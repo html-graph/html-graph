@@ -4,6 +4,10 @@
   "description": "Graph visualization library",
   "main": "src/index.ts",
   "scripts": {
+    "start": "concurrently \"npm run watch:lib\" \"npm run start:http\"",
+    "start:http": "live-server --port=3100 --open=index.html --mount=/lib:./dist ./server",
+    "watch:lib": "tsc --watch",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/dmarov/graphflow/issues"
   },
-  "homepage": "https://github.com/dmarov/graphflow#readme"
+  "homepage": "https://github.com/dmarov/graphflow#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "live-server": "^1.2.2",
+    "typescript": "^5.5.4"
+  }
 }
