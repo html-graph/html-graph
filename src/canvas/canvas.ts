@@ -20,67 +20,91 @@ export class Canvas {
 
     private grabbedNodeId: NodeId | null = null;
 
-    private mouseDownX: number | null = null;
+    private mouseDownCoords: { x: number, y: number } | null = null;
 
-    private mouseDownY: number | null = null;
+    onGrab = (event: MouseEvent) => {
+        this.canvas.style.cursor = "grab";
 
-    onMove = () => {
-        this.mouseDownX = null;
-        this.mouseDownY = null;
-        this.grabbedNodeId = null;
+        this.mouseDownCoords = {
+            x: event.offsetX,
+            y: event.offsetY,
+        };
     };
 
-    onRelease = (event: MouseEvent) => {
-        if (this.grabbedNodeId !== null && this.mouseDownX !== null && this.mouseDownY !== null) {
+    onMove = (event: MouseEvent) => {
+        if (this.grabbedNodeId !== null && this.mouseDownCoords !== null) {
             const metaData = this.nodesMetadata.get(this.grabbedNodeId);
 
             if (metaData) {
-                metaData.wrapperEl.style.left = `${event.clientX - this.mouseDownX}px`;
-                metaData.wrapperEl.style.top = `${event.clientY - this.mouseDownY}px`;
-                metaData.x = event.clientX - this.mouseDownX + metaData.wrapperEl.clientWidth / 2;
-                metaData.y = event.clientY - this.mouseDownY + metaData.wrapperEl.clientHeight / 2;
+                metaData.el.style.left = `${event.clientX - this.mouseDownCoords.x}px`;
+                metaData.el.style.top = `${event.clientY - this.mouseDownCoords.y}px`;
+                metaData.x = event.clientX - this.mouseDownCoords.x + metaData.el.clientWidth / 2;
+                metaData.y = event.clientY - this.mouseDownCoords.y + metaData.el.clientHeight / 2;
                 this.updateEdges();
             }
         }
     };
 
+    onRelease = () => {
+        this.canvas.style.cursor = "default";
+
+        this.mouseDownCoords = null;
+        this.grabbedNodeId = null;
+    };
+
     constructor(
         private readonly canvasWrapper: HTMLElement
     ) {
-        this.canvas = ElementFactory.createCanvas(this.onMove, this.onRelease);
+        this.canvas = ElementFactory.createCanvas(this.onGrab, this.onMove, this.onRelease);
         this.canvasWrapper.appendChild(this.canvas);
 
         this.svg = ElementFactory.createSvg();
         this.canvas.appendChild(this.svg);
     }
 
-    addNode(request: AddNodeRequest): void {
+    addNode(request: AddNodeRequest): Canvas {
         this.addNodeQueue.push(request);
+
+        return this;
     }
 
-    connectNodes(request: ConnectNodesRequest): void {
+    connectNodes(request: ConnectNodesRequest): Canvas {
         this.connectNodesQueue.push(request);
+
+        return this;
     }
 
-    flush(): void {
+    flush(): Canvas {
         this.flushAddNodeQueue();
-        this.flushCreateNodesQueue();
+        this.flushConnectNodesQueue();
+
+        return this;
     }
 
     private flushAddNodeQueue(): void {
         this.addNodeQueue.forEach(request => {
-            const wrapper = ElementFactory.createNodeWrapper(request.el);
 
-            this.nodesMetadata.set(request.id, { x: request.x, y: request.y, wrapperEl: wrapper });
-            this.canvas.appendChild(wrapper);
+            request.el.style.position = "absolute";
+            request.el.style.visibility = "hidden";
+            request.el.style.cursor = "grab";
+            request.el.style.userSelect = "none";
+            request.el.style.zIndex = "0";
 
-            wrapper.style.left = `${request.x - wrapper.clientWidth / 2}px`;
-            wrapper.style.top = `${request.y - wrapper.clientHeight / 2}px`;
-            wrapper.style.visibility = "visible";
-            wrapper.addEventListener('mousedown', (event: MouseEvent) => {
+            this.nodesMetadata.set(request.id, { x: request.x, y: request.y, el: request.el });
+            this.canvas.appendChild(request.el);
+
+            request.el.style.left = `${request.x - request.el.clientWidth / 2}px`;
+            request.el.style.top = `${request.y - request.el.clientHeight / 2}px`;
+            request.el.style.visibility = "visible";
+            request.el.addEventListener('mousedown', (event: MouseEvent) => {
                 if (event.button === 0) {
-                    this.mouseDownX = event.offsetX;
-                    this.mouseDownY = event.offsetY;
+                    event.stopPropagation();
+
+                    this.mouseDownCoords = {
+                        x: event.offsetX,
+                        y: event.offsetY,
+                    };
+
                     this.grabbedNodeId = request.id;
                 }
             });
@@ -89,15 +113,15 @@ export class Canvas {
         this.addNodeQueue = [];
     }
 
-    private flushCreateNodesQueue(): void {
+    private flushConnectNodesQueue(): void {
         this.connectNodesQueue.forEach(request => {
-            const fromMetadata = this.nodesMetadata.get(request.nodeFrom);
-            const toMetadata = this.nodesMetadata.get(request.nodeTo);
-            const id = `${request.nodeFrom}:${request.nodeTo}`;
+            const fromMetadata = this.nodesMetadata.get(request.from);
+            const toMetadata = this.nodesMetadata.get(request.to);
+            const id = `${request.from}:${request.to}`;
 
             this.edgesMetadata.set(
                 id,
-                { nodeFrom: request.nodeFrom, nodeTo: request.nodeTo }
+                { nodeFrom: request.from, nodeTo: request.to }
             );
 
             if (fromMetadata && toMetadata) {

@@ -1,6 +1,8 @@
+import { EdgeId } from "./edge-id";
 import { NodeId } from "./node-id";
 
 export interface ConnectNodesRequest {
-    nodeFrom: NodeId;
-    nodeTo: NodeId;
+    id: EdgeId;
+    from: NodeId;
+    to: NodeId;
 }

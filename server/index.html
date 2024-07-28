@@ -9,7 +9,6 @@
             max-height: 100%;
             padding: 0;
             margin: 0;
-            display: block;
         }
 
         body {
@@ -36,24 +35,27 @@
     <script type="module">
         import "./lib/index.js";
 
-        const el = document.querySelector("#canvas");
+        function createNode(text) {
+            const node = document.createElement('div');
 
+            node.innerText = text;
+            node.classList.add('node');
+
+            return node;
+        }
+
+        const el = document.querySelector("#canvas");
         const canvas = new GraphFlow.Canvas(el);
 
-        const htmlNode1 = document.createElement('div');
-        htmlNode1.innerText = "Node 1";
-        htmlNode1.classList.add('node');
-        canvas.addNode({ id: 1, el: htmlNode1, x: 200, y: 200 });
+        const htmlNode1 = createNode('Node 1');
+        const htmlNode2 = createNode('Node 2');
 
-        const htmlNode2 = document.createElement('div');
-        htmlNode2.innerText = "Node 2";
-        htmlNode2.classList.add('node');
+        canvas
+            .addNode({ id: 1, el: htmlNode1, x: 200, y: 200 })
+            .addNode({ id: 2, el: htmlNode2, x: 600, y: 200 })
+            .connectNodes({ id: '1-to-2', from: 1, to: 2 })
+            .flush();
 
-        canvas.addNode({ id: 2, el: htmlNode2, x: 600, y: 200 });
-
-        canvas.connectNodes({ nodeFrom: 1, nodeTo: 2 });
-
-        canvas.flush();
     </script>
 </body>
 </html>

@@ -1,18 +1,32 @@
 export class ElementFactory {
-    static createCanvas(onRelease: (event: MouseEvent) => void, onMove: (event: MouseEvent) => void): HTMLDivElement {
+    static createCanvas(
+        onGrab: (event: MouseEvent) => void,
+        onMove: (event: MouseEvent) => void,
+        onRelease: (event: MouseEvent) => void,
+    ): HTMLDivElement {
         const canvas = document.createElement('div');
 
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.position = "relative";
         canvas.style.overflow = "hidden";
+
+        canvas.addEventListener("mousedown", (event: MouseEvent) => {
+            if (event.button === 0) {
+                onGrab(event);
+            }
+        });
+
+        canvas.addEventListener("mousemove", (event: MouseEvent) => {
+            if (event.button === 0) {
+                onMove(event);
+            }
+        });
+
         canvas.addEventListener("mouseup", (event: MouseEvent) => {
             if (event.button === 0) {
                 onRelease(event);
             }
-        });
-        canvas.addEventListener("mousemove", (event: MouseEvent) => {
-            onMove(event);
         });
 
         return canvas;
