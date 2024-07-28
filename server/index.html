@@ -24,8 +24,9 @@
         .node  {
             background: grey;
             border: 1px solid black;
-            border-radius: 4px;
-            padding: 4px;
+            border-radius: 50%;
+            padding: 16px;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -33,26 +34,26 @@
     <div id="canvas"></div>
 
     <script type="module">
-        import { GraphFlow } from "./lib/index.js";
+        import "./lib/index.js";
 
         const el = document.querySelector("#canvas");
 
-        const graphFlow = new GraphFlow(el);
+        const canvas = new GraphFlow.Canvas(el);
 
         const htmlNode1 = document.createElement('div');
         htmlNode1.innerText = "Node 1";
         htmlNode1.classList.add('node');
-        graphFlow.addNode({ id: 1, el: htmlNode1, x: 200, y: 200 });
+        canvas.addNode({ id: 1, el: htmlNode1, x: 200, y: 200 });
 
         const htmlNode2 = document.createElement('div');
         htmlNode2.innerText = "Node 2";
         htmlNode2.classList.add('node');
 
-        graphFlow.addNode({ id: 2, el: htmlNode2, x: 600, y: 200 });
+        canvas.addNode({ id: 2, el: htmlNode2, x: 600, y: 200 });
 
-        graphFlow.connectNodes({ nodeFrom: 1, nodeTo: 2 });
+        canvas.connectNodes({ nodeFrom: 1, nodeTo: 2 });
 
-        graphFlow.flush();
+        canvas.flush();
     </script>
 </body>
 </html>
