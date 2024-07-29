@@ -1,10 +1,12 @@
 # TODO
 
-* grabbed node to top
 * grab canvas
 * scale canvas
 * eslint and prettier
 * nodeports
-* arrow customization
+* connections customization
 * respond to node resize
 * virtual scroll
+* error on duplicated id
+* update nodes
+* update edges

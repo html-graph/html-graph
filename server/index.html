@@ -21,8 +21,8 @@
         }
 
         .node  {
-            background: grey;
-            border: 1px solid black;
+            background: #ffdbab;
+            border: 1px solid #bababa;
             border-radius: 50%;
             padding: 16px;
             white-space: nowrap;
@@ -51,9 +51,9 @@
         const htmlNode2 = createNode('Node 2');
 
         canvas
-            .addNode({ id: 1, el: htmlNode1, x: 200, y: 200 })
-            .addNode({ id: 2, el: htmlNode2, x: 600, y: 200 })
-            .connectNodes({ id: '1-to-2', from: 1, to: 2 })
+            .addNode({ id: "1", el: htmlNode1, x: 200, y: 200 })
+            .addNode({ id: "2", el: htmlNode2, x: 600, y: 200 })
+            .connectNodes({ id: '1-to-2', from: "1", to: "2" })
             .flush();
 
     </script>
