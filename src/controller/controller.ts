@@ -1,136 +1,72 @@
-import { ElementFactory } from "@/element-factory/element-factory";
-import { GraphStore } from "@/graph-store/graph-store";
 import { NodeDto } from "@/models/node-dto";
 import { EdgeDto } from "@/models/edge-dto";
+import { GraphEventType } from "@/models/graph-event";
+import { DiContainer } from "@/di-container/di-container";
+import { GrabCanvasPayload, GrabNodePayload, MoveGrabPayload } from "@/models/event-payloads";
 
 export class Controller {
-    private store = new GraphStore();
+    private readonly di = new DiContainer();
 
-    private addNodeQueue: NodeDto[] = [];
+    private onGrabCanvas = (payload: GrabCanvasPayload) => {
+        this.di.htmlView.setGrabCursor();
+        this.di.mouseState.setMouseDownCoords(payload.mouseX, payload.mouseY);
+    }
 
-    private connectNodesQueue: EdgeDto[] = [];
+    private onReleaseGrab = () => {
+        this.di.htmlView.setDefaultCursor();
+        this.di.mouseState.releaseMouse();
+        this.di.grabbedNodeState.releaseNode();
+    }
 
-    private readonly canvas: HTMLElement;
+    private onGrabNode = (payload: GrabNodePayload) => {
+        this.di.mouseState.setMouseDownCoords(payload.mouseX, payload.mouseY);
+        this.di.grabbedNodeState.grabNode(payload.nodeId);
+        this.di.htmlView.moveNodeOnTop(payload.nodeId);
+    }
 
-    private readonly svg: SVGSVGElement;
+    private onMoveGrab = (payload: MoveGrabPayload) => {
+        const mouseCoords = this.di.mouseState.getMouseDownCoords();
 
-    private grabbedNodeId: string | null = null;
-
-    private mouseDownCoords: { x: number, y: number } | null = null;
-
-    private onGrab = (event: MouseEvent) => {
-        this.canvas.style.cursor = "grab";
-
-        this.mouseDownCoords = {
-            x: event.offsetX,
-            y: event.offsetY,
-        };
-    };
-
-    private onMove = (event: MouseEvent) => {
-        if (this.grabbedNodeId !== null && this.mouseDownCoords !== null) {
-            const node = this.store.getNode(this.grabbedNodeId);
-
-            if (node) {
-                node.el.style.left = `${event.clientX - this.mouseDownCoords.x}px`;
-                node.el.style.top = `${event.clientY - this.mouseDownCoords.y}px`;
-                node.x = event.clientX - this.mouseDownCoords.x + node.el.clientWidth / 2;
-                node.y = event.clientY - this.mouseDownCoords.y + node.el.clientHeight / 2;
-
-                this.store.getAdjacentEdges(node.id).forEach(data => {
-                    const from = this.store.getNode(data.from);
-                    const to = this.store.getNode(data.to);
-                    const line = this.svg.getElementById(data.id);
-
-                    if (from && to) {
-                        line.setAttribute("x1", `${from.x}`);
-                        line.setAttribute("y1", `${from.y}`);
-                        line.setAttribute("x2", `${to.x}`);
-                        line.setAttribute("y2", `${to.y}`);
-                    }
-                });
-            }
+        if (mouseCoords === null) {
+            return;
         }
-    };
 
-    private onRelease = () => {
-        this.canvas.style.cursor = "default";
+        const nodeId = this.di.grabbedNodeState.getGrabbedNodeId();
 
-        this.mouseDownCoords = null;
-        this.grabbedNodeId = null;
-    };
+        if (nodeId === null) {
+            return;
+        }
+
+        const node = this.di.graphStore.getNode(nodeId);
+
+        if (node) {
+            const x = payload.mouseX - mouseCoords.x;
+            const y = payload.mouseY - mouseCoords.y;
+
+            this.di.htmlView.updateLines(node.id, x, y);
+        }
+    }
 
     constructor(
         private readonly canvasWrapper: HTMLElement
     ) {
-        this.canvas = ElementFactory.createCanvas(this.onGrab, this.onMove, this.onRelease);
-        this.svg = ElementFactory.createSvg();
+        this.canvasWrapper.appendChild(this.di.htmlView.getHost());
 
-        this.canvas.appendChild(this.svg);
-        this.canvasWrapper.appendChild(this.canvas);
+        this.di.eventSubject.on(GraphEventType.GrabCanvas, this.onGrabCanvas);
+        this.di.eventSubject.on(GraphEventType.ReleaseGrab, this.onReleaseGrab);
+        this.di.eventSubject.on(GraphEventType.MoveGrab, this.onMoveGrab);
+        this.di.eventSubject.on(GraphEventType.GrabNode, this.onGrabNode);
     }
 
     addNode(req: NodeDto): void {
-        this.addNodeQueue.push(req);
+        this.di.commandsQueue.addNode(req);
     }
 
     connectNodes(req: EdgeDto): void {
-        this.connectNodesQueue.push(req);
+        this.di.commandsQueue.connectNodes(req);
     }
 
     flush(): void {
-        this.flushAddNodeQueue();
-        this.flushConnectNodesQueue();
-    }
-
-    private flushAddNodeQueue(): void {
-        this.addNodeQueue.forEach(req => {
-            req.el.id = req.id;
-            req.el.style.position = "absolute";
-            req.el.style.visibility = "hidden";
-            req.el.style.cursor = "grab";
-            req.el.style.userSelect = "none";
-            req.el.style.zIndex = "0";
-
-            this.store.addNode(req);
-            this.canvas.appendChild(req.el);
-
-            req.el.style.left = `${req.x - req.el.clientWidth / 2}px`;
-            req.el.style.top = `${req.y - req.el.clientHeight / 2}px`;
-            req.el.style.visibility = "visible";
-            req.el.addEventListener('mousedown', (event: MouseEvent) => {
-                if (event.button === 0) {
-                    event.stopPropagation();
-
-                    this.mouseDownCoords = {
-                        x: event.offsetX,
-                        y: event.offsetY,
-                    };
-
-                    this.grabbedNodeId = req.id;
-
-                    this.canvas.appendChild(event.target as HTMLElement);
-                }
-            });
-        });
-
-        this.addNodeQueue = [];
-    }
-
-    private flushConnectNodesQueue(): void {
-        this.connectNodesQueue.forEach(request => {
-            const from = this.store.getNode(request.from);
-            const to = this.store.getNode(request.to);
-
-            this.store.addEdge(request);
-
-            if (from && to) {
-                const line = ElementFactory.createSvgLine(request.id, from.x, from.y, to.x, to.y);
-
-                this.svg.append(line);
-            }
-        });
-
-        this.connectNodesQueue = [];
+        this.di.commandsQueue.flush();
     }
 }

@@ -11,6 +11,7 @@
     "declaration": true,
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "lib": ["DOM"]
   }
 }
