@@ -5,41 +5,17 @@ import { NodeDto } from "@/models/node-dto";
 export class HtmlView {
     private readonly canvas: HTMLElement;
 
-    public readonly svg: SVGSVGElement;
-
-    private eventSubject = this.di.eventSubject;
+    private readonly svg: SVGSVGElement;
 
     constructor(
-        private readonly di: DiContainer
+        private readonly di: DiContainer,
+        private readonly canvasWrapper: HTMLElement
     ) {
         this.canvas = this.createCanvas();
-
         this.svg = this.createSvg();
 
         this.canvas.appendChild(this.svg);
-
-        this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
-            if (event.button === 0) {
-                this.eventSubject.dispatch(
-                    GraphEventType.GrabCanvas,
-                    { mouseX: event.offsetX, mouseY: event.offsetY },
-                );
-            }
-        });
-
-        this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
-            if (event.button === 0) {
-                this.eventSubject.dispatch(GraphEventType.MoveGrab, { 
-                    mouseX: event.clientX, mouseY: event.clientY
-                });
-            }
-        });
-
-        this.canvas.addEventListener("mouseup", (event: MouseEvent) => {
-            if (event.button === 0) {
-                this.eventSubject.dispatch(GraphEventType.ReleaseGrab)
-            }
-        });
+        this.canvasWrapper.appendChild(this.canvas);
     }
 
     setGrabCursor(): void {
@@ -59,9 +35,32 @@ export class HtmlView {
     }
 
     appendNode(req: NodeDto): void {
-        this.preprocessNode(req);
-        this.di.htmlView.canvas.appendChild(req.el);
-        this.postprocessNode(req);
+        req.el.id = req.id;
+        req.el.style.position = "absolute";
+        req.el.style.visibility = "hidden";
+        req.el.style.cursor = "grab";
+        req.el.style.userSelect = "none";
+        req.el.style.zIndex = "0";
+
+        this.canvas.appendChild(req.el);
+
+        req.el.style.left = `${req.x - req.el.clientWidth / 2}px`;
+        req.el.style.top = `${req.y - req.el.clientHeight / 2}px`;
+        req.el.style.visibility = "visible";
+
+        req.el.addEventListener('mousedown', (event: MouseEvent) => {
+            if (event.button !== 0) {
+                return;
+            }
+
+            event.stopPropagation();
+            const target = event.target as HTMLElement;
+
+            this.di.eventSubject.dispatch(
+                GraphEventType.GrabNode,
+                { mouseX: event.offsetX, mouseY: event.offsetY, nodeId: target.id }
+            );
+        });
     }
 
     appendLine(id: string, x1: number, y1: number, x2: number, y2: number): void {
@@ -74,36 +73,34 @@ export class HtmlView {
         line.setAttribute("y2", `${y2}`);
         line.setAttribute("stroke", "black")
 
-        this.di.htmlView.svg.append(line);
+        this.svg.append(line);
     }
 
-    updateLines(nodeId: string, x: number, y: number): void {
+    moveNodeTo(nodeId: string, x: number, y: number): void {
         const node = this.di.graphStore.getNode(nodeId);
 
-        if (node) {
-            node.el.style.left = `${x}px`;
-            node.el.style.top = `${y}px`;
-            node.x = x + node.el.clientWidth / 2;
-            node.y = y + node.el.clientHeight / 2;
-
-            this.di.graphStore.getAdjacentEdges(node.id).forEach(data => {
-                const from = this.di.graphStore.getNode(data.from);
-                const to = this.di.graphStore.getNode(data.to);
-
-                if (from && to) {
-                    const line = this.svg.getElementById(data.id);
-
-                    line.setAttribute("x1", `${from.x}`);
-                    line.setAttribute("y1", `${from.y}`);
-                    line.setAttribute("x2", `${to.x}`);
-                    line.setAttribute("y2", `${to.y}`);
-                }
-            });
+        if (node === null) {
+            return;
         }
-    }
 
-    getHost(): HTMLElement {
-        return this.canvas;
+        node.el.style.left = `${x}px`;
+        node.el.style.top = `${y}px`;
+        node.x = x + node.el.clientWidth / 2;
+        node.y = y + node.el.clientHeight / 2;
+
+        this.di.graphStore.getAdjacentEdges(node.id).forEach(data => {
+            const from = this.di.graphStore.getNode(data.from);
+            const to = this.di.graphStore.getNode(data.to);
+
+            if (from && to) {
+                const line = this.svg.getElementById(data.id);
+
+                line.setAttribute("x1", `${from.x}`);
+                line.setAttribute("y1", `${from.y}`);
+                line.setAttribute("x2", `${to.x}`);
+                line.setAttribute("y2", `${to.y}`);
+            }
+        });
     }
 
     private createCanvas(): HTMLDivElement {
@@ -113,6 +110,35 @@ export class HtmlView {
         canvas.style.height = "100%";
         canvas.style.position = "relative";
         canvas.style.overflow = "hidden";
+
+        canvas.addEventListener("mousedown", (event: MouseEvent) => {
+            if (event.button !== 0) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(
+                GraphEventType.GrabCanvas,
+                { mouseX: event.offsetX, mouseY: event.offsetY },
+            );
+        });
+
+        canvas.addEventListener("mousemove", (event: MouseEvent) => {
+            if (event.buttons !== 1) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(GraphEventType.MoveGrab, { 
+                mouseX: event.clientX, mouseY: event.clientY
+            });
+        });
+
+        canvas.addEventListener("mouseup", (event: MouseEvent) => {
+            if (event.button !== 0) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(GraphEventType.ReleaseGrab)
+        });
 
         return canvas;
     }
@@ -125,32 +151,5 @@ export class HtmlView {
         svg.style.position = "absolute";
 
         return svg;
-    }
-
-    private preprocessNode(req: NodeDto): void {
-        req.el.id = req.id;
-        req.el.style.position = "absolute";
-        req.el.style.visibility = "hidden";
-        req.el.style.cursor = "grab";
-        req.el.style.userSelect = "none";
-        req.el.style.zIndex = "0";
-    }
-
-    private postprocessNode(req: NodeDto): void {
-        req.el.style.left = `${req.x - req.el.clientWidth / 2}px`;
-        req.el.style.top = `${req.y - req.el.clientHeight / 2}px`;
-        req.el.style.visibility = "visible";
-
-        req.el.addEventListener('mousedown', (event: MouseEvent) => {
-            if (event.button === 0) {
-                event.stopPropagation();
-                const target = event.target as HTMLElement;
-
-                this.di.eventSubject.dispatch(
-                    GraphEventType.GrabNode,
-                    { mouseX: event.offsetX, mouseY: event.offsetY, nodeId: target.id }
-                );
-            }
-        });
     }
 }

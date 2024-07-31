@@ -1,4 +1,5 @@
 import { CommandsQueue } from "@/commands-queue/commands-queue";
+import { EventHandler } from "@/event-handler/event-handler";
 import { EventSubject } from "@/event-subject/event-subject";
 import { GrabbedNodeState } from "@/grabbed-node-state/grabbed-node-state";
 import { GraphStore } from "@/graph-store/graph-store";
@@ -18,17 +19,21 @@ export class DiContainer {
 
     readonly commandsQueue: CommandsQueue;
 
-    constructor() {
-        this.graphStore = new GraphStore(this);
+    readonly eventHandler: EventHandler;
 
-        this.eventSubject = new EventSubject(this);
+    constructor(canvasWrapper: HTMLElement) {
+        this.eventSubject = new EventSubject();
 
-        this.mouseState = new MouseState(this);
+        this.mouseState = new MouseState();
 
-        this.grabbedNodeState = new GrabbedNodeState(this);
+        this.grabbedNodeState = new GrabbedNodeState();
 
-        this.htmlView = new HtmlView(this);
+        this.graphStore = new GraphStore();
 
         this.commandsQueue = new CommandsQueue(this);
+
+        this.eventHandler = new EventHandler(this);
+
+        this.htmlView = new HtmlView(this, canvasWrapper);
     }
 }

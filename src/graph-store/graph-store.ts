@@ -1,6 +1,5 @@
 import { NodeDto } from "@/models/node-dto";
 import { EdgeDto } from "@/models/edge-dto";
-import { DiContainer } from "@/di-container/di-container";
 
 export class GraphStore {
     private nodes: Map<string, NodeDto> = new Map<string, NodeDto>();
@@ -12,10 +11,6 @@ export class GraphStore {
     private outcomingEdgesMap = new Map<string, EdgeDto[]>();
 
     private circularEdgesMap = new Map<string, EdgeDto[]>();
-
-    constructor(
-        private readonly di: DiContainer,
-    ) { }
 
     addNode(req: NodeDto): void {
         this.nodes.set(req.id, req);

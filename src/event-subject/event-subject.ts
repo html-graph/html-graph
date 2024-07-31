@@ -1,4 +1,3 @@
-import { DiContainer } from "@/di-container/di-container";
 import { GraphEvent } from "@/models/event-payloads";
 import { GraphEventType } from "@/models/graph-event";
 
@@ -6,10 +5,6 @@ import { GraphEventType } from "@/models/graph-event";
 
 export class EventSubject {
     private mapping = new Map<GraphEventType, any[]>();
-
-    constructor(
-        private readonly di: DiContainer
-    ) { }
 
     on<Type extends GraphEvent["type"]>(
       ...args: Extract<GraphEvent, { type: Type }> extends { payload: infer TPayload } ? [Type, (payload: TPayload) => void] : [Type, () => void]
