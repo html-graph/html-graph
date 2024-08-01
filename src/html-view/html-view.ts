@@ -57,8 +57,8 @@ export class HtmlView {
                 GraphEventType.GrabNode,
                 {
                     nodeId: target.id,
-                    nodeMouseX: event.offsetX + el.clientWidth / 2,
-                    nodeMouseY: event.offsetY + el.clientHeight / 2,
+                    nodeMouseX: event.offsetX - el.clientWidth / 2,
+                    nodeMouseY: event.offsetY - el.clientHeight / 2,
                 }
             );
         });
@@ -80,8 +80,8 @@ export class HtmlView {
     moveNodeTo(nodeId: string, x: number, y: number): void {
         const el = this.canvas.querySelector(`[id='${nodeId}']`) as HTMLElement;
 
-        el.style.left = `${x + el.clientWidth / 2}px`;
-        el.style.top = `${y + el.clientHeight / 2}px`;
+        el.style.left = `${x - el.clientWidth / 2}px`;
+        el.style.top = `${y - el.clientHeight / 2}px`;
     }
 
     moveEdgeTo(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {

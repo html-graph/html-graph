@@ -32,8 +32,8 @@ export class Controller {
 
         const nodeId = this.di.grabbedNodeState.getGrabbedNodeId();
 
-        const nodeTopX = payload.mouseX - nodeMouseDownCoords.x;
-        const nodeTopY = payload.mouseY - nodeMouseDownCoords.y;
+        const nodeX = payload.mouseX - nodeMouseDownCoords.x;
+        const nodeY = payload.mouseY - nodeMouseDownCoords.y;
 
         if (nodeId === null) {
             //
@@ -41,7 +41,7 @@ export class Controller {
             const node = this.di.graphStore.getNode(nodeId);
 
             if (node) {
-                node.moveTo(nodeTopX, nodeTopY);
+                node.moveTo(nodeX, nodeY);
             }
         }
     }
