@@ -27,7 +27,6 @@ export class CommandsQueue {
     private flushAddNodeQueue(): void {
         this.addNodeQueue.forEach(req => {
             this.di.graphStore.addNode(req);
-            this.di.htmlView.appendNode(req);
         });
 
         this.addNodeQueue = [];
@@ -35,14 +34,7 @@ export class CommandsQueue {
 
     private flushConnectNodesQueue(): void {
         this.connectNodesQueue.forEach(req => {
-            const from = this.di.graphStore.getNode(req.from);
-            const to = this.di.graphStore.getNode(req.to);
-
             this.di.graphStore.addEdge(req);
-
-            if (from && to) {
-                this.di.htmlView.appendLine(req.id, from.x, from.y, to.x, to.y);
-            }
         });
 
         this.connectNodesQueue = [];

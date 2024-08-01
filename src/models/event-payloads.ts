@@ -1,9 +1,9 @@
 import { GraphEventType } from "./graph-event"
 
 export interface GrabNodePayload {
-    mouseX: number;
-    mouseY: number;
     nodeId: string;
+    nodeMouseX: number;
+    nodeMouseY: number;
 }
 
 export interface GrabCanvasPayload {

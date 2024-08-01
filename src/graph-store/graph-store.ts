@@ -1,10 +1,13 @@
 import { NodeDto } from "@/models/node-dto";
 import { EdgeDto } from "@/models/edge-dto";
+import { DiContainer } from "@/di-container/di-container";
+import { NodeController } from "@/node-controller/node-controller";
+import { EdgeController } from "@/edge-controller/edge-controller";
 
 export class GraphStore {
-    private nodes: Map<string, NodeDto> = new Map<string, NodeDto>();
+    private nodes: Map<string, NodeController> = new Map<string, NodeController>();
 
-    private edges: Map<string, EdgeDto> = new Map<string, EdgeDto>();
+    private edges: Map<string, EdgeController> = new Map<string, EdgeController>();
 
     private incomingEdgesMap = new Map<string, EdgeDto[]>();
 
@@ -12,12 +15,16 @@ export class GraphStore {
 
     private circularEdgesMap = new Map<string, EdgeDto[]>();
 
+    constructor(
+        private readonly di: DiContainer,
+    ) { }
+
     addNode(req: NodeDto): void {
-        this.nodes.set(req.id, req);
+        this.nodes.set(req.id, new NodeController(this.di, req.id, req.el, req.x, req.y));
     }
 
     addEdge(req: EdgeDto): void {
-        this.edges.set(req.id, req);
+        this.edges.set(req.id, new EdgeController(this.di, req.id, req.from, req.to));
 
         if (req.from === req.to) {
             const circularEdges = this.circularEdgesMap.get(req.to);
@@ -48,11 +55,11 @@ export class GraphStore {
         }
     }
 
-    getNode(nodeId: string): NodeDto | null {
+    getNode(nodeId: string): NodeController | null {
         return this.nodes.get(nodeId) ?? null;
     }
 
-    getEdge(edgeId: string): EdgeDto | null {
+    getEdge(edgeId: string): EdgeController | null {
         return this.edges.get(edgeId) ?? null;
     }
 

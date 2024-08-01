@@ -1,6 +1,5 @@
 import { DiContainer } from "@/di-container/di-container";
 import { GraphEventType } from "@/models/graph-event";
-import { NodeDto } from "@/models/node-dto";
 
 export class HtmlView {
     private readonly canvas: HTMLElement;
@@ -27,28 +26,26 @@ export class HtmlView {
     }
 
     moveNodeOnTop(nodeId: string): void {
-        const node = this.di.graphStore.getNode(nodeId);
+        const el = this.canvas.querySelector(`[id='${nodeId}']`) as HTMLElement;
 
-        if (node) {
-            this.canvas.appendChild(node.el);
-        }
+        this.canvas.appendChild(el);
     }
 
-    appendNode(req: NodeDto): void {
-        req.el.id = req.id;
-        req.el.style.position = "absolute";
-        req.el.style.visibility = "hidden";
-        req.el.style.cursor = "grab";
-        req.el.style.userSelect = "none";
-        req.el.style.zIndex = "0";
+    appendNode(id: string, el: HTMLElement, x: number, y: number): void {
+        el.id = id;
+        el.style.position = "absolute";
+        el.style.visibility = "hidden";
+        el.style.cursor = "grab";
+        el.style.userSelect = "none";
+        el.style.zIndex = "0";
 
-        this.canvas.appendChild(req.el);
+        this.canvas.appendChild(el);
 
-        req.el.style.left = `${req.x - req.el.clientWidth / 2}px`;
-        req.el.style.top = `${req.y - req.el.clientHeight / 2}px`;
-        req.el.style.visibility = "visible";
+        el.style.left = `${x - el.clientWidth / 2}px`;
+        el.style.top = `${y - el.clientHeight / 2}px`;
+        el.style.visibility = "visible";
 
-        req.el.addEventListener('mousedown', (event: MouseEvent) => {
+        el.addEventListener('mousedown', (event: MouseEvent) => {
             if (event.button !== 0) {
                 return;
             }
@@ -58,7 +55,11 @@ export class HtmlView {
 
             this.di.eventSubject.dispatch(
                 GraphEventType.GrabNode,
-                { mouseX: event.offsetX, mouseY: event.offsetY, nodeId: target.id }
+                {
+                    nodeId: target.id,
+                    nodeMouseX: event.offsetX + el.clientWidth / 2,
+                    nodeMouseY: event.offsetY + el.clientHeight / 2,
+                }
             );
         });
     }
@@ -77,30 +78,19 @@ export class HtmlView {
     }
 
     moveNodeTo(nodeId: string, x: number, y: number): void {
-        const node = this.di.graphStore.getNode(nodeId);
+        const el = this.canvas.querySelector(`[id='${nodeId}']`) as HTMLElement;
 
-        if (node === null) {
-            return;
-        }
+        el.style.left = `${x + el.clientWidth / 2}px`;
+        el.style.top = `${y + el.clientHeight / 2}px`;
+    }
 
-        node.el.style.left = `${x}px`;
-        node.el.style.top = `${y}px`;
-        node.x = x + node.el.clientWidth / 2;
-        node.y = y + node.el.clientHeight / 2;
+    moveEdgeTo(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {
+        const line = this.svg.getElementById(edgeId);
 
-        this.di.graphStore.getAdjacentEdges(node.id).forEach(data => {
-            const from = this.di.graphStore.getNode(data.from);
-            const to = this.di.graphStore.getNode(data.to);
-
-            if (from && to) {
-                const line = this.svg.getElementById(data.id);
-
-                line.setAttribute("x1", `${from.x}`);
-                line.setAttribute("y1", `${from.y}`);
-                line.setAttribute("x2", `${to.x}`);
-                line.setAttribute("y2", `${to.y}`);
-            }
-        });
+        line.setAttribute("x1", `${x1}`);
+        line.setAttribute("y1", `${y1}`);
+        line.setAttribute("x2", `${x2}`);
+        line.setAttribute("y2", `${y2}`);
     }
 
     private createCanvas(): HTMLDivElement {
@@ -118,7 +108,7 @@ export class HtmlView {
 
             this.di.eventSubject.dispatch(
                 GraphEventType.GrabCanvas,
-                { mouseX: event.offsetX, mouseY: event.offsetY },
+                { mouseX: event.clientX, mouseY: event.clientY },
             );
         });
 
