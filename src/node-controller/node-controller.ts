@@ -5,18 +5,18 @@ export class NodeController {
         private readonly di: DiContainer,
         private readonly id: string,
         private readonly el: HTMLElement,
-        private _x: number,
-        private _y: number,
+        private x: number,
+        private y: number,
     ) {
-        this.di.htmlView.appendNode(this.id, this.el, this._x, this._y);
+        this.di.htmlView.appendNode(this.id, this.el, this.x, this.y);
     }
 
-    get x(): number {
-        return this._x;
+    get centerX(): number {
+        return this.x;
     }
 
-    get y(): number {
-        return this._y;
+    get centerY(): number {
+        return this.y;
     }
 
     moveOnTop(): void {
@@ -26,16 +26,11 @@ export class NodeController {
     moveTo(x: number, y: number): void {
         this.di.htmlView.moveNodeTo(this.id, x, y);
 
-        this._x = x;
-        this._y = y;
+        this.x = x;
+        this.y = y;
 
-        this.di.graphStore.getAdjacentEdges(this.id).forEach(edge => {
-            const from = this.di.graphStore.getNode(edge.from);
-            const to = this.di.graphStore.getNode(edge.to);
-
-            if (from && to) {
-                this.di.htmlView.moveEdgeTo(edge.id, from.x, from.y, to.x, to.y);
-            }
+        this.di.graphController.getAdjacentEdges(this.id).forEach(edge => {
+            edge.updatePosition();
         });
     }
 }

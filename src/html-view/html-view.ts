@@ -6,6 +6,16 @@ export class HtmlView {
 
     private readonly svg: SVGSVGElement;
 
+    private readonly nodeIdToElMapping = new Map<string, HTMLElement>();
+
+    private readonly edgeIdToElMapping = new Map<string, SVGLineElement>();
+
+    private dx = 0;
+
+    private dy = 0;
+
+    private scale = 1;
+
     constructor(
         private readonly di: DiContainer,
         private readonly canvasWrapper: HTMLElement
@@ -15,6 +25,13 @@ export class HtmlView {
 
         this.canvas.appendChild(this.svg);
         this.canvasWrapper.appendChild(this.canvas);
+
+        this.canvasWrapper.style.overflow = "hidden";
+
+        this.hookMouseDown();
+        this.hookMouseMove()
+        this.hookMouseUp();
+        this.hookMouseScroll();
     }
 
     setGrabCursor(): void {
@@ -26,18 +43,23 @@ export class HtmlView {
     }
 
     moveNodeOnTop(nodeId: string): void {
-        const el = this.canvas.querySelector(`[id='${nodeId}']`) as HTMLElement;
+        const el = this.nodeIdToElMapping.get(nodeId);
 
-        this.canvas.appendChild(el);
+        if (el !== undefined) {
+            this.canvas.appendChild(el);
+        }
     }
 
-    appendNode(id: string, el: HTMLElement, x: number, y: number): void {
-        el.id = id;
+    appendNode(nodeId: string, el: HTMLElement, x: number, y: number): void {
+        this.nodeIdToElMapping.set(nodeId, el);
+
+        el.id = nodeId;
         el.style.position = "absolute";
         el.style.visibility = "hidden";
         el.style.cursor = "grab";
         el.style.userSelect = "none";
         el.style.zIndex = "0";
+        el.style.transform = "translate(0px, 0px)";
 
         this.canvas.appendChild(el);
 
@@ -50,47 +72,73 @@ export class HtmlView {
                 return;
             }
 
-            event.stopPropagation();
             const target = event.target as HTMLElement;
+
+            const { top, left } = this.canvas.getBoundingClientRect();
 
             this.di.eventSubject.dispatch(
                 GraphEventType.GrabNode,
                 {
                     nodeId: target.id,
-                    nodeMouseX: event.offsetX - el.clientWidth / 2,
-                    nodeMouseY: event.offsetY - el.clientHeight / 2,
+                    nodeMouseX: event.offsetX - el.clientWidth / 2 + left,
+                    nodeMouseY: event.offsetY - el.clientHeight / 2 + top,
                 }
             );
         });
     }
 
-    appendLine(id: string, x1: number, y1: number, x2: number, y2: number): void {
+    appendEdge(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {
         const line = document.createElementNS("http://www.w3.org/2000/svg","line");
 
-        line.setAttribute("id", `${id}`);
+        line.setAttribute("id", `${edgeId}`);
         line.setAttribute("x1", `${x1}`);
         line.setAttribute("y1", `${y1}`);
         line.setAttribute("x2", `${x2}`);
         line.setAttribute("y2", `${y2}`);
         line.setAttribute("stroke", "black")
+        line.style.transform = "translate(0px, 0px)";
 
         this.svg.append(line);
+        this.edgeIdToElMapping.set(edgeId, line);
     }
 
     moveNodeTo(nodeId: string, x: number, y: number): void {
-        const el = this.canvas.querySelector(`[id='${nodeId}']`) as HTMLElement;
+        const el = this.nodeIdToElMapping.get(nodeId);
 
-        el.style.left = `${x - el.clientWidth / 2}px`;
-        el.style.top = `${y - el.clientHeight / 2}px`;
+        if (el) {
+            el.style.left = `${x - el.clientWidth / 2}px`;
+            el.style.top = `${y - el.clientHeight / 2}px`;
+        }
     }
 
     moveEdgeTo(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {
-        const line = this.svg.getElementById(edgeId);
+        const line = this.edgeIdToElMapping.get(edgeId);
 
-        line.setAttribute("x1", `${x1}`);
-        line.setAttribute("y1", `${y1}`);
-        line.setAttribute("x2", `${x2}`);
-        line.setAttribute("y2", `${y2}`);
+        if (line) {
+            line.setAttribute("x1", `${x1}`);
+            line.setAttribute("y1", `${y1}`);
+            line.setAttribute("x2", `${x2}`);
+            line.setAttribute("y2", `${y2}`);
+        }
+    }
+
+    setCanvasShift(dx: number, dy: number): void {
+        this.dx = dx;
+        this.dy = dy;
+    }
+
+    setCanvasScale(scaleFactor: number): void {
+        this.scale = scaleFactor;
+    }
+
+    updateTransform(): void {
+        this.nodeIdToElMapping.forEach((el) => {
+            el.style.transform = `matrix(${this.scale}, 0, 0, ${this.scale}, ${this.dx}, ${this.dy})`;
+        });
+
+        this.edgeIdToElMapping.forEach((el) => {
+            el.style.transform = `matrix(${this.scale}, 0, 0, ${this.scale}, ${this.dx}, ${this.dy})`;
+        });
     }
 
     private createCanvas(): HTMLDivElement {
@@ -100,35 +148,6 @@ export class HtmlView {
         canvas.style.height = "100%";
         canvas.style.position = "relative";
         canvas.style.overflow = "hidden";
-
-        canvas.addEventListener("mousedown", (event: MouseEvent) => {
-            if (event.button !== 0) {
-                return;
-            }
-
-            this.di.eventSubject.dispatch(
-                GraphEventType.GrabCanvas,
-                { mouseX: event.clientX, mouseY: event.clientY },
-            );
-        });
-
-        canvas.addEventListener("mousemove", (event: MouseEvent) => {
-            if (event.buttons !== 1) {
-                return;
-            }
-
-            this.di.eventSubject.dispatch(GraphEventType.MoveGrab, { 
-                mouseX: event.clientX, mouseY: event.clientY
-            });
-        });
-
-        canvas.addEventListener("mouseup", (event: MouseEvent) => {
-            if (event.button !== 0) {
-                return;
-            }
-
-            this.di.eventSubject.dispatch(GraphEventType.ReleaseGrab)
-        });
 
         return canvas;
     }
@@ -141,5 +160,55 @@ export class HtmlView {
         svg.style.position = "absolute";
 
         return svg;
+    }
+
+    private hookMouseDown(): void {
+        this.canvasWrapper.addEventListener("mousedown", (event: MouseEvent) => {
+            if (event.button !== 0) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(
+                GraphEventType.GrabCanvas,
+                { mouseX: event.clientX, mouseY: event.clientY },
+            );
+        });
+    }
+
+
+    private hookMouseMove(): void {
+        this.canvasWrapper.addEventListener("mousemove", (event: MouseEvent) => {
+            if (event.buttons !== 1) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(GraphEventType.MoveGrab, { 
+                mouseX: event.clientX, mouseY: event.clientY
+            });
+        });
+    }
+
+    private hookMouseUp(): void {
+        this.canvasWrapper.addEventListener("mouseup", (event: MouseEvent) => {
+            if (event.button !== 0) {
+                return;
+            }
+
+            this.di.eventSubject.dispatch(GraphEventType.ReleaseGrab)
+        });
+    }
+
+    private hookMouseScroll(): void {
+        this.canvasWrapper.addEventListener("wheel", (event: WheelEvent) => {
+            if (!event.ctrlKey) {
+                return;
+            }
+
+            event.preventDefault();
+
+            this.di.eventSubject.dispatch(GraphEventType.ScaleCanvas, {
+                value: event.deltaY < 0 ? 1: -1,
+            });
+        });
     }
 }

@@ -16,6 +16,10 @@ export interface MoveGrabPayload {
     mouseY: number;
 }
 
+export interface ScaleCanvasPayload {
+    value: -1 | 1;
+}
+
 export type GraphEvent =
     {
         type: GraphEventType.GrabNode,
@@ -34,5 +38,10 @@ export type GraphEvent =
     |
     {
         type: GraphEventType.ReleaseGrab,
-    };
+    }
+    |
+    {
+        type: GraphEventType.ScaleCanvas,
+        payload: ScaleCanvasPayload,
+    }
 

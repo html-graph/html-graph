@@ -3,4 +3,5 @@ export enum GraphEventType {
     GrabCanvas = 'GrabCanvas',
     MoveGrab = 'GrabMove',
     ReleaseGrab = 'GrabRelease',
+    ScaleCanvas = 'ScaleCanvas',
 }

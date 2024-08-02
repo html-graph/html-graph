@@ -4,16 +4,16 @@ import { DiContainer } from "@/di-container/di-container";
 import { NodeController } from "@/node-controller/node-controller";
 import { EdgeController } from "@/edge-controller/edge-controller";
 
-export class GraphStore {
+export class GraphController {
     private nodes: Map<string, NodeController> = new Map<string, NodeController>();
 
     private edges: Map<string, EdgeController> = new Map<string, EdgeController>();
 
-    private incomingEdgesMap = new Map<string, EdgeDto[]>();
+    private incomingEdgesMap = new Map<string, EdgeController[]>();
 
-    private outcomingEdgesMap = new Map<string, EdgeDto[]>();
+    private outcomingEdgesMap = new Map<string, EdgeController[]>();
 
-    private circularEdgesMap = new Map<string, EdgeDto[]>();
+    private circularEdgesMap = new Map<string, EdgeController[]>();
 
     constructor(
         private readonly di: DiContainer,
@@ -24,15 +24,17 @@ export class GraphStore {
     }
 
     addEdge(req: EdgeDto): void {
-        this.edges.set(req.id, new EdgeController(this.di, req.id, req.from, req.to));
+        const edge = new EdgeController(this.di, req.id, req.from, req.to);
+
+        this.edges.set(req.id, edge);
 
         if (req.from === req.to) {
             const circularEdges = this.circularEdgesMap.get(req.to);
 
             if (circularEdges !== undefined) {
-                circularEdges.push(req);
+                circularEdges.push(edge);
             } else {
-                this.circularEdgesMap.set(req.from, [req])
+                this.circularEdgesMap.set(req.from, [edge])
             }
 
             return;
@@ -41,17 +43,17 @@ export class GraphStore {
         const incomingEdges = this.incomingEdgesMap.get(req.to);
 
         if (incomingEdges !== undefined) {
-            incomingEdges.push(req);
+            incomingEdges.push(edge);
         } else {
-            this.incomingEdgesMap.set(req.to, [req])
+            this.incomingEdgesMap.set(req.to, [edge])
         }
 
         const outcomingEdges = this.outcomingEdgesMap.get(req.from);
 
         if (outcomingEdges !== undefined) {
-            outcomingEdges.push(req)
+            outcomingEdges.push(edge);
         } else {
-            this.outcomingEdgesMap.set(req.from, [req])
+            this.outcomingEdgesMap.set(req.from, [edge])
         }
     }
 
@@ -63,19 +65,19 @@ export class GraphStore {
         return this.edges.get(edgeId) ?? null;
     }
 
-    getIncomingEdges(nodeId: string): readonly EdgeDto[] {
+    getIncomingEdges(nodeId: string): readonly EdgeController[] {
         return this.incomingEdgesMap.get(nodeId) ?? [];
     }
 
-    getOutcomingEdges(nodeId: string): readonly EdgeDto[] {
+    getOutcomingEdges(nodeId: string): readonly EdgeController[] {
         return this.outcomingEdgesMap.get(nodeId) ?? [];
     }
 
-    getCircularEdges(nodeId: string): readonly EdgeDto[] {
+    getCircularEdges(nodeId: string): readonly EdgeController[] {
         return this.circularEdgesMap.get(nodeId) ?? [];
     }
 
-    getAdjacentEdges(nodeId: string): readonly EdgeDto[] {
+    getAdjacentEdges(nodeId: string): readonly EdgeController[] {
         return [
             ...this.getIncomingEdges(nodeId),
             ...this.getOutcomingEdges(nodeId),
