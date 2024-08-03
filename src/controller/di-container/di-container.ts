@@ -1,11 +1,11 @@
-import { CanvasTransformState } from "@/canvas-transform-state/canvas-transform-state";
-import { CommandsQueue } from "@/commands-queue/commands-queue";
-import { EventSubject } from "@/event-subject/event-subject";
-import { GrabbedNodeState } from "@/grabbed-node-state/grabbed-node-state";
-import { GraphController } from "@/graph-controller/graph-controller";
-import { HtmlView } from "@/html-view/html-view";
-import { MouseState } from "@/mouse-state/mouse-state";
-import { NodeMouseState } from "@/node-mouse-state/node-mouse-state";
+import { CommandsQueue } from "../commands-queue/commands-queue";
+import { EventSubject } from "../event-subject/event-subject";
+import { GraphController } from "../graph-controller/graph-controller";
+import { HtmlView } from "../html-view/html-view";
+import { CanvasTransformState } from "../states/canvas-transform-state/canvas-transform-state";
+import { GrabbedNodeState } from "../states/grabbed-node-state/grabbed-node-state";
+import { MouseState } from "../states/mouse-state/mouse-state";
+import { NodeMouseState } from "../states/node-mouse-state/node-mouse-state";
 
 export class DiContainer {
     readonly graphController: GraphController;

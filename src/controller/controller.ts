@@ -1,13 +1,13 @@
 import { NodeDto } from "@/models/node-dto";
 import { EdgeDto } from "@/models/edge-dto";
-import { DiContainer } from "@/di-container/di-container";
-import { GraphEventType } from "@/models/graph-event";
-import { GrabCanvasPayload, GrabNodePayload, MoveGrabPayload, ScaleCanvasPayload } from "@/models/event-payloads";
+import { DiContainer } from "./di-container/di-container";
+import { GrabCanvasPayload, GrabNodePayload, MoveGrabPayload, ScaleCanvasPayload } from "./models/event-payloads";
+import { GraphEventType } from "./models/graph-event";
 
 export class Controller {
     private readonly di: DiContainer;
 
-    grabNode = (payload: GrabNodePayload) => {
+    private readonly grabNode = (payload: GrabNodePayload) => {
         this.di.nodeMouseState.setNodeMouseDownCoords(payload.nodeMouseX, payload.nodeMouseY);
         this.di.grabbedNodeState.grabNode(payload.nodeId);
 
@@ -18,12 +18,12 @@ export class Controller {
         }
     }
 
-    grabCanvas = (payload: GrabCanvasPayload) => {
+    private readonly grabCanvas = (payload: GrabCanvasPayload) => {
         this.di.htmlView.setGrabCursor();
         this.di.mouseState.setMouseDownCoords(payload.mouseX, payload.mouseY);
     }
 
-    moveGrab = (payload: MoveGrabPayload) => {
+    private readonly moveGrab = (payload: MoveGrabPayload) => {
         const nodeId = this.di.grabbedNodeState.getGrabbedNodeId();
 
         if (nodeId === null) {
@@ -37,8 +37,7 @@ export class Controller {
 
                 this.di.canvasTransformState.setCurrentShift(dx, dy);
 
-                this.di.htmlView.setCanvasShift(shift.dx + dx, shift.dy + dy);
-                this.di.htmlView.updateTransform();
+                this.di.graphController.setTransformShift(shift.dx + dx, shift.dy + dy)
             }
         } else {
             const nodeMouseDownCoords = this.di.nodeMouseState.getNodeMouseDownCoords();
@@ -60,15 +59,14 @@ export class Controller {
         }
     }
 
-    scaleCanvas = (payload: ScaleCanvasPayload) => {
+    private readonly scaleCanvas = (payload: ScaleCanvasPayload) => {
         this.di.canvasTransformState.updateScaleVector(payload.value);
         const scaleFactor = this.di.canvasTransformState.getScaleFactor();
 
-        this.di.htmlView.setCanvasScale(scaleFactor);
-        this.di.htmlView.updateTransform();
+        this.di.graphController.setTransformScale(scaleFactor)
     }
 
-    releaseGrab = () => {
+    private readonly releaseGrab = () => {
         this.di.canvasTransformState.releaseCurrentShift();
         this.di.htmlView.setDefaultCursor();
         this.di.mouseState.releaseMouse();

@@ -1,4 +1,4 @@
-import { ShiftVector } from "@/models/shift-vector";
+import { ShiftVector } from "@/controller/models/shift-vector";
 
 export class CanvasTransformState {
     private shift: ShiftVector = { dx: 0, dy: 0 };
@@ -30,9 +30,9 @@ export class CanvasTransformState {
 
     getScaleFactor(): number {
         if (this.scaleVector >= 1) {
-            return this.scaleVector * 0.25;
+            return this.scaleVector;
         }
 
-        return -1 / (this.scaleVector - 2) * 0.25;
+        return -1 / (this.scaleVector - 2);
     }
 }

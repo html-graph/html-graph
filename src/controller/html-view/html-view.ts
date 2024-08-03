@@ -1,5 +1,5 @@
-import { DiContainer } from "@/di-container/di-container";
-import { GraphEventType } from "@/models/graph-event";
+import { DiContainer } from "../di-container/di-container";
+import { GraphEventType } from "../models/graph-event";
 
 export class HtmlView {
     private readonly canvas: HTMLElement;
@@ -10,11 +10,24 @@ export class HtmlView {
 
     private readonly edgeIdToElMapping = new Map<string, SVGLineElement>();
 
-    private dx = 0;
+    private readonly onNodeClick = (event: MouseEvent) => {
+        if (event.button !== 0) {
+            return;
+        }
 
-    private dy = 0;
+        const target = event.target as HTMLElement;
 
-    private scale = 1;
+        const { top, left } = this.canvas.getBoundingClientRect();
+
+        this.di.eventSubject.dispatch(
+            GraphEventType.GrabNode,
+            {
+                nodeId: target.id,
+                nodeMouseX: event.offsetX - target.clientWidth / 2 + left,
+                nodeMouseY: event.offsetY - target.clientHeight / 2 + top,
+            }
+        );
+    };
 
     constructor(
         private readonly di: DiContainer,
@@ -42,12 +55,8 @@ export class HtmlView {
         this.canvas.style.cursor = "default";
     }
 
-    moveNodeOnTop(nodeId: string): void {
-        const el = this.nodeIdToElMapping.get(nodeId);
-
-        if (el !== undefined) {
-            this.canvas.appendChild(el);
-        }
+    moveNodeOnTop(el: HTMLElement): void {
+        this.canvas.appendChild(el);
     }
 
     appendNode(nodeId: string, el: HTMLElement, x: number, y: number): void {
@@ -59,32 +68,14 @@ export class HtmlView {
         el.style.cursor = "grab";
         el.style.userSelect = "none";
         el.style.zIndex = "0";
-        el.style.transform = "translate(0px, 0px)";
+        el.style.transform = "matrix(1, 0, 0, 1, 0, 0)";
 
         this.canvas.appendChild(el);
 
         el.style.left = `${x - el.clientWidth / 2}px`;
         el.style.top = `${y - el.clientHeight / 2}px`;
         el.style.visibility = "visible";
-
-        el.addEventListener('mousedown', (event: MouseEvent) => {
-            if (event.button !== 0) {
-                return;
-            }
-
-            const target = event.target as HTMLElement;
-
-            const { top, left } = this.canvas.getBoundingClientRect();
-
-            this.di.eventSubject.dispatch(
-                GraphEventType.GrabNode,
-                {
-                    nodeId: target.id,
-                    nodeMouseX: event.offsetX - el.clientWidth / 2 + left,
-                    nodeMouseY: event.offsetY - el.clientHeight / 2 + top,
-                }
-            );
-        });
+        el.addEventListener('mousedown', this.onNodeClick);
     }
 
     appendEdge(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {
@@ -96,19 +87,15 @@ export class HtmlView {
         line.setAttribute("x2", `${x2}`);
         line.setAttribute("y2", `${y2}`);
         line.setAttribute("stroke", "black")
-        line.style.transform = "translate(0px, 0px)";
+        line.style.transform = "matrix(1, 0, 0, 1, 0, 0)";
 
         this.svg.append(line);
         this.edgeIdToElMapping.set(edgeId, line);
     }
 
-    moveNodeTo(nodeId: string, x: number, y: number): void {
-        const el = this.nodeIdToElMapping.get(nodeId);
-
-        if (el) {
-            el.style.left = `${x - el.clientWidth / 2}px`;
-            el.style.top = `${y - el.clientHeight / 2}px`;
-        }
+    moveNodeTo(el: HTMLElement, x: number, y: number): void {
+        el.style.left = `${x - el.clientWidth / 2}px`;
+        el.style.top = `${y - el.clientHeight / 2}px`;
     }
 
     moveEdgeTo(edgeId: string, x1: number, y1: number, x2: number, y2: number): void {
@@ -122,23 +109,38 @@ export class HtmlView {
         }
     }
 
-    setCanvasShift(dx: number, dy: number): void {
-        this.dx = dx;
-        this.dy = dy;
+    updateNodeTransform(el: HTMLElement, x: number, y: number, dx: number, dy: number, scale: number): void {
+        // 1 0 -x   s 0 dx   1 0 x
+        // 0 1 -y   0 s dy   0 1 y
+        // 0 0 1    0 0 1    0 0 1
+
+        // a c e
+        // b d f
+
+        // a = s
+        // b = 0
+        // c = 0
+        // d = s
+        // e = x * (s - 1) + dx
+        // f = y * (s - 1) + dy
+        //
+        // s !== 1
+        // x = (e - dx) / (s - 1)
+        // y = (f - dy) / (s - 1)
+        //
+        // s === 1
+        // x = e - dx
+        // y = f - dy
+
+        el.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x * (scale - 1) + dx}, ${y * (scale - 1) + dy})`;
     }
 
-    setCanvasScale(scaleFactor: number): void {
-        this.scale = scaleFactor;
-    }
+    updateEdgeTransform(edgeId: string, dx: number, dy: number, scale: number): void {
+        const line = this.edgeIdToElMapping.get(edgeId);
 
-    updateTransform(): void {
-        this.nodeIdToElMapping.forEach((el) => {
-            el.style.transform = `matrix(${this.scale}, 0, 0, ${this.scale}, ${this.dx}, ${this.dy})`;
-        });
-
-        this.edgeIdToElMapping.forEach((el) => {
-            el.style.transform = `matrix(${this.scale}, 0, 0, ${this.scale}, ${this.dx}, ${this.dy})`;
-        });
+        if (line !== undefined) {
+            line.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${dx}, ${dy})`;
+        }
     }
 
     private createCanvas(): HTMLDivElement {

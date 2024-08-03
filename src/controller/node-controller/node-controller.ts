@@ -1,4 +1,4 @@
-import { DiContainer } from "@/di-container/di-container";
+import { DiContainer } from "../di-container/di-container";
 
 export class NodeController {
     constructor(
@@ -20,11 +20,11 @@ export class NodeController {
     }
 
     moveOnTop(): void {
-        this.di.htmlView.moveNodeOnTop(this.id);
+        this.di.htmlView.moveNodeOnTop(this.el);
     }
 
     moveTo(x: number, y: number): void {
-        this.di.htmlView.moveNodeTo(this.id, x, y);
+        this.di.htmlView.moveNodeTo(this.el, x, y);
 
         this.x = x;
         this.y = y;
@@ -32,5 +32,9 @@ export class NodeController {
         this.di.graphController.getAdjacentEdges(this.id).forEach(edge => {
             edge.updatePosition();
         });
+    }
+
+    updateTransform(dx: number, dy: number, scale: number): void {
+        this.di.htmlView.updateNodeTransform(this.el, this.x, this.y, dx, dy, scale);
     }
 }

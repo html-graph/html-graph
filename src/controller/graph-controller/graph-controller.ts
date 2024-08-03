@@ -1,8 +1,8 @@
 import { NodeDto } from "@/models/node-dto";
 import { EdgeDto } from "@/models/edge-dto";
-import { DiContainer } from "@/di-container/di-container";
-import { NodeController } from "@/node-controller/node-controller";
-import { EdgeController } from "@/edge-controller/edge-controller";
+import { NodeController } from "../node-controller/node-controller";
+import { EdgeController } from "../edge-controller/edge-controller";
+import { DiContainer } from "../di-container/di-container";
 
 export class GraphController {
     private nodes: Map<string, NodeController> = new Map<string, NodeController>();
@@ -15,6 +15,12 @@ export class GraphController {
 
     private circularEdgesMap = new Map<string, EdgeController[]>();
 
+    private dx = 0;
+
+    private dy = 0;
+
+    private scale = 1;
+
     constructor(
         private readonly di: DiContainer,
     ) { }
@@ -24,7 +30,14 @@ export class GraphController {
     }
 
     addEdge(req: EdgeDto): void {
-        const edge = new EdgeController(this.di, req.id, req.from, req.to);
+        const from = this.getNode(req.from);
+        const to = this.getNode(req.to);
+
+        if (from === null || to === null) {
+            return;
+        }
+
+        const edge = new EdgeController(this.di, req.id, from, to);
 
         this.edges.set(req.id, edge);
 
@@ -83,5 +96,28 @@ export class GraphController {
             ...this.getOutcomingEdges(nodeId),
             ...this.getCircularEdges(nodeId),
         ];
+    }
+
+    setTransformShift(dx: number, dy: number): void {
+        this.dx = dx;
+        this.dy = dy;
+
+        this.updateTransform();
+    }
+
+    setTransformScale(scale: number): void {
+        this.scale = scale;
+
+        this.updateTransform();
+    }
+
+    private updateTransform(): void {
+        this.nodes.forEach(node => {
+            node.updateTransform(this.dx, this.dy, this.scale);
+        });
+
+        this.edges.forEach(edge => {
+            edge.updateTransform(this.dx, this.dy, this.scale);
+        });
     }
 }

@@ -1,6 +1,6 @@
-import { DiContainer } from "@/di-container/di-container";
 import { EdgeDto } from "@/models/edge-dto";
 import { NodeDto } from "@/models/node-dto";
+import { DiContainer } from "../di-container/di-container";
 
 export class CommandsQueue {
     private addNodeQueue: NodeDto[] = [];
