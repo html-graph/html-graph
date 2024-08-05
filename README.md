@@ -2,7 +2,7 @@
 
 ### At the moment this library is under development and not stable
 
-Whats in plan:
+Whats planned:
 
 * support for html nodes, because it will allow huge customization possibilities
 * wide configuration options for canvas, nodes and arrows

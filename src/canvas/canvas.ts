@@ -1,29 +1,18 @@
-import { Controller } from "@/controller/controller";
-import { NodeDto } from "@/models/node-dto";
-import { EdgeDto } from "@/models/edge-dto";
+import { DiContainer } from "@/di-container/di-container";
+import { GraphEventType } from "@/event-subject/models/graph-event-type";
 
 export class Canvas {
-    private controller: Controller;
+    private readonly di = new DiContainer(this.canvasWrapper);
 
-    constructor(canvasWrapper: HTMLElement) {
-        this.controller = new Controller(canvasWrapper);
+    constructor(
+        private readonly canvasWrapper: HTMLElement
+    ) {
+        this.di.eventSubject.on(GraphEventType.HostElementResize, (payload) => {
+            this.di.htmlController.redraw();
+        })
     }
 
-    addNode(req: NodeDto): Canvas {
-        this.controller.addNode(req);
-
-        return this;
-    }
-
-    connectNodes(req: EdgeDto): Canvas {
-        this.controller.connectNodes(req);
-
-        return this;
-    }
-
-    flush(): Canvas {
-        this.controller.flush();
-
-        return this;
+    destroy(): void {
+        this.di.htmlController.destroy();
     }
 }
