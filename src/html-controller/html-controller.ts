@@ -1,6 +1,3 @@
-import { DiContainer } from "@/di-container/di-container";
-import { GraphEventType } from "@/event-subject/models/graph-event-type";
-
 export class HtmlController {
     private readonly host: HTMLElement;
 
@@ -14,7 +11,6 @@ export class HtmlController {
 
     constructor(
         private readonly canvasWrapper: HTMLElement,
-        private readonly di: DiContainer
     ) {
         this.host = this.createHost();
         this.svg = this.createSvg();
@@ -38,49 +34,47 @@ export class HtmlController {
         this.hostResizeObserver.observe(this.host);
     }
 
-    redraw(): void {
-        this.draw();
-    }
-
     destroy(): void {
         this.hostResizeObserver.unobserve(this.host);
         this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
     }
 
-    private draw(): void {
-        this.canvasCtx.moveTo(0, 0);
-        this.canvasCtx.lineTo(200, 100);
-        this.canvasCtx.lineWidth = 10;
-        this.canvasCtx.stroke();
+    private drawBackground(): void {
+        this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         const { width, height } = this.host.getBoundingClientRect();
+        const resWidth = 2 * width;
+        const resHeight = 2 * height;
 
-        const centerX = width / 2;
-        const centerY = height / 2;
+        const centerX = resWidth / 2;
+        const centerY = resHeight / 2;
 
-        const horN = Math.ceil(Math.floor(height / 20) / 2);
-        const vertN = Math.ceil(Math.floor(width / 20) / 2);
+        const horN = Math.ceil(Math.floor(resWidth / 100) / 2);
+        const vertN = Math.ceil(Math.floor(resHeight / 100) / 2);
 
-        const iFrom = centerX - horN;
-        const iTo = centerX + horN;
+        const intX = horN * 100;
+        const intY = vertN * 100;
 
-        const jFrom = centerY - vertN;
-        const jTo = centerY + vertN;
+        const iFrom = centerX - intX;
+        const iTo = centerX + intX;
+
+        const jFrom = centerY - intY;
+        const jTo = centerY + intY;
 
         this.canvasCtx.strokeStyle = "black";
-        this.canvasCtx.lineWidth = 10;
+        this.canvasCtx.lineWidth = 1;
 
-        for (let i = iFrom; i <= iTo; i+= 20) {
-            for (let j = jFrom; j <= jTo; j+= 20) {
+        for (let i = iFrom; i <= iTo; i+= 100) {
+            for (let j = jFrom; j <= jTo; j+= 100) {
                 this.canvasCtx.beginPath();
                 this.canvasCtx.moveTo(i, 0);
-                this.canvasCtx.lineTo(i, width);
+                this.canvasCtx.lineTo(i, resHeight);
                 this.canvasCtx.stroke();
 
                 this.canvasCtx.beginPath();
                 this.canvasCtx.moveTo(0, j);
-                this.canvasCtx.lineTo(width, j);
+                this.canvasCtx.lineTo(resWidth, j);
                 this.canvasCtx.stroke();
             }
         }
@@ -118,18 +112,19 @@ export class HtmlController {
     }
 
     private createHostResizeObserver(): ResizeObserver {
-        return new ResizeObserver((entries) => {
-            const rect = entries[0].contentRect;
-
-            this.di.eventSubject.dispatch(GraphEventType.HostElementResize, {
-                newWidth: rect.width,
-                newHeight: rect.height,
-            });
-
-            this.canvas.style.width = `${rect.width}px`;
-            this.canvas.style.height = `${rect.height}px`;
-            this.canvas.width = rect.width;
-            this.canvas.height = rect.height;
+        return new ResizeObserver(() => {
+            this.updateCanvasResolution();
+            this.drawBackground();
         });
+    }
+
+    private updateCanvasResolution(): void {
+        const { width, height } = this.host.getBoundingClientRect();
+
+        const resWidth = 2 * width;
+        const resHeight = 2 * height;
+
+        this.canvas.width = resWidth;
+        this.canvas.height = resHeight;
     }
 }

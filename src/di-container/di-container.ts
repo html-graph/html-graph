@@ -7,7 +7,7 @@ export class DiContainer {
     readonly eventSubject: EventSubject;
 
     constructor(canvasWrapper: HTMLElement) {
-        this.htmlController = new HtmlController(canvasWrapper, this);
+        this.htmlController = new HtmlController(canvasWrapper);
 
         this.eventSubject = new EventSubject();
     }
