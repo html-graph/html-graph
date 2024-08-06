@@ -1,3 +1,3 @@
 export enum GraphEventType {
-    HostElementResize = 'HostElementResize',
+    CanvasMouseLeftDown = 'CanvasMouseLeftDown',
 }

@@ -9,10 +9,124 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
+    private readonly minScaleShift = -5;
+
+    private readonly maxScaleShift = 3;
+
+    private scaleShift = 0;
+
+    private scaleBase = 1.2
+
+    private get scale(): number {
+        return Math.pow(this.scaleBase, -this.scaleShift);
+    }
+
+    private viewportShiftX = 0;
+
+    private viewportShiftY = 0;
+
+    private hostWidth = 0;
+
+    private hostHeight = 0;
+
+    private halfHostWidth = 0;
+
+    private halfHostHeight = 0;
+
+    /**
+     *   1 0 -dx  s 0 0  1 0 dx
+     *   0 1 -dy  0 s 0  0 1 dy
+     *   0 0 1    0 0 1  0 0 1
+     *
+     *   s 0 -dx  1 0 dx
+     *   0 s -dy  0 1 dy
+     *   0 0 1    0 0 1
+     *
+     *   s 0 (s - 1) * dx
+     *   0 s (s - 1) * dy
+     *   0 0 1
+     *
+     *   x2 = s * x1 + (s-1) * dx
+     *   y2 = s * y1 + (s-1) * dy
+     *
+     *   x1 = (x2 - (s-1) * dx) / s
+     *   y1 = (y2 - (s-1) * dy) / s
+     *
+     */
+
+    private getCanvasX(x1: number): number {
+        return (x1 + this.viewportShiftX) * this.scale + this.halfHostWidth;
+    }
+
+    private getCanvasY(y1: number): number {
+        return (y1 + this.viewportShiftY) * this.scale + this.halfHostHeight;
+    }
+
+    private getViewportX(x2: number): number {
+        return (x2- this.halfHostWidth) / this.scale - this.viewportShiftX ;
+    }
+
+    private getViewportY(y2: number): number {
+        return (y2 - this.halfHostHeight) / this.scale - this.viewportShiftY;
+    }
+
+    private readonly onMouseDown = (event: MouseEvent) => {
+        if (event.button !== 0) {
+            return;
+        }
+
+        this.setCursor('grab');
+    }
+
+    private readonly onMouseMove = (event: MouseEvent) => {
+        if (event.buttons !== 1) {
+            return
+        }
+
+        this.viewportShiftX += event.movementX / this.scale;
+        this.viewportShiftY += event.movementY / this.scale;
+        this.drawBackground();
+    }
+
+    private readonly onMouseUp = (event: MouseEvent) => {
+        if (event.button !== 0) {
+            return;
+        }
+
+        this.setCursor('default');
+    }
+
+    private readonly onMouseWheelScroll = (event: WheelEvent) => {
+        if (!event.ctrlKey) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const prevScaleShift = this.scaleShift;
+        const unlimitedScaleShift = this.scaleShift + (event.deltaY > 0 ? 1 : -1);
+        const scaleShift = Math.min(Math.max(this.minScaleShift, unlimitedScaleShift), this.maxScaleShift);
+
+        if (scaleShift !== prevScaleShift) {
+            // this.scaleShift = scaleShift;
+            const { left, top } = this.host.getBoundingClientRect();
+
+            const viewX = this.getViewportX(event.clientX - left);
+            const viewY = this.getViewportY(event.clientY - top);
+
+            this.drawBackground();
+        }
+    }
+
     constructor(
         private readonly canvasWrapper: HTMLElement,
     ) {
         this.host = this.createHost();
+        this.host.addEventListener("mousedown", this.onMouseDown);
+        this.host.addEventListener("mouseup", this.onMouseUp);
+        this.host.addEventListener("mousemove", this.onMouseMove);
+        this.host.addEventListener("wheel", this.onMouseWheelScroll);
+
         this.svg = this.createSvg();
         this.canvas = this.createCanvas();
 
@@ -35,49 +149,21 @@ export class HtmlController {
     }
 
     destroy(): void {
+        this.host.removeEventListener("mousedown", this.onMouseDown);
+        this.host.removeEventListener("mouseup", this.onMouseUp);
+        this.host.removeEventListener("wheel", this.onMouseWheelScroll);
         this.hostResizeObserver.unobserve(this.host);
         this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
     }
 
+    private setCursor(type: 'grab' | 'default'): void {
+        this.canvas.style.cursor = type;
+    }
+
     private drawBackground(): void {
-        this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        const { width, height } = this.host.getBoundingClientRect();
-        const resWidth = 2 * width;
-        const resHeight = 2 * height;
-
-        const centerX = resWidth / 2;
-        const centerY = resHeight / 2;
-
-        const horN = Math.ceil(Math.floor(resWidth / 100) / 2);
-        const vertN = Math.ceil(Math.floor(resHeight / 100) / 2);
-
-        const intX = horN * 100;
-        const intY = vertN * 100;
-
-        const iFrom = centerX - intX;
-        const iTo = centerX + intX;
-
-        const jFrom = centerY - intY;
-        const jTo = centerY + intY;
-
-        this.canvasCtx.strokeStyle = "black";
-        this.canvasCtx.lineWidth = 1;
-
-        for (let i = iFrom; i <= iTo; i+= 100) {
-            for (let j = jFrom; j <= jTo; j+= 100) {
-                this.canvasCtx.beginPath();
-                this.canvasCtx.moveTo(i, 0);
-                this.canvasCtx.lineTo(i, resHeight);
-                this.canvasCtx.stroke();
-
-                this.canvasCtx.beginPath();
-                this.canvasCtx.moveTo(0, j);
-                this.canvasCtx.lineTo(resWidth, j);
-                this.canvasCtx.stroke();
-            }
-        }
+        this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
+        this.draw();
     }
 
     private createHost(): HTMLDivElement {
@@ -107,24 +193,56 @@ export class HtmlController {
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.style.position = "absolute";
+        canvas.style.cursor = "default";
 
         return canvas;
     }
 
     private createHostResizeObserver(): ResizeObserver {
         return new ResizeObserver(() => {
-            this.updateCanvasResolution();
+            this.updateCanvasDimensions();
             this.drawBackground();
         });
     }
 
-    private updateCanvasResolution(): void {
+    private updateCanvasDimensions(): void {
         const { width, height } = this.host.getBoundingClientRect();
 
-        const resWidth = 2 * width;
-        const resHeight = 2 * height;
+        this.hostWidth = width;
+        this.hostHeight = height;
+        this.halfHostWidth = width / 2;
+        this.halfHostHeight = height / 2;
+        this.canvas.width = width;
+        this.canvas.height = height;
+    }
 
-        this.canvas.width = resWidth;
-        this.canvas.height = resHeight;
+    private draw(): void {
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(0), 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.closePath();
+        this.canvasCtx.fillStyle = "black";
+        this.canvasCtx.fill();
+
+        this.canvasCtx.fillStyle = "#c9c9c9";
+
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(this.getCanvasX(100), this.getCanvasY(0) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.closePath();
+        this.canvasCtx.fill();
+
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(this.getCanvasX(-100), this.getCanvasY(0) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.closePath();
+        this.canvasCtx.fill();
+
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(100) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.closePath();
+        this.canvasCtx.fill();
+
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(-100) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.closePath();
+        this.canvasCtx.fill();
     }
 }
