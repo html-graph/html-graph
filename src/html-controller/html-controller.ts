@@ -9,29 +9,25 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
-    private readonly minScaleShift = -5;
+    private readonly minScaleShift = -10;
 
-    private readonly maxScaleShift = 3;
+    private readonly maxScaleShift = 10;
 
     private scaleShift = 0;
 
     private scaleBase = 1.2
 
-    private get scale(): number {
-        return Math.pow(this.scaleBase, -this.scaleShift);
+    private getScale(scaleShift: number): number {
+        return Math.pow(this.scaleBase, scaleShift);
     }
 
-    private viewportShiftX = 0;
+    private absoluteShiftX = 0;
 
-    private viewportShiftY = 0;
+    private absoluteShiftY = 0;
 
-    private hostWidth = 0;
+    private scalePivotX = 0;
 
-    private hostHeight = 0;
-
-    private halfHostWidth = 0;
-
-    private halfHostHeight = 0;
+    private scalePivotY = 0;
 
     /**
      *   1 0 -dx  s 0 0  1 0 dx
@@ -54,20 +50,20 @@ export class HtmlController {
      *
      */
 
-    private getCanvasX(x1: number): number {
-        return (x1 + this.viewportShiftX) * this.scale + this.halfHostWidth;
+    private getCanvasX(viewportX: number): number {
+        return (viewportX - this.scalePivotX - this.absoluteShiftX) * this.getScale(this.scaleShift) + this.scalePivotX;
     }
 
-    private getCanvasY(y1: number): number {
-        return (y1 + this.viewportShiftY) * this.scale + this.halfHostHeight;
+    private getCanvasY(viewportY: number): number {
+        return (viewportY - this.scalePivotY - this.absoluteShiftY) * this.getScale(this.scaleShift) + this.scalePivotY;
     }
 
-    private getViewportX(x2: number): number {
-        return (x2- this.halfHostWidth) / this.scale - this.viewportShiftX ;
+    private getAbsoluteX(canvasX: number): number {
+        return (canvasX - this.scalePivotX) / this.getScale(this.scaleShift) + this.scalePivotX + this.absoluteShiftX;
     }
 
-    private getViewportY(y2: number): number {
-        return (y2 - this.halfHostHeight) / this.scale - this.viewportShiftY;
+    private getAbsoluteY(canvasY: number): number {
+        return (canvasY - this.scalePivotY) / this.getScale(this.scaleShift) + this.scalePivotY + this.absoluteShiftY;
     }
 
     private readonly onMouseDown = (event: MouseEvent) => {
@@ -83,8 +79,12 @@ export class HtmlController {
             return
         }
 
-        this.viewportShiftX += event.movementX / this.scale;
-        this.viewportShiftY += event.movementY / this.scale;
+        const scale = this.getScale(this.scaleShift);
+        this.absoluteShiftX -= event.movementX / scale + this.scalePivotX;
+        this.absoluteShiftY -= event.movementY / scale + this.scalePivotY;
+        this.scalePivotX = 0;
+        this.scalePivotY = 0;
+
         this.drawBackground();
     }
 
@@ -102,17 +102,19 @@ export class HtmlController {
         }
 
         event.preventDefault();
-
         const prevScaleShift = this.scaleShift;
-        const unlimitedScaleShift = this.scaleShift + (event.deltaY > 0 ? 1 : -1);
+
+        const unlimitedScaleShift = this.scaleShift + (event.deltaY > 0 ? -1 : 1);
         const scaleShift = Math.min(Math.max(this.minScaleShift, unlimitedScaleShift), this.maxScaleShift);
 
         if (scaleShift !== prevScaleShift) {
-            // this.scaleShift = scaleShift;
             const { left, top } = this.host.getBoundingClientRect();
+            const canvasX = event.clientX - left;
+            const canvasY = event.clientY - top;
 
-            const viewX = this.getViewportX(event.clientX - left);
-            const viewY = this.getViewportY(event.clientY - top);
+            this.scalePivotX = canvasX;
+            this.scalePivotY = canvasY;
+            this.scaleShift = scaleShift;
 
             this.drawBackground();
         }
@@ -208,17 +210,16 @@ export class HtmlController {
     private updateCanvasDimensions(): void {
         const { width, height } = this.host.getBoundingClientRect();
 
-        this.hostWidth = width;
-        this.hostHeight = height;
-        this.halfHostWidth = width / 2;
-        this.halfHostHeight = height / 2;
         this.canvas.width = width;
         this.canvas.height = height;
     }
 
     private draw(): void {
+        const r = 10 * this.getScale(this.scaleShift);
+        const pi2 = 2 * Math.PI;
+
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(0), 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(0), r, 0, pi2);
         this.canvasCtx.closePath();
         this.canvasCtx.fillStyle = "black";
         this.canvasCtx.fill();
@@ -226,22 +227,22 @@ export class HtmlController {
         this.canvasCtx.fillStyle = "#c9c9c9";
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(100), this.getCanvasY(0) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.arc(this.getCanvasX(100), this.getCanvasY(0) , r, 0, pi2);
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(-100), this.getCanvasY(0) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.arc(this.getCanvasX(-100), this.getCanvasY(0) , r, 0, pi2);
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(100) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(100) , r, 0, pi2);
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(-100) , 10 * this.scale, 0, 2 * Math.PI);
+        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(-100) , r, 0, pi2);
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
     }
