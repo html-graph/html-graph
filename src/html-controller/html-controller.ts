@@ -1,35 +1,7 @@
-function getOriginalX(x1: number, xc: number, s: number, dx: number): number {
-    return (x1 + xc * (s - 1) - dx) / s;
-}
-
-function getOriginalY(y1: number, yc: number, s: number, dy: number): number {
-    return (y1 + yc * (s - 1) - dy) / s;
-}
-
-function getCanvasX(x0: number, s: number, dx: number): number {
-    return x0 * s + dx;
-}
-
-function getCanvasY(x0: number, s: number, dy: number): number {
-    return x0 * s + dy;
-}
-
-interface Transform {
-    scale: number,
-    cx: number,
-    cy: number,
+interface TransformState {
+    s: number,
     dx: number,
     dy: number,
-}
-
-function getNextTransform(v0: Transform, v1: Transform): Transform {
-    return {
-        scale: v0.scale * v1.scale,
-        cx: 0,
-        cy: 0,
-        dx: v0.scale * v1.dx + v0.dx,
-        dy: v0.scale * v1.dy + v0.dy,
-    }
 }
 
 export class HtmlController {
@@ -43,15 +15,11 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
-    private s = 1;
-
-    private dx = 0;
-
-    private dy = 0;
-
-    private cx = 0;
-
-    private cy = 0;
+    private t: TransformState = {
+      s: 1,
+      dx: 0,
+      dy: 0,
+    };
 
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button !== 0) {
@@ -66,25 +34,7 @@ export class HtmlController {
             return
         }
 
-        const t = getNextTransform({
-            scale: this.s,
-            cx: this.cx,
-            cy: this.cy,
-            dx: this.dx,
-            dy: this.dy,
-        }, {
-            scale: 1,
-            cx: 0,
-            cy: 0,
-            dx: event.movementX,
-            dy: event.movementY,
-        });
-
-        this.s = t.scale;
-        this.dx = t.dx;
-        this.dy = t.dy;
-        this.cx = t.cx;
-        this.cy = t.cy;
+        this.t = this.createTransformShift(-event.movementX, -event.movementY);
 
         this.drawBackground();
     }
@@ -103,34 +53,19 @@ export class HtmlController {
         }
 
         event.preventDefault();
-        // const prevScaleShift = this.scaleShift;
 
-        const deltaScale = (event.deltaY > 0 ? 1/1.2 : 1.2);
+        const deltaScale = event.deltaY > 0 ? (1 / 1.2) : 1.2;
 
         const { left, top } = this.host.getBoundingClientRect();
 
         const cx = event.clientX - left;
         const cy = event.clientY - top;
 
-        const t = getNextTransform({
-            scale: this.s,
-            cx: this.cx,
-            cy: this.cy,
-            dx: this.dx,
-            dy: this.dy,
-        }, {
-            scale: deltaScale,
-            cx: cx,
-            cy: cy,
-            dx: 0,
-            dy: 0,
-        });
-
-        this.s = t.scale;
-        this.dx = t.dx;
-        this.dy = t.dy;
-        this.cx = t.cx;
-        this.cy = this.cy;
+        this.t = this.createTransformScale(
+            deltaScale,
+            cx,
+            cy,
+        );
 
         this.drawBackground();
     }
@@ -172,6 +107,33 @@ export class HtmlController {
         this.hostResizeObserver.unobserve(this.host);
         this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
+    }
+
+    private getCanvasX(x0: number): number {
+        return (x0 - this.t.dx) / this.t.s;
+    }
+
+    private getCanvasY(y0: number): number {
+        return (y0 - this.t.dy) / this.t.s;
+    }
+
+
+    private createTransformShift(dx: number, dy: number): TransformState {
+        return {
+            s: this.t.s,
+            dx: dx * this.t.s + this.t.dx,
+            dy: dy * this.t.s + this.t.dy,
+        }
+    }
+
+    private createTransformScale(s: number, cx: number, cy: number): TransformState {
+        const res = {
+            s: this.t.s * s,
+            dx: this.t.s * (1 - s) * cx + this.t.dx,
+            dy: this.t.s * (1 - s) * cy + this.t.dy,
+        };
+
+        return res;
     }
 
     private setCursor(type: 'grab' | 'default'): void {
@@ -230,13 +192,13 @@ export class HtmlController {
     }
 
     private draw(): void {
-        const r = 10 * this.s;
+        const r = 10 *  1 / this.t.s;
         const pi2 = 2 * Math.PI;
 
         this.canvasCtx.beginPath();
         this.canvasCtx.arc(
-            getCanvasX(0, this.s, this.dx),
-            getCanvasY(0, this.s, this.dy),
+            this.getCanvasX(0),
+            this.getCanvasY(0),
             r,
             0,
             pi2
@@ -249,8 +211,8 @@ export class HtmlController {
 
         this.canvasCtx.beginPath();
         this.canvasCtx.arc(
-            getCanvasX(100, this.s, this.dx),
-            getCanvasY(0, this.s, this.dy),
+            this.getCanvasX(100),
+            this.getCanvasY(0),
             r,
             0,
             pi2
@@ -260,8 +222,8 @@ export class HtmlController {
 
         this.canvasCtx.beginPath();
         this.canvasCtx.arc(
-            getCanvasX(-100, this.s, this.dx),
-            getCanvasY(0, this.s, this.dy),
+            this.getCanvasX(-100),
+            this.getCanvasY(0),
             r,
             0,
             pi2
@@ -271,8 +233,8 @@ export class HtmlController {
 
         this.canvasCtx.beginPath();
         this.canvasCtx.arc(
-            getCanvasX(0, this.s, this.dx),
-            getCanvasY(100, this.s, this.dy),
+            this.getCanvasX(0),
+            this.getCanvasY(100),
             r,
             0,
             pi2
@@ -282,8 +244,8 @@ export class HtmlController {
 
         this.canvasCtx.beginPath();
         this.canvasCtx.arc(
-            getCanvasX(0, this.s, this.dx),
-            getCanvasY(-100, this.s, this.dy),
+            this.getCanvasX(0),
+            this.getCanvasY(-100),
             r,
             0,
             pi2
