@@ -1,3 +1,37 @@
+function getOriginalX(x1: number, xc: number, s: number, dx: number): number {
+    return (x1 + xc * (s - 1) - dx) / s;
+}
+
+function getOriginalY(y1: number, yc: number, s: number, dy: number): number {
+    return (y1 + yc * (s - 1) - dy) / s;
+}
+
+function getCanvasX(x0: number, s: number, dx: number): number {
+    return x0 * s + dx;
+}
+
+function getCanvasY(x0: number, s: number, dy: number): number {
+    return x0 * s + dy;
+}
+
+interface Transform {
+    scale: number,
+    cx: number,
+    cy: number,
+    dx: number,
+    dy: number,
+}
+
+function getNextTransform(v0: Transform, v1: Transform): Transform {
+    return {
+        scale: v0.scale * v1.scale,
+        cx: 0,
+        cy: 0,
+        dx: v0.scale * v1.dx + v0.dx,
+        dy: v0.scale * v1.dy + v0.dy,
+    }
+}
+
 export class HtmlController {
     private readonly host: HTMLElement;
 
@@ -9,62 +43,15 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
-    private readonly minScaleShift = -10;
+    private s = 1;
 
-    private readonly maxScaleShift = 10;
+    private dx = 0;
 
-    private scaleShift = 0;
+    private dy = 0;
 
-    private scaleBase = 1.2
+    private cx = 0;
 
-    private getScale(scaleShift: number): number {
-        return Math.pow(this.scaleBase, scaleShift);
-    }
-
-    private absoluteShiftX = 0;
-
-    private absoluteShiftY = 0;
-
-    private scalePivotX = 0;
-
-    private scalePivotY = 0;
-
-    /**
-     *   1 0 -dx  s 0 0  1 0 dx
-     *   0 1 -dy  0 s 0  0 1 dy
-     *   0 0 1    0 0 1  0 0 1
-     *
-     *   s 0 -dx  1 0 dx
-     *   0 s -dy  0 1 dy
-     *   0 0 1    0 0 1
-     *
-     *   s 0 (s - 1) * dx
-     *   0 s (s - 1) * dy
-     *   0 0 1
-     *
-     *   x2 = s * x1 + (s-1) * dx
-     *   y2 = s * y1 + (s-1) * dy
-     *
-     *   x1 = (x2 - (s-1) * dx) / s
-     *   y1 = (y2 - (s-1) * dy) / s
-     *
-     */
-
-    private getCanvasX(viewportX: number): number {
-        return (viewportX - this.scalePivotX - this.absoluteShiftX) * this.getScale(this.scaleShift) + this.scalePivotX;
-    }
-
-    private getCanvasY(viewportY: number): number {
-        return (viewportY - this.scalePivotY - this.absoluteShiftY) * this.getScale(this.scaleShift) + this.scalePivotY;
-    }
-
-    private getAbsoluteX(canvasX: number): number {
-        return (canvasX - this.scalePivotX) / this.getScale(this.scaleShift) + this.scalePivotX + this.absoluteShiftX;
-    }
-
-    private getAbsoluteY(canvasY: number): number {
-        return (canvasY - this.scalePivotY) / this.getScale(this.scaleShift) + this.scalePivotY + this.absoluteShiftY;
-    }
+    private cy = 0;
 
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button !== 0) {
@@ -79,11 +66,25 @@ export class HtmlController {
             return
         }
 
-        const scale = this.getScale(this.scaleShift);
-        this.absoluteShiftX -= event.movementX / scale + this.scalePivotX;
-        this.absoluteShiftY -= event.movementY / scale + this.scalePivotY;
-        this.scalePivotX = 0;
-        this.scalePivotY = 0;
+        const t = getNextTransform({
+            scale: this.s,
+            cx: this.cx,
+            cy: this.cy,
+            dx: this.dx,
+            dy: this.dy,
+        }, {
+            scale: 1,
+            cx: 0,
+            cy: 0,
+            dx: event.movementX,
+            dy: event.movementY,
+        });
+
+        this.s = t.scale;
+        this.dx = t.dx;
+        this.dy = t.dy;
+        this.cx = t.cx;
+        this.cy = t.cy;
 
         this.drawBackground();
     }
@@ -102,22 +103,36 @@ export class HtmlController {
         }
 
         event.preventDefault();
-        const prevScaleShift = this.scaleShift;
+        // const prevScaleShift = this.scaleShift;
 
-        const unlimitedScaleShift = this.scaleShift + (event.deltaY > 0 ? -1 : 1);
-        const scaleShift = Math.min(Math.max(this.minScaleShift, unlimitedScaleShift), this.maxScaleShift);
+        const deltaScale = (event.deltaY > 0 ? 1/1.2 : 1.2);
 
-        if (scaleShift !== prevScaleShift) {
-            const { left, top } = this.host.getBoundingClientRect();
-            const canvasX = event.clientX - left;
-            const canvasY = event.clientY - top;
+        const { left, top } = this.host.getBoundingClientRect();
 
-            this.scalePivotX = canvasX;
-            this.scalePivotY = canvasY;
-            this.scaleShift = scaleShift;
+        const cx = event.clientX - left;
+        const cy = event.clientY - top;
 
-            this.drawBackground();
-        }
+        const t = getNextTransform({
+            scale: this.s,
+            cx: this.cx,
+            cy: this.cy,
+            dx: this.dx,
+            dy: this.dy,
+        }, {
+            scale: deltaScale,
+            cx: cx,
+            cy: cy,
+            dx: 0,
+            dy: 0,
+        });
+
+        this.s = t.scale;
+        this.dx = t.dx;
+        this.dy = t.dy;
+        this.cx = t.cx;
+        this.cy = this.cy;
+
+        this.drawBackground();
     }
 
     constructor(
@@ -215,11 +230,17 @@ export class HtmlController {
     }
 
     private draw(): void {
-        const r = 10 * this.getScale(this.scaleShift);
+        const r = 10 * this.s;
         const pi2 = 2 * Math.PI;
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(0), r, 0, pi2);
+        this.canvasCtx.arc(
+            getCanvasX(0, this.s, this.dx),
+            getCanvasY(0, this.s, this.dy),
+            r,
+            0,
+            pi2
+        );
         this.canvasCtx.closePath();
         this.canvasCtx.fillStyle = "black";
         this.canvasCtx.fill();
@@ -227,22 +248,46 @@ export class HtmlController {
         this.canvasCtx.fillStyle = "#c9c9c9";
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(100), this.getCanvasY(0) , r, 0, pi2);
+        this.canvasCtx.arc(
+            getCanvasX(100, this.s, this.dx),
+            getCanvasY(0, this.s, this.dy),
+            r,
+            0,
+            pi2
+        );
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(-100), this.getCanvasY(0) , r, 0, pi2);
+        this.canvasCtx.arc(
+            getCanvasX(-100, this.s, this.dx),
+            getCanvasY(0, this.s, this.dy),
+            r,
+            0,
+            pi2
+        );
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(100) , r, 0, pi2);
+        this.canvasCtx.arc(
+            getCanvasX(0, this.s, this.dx),
+            getCanvasY(100, this.s, this.dy),
+            r,
+            0,
+            pi2
+        );
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(this.getCanvasX(0), this.getCanvasY(-100) , r, 0, pi2);
+        this.canvasCtx.arc(
+            getCanvasX(0, this.s, this.dx),
+            getCanvasY(-100, this.s, this.dy),
+            r,
+            0,
+            pi2
+        );
         this.canvasCtx.closePath();
         this.canvasCtx.fill();
     }
