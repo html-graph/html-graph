@@ -15,6 +15,8 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
+    private readonly scaleVelocity = 1.2;
+
     private t: TransformState = {
       s: 1,
       dx: 0,
@@ -54,10 +56,9 @@ export class HtmlController {
 
         event.preventDefault();
 
-        const deltaScale = event.deltaY > 0 ? (1 / 1.2) : 1.2;
+        const deltaScale = event.deltaY < 0 ? (1 / this.scaleVelocity) : this.scaleVelocity;
 
         const { left, top } = this.host.getBoundingClientRect();
-
         const cx = event.clientX - left;
         const cy = event.clientY - top;
 
@@ -108,15 +109,6 @@ export class HtmlController {
         this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
     }
-
-    private getCanvasX(x0: number): number {
-        return (x0 - this.t.dx) / this.t.s;
-    }
-
-    private getCanvasY(y0: number): number {
-        return (y0 - this.t.dy) / this.t.s;
-    }
-
 
     private createTransformShift(dx: number, dy: number): TransformState {
         return {
@@ -192,65 +184,36 @@ export class HtmlController {
     }
 
     private draw(): void {
-        const r = 10 *  1 / this.t.s;
+        this.drawPoint(0, 0, "black");
+        this.drawPoint(100, 0, "#c9c9c9");
+        this.drawPoint(-100, 0, "#c9c9c9");
+        this.drawPoint(0, 100, "#c9c9c9");
+        this.drawPoint(0, -100, "#c9c9c9");
+    }
+
+    private getCanvasCoords([x0, y0]: [number, number]): [number, number] {
+        return [
+           (x0 - this.t.dx) / this.t.s,
+           (y0 - this.t.dy) / this.t.s,
+        ];
+    }
+
+    private getCanvasScale(): number {
+        return 1 / this.t.s;
+    }
+
+    private drawPoint(x: number, y: number, color: string): void {
+        const canvasScale = this.getCanvasScale();
+        const r = 10 *  canvasScale;
         const pi2 = 2 * Math.PI;
 
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(
-            this.getCanvasX(0),
-            this.getCanvasY(0),
-            r,
-            0,
-            pi2
-        );
-        this.canvasCtx.closePath();
-        this.canvasCtx.fillStyle = "black";
-        this.canvasCtx.fill();
-
-        this.canvasCtx.fillStyle = "#c9c9c9";
+        const [x1, y1] = this.getCanvasCoords([x, y]);
 
         this.canvasCtx.beginPath();
-        this.canvasCtx.arc(
-            this.getCanvasX(100),
-            this.getCanvasY(0),
-            r,
-            0,
-            pi2
-        );
+        this.canvasCtx.arc(x1, y1, r, 0, pi2);
         this.canvasCtx.closePath();
-        this.canvasCtx.fill();
 
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(
-            this.getCanvasX(-100),
-            this.getCanvasY(0),
-            r,
-            0,
-            pi2
-        );
-        this.canvasCtx.closePath();
-        this.canvasCtx.fill();
-
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(
-            this.getCanvasX(0),
-            this.getCanvasY(100),
-            r,
-            0,
-            pi2
-        );
-        this.canvasCtx.closePath();
-        this.canvasCtx.fill();
-
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(
-            this.getCanvasX(0),
-            this.getCanvasY(-100),
-            r,
-            0,
-            pi2
-        );
-        this.canvasCtx.closePath();
+        this.canvasCtx.fillStyle = color;
         this.canvasCtx.fill();
     }
 }
