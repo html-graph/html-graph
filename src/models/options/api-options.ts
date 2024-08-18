@@ -11,5 +11,8 @@ export interface ApiOptions {
             ctx: CanvasRenderingContext2D,
             transformer: PublicViewportTransformer,
         ) => void;
+        dotColor?: string;
+        dotGap?: number;
+        dotRadius?: number;
     },
 }

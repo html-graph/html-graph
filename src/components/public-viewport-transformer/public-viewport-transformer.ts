@@ -23,7 +23,7 @@ export class PublicViewportTransformer {
 
     /**
      * for given viewport coordinates returns absolute coordinates
-     * absolute coordinates represent actual coordinates, which stay constant event for transformed canvas
+     * absolute coordinates represent actual coordinates, which stay constant even for transformed canvas
      */
     getAbsCoords(x0: number, y0: number): [number, number] {
         return this.transformer.getAbsoluteCoordsFor(x0, y0);
