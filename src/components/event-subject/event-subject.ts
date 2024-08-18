@@ -1,5 +1,5 @@
-import { GraphEvent } from "@/models/graph-event";
-import { GraphEventType } from "@/models/graph-event-type";
+import { GraphEvent } from "@/models/events/graph-event";
+import { GraphEventType } from "@/models/events/graph-event-type";
 
 // https://medium.com/@aungmo/leveraging-advanced-typescript-features-for-dynamic-function-arguments-d54771eee642
 

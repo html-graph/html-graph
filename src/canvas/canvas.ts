@@ -1,30 +1,9 @@
-import { DiContainer } from "@/di-container/di-container";
-import { ApiOptions } from "@/models/api-options";
-import { Options } from "@/models/options";
+import { DiContainer } from "@/components/di-container/di-container";
+import { ApiOptions } from "@/models/options/api-options";
+import { Options } from "@/models/options/options";
 
 export class Canvas {
-    private readonly di: DiContainer;
-
-    constructor(canvasWrapper: HTMLElement, apiOptions?: ApiOptions) {
-        const options: Options = {
-            scale: {
-                velocity: apiOptions?.scale?.velocity ?? 1.2,
-            },
-            background: {
-                drawingFn: (ctx) => {
-                    this.drawBackground(ctx);
-                }
-            }
-        };
-
-        this.di = new DiContainer(canvasWrapper, options);
-    }
-
-    destroy(): void {
-        this.di.htmlController.destroy();
-    }
-
-    private drawBackground(ctx: CanvasRenderingContext2D): void {
+    private readonly defaultBgDrawingFn = (ctx: CanvasRenderingContext2D) => {
         const entries = ([
             [0, 0, "black"],
             [100, 0, "#c9c9c9"],
@@ -47,5 +26,28 @@ export class Canvas {
             ctx.fillStyle = entry[2];
             ctx.fill();
         });
+    };
+
+    options: Options = {
+        scale: {
+            velocity: this.apiOptions?.scale?.velocity ?? 1.2,
+            min: this.apiOptions?.scale?.min ?? null,
+            max: this.apiOptions?.scale?.max ?? null,
+        },
+        background: {
+            drawingFn: this.apiOptions?.background?.drawingFn ?? this.defaultBgDrawingFn
+        },
+    };
+
+
+    private readonly di = new DiContainer(this.canvasWrapper, this.options);
+
+    constructor(
+        private readonly canvasWrapper: HTMLElement,
+        private readonly apiOptions?: ApiOptions
+    ) { }
+
+    destroy(): void {
+        this.di.htmlController.destroy();
     }
 }

@@ -1,4 +1,4 @@
-import { TransformState } from "@/models/transform-state";
+import { TransformState } from "@/models/transform/transform-state";
 
 export class ViewportTransformer {
     private state: TransformState = {
@@ -56,10 +56,14 @@ export class ViewportTransformer {
         return 1 / this.state.scale;
     }
 
-    getCanvasCoordsFor(x0: number, y0: number): [number, number] {
+    getAbsoluteCoordsFor(x0: number, y0: number): [number, number] {
         return [
            x0 * this.state.scale + this.state.deltaX,
            y0 * this.state.scale + this.state.deltaY,
         ];
+    }
+
+    getAbsoluteScale(): number {
+        return this.state.scale;
     }
 }

@@ -1,8 +1,8 @@
-import { EventHandler } from "@/event-handler/event-handler";
-import { EventSubject } from "@/event-subject/event-subject";
-import { HtmlController } from "@/html-controller/html-controller";
-import { Options } from "@/models/options";
-import { ViewportTransformer } from "@/viewport-transformer/viewport-transformer";
+import { Options } from "@/models/options/options";
+import { HtmlController } from "../html-controller/html-controller";
+import { EventSubject } from "../event-subject/event-subject";
+import { EventHandler } from "../event-handler/event-handler";
+import { ViewportTransformer } from "../viewport-transformer/viewport-transformer";
 
 export class DiContainer {
     readonly htmlController: HtmlController;

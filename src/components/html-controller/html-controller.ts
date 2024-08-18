@@ -1,5 +1,5 @@
-import { DiContainer } from "@/di-container/di-container";
-import { GraphEventType } from "@/models/graph-event-type";
+import { GraphEventType } from "@/models/events/graph-event-type";
+import { DiContainer } from "../di-container/di-container";
 
 export class HtmlController {
     private readonly host: HTMLElement;
@@ -71,8 +71,6 @@ export class HtmlController {
 
         this.host.appendChild(this.svg);
         this.host.appendChild(this.canvas);
-
-        this.canvasWrapper.style.overflow = "hidden";
         this.canvasWrapper.appendChild(this.host);
 
         this.hostResizeObserver = this.createHostResizeObserver();
