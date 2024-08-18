@@ -1,8 +1,5 @@
-interface TransformState {
-    s: number,
-    dx: number,
-    dy: number,
-}
+import { DiContainer } from "@/di-container/di-container";
+import { GraphEventType } from "@/models/graph-event-type";
 
 export class HtmlController {
     private readonly host: HTMLElement;
@@ -15,60 +12,45 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
-    private readonly scaleVelocity = 1.2;
-
-    private t: TransformState = {
-      s: 1,
-      dx: 0,
-      dy: 0,
-    };
-
     private readonly onMouseDown = (event: MouseEvent) => {
-        if (event.button !== 0) {
-            return;
+        if (event.button === 0) {
+            this.di.eventSubject.dispatch(GraphEventType.CanvasGrab);
         }
-
-        this.setCursor('grab');
     }
 
     private readonly onMouseMove = (event: MouseEvent) => {
-        if (event.buttons !== 1) {
-            return
+        if (event.buttons === 1) {
+            this.di.eventSubject.dispatch(
+                GraphEventType.CanvasDrag,
+                { dx: event.movementX, dy: event.movementY },
+            );
         }
-
-        this.t = this.createTransformShiftInverse(event.movementX, event.movementY);
-
-        this.drawBackground();
     }
 
     private readonly onMouseUp = (event: MouseEvent) => {
-        if (event.button !== 0) {
-            return;
+        if (event.button === 0) {
+            this.di.eventSubject.dispatch(GraphEventType.CanvasRelease);
         }
-
-        this.setCursor('default');
     }
 
     private readonly onMouseWheelScroll = (event: WheelEvent) => {
-        if (!event.ctrlKey) {
-            return;
+        if (event.ctrlKey) {
+            const { left, top } = this.host.getBoundingClientRect();
+            const centerX = event.clientX - left;
+            const centerY = event.clientY - top;
+
+            this.di.eventSubject.dispatch(
+                GraphEventType.CanvasScale,
+                { deltaY: event.deltaY, centerX, centerY },
+            );
+
+            event.preventDefault();
         }
-
-        event.preventDefault();
-
-        const deltaScale = event.deltaY < 0 ? this.scaleVelocity : (1 / this.scaleVelocity);
-
-        const { left, top } = this.host.getBoundingClientRect();
-        const cx = event.clientX - left;
-        const cy = event.clientY - top;
-
-        this.t = this.createTransformScaleInverse(deltaScale, cx, cy);
-
-        this.drawBackground();
     }
 
     constructor(
         private readonly canvasWrapper: HTMLElement,
+        private readonly di: DiContainer,
     ) {
         this.host = this.createHost();
         this.host.addEventListener("mousedown", this.onMouseDown);
@@ -104,71 +86,17 @@ export class HtmlController {
         this.hostResizeObserver.unobserve(this.host);
         this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
+        this.canvasWrapper.removeChild(this.host);
     }
 
-    /**
-     * dx2 - traslate x
-     * dy2 - traslate y
-     *
-     * direct transform
-     *  s1  0   dx1     1   0   dx2
-     *  0   s1  dy1     0   1   dy2
-     *  0   0   1       0   0   1
-     *
-     * reverse transform
-     *  s1  0   dx1     1   0   -dx2
-     *  0   s1  dy1     0   1   -dy2
-     *  0   0   1       0   0   1
-     *
-     * [s2, dx2, dy2] = [s1, -dx2 * s + dx1, -dy2 * s + dy1]
-     */
-    private createTransformShiftInverse(dx: number, dy: number): TransformState {
-        return {
-            s: this.t.s,
-            dx: -this.t.s * dx + this.t.dx,
-            dy: -this.t.s * dy + this.t.dy,
-        }
-    }
-
-    /**
-     * s2 - scale
-     * cx - scale pivot x
-     * cy - scale pivot y
-     *
-     * direct transform
-     *  s1  0   dx1     s2  0   (1 - s2) * cx
-     *  0   s1  dy1     0   s2  (1 - s2) * cy
-     *  0   0   1       0   0   1
-     *
-     * reverse transform
-     *  s1  0   dx1     1/s2  0     (1 - 1/s2) * cx
-     *  0   s1  dy1     0     1/s2  (1 - 1/s2) * cy
-     *  0   0   1       0     0     1
-     *
-     * [s2, dx2, dy2] = [s1/s2, s1 * (1 - 1/s2) * cx + dx1, s1 * (1 - 1/s2) * cy + dy1]
-     */
-    private createTransformScaleInverse(s: number, cx: number, cy: number): TransformState {
-        const res = {
-            s: this.t.s / s,
-            dx: this.t.s * (1 - 1 / s) * cx + this.t.dx,
-            dy: this.t.s * (1 - 1 / s) * cy + this.t.dy,
-        };
-
-        return res;
-    }
-
-    private setCursor(type: 'grab' | 'default'): void {
+    setCursor(type: 'grab' | 'default'): void {
         this.canvas.style.cursor = type;
     }
 
-    private drawBackground(): void {
+    drawBackground(): void {
         this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
         this.canvasCtx.save();
-        this.drawPoint(0, 0, "black");
-        this.drawPoint(100, 0, "#c9c9c9");
-        this.drawPoint(-100, 0, "#c9c9c9");
-        this.drawPoint(0, 100, "#c9c9c9");
-        this.drawPoint(0, -100, "#c9c9c9");
+        this.di.options.background.drawingFn(this.canvasCtx);
         this.canvasCtx.restore();
     }
 
@@ -202,32 +130,6 @@ export class HtmlController {
         canvas.style.cursor = "default";
 
         return canvas;
-    }
-
-    private getCanvasCoordsInverse([x0, y0]: [number, number]): [number, number] {
-        return [
-           (x0 - this.t.dx) / this.t.s,
-           (y0 - this.t.dy) / this.t.s,
-        ];
-    }
-
-    private getCanvasScaleInverse(): number {
-        return 1 / this.t.s;
-    }
-
-    private drawPoint(x: number, y: number, color: string): void {
-        const canvasScale = this.getCanvasScaleInverse();
-        const r = 10 *  canvasScale;
-        const pi2 = 2 * Math.PI;
-
-        const [x1, y1] = this.getCanvasCoordsInverse([x, y]);
-
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(x1, y1, r, 0, pi2);
-        this.canvasCtx.closePath();
-
-        this.canvasCtx.fillStyle = color;
-        this.canvasCtx.fill();
     }
 
     private createHostResizeObserver(): ResizeObserver {
