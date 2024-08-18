@@ -1,17 +1,17 @@
 import { GraphEventType } from "./graph-event-type";
 
 export type GraphEvent = {
-    type: GraphEventType.CanvasGrab;
+    type: GraphEventType.GrabViewport;
 } | {
-    type: GraphEventType.CanvasDrag;
+    type: GraphEventType.DragViewport;
     payload: {
         dx: number;
         dy: number;
     };
 } | {
-    type: GraphEventType.CanvasRelease;
+    type: GraphEventType.ReleaseViewport;
 } | {
-    type: GraphEventType.CanvasScale;
+    type: GraphEventType.ScaleViewport;
     payload: {
         deltaY: number;
         centerX: number;

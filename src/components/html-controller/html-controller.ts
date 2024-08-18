@@ -4,6 +4,8 @@ import { DiContainer } from "../di-container/di-container";
 export class HtmlController {
     private readonly host: HTMLElement;
 
+    private readonly nodesContainer: HTMLElement;
+
     private readonly svg: SVGSVGElement;
 
     private readonly canvas: HTMLCanvasElement;
@@ -12,9 +14,11 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
+    private readonly nodes = new Map<string, HTMLElement>();
+
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button === 0) {
-            this.di.eventSubject.dispatch(GraphEventType.CanvasGrab);
+            this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
 
             event.stopPropagation();
         }
@@ -23,7 +27,7 @@ export class HtmlController {
     private readonly onMouseMove = (event: MouseEvent) => {
         if (event.buttons === 1) {
             this.di.eventSubject.dispatch(
-                GraphEventType.CanvasDrag,
+                GraphEventType.DragViewport,
                 { dx: event.movementX, dy: event.movementY },
             );
 
@@ -33,7 +37,7 @@ export class HtmlController {
 
     private readonly onMouseUp = (event: MouseEvent) => {
         if (event.button === 0) {
-            this.di.eventSubject.dispatch(GraphEventType.CanvasRelease);
+            this.di.eventSubject.dispatch(GraphEventType.ReleaseViewport);
 
             event.stopPropagation();
         }
@@ -46,7 +50,7 @@ export class HtmlController {
             const centerY = event.clientY - top;
 
             this.di.eventSubject.dispatch(
-                GraphEventType.CanvasScale,
+                GraphEventType.ScaleViewport,
                 { deltaY: event.deltaY, centerX, centerY },
             );
 
@@ -66,6 +70,7 @@ export class HtmlController {
 
         this.svg = this.createSvg();
         this.canvas = this.createCanvas();
+        this.nodesContainer = this.createNodesContainer();
 
         const context = this.canvas.getContext("2d");
 
@@ -75,8 +80,9 @@ export class HtmlController {
 
         this.canvasCtx = context;
 
-        this.host.appendChild(this.svg);
         this.host.appendChild(this.canvas);
+        this.host.appendChild(this.svg);
+        this.host.appendChild(this.nodesContainer);
         this.canvasWrapper.appendChild(this.host);
 
         this.hostResizeObserver = this.createHostResizeObserver();
@@ -88,16 +94,47 @@ export class HtmlController {
         this.host.removeEventListener("mouseup", this.onMouseUp);
         this.host.removeEventListener("wheel", this.onMouseWheelScroll);
         this.hostResizeObserver.unobserve(this.host);
-        this.host.removeChild(this.svg);
         this.host.removeChild(this.canvas);
+        this.host.removeChild(this.svg);
+        this.host.removeChild(this.nodesContainer);
         this.canvasWrapper.removeChild(this.host);
     }
 
     setCursor(type: 'grab' | 'default'): void {
-        this.canvas.style.cursor = type;
+        this.host.style.cursor = type;
     }
 
-    drawBackground(): void {
+    applyTransform(): void {
+        this.applyBackgroundTransform();
+        this.applyNodesTransform();
+    }
+
+    addNode(id: string, html: HTMLElement, x: number, y: number): void {
+        html.id = id;
+        html.style.position = "absolute";
+        html.style.visibility = "hidden";
+
+        this.nodesContainer.appendChild(html);
+
+        const { width, height } = html.getBoundingClientRect();
+
+        html.style.left = `${x - width / 2}px`;
+        html.style.top = `${y - height / 2}px`;
+        html.style.visibility = "visible"
+
+        this.nodes.set(id, html);
+    }
+
+    removeNode(id: string): void {
+        const node = this.nodes.get(id);
+
+        if (node !== undefined) {
+            this.nodesContainer.removeChild(node);
+            this.nodes.delete(id);
+        }
+    }
+
+    private applyBackgroundTransform(): void {
         this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
         this.canvasCtx.save();
         this.di.options.background.drawingFn(
@@ -107,6 +144,16 @@ export class HtmlController {
         this.canvasCtx.restore();
     }
 
+    private applyNodesTransform(): void {
+        const scale = 1;
+        const dx = 0;
+        const dy = 0;
+
+        this.nodes.forEach((value) => {
+            value.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${dx}, ${dy})`;
+        });
+    }
+
     private createHost(): HTMLDivElement {
         const host = document.createElement('div');
 
@@ -114,6 +161,7 @@ export class HtmlController {
         host.style.height = "100%";
         host.style.position = "relative";
         host.style.overflow = "hidden";
+        host.style.cursor = "default";
 
         return host;
     }
@@ -123,7 +171,6 @@ export class HtmlController {
 
         svg.style.width = "100%";
         svg.style.height = "100%";
-        svg.style.position = "absolute";
 
         return svg;
     }
@@ -131,18 +178,25 @@ export class HtmlController {
     private createCanvas(): HTMLCanvasElement {
         const canvas = document.createElement('canvas');
 
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
         canvas.style.position = "absolute";
-        canvas.style.cursor = "default";
+        canvas.style.inset = "0";
 
         return canvas;
+    }
+
+    private createNodesContainer(): HTMLDivElement {
+        const nodesContainer = document.createElement('div');
+
+        nodesContainer.style.position = "absolute";
+        nodesContainer.style.inset = "0";
+
+        return nodesContainer;
     }
 
     private createHostResizeObserver(): ResizeObserver {
         return new ResizeObserver(() => {
             this.updateCanvasDimensions();
-            this.drawBackground();
+            this.applyBackgroundTransform();
         });
     }
 

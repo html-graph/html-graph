@@ -1,7 +1,7 @@
 # TODO
 
-* background
-* virtual scroll
+* nodes
+* edges
 * eslint and prettier
 * nodeports
 * connections customization

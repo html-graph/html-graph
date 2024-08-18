@@ -63,10 +63,10 @@ export class ViewportTransformer {
         };
     }
 
-    getViewportCoordsFor(x0: number, y0: number): [number, number] {
+    getViewportCoordsFor(xa: number, ya: number): [number, number] {
         return [
-           (x0 - this.state.deltaX) / this.state.scale,
-           (y0 - this.state.deltaY) / this.state.scale,
+           (xa - this.state.deltaX) / this.state.scale,
+           (ya - this.state.deltaY) / this.state.scale,
         ];
     }
 
@@ -74,10 +74,10 @@ export class ViewportTransformer {
         return 1 / this.state.scale;
     }
 
-    getAbsoluteCoordsFor(x0: number, y0: number): [number, number] {
+    getAbsoluteCoordsFor(xv: number, yv: number): [number, number] {
         return [
-           x0 * this.state.scale + this.state.deltaX,
-           y0 * this.state.scale + this.state.deltaY,
+           xv * this.state.scale + this.state.deltaX,
+           yv * this.state.scale + this.state.deltaY,
         ];
     }
 

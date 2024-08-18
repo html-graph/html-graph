@@ -4,6 +4,7 @@ import { EventSubject } from "../event-subject/event-subject";
 import { EventHandler } from "../event-handler/event-handler";
 import { ViewportTransformer } from "../viewport-transformer/viewport-transformer";
 import { PublicViewportTransformer } from "../public-viewport-transformer/public-viewport-transformer";
+import { Controller } from "../controller/controller";
 
 export class DiContainer {
     readonly htmlController: HtmlController;
@@ -16,6 +17,8 @@ export class DiContainer {
 
     readonly publicViewportTransformer: PublicViewportTransformer;
 
+    readonly controller: Controller;
+
     constructor(canvasWrapper: HTMLElement, readonly options: Options) {
         this.htmlController = new HtmlController(canvasWrapper, this);
 
@@ -26,5 +29,7 @@ export class DiContainer {
         this.viewportTransformer = new ViewportTransformer(this);
 
         this.publicViewportTransformer = new PublicViewportTransformer(this.viewportTransformer);
+
+        this.controller = new Controller(this);
     }
 }

@@ -3,30 +3,43 @@ import { PublicViewportTransformer } from "@/components/public-viewport-transfor
 const defaultBackgroundDrawingFn = (
     ctx: CanvasRenderingContext2D,
     transformer: PublicViewportTransformer,
-    color: string,
+    dotColor: string,
     gap: number,
     radius: number,
+    color: string,
 ) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
     const zeroViewCoords = transformer.getViewCoords(0, 0);
     const viewScale = transformer.getViewScale();
     const viewGap = gap * viewScale;
 
-    const zeroOffsetX = zeroViewCoords[0] - Math.floor(zeroViewCoords[0] / viewGap) * viewGap;
-    const zeroOffsetY = zeroViewCoords[1] - Math.floor(zeroViewCoords[1] / viewGap) * viewGap;
+    let iterationsHorizontal = 0;
+    let iterationsVertical = 0;
+    let adjustedViewGap = viewGap / 2;
+
+    do {
+        adjustedViewGap *= 2;
+        iterationsHorizontal = ctx.canvas.width / adjustedViewGap;
+        iterationsVertical = ctx.canvas.height / adjustedViewGap;
+    } while (iterationsHorizontal * iterationsVertical > 10000);
+
+    const zeroOffsetX = zeroViewCoords[0] - Math.floor(zeroViewCoords[0] / adjustedViewGap) * adjustedViewGap;
+    const zeroOffsetY = zeroViewCoords[1] - Math.floor(zeroViewCoords[1] / adjustedViewGap) * adjustedViewGap;
 
     const r = radius * viewScale;
     const pi2 = 2 * Math.PI;
 
+    const xFrom = zeroOffsetX - adjustedViewGap;
+    const yFrom = zeroOffsetY - adjustedViewGap;
     const xTo = ctx.canvas.width + zeroOffsetX;
     const yTo = ctx.canvas.height + zeroOffsetY;
 
-    ctx.fillStyle = color;
+    ctx.fillStyle = dotColor;
 
-    const xFrom = zeroOffsetX - viewGap;
-    const yFrom = zeroOffsetY - viewGap;
-
-    for (let x = xFrom; x <= xTo; x+= viewGap) {
-        for (let y = yFrom; y <= yTo; y+= viewGap) {
+    for (let x = xFrom; x <= xTo; x+= adjustedViewGap) {
+        for (let y = yFrom; y <= yTo; y+= adjustedViewGap) {
             ctx.beginPath();
             ctx.arc(x, y, r, 0, pi2);
             ctx.closePath();
@@ -37,12 +50,12 @@ const defaultBackgroundDrawingFn = (
 };
 
 export const createBackgroundDrawingFn = (
+    dotColor: string,
+    dotGap: number,
+    dotRadius: number,
     color: string,
-    gap: number,
-    radius: number
 ) => {
-    return (ctx: CanvasRenderingContext2D,transformer: PublicViewportTransformer,
-    ) => {
-        defaultBackgroundDrawingFn(ctx, transformer, color, gap, radius);
+    return (ctx: CanvasRenderingContext2D, transformer: PublicViewportTransformer) => {
+        defaultBackgroundDrawingFn(ctx, transformer, dotColor, dotGap, dotRadius, color);
     }
 }

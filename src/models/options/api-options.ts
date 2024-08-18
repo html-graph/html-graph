@@ -14,5 +14,6 @@ export interface ApiOptions {
         dotColor?: string;
         dotGap?: number;
         dotRadius?: number;
+        color?: string;
     },
 }
