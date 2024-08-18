@@ -113,8 +113,16 @@ export class HtmlController {
     private createTransformShift(dx: number, dy: number): TransformState {
         return {
             s: this.t.s,
-            dx: dx * this.t.s + this.t.dx,
-            dy: dy * this.t.s + this.t.dy,
+            dx: this.t.s * dx + this.t.dx,
+            dy: this.t.s * dy + this.t.dy,
+        }
+    }
+
+    private createTransformShiftInverse(dx: number, dy: number): TransformState {
+        return {
+            s: this.t.s,
+            dx: - this.t.s * dx + this.t.dx,
+            dy: - this.t.s * dy + this.t.dy,
         }
     }
 
@@ -123,6 +131,16 @@ export class HtmlController {
             s: this.t.s * s,
             dx: this.t.s * (1 - s) * cx + this.t.dx,
             dy: this.t.s * (1 - s) * cy + this.t.dy,
+        };
+
+        return res;
+    }
+
+    private createTransformScaleInverse(s: number, cx: number, cy: number): TransformState {
+        const res = {
+            s: this.t.s / s,
+            dx: this.t.s * (1 - 1 / s) * cx + this.t.dx,
+            dy: this.t.s * (1 - 1 / s) * cy + this.t.dy,
         };
 
         return res;
@@ -195,6 +213,13 @@ export class HtmlController {
         return [
            (x0 - this.t.dx) / this.t.s,
            (y0 - this.t.dy) / this.t.s,
+        ];
+    }
+
+    private getCanvasCoordsInverse([x0, y0]: [number, number]): [number, number] {
+        return [
+           this.t.s * x0 + this.t.dx,
+           this.t.s * y0 + this.t.dy,
         ];
     }
 
