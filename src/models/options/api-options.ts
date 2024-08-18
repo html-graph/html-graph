@@ -1,3 +1,5 @@
+import { PublicViewportTransformer } from "@/components/public-viewport-transformer/public-viewport-transformer";
+
 export interface ApiOptions {
     readonly scale?: {
         readonly velocity?: number;
@@ -5,6 +7,9 @@ export interface ApiOptions {
         readonly max?: number | null;
     },
     readonly background?: {
-        readonly drawingFn?: (ctx: CanvasRenderingContext2D) => void;
+        readonly drawingFn?: (
+            ctx: CanvasRenderingContext2D,
+            transformer: PublicViewportTransformer,
+        ) => void;
     },
 }

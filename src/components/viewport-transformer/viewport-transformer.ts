@@ -1,4 +1,5 @@
 import { TransformState } from "@/models/transform/transform-state";
+import { DiContainer } from "../di-container/di-container";
 
 export class ViewportTransformer {
     private state: TransformState = {
@@ -6,6 +7,10 @@ export class ViewportTransformer {
       deltaX: 0,
       deltaY: 0,
     };
+
+    constructor(
+        private readonly di: DiContainer,
+    ) { }
 
     /**
      * dx2 - traslate x
@@ -38,8 +43,21 @@ export class ViewportTransformer {
      * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
      */
     applyScale(s2: number, cx: number, cy: number): void {
+        const max = this.di.options.scale.max;
+        const min = this.di.options.scale.min;
+
+        const newScale = this.state.scale * s2;
+
+        if (max !== null && newScale > max) {
+            return;
+        }
+
+        if (min !== null && newScale < min) {
+            return;
+        }
+
         this.state = {
-            scale: this.state.scale * s2,
+            scale: newScale,
             deltaX: this.state.scale * (1 - s2) * cx + this.state.deltaX,
             deltaY: this.state.scale * (1 - s2) * cy + this.state.deltaY,
         };

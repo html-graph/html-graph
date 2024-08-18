@@ -37,7 +37,9 @@
 
         const el = document.querySelector("#canvas");
 
-        const canvas = new GraphFlow.Canvas(el);
+        const canvas = new GraphFlow.Canvas(el, {
+            scale: { max: 10, min: 0.4 }
+        });
     </script>
 
     <!-- <script type="module"> -->

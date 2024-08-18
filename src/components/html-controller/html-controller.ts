@@ -15,6 +15,8 @@ export class HtmlController {
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button === 0) {
             this.di.eventSubject.dispatch(GraphEventType.CanvasGrab);
+
+            event.stopPropagation();
         }
     }
 
@@ -24,12 +26,16 @@ export class HtmlController {
                 GraphEventType.CanvasDrag,
                 { dx: event.movementX, dy: event.movementY },
             );
+
+            event.stopPropagation();
         }
     }
 
     private readonly onMouseUp = (event: MouseEvent) => {
         if (event.button === 0) {
             this.di.eventSubject.dispatch(GraphEventType.CanvasRelease);
+
+            event.stopPropagation();
         }
     }
 
@@ -94,7 +100,10 @@ export class HtmlController {
     drawBackground(): void {
         this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
         this.canvasCtx.save();
-        this.di.options.background.drawingFn(this.canvasCtx);
+        this.di.options.background.drawingFn(
+            this.canvasCtx,
+            this.di.publicViewportTransformer,
+        );
         this.canvasCtx.restore();
     }
 
