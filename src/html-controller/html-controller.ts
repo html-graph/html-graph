@@ -36,7 +36,7 @@ export class HtmlController {
             return
         }
 
-        this.t = this.createTransformShift(-event.movementX, -event.movementY);
+        this.t = this.createTransformShiftInverse(event.movementX, event.movementY);
 
         this.drawBackground();
     }
@@ -56,17 +56,13 @@ export class HtmlController {
 
         event.preventDefault();
 
-        const deltaScale = event.deltaY < 0 ? (1 / this.scaleVelocity) : this.scaleVelocity;
+        const deltaScale = event.deltaY < 0 ? this.scaleVelocity : (1 / this.scaleVelocity);
 
         const { left, top } = this.host.getBoundingClientRect();
         const cx = event.clientX - left;
         const cy = event.clientY - top;
 
-        this.t = this.createTransformScale(
-            deltaScale,
-            cx,
-            cy,
-        );
+        this.t = this.createTransformScaleInverse(deltaScale, cx, cy);
 
         this.drawBackground();
     }
@@ -110,32 +106,47 @@ export class HtmlController {
         this.host.removeChild(this.canvas);
     }
 
-    private createTransformShift(dx: number, dy: number): TransformState {
-        return {
-            s: this.t.s,
-            dx: this.t.s * dx + this.t.dx,
-            dy: this.t.s * dy + this.t.dy,
-        }
-    }
-
+    /**
+     * dx2 - traslate x
+     * dy2 - traslate y
+     *
+     * direct transform
+     *  s1  0   dx1     1   0   dx2
+     *  0   s1  dy1     0   1   dy2
+     *  0   0   1       0   0   1
+     *
+     * reverse transform
+     *  s1  0   dx1     1   0   -dx2
+     *  0   s1  dy1     0   1   -dy2
+     *  0   0   1       0   0   1
+     *
+     * [s2, dx2, dy2] = [s1, -dx2 * s + dx1, -dy2 * s + dy1]
+     */
     private createTransformShiftInverse(dx: number, dy: number): TransformState {
         return {
             s: this.t.s,
-            dx: - this.t.s * dx + this.t.dx,
-            dy: - this.t.s * dy + this.t.dy,
+            dx: -this.t.s * dx + this.t.dx,
+            dy: -this.t.s * dy + this.t.dy,
         }
     }
 
-    private createTransformScale(s: number, cx: number, cy: number): TransformState {
-        const res = {
-            s: this.t.s * s,
-            dx: this.t.s * (1 - s) * cx + this.t.dx,
-            dy: this.t.s * (1 - s) * cy + this.t.dy,
-        };
-
-        return res;
-    }
-
+    /**
+     * s2 - scale
+     * cx - scale pivot x
+     * cy - scale pivot y
+     *
+     * direct transform
+     *  s1  0   dx1     s2  0   (1 - s2) * cx
+     *  0   s1  dy1     0   s2  (1 - s2) * cy
+     *  0   0   1       0   0   1
+     *
+     * reverse transform
+     *  s1  0   dx1     1/s2  0     (1 - 1/s2) * cx
+     *  0   s1  dy1     0     1/s2  (1 - 1/s2) * cy
+     *  0   0   1       0     0     1
+     *
+     * [s2, dx2, dy2] = [s1/s2, s1 * (1 - 1/s2) * cx + dx1, s1 * (1 - 1/s2) * cy + dy1]
+     */
     private createTransformScaleInverse(s: number, cx: number, cy: number): TransformState {
         const res = {
             s: this.t.s / s,
@@ -152,7 +163,13 @@ export class HtmlController {
 
     private drawBackground(): void {
         this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
-        this.draw();
+        this.canvasCtx.save();
+        this.drawPoint(0, 0, "black");
+        this.drawPoint(100, 0, "#c9c9c9");
+        this.drawPoint(-100, 0, "#c9c9c9");
+        this.drawPoint(0, 100, "#c9c9c9");
+        this.drawPoint(0, -100, "#c9c9c9");
+        this.canvasCtx.restore();
     }
 
     private createHost(): HTMLDivElement {
@@ -187,6 +204,32 @@ export class HtmlController {
         return canvas;
     }
 
+    private getCanvasCoordsInverse([x0, y0]: [number, number]): [number, number] {
+        return [
+           (x0 - this.t.dx) / this.t.s,
+           (y0 - this.t.dy) / this.t.s,
+        ];
+    }
+
+    private getCanvasScaleInverse(): number {
+        return 1 / this.t.s;
+    }
+
+    private drawPoint(x: number, y: number, color: string): void {
+        const canvasScale = this.getCanvasScaleInverse();
+        const r = 10 *  canvasScale;
+        const pi2 = 2 * Math.PI;
+
+        const [x1, y1] = this.getCanvasCoordsInverse([x, y]);
+
+        this.canvasCtx.beginPath();
+        this.canvasCtx.arc(x1, y1, r, 0, pi2);
+        this.canvasCtx.closePath();
+
+        this.canvasCtx.fillStyle = color;
+        this.canvasCtx.fill();
+    }
+
     private createHostResizeObserver(): ResizeObserver {
         return new ResizeObserver(() => {
             this.updateCanvasDimensions();
@@ -199,46 +242,5 @@ export class HtmlController {
 
         this.canvas.width = width;
         this.canvas.height = height;
-    }
-
-    private draw(): void {
-        this.drawPoint(0, 0, "black");
-        this.drawPoint(100, 0, "#c9c9c9");
-        this.drawPoint(-100, 0, "#c9c9c9");
-        this.drawPoint(0, 100, "#c9c9c9");
-        this.drawPoint(0, -100, "#c9c9c9");
-    }
-
-    private getCanvasCoords([x0, y0]: [number, number]): [number, number] {
-        return [
-           (x0 - this.t.dx) / this.t.s,
-           (y0 - this.t.dy) / this.t.s,
-        ];
-    }
-
-    private getCanvasCoordsInverse([x0, y0]: [number, number]): [number, number] {
-        return [
-           this.t.s * x0 + this.t.dx,
-           this.t.s * y0 + this.t.dy,
-        ];
-    }
-
-    private getCanvasScale(): number {
-        return 1 / this.t.s;
-    }
-
-    private drawPoint(x: number, y: number, color: string): void {
-        const canvasScale = this.getCanvasScale();
-        const r = 10 *  canvasScale;
-        const pi2 = 2 * Math.PI;
-
-        const [x1, y1] = this.getCanvasCoords([x, y]);
-
-        this.canvasCtx.beginPath();
-        this.canvasCtx.arc(x1, y1, r, 0, pi2);
-        this.canvasCtx.closePath();
-
-        this.canvasCtx.fillStyle = color;
-        this.canvasCtx.fill();
     }
 }
