@@ -21,11 +21,31 @@
         }
 
         .node  {
+            width: 150px;
+            height: 50px;
             background: #ffdbab;
             border: 1px solid #bababa;
-            border-radius: 50%;
-            padding: 16px;
+            border-radius: 15px;
             white-space: nowrap;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .port {
+            position: relative;
+        }
+
+        .port::after {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            content: "";
+            width: 10px;
+            height: 10px;
+            background: grey;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -39,32 +59,43 @@
 
         const canvas = new GraphFlow.Canvas(el);
 
-        function createNode(text) {
+        function createNodeElement(text) {
             const node = document.createElement('div');
 
-            node.innerText = text;
             node.classList.add('node');
 
             return node;
         }
 
-        const htmlNode1 = createNode('Node 1');
-        const htmlNode2 = createNode('Node 2');
+        function createPortElement() {
+            const port = document.createElement('div');
 
-        let i = 0;
-        setInterval(() => {
-            if (i % 2) {
-                htmlNode1.innerText = "Node 1";
-            } else {
-                htmlNode1.innerText = "This is long\nlong\nlong\nlong text";
-            }
+            port.classList.add('port');
 
-            i++;
-        }, 2000)
+            return port;
+        }
+
+        const htmlNode1 = createNodeElement('Node 1');
+        const htmlNode2 = createNodeElement('Node 2');
+
+        const port1 = createPortElement();
+        const port2 = createPortElement();
+        const port3 = createPortElement();
+        const port4 = createPortElement();
+
+        htmlNode1.appendChild(port1);
+        htmlNode1.appendChild(port2);
+        htmlNode2.appendChild(port3);
+        htmlNode2.appendChild(port4);
 
         canvas
-            .addNode({ id: "node-1", html: htmlNode1, x: 200, y: 200 })
-            .addNode({ id: "node-2", html: htmlNode2, x: 600, y: 200 });
+            .addNode({ id: "node-1", element: htmlNode1, x: 200, y: 200 })
+            .addNode({ id: "node-2", element: htmlNode2, x: 600, y: 200 })
+            .setPort({ id: "port-1", element: port1, nodeId: "node-1" })
+            .setPort({ id: "port-2", element: port2, nodeId: "node-1" })
+            .setPort({ id: "port-3", element: port3, nodeId: "node-2" })
+            .setPort({ id: "port-4", element: port4, nodeId: "node-2" })
+            .connectPorts({ id: "connection-1", from: "port-2", to: "port-3" });
     </script>
 </body>
 </html>

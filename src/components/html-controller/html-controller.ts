@@ -1,5 +1,6 @@
 import { GraphEventType } from "@/models/events/graph-event-type";
 import { DiContainer } from "../di-container/di-container";
+import { NodePayload } from "@/models/html/node-payload";
 
 export class HtmlController {
     private readonly host: HTMLElement;
@@ -16,7 +17,7 @@ export class HtmlController {
 
     private readonly nodesResizeObserver: ResizeObserver;
 
-    private readonly nodes = new Map<string, { html: HTMLElement, x: number, y: number }>();
+    private readonly nodes = new Map<string, NodePayload>();
 
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button === 0) {
@@ -97,7 +98,8 @@ export class HtmlController {
         this.host.removeEventListener("mousedown", this.onMouseDown);
         this.host.removeEventListener("mouseup", this.onMouseUp);
         this.host.removeEventListener("wheel", this.onMouseWheelScroll);
-        this.hostResizeObserver.unobserve(this.host);
+        this.hostResizeObserver.disconnect();
+        this.nodesResizeObserver.disconnect();
         this.host.removeChild(this.canvas);
         this.host.removeChild(this.svg);
         this.host.removeChild(this.nodesContainer);
@@ -113,46 +115,46 @@ export class HtmlController {
         this.applyNodesTransform();
     }
 
-    addNode(id: string, html: HTMLElement, x: number, y: number): void {
-        html.id = id;
-        html.style.position = "absolute";
-        html.style.visibility = "hidden";
-        html.style.transformOrigin = "50% 50%"
-        html.style.transform = "scale(1)"
+    addNode(id: string, element: HTMLElement, x: number, y: number): void {
+        element.id = id;
+        element.style.position = "absolute";
+        element.style.visibility = "hidden";
+        element.style.transformOrigin = "50% 50%"
+        element.style.transform = "scale(1)"
 
-        this.nodesContainer.appendChild(html);
+        this.nodesContainer.appendChild(element);
 
-        const { width, height } = html.getBoundingClientRect();
+        const { width, height } = element.getBoundingClientRect();
 
-        html.style.left = `${x - width / 2}px`;
-        html.style.top = `${y - height / 2}px`;
-        html.style.visibility = "visible"
+        element.style.left = `${x - width / 2}px`;
+        element.style.top = `${y - height / 2}px`;
+        element.style.visibility = "visible"
 
-        this.nodes.set(id, { html, x, y });
+        this.nodes.set(id, { element, x, y });
 
-        this.nodesResizeObserver.observe(html)
+        this.nodesResizeObserver.observe(element)
     }
 
     updateNode(id: string, x: number, y: number): void {
         const node = this.nodes.get(id);
 
         if (node === undefined) {
-            throw new Error("failed to update nonexisnting node");
+            throw new Error("failed to update nonexisting node");
         }
 
         node.x = x;
         node.y = y;
 
-        this.updateNodeCoords(node);
+        this.handleNodeResize(node);
     }
 
     removeNode(id: string): void {
         const node = this.nodes.get(id);
 
         if (node !== undefined) {
-            this.nodesContainer.removeChild(node.html);
+            this.nodesResizeObserver.unobserve(node.element);
+            this.nodesContainer.removeChild(node.element);
             this.nodes.delete(id);
-            this.nodesResizeObserver.unobserve(node.html);
         }
     }
 
@@ -167,9 +169,10 @@ export class HtmlController {
     }
 
     private applyNodesTransform(): void {
-        this.nodes.forEach((node) => {
-            this.updateNodeCoords(node);
-        });
+        const [xv, yv] = this.di.viewportTransformer.getViewportCoordsFor(0, 0);
+        const sv = this.di.viewportTransformer.getViewportScale();
+
+        this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
     }
 
     private createHost(): HTMLDivElement {
@@ -206,7 +209,10 @@ export class HtmlController {
         const nodesContainer = document.createElement('div');
 
         nodesContainer.style.position = "absolute";
-        nodesContainer.style.inset = "0";
+        nodesContainer.style.top = "0";
+        nodesContainer.style.left = "0";
+        nodesContainer.style.width = "0";
+        nodesContainer.style.height = "0";
 
         return nodesContainer;
     }
@@ -224,7 +230,7 @@ export class HtmlController {
                 const node = this.nodes.get(entry.target.id);
 
                 if (node !== undefined) {
-                    this.updateNodeCoords(node);
+                    this.handleNodeResize(node);
                 }
             })
         });
@@ -237,16 +243,10 @@ export class HtmlController {
         this.canvas.height = height;
     }
 
-    private updateNodeCoords(value: { html: HTMLElement, x: number, y: number }): void {
-        const [x, y] = this.di.viewportTransformer.getViewportCoordsFor(value.x, value.y);
-        const sv = this.di.viewportTransformer.getViewportScale();
-        const sa = this.di.viewportTransformer.getAbsoluteScale();
+    private handleNodeResize(node: NodePayload): void {
+        const { width, height } = node.element.getBoundingClientRect();
 
-        value.html.style.transform = `scale(${sv})`;
-
-        const { width, height } = value.html.getBoundingClientRect();
-
-        value.html.style.left = `${x - width / 2 * sa}px`;
-        value.html.style.top = `${y - height / 2 * sa}px`;
+        node.element.style.left = `${node.x - width / 2}px`;
+        node.element.style.top = `${node.y - height / 2}px`;
     }
 }

@@ -1,7 +1,9 @@
 import { DiContainer } from "@/components/di-container/di-container";
+import { ApiConnection } from "@/models/connection/api-connection";
 import { ApiNode } from "@/models/nodes/api-node";
 import { ApiOptions } from "@/models/options/api-options";
 import { Options } from "@/models/options/options";
+import { ApiPort } from "@/models/port/api-port";
 import { createBackgroundDrawingFn } from "@/utils/create-background-drawing-fn/create-background-drawing-fn";
 
 export class Canvas {
@@ -29,13 +31,25 @@ export class Canvas {
     ) { }
 
     addNode(node: ApiNode): Canvas {
-        this.di.controller.addNode(node.id, node.html, node.x, node.y);
+        this.di.controller.addNode(node.id, node.element, node.x, node.y);
+
+        return this;
+    }
+
+    setPort(port: ApiPort): Canvas {
+        this.di.controller.setPort(port.id, port.element, port.nodeId);
 
         return this;
     }
 
     removeNode(nodeId: string): Canvas {
         this.di.controller.removeNode(nodeId);
+
+        return this;
+    }
+
+    connectPorts(connection: ApiConnection): Canvas {
+        this.di.controller.connectPorts(connection.id, connection.from, connection.to);
 
         return this;
     }

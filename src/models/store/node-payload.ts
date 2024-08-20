@@ -1,5 +1,4 @@
-export interface ApiNode {
-    id: string;
+export interface NodePayload {
     element: HTMLElement;
     x: number;
     y: number;

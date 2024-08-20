@@ -31,11 +31,25 @@ export class Controller {
         this.di.htmlController.applyTransform();
     }
 
-    addNode(id: string, html: HTMLElement, x: number, y: number): void {
-        this.di.htmlController.addNode(id, html, x, y);
+    addNode(id: string, element: HTMLElement, x: number, y: number): void {
+        this.di.graphStore.addNode(id, element, x, y);
+        this.di.htmlController.addNode(id, element, x, y);
+    }
+
+    setPort(id: string, element: HTMLElement, nodeId: string): void {
+        this.di.graphStore.addPort(id,  element, nodeId);
+    }
+
+    unsetPort(portId: string): void {
+        this.di.graphStore.removePort(portId);
+    }
+
+    connectPorts(id: string, from: string, to: string): void {
+        //
     }
 
     removeNode(id: string): void {
+        this.di.graphStore.removeNode(id);
         this.di.htmlController.removeNode(id);
     }
 

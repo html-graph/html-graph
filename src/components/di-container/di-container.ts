@@ -5,6 +5,7 @@ import { EventHandler } from "../event-handler/event-handler";
 import { ViewportTransformer } from "../viewport-transformer/viewport-transformer";
 import { PublicViewportTransformer } from "../public-viewport-transformer/public-viewport-transformer";
 import { Controller } from "../controller/controller";
+import { GraphStore } from "../graph-store/graph-store";
 
 export class DiContainer {
     readonly htmlController: HtmlController;
@@ -19,6 +20,8 @@ export class DiContainer {
 
     readonly controller: Controller;
 
+    readonly graphStore: GraphStore;
+
     constructor(canvasWrapper: HTMLElement, readonly options: Options) {
         this.htmlController = new HtmlController(canvasWrapper, this);
 
@@ -31,5 +34,7 @@ export class DiContainer {
         this.publicViewportTransformer = new PublicViewportTransformer(this.viewportTransformer);
 
         this.controller = new Controller(this);
+
+        this.graphStore = new GraphStore();
     }
 }
