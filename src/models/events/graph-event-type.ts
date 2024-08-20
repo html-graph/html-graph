@@ -3,4 +3,5 @@ export enum GraphEventType {
     GrabViewport = 'GrabViewport',
     ReleaseViewport = 'ReleaseViewport',
     ScaleViewport = 'ScaleViewport',
+    GrabNode = 'GrabNode',
 }

@@ -35,6 +35,10 @@ export class Controller {
         this.di.htmlController.addNode(id, html, x, y);
     }
 
+    removeNode(id: string): void {
+        this.di.htmlController.removeNode(id);
+    }
+
     destroy(): void {
         this.di.htmlController.destroy();
     }

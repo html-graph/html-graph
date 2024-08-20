@@ -17,4 +17,11 @@ export type GraphEvent = {
         centerX: number;
         centerY: number;
     }
+} | {
+    type: GraphEventType.GrabNode;
+    payload: {
+        nodeId: string;
+        nodeMouseX: number;
+        nodeMouseY: number;
+    }
 };

@@ -14,7 +14,9 @@ export class HtmlController {
 
     private readonly hostResizeObserver: ResizeObserver;
 
-    private readonly nodes = new Map<string, HTMLElement>();
+    private readonly nodesResizeObserver: ResizeObserver;
+
+    private readonly nodes = new Map<string, { html: HTMLElement, x: number, y: number }>();
 
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button === 0) {
@@ -87,6 +89,8 @@ export class HtmlController {
 
         this.hostResizeObserver = this.createHostResizeObserver();
         this.hostResizeObserver.observe(this.host);
+
+        this.nodesResizeObserver = this.createNodesResizeObserver();
     }
 
     destroy(): void {
@@ -113,6 +117,8 @@ export class HtmlController {
         html.id = id;
         html.style.position = "absolute";
         html.style.visibility = "hidden";
+        html.style.transformOrigin = "50% 50%"
+        html.style.transform = "scale(1)"
 
         this.nodesContainer.appendChild(html);
 
@@ -122,15 +128,31 @@ export class HtmlController {
         html.style.top = `${y - height / 2}px`;
         html.style.visibility = "visible"
 
-        this.nodes.set(id, html);
+        this.nodes.set(id, { html, x, y });
+
+        this.nodesResizeObserver.observe(html)
+    }
+
+    updateNode(id: string, x: number, y: number): void {
+        const node = this.nodes.get(id);
+
+        if (node === undefined) {
+            throw new Error("failed to update nonexisnting node");
+        }
+
+        node.x = x;
+        node.y = y;
+
+        this.updateNodeCoords(node);
     }
 
     removeNode(id: string): void {
         const node = this.nodes.get(id);
 
         if (node !== undefined) {
-            this.nodesContainer.removeChild(node);
+            this.nodesContainer.removeChild(node.html);
             this.nodes.delete(id);
+            this.nodesResizeObserver.unobserve(node.html);
         }
     }
 
@@ -145,12 +167,8 @@ export class HtmlController {
     }
 
     private applyNodesTransform(): void {
-        const scale = 1;
-        const dx = 0;
-        const dy = 0;
-
-        this.nodes.forEach((value) => {
-            value.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${dx}, ${dy})`;
+        this.nodes.forEach((node) => {
+            this.updateNodeCoords(node);
         });
     }
 
@@ -200,10 +218,35 @@ export class HtmlController {
         });
     }
 
+    private createNodesResizeObserver(): ResizeObserver {
+        return new ResizeObserver((entries) => {
+            entries.forEach((entry) => {
+                const node = this.nodes.get(entry.target.id);
+
+                if (node !== undefined) {
+                    this.updateNodeCoords(node);
+                }
+            })
+        });
+    }
+
     private updateCanvasDimensions(): void {
         const { width, height } = this.host.getBoundingClientRect();
 
         this.canvas.width = width;
         this.canvas.height = height;
+    }
+
+    private updateNodeCoords(value: { html: HTMLElement, x: number, y: number }): void {
+        const [x, y] = this.di.viewportTransformer.getViewportCoordsFor(value.x, value.y);
+        const sv = this.di.viewportTransformer.getViewportScale();
+        const sa = this.di.viewportTransformer.getAbsoluteScale();
+
+        value.html.style.transform = `scale(${sv})`;
+
+        const { width, height } = value.html.getBoundingClientRect();
+
+        value.html.style.left = `${x - width / 2 * sa}px`;
+        value.html.style.top = `${y - height / 2 * sa}px`;
     }
 }

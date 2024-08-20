@@ -34,6 +34,12 @@ export class Canvas {
         return this;
     }
 
+    removeNode(nodeId: string): Canvas {
+        this.di.controller.removeNode(nodeId);
+
+        return this;
+    }
+
     destroy(): void {
         this.di.controller.destroy();
     }
