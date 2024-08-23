@@ -1,3 +1,4 @@
+import { ConnectionDrawingFn } from "@/models/connection/connection-drawing-fn";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
@@ -31,26 +32,57 @@ export class Controller {
         this.di.htmlController.applyTransform();
     }
 
-    addNode(id: string, element: HTMLElement, x: number, y: number): void {
-        this.di.graphStore.addNode(id, element, x, y);
-        this.di.htmlController.addNode(id, element, x, y);
+    addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
+        if (this.di.graphStore.hasNode(nodeId)) {
+            throw new Error("failed to add node with existing id");
+        }
+
+        this.di.graphStore.addNode(nodeId, element, x, y);
+        this.di.htmlController.attachNode(nodeId);
     }
 
-    setPort(id: string, element: HTMLElement, nodeId: string): void {
-        this.di.graphStore.addPort(id,  element, nodeId);
+    setPort(portId: string, element: HTMLElement, nodeId: string): void {
+        if (!this.di.graphStore.hasNode(nodeId)) {
+            throw new Error("failed to set port on nonexisting node");
+        }
+
+        if (this.di.graphStore.hasPort(portId)) {
+            throw new Error("failed to add port with existing id");
+        }
+
+        this.di.graphStore.addPort(portId,  element, nodeId);
     }
 
     unsetPort(portId: string): void {
+        if (!this.di.graphStore.hasPort(portId)) {
+            throw new Error("failed to unset nonexisting port");
+        }
+
         this.di.graphStore.removePort(portId);
     }
 
-    connectPorts(id: string, from: string, to: string): void {
-        //
+    connectPorts(
+        connectionId: string,
+        fromPortId: string,
+        toPortId: string,
+        element: SVGSVGElement,
+    ): void {
+        this.di.graphStore.addConnection(connectionId, fromPortId, toPortId);
+        this.di.htmlController.attachConnection(connectionId, element);
     }
 
-    removeNode(id: string): void {
-        this.di.graphStore.removeNode(id);
-        this.di.htmlController.removeNode(id);
+    disconnectPorts(connectionId: string): void {
+        this.di.graphStore.removeConnection(connectionId);
+        this.di.htmlController.detachConnection(connectionId);
+    }
+
+    removeNode(nodeId: string): void {
+        if (!this.di.graphStore.hasNode(nodeId)) {
+            throw new Error("failed to remove nonexisting node");
+        }
+
+        this.di.htmlController.detachNode(nodeId);
+        this.di.graphStore.removeNode(nodeId);
     }
 
     destroy(): void {

@@ -49,7 +49,13 @@ export class Canvas {
     }
 
     connectPorts(connection: ApiConnection): Canvas {
-        this.di.controller.connectPorts(connection.id, connection.from, connection.to);
+        this.di.controller.connectPorts(connection.id, connection.from, connection.to, connection.element);
+
+        return this;
+    }
+
+    disconnectPorts(connectionId: string): Canvas {
+        this.di.controller.disconnectPorts(connectionId);
 
         return this;
     }

@@ -1,13 +1,14 @@
 import { GraphEventType } from "@/models/events/graph-event-type";
 import { DiContainer } from "../di-container/di-container";
 import { NodePayload } from "@/models/html/node-payload";
+import { ConnectionDrawingFn } from "@/models/connection/connection-drawing-fn";
 
 export class HtmlController {
     private readonly host: HTMLElement;
 
     private readonly nodesContainer: HTMLElement;
 
-    private readonly svg: SVGSVGElement;
+    private readonly connectionsContainer: HTMLElement;
 
     private readonly canvas: HTMLCanvasElement;
 
@@ -17,7 +18,9 @@ export class HtmlController {
 
     private readonly nodesResizeObserver: ResizeObserver;
 
-    private readonly nodes = new Map<string, NodePayload>();
+    private readonly nodeIdsMap = new Map<HTMLElement, string>();
+
+    private readonly connectionsMap = new Map<string, SVGSVGElement>();
 
     private readonly onMouseDown = (event: MouseEvent) => {
         if (event.button === 0) {
@@ -71,9 +74,9 @@ export class HtmlController {
         this.host.addEventListener("mousemove", this.onMouseMove);
         this.host.addEventListener("wheel", this.onMouseWheelScroll);
 
-        this.svg = this.createSvg();
         this.canvas = this.createCanvas();
         this.nodesContainer = this.createNodesContainer();
+        this.connectionsContainer = this.createConnectionsContainer();
 
         const context = this.canvas.getContext("2d");
 
@@ -84,7 +87,7 @@ export class HtmlController {
         this.canvasCtx = context;
 
         this.host.appendChild(this.canvas);
-        this.host.appendChild(this.svg);
+        this.host.appendChild(this.connectionsContainer);
         this.host.appendChild(this.nodesContainer);
         this.canvasWrapper.appendChild(this.host);
 
@@ -97,11 +100,12 @@ export class HtmlController {
     destroy(): void {
         this.host.removeEventListener("mousedown", this.onMouseDown);
         this.host.removeEventListener("mouseup", this.onMouseUp);
+        this.host.removeEventListener("mousemove", this.onMouseMove);
         this.host.removeEventListener("wheel", this.onMouseWheelScroll);
         this.hostResizeObserver.disconnect();
         this.nodesResizeObserver.disconnect();
         this.host.removeChild(this.canvas);
-        this.host.removeChild(this.svg);
+        this.host.removeChild(this.connectionsContainer);
         this.host.removeChild(this.nodesContainer);
         this.canvasWrapper.removeChild(this.host);
     }
@@ -111,68 +115,58 @@ export class HtmlController {
     }
 
     applyTransform(): void {
-        this.applyBackgroundTransform();
-        this.applyNodesTransform();
-    }
-
-    addNode(id: string, element: HTMLElement, x: number, y: number): void {
-        element.id = id;
-        element.style.position = "absolute";
-        element.style.visibility = "hidden";
-        element.style.transformOrigin = "50% 50%"
-        element.style.transform = "scale(1)"
-
-        this.nodesContainer.appendChild(element);
-
-        const { width, height } = element.getBoundingClientRect();
-
-        element.style.left = `${x - width / 2}px`;
-        element.style.top = `${y - height / 2}px`;
-        element.style.visibility = "visible"
-
-        this.nodes.set(id, { element, x, y });
-
-        this.nodesResizeObserver.observe(element)
-    }
-
-    updateNode(id: string, x: number, y: number): void {
-        const node = this.nodes.get(id);
-
-        if (node === undefined) {
-            throw new Error("failed to update nonexisting node");
-        }
-
-        node.x = x;
-        node.y = y;
-
-        this.handleNodeResize(node);
-    }
-
-    removeNode(id: string): void {
-        const node = this.nodes.get(id);
-
-        if (node !== undefined) {
-            this.nodesResizeObserver.unobserve(node.element);
-            this.nodesContainer.removeChild(node.element);
-            this.nodes.delete(id);
-        }
-    }
-
-    private applyBackgroundTransform(): void {
         this.canvasCtx.clearRect(0, 0, this.canvasCtx.canvas.width, this.canvasCtx.canvas.height);
+
         this.canvasCtx.save();
+
         this.di.options.background.drawingFn(
             this.canvasCtx,
             this.di.publicViewportTransformer,
         );
-        this.canvasCtx.restore();
-    }
 
-    private applyNodesTransform(): void {
+        this.canvasCtx.restore();
+
         const [xv, yv] = this.di.viewportTransformer.getViewportCoordsFor(0, 0);
         const sv = this.di.viewportTransformer.getViewportScale();
 
         this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+        this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+    }
+
+    attachNode(nodeId: string): void {
+        const node = this.di.graphStore.getNode(nodeId);
+
+        node.element.style.position = "absolute";
+        node.element.style.visibility = "hidden";
+
+        this.nodesContainer.appendChild(node.element);
+        this.nodeIdsMap.set(node.element, nodeId);
+        this.updateNodeCoords(node);
+        this.nodesResizeObserver.observe(node.element)
+
+        node.element.style.visibility = "visible";
+    }
+
+    detachNode(nodeId: string): void {
+        const node = this.di.graphStore.getNode(nodeId);
+
+        this.nodesResizeObserver.unobserve(node.element);
+        this.nodesContainer.removeChild(node.element);
+        this.nodeIdsMap.delete(node.element);
+    }
+
+    attachConnection(connectionId: string, element: SVGSVGElement): void {
+        this.connectionsMap.set(connectionId, element);
+
+        this.updateConnectionCoords(connectionId);
+
+        this.connectionsContainer.appendChild(element);
+    }
+
+    detachConnection(connectionId: string): void {
+        const element = this.connectionsMap.get(connectionId);
+        this.connectionsMap.delete(connectionId);
+        this.connectionsContainer.removeChild(element!);
     }
 
     private createHost(): HTMLDivElement {
@@ -185,15 +179,6 @@ export class HtmlController {
         host.style.cursor = "default";
 
         return host;
-    }
-
-    private createSvg(): SVGSVGElement {
-        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-        svg.style.width = "100%";
-        svg.style.height = "100%";
-
-        return svg;
     }
 
     private createCanvas(): HTMLCanvasElement {
@@ -217,21 +202,33 @@ export class HtmlController {
         return nodesContainer;
     }
 
+    private createConnectionsContainer(): HTMLDivElement {
+        const edgesContainer = document.createElement('div');
+
+        edgesContainer.style.position = "absolute";
+        edgesContainer.style.pointerEvents = "none";
+        edgesContainer.style.top = "0";
+        edgesContainer.style.left = "0";
+        edgesContainer.style.width = "0";
+        edgesContainer.style.height = "0";
+
+        return edgesContainer;
+    }
+
     private createHostResizeObserver(): ResizeObserver {
         return new ResizeObserver(() => {
             this.updateCanvasDimensions();
-            this.applyBackgroundTransform();
+            this.applyTransform();
         });
     }
 
     private createNodesResizeObserver(): ResizeObserver {
         return new ResizeObserver((entries) => {
             entries.forEach((entry) => {
-                const node = this.nodes.get(entry.target.id);
+                const nodeId = this.nodeIdsMap.get(entry.target as HTMLElement);
+                const node = this.di.graphStore.getNode(nodeId!);
 
-                if (node !== undefined) {
-                    this.handleNodeResize(node);
-                }
+                this.updateNodeCoords(node);
             })
         });
     }
@@ -243,10 +240,45 @@ export class HtmlController {
         this.canvas.height = height;
     }
 
-    private handleNodeResize(node: NodePayload): void {
+    private updateNodeCoords(node: NodePayload): void {
         const { width, height } = node.element.getBoundingClientRect();
 
         node.element.style.left = `${node.x - width / 2}px`;
         node.element.style.top = `${node.y - height / 2}px`;
+    }
+
+    private updateConnectionCoords(connectionId: string): void {
+        const payload = this.di.graphStore.getConnection(connectionId);
+        const portFrom = this.di.graphStore.getPort(payload.from);
+        const portTo = this.di.graphStore.getPort(payload.to);
+
+        const rectFrom = portFrom.getBoundingClientRect();
+        const rectTo = portTo.getBoundingClientRect();
+
+        const top = Math.min(rectFrom.top, rectTo.top);
+        const left = Math.min(rectFrom.left, rectTo.left);
+        const width = Math.abs(rectFrom.left - rectTo.left);
+        const height = Math.abs(rectFrom.top - rectTo.top);
+
+        const element = this.connectionsMap.get(connectionId)!;
+
+        element.style.transformOrigin = "50% 50%";
+
+        const hor = left === rectFrom.left;
+        const vert = top === rectFrom.top;
+
+        element.style.transform = `scale(${hor ? 1 : -1}, ${vert ? 1 : -1})`;
+
+        element.style.position = "absolute";
+        element.style.top = `${top}px`;
+        element.style.left = `${left}px`;
+        element.style.width = `${width}px`;
+        element.style.height = `${height}px`;
+    }
+
+    private createConnectionSvg(): SVGSVGElement {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+        return svg;
     }
 }

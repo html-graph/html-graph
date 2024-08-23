@@ -1,3 +1,4 @@
+import { EdgePayload } from "@/models/edges/edge-payload";
 import { ObjectMap } from "@/models/object-map";
 import { NodePayload } from "@/models/store/node-payload";
 
@@ -10,14 +11,19 @@ export class GraphStore {
 
     private readonly portNodeId: ObjectMap<string> = Object.create(null);
 
+    private readonly connections: ObjectMap<EdgePayload> = Object.create(null);
+
     addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
         this.nodes[nodeId] = { element, x, y };
         this.nodePorts[nodeId] = Object.create(null);
     }
 
-    updateNodeCoords(nodeId: string, x: number, y: number): void {
-        this.nodes[nodeId].x = x;
-        this.nodes[nodeId].y = y;
+    hasNode(nodeId: string): boolean {
+        return this.nodes[nodeId] !== undefined;
+    }
+
+    getNode(nodeId: string): NodePayload {
+        return this.nodes[nodeId];
     }
 
     removeNode(nodeId: string): void {
@@ -41,17 +47,35 @@ export class GraphStore {
         }
     }
 
+    getPort(portId: string): HTMLElement {
+        return this.ports[portId];
+    }
+
+    hasPort(portId: string): boolean {
+        return this.portNodeId[portId] !== undefined;
+    }
+
     removePort(portId: string): void {
         const node = this.portNodeId[portId];
 
-        if (node !== undefined) {
-            delete this.portNodeId[portId];
+        delete this.portNodeId[portId];
 
-            const ports = this.nodePorts[node];
+        const ports = this.nodePorts[node];
 
-            delete ports[portId];
-        }
+        delete ports[portId];
 
         delete this.ports[portId];
+    }
+
+    addConnection(connectionId: string, fromPortId: string, toPortId: string): void {
+        this.connections[connectionId] = { from: fromPortId, to: toPortId };
+    }
+
+    getConnection(connectionId: string): EdgePayload {
+        return this.connections[connectionId];
+    }
+
+    removeConnection(connectionId: string): void {
+        delete this.connections[connectionId];
     }
 }

@@ -1,5 +1,5 @@
 export interface NodePayload {
-    element: HTMLElement;
-    x: number;
-    y: number;
+    readonly element: HTMLElement;
+    readonly x: number;
+    readonly y: number;
 }
