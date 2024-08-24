@@ -4,78 +4,61 @@
 
 <img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
 
-Whats planned:
+Features:
 
-* support for html nodes, because it will allow huge customization possibilities
-* wide configuration options for canvas, nodes and arrows
-* respond to canvas and nodes resize
+* support for fully customizable html nodes
+* support for fully customizable svg connections
+* wide configuration options for canvas, nodes and connections
+* automatic adjustment of canvas and nodes on resize
 * draggable and scalable canvas with draggable nodes option
-* nodes positioning layouts
-* connections between nodes via ports
+* connections between nodes via fully customizable ports
 * zero dependencies
-* framework independency in order to provide one easy to support API
 * virtual scroll in order to optimize large graphs
 
-## Probable API wid connectable nodes:
+## Probable API:
 ```
-function createNode(text) {
-    const node = document.createElement('div');
+const el = document.querySelector("#canvas");
 
-    node.innerText = text;
-    node.classList.add('node');
+const canvas = new GraphFlow.Canvas(el, { 
+    scale: { enabled: true },
+    shift: { enabled: true },
+    nodes: { draggable: true }
+});
+
+function createPortElement() {
+    return document.createElement('div');
+}
+
+function createNodeElement(name) {
+    const node =  document.createElement('div');
+    const text =  document.createElement('div');
+
+    node.classList.add("node");
+    node.appendChild(text);
+
+    text.innerText = name;
+
+    const frontPort = createPortElement();
+    node.prepend(frontPort);
+
+    const backPort = createPortElement();
+    node.appendChild(backPort);
+
+    node.inPort = frontPort;
+    node.outPort = backPort;
 
     return node;
 }
 
-const el = document.querySelector("#canvas");
-const canvas = new GraphFlow.Canvas(el);
-
-const htmlNode1 = createNode('Node 1');
-const htmlNode2 = createNode('Node 2');
+const node1 = createNodeElement("Node 1");
+const node2 = createNodeElement("Node 2");
 
 canvas
-    .addNode({ id: "1", html: htmlNode1, x: 200, y: 200 })
-    .addNode({ id: "2", html: htmlNode2, x: 600, y: 200 })
-    .connectNodes({ id: '1-to-2', from: "1", to: "2" });
-```
-
-
-## Probable API wid connectable ports:
-```
-function createNode(text) {
-    const node = document.createElement('div');
-
-    node.innerText = text;
-    node.classList.add('node');
-
-    return node;
-}
-
-function createPort(text) {
-    const port = document.createElement('div');
-
-    port.innerText = text;
-    port.classList.add('port');
-
-    return port;
-}
-
-const el = document.querySelector("#canvas");
-const canvas = new GraphFlow.Canvas(el);
-
-const htmlNode1 = createNode('Node 1');
-const htmlNode2 = createNode('Node 2');
-
-const htmlPort1 = createPort('Port for Node 1');
-const htmlPort2 = createNode('Port for Node 2');
-
-htmlNode1.appendChild(htmlPort1);
-htmlNode2.appendChild(htmlPort2);
-
-canvas
-    .addNode({ id: "1", html: htmlNode1, x: 200, y: 200 })
-    .addPort({ id: "port-1", nodeId: "1", html: htmlPort1 })
-    .addNode({ id: "2", html: htmlNode2, x: 600, y: 200 })
-    .addPort({ id: "port-2", nodeId: "2", html: htmlPort2 })
-    .connectPorts({ id: 'port-1-to-port-2', from: "port-1", to: "port-2" });
+    .addNode({ id: "node-1", element: node1, x: 200, y: 400 })
+    .setPort({ id: "port-1-1", element: node1.inPort, nodeId: "node-1" })
+    .setPort({ id: "port-1-2", element: node1.outPort, nodeId: "node-1" })
+    .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
+    .setPort({ id: "port-2-1", element: node2.inPort, nodeId: "node-2" })
+    .setPort({ id: "port-2-2", element: node2.outPort, nodeId: "node-2" })
+    .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```

@@ -33,22 +33,10 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .connection {
-            overflow: visible;
-        }
     </style>
 </head>
 <body>
     <div id="canvas"></div>
-
-    <div style="display: none">
-        <div class="node" data-node-template>
-            <div class="text"></div>
-        </div>
-
-        <div class="port" data-port-template></div>
-    </div>
 
     <script type="module">
         import "./lib/index.js";
@@ -62,13 +50,17 @@
         });
 
         function createPortElement() {
-            return document.querySelector('[data-port-template]').cloneNode(true);
+            return document.createElement('div');
         }
 
-        function createNodeElement(text) {
-            const node =  document.querySelector('[data-node-template]').cloneNode(true);
+        function createNodeElement(name) {
+            const node =  document.createElement('div');
+            const text =  document.createElement('div');
 
-            node.querySelector(".text").innerText = text;
+            node.classList.add("node");
+            node.appendChild(text);
+
+            text.innerText = name;
 
             const frontPort = createPortElement();
             node.prepend(frontPort);
