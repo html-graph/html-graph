@@ -27,10 +27,6 @@ const canvas = new GraphFlow.Canvas(el, {
     nodes: { draggable: true }
 });
 
-function createPortElement() {
-    return document.createElement('div');
-}
-
 function createNodeElement(name) {
     const node =  document.createElement('div');
     const text =  document.createElement('div');
@@ -40,10 +36,10 @@ function createNodeElement(name) {
 
     text.innerText = name;
 
-    const frontPort = createPortElement();
+    const frontPort = document.createElement('div');
     node.prepend(frontPort);
 
-    const backPort = createPortElement();
+    const backPort = document.createElement('div');
     node.appendChild(backPort);
 
     node.inPort = frontPort;
