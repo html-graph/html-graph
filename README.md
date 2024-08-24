@@ -2,7 +2,7 @@
 
 ### At the moment this library is under development and not stable
 
-<img width="100%" src="./media/demo.gif"/>
+<img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
 
 Whats planned:
 
