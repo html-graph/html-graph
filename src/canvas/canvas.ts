@@ -47,8 +47,8 @@ export class Canvas {
         return this;
     }
 
-    setPort(port: ApiPort): Canvas {
-        this.di.controller.setPort(port.id, port.element, port.nodeId);
+    markAsPort(port: ApiPort): Canvas {
+        this.di.controller.markAsPort(port.id, port.element, port.nodeId);
 
         return this;
     }

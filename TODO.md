@@ -1,5 +1,7 @@
 # TODO
 
+* unmark port
+* focus on nodes
 * fix arrows shiver
 * clear
 * unit tests
@@ -8,7 +10,6 @@
 * virtual scroll
 * import data
 * export data
-* focus on nodes
 * eslint and prettier
 * update node coords and element
 * update edges element

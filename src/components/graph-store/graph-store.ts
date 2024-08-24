@@ -47,6 +47,12 @@ export class GraphStore {
         });
 
         delete this.nodePorts[nodeId];
+
+        const connections = this.getAllConnectionsToNode(nodeId);
+
+        connections.forEach(connectionId => {
+            this.removeConnection(connectionId);
+        });
     }
 
     addPort(portId: string, element: HTMLElement, nodeId: string): void {

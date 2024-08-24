@@ -64,7 +64,7 @@ export class Controller {
         this.di.htmlController.attachNode(nodeId);
     }
 
-    setPort(portId: string, element: HTMLElement, nodeId: string): void {
+    markAsPort(portId: string, element: HTMLElement, nodeId: string): void {
         if (!this.di.graphStore.hasNode(nodeId)) {
             throw new Error("failed to set port on nonexisting node");
         }
