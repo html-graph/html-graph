@@ -1,8 +1,10 @@
 # GraphFlow
 
-### At the moment this library is under development and not stable
+# Graph visualization library that allows to customize nodes using html 
 
 <img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
+
+#### At the moment this library is under development
 
 Features:
 
