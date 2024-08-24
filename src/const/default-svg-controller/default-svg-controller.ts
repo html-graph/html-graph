@@ -7,7 +7,7 @@ export const defaultSvgController: SvgController = {
         const line = document.createElementNS("http://www.w3.org/2000/svg", "path"); 
         line.setAttribute("id", "line");
         line.setAttribute("stroke", "#5c5c5c");
-        line.setAttribute("stroke-width", "0.5");
+        line.setAttribute("stroke-width", "1");
         line.setAttribute("fill", "none");
         svg.appendChild(line);
 

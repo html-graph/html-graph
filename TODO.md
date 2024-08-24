@@ -1,5 +1,6 @@
 # TODO
 
+* fix arrows shiver
 * clear
 * unit tests
 * fix grab cursor position?

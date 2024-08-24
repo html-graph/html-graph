@@ -2,6 +2,8 @@
 
 ### At the moment this library is under development and not stable
 
+<img width="100%" src="./media/demo.gif"/>
+
 Whats planned:
 
 * support for html nodes, because it will allow huge customization possibilities
