@@ -8,12 +8,12 @@ Features:
 
 * support for fully customizable html nodes
 * support for fully customizable svg connections
+* connections between nodes via fully customizable ports
 * wide configuration options for canvas, nodes and connections
 * automatic adjustment of canvas and nodes on resize
-* draggable and scalable canvas with draggable nodes option
-* connections between nodes via fully customizable ports
+* draggable and scalable canvas with draggable nodes
 * zero dependencies
-* virtual scroll in order to optimize large graphs
+* support for 1k+ nodes and commections in viewport at the same time without lagging
 
 ## Probable API:
 ```
