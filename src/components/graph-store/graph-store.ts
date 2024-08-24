@@ -1,3 +1,4 @@
+import { SvgController } from "@/models/connection/svg-controller";
 import { EdgePayload } from "@/models/edges/edge-payload";
 import { ObjectMap } from "@/models/object-map";
 import { NodePayload } from "@/models/store/node-payload";
@@ -13,6 +14,12 @@ export class GraphStore {
 
     private readonly connections: ObjectMap<EdgePayload> = Object.create(null);
 
+    private readonly incommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+
+    private readonly outcommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+
+    private readonly cycleConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+
     addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
         this.nodes[nodeId] = { element, x, y };
         this.nodePorts[nodeId] = Object.create(null);
@@ -24,6 +31,11 @@ export class GraphStore {
 
     getNode(nodeId: string): NodePayload {
         return this.nodes[nodeId];
+    }
+
+    updateNodeCoords(nodeId: string, x: number, y: number): void {
+        this.nodes[nodeId].x = x;
+        this.nodes[nodeId].y = y;
     }
 
     removeNode(nodeId: string): void {
@@ -39,6 +51,9 @@ export class GraphStore {
 
     addPort(portId: string, element: HTMLElement, nodeId: string): void {
         this.ports[portId] = element;
+        this.cycleConnections[portId] = {};
+        this.incommingConnections[portId] = {};
+        this.outcommingConnections[portId] = {};
 
         const ports = this.nodePorts[nodeId];
 
@@ -65,10 +80,37 @@ export class GraphStore {
         delete ports[portId];
 
         delete this.ports[portId];
+
+        Object.keys(this.cycleConnections[portId]).forEach(connectionId => {
+            this.removeConnection(connectionId)
+        });
+        delete this.cycleConnections[portId];
+
+        Object.keys(this.incommingConnections[portId]).forEach(connectionId => {
+            this.removeConnection(connectionId)
+        });
+        delete this.incommingConnections[portId];
+
+        Object.keys(this.outcommingConnections[portId]).forEach(connectionId => {
+            this.removeConnection(connectionId)
+        });
+        delete this.outcommingConnections[portId];
     }
 
-    addConnection(connectionId: string, fromPortId: string, toPortId: string): void {
-        this.connections[connectionId] = { from: fromPortId, to: toPortId };
+    addConnection(
+        connectionId: string,
+        fromPortId: string,
+        toPortId: string,
+        svgController: SvgController,
+    ): void {
+        this.connections[connectionId] = { from: fromPortId, to: toPortId, svgController };
+
+        if (fromPortId !== toPortId) {
+            this.outcommingConnections[fromPortId][connectionId] = true;
+            this.incommingConnections[toPortId][connectionId] = true;
+        } else {
+            this.cycleConnections[fromPortId][connectionId] = true;
+        }
     }
 
     getConnection(connectionId: string): EdgePayload {
@@ -77,5 +119,26 @@ export class GraphStore {
 
     removeConnection(connectionId: string): void {
         delete this.connections[connectionId];
+    }
+
+    getAllConnectionsToNode(nodeId: string): readonly string[] {
+        const ports = Object.keys(this.nodePorts[nodeId]);
+        let res: string[] = [];
+
+        ports.forEach(port => {
+            if (this.cycleConnections[port] !== undefined) {
+                res = [...res, ...Object.keys(this.cycleConnections[port])];
+            }
+
+            if (this.incommingConnections[port] !== undefined) {
+                res = [...res, ...Object.keys(this.incommingConnections[port])];
+            }
+
+            if (this.outcommingConnections[port] !== undefined) {
+                res = [...res, ...Object.keys(this.outcommingConnections[port])];
+            }
+        });
+
+        return res;
     }
 }

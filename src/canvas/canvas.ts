@@ -1,4 +1,5 @@
 import { DiContainer } from "@/components/di-container/di-container";
+import { defaultSvgController } from "@/const/default-svg-controller/default-svg-controller";
 import { ApiConnection } from "@/models/connection/api-connection";
 import { ApiNode } from "@/models/nodes/api-node";
 import { ApiOptions } from "@/models/options/api-options";
@@ -9,6 +10,7 @@ import { createBackgroundDrawingFn } from "@/utils/create-background-drawing-fn/
 export class Canvas {
     private readonly options: Options = {
         scale: {
+            enabled: this.apiOptions?.scale?.enabled ?? false,
             velocity: this.apiOptions?.scale?.velocity ?? 1.2,
             min: this.apiOptions?.scale?.min ?? null,
             max: this.apiOptions?.scale?.max ?? null,
@@ -21,6 +23,15 @@ export class Canvas {
                 this.apiOptions?.background?.color ?? "#ffffff",
             ),
         },
+        shift: {
+            enabled: this.apiOptions?.shift?.enabled ?? false,
+        },
+        nodes: {
+            draggable: this.apiOptions?.nodes?.draggable ?? false,
+        },
+        connections: {
+            svgController: this.apiOptions?.connections?.svgController ?? defaultSvgController,
+        }
     };
 
     private readonly di = new DiContainer(this.canvasWrapper, this.options);
@@ -49,13 +60,18 @@ export class Canvas {
     }
 
     connectPorts(connection: ApiConnection): Canvas {
-        this.di.controller.connectPorts(connection.id, connection.from, connection.to, connection.element);
+        this.di.controller.connectPorts(
+            connection.id,
+            connection.from,
+            connection.to,
+            connection.svgController ?? this.options.connections.svgController,
+        );
 
         return this;
     }
 
-    disconnectPorts(connectionId: string): Canvas {
-        this.di.controller.disconnectPorts(connectionId);
+    removeConnection(connectionId: string): Canvas {
+        this.di.controller.removeConnection(connectionId);
 
         return this;
     }

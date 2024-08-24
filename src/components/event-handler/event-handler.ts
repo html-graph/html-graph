@@ -13,12 +13,20 @@ export class EventHandler {
             this.di.controller.dragViewport(payload.dx, payload.dy);
         });
 
-        this.di.eventSubject.on(GraphEventType.ReleaseViewport, () => {
-            this.di.controller.releaseViewport();
-        });
-
         this.di.eventSubject.on(GraphEventType.ScaleViewport, (payload) => {
             this.di.controller.scaleCanvas(payload.deltaY, payload.centerX, payload.centerY);
+        });
+
+        this.di.eventSubject.on(GraphEventType.GrabNode, (payload) => {
+            this.di.controller.grabNode(payload.nodeId);
+        });
+
+        this.di.eventSubject.on(GraphEventType.DragNode, (payload) => {
+            this.di.controller.dragNode(payload.nodeId, payload.dx, payload.dy);
+        });
+
+        this.di.eventSubject.on(GraphEventType.Release, () => {
+            this.di.controller.release();
         });
     }
 }

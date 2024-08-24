@@ -6,7 +6,6 @@
     <style>
         html, body {
             height: 100%;
-            max-height: 100%;
             padding: 0;
             margin: 0;
         }
@@ -22,7 +21,9 @@
 
         .node  {
             width: 150px;
+            max-width: 150px;
             height: 50px;
+            max-height: 50px;
             background: #ffdbab;
             border: 1px solid #bababa;
             border-radius: 15px;
@@ -31,21 +32,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .port {
-            position: relative;
-        }
-
-        .port::after {
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            content: "";
-            width: 10px;
-            height: 10px;
-            background: grey;
-            border-radius: 50%;
         }
 
         .connection {
@@ -57,13 +43,11 @@
     <div id="canvas"></div>
 
     <div style="display: none">
-        <div class="node" data-node-template></div>
+        <div class="node" data-node-template>
+            <div class="text"></div>
+        </div>
 
         <div class="port" data-port-template></div>
-
-        <svg class="connection" data-connection-template viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M 0 0 C 40 0, 60 100, 100 100" stroke-width="1" stroke="grey" fill="transparent"/>
-        </svg>
     </div>
 
     <script type="module">
@@ -71,56 +55,69 @@
 
         const el = document.querySelector("#canvas");
 
-        const canvas = new GraphFlow.Canvas(el);
+        const canvas = new GraphFlow.Canvas(el, { 
+            scale: { enabled: true },
+            shift: { enabled: true },
+            nodes: { draggable: true }
+        });
 
-        function createNodeElement() {
-            return document.querySelector('[data-node-template]').cloneNode(true);
+        function createNodeElement(text) {
+            const node =  document.querySelector('[data-node-template]').cloneNode(true);
+
+            node.querySelector(".text").innerText = text;
+
+            return node;
         }
 
         function createPortElement() {
             return document.querySelector('[data-port-template]').cloneNode(true);
         }
 
-        function createConnectionElement() {
-            return document.querySelector('[data-connection-template]').cloneNode(true);
-        }
+        const htmlNode1 = createNodeElement("Node 1");
+        const htmlNode2 = createNodeElement("Node 2");
+        const htmlNode3 = createNodeElement("Node 3");
+        const htmlNode4 = createNodeElement("Node 3");
 
-        const htmlNode1 = createNodeElement();
-        const htmlNode2 = createNodeElement();
-        const htmlNode3 = createNodeElement();
+        const frontPort1 = createPortElement();
+        htmlNode1.prepend(frontPort1);
 
-        const port1 = createPortElement();
-        const port2 = createPortElement();
-        const port3 = createPortElement();
-        const port4 = createPortElement();
-        const port5 = createPortElement();
-        const port6 = createPortElement();
+        const backPort1 = createPortElement();
+        htmlNode1.appendChild(backPort1);
 
-        const connection1 = createConnectionElement();
-        const connection2 = createConnectionElement();
+        const frontPort2 = createPortElement();
+        htmlNode2.prepend(frontPort2);
 
-        htmlNode1.appendChild(port1);
-        htmlNode1.appendChild(port2);
-        htmlNode2.appendChild(port3);
-        htmlNode2.appendChild(port4);
-        htmlNode3.appendChild(port5);
-        htmlNode3.appendChild(port6);
+        const backPort2 = createPortElement();
+        htmlNode2.appendChild(backPort2);
+
+        const frontPort3 = createPortElement();
+        htmlNode3.prepend(frontPort3);
+
+        const backPort3 = createPortElement();
+        htmlNode3.appendChild(backPort3);
+
+        const frontPort4 = createPortElement();
+        htmlNode4.prepend(frontPort4);
+
+        const backPort4 = createPortElement();
+        htmlNode4.appendChild(backPort4);
 
         canvas
             .addNode({ id: "node-1", element: htmlNode1, x: 200, y: 400 })
-            .setPort({ id: "port-1-1", element: port1, nodeId: "node-1" })
-            .setPort({ id: "port-1-2", element: port2, nodeId: "node-1" })
-
+            .setPort({ id: "port-1-1", element: frontPort1, nodeId: "node-1" })
+            .setPort({ id: "port-1-2", element: backPort1, nodeId: "node-1" })
             .addNode({ id: "node-2", element: htmlNode2, x: 600, y: 600 })
-            .setPort({ id: "port-2-1", element: port3, nodeId: "node-2" })
-            .setPort({ id: "port-2-2", element: port4, nodeId: "node-2" })
-
+            .setPort({ id: "port-2-1", element: frontPort2, nodeId: "node-2" })
+            .setPort({ id: "port-2-2", element: backPort2, nodeId: "node-2" })
             .addNode({ id: "node-3", element: htmlNode3, x: 200, y: 800 })
-            .setPort({ id: "port-3-1", element: port5, nodeId: "node-3" })
-            .setPort({ id: "port-3-2", element: port6, nodeId: "node-3" })
-
-            .connectPorts({ id: "connection-1", from: "port-1-2", to: "port-2-1", element: connection1 })
-            .connectPorts({ id: "connection-2", from: "port-3-2", to: "port-2-1", element: connection2 });
+            .setPort({ id: "port-3-1", element: frontPort3, nodeId: "node-3" })
+            .setPort({ id: "port-3-2", element: backPort3, nodeId: "node-3" })
+            .addNode({ id: "node-4", element: htmlNode4, x: 800, y: 600 })
+            .setPort({ id: "port-4-1", element: frontPort4, nodeId: "node-4" })
+            .setPort({ id: "port-4-2", element: backPort4, nodeId: "node-4" })
+            .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" })
+            .connectPorts({ id: "con-2", from: "port-3-2", to: "port-2-1" })
+            .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" });
     </script>
 </body>
 </html>

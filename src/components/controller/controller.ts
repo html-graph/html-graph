@@ -1,4 +1,4 @@
-import { ConnectionDrawingFn } from "@/models/connection/connection-drawing-fn";
+import { SvgController } from "@/models/connection/svg-controller";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
@@ -7,7 +7,20 @@ export class Controller {
     ) { }
 
     grabViewport(): void {
+        if (this.di.options.shift.enabled === false) {
+            return;
+        }
+
         this.di.htmlController.setCursor('grab');
+    }
+
+    grabNode(nodeId: string): void {
+        if (this.di.options.nodes.draggable === false) {
+            return;
+        }
+
+        this.di.htmlController.setCursor('grab');
+        this.di.htmlController.moveNodeOnTop(nodeId);
     }
 
     dragViewport(dx: number, dy: number): void {
@@ -15,7 +28,17 @@ export class Controller {
         this.di.htmlController.applyTransform();
     }
 
-    releaseViewport(): void {
+    dragNode(nodeId: string, dx: number, dy: number): void {
+        const node = this.di.graphStore.getNode(nodeId);
+        const [xv, yv] = this.di.viewportTransformer.getViewportCoordsFor(node.x, node.y);
+        const nodeX = xv + dx;
+        const nodeY = yv + dy;
+        const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoordsFor(nodeX, nodeY);
+        this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
+        this.di.htmlController.updateNodePosition(nodeId);
+    }
+
+    release(): void {
         this.di.htmlController.setCursor('default');
     }
 
@@ -65,15 +88,15 @@ export class Controller {
         connectionId: string,
         fromPortId: string,
         toPortId: string,
-        element: SVGSVGElement,
+        svgController: SvgController,
     ): void {
-        this.di.graphStore.addConnection(connectionId, fromPortId, toPortId);
-        this.di.htmlController.attachConnection(connectionId, element);
+        this.di.graphStore.addConnection(connectionId, fromPortId, toPortId, svgController);
+        this.di.htmlController.attachConnection(connectionId);
     }
 
-    disconnectPorts(connectionId: string): void {
-        this.di.graphStore.removeConnection(connectionId);
+    removeConnection(connectionId: string): void {
         this.di.htmlController.detachConnection(connectionId);
+        this.di.graphStore.removeConnection(connectionId);
     }
 
     removeNode(nodeId: string): void {

@@ -1,7 +1,6 @@
 import { GraphEventType } from "@/models/events/graph-event-type";
 import { DiContainer } from "../di-container/di-container";
 import { NodePayload } from "@/models/html/node-payload";
-import { ConnectionDrawingFn } from "@/models/connection/connection-drawing-fn";
 
 export class HtmlController {
     private readonly host: HTMLElement;
@@ -22,57 +21,94 @@ export class HtmlController {
 
     private readonly connectionsMap = new Map<string, SVGSVGElement>();
 
-    private readonly onMouseDown = (event: MouseEvent) => {
-        if (event.button === 0) {
-            this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
+    private grabbedNodeId: string | null = null;
 
-            event.stopPropagation();
+    private readonly onPointerDown = (event: MouseEvent) => {
+        if (event.button !== 0) {
+            return;
         }
+
+        this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
+
+        event.stopPropagation();
     }
 
-    private readonly onMouseMove = (event: MouseEvent) => {
-        if (event.buttons === 1) {
+    private readonly onPointerMove = (event: MouseEvent) => {
+        if (event.buttons !== 1) {
+            return;
+        }
+
+        if (this.grabbedNodeId !== null) {
+            this.di.eventSubject.dispatch(
+                GraphEventType.DragNode,
+                {
+                    nodeId: this.grabbedNodeId,
+                    dx: event.movementX,
+                    dy: event.movementY,
+                },
+            );
+        } else {
             this.di.eventSubject.dispatch(
                 GraphEventType.DragViewport,
                 { dx: event.movementX, dy: event.movementY },
             );
-
-            event.stopPropagation();
         }
+
+        event.stopPropagation();
     }
 
-    private readonly onMouseUp = (event: MouseEvent) => {
-        if (event.button === 0) {
-            this.di.eventSubject.dispatch(GraphEventType.ReleaseViewport);
-
-            event.stopPropagation();
+    private readonly onPointerUp = (event: MouseEvent) => {
+        if (event.button !== 0) {
+            return;
         }
+
+        this.grabbedNodeId = null;
+        this.di.eventSubject.dispatch(GraphEventType.Release);
+
+        event.stopPropagation();
     }
 
-    private readonly onMouseWheelScroll = (event: WheelEvent) => {
-        if (event.ctrlKey) {
-            const { left, top } = this.host.getBoundingClientRect();
-            const centerX = event.clientX - left;
-            const centerY = event.clientY - top;
-
-            this.di.eventSubject.dispatch(
-                GraphEventType.ScaleViewport,
-                { deltaY: event.deltaY, centerX, centerY },
-            );
-
-            event.preventDefault();
+    private readonly onWheelScroll = (event: WheelEvent) => {
+        if (!event.ctrlKey) {
+            return;
         }
+
+        const { left, top } = this.host.getBoundingClientRect();
+        const centerX = event.clientX - left;
+        const centerY = event.clientY - top;
+
+        this.di.eventSubject.dispatch(
+            GraphEventType.ScaleViewport,
+            { deltaY: event.deltaY, centerX, centerY },
+        );
+
+        event.preventDefault();
     }
+
+    private readonly onNodePointerDown = (event: PointerEvent) => {
+        if (event.button !== 0) {
+            return;
+        }
+
+        const nodeId = this.nodeIdsMap.get(event.currentTarget as HTMLElement)!;
+
+        this.grabbedNodeId = nodeId;
+        this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
+            nodeId,
+        });
+
+        event.stopPropagation();
+    };
 
     constructor(
         private readonly canvasWrapper: HTMLElement,
         private readonly di: DiContainer,
     ) {
         this.host = this.createHost();
-        this.host.addEventListener("mousedown", this.onMouseDown);
-        this.host.addEventListener("mouseup", this.onMouseUp);
-        this.host.addEventListener("mousemove", this.onMouseMove);
-        this.host.addEventListener("wheel", this.onMouseWheelScroll);
+        this.host.addEventListener("pointerdown", this.onPointerDown);
+        this.host.addEventListener("pointerup", this.onPointerUp);
+        this.host.addEventListener("pointermove", this.onPointerMove);
+        this.host.addEventListener("wheel", this.onWheelScroll);
 
         this.canvas = this.createCanvas();
         this.nodesContainer = this.createNodesContainer();
@@ -98,10 +134,10 @@ export class HtmlController {
     }
 
     destroy(): void {
-        this.host.removeEventListener("mousedown", this.onMouseDown);
-        this.host.removeEventListener("mouseup", this.onMouseUp);
-        this.host.removeEventListener("mousemove", this.onMouseMove);
-        this.host.removeEventListener("wheel", this.onMouseWheelScroll);
+        this.host.removeEventListener("pointerdown", this.onPointerDown);
+        this.host.removeEventListener("pointerup", this.onPointerUp);
+        this.host.removeEventListener("pointermove", this.onPointerMove);
+        this.host.removeEventListener("wheel", this.onWheelScroll);
         this.hostResizeObserver.disconnect();
         this.nodesResizeObserver.disconnect();
         this.host.removeChild(this.canvas);
@@ -145,6 +181,7 @@ export class HtmlController {
         this.nodesResizeObserver.observe(node.element)
 
         node.element.style.visibility = "visible";
+        node.element.addEventListener('pointerdown', this.onNodePointerDown);
     }
 
     detachNode(nodeId: string): void {
@@ -152,10 +189,19 @@ export class HtmlController {
 
         this.nodesResizeObserver.unobserve(node.element);
         this.nodesContainer.removeChild(node.element);
+
+        node.element.removeEventListener('pointerdown', this.onNodePointerDown);
+
         this.nodeIdsMap.delete(node.element);
     }
 
-    attachConnection(connectionId: string, element: SVGSVGElement): void {
+    attachConnection(connectionId: string): void {
+        const connection = this.di.graphStore.getConnection(connectionId);
+        const element = connection.svgController.createSvg();
+
+        element.style.transformOrigin = "50% 50%";
+        element.style.position = "absolute";
+
         this.connectionsMap.set(connectionId, element);
 
         this.updateConnectionCoords(connectionId);
@@ -167,6 +213,22 @@ export class HtmlController {
         const element = this.connectionsMap.get(connectionId);
         this.connectionsMap.delete(connectionId);
         this.connectionsContainer.removeChild(element!);
+    }
+
+    moveNodeOnTop(nodeId: string): void {
+        const node = this.di.graphStore.getNode(nodeId);
+        this.nodesContainer.appendChild(node.element);
+    }
+
+    updateNodePosition(nodeId: string): void {
+        const node = this.di.graphStore.getNode(nodeId);
+        this.updateNodeCoords(node);
+
+        const connections = this.di.graphStore.getAllConnectionsToNode(nodeId);
+
+        connections.forEach(connection => {
+            this.updateConnectionCoords(connection);
+        });
     }
 
     private createHost(): HTMLDivElement {
@@ -242,9 +304,10 @@ export class HtmlController {
 
     private updateNodeCoords(node: NodePayload): void {
         const { width, height } = node.element.getBoundingClientRect();
+        const sa = this.di.viewportTransformer.getAbsoluteScale();
 
-        node.element.style.left = `${node.x - width / 2}px`;
-        node.element.style.top = `${node.y - height / 2}px`;
+        node.element.style.left = `${node.x - sa * width / 2}px`;
+        node.element.style.top = `${node.y - sa * height / 2}px`;
     }
 
     private updateConnectionCoords(connectionId: string): void {
@@ -255,30 +318,25 @@ export class HtmlController {
         const rectFrom = portFrom.getBoundingClientRect();
         const rectTo = portTo.getBoundingClientRect();
 
-        const top = Math.min(rectFrom.top, rectTo.top);
-        const left = Math.min(rectFrom.left, rectTo.left);
-        const width = Math.abs(rectFrom.left - rectTo.left);
-        const height = Math.abs(rectFrom.top - rectTo.top);
+        const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectFrom.left, rectFrom.top);
+        const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectTo.left, rectTo.top);
+        const top = Math.min(yaFrom, yaTo);
+        const left = Math.min(xaFrom, xaTo);
+        const width = Math.abs(xaTo - xaFrom);
+        const height = Math.abs(yaTo - yaFrom);
 
         const element = this.connectionsMap.get(connectionId)!;
 
-        element.style.transformOrigin = "50% 50%";
+        const horDir = rectFrom.left <= rectTo.left;
+        const vertDir = rectFrom.top <= rectTo.top;
 
-        const hor = left === rectFrom.left;
-        const vert = top === rectFrom.top;
-
-        element.style.transform = `scale(${hor ? 1 : -1}, ${vert ? 1 : -1})`;
-
-        element.style.position = "absolute";
+        element.style.transform = `scale(${horDir ? 1 : -1}, ${vertDir ? 1 : -1})`;
         element.style.top = `${top}px`;
         element.style.left = `${left}px`;
         element.style.width = `${width}px`;
         element.style.height = `${height}px`;
-    }
 
-    private createConnectionSvg(): SVGSVGElement {
-        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-        return svg;
+        const connection = this.di.graphStore.getConnection(connectionId);
+        connection.svgController.updateSvg(element, width, height);
     }
 }

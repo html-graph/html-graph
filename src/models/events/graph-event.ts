@@ -9,19 +9,24 @@ export type GraphEvent = {
         dy: number;
     };
 } | {
-    type: GraphEventType.ReleaseViewport;
+    type: GraphEventType.Release;
 } | {
     type: GraphEventType.ScaleViewport;
     payload: {
         deltaY: number;
         centerX: number;
         centerY: number;
-    }
+    };
 } | {
     type: GraphEventType.GrabNode;
     payload: {
         nodeId: string;
-        nodeMouseX: number;
-        nodeMouseY: number;
-    }
+    };
+} | {
+    type: GraphEventType.DragNode;
+    payload: {
+        nodeId: string;
+        dx: number;
+        dy: number;
+    };
 };

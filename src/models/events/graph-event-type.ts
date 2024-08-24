@@ -1,7 +1,8 @@
 export enum GraphEventType {
-    DragViewport = 'DragViewport',
     GrabViewport = 'GrabViewport',
-    ReleaseViewport = 'ReleaseViewport',
+    Release = 'Release',
+    DragViewport = 'DragViewport',
     ScaleViewport = 'ScaleViewport',
     GrabNode = 'GrabNode',
+    DragNode = 'DragNode',
 }
