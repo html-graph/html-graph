@@ -13,7 +13,7 @@ Features:
 * automatic adjustment of canvas and nodes on resize
 * draggable and scalable canvas with draggable nodes
 * zero dependencies
-* support for 1k+ nodes and commections in viewport at the same time without lagging
+* support for 1k+ nodes and connections in viewport at the same time without lagging
 
 ## Probable API:
 ```
