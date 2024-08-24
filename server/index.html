@@ -90,7 +90,8 @@
             .markAsPort({ id: "port-4-2", element: node4.outPort, nodeId: "node-4" })
             .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" })
             .connectPorts({ id: "con-2", from: "port-3-2", to: "port-2-1" })
-            .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" });
+            .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" })
+            .removeConnection("con-1")
     </script>
 </body>
 </html>

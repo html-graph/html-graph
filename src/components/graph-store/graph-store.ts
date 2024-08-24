@@ -124,6 +124,17 @@ export class GraphStore {
     }
 
     removeConnection(connectionId: string): void {
+        const connection = this.connections[connectionId];
+        const portFromId = connection.from;
+        const portToId = connection.to;
+
+        delete this.cycleConnections[portFromId][connectionId];
+        delete this.cycleConnections[portToId][connectionId];
+        delete this.incommingConnections[portFromId][connectionId];
+        delete this.incommingConnections[portToId][connectionId];
+        delete this.outcommingConnections[portFromId][connectionId];
+        delete this.outcommingConnections[portToId][connectionId];
+
         delete this.connections[connectionId];
     }
 
