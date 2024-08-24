@@ -1,17 +1,19 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "target": "es5",
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "strict": true,
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["DOM"],
     "skipLibCheck": true,
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "declaration": true,
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "lib": ["DOM"]
-  }
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "lib"]
 }

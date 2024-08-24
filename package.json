@@ -1,32 +1,24 @@
 {
   "name": "graphflow",
+  "private": false,
   "version": "0.0.0",
-  "description": "Graph visualization library",
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "start": "concurrently \"npm run watch:lib\" \"npm run start:http\"",
-    "start:http": "live-server --port=3100 --open=index.html --mount=/lib:./dist ./server",
-    "watch:lib": "webpack --watch",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "vite",
+    "build": "tsc --p ./tsconfig-build.json && vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/dmarov/graphflow.git"
-  },
-  "author": "Dmitry Marov <d.marov94@gmail.com>",
-  "license": "BSD-2-Clause",
-  "bugs": {
-    "url": "https://github.com/dmarov/graphflow/issues"
-  },
-  "homepage": "https://github.com/dmarov/graphflow#readme",
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "live-server": "^1.2.2",
-    "ts-loader": "^9.5.1",
-    "tsconfig-paths-webpack-plugin": "^4.1.0",
-    "typescript": "^5.5.4",
-    "webpack": "^5.93.0",
-    "webpack-cli": "^5.1.4"
+    "@types/node": "^22.5.0",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.0.3",
+    "vite-tsconfig-paths": "^5.0.1"
   }
 }
