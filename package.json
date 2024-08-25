@@ -18,6 +18,11 @@
     "url": "git+https://github.com/dmarov/graphflow.git"
   },
   "license": "BSD-3-Clause",
+  "keywords": [
+    "visualization",
+    "graph",
+    "html"
+  ],
   "scripts": {
     "start": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
