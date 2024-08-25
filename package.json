@@ -20,8 +20,11 @@
   "license": "BSD-3-Clause",
   "keywords": [
     "visualization",
+    "visualisation",
     "graph",
-    "html"
+    "html",
+    "svg",
+    "network"
   ],
   "scripts": {
     "start": "vite",
