@@ -33,87 +33,79 @@ Port is an entity of node to which connection can be attached to. It might be vi
 npm i @diyguy/graphflow
 ```
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Simple GraphFlow Demo</title>
-    <style>
-      html,
-      body {
-        height: 100%;
-        padding: 0;
-        margin: 0;
-      }
+```typescript
+import { Canvas } from "@diyguy/graphflow";
 
-      #canvas {
-        height: 100%;
-      }
+const canvasElement = document.createElement('div');
+document.body.prepend(canvasElement);
 
-      .node {
-        width: 150px;
-        max-width: 150px;
-        height: 50px;
-        max-height: 50px;
-        background: #ffdbab;
-        border: 1px solid #bababa;
-        border-radius: 1000px;
-        white-space: nowrap;
-        user-select: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-    </style>
-  </head>
+const canvas = new Canvas(canvasElement, { 
+    scale: { enabled: true },
+    shift: { enabled: true },
+    nodes: { draggable: true }
+});
 
-  <body>
-    <div id="canvas"></div>
-    <script type="module">
-      import { Canvas } from "https://unpkg.com/@diyguy/graphflow@0.0.5";
+function createNodeElement(name: string): [HTMLElement, HTMLElement, HTMLElement] {
+    const node =  document.createElement('div');
+    const text =  document.createElement('div');
 
-      const canvasElement = document.querySelector("#canvas");
-      document.body.prepend(canvasElement);
+    node.classList.add("node");
+    node.appendChild(text);
 
-      const canvas = new Canvas(canvasElement, {
-        scale: { enabled: true },
-        shift: { enabled: true },
-        nodes: { draggable: true },
-      });
+    text.innerText = name;
 
-      function createNodeElement(name) {
-        const node = document.createElement("div");
-        const text = document.createElement("div");
+    const frontPort = document.createElement('div');
+    node.prepend(frontPort);
 
-        node.classList.add("node");
-        node.appendChild(text);
+    const backPort = document.createElement('div');
+    node.appendChild(backPort);
 
-        text.innerText = name;
+    return [node, frontPort, backPort];
+}
 
-        const frontPort = document.createElement("div");
-        node.prepend(frontPort);
+const node1 = createNodeElement("Node 1");
+const node2 = createNodeElement("Node 2");
 
-        const backPort = document.createElement("div");
-        node.appendChild(backPort);
+canvas
+    .addNode({ id: "node-1", element: node1[0], x: 200, y: 400 })
+    .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
+    .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
+    .addNode({ id: "node-2", element: node2[0], x: 600, y: 500 })
+    .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
+    .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
+    .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
+```
 
-        return [node, frontPort, backPort];
-      }
+```css
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
 
-      const node1 = createNodeElement("Node 1");
-      const node2 = createNodeElement("Node 2");
+body {
+    display: flex;
+    flex-direction: column;
+}
 
-      canvas
-        .addNode({ id: "node-1", element: node1[0], x: 200, y: 200 })
-        .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
-        .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
-        .addNode({ id: "node-2", element: node2[0], x: 500, y: 300 })
-        .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
-        .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
-        .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
-    </script>
-  </body>
-</html>
+body > div {
+    flex-grow: 1;
+}
+
+.node  {
+    width: 150px;
+    max-width: 150px;
+    height: 50px;
+    max-height: 50px;
+    background: #ffdbab;
+    border: 1px solid #bababa;
+    border-radius: 1000px;
+    white-space: nowrap;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 ```
 
 ## Options
