@@ -15,7 +15,7 @@
 </a>
 
 
-Features:
+## Features:
 
 * support for fully customizable html nodes
 * support for fully customizable svg connections
