@@ -1,5 +1,6 @@
-import { exec, spawn } from "child_process";
+import { spawn } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
+import { argv } from "process";
 
 const content = readFileSync("./package.json", "utf8");
 
@@ -41,4 +42,6 @@ const execute = async (cmd: string, cwd: string, params = []): Promise<void> => 
     });
 }
 
-execute(`git add -A && git commit -m "release ${newVersion}" && git push && npm publish --access=public`, "./")
+const otp = argv[2];
+
+execute(`git add -A && git commit -m "release ${newVersion}" && git push && npm publish --access=public --otp=${otp}`, "./")
