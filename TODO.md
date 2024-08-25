@@ -3,6 +3,7 @@
 * interactive demo
 * unmark port
 * focus on nodes
+* scale behavior
 * backward arrow state
 * fix arrows shiver
 * clear
