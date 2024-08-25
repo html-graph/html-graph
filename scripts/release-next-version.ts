@@ -8,8 +8,6 @@ const pkg = JSON.parse(content);
 
 const version = pkg.version;
 
-console.log(version)
-
 const reg = /(\d+)\.(\d+)\.(\d+)/;
 
 const result = version.match(reg);
@@ -54,9 +52,7 @@ const cmds = [
 
 const cmd = cmds.join(" && ");
 
-
-
 execute(cmd, "./")
     .catch(() => {
-        execute("git reset --hard", "./")
+        execute("git reset --hard", "./");
     });
