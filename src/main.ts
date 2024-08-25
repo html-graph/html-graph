@@ -1,3 +1,4 @@
+import "./main.css";
 import { Canvas } from "../lib/main";
 
 const canvasElement = document.createElement('div');

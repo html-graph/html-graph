@@ -1,7 +1,9 @@
 # TODO
 
+* interactive demo
 * unmark port
 * focus on nodes
+* backward arrow state
 * fix arrows shiver
 * clear
 * unit tests
