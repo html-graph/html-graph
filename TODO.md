@@ -1,6 +1,6 @@
 # TODO
 
-* interactive demo
+* release script
 * unmark port
 * focus on nodes
 * scale behavior

@@ -7,7 +7,7 @@
     <img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
 </a>
 
-Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility in managing connections.
+Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility at managing connections.
 Port is an entity of node to which connection can be attached to. It might be visually invisible or visible
 
 
