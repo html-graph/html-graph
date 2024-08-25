@@ -125,7 +125,7 @@ interface ApiOptions {
         readonly draggable?: boolean; // enables draggable nodes behavior
     },
     readonly connections?: {
-        readonly svgController: SvgController; // provides custom connections creation rules
+        readonly svgController?: SvgController; // provides custom connections creation rules
     },
 }
 ```

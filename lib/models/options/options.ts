@@ -1,5 +1,6 @@
 import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
 import { SvgController } from "../connection/svg-controller";
+import { ScaleTrigger } from "../scale/scale-trigger.type";
 
 export interface Options {
     readonly scale: {
@@ -7,6 +8,7 @@ export interface Options {
         readonly velocity: number;
         readonly min: number | null;
         readonly max: number | null;
+        readonly trigger: ScaleTrigger;
     },
     readonly background: {
         readonly drawingFn: (

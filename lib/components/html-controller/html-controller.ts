@@ -69,7 +69,13 @@ export class HtmlController {
     }
 
     private readonly onWheelScroll = (event: WheelEvent) => {
-        if (!event.ctrlKey) {
+        const trigger = this.di.options.scale.trigger;
+
+        if ((trigger === "ctrl+wheel" || trigger === 'ctrl+shift+wheel') && !event.ctrlKey) {
+            return;
+        }
+
+        if ((trigger === 'shift+wheel' || trigger === 'ctrl+shift+wheel') && !event.shiftKey) {
             return;
         }
 

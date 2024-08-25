@@ -22,6 +22,7 @@ export class Canvas {
                 velocity: this.apiOptions?.scale?.velocity ?? 1.2,
                 min: this.apiOptions?.scale?.min ?? null,
                 max: this.apiOptions?.scale?.max ?? null,
+                trigger: this.apiOptions?.scale?.trigger ?? 'wheel',
             },
             background: {
                 drawingFn: this.apiOptions?.background?.drawingFn ?? createBackgroundDrawingFn(
