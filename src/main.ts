@@ -1,8 +1,8 @@
-import GraphFlow from "../lib/main";
+import { Canvas } from "../lib/main";
 
 const el = document.querySelector("#canvas") as HTMLElement;
 
-const canvas = new GraphFlow.Canvas(el, { 
+const canvas = new Canvas(el, { 
     scale: { enabled: true },
     shift: { enabled: true },
     nodes: { draggable: true }
