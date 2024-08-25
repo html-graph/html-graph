@@ -21,8 +21,7 @@
     "start": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
     "preview": "vite preview",
-    "prepublishOnly": "npm run build",
-    "publish": "npm publish --access=public"
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@types/node": "^22.5.0",
