@@ -4,7 +4,7 @@
 
 <img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
 
-#### At the moment this library is under development
+#### At the moment this library is under development and might be unstable
 
 Features:
 
@@ -15,19 +15,59 @@ Features:
 * automatic adjustment of canvas and nodes on resize
 * draggable and scalable canvas with draggable nodes
 * zero dependencies
-* support for 1k+ nodes and connections in viewport at the same time without lagging
 
-## Probable API:
+## How to use:
 ```
-const el = document.querySelector("#canvas");
+npm i @diyguy/graphflow
+```
 
-const canvas = new GraphFlow.Canvas(el, { 
+css
+```
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#canvas {
+    flex-grow: 1;
+}
+
+.node  {
+    width: 150px;
+    max-width: 150px;
+    height: 50px;
+    max-height: 50px;
+    background: #ffdbab;
+    border: 1px solid #bababa;
+    border-radius: 1000px;
+    white-space: nowrap;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+```
+
+typescript/javascript
+```
+import { Canvas } from "@diyguy/graphflow";
+
+const canvasElement = document.createElement('div');
+document.body.appendChild(canvasElement);
+
+const canvas = new Canvas(canvasElement, { 
     scale: { enabled: true },
     shift: { enabled: true },
     nodes: { draggable: true }
 });
 
-function createNodeElement(name) {
+function createNodeElement(name: string): [HTMLElement, HTMLElement, HTMLElement] {
     const node =  document.createElement('div');
     const text =  document.createElement('div');
 
@@ -42,21 +82,18 @@ function createNodeElement(name) {
     const backPort = document.createElement('div');
     node.appendChild(backPort);
 
-    node.inPort = frontPort;
-    node.outPort = backPort;
-
-    return node;
+    return [node, frontPort, backPort];
 }
 
 const node1 = createNodeElement("Node 1");
 const node2 = createNodeElement("Node 2");
 
 canvas
-    .addNode({ id: "node-1", element: node1, x: 200, y: 400 })
-    .markAsPort({ id: "port-1-1", element: node1.inPort, nodeId: "node-1" })
-    .markAsPort({ id: "port-1-2", element: node1.outPort, nodeId: "node-1" })
-    .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-    .markAsPort({ id: "port-2-1", element: node2.inPort, nodeId: "node-2" })
-    .markAsPort({ id: "port-2-2", element: node2.outPort, nodeId: "node-2" })
+    .addNode({ id: "node-1", element: node1[0], x: 200, y: 400 })
+    .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
+    .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
+    .addNode({ id: "node-2", element: node2[0], x: 600, y: 500 })
+    .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
+    .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
     .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```
