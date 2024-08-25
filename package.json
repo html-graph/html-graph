@@ -1,5 +1,5 @@
 {
-  "name": "graphflow",
+  "name": "@diyguy/graphflow",
   "private": false,
   "version": "0.0.0",
   "type": "module",
@@ -12,13 +12,13 @@
     "start": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
     "preview": "vite preview",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "publish": "npm publish --access=public"
   },
   "devDependencies": {
     "@types/node": "^22.5.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
-    "vite-plugin-dts": "^4.0.3",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite-plugin-dts": "^4.0.3"
   }
 }
