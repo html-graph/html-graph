@@ -44,4 +44,4 @@ const execute = async (cmd: string, cwd: string, params = []): Promise<void> => 
 
 const otp = argv[2];
 
-execute(`git add -A && git commit -m "release ${newVersion}" && git tag -a ${newVersion} -m "GraphFlow version ${newVersion}" && git push --tags && npm publish --access=public --otp=${otp}`, "./")
+execute(`npm publish --access=public --otp=${otp} && git add -A && git commit -m "release ${newVersion}" && git tag -a ${newVersion} -m "GraphFlow version ${newVersion}" && git push --tags`, "./")
