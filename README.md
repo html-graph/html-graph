@@ -26,7 +26,7 @@ npm i @diyguy/graphflow
 import { Canvas } from "@diyguy/graphflow";
 
 const canvasElement = document.createElement('div');
-document.body.appendChild(canvasElement);
+document.body.prepend(canvasElement);
 
 const canvas = new Canvas(canvasElement, { 
     scale: { enabled: true },
@@ -77,7 +77,7 @@ body {
     flex-direction: column;
 }
 
-#canvas {
+body > div {
     flex-grow: 1;
 }
 

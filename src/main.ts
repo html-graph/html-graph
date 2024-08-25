@@ -1,8 +1,9 @@
 import { Canvas } from "../lib/main";
 
-const el = document.querySelector("#canvas") as HTMLElement;
+const canvasElement = document.createElement('div');
+document.body.prepend(canvasElement);
 
-const canvas = new Canvas(el, { 
+const canvas = new Canvas(canvasElement, { 
     scale: { enabled: true },
     shift: { enabled: true },
     nodes: { draggable: true }
