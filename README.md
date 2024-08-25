@@ -21,40 +21,7 @@ Features:
 npm i @diyguy/graphflow
 ```
 
-css
-```
-html, body {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-#canvas {
-    flex-grow: 1;
-}
-
-.node  {
-    width: 150px;
-    max-width: 150px;
-    height: 50px;
-    max-height: 50px;
-    background: #ffdbab;
-    border: 1px solid #bababa;
-    border-radius: 1000px;
-    white-space: nowrap;
-    user-select: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-```
-
-typescript/javascript
+typescript (javascript)
 ```
 import { Canvas } from "@diyguy/graphflow";
 
@@ -96,4 +63,37 @@ canvas
     .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
     .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
     .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
+```
+
+css
+```
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#canvas {
+    flex-grow: 1;
+}
+
+.node  {
+    width: 150px;
+    max-width: 150px;
+    height: 50px;
+    max-height: 50px;
+    background: #ffdbab;
+    border: 1px solid #bababa;
+    border-radius: 1000px;
+    white-space: nowrap;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 ```
