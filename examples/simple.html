@@ -1,93 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Simple GraphFlow Demo</title>
     <style>
-        html, body {
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
+      html,
+      body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+      #canvas {
+        height: 100%;
+      }
 
-        body > div {
-            flex-grow: 1;
-        }
-
-        .node {
-            width: 150px;
-            max-width: 150px;
-            height: 50px;
-            max-height: 50px;
-            background: #ffdbab;
-            border: 1px solid #bababa;
-            border-radius: 1000px;
-            white-space: nowrap;
-            user-select: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+      .node {
+        width: 150px;
+        max-width: 150px;
+        height: 50px;
+        max-height: 50px;
+        background: #ffdbab;
+        border: 1px solid #bababa;
+        border-radius: 1000px;
+        white-space: nowrap;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <div id="canvas"></div>
     <script type="module">
-        import { Canvas } from "https://unpkg.com/@diyguy/graphflow@0.0.4"
+      import { Canvas } from "https://unpkg.com/@diyguy/graphflow@0.0.5";
 
-        const canvasElement = document.createElement('div');
-        document.body.prepend(canvasElement);
+      const canvasElement = document.querySelector("#canvas");
+      document.body.prepend(canvasElement);
 
-        const canvas = new Canvas(canvasElement, { 
-            scale: { enabled: true },
-            shift: { enabled: true },
-            nodes: { draggable: true }
-        });
+      const canvas = new Canvas(canvasElement, {
+        scale: { enabled: true },
+        shift: { enabled: true },
+        nodes: { draggable: true },
+      });
 
-        function createNodeElement(name) {
-            const node =  document.createElement('div');
-            const text =  document.createElement('div');
+      function createNodeElement(name) {
+        const node = document.createElement("div");
+        const text = document.createElement("div");
 
-            node.classList.add("node");
-            node.appendChild(text);
+        node.classList.add("node");
+        node.appendChild(text);
 
-            text.innerText = name;
+        text.innerText = name;
 
-            const frontPort = document.createElement('div');
-            node.prepend(frontPort);
+        const frontPort = document.createElement("div");
+        node.prepend(frontPort);
 
-            const backPort = document.createElement('div');
-            node.appendChild(backPort);
+        const backPort = document.createElement("div");
+        node.appendChild(backPort);
 
-            return [node, frontPort, backPort];
-        }
+        return [node, frontPort, backPort];
+      }
 
-        const node1 = createNodeElement("Node 1");
-        const node2 = createNodeElement("Node 2");
-        const node3 = createNodeElement("Node 3");
-        const node4 = createNodeElement("Node 4");
+      const node1 = createNodeElement("Node 1");
+      const node2 = createNodeElement("Node 2");
+      const node3 = createNodeElement("Node 3");
+      const node4 = createNodeElement("Node 4");
 
-        canvas
-            .addNode({ id: "node-1", element: node1[0], x: 200, y: 400 })
-            .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
-            .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
-            .addNode({ id: "node-2", element: node2[0], x: 600, y: 500 })
-            .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
-            .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
-            .addNode({ id: "node-3", element: node3[0], x: 200, y: 800 })
-            .markAsPort({ id: "port-3-1", element: node3[1], nodeId: "node-3" })
-            .markAsPort({ id: "port-3-2", element: node3[2], nodeId: "node-3" })
-            .addNode({ id: "node-4", element: node4[0], x: 1000, y: 600 })
-            .markAsPort({ id: "port-4-1", element: node4[1], nodeId: "node-4" })
-            .markAsPort({ id: "port-4-2", element: node4[2], nodeId: "node-4" })
-            .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" })
-            .connectPorts({ id: "con-2", from: "port-3-2", to: "port-2-1" })
-            .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" });
+      canvas
+        .addNode({ id: "node-1", element: node1[0], x: 200, y: 200 })
+        .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
+        .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
+        .addNode({ id: "node-2", element: node2[0], x: 500, y: 300 })
+        .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
+        .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
+        .addNode({ id: "node-3", element: node3[0], x: 200, y: 500 })
+        .markAsPort({ id: "port-3-1", element: node3[1], nodeId: "node-3" })
+        .markAsPort({ id: "port-3-2", element: node3[2], nodeId: "node-3" })
+        .addNode({ id: "node-4", element: node4[0], x: 800, y: 400 })
+        .markAsPort({ id: "port-4-1", element: node4[1], nodeId: "node-4" })
+        .markAsPort({ id: "port-4-2", element: node4[2], nodeId: "node-4" })
+        .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" })
+        .connectPorts({ id: "con-2", from: "port-3-2", to: "port-2-1" })
+        .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" });
     </script>
-</body>
+  </body>
 </html>
