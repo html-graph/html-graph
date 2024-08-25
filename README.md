@@ -22,8 +22,6 @@ Port is an entity of node to which connection can be attached to. It might be vi
 ## Features:
 
 * nodes, connections and ports are fully customizable
-* support for fully customizable svg connections
-* connections between nodes via fully customizable ports
 * wide configuration options for canvas, nodes and connections
 * automatic adjustment of canvas and nodes on resize
 * draggable and scalable canvas with draggable nodes
