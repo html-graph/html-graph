@@ -77,19 +77,9 @@ canvas
 ```
 
 ```css
-html, body {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
 body > div {
-    flex-grow: 1;
+    width: 1000px;
+    height: 1000px;
 }
 
 .node  {
