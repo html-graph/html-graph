@@ -13,10 +13,10 @@ export interface ApiOptions {
             ctx: CanvasRenderingContext2D,
             transformer: PublicViewportTransformer,
         ) => void;
-        dotColor?: string;
-        dotGap?: number;
-        dotRadius?: number;
-        color?: string;
+        readonly dotColor?: string;
+        readonly dotGap?: number;
+        readonly dotRadius?: number;
+        readonly color?: string;
     },
     readonly shift?: {
         readonly enabled?: boolean;

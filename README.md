@@ -113,10 +113,10 @@ interface ApiOptions {
             ctx: CanvasRenderingContext2D,
             transformer: PublicViewportTransformer,
         ) => void; // custom background drawing function
-        dotColor?: string; // color of background dots
-        dotGap?: number; // gap between background dots
-        dotRadius?: number; // radius of background dots
-        color?: string; // color of background
+        readonly dotColor?: string; // color of background dots
+        readonly dotGap?: number; // gap between background dots
+        readonly dotRadius?: number; // radius of background dots
+        readonly color?: string; // color of background
     },
     readonly shift?: {
         readonly enabled?: boolean; // enables canvas shift
