@@ -317,9 +317,10 @@ export class HtmlController {
 
         const rectFrom = portFrom.getBoundingClientRect();
         const rectTo = portTo.getBoundingClientRect();
+        const rect = this.host.getBoundingClientRect();
 
-        const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectFrom.left, rectFrom.top);
-        const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectTo.left, rectTo.top);
+        const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectFrom.left - rect.left, rectFrom.top - rect.top);
+        const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectTo.left - rect.left, rectTo.top - rect.top);
         const top = Math.min(yaFrom, yaTo);
         const left = Math.min(xaFrom, xaTo);
         const width = Math.abs(xaTo - xaFrom);

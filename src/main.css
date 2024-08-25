@@ -10,7 +10,11 @@ body {
 }
 
 body > div {
-    flex-grow: 1;
+    margin-top: 200px;
+    margin-left: 200px;
+    width: 700px;
+    height: 700px;
+    /* flex-grow: 1; */
 }
 
 .node  {
