@@ -1,5 +1,6 @@
 {
   "name": "@diyguy/graphflow",
+  "author": "Dmitry Marov",
   "private": false,
   "version": "0.0.1",
   "type": "module",
@@ -8,6 +9,14 @@
   "files": [
     "dist"
   ],
+  "homepape": "https://github.com/dmarov/graphflow#readme",
+  "bugs": {
+    "url": "https://github.com/dmarov/graphflow/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmarov/graphflow.git"
+  },
   "scripts": {
     "start": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
