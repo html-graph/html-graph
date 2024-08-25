@@ -15,14 +15,14 @@ Features:
 * automatic adjustment of canvas and nodes on resize
 * draggable and scalable canvas with draggable nodes
 * zero dependencies
+* typescript support
 
 ## How to use:
 ```
 npm i @diyguy/graphflow
 ```
 
-typescript (javascript)
-```
+```typescript
 import { Canvas } from "@diyguy/graphflow";
 
 const canvasElement = document.createElement('div');
@@ -65,8 +65,7 @@ canvas
     .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```
 
-css
-```
+```css
 html, body {
     height: 100%;
     padding: 0;
