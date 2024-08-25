@@ -7,6 +7,10 @@
     <img width="100%" src="https://raw.githubusercontent.com/dmarov/graphflow/master/media/demo.gif"/>
 </a>
 
+Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility in managing connections.
+Port is an entity of node to which connection can be attached to. It might be visually invisible or visible
+
+
 #### At the moment this library is under development and might be unstable
 
 
@@ -17,7 +21,7 @@
 
 ## Features:
 
-* support for fully customizable html nodes
+* nodes, connections and ports are fully customizable
 * support for fully customizable svg connections
 * connections between nodes via fully customizable ports
 * wide configuration options for canvas, nodes and connections
