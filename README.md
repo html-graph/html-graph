@@ -121,7 +121,7 @@ interface ApiOptions {
         readonly enabled?: boolean; // enables canvas shift
     },
     readonly nodes?: {
-        readonly draggable?: boolean; // enabled draggable nodes behavior
+        readonly draggable?: boolean; // enables draggable nodes behavior
     },
     readonly connections?: {
         readonly svgController: SvgController; // provides custom connections creation rules
