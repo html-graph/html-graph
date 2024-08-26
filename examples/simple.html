@@ -35,10 +35,9 @@
   <body>
     <div id="canvas"></div>
     <script type="module">
-      import { Canvas } from "https://unpkg.com/@diyguy/graphflow@0.0.5";
+      import { Canvas } from "https://unpkg.com/@diyguy/graphflow@0.0.15";
 
       const canvasElement = document.querySelector("#canvas");
-      document.body.prepend(canvasElement);
 
       const canvas = new Canvas(canvasElement, {
         scale: { enabled: true },

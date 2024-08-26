@@ -71,7 +71,7 @@ export class ViewportTransformer {
         };
     }
 
-    getViewportCoordsFor(xa: number, ya: number): [number, number] {
+    getViewportCoords(xa: number, ya: number): [number, number] {
         return [
            (xa - this.state.deltaX) / this.state.scale,
            (ya - this.state.deltaY) / this.state.scale,
@@ -82,7 +82,7 @@ export class ViewportTransformer {
         return 1 / this.state.scale;
     }
 
-    getAbsoluteCoordsFor(xv: number, yv: number): [number, number] {
+    getAbsoluteCoords(xv: number, yv: number): [number, number] {
         return [
            xv * this.state.scale + this.state.deltaX,
            yv * this.state.scale + this.state.deltaY,

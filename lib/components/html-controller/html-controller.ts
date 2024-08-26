@@ -168,7 +168,7 @@ export class HtmlController {
 
         this.canvasCtx.restore();
 
-        const [xv, yv] = this.di.viewportTransformer.getViewportCoordsFor(0, 0);
+        const [xv, yv] = this.di.viewportTransformer.getViewportCoords(0, 0);
         const sv = this.di.viewportTransformer.getViewportScale();
 
         this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
@@ -228,9 +228,9 @@ export class HtmlController {
 
     updateNodePosition(nodeId: string): void {
         const node = this.di.graphStore.getNode(nodeId);
-        this.updateNodeCoords(node);
+        const connections = this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
 
-        const connections = this.di.graphStore.getAllConnectionsToNode(nodeId);
+        this.updateNodeCoords(node);
 
         connections.forEach(connection => {
             this.updateConnectionCoords(connection);
@@ -325,8 +325,8 @@ export class HtmlController {
         const rectTo = portTo.getBoundingClientRect();
         const rect = this.host.getBoundingClientRect();
 
-        const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectFrom.left - rect.left, rectFrom.top - rect.top);
-        const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoordsFor(rectTo.left - rect.left, rectTo.top - rect.top);
+        const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoords(rectFrom.left - rect.left, rectFrom.top - rect.top);
+        const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoords(rectTo.left - rect.left, rectTo.top - rect.top);
         const top = Math.min(yaFrom, yaTo);
         const left = Math.min(xaFrom, xaTo);
         const width = Math.abs(xaTo - xaFrom);

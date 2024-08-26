@@ -1,0 +1,6 @@
+services:
+  portfolio:
+    extends:
+      file: docker-compose.yml
+      service: portfolio
+    command: tail -f /dev/null

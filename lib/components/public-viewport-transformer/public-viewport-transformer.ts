@@ -10,7 +10,7 @@ export class PublicViewportTransformer {
      * viewport coordinated represent actual coordinates on canvas for given absolute coordinates
      */
     getViewCoords(xa: number, ya: number): [number, number] {
-        return this.transformer.getViewportCoordsFor(xa, ya);
+        return this.transformer.getViewportCoords(xa, ya);
     }
 
     /**
@@ -26,7 +26,7 @@ export class PublicViewportTransformer {
      * absolute coordinates represent actual coordinates, which stay constant even for transformed canvas
      */
     getAbsCoords(xv: number, yv: number): [number, number] {
-        return this.transformer.getAbsoluteCoordsFor(xv, yv);
+        return this.transformer.getAbsoluteCoords(xv, yv);
     }
 
     /**

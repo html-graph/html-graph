@@ -30,10 +30,10 @@ export class Controller {
 
     dragNode(nodeId: string, dx: number, dy: number): void {
         const node = this.di.graphStore.getNode(nodeId);
-        const [xv, yv] = this.di.viewportTransformer.getViewportCoordsFor(node.x, node.y);
+        const [xv, yv] = this.di.viewportTransformer.getViewportCoords(node.x, node.y);
         const nodeX = xv + dx;
         const nodeY = yv + dy;
-        const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoordsFor(nodeX, nodeY);
+        const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoords(nodeX, nodeY);
         this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
         this.di.htmlController.updateNodePosition(nodeId);
     }

@@ -27,7 +27,7 @@
     "network"
   ],
   "scripts": {
-    "start": "vite",
+    "start": "vite --port 3100 --host 0.0.0.0",
     "build": "tsc --p ./tsconfig-build.json && vite build",
     "preview": "vite preview",
     "prepublishOnly": "npm run build",

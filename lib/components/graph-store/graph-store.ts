@@ -48,7 +48,7 @@ export class GraphStore {
 
         delete this.nodePorts[nodeId];
 
-        const connections = this.getAllConnectionsToNode(nodeId);
+        const connections = this.getAllAdjacentToNodeConnections(nodeId);
 
         connections.forEach(connectionId => {
             this.removeConnection(connectionId);
@@ -138,7 +138,7 @@ export class GraphStore {
         delete this.connections[connectionId];
     }
 
-    getAllConnectionsToNode(nodeId: string): readonly string[] {
+    getAllAdjacentToNodeConnections(nodeId: string): readonly string[] {
         const ports = Object.keys(this.nodePorts[nodeId]);
         let res: string[] = [];
 
