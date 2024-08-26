@@ -68,11 +68,11 @@ const node2 = createNodeElement("Node 2");
 
 canvas
     .addNode({ id: "node-1", element: node1[0], x: 200, y: 400 })
-    .markAsPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
-    .markAsPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
+    .markPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
+    .markPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
     .addNode({ id: "node-2", element: node2[0], x: 600, y: 500 })
-    .markAsPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
-    .markAsPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
+    .markPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
+    .markPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
     .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```
 

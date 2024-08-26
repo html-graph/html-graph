@@ -53,8 +53,8 @@ export class Canvas {
         return this;
     }
 
-    markAsPort(port: ApiPort): Canvas {
-        this.di.controller.markAsPort(port.id, port.element, port.nodeId);
+    markPort(port: ApiPort): Canvas {
+        this.di.controller.markPort(port.id, port.element, port.nodeId);
 
         return this;
     }
