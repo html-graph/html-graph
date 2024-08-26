@@ -1,9 +1,10 @@
 # TODO
 
-* release script
+* eslint and prettier
 * unmark port
 * focus on nodes
 * scale behavior
+* progammatic viewport transformation
 * backward arrow state
 * fix arrows shiver
 * clear
@@ -13,7 +14,6 @@
 * virtual scroll
 * import data
 * export data
-* eslint and prettier
 * update node coords and element
 * update edges element
 * README
