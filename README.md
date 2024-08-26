@@ -101,31 +101,5 @@ body > div {
 ## Options
 
 ```typescript
-interface ApiOptions {
-    readonly scale?: {
-        readonly enabled?: boolean; // enables canvas scaling
-        readonly velocity?: number; // determines how fast scale works
-        readonly min?: number | null; // sets minimum scale
-        readonly max?: number | null; // sets maximum scale
-    },
-    readonly background?: {
-        readonly drawingFn?: (
-            ctx: CanvasRenderingContext2D,
-            transformer: PublicViewportTransformer,
-        ) => void; // custom background drawing function
-        readonly dotColor?: string; // color of background dots
-        readonly dotGap?: number; // gap between background dots
-        readonly dotRadius?: number; // radius of background dots
-        readonly color?: string; // color of background
-    },
-    readonly shift?: {
-        readonly enabled?: boolean; // enables canvas shift
-    },
-    readonly nodes?: {
-        readonly draggable?: boolean; // enables draggable nodes behavior
-    },
-    readonly connections?: {
-        readonly svgController?: SvgController; // provides custom connections creation rules
-    },
-}
+# lib/models/options/api-options.ts
 ```
