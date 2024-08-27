@@ -47,6 +47,7 @@ const cmds = [
     `git add -A`,
     `git commit -m "release ${newVersion}"`,
     `git tag -a v${newVersion} -m "GraphFlow version ${newVersion}"`,
+    `git push`,
     `git push --tags`,
 ];
 
