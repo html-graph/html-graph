@@ -1,6 +1,9 @@
 # TODO
 
+
 * eslint and prettier
+* arrows move on top
+* change default background
 * unmark port
 * focus on nodes
 * scale behavior
