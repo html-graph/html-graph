@@ -7,7 +7,7 @@ export interface ApiOptions {
      * canvas scale related behavior
      */
     readonly scale?: {
-        /*
+        /**
          * enables canvas scaling
          */
         readonly enabled?: boolean;

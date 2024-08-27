@@ -82,6 +82,12 @@ export class Canvas {
         return this;
     }
 
+    clear(): Canvas {
+        this.di.controller.clear();
+
+        return this;
+    }
+
     destroy(): void {
         this.di.controller.destroy();
     }

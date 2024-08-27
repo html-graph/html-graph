@@ -1,19 +1,19 @@
 # TODO
 
 
+* default background blank
+* clear
+* unset ports
 * eslint and prettier
 * arrows move on top
 * change default background
 * unmark port
 * focus on nodes
-* scale behavior
 * progammatic viewport transformation
 * backward arrow state
 * fix arrows shiver
-* clear
 * unit tests
 * fix grab cursor position?
-* unset ports
 * virtual scroll
 * import data
 * export data

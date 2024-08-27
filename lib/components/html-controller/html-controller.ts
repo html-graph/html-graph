@@ -139,6 +139,16 @@ export class HtmlController {
         this.nodesResizeObserver = this.createNodesResizeObserver();
     }
 
+    clear(): void {
+        Array.from(this.connectionsMap.keys()).forEach((connectionId) => {
+            this.detachConnection(connectionId);
+        });
+
+        Array.from(this.nodeIdsMap.values()).forEach((nodeId) => {
+            this.detachNode(nodeId);
+        });
+    }
+
     destroy(): void {
         this.host.removeEventListener("pointerdown", this.onPointerDown);
         this.host.removeEventListener("pointerup", this.onPointerUp);

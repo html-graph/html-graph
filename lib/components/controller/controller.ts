@@ -108,6 +108,11 @@ export class Controller {
         this.di.graphStore.removeNode(nodeId);
     }
 
+    clear(): void {
+        this.di.htmlController.clear();
+        this.di.graphStore.clear();
+    }
+
     destroy(): void {
         this.di.htmlController.destroy();
     }

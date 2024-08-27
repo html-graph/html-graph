@@ -46,7 +46,7 @@ const cmds = [
     `npm publish --access=public --otp=${otp}`,
     `git add -A`,
     `git commit -m "release ${newVersion}"`,
-    `git tag -a v${newVersion} -m "GraphFlow version ${newVersion}"`,
+    `git tag -a v${newVersion} -m "new version ${newVersion}"`,
     `git push`,
     `git push --tags`,
 ];

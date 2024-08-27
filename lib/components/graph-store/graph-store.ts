@@ -4,21 +4,21 @@ import { ObjectMap } from "../../models/object-map";
 import { NodePayload } from "../../models/store/node-payload";
 
 export class GraphStore {
-    private readonly nodes: ObjectMap<NodePayload> = Object.create(null);
+    private nodes: ObjectMap<NodePayload> = Object.create(null);
 
-    private readonly ports: ObjectMap<HTMLElement> = Object.create(null);
+    private ports: ObjectMap<HTMLElement> = Object.create(null);
 
-    private readonly nodePorts: ObjectMap<ObjectMap<HTMLElement>> = Object.create(null);
+    private nodePorts: ObjectMap<ObjectMap<HTMLElement>> = Object.create(null);
 
-    private readonly portNodeId: ObjectMap<string> = Object.create(null);
+    private portNodeId: ObjectMap<string> = Object.create(null);
 
-    private readonly connections: ObjectMap<EdgePayload> = Object.create(null);
+    private connections: ObjectMap<EdgePayload> = Object.create(null);
 
-    private readonly incommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+    private incommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
 
-    private readonly outcommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+    private outcommingConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
 
-    private readonly cycleConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+    private cycleConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
 
     addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
         this.nodes[nodeId] = { element, x, y };
@@ -157,5 +157,16 @@ export class GraphStore {
         });
 
         return res;
+    }
+
+    clear(): void {
+        this.nodes = Object.create(null);
+        this.ports = Object.create(null);
+        this.nodePorts = Object.create(null);
+        this.portNodeId = Object.create(null);
+        this.connections = Object.create(null);
+        this.incommingConnections = Object.create(null);
+        this.outcommingConnections = Object.create(null);
+        this.cycleConnections = Object.create(null);
     }
 }
