@@ -34,18 +34,39 @@ const [port31, node3, port32] = createNodeElement("Node 3");
 const [port41, node4, port42] = createNodeElement("Node 4");
 
 canvas
-  .addNode({ id: "node-1", element: node1, x: 200, y: 400 })
-  .markPort({ id: "port-1-1", element: port11, nodeId: "node-1" })
-  .markPort({ id: "port-1-2", element: port12, nodeId: "node-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({ id: "port-2-1", element: port21, nodeId: "node-2" })
-  .markPort({ id: "port-2-2", element: port22, nodeId: "node-2" })
-  .addNode({ id: "node-3", element: node3, x: 200, y: 800 })
-  .markPort({ id: "port-3-1", element: port31, nodeId: "node-3" })
-  .markPort({ id: "port-3-2", element: port32, nodeId: "node-3" })
-  .addNode({ id: "node-4", element: node4, x: 1000, y: 600 })
-  .markPort({ id: "port-4-1", element: port41, nodeId: "node-4" })
-  .markPort({ id: "port-4-2", element: port42, nodeId: "node-4" })
+  .addNode({
+    element: node1,
+    x: 200,
+    y: 400,
+    ports: { "port-1-1": port11, "port-1-2": port12 },
+  })
+  .addNode({
+    element: node2,
+    x: 600,
+    y: 500,
+    ports: {
+      "port-2-1": port21,
+      "port-2-2": port22,
+    },
+  })
+  .addNode({
+    element: node3,
+    x: 200,
+    y: 800,
+    ports: {
+      "port-3-1": port31,
+      "port-3-2": port32,
+    },
+  })
+  .addNode({
+    element: node4,
+    x: 1000,
+    y: 600,
+    ports: {
+      "port-4-1": port41,
+      "port-4-2": port42,
+    },
+  })
   .addConnection({ from: "port-1-2", to: "port-2-1" })
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });

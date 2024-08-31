@@ -65,6 +65,7 @@ export class Controller {
     element: HTMLElement,
     x: number,
     y: number,
+    ports?: Record<string, HTMLElement>,
   ): void {
     if (nodeId === undefined) {
       do {
@@ -78,6 +79,12 @@ export class Controller {
 
     this.di.graphStore.addNode(nodeId, element, x, y);
     this.di.htmlController.attachNode(nodeId);
+
+    if (ports !== undefined) {
+      Object.entries(ports).forEach(([portId, element]) => {
+        this.di.controller.markPort(portId, element, nodeId);
+      });
+    }
   }
 
   markPort(

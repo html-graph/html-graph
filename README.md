@@ -11,7 +11,7 @@
 Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility at managing connections.
 Port is an entity of node to which connection can be attached to.
 
-The purpose of this library is to provide low level api for displaying and interacting with graph structures.
+The purpose of this library is to provide api for displaying and interacting with graph structures.
 This library fits for tasks where it is required easy nodes customization and interactiveness.
 
 ## Features:
@@ -55,65 +55,19 @@ node1.appendChild(port1);
 node2.appendChild(port2);
 
 canvas
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
-  .markPort({ id: "port-1", element: port1, nodeId: "node-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({ id: "port-2", element: port2, nodeId: "node-2" })
+  .addNode({
+    element: node1,
+    x: 200,
+    y: 300,
+    ports: { "port-1": port1 },
+  })
+  .addNode({
+    element: node1,
+    x: 600,
+    y: 500,
+    ports: { "port-2": port1 },
+  })
   .addConnection({ from: "port-1", to: "port-2" });
-```
-
-```css
-#canvas {
-  width: 1000px;
-  height: 1000px;
-}
-
-.node {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  background: #ffdbab;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.port {
-  position: absolute;
-  top: 50%;
-  width: 0;
-  height: 0;
-}
-
-.port::after {
-  display: block;
-  content: "";
-  position: relative;
-  top: -2.5px;
-  left: -2.5px;
-  width: 5px;
-  height: 5px;
-  background: #737373;
-  border-radius: 2.5px;
-  border: none;
-}
-```
-
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GraphFlow | Getting Started</title>
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <body>
-    <div id="canvas"></div>
-    <script type="module" src="main.ts"></script>
-  </body>
-</html>
 ```
 
 Refer to [Examples](examples) for more.

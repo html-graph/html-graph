@@ -72,7 +72,13 @@ export class Canvas {
   }
 
   addNode(node: ApiNode): Canvas {
-    this.di.controller.addNode(node.id, node.element, node.x, node.y);
+    this.di.controller.addNode(
+      node.id,
+      node.element,
+      node.x,
+      node.y,
+      node.ports,
+    );
 
     return this;
   }
