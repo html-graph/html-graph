@@ -8,6 +8,7 @@
 - progammatic viewport transformation
 - fix arrows shiver
 - unit tests
+- e2e tests
 - fix grab cursor position?
 - virtual scroll
 - import data
