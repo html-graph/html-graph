@@ -1,7 +1,5 @@
 # TODO
 
-- position relative for nodes
-- arrows move on top
 - backward arrow state
 - programmatic update node coords and element
 - examples docs
