@@ -32,8 +32,6 @@ export class HtmlController {
     }
 
     this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
-
-    event.stopPropagation();
   };
 
   private readonly onPointerMove = (event: MouseEvent) => {
@@ -53,8 +51,6 @@ export class HtmlController {
         dy: event.movementY,
       });
     }
-
-    event.stopPropagation();
   };
 
   private readonly onPointerUp = (event: MouseEvent) => {
@@ -64,8 +60,6 @@ export class HtmlController {
 
     this.grabbedNodeId = null;
     this.di.eventSubject.dispatch(GraphEventType.Release);
-
-    event.stopPropagation();
   };
 
   private readonly onWheelScroll = (event: WheelEvent) => {
@@ -113,8 +107,6 @@ export class HtmlController {
     this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
       nodeId,
     });
-
-    event.stopPropagation();
   };
 
   constructor(
@@ -213,7 +205,6 @@ export class HtmlController {
     this.nodesContainer.appendChild(wrapper);
 
     this.nodeElementToIdMap.set(node.element, nodeId);
-
     this.nodeWrapperElementToIdMap.set(wrapper, nodeId);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
@@ -232,11 +223,10 @@ export class HtmlController {
 
     node.element.removeEventListener("pointerdown", this.onNodePointerDown);
 
-    this.nodeElementToIdMap.delete(node.element);
-
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     wrapper.removeChild(node.element);
 
+    this.nodeElementToIdMap.delete(node.element);
     this.nodeWrapperElementToIdMap.delete(wrapper);
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
@@ -340,6 +330,13 @@ export class HtmlController {
         const node = this.di.graphStore.getNode(nodeId!);
 
         this.updateNodeCoords(nodeId, node.x, node.y);
+
+        const connections =
+          this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+
+        connections.forEach((connection) => {
+          this.updateConnectionCoords(connection);
+        });
       });
     });
   }

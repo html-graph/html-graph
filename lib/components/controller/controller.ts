@@ -18,7 +18,12 @@ export class Controller {
     }
 
     this.di.htmlController.setCursor("grab");
-    this.di.htmlController.moveNodeOnTop(nodeId);
+
+    // need to handle events for interactive elements inside node before reattaching node
+    // so that events would work
+    setTimeout(() => {
+      this.di.htmlController.moveNodeOnTop(nodeId);
+    });
   }
 
   dragViewport(dx: number, dy: number): void {

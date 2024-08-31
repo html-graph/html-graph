@@ -1,0 +1,35 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#canvas {
+  flex-grow: 1;
+}
+
+.node {
+  width: 200px;
+  max-width: 200px;
+  height: 70px;
+  max-height: 70px;
+  background: #ffdbab;
+  border: 1px solid #bababa;
+  border-radius: 8px;
+  white-space: nowrap;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    padding: 8px;
+    cursor: pointer;
+  }
+}
