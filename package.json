@@ -34,7 +34,8 @@
     "fix-lint": "eslint . --fix",
     "build": "tsc --p ./tsconfig-build-library.json && vite build",
     "preview": "vite preview",
-    "prepublishOnly": "npm run lint && npm run check-formatting && npm run build",
+    "prebuild": "npm run lint && npm run check-formatting",
+    "prepublishOnly": "npm run prebuild && npm run build",
     "release-next-version": "tsx ./scripts/release-next-version.ts"
   },
   "devDependencies": {

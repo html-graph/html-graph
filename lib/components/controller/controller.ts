@@ -55,7 +55,18 @@ export class Controller {
     this.di.htmlController.applyTransform();
   }
 
-  addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
+  addNode(
+    nodeId: string | undefined,
+    element: HTMLElement,
+    x: number,
+    y: number,
+  ): void {
+    if (nodeId === undefined) {
+      do {
+        nodeId = this.di.nodeIdGenerator.generateNextId();
+      } while (this.di.graphStore.hasNode(nodeId));
+    }
+
     if (this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to add node with existing id");
     }
@@ -64,7 +75,17 @@ export class Controller {
     this.di.htmlController.attachNode(nodeId);
   }
 
-  markPort(portId: string, element: HTMLElement, nodeId: string): void {
+  markPort(
+    portId: string | undefined,
+    element: HTMLElement,
+    nodeId: string,
+  ): void {
+    if (portId === undefined) {
+      do {
+        portId = this.di.portIdGenerator.generateNextId();
+      } while (this.di.graphStore.hasPort(portId));
+    }
+
     if (!this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to set port on nonexisting node");
     }
@@ -91,17 +112,31 @@ export class Controller {
   }
 
   connectPorts(
-    connectionId: string,
+    connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,
     svgController: SvgController,
   ): void {
+    if (connectionId === undefined) {
+      do {
+        connectionId = this.di.connectionIdGenerator.generateNextId();
+      } while (this.di.graphStore.hasPort(connectionId));
+    }
+    if (!this.di.graphStore.hasPort(fromPortId)) {
+      throw new Error("failed to add connection from nonexisting port");
+    }
+
+    if (!this.di.graphStore.hasPort(toPortId)) {
+      throw new Error("failed to add connection to nonexisting port");
+    }
+
     this.di.graphStore.addConnection(
       connectionId,
       fromPortId,
       toPortId,
       svgController,
     );
+
     this.di.htmlController.attachConnection(connectionId);
   }
 
@@ -122,6 +157,9 @@ export class Controller {
   clear(): void {
     this.di.htmlController.clear();
     this.di.graphStore.clear();
+    this.di.nodeIdGenerator.reset();
+    this.di.portIdGenerator.reset();
+    this.di.connectionIdGenerator.reset();
   }
 
   destroy(): void {

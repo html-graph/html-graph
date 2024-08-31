@@ -10,7 +10,7 @@ body {
   flex-direction: column;
 }
 
-body > div {
+#canvas {
   flex-grow: 1;
 }
 

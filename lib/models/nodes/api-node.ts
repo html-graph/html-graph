@@ -1,5 +1,5 @@
 export interface ApiNode {
-  id: string;
+  id?: string;
   element: HTMLElement;
   x: number;
   y: number;

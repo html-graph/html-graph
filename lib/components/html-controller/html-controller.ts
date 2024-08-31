@@ -1,6 +1,5 @@
 import { GraphEventType } from "../../models/events/graph-event-type";
 import { DiContainer } from "../di-container/di-container";
-import { NodePayload } from "../../models/html/node-payload";
 
 export class HtmlController {
   private readonly host: HTMLElement;
@@ -17,9 +16,13 @@ export class HtmlController {
 
   private readonly nodesResizeObserver: ResizeObserver;
 
-  private readonly nodeIdsMap = new Map<HTMLElement, string>();
+  private readonly nodeElementToIdMap = new Map<HTMLElement, string>();
 
-  private readonly connectionsMap = new Map<string, SVGSVGElement>();
+  private readonly nodeWrapperElementToIdMap = new Map<HTMLElement, string>();
+
+  private readonly nodeIdToWrapperElementMap = new Map<string, HTMLElement>();
+
+  private readonly connectionIdToElementMap = new Map<string, SVGSVGElement>();
 
   private grabbedNodeId: string | null = null;
 
@@ -92,15 +95,19 @@ export class HtmlController {
       centerY,
     });
 
-    event.preventDefault();
+    if (this.di.options.scale.enabled) {
+      event.preventDefault();
+    }
   };
 
   private readonly onNodePointerDown = (event: PointerEvent) => {
-    if (event.button !== 0) {
+    if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
 
-    const nodeId = this.nodeIdsMap.get(event.currentTarget as HTMLElement)!;
+    const nodeId = this.nodeElementToIdMap.get(
+      event.currentTarget as HTMLElement,
+    )!;
 
     this.grabbedNodeId = nodeId;
     this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
@@ -144,11 +151,11 @@ export class HtmlController {
   }
 
   clear(): void {
-    Array.from(this.connectionsMap.keys()).forEach((connectionId) => {
+    Array.from(this.connectionIdToElementMap.keys()).forEach((connectionId) => {
       this.detachConnection(connectionId);
     });
 
-    Array.from(this.nodeIdsMap.values()).forEach((nodeId) => {
+    Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
       this.detachNode(nodeId);
     });
   }
@@ -197,15 +204,23 @@ export class HtmlController {
   attachNode(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
 
-    node.element.style.position = "absolute";
-    node.element.style.visibility = "hidden";
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(node.element);
 
-    this.nodesContainer.appendChild(node.element);
-    this.nodeIdsMap.set(node.element, nodeId);
-    this.updateNodeCoords(node);
-    this.nodesResizeObserver.observe(node.element);
+    wrapper.style.position = "absolute";
+    wrapper.style.visibility = "hidden";
 
-    node.element.style.visibility = "visible";
+    this.nodesContainer.appendChild(wrapper);
+
+    this.nodeElementToIdMap.set(node.element, nodeId);
+
+    this.nodeWrapperElementToIdMap.set(wrapper, nodeId);
+    this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
+
+    this.updateNodeCoords(nodeId, node.x, node.y);
+    this.nodesResizeObserver.observe(wrapper);
+
+    wrapper.style.visibility = "visible";
     node.element.addEventListener("pointerdown", this.onNodePointerDown);
   }
 
@@ -217,7 +232,13 @@ export class HtmlController {
 
     node.element.removeEventListener("pointerdown", this.onNodePointerDown);
 
-    this.nodeIdsMap.delete(node.element);
+    this.nodeElementToIdMap.delete(node.element);
+
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    wrapper.removeChild(node.element);
+
+    this.nodeWrapperElementToIdMap.delete(wrapper);
+    this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
   attachConnection(connectionId: string): void {
@@ -227,7 +248,7 @@ export class HtmlController {
     element.style.transformOrigin = "50% 50%";
     element.style.position = "absolute";
 
-    this.connectionsMap.set(connectionId, element);
+    this.connectionIdToElementMap.set(connectionId, element);
 
     this.updateConnectionCoords(connectionId);
 
@@ -235,14 +256,14 @@ export class HtmlController {
   }
 
   detachConnection(connectionId: string): void {
-    const element = this.connectionsMap.get(connectionId);
-    this.connectionsMap.delete(connectionId);
+    const element = this.connectionIdToElementMap.get(connectionId);
+    this.connectionIdToElementMap.delete(connectionId);
     this.connectionsContainer.removeChild(element!);
   }
 
   moveNodeOnTop(nodeId: string): void {
-    const node = this.di.graphStore.getNode(nodeId);
-    this.nodesContainer.appendChild(node.element);
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    this.nodesContainer.appendChild(wrapper);
   }
 
   updateNodePosition(nodeId: string): void {
@@ -250,7 +271,7 @@ export class HtmlController {
     const connections =
       this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
 
-    this.updateNodeCoords(node);
+    this.updateNodeCoords(nodeId, node.x, node.y);
 
     connections.forEach((connection) => {
       this.updateConnectionCoords(connection);
@@ -313,10 +334,12 @@ export class HtmlController {
   private createNodesResizeObserver(): ResizeObserver {
     return new ResizeObserver((entries) => {
       entries.forEach((entry) => {
-        const nodeId = this.nodeIdsMap.get(entry.target as HTMLElement);
+        const nodeId = this.nodeWrapperElementToIdMap.get(
+          entry.target as HTMLElement,
+        )!;
         const node = this.di.graphStore.getNode(nodeId!);
 
-        this.updateNodeCoords(node);
+        this.updateNodeCoords(nodeId, node.x, node.y);
       });
     });
   }
@@ -328,12 +351,13 @@ export class HtmlController {
     this.canvas.height = height;
   }
 
-  private updateNodeCoords(node: NodePayload): void {
-    const { width, height } = node.element.getBoundingClientRect();
+  private updateNodeCoords(nodeId: string, x: number, y: number): void {
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const { width, height } = wrapper.getBoundingClientRect();
     const sa = this.di.viewportTransformer.getAbsoluteScale();
 
-    node.element.style.left = `${node.x - (sa * width) / 2}px`;
-    node.element.style.top = `${node.y - (sa * height) / 2}px`;
+    wrapper.style.left = `${x - (sa * width) / 2}px`;
+    wrapper.style.top = `${y - (sa * height) / 2}px`;
   }
 
   private updateConnectionCoords(connectionId: string): void {
@@ -358,7 +382,7 @@ export class HtmlController {
     const width = Math.abs(xaTo - xaFrom);
     const height = Math.abs(yaTo - yaFrom);
 
-    const element = this.connectionsMap.get(connectionId)!;
+    const element = this.connectionIdToElementMap.get(connectionId)!;
 
     const horDir = rectFrom.left <= rectTo.left;
     const vertDir = rectFrom.top <= rectTo.top;

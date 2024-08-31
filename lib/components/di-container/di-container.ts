@@ -6,6 +6,7 @@ import { ViewportTransformer } from "../viewport-transformer/viewport-transforme
 import { PublicViewportTransformer } from "../public-viewport-transformer/public-viewport-transformer";
 import { Controller } from "../controller/controller";
 import { GraphStore } from "../graph-store/graph-store";
+import { IdGenerator } from "../id-generator/id-generator";
 
 export class DiContainer {
   readonly htmlController: HtmlController;
@@ -21,6 +22,12 @@ export class DiContainer {
   readonly controller: Controller;
 
   readonly graphStore: GraphStore;
+
+  readonly nodeIdGenerator: IdGenerator;
+
+  readonly portIdGenerator: IdGenerator;
+
+  readonly connectionIdGenerator: IdGenerator;
 
   constructor(
     canvasWrapper: HTMLElement,
@@ -41,5 +48,11 @@ export class DiContainer {
     this.controller = new Controller(this);
 
     this.graphStore = new GraphStore();
+
+    this.nodeIdGenerator = new IdGenerator();
+
+    this.portIdGenerator = new IdGenerator();
+
+    this.connectionIdGenerator = new IdGenerator();
   }
 }
