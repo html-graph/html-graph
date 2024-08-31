@@ -1,7 +1,6 @@
 # TODO
 
-- default background blank
-- eslint and prettier
+- eslint
 - type check
 - arrows move on top
 - change default background
