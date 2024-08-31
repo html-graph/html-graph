@@ -42,37 +42,37 @@ const canvas = new Canvas(canvasElement, {
   scale: { enabled: true },
   shift: { enabled: true },
   nodes: { draggable: true },
+  background: { type: "dots" },
 });
 
 function createNodeElement(
   name: string,
 ): [HTMLElement, HTMLElement, HTMLElement] {
   const node = document.createElement("div");
-  const text = document.createElement("div");
-
   node.classList.add("node");
-  node.appendChild(text);
-
-  text.innerText = name;
 
   const frontPort = document.createElement("div");
-  node.prepend(frontPort);
+  node.appendChild(frontPort);
+
+  const text = document.createElement("div");
+  text.innerText = name;
+  node.appendChild(text);
 
   const backPort = document.createElement("div");
   node.appendChild(backPort);
 
-  return [node, frontPort, backPort];
+  return [frontPort, node, backPort];
 }
 
 const node1 = createNodeElement("Node 1");
 const node2 = createNodeElement("Node 2");
 
 canvas
-  .addNode({ id: "node-1", element: node1[0], x: 200, y: 400 })
-  .markPort({ id: "port-1-1", element: node1[1], nodeId: "node-1" })
+  .addNode({ id: "node-1", element: node1[1], x: 200, y: 400 })
+  .markPort({ id: "port-1-1", element: node1[0], nodeId: "node-1" })
   .markPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
-  .addNode({ id: "node-2", element: node2[0], x: 600, y: 500 })
-  .markPort({ id: "port-2-1", element: node2[1], nodeId: "node-2" })
+  .addNode({ id: "node-2", element: node2[1], x: 600, y: 500 })
+  .markPort({ id: "port-2-1", element: node2[0], nodeId: "node-2" })
   .markPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
   .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```
