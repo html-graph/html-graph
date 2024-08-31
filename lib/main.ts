@@ -1,4 +1,4 @@
-export { Canvas } from "./canvas/canvas";
+export { Canvas as GraphFlowCanvas } from "./canvas/canvas";
 export type { PublicViewportTransformer as GraphFlowPublicApiTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
 export type { ApiNode as GraphFlowNode } from "./models/nodes/api-node";
 export type { ApiConnection as GraphFlowConnection } from "./models/connection/api-connection";

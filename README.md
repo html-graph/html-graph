@@ -33,12 +33,12 @@ npm i @diyguy/graphflow
 ```
 
 ```typescript
-import { Canvas } from "@diyguy/graphflow";
+import { GraphFlowCanvas } from "@diyguy/graphflow";
 
 const canvasElement = document.createElement("div");
 document.body.prepend(canvasElement);
 
-const canvas = new Canvas(canvasElement, {
+const canvas = new GraphFlowCanvas(canvasElement, {
   scale: { enabled: true },
   shift: { enabled: true },
   nodes: { draggable: true },
