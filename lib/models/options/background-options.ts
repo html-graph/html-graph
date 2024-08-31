@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
+import { BackgroundDrawingFn } from "./background-drawing-fn";
 
 export type BackgroundOptions =
   | {
@@ -17,8 +17,5 @@ export type BackgroundOptions =
     }
   | {
       readonly type: "custom";
-      readonly drawingFn: (
-        ctx: CanvasRenderingContext2D,
-        transformer: PublicViewportTransformer,
-      ) => void;
+      readonly drawingFn: BackgroundDrawingFn;
     };

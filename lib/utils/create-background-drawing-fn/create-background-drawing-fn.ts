@@ -83,12 +83,7 @@ export const createDotsBackgroundDrawingFn = (
 };
 
 export const createNoopBackgroundDrawingFn = () => {
-  return (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _ctx: CanvasRenderingContext2D,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _transformer: PublicViewportTransformer,
-  ) => {
+  return () => {
     // no actions should be performed
   };
 };

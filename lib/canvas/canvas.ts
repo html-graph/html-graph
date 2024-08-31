@@ -3,6 +3,7 @@ import { defaultSvgController } from "../const/default-svg-controller/default-sv
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiNode } from "../models/nodes/api-node";
 import { ApiOptions } from "../models/options/api-options";
+import { BackgroundDrawingFn } from "../models/options/background-drawing-fn";
 import { Options } from "../models/options/options";
 import { ApiPort } from "../models/port/api-port";
 import {
@@ -20,7 +21,7 @@ export class Canvas {
     private readonly canvasWrapper: HTMLElement,
     private readonly apiOptions?: ApiOptions,
   ) {
-    let drawingFn = createNoopBackgroundDrawingFn();
+    let drawingFn: BackgroundDrawingFn = createNoopBackgroundDrawingFn();
 
     switch (this.apiOptions?.background?.type) {
       case "custom":
