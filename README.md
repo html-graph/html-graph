@@ -74,7 +74,7 @@ canvas
   .addNode({ id: "node-2", element: node2[1], x: 600, y: 500 })
   .markPort({ id: "port-2-1", element: node2[0], nodeId: "node-2" })
   .markPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
-  .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" });
+  .addConnection({ id: "con-1", from: "port-1-2", to: "port-2-1" });
 ```
 
 ```css
