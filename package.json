@@ -32,7 +32,7 @@
     "fix-formatting": "prettier . --write",
     "lint": "eslint .",
     "fix-lint": "eslint . --fix",
-    "build": "tsc --p ./tsconfig-build.json && vite build",
+    "build": "tsc --p ./tsconfig-build-library.json && vite build",
     "preview": "vite preview",
     "prepublishOnly": "npm run build",
     "release-next-version": "tsx ./scripts/release-next-version.ts"

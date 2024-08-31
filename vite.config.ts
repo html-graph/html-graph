@@ -4,7 +4,6 @@ import dts from "vite-plugin-dts";
 import checker from "vite-plugin-checker";
 
 export default defineConfig({
-  root: "examples",
   plugins: [
     dts({
       include: ["lib"],

@@ -3,6 +3,7 @@
 - arrows move on top
 - backward arrow state
 - programmatic update node coords and element
+- examples docs
 - update edges element
 - focus on nodes
 - progammatic viewport transformation

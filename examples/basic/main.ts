@@ -1,4 +1,4 @@
-import { Canvas } from "../lib/main";
+import { Canvas } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
