@@ -1,8 +1,6 @@
-import "./main.css";
 import { Canvas } from "../lib/main";
 
-const canvasElement = document.createElement("div");
-document.body.prepend(canvasElement);
+const canvasElement = document.getElementById("canvas")!;
 
 const canvas = new Canvas(canvasElement, {
   scale: { enabled: true },

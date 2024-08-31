@@ -99,6 +99,24 @@ body > div {
 }
 ```
 
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphFlow Usage Example</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div id="canvas"></div>
+    <script type="module" src="main.ts"></script>
+  </body>
+</html>
+```
+
+Refer to [Examples](exampless) for more complex use-cases.
+
 ## Options
 
 Refer to [ApiOptions](lib/models/options/api-options.ts)
