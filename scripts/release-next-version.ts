@@ -39,7 +39,11 @@ const execute = async (
     proc.stderr.pipe(process.stderr);
 
     proc.on("close", (code) => {
-      code == 0 ? res() : rej();
+      if (code === 0) {
+        res();
+      } else {
+        rej();
+      }
     });
   });
 };

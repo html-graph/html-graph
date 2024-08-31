@@ -1,4 +1,3 @@
-import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
 import { SvgController } from "../connection/svg-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 import { BackgroundOptions } from "./background-options";

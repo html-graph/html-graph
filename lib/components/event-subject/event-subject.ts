@@ -4,6 +4,7 @@ import { GraphEventType } from "../../models/events/graph-event-type";
 // https://medium.com/@aungmo/leveraging-advanced-typescript-features-for-dynamic-function-arguments-d54771eee642
 
 export class EventSubject {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private mapping = new Map<GraphEventType, any[]>();
 
   on<Type extends GraphEvent["type"]>(

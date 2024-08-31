@@ -83,19 +83,13 @@ export const createDotsBackgroundDrawingFn = (
 };
 
 export const createNoopBackgroundDrawingFn = () => {
-  return (
-    _ctx: CanvasRenderingContext2D,
-    _transformer: PublicViewportTransformer,
-  ) => {
+  return () => {
     // no actions should be performed
   };
 };
 
 export const createColorBackgroundDrawingFn = (color: string) => {
-  return (
-    ctx: CanvasRenderingContext2D,
-    _transformer: PublicViewportTransformer,
-  ) => {
+  return (ctx: CanvasRenderingContext2D) => {
     colorBackgroundDrawingFn(ctx, color);
   };
 };
