@@ -26,7 +26,7 @@ Port is an entity of node to which connection can be attached to. It might be vi
 - zero dependencies
 - typescript support
 
-## How to use:
+## Getting started:
 
 ```
 npm i @diyguy/graphflow
@@ -35,77 +35,82 @@ npm i @diyguy/graphflow
 ```typescript
 import { GraphFlowCanvas } from "@diyguy/graphflow";
 
-const canvasElement = document.createElement("div");
-document.body.prepend(canvasElement);
+const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new GraphFlowCanvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new GraphFlowCanvas(canvasElement);
 
-function createNodeElement(
-  name: string,
-): [HTMLElement, HTMLElement, HTMLElement] {
-  const node = document.createElement("div");
-  node.classList.add("node");
+const node1 = document.createElement("div");
+node1.classList.add("node");
+node1.innerText = "1";
 
-  const frontPort = document.createElement("div");
-  node.appendChild(frontPort);
+const node2 = document.createElement("div");
+node2.classList.add("node");
+node2.innerText = "2";
 
-  const text = document.createElement("div");
-  text.innerText = name;
-  node.appendChild(text);
+const port1 = document.createElement("div");
+port1.classList.add("port");
+port1.style.right = "0";
 
-  const backPort = document.createElement("div");
-  node.appendChild(backPort);
+const port2 = document.createElement("div");
+port2.classList.add("port");
+port2.style.left = "0";
 
-  return [frontPort, node, backPort];
-}
-
-const node1 = createNodeElement("Node 1");
-const node2 = createNodeElement("Node 2");
+node1.appendChild(port1);
+node2.appendChild(port2);
 
 canvas
-  .addNode({ id: "node-1", element: node1[1], x: 200, y: 400 })
-  .markPort({ id: "port-1-1", element: node1[0], nodeId: "node-1" })
-  .markPort({ id: "port-1-2", element: node1[2], nodeId: "node-1" })
-  .addNode({ id: "node-2", element: node2[1], x: 600, y: 500 })
-  .markPort({ id: "port-2-1", element: node2[0], nodeId: "node-2" })
-  .markPort({ id: "port-2-2", element: node2[2], nodeId: "node-2" })
-  .addConnection({ id: "con-1", from: "port-1-2", to: "port-2-1" });
+  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
+  .markPort({ id: "port-1", element: port1, nodeId: "node-1" })
+  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
+  .markPort({ id: "port-2", element: port2, nodeId: "node-2" })
+  .addConnection({ from: "port-1", to: "port-2" });
 ```
 
 ```css
-body > div {
+#canvas {
   width: 1000px;
   height: 1000px;
 }
 
 .node {
-  width: 150px;
-  max-width: 150px;
+  position: relative;
+  width: 50px;
   height: 50px;
-  max-height: 50px;
   background: #ffdbab;
-  border: 1px solid #bababa;
-  border-radius: 1000px;
-  white-space: nowrap;
-  user-select: none;
+  border-radius: 50%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+}
+
+.port {
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.port::after {
+  display: block;
+  content: "";
+  position: relative;
+  top: -2.5px;
+  left: -2.5px;
+  width: 5px;
+  height: 5px;
+  background: #737373;
+  border-radius: 2.5px;
+  border: none;
 }
 ```
 
 ```html
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GraphFlow Usage Example</title>
+    <title>GraphFlow | Getting Started</title>
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
