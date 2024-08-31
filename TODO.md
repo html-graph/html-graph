@@ -1,25 +1,25 @@
 # TODO
 
-
-* default background blank
-* eslint and prettier
-* arrows move on top
-* change default background
-* unmark port
-* focus on nodes
-* progammatic viewport transformation
-* backward arrow state
-* fix arrows shiver
-* unit tests
-* fix grab cursor position?
-* virtual scroll
-* import data
-* export data
-* update node coords and element
-* update edges element
-* README
-* usage documentation
-* architecture documentation
-* pipeline
-* layouts
-* check on touch devices
+- default background blank
+- eslint and prettier
+- type check
+- arrows move on top
+- change default background
+- unmark port
+- focus on nodes
+- progammatic viewport transformation
+- backward arrow state
+- fix arrows shiver
+- unit tests
+- fix grab cursor position?
+- virtual scroll
+- import data
+- export data
+- update node coords and element
+- update edges element
+- README
+- usage documentation
+- architecture documentation
+- pipeline
+- layouts
+- check on touch devices

@@ -1,87 +1,64 @@
 import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
 import { SvgController } from "../connection/svg-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
+import { BackgroundOptions } from "./background-options";
 
 export interface ApiOptions {
+  /**
+   * canvas scale related behavior
+   */
+  readonly scale?: {
     /**
-     * canvas scale related behavior
+     * enables canvas scaling
      */
-    readonly scale?: {
-        /**
-         * enables canvas scaling
-         */
-        readonly enabled?: boolean;
-        /**
-         * determines how fast scale works
-         * number between 1 and 2 is recommended
-         */
-        readonly velocity?: number;
-        /**
-         * sets minimum scale
-         */
-        readonly min?: number | null;
-        /**
-         * sets maximum scale
-         */
-        readonly max?: number | null;
-        /**
-         * sets trigger for scroll
-         */
-        readonly trigger?: ScaleTrigger;
-    },
+    readonly enabled?: boolean;
     /**
-     * canvas background settings
+     * determines how fast scale works
+     * number between 1 and 2 is recommended
      */
-    readonly background?: {
-        /**
-         * custom background drawing function
-         */
-        readonly drawingFn?: (
-            ctx: CanvasRenderingContext2D,
-            transformer: PublicViewportTransformer,
-        ) => void;
-        /**
-         * color of background dots
-         */
-        readonly dotColor?: string;
-        /**
-         * gap between background dots
-         */
-        readonly dotGap?: number;
-        /**
-         * radius of background dots
-         */
-        readonly dotRadius?: number;
-        /**
-         * color of background
-         */
-        readonly color?: string;
-    },
+    readonly velocity?: number;
     /**
-     * viewport shift related behavior
+     * sets minimum scale
      */
-    readonly shift?: {
-        /**
-         * enables viewport shift
-         */
-        readonly enabled?: boolean;
-    },
+    readonly min?: number | null;
     /**
-     * nodes related behavior
+     * sets maximum scale
      */
-    readonly nodes?: {
-        /**
-         * enables nodes drag behavior
-         */
-        readonly draggable?: boolean;
-    },
+    readonly max?: number | null;
     /**
-     * nodes related behavior
+     * sets trigger for scroll
      */
-    readonly connections?: {
-        /**
-         * connection creation configuration
-         */
-        readonly svgController?: SvgController;
-    },
+    readonly trigger?: ScaleTrigger;
+  };
+  /**
+   * canvas background settings
+   */
+  readonly background?: BackgroundOptions;
+  /**
+   * viewport shift related behavior
+   */
+  readonly shift?: {
+    /**
+     * enables viewport shift
+     */
+    readonly enabled?: boolean;
+  };
+  /**
+   * nodes related behavior
+   */
+  readonly nodes?: {
+    /**
+     * enables nodes drag behavior
+     */
+    readonly draggable?: boolean;
+  };
+  /**
+   * nodes related behavior
+   */
+  readonly connections?: {
+    /**
+     * connection creation configuration
+     */
+    readonly svgController?: SvgController;
+  };
 }

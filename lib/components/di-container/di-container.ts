@@ -8,33 +8,38 @@ import { Controller } from "../controller/controller";
 import { GraphStore } from "../graph-store/graph-store";
 
 export class DiContainer {
-    readonly htmlController: HtmlController;
+  readonly htmlController: HtmlController;
 
-    readonly eventSubject: EventSubject;
+  readonly eventSubject: EventSubject;
 
-    readonly eventHandler: EventHandler;
+  readonly eventHandler: EventHandler;
 
-    readonly viewportTransformer: ViewportTransformer;
+  readonly viewportTransformer: ViewportTransformer;
 
-    readonly publicViewportTransformer: PublicViewportTransformer;
+  readonly publicViewportTransformer: PublicViewportTransformer;
 
-    readonly controller: Controller;
+  readonly controller: Controller;
 
-    readonly graphStore: GraphStore;
+  readonly graphStore: GraphStore;
 
-    constructor(canvasWrapper: HTMLElement, readonly options: Options) {
-        this.htmlController = new HtmlController(canvasWrapper, this);
+  constructor(
+    canvasWrapper: HTMLElement,
+    readonly options: Options,
+  ) {
+    this.htmlController = new HtmlController(canvasWrapper, this);
 
-        this.eventSubject = new EventSubject();
+    this.eventSubject = new EventSubject();
 
-        this.eventHandler = new EventHandler(this);
+    this.eventHandler = new EventHandler(this);
 
-        this.viewportTransformer = new ViewportTransformer(this);
+    this.viewportTransformer = new ViewportTransformer(this);
 
-        this.publicViewportTransformer = new PublicViewportTransformer(this.viewportTransformer);
+    this.publicViewportTransformer = new PublicViewportTransformer(
+      this.viewportTransformer,
+    );
 
-        this.controller = new Controller(this);
+    this.controller = new Controller(this);
 
-        this.graphStore = new GraphStore();
-    }
+    this.graphStore = new GraphStore();
+  }
 }

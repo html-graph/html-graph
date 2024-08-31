@@ -2,122 +2,129 @@ import { SvgController } from "../../models/connection/svg-controller";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
-    constructor(
-        private readonly di: DiContainer
-    ) { }
+  constructor(private readonly di: DiContainer) {}
 
-    grabViewport(): void {
-        if (this.di.options.shift.enabled === false) {
-            return;
-        }
-
-        this.di.htmlController.setCursor('grab');
+  grabViewport(): void {
+    if (this.di.options.shift.enabled === false) {
+      return;
     }
 
-    grabNode(nodeId: string): void {
-        if (this.di.options.nodes.draggable === false) {
-            return;
-        }
+    this.di.htmlController.setCursor("grab");
+  }
 
-        this.di.htmlController.setCursor('grab');
-        this.di.htmlController.moveNodeOnTop(nodeId);
+  grabNode(nodeId: string): void {
+    if (this.di.options.nodes.draggable === false) {
+      return;
     }
 
-    dragViewport(dx: number, dy: number): void {
-        this.di.viewportTransformer.applyShift(-dx, -dy);
-        this.di.htmlController.applyTransform();
+    this.di.htmlController.setCursor("grab");
+    this.di.htmlController.moveNodeOnTop(nodeId);
+  }
+
+  dragViewport(dx: number, dy: number): void {
+    this.di.viewportTransformer.applyShift(-dx, -dy);
+    this.di.htmlController.applyTransform();
+  }
+
+  dragNode(nodeId: string, dx: number, dy: number): void {
+    const node = this.di.graphStore.getNode(nodeId);
+    const [xv, yv] = this.di.viewportTransformer.getViewportCoords(
+      node.x,
+      node.y,
+    );
+    const nodeX = xv + dx;
+    const nodeY = yv + dy;
+    const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoords(
+      nodeX,
+      nodeY,
+    );
+    this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
+    this.di.htmlController.updateNodePosition(nodeId);
+  }
+
+  release(): void {
+    this.di.htmlController.setCursor("default");
+  }
+
+  scaleCanvas(deltaY: number, centerX: number, centerY: number): void {
+    const scaleVelocity = this.di.options.scale.velocity;
+    const velocity = deltaY < 0 ? scaleVelocity : 1 / scaleVelocity;
+
+    this.di.viewportTransformer.applyScale(1 / velocity, centerX, centerY);
+
+    this.di.htmlController.applyTransform();
+  }
+
+  addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
+    if (this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to add node with existing id");
     }
 
-    dragNode(nodeId: string, dx: number, dy: number): void {
-        const node = this.di.graphStore.getNode(nodeId);
-        const [xv, yv] = this.di.viewportTransformer.getViewportCoords(node.x, node.y);
-        const nodeX = xv + dx;
-        const nodeY = yv + dy;
-        const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoords(nodeX, nodeY);
-        this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
-        this.di.htmlController.updateNodePosition(nodeId);
+    this.di.graphStore.addNode(nodeId, element, x, y);
+    this.di.htmlController.attachNode(nodeId);
+  }
+
+  markPort(portId: string, element: HTMLElement, nodeId: string): void {
+    if (!this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to set port on nonexisting node");
     }
 
-    release(): void {
-        this.di.htmlController.setCursor('default');
+    if (this.di.graphStore.hasPort(portId)) {
+      throw new Error("failed to add port with existing id");
     }
 
-    scaleCanvas(deltaY: number, centerX: number, centerY: number): void {
-        const scaleVelocity = this.di.options.scale.velocity;
-        const velocity = deltaY < 0 ? scaleVelocity : (1 / scaleVelocity);
+    this.di.graphStore.addPort(portId, element, nodeId);
+  }
 
-        this.di.viewportTransformer.applyScale(
-            1 / velocity,
-            centerX,
-            centerY,
-        );
-
-        this.di.htmlController.applyTransform();
+  unmarkPort(portId: string): void {
+    if (!this.di.graphStore.hasPort(portId)) {
+      throw new Error("failed to unset nonexisting port");
     }
 
-    addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
-        if (this.di.graphStore.hasNode(nodeId)) {
-            throw new Error("failed to add node with existing id");
-        }
+    this.di.graphStore
+      .getAllAdjacentToPortConnections(portId)
+      .forEach((connectionId) => {
+        this.removeConnection(connectionId);
+      });
 
-        this.di.graphStore.addNode(nodeId, element, x, y);
-        this.di.htmlController.attachNode(nodeId);
+    this.di.graphStore.removePort(portId);
+  }
+
+  connectPorts(
+    connectionId: string,
+    fromPortId: string,
+    toPortId: string,
+    svgController: SvgController,
+  ): void {
+    this.di.graphStore.addConnection(
+      connectionId,
+      fromPortId,
+      toPortId,
+      svgController,
+    );
+    this.di.htmlController.attachConnection(connectionId);
+  }
+
+  removeConnection(connectionId: string): void {
+    this.di.htmlController.detachConnection(connectionId);
+    this.di.graphStore.removeConnection(connectionId);
+  }
+
+  removeNode(nodeId: string): void {
+    if (!this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to remove nonexisting node");
     }
 
-    markPort(portId: string, element: HTMLElement, nodeId: string): void {
-        if (!this.di.graphStore.hasNode(nodeId)) {
-            throw new Error("failed to set port on nonexisting node");
-        }
+    this.di.htmlController.detachNode(nodeId);
+    this.di.graphStore.removeNode(nodeId);
+  }
 
-        if (this.di.graphStore.hasPort(portId)) {
-            throw new Error("failed to add port with existing id");
-        }
+  clear(): void {
+    this.di.htmlController.clear();
+    this.di.graphStore.clear();
+  }
 
-        this.di.graphStore.addPort(portId,  element, nodeId);
-    }
-
-    unmarkPort(portId: string): void {
-        if (!this.di.graphStore.hasPort(portId)) {
-            throw new Error("failed to unset nonexisting port");
-        }
-
-        this.di.graphStore.getAllAdjacentToPortConnections(portId).forEach(connectionId => {
-            this.removeConnection(connectionId);
-        })
-
-        this.di.graphStore.removePort(portId);
-    }
-
-    connectPorts(
-        connectionId: string,
-        fromPortId: string,
-        toPortId: string,
-        svgController: SvgController,
-    ): void {
-        this.di.graphStore.addConnection(connectionId, fromPortId, toPortId, svgController);
-        this.di.htmlController.attachConnection(connectionId);
-    }
-
-    removeConnection(connectionId: string): void {
-        this.di.htmlController.detachConnection(connectionId);
-        this.di.graphStore.removeConnection(connectionId);
-    }
-
-    removeNode(nodeId: string): void {
-        if (!this.di.graphStore.hasNode(nodeId)) {
-            throw new Error("failed to remove nonexisting node");
-        }
-
-        this.di.htmlController.detachNode(nodeId);
-        this.di.graphStore.removeNode(nodeId);
-    }
-
-    clear(): void {
-        this.di.htmlController.clear();
-        this.di.graphStore.clear();
-    }
-
-    destroy(): void {
-        this.di.htmlController.destroy();
-    }
+  destroy(): void {
+    this.di.htmlController.destroy();
+  }
 }

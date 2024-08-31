@@ -1,1 +1,1 @@
-export type ObjectMap<T> = {[key: string]: T};
+export type ObjectMap<T> = { [key: string]: T };
