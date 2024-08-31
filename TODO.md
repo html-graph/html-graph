@@ -1,23 +1,20 @@
 # TODO
 
-- type check
 - arrows move on top
-- change default background
-- unmark port
+- backward arrow state
+- programmatic update node coords and element
+- update edges element
 - focus on nodes
 - progammatic viewport transformation
-- backward arrow state
 - fix arrows shiver
 - unit tests
 - fix grab cursor position?
 - virtual scroll
 - import data
 - export data
-- update node coords and element
-- update edges element
 - README
 - usage documentation
 - architecture documentation
-- pipeline
+- pipeline release new version
 - layouts
 - check on touch devices

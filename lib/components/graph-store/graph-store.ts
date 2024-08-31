@@ -1,26 +1,27 @@
 import { SvgController } from "../../models/connection/svg-controller";
 import { EdgePayload } from "../../models/edges/edge-payload";
-import { ObjectMap } from "../../models/object-map";
 import { NodePayload } from "../../models/store/node-payload";
 
 export class GraphStore {
-  private nodes: ObjectMap<NodePayload> = Object.create(null);
+  private nodes: Record<string, NodePayload> = Object.create(null);
 
-  private ports: ObjectMap<HTMLElement> = Object.create(null);
+  private ports: Record<string, HTMLElement> = Object.create(null);
 
-  private nodePorts: ObjectMap<ObjectMap<HTMLElement>> = Object.create(null);
-
-  private portNodeId: ObjectMap<string> = Object.create(null);
-
-  private connections: ObjectMap<EdgePayload> = Object.create(null);
-
-  private incommingConnections: ObjectMap<ObjectMap<true>> =
+  private nodePorts: Record<string, Record<string, HTMLElement>> =
     Object.create(null);
 
-  private outcommingConnections: ObjectMap<ObjectMap<true>> =
+  private portNodeId: Record<string, string> = Object.create(null);
+
+  private connections: Record<string, EdgePayload> = Object.create(null);
+
+  private incommingConnections: Record<string, Record<string, true>> =
     Object.create(null);
 
-  private cycleConnections: ObjectMap<ObjectMap<true>> = Object.create(null);
+  private outcommingConnections: Record<string, Record<string, true>> =
+    Object.create(null);
+
+  private cycleConnections: Record<string, Record<string, true>> =
+    Object.create(null);
 
   addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
     this.nodes[nodeId] = { element, x, y };
