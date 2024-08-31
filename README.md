@@ -115,7 +115,7 @@ body > div {
 </html>
 ```
 
-Refer to [Examples](exampless) for more complex use-cases.
+Refer to [Examples](examples) for more complex use-cases.
 
 ## Options
 
