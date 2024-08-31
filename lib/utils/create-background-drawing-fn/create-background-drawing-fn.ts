@@ -94,11 +94,7 @@ export const createNoopBackgroundDrawingFn = () => {
 };
 
 export const createColorBackgroundDrawingFn = (color: string) => {
-  return (
-    ctx: CanvasRenderingContext2D,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _transformer: PublicViewportTransformer,
-  ) => {
+  return (ctx: CanvasRenderingContext2D) => {
     colorBackgroundDrawingFn(ctx, color);
   };
 };
