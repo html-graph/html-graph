@@ -47,4 +47,5 @@ canvas
     .markPort({ id: "port-4-2", element: port42, nodeId: "node-4" })
     .connectPorts({ id: "con-1", from: "port-1-2", to: "port-2-1" })
     .connectPorts({ id: "con-2", from: "port-3-2", to: "port-2-1" })
-    .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" });
+    .connectPorts({ id: "con-3", from: "port-2-2", to: "port-4-1" })
+    .unmarkPort("port-4-1");

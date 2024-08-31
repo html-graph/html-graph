@@ -59,6 +59,12 @@ export class Canvas {
         return this;
     }
 
+    unmarkPort(portId: string): Canvas {
+        this.di.controller.unmarkPort(portId);
+
+        return this;
+    }
+
     removeNode(nodeId: string): Canvas {
         this.di.controller.removeNode(nodeId);
 

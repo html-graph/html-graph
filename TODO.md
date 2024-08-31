@@ -2,8 +2,6 @@
 
 
 * default background blank
-* clear
-* unset ports
 * eslint and prettier
 * arrows move on top
 * change default background

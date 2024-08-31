@@ -60,6 +60,7 @@ export class GraphStore {
         this.cycleConnections[portId] = {};
         this.incommingConnections[portId] = {};
         this.outcommingConnections[portId] = {};
+        this.portNodeId[portId] = nodeId;
 
         const ports = this.nodePorts[nodeId];
 
@@ -142,19 +143,27 @@ export class GraphStore {
         const ports = Object.keys(this.nodePorts[nodeId]);
         let res: string[] = [];
 
-        ports.forEach(port => {
-            if (this.cycleConnections[port] !== undefined) {
-                res = [...res, ...Object.keys(this.cycleConnections[port])];
-            }
-
-            if (this.incommingConnections[port] !== undefined) {
-                res = [...res, ...Object.keys(this.incommingConnections[port])];
-            }
-
-            if (this.outcommingConnections[port] !== undefined) {
-                res = [...res, ...Object.keys(this.outcommingConnections[port])];
-            }
+        ports.forEach(portId => {
+            res = [...res, ...this.getAllAdjacentToPortConnections(portId)];
         });
+
+        return res;
+    }
+
+    getAllAdjacentToPortConnections(portId: string): readonly string[] {
+        let res: string[] = [];
+
+        if (this.cycleConnections[portId] !== undefined) {
+            res = [...res, ...Object.keys(this.cycleConnections[portId])];
+        }
+
+        if (this.incommingConnections[portId] !== undefined) {
+            res = [...res, ...Object.keys(this.incommingConnections[portId])];
+        }
+
+        if (this.outcommingConnections[portId] !== undefined) {
+            res = [...res, ...Object.keys(this.outcommingConnections[portId])];
+        }
 
         return res;
     }

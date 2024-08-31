@@ -76,10 +76,14 @@ export class Controller {
         this.di.graphStore.addPort(portId,  element, nodeId);
     }
 
-    unsetPort(portId: string): void {
+    unmarkPort(portId: string): void {
         if (!this.di.graphStore.hasPort(portId)) {
             throw new Error("failed to unset nonexisting port");
         }
+
+        this.di.graphStore.getAllAdjacentToPortConnections(portId).forEach(connectionId => {
+            this.removeConnection(connectionId);
+        })
 
         this.di.graphStore.removePort(portId);
     }
