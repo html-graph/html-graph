@@ -1,6 +1,5 @@
 # TODO
 
-- eslint
 - type check
 - arrows move on top
 - change default background

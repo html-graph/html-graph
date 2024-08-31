@@ -95,7 +95,7 @@ export class Canvas {
     return this;
   }
 
-  connectPorts(connection: ApiConnection): Canvas {
+  addConnection(connection: ApiConnection): Canvas {
     this.di.controller.connectPorts(
       connection.id,
       connection.from,

@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
+import checker from "vite-plugin-checker";
 
 export default defineConfig({
   plugins: [
@@ -8,6 +9,7 @@ export default defineConfig({
       include: ["lib"],
       rollupTypes: true,
     }),
+    checker({ typescript: true }),
   ],
   build: {
     lib: {
