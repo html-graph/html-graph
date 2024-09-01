@@ -1,11 +1,13 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 
-export const defaultConnectionController: ConnectionController = {
-  createSvg: () => {
+export class BezierArrowConnectionController implements ConnectionController {
+  constructor(private readonly color: string) {}
+
+  createSvg() {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
     const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    line.setAttribute("stroke", "#5c5c5c");
+    line.setAttribute("stroke", this.color);
     line.setAttribute("stroke-width", "1");
     line.setAttribute("fill", "none");
     svg.appendChild(line);
@@ -14,13 +16,15 @@ export const defaultConnectionController: ConnectionController = {
       "http://www.w3.org/2000/svg",
       "path",
     );
-    arrow.setAttribute("fill", "#5c5c5c");
+
+    arrow.setAttribute("fill", this.color);
     svg.appendChild(arrow);
     svg.style.overflow = "visible";
 
     return svg;
-  },
-  updateSvg: (svg: SVGSVGElement, width: number, height: number) => {
+  }
+
+  updateSvg(svg: SVGSVGElement, width: number, height: number) {
     const line = svg.children[0]!;
     const arrow = svg.children[1]!;
 
@@ -32,5 +36,5 @@ export const defaultConnectionController: ConnectionController = {
       "d",
       `M ${width} ${height} L ${width - 15} ${height - 4} L ${width - 15} ${height + 4}`,
     );
-  },
-};
+  }
+}

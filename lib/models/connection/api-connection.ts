@@ -1,8 +1,8 @@
-import { ConnectionController } from "./connection-controller";
+import { ConnectionOptions } from "../options/connection-options";
 
 export interface ApiConnection {
   id?: string;
   from: string;
   to: string;
-  svgController?: ConnectionController;
+  options?: ConnectionOptions;
 }

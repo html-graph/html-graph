@@ -76,7 +76,7 @@ export class Canvas {
       connection.id,
       connection.from,
       connection.to,
-      connection.svgController ?? this.options.connections.controller,
+      connection.options,
     );
 
     return this;

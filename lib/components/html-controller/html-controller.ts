@@ -390,6 +390,12 @@ export class HtmlController {
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
-    connection.svgController.updateSvg(element, width, height);
+    connection.svgController.updateSvg(
+      element,
+      width,
+      height,
+      portFrom,
+      portTo,
+    );
   }
 }

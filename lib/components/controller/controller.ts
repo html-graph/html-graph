@@ -1,4 +1,5 @@
-import { ConnectionController } from "../../models/connection/connection-controller";
+import { ConnectionOptions } from "../../models/options/connection-options";
+import { resolveConnectionController } from "../../utils/resolve-connection-controller/resolve-connection-controller";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
@@ -132,7 +133,7 @@ export class Controller {
     connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,
-    svgController: ConnectionController,
+    options: ConnectionOptions | undefined,
   ): void {
     if (connectionId === undefined) {
       do {
@@ -147,11 +148,16 @@ export class Controller {
       throw new Error("failed to add connection to nonexisting port");
     }
 
+    const controller =
+      options !== undefined
+        ? resolveConnectionController(options)
+        : this.di.options.connections.controller;
+
     this.di.graphStore.addConnection(
       connectionId,
       fromPortId,
       toPortId,
-      svgController,
+      controller,
     );
 
     this.di.htmlController.attachConnection(connectionId);
