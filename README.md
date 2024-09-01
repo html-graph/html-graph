@@ -33,31 +33,43 @@ import { GraphFlowCanvas } from "@diyguy/graphflow";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new GraphFlowCanvas(canvasElement);
+const canvas = new GraphFlowCanvas(canvasElement, {
+  scale: { enabled: true },
+  shift: { enabled: true },
+  nodes: { draggable: true },
+  background: { type: "dots" },
+});
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
-node1.innerText = "1";
+function createNode(
+  name: string,
+  frontPortId: string,
+  backPortId: string,
+): [HTMLElement, Record<string, HTMLElement>] {
+  const node = document.createElement("div");
+  node.classList.add("node");
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
-node2.innerText = "2";
+  const frontPort = document.createElement("div");
+  node.appendChild(frontPort);
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
+  const text = document.createElement("div");
+  text.innerText = name;
+  node.appendChild(text);
 
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
+  const backPort = document.createElement("div");
+  node.appendChild(backPort);
 
-node1.appendChild(port1);
-node2.appendChild(port2);
+  return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
+}
+
+const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
+const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
+const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
+const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
 
 canvas
-  .addNode({ element: node1, x: 200, y: 300, ports: { "port-1": port1 } })
-  .addNode({ element: node1, x: 600, y: 500, ports: { "port-2": port2 } })
-  .addConnection({ from: "port-1", to: "port-2" });
+  .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
+  .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
+  .addConnection({ from: "port-1-2", to: "port-2-1" });
 ```
 
 Refer to [Examples](examples) for more.

@@ -1,16 +1,16 @@
 # TODO
 
 - adaptive arrows
-- programmatic update node coords and element
-- examples docs
-- update edges element
 - focus on nodes
+- programmatic update node coords and element
+- update edges element
 - progammatic viewport transformation
+- examples docs
+- virtual scroll
 - fix arrows shiver
 - unit tests
 - e2e tests
 - fix grab cursor position?
-- virtual scroll
 - import data
 - export data
 - README

@@ -358,9 +358,9 @@ export class HtmlController {
   }
 
   private updateConnectionCoords(connectionId: string): void {
-    const payload = this.di.graphStore.getConnection(connectionId);
-    const portFrom = this.di.graphStore.getPort(payload.from);
-    const portTo = this.di.graphStore.getPort(payload.to);
+    const connection = this.di.graphStore.getConnection(connectionId);
+    const portFrom = this.di.graphStore.getPort(connection.from);
+    const portTo = this.di.graphStore.getPort(connection.to);
 
     const rectFrom = portFrom.getBoundingClientRect();
     const rectTo = portTo.getBoundingClientRect();
@@ -390,7 +390,6 @@ export class HtmlController {
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
-    const connection = this.di.graphStore.getConnection(connectionId);
     connection.svgController.updateSvg(element, width, height);
   }
 }
