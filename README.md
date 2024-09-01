@@ -49,6 +49,7 @@ function createNode(
   node.classList.add("node");
 
   const frontPort = document.createElement("div");
+  frontPort.classList.add("port");
   node.appendChild(frontPort);
 
   const text = document.createElement("div");
@@ -56,6 +57,7 @@ function createNode(
   node.appendChild(text);
 
   const backPort = document.createElement("div");
+  backPort.classList.add("port");
   node.appendChild(backPort);
 
   return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
@@ -63,8 +65,6 @@ function createNode(
 
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
 const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
-const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
-const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
 
 canvas
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
