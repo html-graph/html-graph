@@ -51,6 +51,7 @@ const execute = async (
 const otp = argv[2];
 
 const cmds = [
+  `npx prettier ./package.json --write`,
   `npm publish --access=public --otp=${otp}`,
   `git add -A`,
   `git commit -m "release ${newVersion}"`,
