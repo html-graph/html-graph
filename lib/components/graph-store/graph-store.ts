@@ -1,5 +1,5 @@
-import { SvgController } from "../../models/connection/svg-controller";
-import { EdgePayload } from "../../models/edges/edge-payload";
+import { ConnectionController } from "../../models/connection/connection-controller";
+import { ConnectionPayload } from "../../models/connection/connection-payload";
 import { NodePayload } from "../../models/store/node-payload";
 
 export class GraphStore {
@@ -12,7 +12,7 @@ export class GraphStore {
 
   private portNodeId: Record<string, string> = Object.create(null);
 
-  private connections: Record<string, EdgePayload> = Object.create(null);
+  private connections: Record<string, ConnectionPayload> = Object.create(null);
 
   private incommingConnections: Record<string, Record<string, true>> =
     Object.create(null);
@@ -111,7 +111,7 @@ export class GraphStore {
     connectionId: string,
     fromPortId: string,
     toPortId: string,
-    svgController: SvgController,
+    svgController: ConnectionController,
   ): void {
     this.connections[connectionId] = {
       from: fromPortId,
@@ -127,7 +127,7 @@ export class GraphStore {
     }
   }
 
-  getConnection(connectionId: string): EdgePayload {
+  getConnection(connectionId: string): ConnectionPayload {
     return this.connections[connectionId];
   }
 

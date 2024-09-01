@@ -1,6 +1,6 @@
-import { SvgController } from "../connection/svg-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 import { BackgroundOptions } from "./background-options";
+import { ConnectionOptions } from "./connection-options";
 
 export interface ApiOptions {
   /**
@@ -54,10 +54,5 @@ export interface ApiOptions {
   /**
    * nodes related behavior
    */
-  readonly connections?: {
-    /**
-     * connection creation configuration
-     */
-    readonly svgController?: SvgController;
-  };
+  readonly connections?: ConnectionOptions;
 }

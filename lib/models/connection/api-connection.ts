@@ -1,8 +1,8 @@
-import { SvgController } from "./svg-controller";
+import { ConnectionController } from "./connection-controller";
 
 export interface ApiConnection {
   id?: string;
   from: string;
   to: string;
-  svgController?: SvgController;
+  svgController?: ConnectionController;
 }

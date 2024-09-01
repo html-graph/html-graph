@@ -1,5 +1,5 @@
 import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
-import { SvgController } from "../connection/svg-controller";
+import { ConnectionController } from "../connection/connection-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 
 export interface Options {
@@ -23,6 +23,6 @@ export interface Options {
     readonly draggable: boolean;
   };
   readonly connections: {
-    readonly svgController: SvgController;
+    readonly controller: ConnectionController;
   };
 }

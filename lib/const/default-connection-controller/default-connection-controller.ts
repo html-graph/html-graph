@@ -1,6 +1,6 @@
-import { SvgController } from "../../models/connection/svg-controller";
+import { ConnectionController } from "../../models/connection/connection-controller";
 
-export const defaultSvgController: SvgController = {
+export const defaultConnectionController: ConnectionController = {
   createSvg: () => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 

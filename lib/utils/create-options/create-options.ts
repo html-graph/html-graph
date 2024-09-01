@@ -1,4 +1,5 @@
-import { defaultSvgController } from "../../const/default-svg-controller/default-svg-controller";
+import { defaultConnectionController } from "../../const/default-connection-controller/default-connection-controller";
+import { ConnectionController } from "../../models/connection/connection-controller";
 import { ApiOptions } from "../../models/options/api-options";
 import { BackgroundDrawingFn } from "../../models/options/background-drawing-fn";
 import { Options } from "../../models/options/options";
@@ -35,6 +36,16 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
       break;
   }
 
+  let controller: ConnectionController = defaultConnectionController;
+
+  switch (apiOptions?.connections?.type) {
+    case "custom":
+      controller = apiOptions.connections.controller;
+      break;
+    default:
+      break;
+  }
+
   return {
     scale: {
       enabled: apiOptions?.scale?.enabled ?? false,
@@ -43,18 +54,9 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
       max: apiOptions?.scale?.max ?? null,
       trigger: apiOptions?.scale?.trigger ?? "wheel",
     },
-    background: {
-      drawingFn,
-    },
-    shift: {
-      enabled: apiOptions?.shift?.enabled ?? false,
-    },
-    nodes: {
-      draggable: apiOptions?.nodes?.draggable ?? false,
-    },
-    connections: {
-      svgController:
-        apiOptions?.connections?.svgController ?? defaultSvgController,
-    },
+    background: { drawingFn },
+    shift: { enabled: apiOptions?.shift?.enabled ?? false },
+    nodes: { draggable: apiOptions?.nodes?.draggable ?? false },
+    connections: { controller },
   };
 };

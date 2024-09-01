@@ -5,7 +5,7 @@ export class PublicViewportTransformer {
 
   /**
    * for given absolute coordinates returns viewport coordinates
-   * viewport coordinated represent actual coordinates on canvas for given absolute coordinates
+   * viewport coordinated represent actual coordinates on screen for given absolute coordinates
    */
   getViewCoords(xa: number, ya: number): [number, number] {
     return this.transformer.getViewportCoords(xa, ya);

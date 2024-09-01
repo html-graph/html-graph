@@ -1,4 +1,4 @@
-import { SvgController } from "../../models/connection/svg-controller";
+import { ConnectionController } from "../../models/connection/connection-controller";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
@@ -132,7 +132,7 @@ export class Controller {
     connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,
-    svgController: SvgController,
+    svgController: ConnectionController,
   ): void {
     if (connectionId === undefined) {
       do {
