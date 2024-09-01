@@ -65,7 +65,7 @@ canvas
     element: node1,
     x: 600,
     y: 500,
-    ports: { "port-2": port1 },
+    ports: { "port-2": port2 },
   })
   .addConnection({ from: "port-1", to: "port-2" });
 ```

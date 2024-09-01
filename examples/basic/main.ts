@@ -44,28 +44,19 @@ canvas
     element: node2,
     x: 600,
     y: 500,
-    ports: {
-      "port-2-1": port21,
-      "port-2-2": port22,
-    },
+    ports: { "port-2-1": port21, "port-2-2": port22 },
   })
   .addNode({
     element: node3,
     x: 200,
     y: 800,
-    ports: {
-      "port-3-1": port31,
-      "port-3-2": port32,
-    },
+    ports: { "port-3-1": port31, "port-3-2": port32 },
   })
   .addNode({
     element: node4,
     x: 1000,
     y: 600,
-    ports: {
-      "port-4-1": port41,
-      "port-4-2": port42,
-    },
+    ports: { "port-4-1": port41, "port-4-2": port42 },
   })
   .addConnection({ from: "port-1-2", to: "port-2-1" })
   .addConnection({ from: "port-3-2", to: "port-2-1" })

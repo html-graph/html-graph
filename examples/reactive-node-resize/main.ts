@@ -37,28 +37,14 @@ node1.appendChild(port1);
 node2.appendChild(port2);
 
 canvas
-  .addNode({
-    element: node1,
-    x: 200,
-    y: 300,
-    ports: {
-      "port-1": port1,
-    },
-  })
-  .addNode({
-    element: node2,
-    x: 600,
-    y: 500,
-    ports: {
-      "port-2": port2,
-    },
-  })
+  .addNode({ element: node1, x: 200, y: 300, ports: { "port-1": port1 } })
+  .addNode({ element: node2, x: 600, y: 500, ports: { "port-2": port2 } })
   .addConnection({ from: "port-1", to: "port-2" });
 
 let i = 0;
 
 setInterval(() => {
   text1.innerText = i % 2 ? "1" : "111111111111";
-  text2.innerText = i % 2 ? "22222222222" : "2";
+  text2.innerText = i % 2 ? "222222222222" : "2";
   i++;
 }, 1000);
