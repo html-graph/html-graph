@@ -1,7 +1,6 @@
 # TODO
 
-- mark portrs with node add
-- backward arrow state
+- adaptive arrows
 - programmatic update node coords and element
 - examples docs
 - update edges element
