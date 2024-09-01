@@ -4,10 +4,10 @@ import readline from "readline";
 import { stdin as input, stdout as output } from "process";
 
 class Releaser {
-  private static execute(cmd: string, cwd: string, params = []): Promise<void> {
+  private static execute(cmd: string): Promise<void> {
     return new Promise((res, rej) => {
-      const proc = spawn(cmd, params, {
-        cwd,
+      const proc = spawn(cmd, [], {
+        cwd: "./",
         shell: true,
       });
 
@@ -25,12 +25,11 @@ class Releaser {
     });
   }
 
-  private static askCode() {
+  private static askCode(): Promise<string> {
     return new Promise((resolve) => {
       const rl = readline.createInterface({ input, output });
 
       rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
-        console.log(answer);
         resolve(answer);
 
         rl.close();
@@ -51,9 +50,9 @@ class Releaser {
 
     const major = parseInt(result[1]);
     const minor = parseInt(result[2]);
-    const patch = parseInt(result[3]) + 1;
+    const patch = parseInt(result[3]);
 
-    const newVersion = `${major}.${minor}.${patch}`;
+    const newVersion = `${major}.${minor}.${patch + 1}`;
     pkg.version = newVersion;
 
     const newContent = JSON.stringify(pkg, null, 2);
@@ -75,15 +74,13 @@ class Releaser {
       `git push --tags`,
     ];
 
-    this.execute(cmdsBeforePublish.join(" && "), "./")
+    this.execute(cmdsBeforePublish.join(" && "))
       .then(() => this.askCode())
       .then((token) =>
-        this.execute(`npm publish --access=public --otp=${token}`, "./"),
+        this.execute(`npm publish --access=public --otp=${token}`),
       )
-      .then(() => this.execute(cmdsAfterPublish.join(" && "), "./"))
-      .catch(() => {
-        this.execute("git reset --hard", "./");
-      });
+      .then(() => this.execute(cmdsAfterPublish.join(" && ")))
+      .catch(() => this.execute("git reset --hard"));
   }
 }
 

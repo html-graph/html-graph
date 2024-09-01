@@ -1,6 +1,7 @@
 # TODO
 
 - adaptive arrows
+- node refresh after port add
 - focus on nodes
 - programmatic update node coords and element
 - update edges element

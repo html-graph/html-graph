@@ -33,16 +33,20 @@ export class Controller {
 
   dragNode(nodeId: string, dx: number, dy: number): void {
     const node = this.di.graphStore.getNode(nodeId);
+
     const [xv, yv] = this.di.viewportTransformer.getViewportCoords(
       node.x,
       node.y,
     );
+
     const nodeX = xv + dx;
     const nodeY = yv + dy;
+
     const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoords(
       nodeX,
       nodeY,
     );
+
     this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
     this.di.htmlController.updateNodePosition(nodeId);
   }
@@ -54,8 +58,9 @@ export class Controller {
   scaleCanvas(deltaY: number, centerX: number, centerY: number): void {
     const scaleVelocity = this.di.options.scale.velocity;
     const velocity = deltaY < 0 ? scaleVelocity : 1 / scaleVelocity;
+    const viewportVelocity = 1 / velocity;
 
-    this.di.viewportTransformer.applyScale(1 / velocity, centerX, centerY);
+    this.di.viewportTransformer.applyScale(viewportVelocity, centerX, centerY);
 
     this.di.htmlController.applyTransform();
   }
@@ -123,7 +128,7 @@ export class Controller {
     this.di.graphStore.removePort(portId);
   }
 
-  connectPorts(
+  addConnection(
     connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,

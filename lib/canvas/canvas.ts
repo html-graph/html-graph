@@ -72,7 +72,7 @@ export class Canvas {
    * adds connection to graph
    */
   addConnection(connection: ApiConnection): Canvas {
-    this.di.controller.connectPorts(
+    this.di.controller.addConnection(
       connection.id,
       connection.from,
       connection.to,
