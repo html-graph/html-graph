@@ -1,16 +1,10 @@
 import { DiContainer } from "../components/di-container/di-container";
-import { defaultSvgController } from "../const/default-svg-controller/default-svg-controller";
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiNode } from "../models/nodes/api-node";
 import { ApiOptions } from "../models/options/api-options";
-import { BackgroundDrawingFn } from "../models/options/background-drawing-fn";
 import { Options } from "../models/options/options";
 import { ApiPort } from "../models/port/api-port";
-import {
-  createColorBackgroundDrawingFn,
-  createDotsBackgroundDrawingFn,
-  createNoopBackgroundDrawingFn,
-} from "../utils/create-background-drawing-fn/create-background-drawing-fn";
+import { createOptions } from "../utils/create-options/create-options";
 
 /**
  * Provides API for acting on graph
@@ -24,52 +18,7 @@ export class Canvas {
     private readonly canvasWrapper: HTMLElement,
     private readonly apiOptions?: ApiOptions,
   ) {
-    let drawingFn: BackgroundDrawingFn = createNoopBackgroundDrawingFn();
-
-    switch (this.apiOptions?.background?.type) {
-      case "custom":
-        drawingFn = this.apiOptions.background.drawingFn;
-        break;
-
-      case "dots":
-        drawingFn = createDotsBackgroundDrawingFn(
-          this.apiOptions.background.dotColor ?? "#d8d8d8",
-          this.apiOptions.background.dotGap ?? 25,
-          this.apiOptions.background.dotRadius ?? 1.5,
-          this.apiOptions.background.color ?? "#ffffff",
-        );
-        break;
-      case "color":
-        drawingFn = createColorBackgroundDrawingFn(
-          this.apiOptions.background.color ?? "#ffffff",
-        );
-        break;
-      default:
-        break;
-    }
-
-    this.options = {
-      scale: {
-        enabled: this.apiOptions?.scale?.enabled ?? false,
-        velocity: this.apiOptions?.scale?.velocity ?? 1.2,
-        min: this.apiOptions?.scale?.min ?? null,
-        max: this.apiOptions?.scale?.max ?? null,
-        trigger: this.apiOptions?.scale?.trigger ?? "wheel",
-      },
-      background: {
-        drawingFn,
-      },
-      shift: {
-        enabled: this.apiOptions?.shift?.enabled ?? false,
-      },
-      nodes: {
-        draggable: this.apiOptions?.nodes?.draggable ?? false,
-      },
-      connections: {
-        svgController:
-          this.apiOptions?.connections?.svgController ?? defaultSvgController,
-      },
-    };
+    this.options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(this.canvasWrapper, this.options);
   }
