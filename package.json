@@ -2,7 +2,7 @@
   "name": "@diyguy/graphflow",
   "author": "Dmitry Marov",
   "private": false,
-  "version": "0.0.19",
+  "version": "0.0.20",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -35,7 +35,6 @@
     "build": "tsc --p ./tsconfig-build-library.json && vite build",
     "preview": "vite preview",
     "prebuild": "npm run lint && npm run check-formatting",
-    "prepublishOnly": "npm run prebuild && npm run build",
     "release-next-version": "tsx ./scripts/release-next-version.ts"
   },
   "devDependencies": {

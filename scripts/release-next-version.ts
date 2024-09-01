@@ -1,67 +1,90 @@
 import { spawn } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
-import { argv } from "process";
+import readline from "readline";
+import { stdin as input, stdout as output } from "process";
 
-const content = readFileSync("./package.json", "utf8");
+class Releaser {
+  private static execute(cmd: string, cwd: string, params = []): Promise<void> {
+    return new Promise((res, rej) => {
+      const proc = spawn(cmd, params, {
+        cwd,
+        shell: true,
+      });
 
-const pkg = JSON.parse(content);
+      proc.stderr.setEncoding("utf-8");
+      proc.stdout.pipe(process.stdout);
+      proc.stderr.pipe(process.stderr);
 
-const version = pkg.version;
-
-const reg = /(\d+)\.(\d+)\.(\d+)/;
-
-const result = version.match(reg);
-
-const major = parseInt(result[1]);
-const minor = parseInt(result[2]);
-const patch = parseInt(result[3]) + 1;
-
-const newVersion = `${major}.${minor}.${patch}`;
-pkg.version = newVersion;
-
-const newContent = JSON.stringify(pkg, null, 2);
-
-writeFileSync("./package.json", newContent);
-
-const execute = async (
-  cmd: string,
-  cwd: string,
-  params = [],
-): Promise<void> => {
-  return new Promise((res, rej) => {
-    const proc = spawn(cmd, params, {
-      cwd,
-      shell: true,
+      proc.on("close", (code) => {
+        if (code === 0) {
+          res();
+        } else {
+          rej();
+        }
+      });
     });
+  }
 
-    proc.stderr.setEncoding("utf-8");
-    proc.stdout.pipe(process.stdout);
-    proc.stderr.pipe(process.stderr);
+  private static askCode() {
+    return new Promise((resolve) => {
+      const rl = readline.createInterface({ input, output });
 
-    proc.on("close", (code) => {
-      if (code === 0) {
-        res();
-      } else {
-        rej();
-      }
+      rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
+        console.log(answer);
+        resolve(answer);
+
+        rl.close();
+      });
     });
-  });
-};
+  }
 
-const otp = argv[2];
+  static release(): void {
+    const content = readFileSync("./package.json", "utf8");
 
-const cmds = [
-  `npx prettier ./package.json --write`,
-  `npm publish --access=public --otp=${otp}`,
-  `git add -A`,
-  `git commit -m "release ${newVersion}"`,
-  `git tag -a v${newVersion} -m "new version ${newVersion}"`,
-  `git push`,
-  `git push --tags`,
-];
+    const pkg = JSON.parse(content);
 
-const cmd = cmds.join(" && ");
+    const version = pkg.version;
 
-execute(cmd, "./").catch(() => {
-  execute("git reset --hard", "./");
-});
+    const reg = /(\d+)\.(\d+)\.(\d+)/;
+
+    const result = version.match(reg);
+
+    const major = parseInt(result[1]);
+    const minor = parseInt(result[2]);
+    const patch = parseInt(result[3]) + 1;
+
+    const newVersion = `${major}.${minor}.${patch}`;
+    pkg.version = newVersion;
+
+    const newContent = JSON.stringify(pkg, null, 2);
+
+    writeFileSync("./package.json", newContent);
+
+    const cmdsBeforePublish = [
+      `npx prettier ./package.json --write`,
+      `npm install`,
+      "npm run prebuild",
+      "npm run build",
+    ];
+
+    const cmdsAfterPublish = [
+      `git add -A`,
+      `git commit -m "release ${newVersion}"`,
+      `git tag -a v${newVersion} -m "new version ${newVersion}"`,
+      `git push`,
+      `git push --tags`,
+    ];
+
+    this.execute(cmdsBeforePublish.join(" && "), "./")
+      .then(() => this.askCode())
+      .then((token) =>
+        this.execute(`npm publish --access=public --otp=${token}`, "./"),
+      )
+      .then(() => this.execute(cmdsAfterPublish.join(" && "), "./"))
+      .catch(() => {
+        this.execute("git reset --hard", "./");
+      });
+  }
+}
+
+Releaser.release();
