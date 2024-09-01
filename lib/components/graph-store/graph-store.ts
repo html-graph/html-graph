@@ -116,7 +116,7 @@ export class GraphStore {
     this.connections[connectionId] = {
       from: fromPortId,
       to: toPortId,
-      svgController,
+      controller: svgController,
     };
 
     if (fromPortId !== toPortId) {

@@ -233,7 +233,7 @@ export class HtmlController {
 
   attachConnection(connectionId: string): void {
     const connection = this.di.graphStore.getConnection(connectionId);
-    const element = connection.svgController.createSvg();
+    const element = connection.controller.createSvg();
 
     element.style.transformOrigin = "50% 50%";
     element.style.position = "absolute";
@@ -324,9 +324,8 @@ export class HtmlController {
   private createNodesResizeObserver(): ResizeObserver {
     return new ResizeObserver((entries) => {
       entries.forEach((entry) => {
-        const nodeId = this.nodeWrapperElementToIdMap.get(
-          entry.target as HTMLElement,
-        )!;
+        const wrapper = entry.target as HTMLElement;
+        const nodeId = this.nodeWrapperElementToIdMap.get(wrapper)!;
         const node = this.di.graphStore.getNode(nodeId!);
 
         this.updateNodeCoords(nodeId, node.x, node.y);
@@ -370,10 +369,12 @@ export class HtmlController {
       rectFrom.left - rect.left,
       rectFrom.top - rect.top,
     );
+
     const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoords(
       rectTo.left - rect.left,
       rectTo.top - rect.top,
     );
+
     const top = Math.min(yaFrom, yaTo);
     const left = Math.min(xaFrom, xaTo);
     const width = Math.abs(xaTo - xaFrom);
@@ -390,12 +391,6 @@ export class HtmlController {
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
-    connection.svgController.updateSvg(
-      element,
-      width,
-      height,
-      portFrom,
-      portTo,
-    );
+    connection.controller.updateSvg(element, width, height, portFrom, portTo);
   }
 }

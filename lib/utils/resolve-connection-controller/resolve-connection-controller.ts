@@ -13,6 +13,11 @@ export const resolveConnectionController = (
     case "custom":
       controller = options.controller;
       break;
+    case "bezier-arrow":
+      controller = new BezierArrowConnectionController(
+        options?.color ?? "#5c5c5c",
+      );
+      break;
     default:
       break;
   }

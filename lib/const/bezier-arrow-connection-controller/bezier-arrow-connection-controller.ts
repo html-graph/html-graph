@@ -3,7 +3,7 @@ import { ConnectionController } from "../../models/connection/connection-control
 export class BezierArrowConnectionController implements ConnectionController {
   constructor(private readonly color: string) {}
 
-  createSvg() {
+  createSvg(): SVGSVGElement {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
     const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -24,7 +24,7 @@ export class BezierArrowConnectionController implements ConnectionController {
     return svg;
   }
 
-  updateSvg(svg: SVGSVGElement, width: number, height: number) {
+  updateSvg(svg: SVGSVGElement, width: number, height: number): void {
     const line = svg.children[0]!;
     const arrow = svg.children[1]!;
 

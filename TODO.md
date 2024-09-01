@@ -1,5 +1,7 @@
 # TODO
 
+- port center config
+- node center config
 - adaptive arrows
 - node refresh after port add
 - focus on nodes
