@@ -351,9 +351,10 @@ export class HtmlController {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
     const sa = this.di.viewportTransformer.getAbsoluteScale();
+    const [centerX, centerY] = this.di.options.nodes.centerFn(width, height);
 
-    wrapper.style.left = `${x - (sa * width) / 2}px`;
-    wrapper.style.top = `${y - (sa * height) / 2}px`;
+    wrapper.style.left = `${x - sa * centerX}px`;
+    wrapper.style.top = `${y - sa * centerY}px`;
   }
 
   private updateConnectionCoords(connectionId: string): void {
@@ -361,24 +362,38 @@ export class HtmlController {
     const portFrom = this.di.graphStore.getPort(connection.from);
     const portTo = this.di.graphStore.getPort(connection.to);
 
-    const rectFrom = portFrom.getBoundingClientRect();
-    const rectTo = portTo.getBoundingClientRect();
+    const rectFrom = portFrom.element.getBoundingClientRect();
+    const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
 
-    const [xaFrom, yaFrom] = this.di.viewportTransformer.getAbsoluteCoords(
+    const [xAbsFrom, yAbsFrom] = this.di.viewportTransformer.getAbsoluteCoords(
       rectFrom.left - rect.left,
       rectFrom.top - rect.top,
     );
 
-    const [xaTo, yaTo] = this.di.viewportTransformer.getAbsoluteCoords(
+    const [xAbsTo, yAbsTo] = this.di.viewportTransformer.getAbsoluteCoords(
       rectTo.left - rect.left,
       rectTo.top - rect.top,
     );
 
-    const top = Math.min(yaFrom, yaTo);
-    const left = Math.min(xaFrom, xaTo);
-    const width = Math.abs(xaTo - xaFrom);
-    const height = Math.abs(yaTo - yaFrom);
+    const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
+      rectFrom.width,
+      rectFrom.height,
+    );
+
+    const [xCenterTo, yCenterTo] = portTo.centerFn(rectTo.width, rectTo.height);
+
+    const sa = this.di.viewportTransformer.getAbsoluteScale();
+
+    const xAbsCenterFrom = xCenterFrom * sa + xAbsFrom;
+    const yAbsCenterFrom = yCenterFrom * sa + yAbsFrom;
+    const xAbsCenterTo = xCenterTo * sa + xAbsTo;
+    const yAbsCenterTo = yCenterTo * sa + yAbsTo;
+
+    const top = Math.min(yAbsCenterFrom, yAbsCenterTo);
+    const left = Math.min(xAbsCenterFrom, xAbsCenterTo);
+    const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
+    const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
 
     const element = this.connectionIdToElementMap.get(connectionId)!;
 
@@ -391,6 +406,6 @@ export class HtmlController {
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
-    connection.controller.updateSvg(element, width, height, portFrom, portTo);
+    connection.controller.updateSvg(element, width, height);
   }
 }

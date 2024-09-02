@@ -1,11 +1,13 @@
+import { CenterFn } from "../../models/center/center-fn";
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { ConnectionPayload } from "../../models/connection/connection-payload";
 import { NodePayload } from "../../models/store/node-payload";
+import { PortPayload } from "../../models/store/port-payload";
 
 export class GraphStore {
   private nodes: Record<string, NodePayload> = Object.create(null);
 
-  private ports: Record<string, HTMLElement> = Object.create(null);
+  private ports: Record<string, PortPayload> = Object.create(null);
 
   private nodePorts: Record<string, Record<string, HTMLElement>> =
     Object.create(null);
@@ -58,8 +60,13 @@ export class GraphStore {
     });
   }
 
-  addPort(portId: string, element: HTMLElement, nodeId: string): void {
-    this.ports[portId] = element;
+  addPort(
+    portId: string,
+    element: HTMLElement,
+    nodeId: string,
+    centerFn: CenterFn,
+  ): void {
+    this.ports[portId] = { element, centerFn };
     this.cycleConnections[portId] = {};
     this.incommingConnections[portId] = {};
     this.outcommingConnections[portId] = {};
@@ -72,7 +79,7 @@ export class GraphStore {
     }
   }
 
-  getPort(portId: string): HTMLElement {
+  getPort(portId: string): PortPayload {
     return this.ports[portId];
   }
 

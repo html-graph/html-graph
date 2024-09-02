@@ -1,3 +1,4 @@
+import { CenterFn } from "../center/center-fn";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 import { BackgroundOptions } from "./background-options";
 import { ConnectionOptions } from "./connection-options";
@@ -50,6 +51,21 @@ export interface ApiOptions {
      * enables nodes drag behavior
      */
     readonly draggable?: boolean;
+    /**
+     * specifies how to determine center of node
+     * center of nodes specified in addNode method by x and y
+     */
+    readonly centerFn?: CenterFn;
+  };
+  /**
+   * nodes related behavior
+   */
+  readonly ports?: {
+    /**
+     * specifies how to determine center of port
+     * center of port determines points to which connection attaches
+     */
+    readonly centerFn?: CenterFn;
   };
   /**
    * nodes related behavior

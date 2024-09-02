@@ -53,7 +53,12 @@ export class Canvas {
    * marks element as port of node
    */
   markPort(port: ApiPort): Canvas {
-    this.di.controller.markPort(port.id, port.element, port.nodeId);
+    this.di.controller.markPort(
+      port.id,
+      port.element,
+      port.nodeId,
+      port.centerFn,
+    );
 
     return this;
   }

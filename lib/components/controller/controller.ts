@@ -1,3 +1,4 @@
+import { CenterFn } from "../../models/center/center-fn";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionController } from "../../utils/resolve-connection-controller/resolve-connection-controller";
 import { DiContainer } from "../di-container/di-container";
@@ -88,7 +89,12 @@ export class Controller {
 
     if (ports !== undefined) {
       Object.entries(ports).forEach(([portId, element]) => {
-        this.di.controller.markPort(portId, element, nodeId);
+        this.di.controller.markPort(
+          portId,
+          element,
+          nodeId,
+          this.di.options.ports.centerFn,
+        );
       });
     }
   }
@@ -97,6 +103,7 @@ export class Controller {
     portId: string | undefined,
     element: HTMLElement,
     nodeId: string,
+    centerFn: CenterFn | undefined,
   ): void {
     if (portId === undefined) {
       do {
@@ -112,7 +119,12 @@ export class Controller {
       throw new Error("failed to add port with existing id");
     }
 
-    this.di.graphStore.addPort(portId, element, nodeId);
+    this.di.graphStore.addPort(
+      portId,
+      element,
+      nodeId,
+      centerFn ?? this.di.options.ports.centerFn,
+    );
   }
 
   unmarkPort(portId: string): void {

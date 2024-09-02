@@ -11,8 +11,7 @@
 Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility at managing connections.
 Port is an entity of node to which connection can be attached to.
 
-The purpose of this library is to provide api for displaying and interacting with graph structures.
-This library fits for tasks where it is required easy nodes customization and interactiveness.
+This library fits for tasks where easy nodes customization and interactiveness are required.
 
 ## Features:
 

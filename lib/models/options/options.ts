@@ -1,4 +1,5 @@
 import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
+import { CenterFn } from "../center/center-fn";
 import { ConnectionController } from "../connection/connection-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 
@@ -21,6 +22,10 @@ export interface Options {
   };
   readonly nodes: {
     readonly draggable: boolean;
+    readonly centerFn: CenterFn;
+  };
+  readonly ports: {
+    readonly centerFn: CenterFn;
   };
   readonly connections: {
     readonly controller: ConnectionController;

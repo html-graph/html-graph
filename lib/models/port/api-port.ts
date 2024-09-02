@@ -1,5 +1,8 @@
+import { CenterFn } from "../center/center-fn";
+
 export interface ApiPort {
   readonly id?: string;
   readonly element: HTMLElement;
   readonly nodeId: string;
+  readonly centerFn?: CenterFn;
 }
