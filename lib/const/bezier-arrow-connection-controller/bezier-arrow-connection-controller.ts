@@ -28,13 +28,10 @@ export class BezierArrowConnectionController implements ConnectionController {
     const line = svg.children[0]!;
     const arrow = svg.children[1]!;
 
-    line.setAttribute(
-      "d",
-      `M 0 0 C ${width * 0.4} 0, ${width * 0.6} ${height}, ${width - 15} ${height}`,
-    );
-    arrow.setAttribute(
-      "d",
-      `M ${width} ${height} L ${width - 15} ${height - 4} L ${width - 15} ${height + 4}`,
-    );
+    const linePath = `M 0 0 C ${width * 0.4} 0, ${width * 0.6} ${height}, ${width - 15} ${height}`;
+    const arrowPath = `M ${width} ${height} L ${width - 15} ${height - 4} L ${width - 15} ${height + 4}`;
+
+    line.setAttribute("d", linePath);
+    arrow.setAttribute("d", arrowPath);
   }
 }

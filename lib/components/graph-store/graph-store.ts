@@ -50,6 +50,12 @@ export class GraphStore {
   }
 
   removeNode(nodeId: string): void {
+    const connections = this.getAllAdjacentToNodeConnections(nodeId);
+
+    connections.forEach((connectionId) => {
+      this.removeConnection(connectionId);
+    });
+
     delete this.nodes[nodeId];
     const ports = this.nodePorts[nodeId];
 
@@ -58,12 +64,6 @@ export class GraphStore {
     });
 
     delete this.nodePorts[nodeId];
-
-    const connections = this.getAllAdjacentToNodeConnections(nodeId);
-
-    connections.forEach((connectionId) => {
-      this.removeConnection(connectionId);
-    });
   }
 
   addPort(
@@ -94,16 +94,6 @@ export class GraphStore {
   }
 
   removePort(portId: string): void {
-    const node = this.portNodeId[portId];
-
-    delete this.portNodeId[portId];
-
-    const ports = this.nodePorts[node];
-
-    delete ports[portId];
-
-    delete this.ports[portId];
-
     Object.keys(this.cycleConnections[portId]).forEach((connectionId) => {
       this.removeConnection(connectionId);
     });
@@ -118,6 +108,16 @@ export class GraphStore {
       this.removeConnection(connectionId);
     });
     delete this.outcommingConnections[portId];
+
+    const node = this.portNodeId[portId];
+
+    delete this.portNodeId[portId];
+
+    const ports = this.nodePorts[node];
+
+    delete ports[portId];
+
+    delete this.ports[portId];
   }
 
   addConnection(

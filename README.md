@@ -102,5 +102,4 @@ npm install {some package}
 npm install
 
 npm run start
-...
 ```
