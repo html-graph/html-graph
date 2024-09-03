@@ -39,18 +39,28 @@ node1.appendChild(port1);
 node2.appendChild(port2);
 
 canvas
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
-  .markPort({
-    id: "port-1",
-    element: port1,
-    nodeId: "node-1",
-    centerFn: (w, h) => [w, h / 2],
+  .addNode({
+    id: "node-1",
+    element: node1,
+    x: 200,
+    y: 300,
+    ports: {
+      "port-1": {
+        element: port1,
+        centerFn: (w, h) => [w, h / 2],
+      },
+    },
   })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({
-    id: "port-2",
-    element: port2,
-    nodeId: "node-2",
-    centerFn: (_w, h) => [0, h / 2],
+  .addNode({
+    id: "node-2",
+    element: node2,
+    x: 600,
+    y: 500,
+    ports: {
+      "port-2": {
+        element: port2,
+        centerFn: (_w, h) => [0, h / 2],
+      },
+    },
   })
   .addConnection({ from: "port-1", to: "port-2" });

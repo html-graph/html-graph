@@ -33,6 +33,7 @@ export class Canvas {
       node.x,
       node.y,
       node.ports,
+      node.centerFn,
     );
 
     return this;

@@ -25,8 +25,14 @@ export class GraphStore {
   private cycleConnections: Record<string, Record<string, true>> =
     Object.create(null);
 
-  addNode(nodeId: string, element: HTMLElement, x: number, y: number): void {
-    this.nodes[nodeId] = { element, x, y };
+  addNode(
+    nodeId: string,
+    element: HTMLElement,
+    x: number,
+    y: number,
+    centerFn: CenterFn,
+  ): void {
+    this.nodes[nodeId] = { element, x, y, centerFn };
     this.nodePorts[nodeId] = Object.create(null);
   }
 

@@ -1,4 +1,5 @@
 import { CenterFn } from "../../models/center/center-fn";
+import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionController } from "../../utils/resolve-connection-controller/resolve-connection-controller";
 import { DiContainer } from "../di-container/di-container";
@@ -72,7 +73,8 @@ export class Controller {
     element: HTMLElement,
     x: number,
     y: number,
-    ports?: Record<string, HTMLElement>,
+    ports: Record<string, ApiPortsPayload> | undefined,
+    centerFn: CenterFn | undefined,
   ): void {
     if (nodeId === undefined) {
       do {
@@ -84,17 +86,32 @@ export class Controller {
       throw new Error("failed to add node with existing id");
     }
 
-    this.di.graphStore.addNode(nodeId, element, x, y);
+    this.di.graphStore.addNode(
+      nodeId,
+      element,
+      x,
+      y,
+      centerFn ?? this.di.options.nodes.centerFn,
+    );
     this.di.htmlController.attachNode(nodeId);
 
     if (ports !== undefined) {
       Object.entries(ports).forEach(([portId, element]) => {
-        this.di.controller.markPort(
-          portId,
-          element,
-          nodeId,
-          this.di.options.ports.centerFn,
-        );
+        if (element instanceof HTMLElement) {
+          this.di.controller.markPort(
+            portId,
+            element,
+            nodeId,
+            this.di.options.ports.centerFn,
+          );
+        } else {
+          this.di.controller.markPort(
+            portId,
+            element.element,
+            nodeId,
+            element.centerFn ?? this.di.options.ports.centerFn,
+          );
+        }
       });
     }
   }

@@ -351,7 +351,8 @@ export class HtmlController {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
     const sa = this.di.viewportTransformer.getAbsoluteScale();
-    const [centerX, centerY] = this.di.options.nodes.centerFn(width, height);
+    const node = this.di.graphStore.getNode(nodeId)!;
+    const [centerX, centerY] = node.centerFn(width, height);
 
     wrapper.style.left = `${x - sa * centerX}px`;
     wrapper.style.top = `${y - sa * centerY}px`;
