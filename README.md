@@ -1,6 +1,6 @@
 # GraphFlow
 
-## Graph visualization library that allows to customize nodes using HTML
+## Graph visualization library that enables to create graph nodes using HTML
 
 ![CI](https://github.com/dmarov/graphflow/actions/workflows/ci.yml/badge.svg?branch=master)
 
@@ -18,7 +18,6 @@ This library fits for tasks where easy nodes customization and interactiveness a
 - easy customization of nodes using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas with draggable nodes
-- zero dependencies
 - typescript support
 
 ## Getting started:
@@ -28,11 +27,11 @@ npm i @diyguy/graphflow
 ```
 
 ```typescript
-import { GraphFlowCanvas } from "@diyguy/graphflow";
+import { Canvas } from "@diyguy/graphflow";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new GraphFlowCanvas(canvasElement, {
+const canvas = new Canvas(canvasElement, {
   scale: { enabled: true },
   shift: { enabled: true },
   nodes: { draggable: true },

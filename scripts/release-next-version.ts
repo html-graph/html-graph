@@ -52,7 +52,20 @@ class Releaser {
     const minor = parseInt(result[2]);
     const patch = parseInt(result[3]);
 
-    const newVersion = `${major}.${minor}.${patch + 1}`;
+    const args = process.argv.slice(2);
+    const isMajor = args.includes("--major");
+    const isMinor = args.includes("--minor");
+
+    let newVersion = `${major}.${minor}.${patch + 1}`;
+
+    if (isMajor) {
+      newVersion = `${major + 1}.0.0`;
+    }
+
+    if (isMinor) {
+      newVersion = `${major}.${minor + 1}.0`;
+    }
+
     pkg.version = newVersion;
 
     const newContent = JSON.stringify(pkg, null, 2);

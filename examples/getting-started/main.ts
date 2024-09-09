@@ -1,8 +1,8 @@
-import { GraphFlowCanvas } from "../../lib/main";
+import { Canvas } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new GraphFlowCanvas(canvasElement);
+const canvas = new Canvas(canvasElement);
 
 const node1 = document.createElement("div");
 node1.classList.add("node");

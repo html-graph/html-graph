@@ -1,7 +1,7 @@
-export { Canvas as GraphFlowCanvas } from "./canvas/canvas";
-export type { PublicViewportTransformer as GraphFlowPublicApiTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
-export type { ApiNode as GraphFlowNode } from "./models/nodes/api-node";
-export type { ApiPortsPayload as GraphFlowApiPortsPayload } from "./models/nodes/api-ports-payload";
-export type { ApiConnection as GraphFlowConnection } from "./models/connection/api-connection";
-export type { ApiPort as GraphFlowPort } from "./models/port/api-port";
-export type { BackgroundDrawingFn as GraphFlowBackgroundDrawingFn } from "./models/options/background-drawing-fn";
+export { Canvas } from "./canvas/canvas";
+export type { PublicViewportTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
+export type { ApiNode } from "./models/nodes/api-node";
+export type { ApiPortsPayload } from "./models/nodes/api-ports-payload";
+export type { ApiConnection } from "./models/connection/api-connection";
+export type { ApiPort } from "./models/port/api-port";
+export type { BackgroundDrawingFn } from "./models/options/background-drawing-fn";

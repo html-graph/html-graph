@@ -9,14 +9,12 @@
 - examples docs
 - virtual scroll
 - fix arrows shiver
+- fix node content shiver
 - unit tests
 - e2e tests
 - fix grab cursor position?
-- import data
-- export data
 - README
 - usage documentation
-- architecture documentation
 - pipeline release new version
 - layouts
 - check on touch devices
