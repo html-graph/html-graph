@@ -200,6 +200,8 @@ export class HtmlController {
     wrapper.appendChild(node.element);
 
     wrapper.style.position = "absolute";
+    wrapper.style.top = "0";
+    wrapper.style.left = "0";
     wrapper.style.visibility = "hidden";
 
     this.nodesContainer.appendChild(wrapper);
@@ -354,8 +356,7 @@ export class HtmlController {
     const node = this.di.graphStore.getNode(nodeId)!;
     const [centerX, centerY] = node.centerFn(width, height);
 
-    wrapper.style.left = `${x - sa * centerX}px`;
-    wrapper.style.top = `${y - sa * centerY}px`;
+    wrapper.style.transform = `matrix(1, 0, 0, 1, ${x - sa * centerX}, ${y - sa * centerY})`;
   }
 
   private updateConnectionCoords(connectionId: string): void {
