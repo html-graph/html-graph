@@ -1,6 +1,12 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 
 export class BezierArrowConnectionController implements ConnectionController {
+  private readonly curvature = 0.4;
+
+  private readonly arrowLength = 15;
+
+  private readonly arrowWidth = 4;
+
   constructor(private readonly color: string) {}
 
   createSvg(): SVGSVGElement {
@@ -28,8 +34,28 @@ export class BezierArrowConnectionController implements ConnectionController {
     const line = svg.children[0]!;
     const arrow = svg.children[1]!;
 
-    const linePath = `M 0 0 C ${width * 0.4} 0 ${width * 0.6} ${height} ${width - 15} ${height}`;
-    const arrowPath = `M ${width} ${height} L ${width - 15} ${height - 4} L ${width - 15} ${height + 4}`;
+    const lp = [
+      [0, 0],
+      [width * this.curvature, 0],
+      [width * (1 - this.curvature) - this.arrowLength, height],
+      [width - this.arrowLength, height],
+    ];
+
+    const ap = [
+      [width, height],
+      [width - this.arrowLength, height - this.arrowWidth],
+      [width - this.arrowLength, height + this.arrowWidth],
+    ];
+
+    const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
+    const lcurve = `C ${lp[1][0]} ${lp[1][1]} ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]}`;
+
+    const linePath = `${lmove} ${lcurve}`;
+
+    const amove = `M ${ap[0][0]} ${ap[0][1]}`;
+    const lline1 = `L ${ap[1][0]} ${ap[1][1]}`;
+    const lline2 = `L ${ap[2][0]} ${ap[2][1]}`;
+    const arrowPath = `${amove} ${lline1} ${lline2}`;
 
     line.setAttribute("d", linePath);
     arrow.setAttribute("d", arrowPath);

@@ -402,9 +402,7 @@ export class HtmlController {
     const horDir = rectFrom.left <= rectTo.left;
     const vertDir = rectFrom.top <= rectTo.top;
 
-    element.style.transform = `scale(${horDir ? 1 : -1}, ${vertDir ? 1 : -1})`;
-    element.style.top = `${top}px`;
-    element.style.left = `${left}px`;
+    element.style.transform = `matrix(${horDir ? 1 : -1}, 0, 0, ${vertDir ? 1 : -1}, ${left}, ${top})`;
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 

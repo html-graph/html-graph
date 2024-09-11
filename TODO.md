@@ -8,8 +8,6 @@
 - progammatic viewport transformation
 - examples docs
 - virtual scroll
-- fix arrows shiver
-- fix node content shiver
 - unit tests
 - e2e tests
 - fix grab cursor position?
