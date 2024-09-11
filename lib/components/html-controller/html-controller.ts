@@ -239,6 +239,8 @@ export class HtmlController {
 
     element.style.transformOrigin = "50% 50%";
     element.style.position = "absolute";
+    element.style.top = "0";
+    element.style.left = "0";
 
     this.connectionIdToElementMap.set(connectionId, element);
 
@@ -406,6 +408,6 @@ export class HtmlController {
     element.style.width = `${width}px`;
     element.style.height = `${height}px`;
 
-    connection.controller.updateSvg(element, width, height);
+    connection.controller.updateSvg(element, width, height, portFrom, portTo);
   }
 }

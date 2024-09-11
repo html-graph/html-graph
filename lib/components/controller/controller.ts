@@ -78,7 +78,7 @@ export class Controller {
   ): void {
     if (nodeId === undefined) {
       do {
-        nodeId = this.di.nodeIdGenerator.generateNextId();
+        nodeId = this.di.nodeIdGenerator.next();
       } while (this.di.graphStore.hasNode(nodeId));
     }
 
@@ -124,7 +124,7 @@ export class Controller {
   ): void {
     if (portId === undefined) {
       do {
-        portId = this.di.portIdGenerator.generateNextId();
+        portId = this.di.portIdGenerator.next();
       } while (this.di.graphStore.hasPort(portId));
     }
 
@@ -166,7 +166,7 @@ export class Controller {
   ): void {
     if (connectionId === undefined) {
       do {
-        connectionId = this.di.connectionIdGenerator.generateNextId();
+        connectionId = this.di.connectionIdGenerator.next();
       } while (this.di.graphStore.hasPort(connectionId));
     }
     if (!this.di.graphStore.hasPort(fromPortId)) {

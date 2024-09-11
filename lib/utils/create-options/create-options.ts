@@ -27,7 +27,9 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
       centerFn: apiOptions?.ports?.centerFn ?? standardCenterFn,
     },
     connections: {
-      controller: resolveConnectionController(apiOptions?.connections),
+      controller: resolveConnectionController(
+        apiOptions?.connections ?? { type: "bezier-adaptive-arrow" },
+      ),
     },
   };
 };
