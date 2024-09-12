@@ -16,7 +16,7 @@ export default defineConfig({
       entry: resolve(__dirname, "lib/main.ts"),
       formats: ["es", "umd"],
       fileName: "main",
-      name: "GraphFlow",
+      name: "HTMLGraph",
     },
     copyPublicDir: false,
   },

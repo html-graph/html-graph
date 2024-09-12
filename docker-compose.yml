@@ -1,5 +1,5 @@
 services:
-  graphflow:
+  html-graph:
     build:
       dockerfile: ./docker/Dockerfile-dev
       context: .

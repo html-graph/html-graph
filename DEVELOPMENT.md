@@ -10,7 +10,7 @@ HOST_GROUP_ID=1000 # (1000 by default) host group id to fix file permissions iss
 
 2. `docker compose up [--build]` - to run development container [and rebuild]. Press `Ctrl+C` to stop container.
 
-3. `docker compose exec graphflow zsh` - to enter container shell (to install packages and so on)
+3. `docker compose exec html-graph zsh` - to enter container shell (to install packages and so on)
 
 ```
 npm install {some package}

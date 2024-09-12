@@ -9,13 +9,13 @@
   "files": [
     "dist"
   ],
-  "homepape": "https://github.com/dmarov/graphflow#readme",
+  "homepape": "https://github.com/dmarov/html-graph#readme",
   "bugs": {
-    "url": "https://github.com/dmarov/graphflow/issues"
+    "url": "https://github.com/dmarov/html-graph/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dmarov/graphflow.git"
+    "url": "git+https://github.com/dmarov/html-graph.git"
   },
   "license": "BSD-3-Clause",
   "keywords": [
