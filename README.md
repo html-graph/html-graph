@@ -27,7 +27,7 @@ npm i @diyguy/graphflow
 ```
 
 ```typescript
-import { Canvas } from "@diyguy/graphflow";
+import { Canvas } from "@graphflow/core";
 
 const canvasElement = document.getElementById("canvas")!;
 
