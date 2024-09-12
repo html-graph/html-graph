@@ -59,6 +59,7 @@ export class Canvas {
       port.element,
       port.nodeId,
       port.centerFn,
+      port.dir,
     );
 
     return this;

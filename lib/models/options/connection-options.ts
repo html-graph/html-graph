@@ -18,6 +18,10 @@ export type ConnectionOptions =
   | {
       readonly type: "arc";
       readonly color?: string;
+      readonly arowLength?: number;
+      readonly arowWidth?: number;
+      readonly hasSourceArrow?: boolean;
+      readonly hasTargetArrow?: boolean;
     }
   | {
       readonly type: "line";

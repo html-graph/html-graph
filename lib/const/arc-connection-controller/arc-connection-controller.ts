@@ -1,14 +1,16 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { PortPayload } from "../../models/store/port-payload";
 
-export class ArcConnectionController implements ConnectionController {
-  private readonly curvature = 0.4;
-
-  private readonly arrowLength = 15;
-
-  private readonly arrowWidth = 4;
-
-  constructor(private readonly color: string) {}
+export class BezierAdaptiveArcConnectionController
+  implements ConnectionController
+{
+  constructor(
+    private readonly color: string,
+    private readonly arrowLength: number,
+    private readonly arrowWidth: number,
+    private readonly hasSourceArrow: boolean,
+    private readonly hasTargetArrow: boolean,
+  ) {}
 
   createSvg(): SVGSVGElement {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -19,13 +21,26 @@ export class ArcConnectionController implements ConnectionController {
     line.setAttribute("fill", "none");
     svg.appendChild(line);
 
-    const arrow = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "path",
-    );
+    if (this.hasSourceArrow) {
+      const arrow = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
 
-    arrow.setAttribute("fill", this.color);
-    svg.appendChild(arrow);
+      arrow.setAttribute("fill", this.color);
+      svg.appendChild(arrow);
+    }
+
+    if (this.hasTargetArrow) {
+      const arrow = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path",
+      );
+
+      arrow.setAttribute("fill", this.color);
+      svg.appendChild(arrow);
+    }
+
     svg.style.overflow = "visible";
 
     return svg;
@@ -40,69 +55,60 @@ export class ArcConnectionController implements ConnectionController {
   ): void {
     const fromCenter = this.getPortCenter(from);
     const toCenter = this.getPortCenter(to);
+    const m = fromCenter[0] <= toCenter[0] ? 1 : -1;
 
-    if (fromCenter[0] < toCenter[0]) {
-      this.updateDirect(svg, width, height);
-    } else {
-      this.updateAdaptive(svg, width, height);
-    }
-  }
+    const p1 = [m * (this.hasSourceArrow ? this.arrowLength : 0), 0];
+    const p2 = [
+      width - m * (this.hasTargetArrow ? this.arrowLength : 0),
+      height,
+    ];
 
-  private updateDirect(svg: SVGSVGElement, width: number, height: number) {
     const lp = [
-      [0, 0],
-      [width * this.curvature, 0],
-      [width * (1 - this.curvature) - this.arrowLength, height],
-      [width - this.arrowLength, height],
+      [p1[0], p1[1]],
+      [(p2[0] - p1[0]) / 2, (p2[1] - p1[1]) / 2],
+      [p2[0], p2[1]],
+      [width, height],
     ];
 
     const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
-    const lcurve = `C ${lp[1][0]} ${lp[1][1]} ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]}`;
-    const linePath = `${lmove} ${lcurve}`;
+    const lline2 = `L ${lp[1][0]} ${lp[1][1]}`;
+    const lline3 = `L ${lp[2][0]} ${lp[2][1]}`;
+    const linePath = `${lmove} ${lline2} ${lline3}`;
 
     const line = svg.children[0]!;
     line.setAttribute("d", linePath);
 
-    const ap = [
-      [width, height],
-      [width - this.arrowLength, height - this.arrowWidth],
-      [width - this.arrowLength, height + this.arrowWidth],
-    ];
+    if (this.hasSourceArrow) {
+      const ap = [
+        [0, 0],
+        [m * this.arrowLength, this.arrowWidth],
+        [m * this.arrowLength, -this.arrowWidth],
+      ];
 
-    const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-    const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-    const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
-    const arrowPath = `${amove} ${aline1} ${aline2}`;
+      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
+      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
+      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
+      const arrowPath = `${amove} ${aline1} ${aline2}`;
 
-    const arrow = svg.children[1]!;
-    arrow.setAttribute("d", arrowPath);
-  }
+      const arrow = svg.children[1]!;
+      arrow.setAttribute("d", arrowPath);
+    }
 
-  private updateAdaptive(svg: SVGSVGElement, width: number, height: number) {
-    const lmove = `M ${0} ${0}`;
-    const d = height / 2;
-    const r = d / 2;
-    const arc1 = `A ${r} ${r} 0 0 0 ${0} ${d}`;
-    const lline1 = `L ${width + this.arrowLength} ${d}`;
-    const arc2 = `A ${r} ${r} 0 0 1 ${width + this.arrowLength} ${height}`;
-    const linePath = `${lmove} ${arc1} ${lline1} ${arc2}`;
+    if (this.hasTargetArrow) {
+      const ap = [
+        [width, height],
+        [width - m * this.arrowLength, height - this.arrowWidth],
+        [width - m * this.arrowLength, height + this.arrowWidth],
+      ];
 
-    const line = svg.children[0]!;
-    line.setAttribute("d", linePath);
+      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
+      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
+      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
+      const arrowPath = `${amove} ${aline1} ${aline2}`;
 
-    const ap = [
-      [width, height],
-      [width + this.arrowLength, height - this.arrowWidth],
-      [width + this.arrowLength, height + this.arrowWidth],
-    ];
-
-    const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-    const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-    const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
-    const arrowPath = `${amove} ${aline1} ${aline2}`;
-
-    const arrow = svg.children[1]!;
-    arrow.setAttribute("d", arrowPath);
+      const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
+      arrow.setAttribute("d", arrowPath);
+    }
   }
 
   private getPortCenter(port: PortPayload): [number, number] {

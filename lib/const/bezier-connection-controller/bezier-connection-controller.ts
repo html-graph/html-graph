@@ -58,7 +58,6 @@ export class BezierConnectionController implements ConnectionController {
     const shift = this.curvature + this.arrowLength;
 
     const lp = [
-      [0, 0],
       [m * (this.hasSourceArrow ? this.arrowLength : 0), 0],
       [m * shift, 0],
       [width - m * shift, height],
@@ -66,9 +65,8 @@ export class BezierConnectionController implements ConnectionController {
     ];
 
     const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
-    const lline = `L ${lp[1][0]} ${lp[1][1]}`;
-    const lcurve = `C ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]} ${lp[4][0]} ${lp[4][1]}`;
-    const linePath = `${lmove} ${lline} ${lcurve}`;
+    const lcurve = `C ${lp[1][0]} ${lp[1][1]} ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]}`;
+    const linePath = `${lmove} ${lcurve}`;
 
     const line = svg.children[0]!;
     line.setAttribute("d", linePath);

@@ -72,4 +72,4 @@ canvas
 
 Refer to [Examples](examples) for more.
 
-Refer to [Development](DEVELOPMENT.md) for run instructions.
+Refer to [Development](DEVELOPMENT.md) to check out examples locally.

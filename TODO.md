@@ -1,5 +1,6 @@
 # TODO
 
+- connection attach vector
 - adaptive arrows
 - node refresh after port add
 - focus on nodes

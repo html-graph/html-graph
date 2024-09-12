@@ -93,6 +93,7 @@ export class Controller {
       y,
       centerFn ?? this.di.options.nodes.centerFn,
     );
+
     this.di.htmlController.attachNode(nodeId);
 
     if (ports !== undefined) {
@@ -103,6 +104,7 @@ export class Controller {
             element,
             nodeId,
             this.di.options.ports.centerFn,
+            null,
           );
         } else {
           this.di.controller.markPort(
@@ -110,6 +112,7 @@ export class Controller {
             element.element,
             nodeId,
             element.centerFn ?? this.di.options.ports.centerFn,
+            element.dir ?? null,
           );
         }
       });
@@ -121,6 +124,7 @@ export class Controller {
     element: HTMLElement,
     nodeId: string,
     centerFn: CenterFn | undefined,
+    dir: number | null | undefined,
   ): void {
     if (portId === undefined) {
       do {
@@ -141,6 +145,7 @@ export class Controller {
       element,
       nodeId,
       centerFn ?? this.di.options.ports.centerFn,
+      dir ?? null,
     );
   }
 

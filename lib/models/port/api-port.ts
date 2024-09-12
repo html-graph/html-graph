@@ -5,4 +5,5 @@ export interface ApiPort {
   readonly element: HTMLElement;
   readonly nodeId: string;
   readonly centerFn?: CenterFn;
+  readonly dir?: number | null;
 }

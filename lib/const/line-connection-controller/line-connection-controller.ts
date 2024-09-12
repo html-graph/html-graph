@@ -53,12 +53,36 @@ export class LineConnectionController implements ConnectionController {
   ): void {
     const fromCenter = this.getPortCenter(from);
     const toCenter = this.getPortCenter(to);
-    const m = fromCenter[0] <= toCenter[0] ? 1 : -1;
+    const multX = fromCenter[0] <= toCenter[0] ? 1 : -1;
+    const multY = fromCenter[1] <= toCenter[1] ? 1 : -1;
 
-    const lp = [
-      [m * (this.hasSourceArrow ? this.arrowLength : 0), 0],
-      [width - m * (this.hasTargetArrow ? this.arrowLength : 0), height],
+    const fromNorm = [
+      multX * Math.cos(from.dir ?? 0),
+      multY * Math.sin(from.dir ?? 0),
     ];
+
+    const toNorm = [
+      multX * Math.cos(to.dir ?? 0),
+      multY * Math.sin(to.dir ?? 0),
+    ];
+
+    const ps = this.rotate(
+      [this.hasSourceArrow ? this.arrowLength : 0, 0],
+      fromNorm[0],
+      fromNorm[1],
+      0,
+      0,
+    );
+
+    const pe = this.rotate(
+      [width - (this.hasTargetArrow ? this.arrowLength : 0), height],
+      toNorm[0],
+      toNorm[1],
+      width,
+      height,
+    );
+
+    const lp = [ps, pe];
 
     const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
     const lline = `L ${lp[1][0]} ${lp[1][1]}`;
@@ -68,15 +92,17 @@ export class LineConnectionController implements ConnectionController {
     line.setAttribute("d", linePath);
 
     if (this.hasSourceArrow) {
-      const ap = [
+      const ap: [number, number][] = [
         [0, 0],
-        [m * this.arrowLength, this.arrowWidth],
-        [m * this.arrowLength, -this.arrowWidth],
+        [this.arrowLength, this.arrowWidth],
+        [this.arrowLength, -this.arrowWidth],
       ];
 
-      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
+      const tap = ap.map((p) => this.rotate(p, fromNorm[0], fromNorm[1], 0, 0));
+
+      const amove = `M ${tap[0][0]} ${tap[0][1]}`;
+      const aline1 = `L ${tap[1][0]} ${tap[1][1]}`;
+      const aline2 = `L ${tap[2][0]} ${tap[2][1]}`;
       const arrowPath = `${amove} ${aline1} ${aline2}`;
 
       const arrow = svg.children[1]!;
@@ -84,15 +110,19 @@ export class LineConnectionController implements ConnectionController {
     }
 
     if (this.hasTargetArrow) {
-      const ap = [
+      const ap: [number, number][] = [
         [width, height],
-        [width - m * this.arrowLength, height - this.arrowWidth],
-        [width - m * this.arrowLength, height + this.arrowWidth],
+        [width - this.arrowLength, height - this.arrowWidth],
+        [width - this.arrowLength, height + this.arrowWidth],
       ];
 
-      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
+      const tap = ap.map((p) =>
+        this.rotate(p, toNorm[0], toNorm[1], width, height),
+      );
+
+      const amove = `M ${tap[0][0]} ${tap[0][1]}`;
+      const aline1 = `L ${tap[1][0]} ${tap[1][1]}`;
+      const aline2 = `L ${tap[2][0]} ${tap[2][1]}`;
       const arrowPath = `${amove} ${aline1} ${aline2}`;
 
       const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
@@ -106,5 +136,39 @@ export class LineConnectionController implements ConnectionController {
     const center = port.centerFn(width, height);
 
     return [left + center[0], top + center[1]];
+  }
+
+  private rotate(
+    p: [number, number],
+    cos: number,
+    sin: number,
+    cx: number,
+    cy: number,
+  ): [number, number] {
+    /**
+     * translate to center
+     *  1  0  cx
+     *  0  1  cy
+     *  0  0  1
+     *
+     * rotate
+     *  c -s  0
+     *  s  c  0
+     *  0  0  1
+     *
+     * translate back
+     *  1  0  -cx
+     *  0  1  -cy
+     *  0  0  1
+     *
+     *  c -s  -c * cx + s * cy + cx
+     *  s  c  -s * cx - c * cy + cy
+     *  0  0  1
+     */
+
+    return [
+      cos * p[0] - sin * p[1] - cos * cx + sin * cy + cx,
+      sin * p[0] + cos * p[1] - sin * cx - cos * cy + cy,
+    ];
   }
 }
