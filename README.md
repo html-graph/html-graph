@@ -1,4 +1,4 @@
-# GraphFlow
+# HTMLGraph
 
 ## Graph visualization library that enables to create graph nodes using HTML
 
