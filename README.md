@@ -1,6 +1,6 @@
 # HTMLGraph
 
-## Graph visualization library that enables to create graph nodes using HTML
+## Graph visualization library that enables to customize graph nodes using HTML
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
