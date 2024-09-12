@@ -23,7 +23,7 @@ This library fits for tasks where easy nodes customization and interactiveness a
 ## Getting started:
 
 ```
-npm i @diyguy/graphflow
+npm i @graphflow/core
 ```
 
 ```typescript
