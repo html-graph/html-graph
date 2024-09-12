@@ -23,11 +23,11 @@ This library fits for tasks where easy nodes customization and interactiveness a
 ## Getting started:
 
 ```
-npm i @graphflow/core
+npm i @html-graph/core
 ```
 
 ```typescript
-import { Canvas } from "@graphflow/core";
+import { Canvas } from "@html-graph/core";
 
 const canvasElement = document.getElementById("canvas")!;
 
