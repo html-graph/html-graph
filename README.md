@@ -9,13 +9,13 @@
 </a>
 
 Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility at managing connections.
-Port is an entity of node to which connection can be attached to.
+Port is an entity of the node to which connection can be attached to.
 
 This library fits for tasks where easy nodes customization and interactiveness are required.
 
 ## Features:
 
-- easy customization of nodes using HTML
+- easy nodes customization using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas with draggable nodes
 - typescript support
