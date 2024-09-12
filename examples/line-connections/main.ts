@@ -8,9 +8,7 @@ const canvas = new Canvas(canvasElement, {
   nodes: { draggable: true },
   background: { type: "dots" },
   connections: {
-    type: "bezier",
-    hasSourceArrow: true,
-    hasTargetArrow: true,
+    type: "line",
   },
 });
 

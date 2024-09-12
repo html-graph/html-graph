@@ -1,10 +1,9 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { PortPayload } from "../../models/store/port-payload";
 
-export class BezierConnectionController implements ConnectionController {
+export class LineConnectionController implements ConnectionController {
   constructor(
     private readonly color: string,
-    private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     private readonly hasSourceArrow: boolean,
@@ -55,20 +54,15 @@ export class BezierConnectionController implements ConnectionController {
     const fromCenter = this.getPortCenter(from);
     const toCenter = this.getPortCenter(to);
     const m = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const shift = this.curvature + this.arrowLength;
 
     const lp = [
-      [0, 0],
       [m * (this.hasSourceArrow ? this.arrowLength : 0), 0],
-      [m * shift, 0],
-      [width - m * shift, height],
       [width - m * (this.hasTargetArrow ? this.arrowLength : 0), height],
     ];
 
     const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
     const lline = `L ${lp[1][0]} ${lp[1][1]}`;
-    const lcurve = `C ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]} ${lp[4][0]} ${lp[4][1]}`;
-    const linePath = `${lmove} ${lline} ${lcurve}`;
+    const linePath = `${lmove} ${lline}`;
 
     const line = svg.children[0]!;
     line.setAttribute("d", linePath);
