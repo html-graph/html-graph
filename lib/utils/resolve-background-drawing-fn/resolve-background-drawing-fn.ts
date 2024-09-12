@@ -1,4 +1,3 @@
-import { BackgroundDrawingFn } from "../../models/options/background-drawing-fn";
 import { BackgroundOptions } from "../../models/options/background-options";
 import {
   createColorBackgroundDrawingFn,
@@ -9,27 +8,19 @@ import {
 export const resolveBackgroundDrawingFn = (
   options: BackgroundOptions | undefined,
 ) => {
-  let drawingFn: BackgroundDrawingFn = createNoopBackgroundDrawingFn();
-
   switch (options?.type) {
     case "custom":
-      drawingFn = options.drawingFn;
-      break;
-
+      return options.drawingFn;
     case "dots":
-      drawingFn = createDotsBackgroundDrawingFn(
+      return createDotsBackgroundDrawingFn(
         options.dotColor ?? "#d8d8d8",
         options.dotGap ?? 25,
         options.dotRadius ?? 1.5,
         options.color ?? "#ffffff",
       );
-      break;
     case "color":
-      drawingFn = createColorBackgroundDrawingFn(options.color ?? "#ffffff");
-      break;
+      return createColorBackgroundDrawingFn(options.color ?? "#ffffff");
     default:
-      break;
+      return createNoopBackgroundDrawingFn();
   }
-
-  return drawingFn;
 };

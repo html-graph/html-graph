@@ -1,9 +1,7 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { PortPayload } from "../../models/store/port-payload";
 
-export class ArcAdaptiveArrowConnectionController
-  implements ConnectionController
-{
+export class ArcConnectionController implements ConnectionController {
   private readonly curvature = 0.4;
 
   private readonly arrowLength = 15;

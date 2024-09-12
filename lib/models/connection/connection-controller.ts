@@ -7,6 +7,6 @@ export interface ConnectionController {
     width: number,
     height: number,
     from: PortPayload,
-    tp: PortPayload,
+    to: PortPayload,
   ) => void;
 }
