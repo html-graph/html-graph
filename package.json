@@ -9,13 +9,13 @@
   "files": [
     "dist"
   ],
-  "homepape": "https://github.com/dmarov/html-graph#readme",
+  "homepape": "https://github.com/html-graph/html-graph#readme",
   "bugs": {
-    "url": "https://github.com/dmarov/html-graph/issues"
+    "url": "https://github.com/html-graph/html-graph/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dmarov/html-graph.git"
+    "url": "git+https://github.com/html-graph/html-graph.git"
   },
   "license": "BSD-3-Clause",
   "keywords": [
