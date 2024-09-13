@@ -28,7 +28,6 @@ body {
 
 .port {
   position: absolute;
-  top: 50%;
   width: 0;
   height: 0;
 }

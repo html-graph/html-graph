@@ -4,6 +4,7 @@ export type ConnectionOptions =
   | {
       readonly type: "bezier";
       readonly color?: string;
+      readonly width?: number;
       readonly curvature?: number;
       readonly adaptiveCurvature?: number;
       readonly arowLength?: number;
@@ -16,16 +17,9 @@ export type ConnectionOptions =
       readonly controller: ConnectionController;
     }
   | {
-      readonly type: "arc";
-      readonly color?: string;
-      readonly arowLength?: number;
-      readonly arowWidth?: number;
-      readonly hasSourceArrow?: boolean;
-      readonly hasTargetArrow?: boolean;
-    }
-  | {
       readonly type: "line";
       readonly color?: string;
+      readonly width?: number;
       readonly arowLength?: number;
       readonly arowWidth?: number;
       readonly hasSourceArrow?: boolean;

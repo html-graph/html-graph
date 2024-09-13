@@ -73,7 +73,7 @@ export class GraphStore {
     centerFn: CenterFn,
     dir: number | null,
   ): void {
-    this.ports[portId] = { element, centerFn, dir };
+    this.ports[portId] = { element, centerFn, direction: dir };
     this.cycleConnections[portId] = {};
     this.incommingConnections[portId] = {};
     this.outcommingConnections[portId] = {};

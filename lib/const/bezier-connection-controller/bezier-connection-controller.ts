@@ -1,9 +1,11 @@
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { PortPayload } from "../../models/store/port-payload";
+import { ConnectionUtils } from "../../utils/connection-utils/connection-utils";
 
 export class BezierConnectionController implements ConnectionController {
   constructor(
     private readonly color: string,
+    private readonly width: number,
     private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
@@ -16,7 +18,7 @@ export class BezierConnectionController implements ConnectionController {
 
     const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
     line.setAttribute("stroke", this.color);
-    line.setAttribute("stroke-width", "1");
+    line.setAttribute("stroke-width", `${this.width}`);
     line.setAttribute("fill", "none");
     svg.appendChild(line);
 
@@ -52,63 +54,74 @@ export class BezierConnectionController implements ConnectionController {
     from: PortPayload,
     to: PortPayload,
   ): void {
-    const fromCenter = this.getPortCenter(from);
-    const toCenter = this.getPortCenter(to);
-    const m = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const shift = this.curvature + this.arrowLength;
+    const fromCenter = ConnectionUtils.getPortCenter(from);
+    const toCenter = ConnectionUtils.getPortCenter(to);
+    const multX = fromCenter[0] <= toCenter[0] ? 1 : -1;
+    const multY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+    const fromVect = ConnectionUtils.getDirectionVector(
+      from.direction,
+      multX,
+      multY,
+    );
+    const toVect = ConnectionUtils.getDirectionVector(
+      to.direction,
+      multX,
+      multY,
+    );
 
-    const lp = [
-      [m * (this.hasSourceArrow ? this.arrowLength : 0), 0],
-      [m * shift, 0],
-      [width - m * shift, height],
-      [width - m * (this.hasTargetArrow ? this.arrowLength : 0), height],
+    const pointBegin = ConnectionUtils.rotate(
+      [this.hasSourceArrow ? this.arrowLength : 0, 0],
+      fromVect,
+      [0, 0],
+    );
+
+    const pointEnd = ConnectionUtils.rotate(
+      [width - (this.hasTargetArrow ? this.arrowLength : 0), height],
+      toVect,
+      [width, height],
+    );
+
+    const bpb = [
+      pointBegin[0] + fromVect[0] * this.curvature,
+      pointBegin[1] + fromVect[1] * this.curvature,
     ];
 
-    const lmove = `M ${lp[0][0]} ${lp[0][1]}`;
-    const lcurve = `C ${lp[1][0]} ${lp[1][1]} ${lp[2][0]} ${lp[2][1]} ${lp[3][0]} ${lp[3][1]}`;
+    const bpe = [
+      pointEnd[0] - toVect[0] * this.curvature,
+      pointEnd[1] - toVect[1] * this.curvature,
+    ];
+
+    const lmove = `M ${pointBegin[0]} ${pointBegin[1]}`;
+    const lcurve = `C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pointEnd[0]} ${pointEnd[1]}`;
     const linePath = `${lmove} ${lcurve}`;
 
     const line = svg.children[0]!;
     line.setAttribute("d", linePath);
 
     if (this.hasSourceArrow) {
-      const ap = [
-        [0, 0],
-        [m * this.arrowLength, this.arrowWidth],
-        [m * this.arrowLength, -this.arrowWidth],
-      ];
-
-      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
-      const arrowPath = `${amove} ${aline1} ${aline2}`;
+      const arrowPath = ConnectionUtils.getArrowPath(
+        fromVect,
+        0,
+        0,
+        this.arrowLength,
+        this.arrowWidth,
+      );
 
       const arrow = svg.children[1]!;
       arrow.setAttribute("d", arrowPath);
     }
 
     if (this.hasTargetArrow) {
-      const ap = [
-        [width, height],
-        [width - m * this.arrowLength, height - this.arrowWidth],
-        [width - m * this.arrowLength, height + this.arrowWidth],
-      ];
-
-      const amove = `M ${ap[0][0]} ${ap[0][1]}`;
-      const aline1 = `L ${ap[1][0]} ${ap[1][1]}`;
-      const aline2 = `L ${ap[2][0]} ${ap[2][1]}`;
-      const arrowPath = `${amove} ${aline1} ${aline2}`;
+      const arrowPath = ConnectionUtils.getArrowPath(
+        toVect,
+        width,
+        height,
+        -this.arrowLength,
+        this.arrowWidth,
+      );
 
       const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
       arrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private getPortCenter(port: PortPayload): [number, number] {
-    const { top, left, width, height } = port.element.getBoundingClientRect();
-
-    const center = port.centerFn(width, height);
-
-    return [left + center[0], top + center[1]];
   }
 }
