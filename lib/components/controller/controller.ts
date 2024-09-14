@@ -72,8 +72,8 @@ export class Controller {
   addNode(
     nodeId: string | undefined,
     element: HTMLElement,
-    x: number | undefined,
-    y: number | undefined,
+    x: number,
+    y: number,
     ports: Record<string, ApiPortsPayload> | undefined,
     centerFn: CenterFn | undefined,
   ): void {
@@ -90,8 +90,8 @@ export class Controller {
     this.di.graphStore.addNode(
       nodeId,
       element,
-      x ?? 0,
-      y ?? 0,
+      x,
+      y,
       centerFn ?? this.di.options.nodes.centerFn,
     );
 

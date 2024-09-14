@@ -12,7 +12,8 @@ const canvas = new Canvas(canvasElement, {
   },
 });
 
-const total = 100;
+let offset = 0;
+const total = 1000;
 let prevPortId: string | null = null;
 
 for (let i = 0; i < total; i++) {
@@ -27,12 +28,16 @@ for (let i = 0; i < total; i++) {
 
   canvas.addNode({
     element: node,
+    x: offset,
+    y: 300 + Math.random() * 200,
     ports: { [newPortId]: port },
   });
 
   if (prevPortId) {
     canvas.addConnection({ from: prevPortId, to: newPortId });
   }
+
+  offset += 300;
 
   prevPortId = newPortId;
 }
