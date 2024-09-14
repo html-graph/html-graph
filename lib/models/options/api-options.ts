@@ -81,4 +81,18 @@ export interface ApiOptions {
      */
     readonly connectionsOnTop?: boolean;
   };
+
+  /**
+   * virtual scroll related behavior
+   */
+  readonly virtualScroll?: {
+    /**
+     * enables virtual scroll
+     */
+    readonly enabled?: boolean;
+    /**
+     * sets offset at which nodes are considered visible
+     */
+    readonly viewportOffset?: number;
+  };
 }

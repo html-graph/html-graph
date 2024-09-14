@@ -10,6 +10,10 @@ const canvas = new Canvas(canvasElement, {
   layers: {
     connectionsOnTop: true,
   },
+  virtualScroll: {
+    enabled: true,
+    viewportOffset: 200,
+  },
 });
 
 let offset = 0;
