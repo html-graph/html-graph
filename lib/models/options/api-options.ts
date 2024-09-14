@@ -2,6 +2,7 @@ import { CenterFn } from "../center/center-fn";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 import { BackgroundOptions } from "./background-options";
 import { ConnectionOptions } from "./connection-options";
+import { LayoutOptions } from "./layout-options";
 
 export interface ApiOptions {
   /**
@@ -81,4 +82,6 @@ export interface ApiOptions {
      */
     readonly connectionsOnTop?: boolean;
   };
+
+  readonly layout?: LayoutOptions;
 }
