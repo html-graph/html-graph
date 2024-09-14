@@ -28,8 +28,6 @@ for (let i = 0; i < total; i++) {
 
   canvas.addNode({
     element: node,
-    x: offset,
-    y: 300 + Math.random() * 200,
     ports: { [newPortId]: port },
   });
 

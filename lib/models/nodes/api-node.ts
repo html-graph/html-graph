@@ -4,8 +4,8 @@ import { ApiPortsPayload } from "./api-ports-payload";
 export interface ApiNode {
   id?: string;
   element: HTMLElement;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   ports?: Record<string, ApiPortsPayload>;
   centerFn?: CenterFn;
 }
