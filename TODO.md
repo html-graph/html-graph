@@ -1,6 +1,5 @@
 # TODO
 
-- virtual scroll
 - layouts
 - check on touch devices
 - examples docs
