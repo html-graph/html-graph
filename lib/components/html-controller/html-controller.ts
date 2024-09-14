@@ -27,6 +27,8 @@ export class HtmlController {
 
   private grabbedNodeId: string | null = null;
 
+  private currentZIndex = 0;
+
   private readonly onPointerDown = (event: MouseEvent) => {
     if (event.button !== 0) {
       return;
@@ -210,6 +212,7 @@ export class HtmlController {
     wrapper.style.position = "absolute";
     wrapper.style.top = "0";
     wrapper.style.left = "0";
+    wrapper.style.zIndex = `${this.currentZIndex}`;
     wrapper.style.visibility = "hidden";
 
     this.nodesContainer.appendChild(wrapper);
@@ -249,6 +252,7 @@ export class HtmlController {
     element.style.position = "absolute";
     element.style.top = "0";
     element.style.left = "0";
+    element.style.zIndex = `${this.currentZIndex}`;
 
     this.connectionIdToElementMap.set(connectionId, element);
 
@@ -265,7 +269,7 @@ export class HtmlController {
 
   moveNodeOnTop(nodeId: string): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    this.nodesContainer.appendChild(wrapper);
+    wrapper.style.zIndex = `${++this.currentZIndex}`;
   }
 
   updateNodePosition(nodeId: string): void {
@@ -424,8 +428,8 @@ export class HtmlController {
 
     const element = this.connectionIdToElementMap.get(connectionId)!;
 
-    const horDir = rectFrom.left <= rectTo.left;
-    const vertDir = rectFrom.top <= rectTo.top;
+    const horDir = xAbsCenterFrom <= xAbsCenterTo;
+    const vertDir = yAbsCenterFrom <= yAbsCenterTo;
 
     element.style.transform = `matrix(${horDir ? 1 : -1}, 0, 0, ${vertDir ? 1 : -1}, ${left}, ${top})`;
     element.style.width = `${width}px`;

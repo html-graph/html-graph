@@ -1,0 +1,84 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  --color-1: #66666e;
+  --color-2: #daedbd;
+  --color-7: #02020a;
+}
+
+#canvas {
+  flex-grow: 1;
+}
+
+.templates {
+  display: none;
+}
+
+.node {
+  min-width: 15rem;
+  position: relative;
+  border-radius: 0.5rem;
+  background: var(--color-2);
+  color: var(--color-7);
+  border: 1px solid var(--color-1);
+  user-select: none;
+  box-shadow: 0 0 5px var(--color-1);
+}
+
+.node-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.node-content {
+  display: flex;
+  flex-direction: column;
+  vertical-align: stretch;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.node-port {
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.node-port::after {
+  display: block;
+  content: "";
+  position: relative;
+  top: -2.5px;
+  left: -3px;
+  width: 5px;
+  height: 5px;
+  background: #737373;
+  border-radius: 2.5px;
+  border: none;
+}
+
+.node-text {
+  resize: vertical;
+  width: 100%;
+  height: 4rem;
+  box-sizing: border-box;
+}
+
+.node-port-content {
+  display: flex;
+  justify-content: flex-end;
+  background: #fff;
+  border-radius: 0.5rem;
+  margin: 0.25rem 0;
+  padding: 0.25rem;
+  font-size: 12px;
+  line-height: 12px;
+}

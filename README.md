@@ -74,7 +74,7 @@ Refer to [Examples](examples) for more.
 
 ## Run examples locally
 
-Use node version 20
+Use node version >= 20
 
 ```
 npm install
