@@ -1,8 +1,7 @@
 # TODO
 
-- focus on nodes
 - focus event handling
-- programmatic update node coords and element
+- programmatic update node coords
 - update edges element
 - examples docs
 - virtual scroll
