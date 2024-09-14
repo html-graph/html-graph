@@ -72,4 +72,14 @@ canvas
 
 Refer to [Examples](examples) for more.
 
-Refer to [Development](DEVELOPMENT.md) to check out examples locally.
+## Run examples locally
+
+Use node version 20
+
+```
+npm install
+
+npm run start
+```
+
+Open `http://localhost:3100`
