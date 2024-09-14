@@ -1,5 +1,6 @@
 import { DiContainer } from "../components/di-container/di-container";
 import { ApiConnection } from "../models/connection/api-connection";
+import { ApiUpdateConnection } from "../models/connection/api-update-connection";
 import { ApiNode } from "../models/nodes/api-node";
 import { ApiOptions } from "../models/options/api-options";
 import { Options } from "../models/options/options";
@@ -145,8 +146,37 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * applies shift transformation for content
+   */
   moveToNodes(nodeIds: readonly string[]): Canvas {
     this.di.controller.moveToNodes(nodeIds);
+
+    return this;
+  }
+
+  /**
+   * updates node absolute coordinates
+   */
+  updateNodeCoords(nodeId: string, x: number, y: number): Canvas {
+    this.di.controller.updateNodeCoords(nodeId, x, y);
+
+    return this;
+  }
+
+  /**
+   * updates connection
+   */
+  updateConnectionOptions(
+    connectionId: string,
+    options: ApiUpdateConnection,
+  ): Canvas {
+    if (options.controller !== undefined) {
+      this.di.controller.updateConnectionController(
+        connectionId,
+        options.controller,
+      );
+    }
 
     return this;
   }

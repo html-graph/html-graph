@@ -1,4 +1,5 @@
 import { CenterFn } from "../../models/center/center-fn";
+import { ConnectionController } from "../../models/connection/connection-controller";
 import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionController } from "../../utils/resolve-connection-controller/resolve-connection-controller";
@@ -206,6 +207,10 @@ export class Controller {
   }
 
   removeConnection(connectionId: string): void {
+    if (!this.di.graphStore.hasConnection(connectionId)) {
+      throw new Error("failed to remove nonexisting connection");
+    }
+
     this.di.htmlController.detachConnection(connectionId);
     this.di.graphStore.removeConnection(connectionId);
   }
@@ -265,6 +270,28 @@ export class Controller {
     const targetY = avgY - (sa * height) / 2;
 
     this.patchViewportTransform(null, targetX, targetY);
+  }
+
+  updateNodeCoords(nodeId: string, x: number, y: number): void {
+    if (!this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to update coordinates of nonexisting node");
+    }
+
+    this.di.graphStore.updateNodeCoords(nodeId, x, y);
+    this.di.htmlController.updateNodePosition(nodeId);
+  }
+
+  updateConnectionController(
+    connectionId: string,
+    controller: ConnectionController,
+  ): void {
+    if (!this.di.graphStore.hasConnection(connectionId)) {
+      throw new Error("failed to update nonexisting connection controller");
+    }
+
+    this.di.htmlController.detachConnection(connectionId);
+    this.di.graphStore.updateConnectionController(connectionId, controller);
+    this.di.htmlController.attachConnection(connectionId);
   }
 
   clear(): void {

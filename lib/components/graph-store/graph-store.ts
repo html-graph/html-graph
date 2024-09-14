@@ -49,6 +49,13 @@ export class GraphStore {
     this.nodes[nodeId].y = y;
   }
 
+  updateConnectionController(
+    connectionId: string,
+    controller: ConnectionController,
+  ): void {
+    this.connections[connectionId].controller = controller;
+  }
+
   removeNode(nodeId: string): void {
     const connections = this.getAllAdjacentToNodeConnections(nodeId);
 
@@ -143,6 +150,10 @@ export class GraphStore {
 
   getConnection(connectionId: string): ConnectionPayload {
     return this.connections[connectionId];
+  }
+
+  hasConnection(connectionId: string): boolean {
+    return this.connections[connectionId] !== undefined;
   }
 
   removeConnection(connectionId: string): void {
