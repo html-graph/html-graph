@@ -5,3 +5,6 @@ export type { ApiPortsPayload } from "./models/nodes/api-ports-payload";
 export type { ApiConnection } from "./models/connection/api-connection";
 export type { ApiPort } from "./models/port/api-port";
 export type { BackgroundDrawingFn } from "./models/options/background-drawing-fn";
+export type { PortPayload } from "./models/store/port-payload";
+export type { ApiContentScaleTransform } from "./models/transform/api-content-scale-transform";
+export type { ApiContentMoveTransform } from "./models/transform/api-content-move-transform";

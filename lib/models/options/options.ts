@@ -30,4 +30,7 @@ export interface Options {
   readonly connections: {
     readonly controller: ConnectionController;
   };
+  readonly layers: {
+    readonly connectionsOnTop: boolean;
+  };
 }

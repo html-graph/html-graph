@@ -9,27 +9,30 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
 ) => {
   return {
     scale: {
-      enabled: apiOptions?.scale?.enabled ?? false,
-      velocity: apiOptions?.scale?.velocity ?? 1.2,
-      min: apiOptions?.scale?.min ?? null,
-      max: apiOptions?.scale?.max ?? null,
-      trigger: apiOptions?.scale?.trigger ?? "wheel",
+      enabled: apiOptions.scale?.enabled ?? false,
+      velocity: apiOptions.scale?.velocity ?? 1.2,
+      min: apiOptions.scale?.min ?? null,
+      max: apiOptions.scale?.max ?? null,
+      trigger: apiOptions.scale?.trigger ?? "wheel",
     },
     background: {
-      drawingFn: resolveBackgroundDrawingFn(apiOptions?.background),
+      drawingFn: resolveBackgroundDrawingFn(apiOptions.background),
     },
-    shift: { enabled: apiOptions?.shift?.enabled ?? false },
+    shift: { enabled: apiOptions.shift?.enabled ?? false },
     nodes: {
-      draggable: apiOptions?.nodes?.draggable ?? false,
-      centerFn: apiOptions?.nodes?.centerFn ?? standardCenterFn,
+      draggable: apiOptions.nodes?.draggable ?? false,
+      centerFn: apiOptions.nodes?.centerFn ?? standardCenterFn,
     },
     ports: {
-      centerFn: apiOptions?.ports?.centerFn ?? standardCenterFn,
+      centerFn: apiOptions.ports?.centerFn ?? standardCenterFn,
     },
     connections: {
       controller: resolveConnectionController(
-        apiOptions?.connections ?? { type: "bezier" },
+        apiOptions.connections ?? { type: "bezier" },
       ),
+    },
+    layers: {
+      connectionsOnTop: apiOptions.layers?.connectionsOnTop ?? false,
     },
   };
 };

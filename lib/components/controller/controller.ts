@@ -149,6 +149,14 @@ export class Controller {
     );
   }
 
+  updatePortConnections(portId: string): void {
+    if (!this.di.graphStore.hasPort(portId)) {
+      throw new Error("failed to unset nonexisting port");
+    }
+
+    this.di.htmlController.updatePortConnections(portId);
+  }
+
   unmarkPort(portId: string): void {
     if (!this.di.graphStore.hasPort(portId)) {
       throw new Error("failed to unset nonexisting port");
@@ -209,6 +217,54 @@ export class Controller {
 
     this.di.htmlController.detachNode(nodeId);
     this.di.graphStore.removeNode(nodeId);
+  }
+
+  patchViewportTransform(
+    scale: number | null,
+    x: number | null,
+    y: number | null,
+  ): void {
+    this.di.viewportTransformer.patchState(scale, x, y);
+    this.di.htmlController.applyTransform();
+  }
+
+  moveContent(x: number, y: number): void {
+    this.di.viewportTransformer.applyShift(-x, -y);
+    this.di.htmlController.applyTransform();
+  }
+
+  scaleContent(scale: number, cx: number, cy: number): void {
+    this.di.viewportTransformer.applyScale(1 / scale, cx, cy);
+    this.di.htmlController.applyTransform();
+  }
+
+  moveToNodes(nodeIds: readonly string[]): void {
+    if (nodeIds.length === 0) {
+      return;
+    }
+
+    const nodes = nodeIds
+      .map((nodeId) => this.di.graphStore.getNode(nodeId))
+      .filter((node) => node !== undefined);
+
+    if (nodes.length < nodeIds.length) {
+      throw new Error("failed to move to nonexisting node");
+    }
+
+    const [x, y] = nodes.reduce(
+      (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
+      [0, 0],
+    );
+
+    const avgX = x / nodes.length;
+    const avgY = y / nodes.length;
+    const [width, height] = this.di.htmlController.getViewportDimenstions();
+    const sa = this.di.viewportTransformer.getAbsoluteScale();
+
+    const targetX = avgX - (sa * width) / 2;
+    const targetY = avgY - (sa * height) / 2;
+
+    this.patchViewportTransform(null, targetX, targetY);
   }
 
   clear(): void {

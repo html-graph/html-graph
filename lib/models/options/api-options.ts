@@ -58,7 +58,7 @@ export interface ApiOptions {
     readonly centerFn?: CenterFn;
   };
   /**
-   * nodes related behavior
+   * ports related behavior
    */
   readonly ports?: {
     /**
@@ -68,7 +68,17 @@ export interface ApiOptions {
     readonly centerFn?: CenterFn;
   };
   /**
-   * nodes related behavior
+   *connections related behavior
    */
   readonly connections?: ConnectionOptions;
+
+  /**
+   * layers related behavior
+   */
+  readonly layers?: {
+    /**
+     * enables connections to be drawn on top of nodes
+     */
+    readonly connectionsOnTop?: boolean;
+  };
 }

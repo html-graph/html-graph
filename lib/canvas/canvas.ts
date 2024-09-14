@@ -4,6 +4,9 @@ import { ApiNode } from "../models/nodes/api-node";
 import { ApiOptions } from "../models/options/api-options";
 import { Options } from "../models/options/options";
 import { ApiPort } from "../models/port/api-port";
+import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
+import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
+import { ApiTransform } from "../models/transform/api-transform";
 import { createOptions } from "../utils/create-options/create-options";
 
 /**
@@ -66,6 +69,15 @@ export class Canvas {
   }
 
   /**
+   * updates connections attached to port
+   */
+  updatePortConnections(portId: string): Canvas {
+    this.di.controller.updatePortConnections(portId);
+
+    return this;
+  }
+
+  /**
    * ummarks element as port of node
    * all the connections adjacent to port get removed
    */
@@ -94,6 +106,47 @@ export class Canvas {
    */
   removeConnection(connectionId: string): Canvas {
     this.di.controller.removeConnection(connectionId);
+
+    return this;
+  }
+
+  /**
+   * applies transformation for viewport
+   */
+  setViewportTransform(apiTransform: ApiTransform): Canvas {
+    this.di.controller.patchViewportTransform(
+      apiTransform.scale ?? null,
+      apiTransform.x ?? null,
+      apiTransform.y ?? null,
+    );
+
+    return this;
+  }
+
+  /**
+   * applies move transformation for content
+   */
+  moveContent(apiTransform: ApiContentMoveTransform): Canvas {
+    this.di.controller.moveContent(apiTransform.x ?? 0, apiTransform.y ?? 0);
+
+    return this;
+  }
+
+  /**
+   * applies scale transformation for content
+   */
+  scaleContent(apiTransform: ApiContentScaleTransform): Canvas {
+    this.di.controller.scaleContent(
+      apiTransform.scale ?? 1,
+      apiTransform.x ?? 0,
+      apiTransform.y ?? 0,
+    );
+
+    return this;
+  }
+
+  moveToNodes(nodeIds: readonly string[]): Canvas {
+    this.di.controller.moveToNodes(nodeIds);
 
     return this;
   }

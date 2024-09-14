@@ -1,4 +1,5 @@
 import { GraphEventType } from "../../models/events/graph-event-type";
+import { Point } from "../../models/point/point";
 import { DiContainer } from "../di-container/di-container";
 
 export class HtmlController {
@@ -132,8 +133,15 @@ export class HtmlController {
     this.canvasCtx = context;
 
     this.host.appendChild(this.canvas);
-    this.host.appendChild(this.connectionsContainer);
-    this.host.appendChild(this.nodesContainer);
+
+    if (this.di.options.layers.connectionsOnTop) {
+      this.host.appendChild(this.nodesContainer);
+      this.host.appendChild(this.connectionsContainer);
+    } else {
+      this.host.appendChild(this.connectionsContainer);
+      this.host.appendChild(this.nodesContainer);
+    }
+
     this.canvasWrapper.appendChild(this.host);
 
     this.hostResizeObserver = this.createHostResizeObserver();
@@ -270,6 +278,21 @@ export class HtmlController {
     connections.forEach((connection) => {
       this.updateConnectionCoords(connection);
     });
+  }
+
+  updatePortConnections(portId: string): void {
+    const connections =
+      this.di.graphStore.getAllAdjacentToPortConnections(portId);
+
+    connections.forEach((connection) => {
+      this.updateConnectionCoords(connection);
+    });
+  }
+
+  getViewportDimenstions(): Point {
+    const rect = this.host.getBoundingClientRect();
+
+    return [rect.width, rect.height];
   }
 
   private createHost(): HTMLDivElement {
