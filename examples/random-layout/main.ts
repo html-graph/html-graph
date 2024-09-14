@@ -10,6 +10,9 @@ const canvas = new Canvas(canvasElement, {
   layers: {
     connectionsOnTop: true,
   },
+  layout: {
+    type: "random",
+  },
 });
 
 let offset = 0;
