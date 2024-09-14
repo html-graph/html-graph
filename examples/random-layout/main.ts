@@ -12,8 +12,7 @@ const canvas = new Canvas(canvasElement, {
   },
 });
 
-let offset = 0;
-const total = 1000;
+const total = 100;
 let prevPortId: string | null = null;
 
 for (let i = 0; i < total; i++) {
@@ -34,8 +33,6 @@ for (let i = 0; i < total; i++) {
   if (prevPortId) {
     canvas.addConnection({ from: prevPortId, to: newPortId });
   }
-
-  offset += 300;
 
   prevPortId = newPortId;
 }
