@@ -1,9 +1,6 @@
 # TODO
 
-- demo example
+- support for touch devices
 - virtual scroll
-- layouts
-- check on touch devices
-- examples docs
 - unit tests
 - e2e tests
