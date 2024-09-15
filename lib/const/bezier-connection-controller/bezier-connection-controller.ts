@@ -70,13 +70,13 @@ export class BezierConnectionController implements ConnectionController {
     );
 
     const pointBegin = ConnectionUtils.rotate(
-      [this.arrowLength, 0],
+      [this.hasSourceArrow ? this.arrowLength : 0, 0],
       fromVect,
       [0, 0],
     );
 
     const pointEnd = ConnectionUtils.rotate(
-      [width - this.arrowLength, height],
+      [width - (this.hasTargetArrow ? this.arrowLength : 0), height],
       toVect,
       [width, height],
     );
