@@ -109,8 +109,6 @@ export class BezierConnectionController implements ConnectionController {
 
       const arrow = svg.children[1]!;
       arrow.setAttribute("d", arrowPath);
-    } else {
-      //
     }
 
     if (this.hasTargetArrow) {
@@ -124,8 +122,6 @@ export class BezierConnectionController implements ConnectionController {
 
       const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
       arrow.setAttribute("d", arrowPath);
-    } else {
-      //
     }
   }
 }
