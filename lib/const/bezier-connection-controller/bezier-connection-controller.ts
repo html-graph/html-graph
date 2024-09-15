@@ -70,13 +70,13 @@ export class BezierConnectionController implements ConnectionController {
     );
 
     const pointBegin = ConnectionUtils.rotate(
-      [this.hasSourceArrow ? this.arrowLength : 0, 0],
+      [this.arrowLength, 0],
       fromVect,
       [0, 0],
     );
 
     const pointEnd = ConnectionUtils.rotate(
-      [width - (this.hasTargetArrow ? this.arrowLength : 0), height],
+      [width - this.arrowLength, height],
       toVect,
       [width, height],
     );
@@ -109,6 +109,8 @@ export class BezierConnectionController implements ConnectionController {
 
       const arrow = svg.children[1]!;
       arrow.setAttribute("d", arrowPath);
+    } else {
+      //
     }
 
     if (this.hasTargetArrow) {
@@ -122,6 +124,8 @@ export class BezierConnectionController implements ConnectionController {
 
       const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
       arrow.setAttribute("d", arrowPath);
+    } else {
+      //
     }
   }
 }
