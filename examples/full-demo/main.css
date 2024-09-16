@@ -86,7 +86,6 @@ body {
 
 .node-port {
   position: absolute;
-  top: 50%;
   width: 0;
   height: 0;
 }
@@ -104,12 +103,11 @@ body {
   border: none;
 }
 
-.node-port-input::after {
-  top: -2.5px;
-  left: -3px;
+.node-port-input {
+  top: 50%;
 }
 
-.node-port-output::after {
-  top: -2.5px;
-  left: 10px;
+.node-port-output {
+  top: 50%;
+  right: -9px;
 }

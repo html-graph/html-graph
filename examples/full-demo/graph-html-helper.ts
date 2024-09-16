@@ -95,7 +95,7 @@ export class GraphHtmlHelper {
 
       body.appendChild(portContent);
       portElements[key] = {
-        element: portContent,
+        element: port,
         centerFn: (w, h) => [w, h / 2],
         dir: 0,
       };
