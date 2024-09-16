@@ -4,7 +4,7 @@
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
-<a href="/examples/full-demo/main.ts">
+<a href="https://html-graph.github.io/">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
 
