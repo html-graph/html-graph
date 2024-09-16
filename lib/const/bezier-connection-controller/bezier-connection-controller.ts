@@ -70,13 +70,13 @@ export class BezierConnectionController implements ConnectionController {
     );
 
     const pointBegin = ConnectionUtils.rotate(
-      [this.hasSourceArrow ? this.arrowLength : 0, 0],
+      [this.arrowLength, 0],
       fromVect,
       [0, 0],
     );
 
     const pointEnd = ConnectionUtils.rotate(
-      [width - (this.hasTargetArrow ? this.arrowLength : 0), height],
+      [width - this.arrowLength, height],
       toVect,
       [width, height],
     );
@@ -93,7 +93,9 @@ export class BezierConnectionController implements ConnectionController {
 
     const lmove = `M ${pointBegin[0]} ${pointBegin[1]}`;
     const lcurve = `C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pointEnd[0]} ${pointEnd[1]}`;
-    const linePath = `${lmove} ${lcurve}`;
+    const preLine = `M ${0} ${0} L ${pointBegin[0]} ${pointBegin[1]} `;
+    const postLine = ` M ${pointEnd[0]} ${pointEnd[1]} L ${width} ${height}`;
+    const linePath = `${this.hasSourceArrow ? "" : preLine}${lmove} ${lcurve}${this.hasTargetArrow ? "" : postLine}`;
 
     const line = svg.children[0]!;
     line.setAttribute("d", linePath);
