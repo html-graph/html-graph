@@ -109,7 +109,7 @@ export class Controller {
             element.element,
             nodeId,
             element.centerFn ?? this.di.options.ports.centerFn,
-            element.dir ?? null,
+            element.direction ?? null,
           );
         }
       });

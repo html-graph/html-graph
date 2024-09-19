@@ -5,5 +5,5 @@ export type ApiPortsPayload =
   | {
       readonly element: HTMLElement;
       readonly centerFn?: CenterFn;
-      readonly dir?: number | null;
+      readonly direction?: number | null;
     };
