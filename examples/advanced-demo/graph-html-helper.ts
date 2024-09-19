@@ -15,7 +15,7 @@ export class GraphHtmlHelper {
     if (frontPortId !== null) {
       const inputPort = this.createInputPort();
       node.appendChild(inputPort);
-      portElements[frontPortId] = { element: inputPort, direction: 0 };
+      portElements[frontPortId] = inputPort;
     }
 
     const content = this.createContentElement();
@@ -94,11 +94,7 @@ export class GraphHtmlHelper {
       portContent.appendChild(port);
 
       body.appendChild(portContent);
-      portElements[key] = {
-        element: port,
-        centerFn: (w, h) => [w, h / 2],
-        direction: 0,
-      };
+      portElements[key] = port;
     });
 
     return [body, portElements];
