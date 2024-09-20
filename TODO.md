@@ -1,7 +1,7 @@
 # TODO
 
-- make vertical/horizontal arrows
 - add connection labels
+- make vertical/horizontal arrows
 - support for touch devices
 - virtual scroll
 - unit tests

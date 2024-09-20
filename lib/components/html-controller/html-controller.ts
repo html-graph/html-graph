@@ -1,4 +1,6 @@
 import { GraphEventType } from "../../models/events/graph-event-type";
+import { LayersController } from "../../models/layers/layers-controller";
+import { LayersMode } from "../../models/options/layers-mode";
 import { Point } from "../../models/point/point";
 import { DiContainer } from "../di-container/di-container";
 
@@ -7,7 +9,7 @@ export class HtmlController {
 
   private readonly nodesContainer: HTMLElement;
 
-  private readonly connectionsContainer: HTMLElement;
+  private connectionsContainer: HTMLElement;
 
   private readonly canvas: HTMLCanvasElement;
 
@@ -112,6 +114,59 @@ export class HtmlController {
     });
   };
 
+  private readonly layers: { [key in LayersMode]: LayersController } = {
+    "connections-on-top": {
+      create: () => {
+        this.host.appendChild(this.nodesContainer);
+        this.host.appendChild(this.connectionsContainer);
+      },
+      update: (sv: number, xv: number, yv: number) => {
+        this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+        this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+      },
+      moveOnTop: (nodeId: string) => {
+        this.currentZIndex += 1;
+        const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+        wrapper.style.zIndex = `${this.currentZIndex}`;
+      },
+    },
+    "connections-follow-node": {
+      create: () => {
+        this.host.appendChild(this.nodesContainer);
+        this.connectionsContainer = this.nodesContainer;
+      },
+      update: (sv: number, xv: number, yv: number) => {
+        this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+      },
+      moveOnTop: (nodeId: string) => {
+        const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+        this.currentZIndex += 2;
+        wrapper.style.zIndex = `${this.currentZIndex}`;
+        const connections =
+          this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+        connections.forEach((connection) => {
+          this.connectionIdToElementMap.get(connection)!.style.zIndex =
+            `${this.currentZIndex - 1}`;
+        });
+      },
+    },
+    "nodes-on-top": {
+      create: () => {
+        this.host.appendChild(this.connectionsContainer);
+        this.host.appendChild(this.nodesContainer);
+      },
+      update: (sv: number, xv: number, yv: number) => {
+        this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+        this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+      },
+      moveOnTop: (nodeId: string) => {
+        this.currentZIndex += 1;
+        const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+        wrapper.style.zIndex = `${this.currentZIndex}`;
+      },
+    },
+  };
+
   constructor(
     private readonly canvasWrapper: HTMLElement,
     private readonly di: DiContainer,
@@ -138,19 +193,7 @@ export class HtmlController {
 
     const mode = this.di.options.layers.mode;
 
-    switch (mode) {
-      case "connections-on-top":
-        this.host.appendChild(this.nodesContainer);
-        this.host.appendChild(this.connectionsContainer);
-        break;
-      case "connections-follow-node":
-        this.host.appendChild(this.nodesContainer);
-        this.connectionsContainer = this.nodesContainer;
-        break;
-      default:
-        this.host.appendChild(this.connectionsContainer);
-        this.host.appendChild(this.nodesContainer);
-    }
+    this.layers[mode].create();
 
     this.canvasWrapper.appendChild(this.host);
 
@@ -207,8 +250,7 @@ export class HtmlController {
     const [xv, yv] = this.di.viewportTransformer.getViewportCoords(0, 0);
     const sv = this.di.viewportTransformer.getViewportScale();
 
-    this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
-    this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+    this.layers[this.di.options.layers.mode].update(sv, xv, yv);
   }
 
   attachNode(nodeId: string): void {
@@ -278,21 +320,7 @@ export class HtmlController {
   }
 
   moveNodeOnTop(nodeId: string): void {
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-
-    if (this.di.options.layers.mode === "connections-follow-node") {
-      this.currentZIndex += 2;
-      wrapper.style.zIndex = `${this.currentZIndex}`;
-      const connections =
-        this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
-      connections.forEach((connection) => {
-        this.connectionIdToElementMap.get(connection)!.style.zIndex =
-          `${this.currentZIndex - 1}`;
-      });
-    } else {
-      this.currentZIndex += 1;
-      wrapper.style.zIndex = `${this.currentZIndex}`;
-    }
+    this.layers[this.di.options.layers.mode].moveOnTop(nodeId);
   }
 
   updateNodePosition(nodeId: string): void {

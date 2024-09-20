@@ -64,7 +64,7 @@ export interface ApiOptions {
   readonly ports?: {
     /**
      * specifies how to determine center of port
-     * center of port determines points to which connection attaches
+     * center of port determines point to which connection attaches
      */
     readonly centerFn?: CenterFn;
   };
@@ -78,7 +78,7 @@ export interface ApiOptions {
    */
   readonly layers?: {
     /**
-     * enables connections to be drawn on top of nodes
+     * sets layers order
      */
     readonly mode?: LayersMode;
   };
