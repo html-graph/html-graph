@@ -8,7 +8,7 @@ const canvas = new Canvas(canvasElement, {
   nodes: { draggable: true },
   background: { type: "dots" },
   layers: {
-    connectionsOnTop: true,
+    mode: "connections-on-top",
   },
 });
 

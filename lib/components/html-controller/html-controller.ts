@@ -136,7 +136,7 @@ export class HtmlController {
 
     this.host.appendChild(this.canvas);
 
-    if (this.di.options.layers.connectionsOnTop) {
+    if (this.di.options.layers.mode === "connections-on-top") {
       this.host.appendChild(this.nodesContainer);
       this.host.appendChild(this.connectionsContainer);
     } else {

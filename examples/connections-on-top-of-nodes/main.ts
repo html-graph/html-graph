@@ -8,7 +8,7 @@ const canvas = new Canvas(canvasElement, {
   scale: { enabled: true },
   shift: { enabled: true },
   layers: {
-    connectionsOnTop: true,
+    mode: "connections-on-top",
   },
 });
 

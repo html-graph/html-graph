@@ -31,6 +31,6 @@ export interface Options {
     readonly controller: ConnectionController;
   };
   readonly layers: {
-    readonly connectionsOnTop: boolean;
+    readonly mode: "connections-on-top" | "nodes-on-top";
   };
 }

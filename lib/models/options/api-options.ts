@@ -79,6 +79,6 @@ export interface ApiOptions {
     /**
      * enables connections to be drawn on top of nodes
      */
-    readonly connectionsOnTop?: boolean;
+    readonly mode?: "connections-on-top" | "nodes-on-top";
   };
 }
