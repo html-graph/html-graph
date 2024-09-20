@@ -136,12 +136,20 @@ export class HtmlController {
 
     this.host.appendChild(this.canvas);
 
-    if (this.di.options.layers.mode === "connections-on-top") {
-      this.host.appendChild(this.nodesContainer);
-      this.host.appendChild(this.connectionsContainer);
-    } else {
-      this.host.appendChild(this.connectionsContainer);
-      this.host.appendChild(this.nodesContainer);
+    const mode = this.di.options.layers.mode;
+
+    switch (mode) {
+      case "connections-on-top":
+        this.host.appendChild(this.nodesContainer);
+        this.host.appendChild(this.connectionsContainer);
+        break;
+      case "connections-follow-node":
+        this.host.appendChild(this.nodesContainer);
+        this.connectionsContainer = this.nodesContainer;
+        break;
+      default:
+        this.host.appendChild(this.connectionsContainer);
+        this.host.appendChild(this.nodesContainer);
     }
 
     this.canvasWrapper.appendChild(this.host);
@@ -213,6 +221,7 @@ export class HtmlController {
     wrapper.style.top = "0";
     wrapper.style.left = "0";
     wrapper.style.zIndex = `${this.currentZIndex}`;
+    this.currentZIndex += 1;
     wrapper.style.visibility = "hidden";
 
     this.nodesContainer.appendChild(wrapper);
@@ -253,6 +262,7 @@ export class HtmlController {
     element.style.top = "0";
     element.style.left = "0";
     element.style.zIndex = `${this.currentZIndex}`;
+    this.currentZIndex += 1;
 
     this.connectionIdToElementMap.set(connectionId, element);
 
@@ -269,7 +279,20 @@ export class HtmlController {
 
   moveNodeOnTop(nodeId: string): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    wrapper.style.zIndex = `${++this.currentZIndex}`;
+
+    if (this.di.options.layers.mode === "connections-follow-node") {
+      this.currentZIndex += 2;
+      wrapper.style.zIndex = `${this.currentZIndex}`;
+      const connections =
+        this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+      connections.forEach((connection) => {
+        this.connectionIdToElementMap.get(connection)!.style.zIndex =
+          `${this.currentZIndex - 1}`;
+      });
+    } else {
+      this.currentZIndex += 1;
+      wrapper.style.zIndex = `${this.currentZIndex}`;
+    }
   }
 
   updateNodePosition(nodeId: string): void {

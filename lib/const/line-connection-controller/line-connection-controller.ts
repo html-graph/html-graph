@@ -14,6 +14,7 @@ export class LineConnectionController implements ConnectionController {
 
   createSvg(): SVGSVGElement {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.style.pointerEvents = "none";
 
     const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
     line.setAttribute("stroke", this.color);

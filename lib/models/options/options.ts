@@ -2,6 +2,7 @@ import { PublicViewportTransformer } from "../../components/public-viewport-tran
 import { CenterFn } from "../center/center-fn";
 import { ConnectionController } from "../connection/connection-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
+import { LayersMode } from "./layers-mode";
 
 export interface Options {
   readonly scale: {
@@ -31,6 +32,6 @@ export interface Options {
     readonly controller: ConnectionController;
   };
   readonly layers: {
-    readonly mode: "connections-on-top" | "nodes-on-top";
+    readonly mode: LayersMode;
   };
 }

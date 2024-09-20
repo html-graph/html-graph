@@ -2,6 +2,7 @@ import { CenterFn } from "../center/center-fn";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
 import { BackgroundOptions } from "./background-options";
 import { ConnectionOptions } from "./connection-options";
+import { LayersMode } from "./layers-mode";
 
 export interface ApiOptions {
   /**
@@ -79,6 +80,6 @@ export interface ApiOptions {
     /**
      * enables connections to be drawn on top of nodes
      */
-    readonly mode?: "connections-on-top" | "nodes-on-top";
+    readonly mode?: LayersMode;
   };
 }

@@ -12,6 +12,9 @@ const canvas = new Canvas(canvasElement, {
     color: "var(--color-1)",
   },
   background: { type: "dots" },
+  layers: {
+    mode: "connections-follow-node",
+  },
 });
 
 const helper = new GraphHtmlHelper();
