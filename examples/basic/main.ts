@@ -1,4 +1,4 @@
-import { Canvas } from "../../lib/main";
+import { ApiPortsPayload, Canvas } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -13,7 +13,7 @@ function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, HTMLElement>] {
+): [HTMLElement, Record<string, ApiPortsPayload>] {
   const node = document.createElement("div");
   node.classList.add("node");
 
