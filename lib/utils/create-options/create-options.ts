@@ -32,7 +32,7 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
       ),
     },
     layers: {
-      mode: apiOptions.layers?.mode ?? "nodes-on-top",
+      mode: apiOptions.layers?.mode ?? "connections-follow-node",
     },
   };
 };

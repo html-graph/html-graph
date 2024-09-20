@@ -7,7 +7,7 @@ const canvas = new Canvas(canvasElement, {
   shift: { enabled: true },
   nodes: { draggable: true },
   background: { type: "dots" },
-  layers: { mode: "connections-follow-node" },
+  layers: { mode: "nodes-on-top" },
 });
 
 function createNode(
