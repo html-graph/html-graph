@@ -2,7 +2,6 @@ import { GraphEventType } from "../../models/events/graph-event-type";
 import { LayersController } from "../../models/layers/layers-controller";
 import { LayersMode } from "../../models/options/layers-mode";
 import { Point } from "../../models/point/point";
-import { ConnectionUtils } from "../../utils/connection-utils/connection-utils";
 import { DiContainer } from "../di-container/di-container";
 
 export class HtmlController {
@@ -445,13 +444,33 @@ export class HtmlController {
     const portFrom = this.di.graphStore.getPort(connection.from);
     const portTo = this.di.graphStore.getPort(connection.to);
 
-    const portFromCenter = ConnectionUtils.getPortCenter(portFrom);
-    const [xAbsCenterFrom, yAbsCenterFrom] =
-      this.di.viewportTransformer.getAbsoluteCoords(...portFromCenter);
+    const rectFrom = portFrom.element.getBoundingClientRect();
+    const rectTo = portTo.element.getBoundingClientRect();
+    const rect = this.host.getBoundingClientRect();
 
-    const portToCenter = ConnectionUtils.getPortCenter(portTo);
-    const [xAbsCenterTo, yAbsCenterTo] =
-      this.di.viewportTransformer.getAbsoluteCoords(...portToCenter);
+    const [xAbsFrom, yAbsFrom] = this.di.viewportTransformer.getAbsoluteCoords(
+      rectFrom.left - rect.left,
+      rectFrom.top - rect.top,
+    );
+
+    const [xAbsTo, yAbsTo] = this.di.viewportTransformer.getAbsoluteCoords(
+      rectTo.left - rect.left,
+      rectTo.top - rect.top,
+    );
+
+    const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
+      rectFrom.width,
+      rectFrom.height,
+    );
+
+    const [xCenterTo, yCenterTo] = portTo.centerFn(rectTo.width, rectTo.height);
+
+    const sa = this.di.viewportTransformer.getAbsoluteScale();
+
+    const xAbsCenterFrom = xCenterFrom * sa + xAbsFrom;
+    const yAbsCenterFrom = yCenterFrom * sa + yAbsFrom;
+    const xAbsCenterTo = xCenterTo * sa + xAbsTo;
+    const yAbsCenterTo = yCenterTo * sa + yAbsTo;
 
     const top = Math.min(yAbsCenterFrom, yAbsCenterTo);
     const left = Math.min(xAbsCenterFrom, xAbsCenterTo);
