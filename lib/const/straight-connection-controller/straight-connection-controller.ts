@@ -18,6 +18,7 @@ export class StraightConnectionController implements ConnectionController {
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
+    private readonly minPortOffset: number,
     private readonly hasSourceArrow: boolean,
     private readonly hasTargetArrow: boolean,
   ) {
@@ -88,13 +89,13 @@ export class StraightConnectionController implements ConnectionController {
     );
 
     const pointBegin = ConnectionUtils.rotate(
-      [this.arrowLength, 0],
+      [this.arrowLength + this.minPortOffset, 0],
       fromVect,
       [0, 0],
     );
 
     const pointEnd = ConnectionUtils.rotate(
-      [width - this.arrowLength, height],
+      [width - this.arrowLength - this.minPortOffset, height],
       toVect,
       [width, height],
     );
@@ -108,7 +109,21 @@ export class StraightConnectionController implements ConnectionController {
 
     const preLine = `M ${0} ${0} L ${pointBegin[0]} ${pointBegin[1]} `;
     const postLine = ` M ${pointEnd[0]} ${pointEnd[1]} L ${width} ${height}`;
-    const linePath = `${this.sourceArrow ? "" : preLine}${line}${this.targetArrow ? "" : postLine}`;
+    const preOffsetLine = ConnectionUtils.getArrowOffsetPath(
+      fromVect,
+      0,
+      0,
+      this.arrowLength,
+      this.minPortOffset,
+    );
+    const postOffsetLine = ConnectionUtils.getArrowOffsetPath(
+      toVect,
+      width,
+      height,
+      -this.arrowLength,
+      -this.minPortOffset,
+    );
+    const linePath = `${this.sourceArrow ? preOffsetLine : preLine}${line}${this.targetArrow ? postOffsetLine : postLine}`;
 
     this.line.setAttribute("d", linePath);
 

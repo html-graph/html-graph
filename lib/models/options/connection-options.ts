@@ -21,6 +21,7 @@ export type ConnectionOptions =
       readonly width?: number;
       readonly arowLength?: number;
       readonly arowWidth?: number;
+      readonly minPortOffset?: number;
       readonly hasSourceArrow?: boolean;
       readonly hasTargetArrow?: boolean;
     };

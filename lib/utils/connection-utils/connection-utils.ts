@@ -73,4 +73,23 @@ export class ConnectionUtils {
 
     return `${amove} ${aline1} ${aline2}`;
   }
+
+  static getArrowOffsetPath(
+    vect: Point,
+    shiftX: number,
+    shiftY: number,
+    arrowLength: number,
+    arrowOffset: number,
+  ): string {
+    const arrowPoints: [number, number][] = [
+      [arrowLength, 0],
+      [arrowLength + arrowOffset, 0],
+    ];
+
+    const transformedPoints = arrowPoints
+      .map((p) => this.rotate(p, vect, [0, 0]))
+      .map((p) => [p[0] + shiftX, p[1] + shiftY]);
+
+    return `M ${transformedPoints[0][0]} ${transformedPoints[0][1]} L ${transformedPoints[1][0]} ${transformedPoints[1][1]}`;
+  }
 }

@@ -15,6 +15,7 @@ export const resolveConnectionControllerFactory = (
           options.width ?? 1,
           options.arowLength ?? 15,
           options.arowWidth ?? 4,
+          options.minPortOffset ?? 15,
           options.hasSourceArrow ?? false,
           options.hasTargetArrow ?? true,
         );
