@@ -44,10 +44,10 @@ export class ConnectionUtils {
 
   static getDirectionVector(
     direction: number | null,
-    mx: number,
-    my: number,
+    flipX: number,
+    flipY: number,
   ): Point {
-    return [mx * Math.cos(direction ?? 0), my * Math.sin(direction ?? 0)];
+    return [flipX * Math.cos(direction ?? 0), flipY * Math.sin(direction ?? 0)];
   }
 
   static getArrowPath(

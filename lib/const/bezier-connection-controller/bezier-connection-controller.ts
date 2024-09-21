@@ -5,6 +5,14 @@ import { ConnectionUtils } from "../../utils/connection-utils/connection-utils";
 export class BezierConnectionController implements ConnectionController {
   readonly svg: SVGSVGElement;
 
+  private readonly group: SVGGElement;
+
+  private readonly line: SVGPathElement;
+
+  private readonly sourceArrow: SVGPathElement | null = null;
+
+  private readonly targetArrow: SVGPathElement | null = null;
+
   constructor(
     private readonly color: string,
     private readonly width: number,
@@ -17,30 +25,34 @@ export class BezierConnectionController implements ConnectionController {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    line.setAttribute("stroke", this.color);
-    line.setAttribute("stroke-width", `${this.width}`);
-    line.setAttribute("fill", "none");
-    this.svg.appendChild(line);
+    this.group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    this.svg.appendChild(this.group);
+
+    this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    this.line.setAttribute("stroke", this.color);
+    this.line.setAttribute("stroke-width", `${this.width}`);
+    this.line.setAttribute("fill", "none");
+    this.group.appendChild(this.line);
+    this.group.style.transformOrigin = `50% 50%`;
 
     if (this.hasSourceArrow) {
-      const arrow = document.createElementNS(
+      this.sourceArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
       );
 
-      arrow.setAttribute("fill", this.color);
-      this.svg.appendChild(arrow);
+      this.sourceArrow.setAttribute("fill", this.color);
+      this.group.appendChild(this.sourceArrow);
     }
 
     if (this.hasTargetArrow) {
-      const arrow = document.createElementNS(
+      this.targetArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
       );
 
-      arrow.setAttribute("fill", this.color);
-      this.svg.appendChild(arrow);
+      this.targetArrow.setAttribute("fill", this.color);
+      this.group.appendChild(this.targetArrow);
     }
 
     this.svg.style.overflow = "visible";
@@ -56,22 +68,24 @@ export class BezierConnectionController implements ConnectionController {
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
+
     const fromCenter = ConnectionUtils.getPortCenter(from);
     const toCenter = ConnectionUtils.getPortCenter(to);
-    const multX = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const multY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+    const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
+    const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
 
-    this.svg.style.transform = `matrix(${multX}, 0, 0, ${multY}, ${x}, ${y})`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+    this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = ConnectionUtils.getDirectionVector(
       from.direction,
-      multX,
-      multY,
+      flipX,
+      flipY,
     );
     const toVect = ConnectionUtils.getDirectionVector(
       to.direction,
-      multX,
-      multY,
+      flipX,
+      flipY,
     );
 
     const pointBegin = ConnectionUtils.rotate(
@@ -100,12 +114,11 @@ export class BezierConnectionController implements ConnectionController {
     const lcurve = `C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pointEnd[0]} ${pointEnd[1]}`;
     const preLine = `M ${0} ${0} L ${pointBegin[0]} ${pointBegin[1]} `;
     const postLine = ` M ${pointEnd[0]} ${pointEnd[1]} L ${width} ${height}`;
-    const linePath = `${this.hasSourceArrow ? "" : preLine}${lmove} ${lcurve}${this.hasTargetArrow ? "" : postLine}`;
+    const linePath = `${this.sourceArrow ? "" : preLine}${lmove} ${lcurve}${this.targetArrow ? "" : postLine}`;
 
-    const line = this.svg.children[0]!;
-    line.setAttribute("d", linePath);
+    this.line.setAttribute("d", linePath);
 
-    if (this.hasSourceArrow) {
+    if (this.sourceArrow) {
       const arrowPath = ConnectionUtils.getArrowPath(
         fromVect,
         0,
@@ -114,11 +127,10 @@ export class BezierConnectionController implements ConnectionController {
         this.arrowWidth,
       );
 
-      const arrow = this.svg.children[1]!;
-      arrow.setAttribute("d", arrowPath);
+      this.sourceArrow.setAttribute("d", arrowPath);
     }
 
-    if (this.hasTargetArrow) {
+    if (this.targetArrow) {
       const arrowPath = ConnectionUtils.getArrowPath(
         toVect,
         width,
@@ -127,8 +139,7 @@ export class BezierConnectionController implements ConnectionController {
         this.arrowWidth,
       );
 
-      const arrow = this.svg.children[this.hasSourceArrow ? 2 : 1]!;
-      arrow.setAttribute("d", arrowPath);
+      this.targetArrow.setAttribute("d", arrowPath);
     }
   }
 }

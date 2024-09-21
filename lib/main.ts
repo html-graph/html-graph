@@ -1,6 +1,5 @@
 export { Canvas } from "./canvas/canvas";
 export { BezierConnectionController } from "./const/bezier-connection-controller/bezier-connection-controller";
-export { LineConnectionController } from "./const/line-connection-controller/line-connection-controller";
 export type { PublicViewportTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
 export type { ApiNode } from "./models/nodes/api-node";
 export type { ApiPortsPayload } from "./models/nodes/api-ports-payload";
