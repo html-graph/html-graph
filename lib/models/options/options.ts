@@ -1,7 +1,7 @@
 import { PublicViewportTransformer } from "../../components/public-viewport-transformer/public-viewport-transformer";
 import { CenterFn } from "../center/center-fn";
-import { ConnectionController } from "../connection/connection-controller";
 import { ScaleTrigger } from "../scale/scale-trigger.type";
+import { ConnectionControllerFactory } from "./connection-controller-factory";
 import { LayersMode } from "./layers-mode";
 
 export interface Options {
@@ -29,7 +29,7 @@ export interface Options {
     readonly centerFn: CenterFn;
   };
   readonly connections: {
-    readonly controller: ConnectionController;
+    readonly controllerFactory: ConnectionControllerFactory;
   };
   readonly layers: {
     readonly mode: LayersMode;

@@ -2,7 +2,7 @@ import { CenterFn } from "../../models/center/center-fn";
 import { ConnectionController } from "../../models/connection/connection-controller";
 import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
-import { resolveConnectionController } from "../../utils/resolve-connection-controller/resolve-connection-controller";
+import { resolveConnectionControllerFactory } from "../../utils/resolve-connection-controller-factory/resolve-connection-controller-factory";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
@@ -189,14 +189,14 @@ export class Controller {
 
     const controller =
       options !== undefined
-        ? resolveConnectionController(options)
-        : this.di.options.connections.controller;
+        ? resolveConnectionControllerFactory(options)
+        : this.di.options.connections.controllerFactory;
 
     this.di.graphStore.addConnection(
       connectionId,
       fromPortId,
       toPortId,
-      controller,
+      controller(),
     );
 
     this.di.htmlController.attachConnection(connectionId);

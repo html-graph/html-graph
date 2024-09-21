@@ -1,4 +1,4 @@
-import { ConnectionController } from "../connection/connection-controller";
+import { ConnectionControllerFactory } from "./connection-controller-factory";
 
 export type ConnectionOptions =
   | {
@@ -14,7 +14,7 @@ export type ConnectionOptions =
     }
   | {
       readonly type: "custom";
-      readonly controller: ConnectionController;
+      readonly controllerFactory: ConnectionControllerFactory;
     }
   | {
       readonly type: "line";

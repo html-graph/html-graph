@@ -2,7 +2,7 @@ import { standardCenterFn } from "../../const/standard-center-fn/standard-center
 import { ApiOptions } from "../../models/options/api-options";
 import { Options } from "../../models/options/options";
 import { resolveBackgroundDrawingFn } from "../resolve-background-drawing-fn/resolve-background-drawing-fn";
-import { resolveConnectionController } from "../resolve-connection-controller/resolve-connection-controller";
+import { resolveConnectionControllerFactory } from "../resolve-connection-controller-factory/resolve-connection-controller-factory";
 
 export const createOptions: (apiOptions: ApiOptions) => Options = (
   apiOptions: ApiOptions,
@@ -27,7 +27,7 @@ export const createOptions: (apiOptions: ApiOptions) => Options = (
       centerFn: apiOptions.ports?.centerFn ?? standardCenterFn,
     },
     connections: {
-      controller: resolveConnectionController(
+      controllerFactory: resolveConnectionControllerFactory(
         apiOptions.connections ?? { type: "bezier" },
       ),
     },

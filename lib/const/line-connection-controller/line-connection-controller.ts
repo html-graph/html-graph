@@ -3,6 +3,8 @@ import { PortPayload } from "../../models/store/port-payload";
 import { ConnectionUtils } from "../../utils/connection-utils/connection-utils";
 
 export class LineConnectionController implements ConnectionController {
+  readonly svg: SVGSVGElement;
+
   constructor(
     private readonly color: string,
     private readonly width: number,
@@ -10,17 +12,15 @@ export class LineConnectionController implements ConnectionController {
     private readonly arrowWidth: number,
     private readonly hasSourceArrow: boolean,
     private readonly hasTargetArrow: boolean,
-  ) {}
-
-  createSvg(): SVGSVGElement {
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.style.pointerEvents = "none";
+  ) {
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.svg.style.pointerEvents = "none";
 
     const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
     line.setAttribute("stroke", this.color);
     line.setAttribute("stroke-width", `${this.width}`);
     line.setAttribute("fill", "none");
-    svg.appendChild(line);
+    this.svg.appendChild(line);
 
     if (this.hasSourceArrow) {
       const arrow = document.createElementNS(
@@ -29,7 +29,7 @@ export class LineConnectionController implements ConnectionController {
       );
 
       arrow.setAttribute("fill", this.color);
-      svg.appendChild(arrow);
+      this.svg.appendChild(arrow);
     }
 
     if (this.hasTargetArrow) {
@@ -39,25 +39,30 @@ export class LineConnectionController implements ConnectionController {
       );
 
       arrow.setAttribute("fill", this.color);
-      svg.appendChild(arrow);
+      this.svg.appendChild(arrow);
     }
 
-    svg.style.overflow = "visible";
-
-    return svg;
+    this.svg.style.overflow = "visible";
   }
 
-  updateSvg(
-    svg: SVGSVGElement,
+  update(
+    x: number,
+    y: number,
     width: number,
     height: number,
     from: PortPayload,
     to: PortPayload,
   ): void {
+    this.svg.style.width = `${width}px`;
+    this.svg.style.height = `${height}px`;
+
     const fromCenter = ConnectionUtils.getPortCenter(from);
     const toCenter = ConnectionUtils.getPortCenter(to);
     const multX = fromCenter[0] <= toCenter[0] ? 1 : -1;
     const multY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+
+    this.svg.style.transform = `matrix(${multX}, 0, 0, ${multY}, ${x}, ${y})`;
+
     const fromVect = ConnectionUtils.getDirectionVector(
       from.direction,
       multX,
@@ -85,7 +90,7 @@ export class LineConnectionController implements ConnectionController {
     const lline = `L ${pointEnd[0]} ${pointEnd[1]}`;
     const linePath = `${lmove} ${lline}`;
 
-    const line = svg.children[0]!;
+    const line = this.svg.children[0]!;
     line.setAttribute("d", linePath);
 
     if (this.hasSourceArrow) {
@@ -97,7 +102,7 @@ export class LineConnectionController implements ConnectionController {
         this.arrowWidth,
       );
 
-      const arrow = svg.children[1]!;
+      const arrow = this.svg.children[1]!;
       arrow.setAttribute("d", arrowPath);
     }
 
@@ -110,7 +115,7 @@ export class LineConnectionController implements ConnectionController {
         this.arrowWidth,
       );
 
-      const arrow = svg.children[this.hasSourceArrow ? 2 : 1]!;
+      const arrow = this.svg.children[this.hasSourceArrow ? 2 : 1]!;
       arrow.setAttribute("d", arrowPath);
     }
   }

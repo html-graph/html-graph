@@ -297,7 +297,7 @@ export class HtmlController {
 
   attachConnection(connectionId: string): void {
     const connection = this.di.graphStore.getConnection(connectionId);
-    const element = connection.controller.createSvg();
+    const element = connection.controller.svg;
 
     element.style.transformOrigin = "50% 50%";
     element.style.position = "absolute";
@@ -458,34 +458,35 @@ export class HtmlController {
       rectTo.top - rect.top,
     );
 
-    const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
-      rectFrom.width,
-      rectFrom.height,
-    );
-
-    const [xCenterTo, yCenterTo] = portTo.centerFn(rectTo.width, rectTo.height);
-
     const sa = this.di.viewportTransformer.getAbsoluteScale();
 
-    const xAbsCenterFrom = xCenterFrom * sa + xAbsFrom;
-    const yAbsCenterFrom = yCenterFrom * sa + yAbsFrom;
-    const xAbsCenterTo = xCenterTo * sa + xAbsTo;
-    const yAbsCenterTo = yCenterTo * sa + yAbsTo;
+    const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
+      rectFrom.width * sa,
+      rectFrom.height * sa,
+    );
 
-    const top = Math.min(yAbsCenterFrom, yAbsCenterTo);
-    const left = Math.min(xAbsCenterFrom, xAbsCenterTo);
+    const [xCenterTo, yCenterTo] = portTo.centerFn(
+      rectTo.width * sa,
+      rectTo.height * sa,
+    );
+
+    const xAbsCenterFrom = xCenterFrom + xAbsFrom;
+    const yAbsCenterFrom = yCenterFrom + yAbsFrom;
+    const xAbsCenterTo = xCenterTo + xAbsTo;
+    const yAbsCenterTo = yCenterTo + yAbsTo;
+
+    const x = Math.min(xAbsCenterFrom, xAbsCenterTo);
+    const y = Math.min(yAbsCenterFrom, yAbsCenterTo);
     const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
     const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
 
     const element = this.connectionIdToElementMap.get(connectionId)!;
 
-    const horDir = xAbsCenterFrom <= xAbsCenterTo;
-    const vertDir = yAbsCenterFrom <= yAbsCenterTo;
+    const flipHor = xAbsCenterFrom <= xAbsCenterTo;
+    const flipVert = yAbsCenterFrom <= yAbsCenterTo;
 
-    element.style.transform = `matrix(${horDir ? 1 : -1}, 0, 0, ${vertDir ? 1 : -1}, ${left}, ${top})`;
-    element.style.width = `${width}px`;
-    element.style.height = `${height}px`;
+    element.style.transform = `matrix(${flipHor ? 1 : -1}, 0, 0, ${flipVert ? 1 : -1}, ${x}, ${y})`;
 
-    connection.controller.updateSvg(element, width, height, portFrom, portTo);
+    connection.controller.update(x, y, width, height, portFrom, portTo);
   }
 }
