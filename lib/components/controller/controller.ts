@@ -24,6 +24,10 @@ export class Controller {
   }
 
   dragNode(nodeId: string, dx: number, dy: number): void {
+    if (!this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to drag nonexisting node");
+    }
+
     const node = this.di.graphStore.getNode(nodeId);
 
     const [xv, yv] = this.di.viewportTransformer.getViewportCoords(

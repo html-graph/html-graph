@@ -2,41 +2,74 @@ import { ApiPortsPayload, Canvas } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  background: { type: "dots" },
-});
+class NodesDragHandler {
+  private readonly nodes = new Map<string, HTMLElement>();
 
-function createNode(
-  name: string,
-  frontPortId: string,
-  backPortId: string,
-): [HTMLElement, Record<string, ApiPortsPayload>] {
-  const node = document.createElement("div");
-  node.classList.add("node");
+  private grabbedNode: string | null = null;
 
-  const frontPort = document.createElement("div");
-  node.appendChild(frontPort);
+  constructor(private readonly element: HTMLElement) {
+    const canvas = new Canvas(this.element, {
+      background: { type: "dots" },
+    });
 
-  const text = document.createElement("div");
-  text.innerText = name;
-  node.appendChild(text);
+    const [node1, ports1] = this.createNode("Node 1", "port-1-1", "port-1-2");
+    const [node2, ports2] = this.createNode("Node 2", "port-2-1", "port-2-2");
+    const [node3, ports3] = this.createNode("Node 3", "port-3-1", "port-3-2");
+    const [node4, ports4] = this.createNode("Node 4", "port-4-1", "port-4-2");
 
-  const backPort = document.createElement("div");
-  node.appendChild(backPort);
+    this.nodes.set("node-1", node1);
+    this.nodes.set("node-2", node2);
+    this.nodes.set("node-3", node3);
+    this.nodes.set("node-4", node4);
 
-  return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
+    canvas
+      .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
+      .addNode({ id: "node-2", element: node2, x: 600, y: 500, ports: ports2 })
+      .addNode({ id: "node-3", element: node3, x: 200, y: 800, ports: ports3 })
+      .addNode({ id: "node-4", element: node4, x: 1000, y: 600, ports: ports4 })
+      .addConnection({ from: "port-1-2", to: "port-2-1" })
+      .addConnection({ from: "port-3-2", to: "port-2-1" })
+      .addConnection({ from: "port-2-2", to: "port-4-1" });
+
+    this.nodes.forEach((value, key) => {
+      value.addEventListener("pointerdown", () => {
+        this.element.style.cursor = "grab";
+        this.grabbedNode = key;
+      });
+
+      value.addEventListener("pointerup", () => {
+        this.element.style.removeProperty("cursor");
+        this.grabbedNode = null;
+      });
+    });
+
+    element.addEventListener("pointermove", (event: PointerEvent) => {
+      if (this.grabbedNode !== null) {
+        canvas.dragNode(this.grabbedNode, event.movementX, event.movementY);
+      }
+    });
+  }
+
+  createNode(
+    name: string,
+    frontPortId: string,
+    backPortId: string,
+  ): [HTMLElement, Record<string, ApiPortsPayload>] {
+    const node = document.createElement("div");
+    node.classList.add("node");
+
+    const frontPort = document.createElement("div");
+    node.appendChild(frontPort);
+
+    const text = document.createElement("div");
+    text.innerText = name;
+    node.appendChild(text);
+
+    const backPort = document.createElement("div");
+    node.appendChild(backPort);
+
+    return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
+  }
 }
 
-const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
-const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
-const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
-
-canvas
-  .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
-  .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
-  .addNode({ element: node4, x: 1000, y: 600, ports: ports4 })
-  .addConnection({ from: "port-1-2", to: "port-2-1" })
-  .addConnection({ from: "port-3-2", to: "port-2-1" })
-  .addConnection({ from: "port-2-2", to: "port-4-1" });
+new NodesDragHandler(canvasElement);

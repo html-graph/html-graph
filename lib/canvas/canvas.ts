@@ -182,6 +182,13 @@ export class Canvas {
   }
 
   /**
+   * drags node in viewport
+   */
+  dragNode(nodeId: string, dx: number, dy: number): void {
+    this.di.controller.dragNode(nodeId, dx, dy);
+  }
+
+  /**
    * clears graph
    * graph gets rolled back to initial state
    * canvas can be reused
