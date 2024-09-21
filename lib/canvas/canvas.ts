@@ -184,8 +184,10 @@ export class Canvas {
   /**
    * drags node in viewport
    */
-  dragNode(nodeId: string, dx: number, dy: number): void {
+  dragNode(nodeId: string, dx: number, dy: number): Canvas {
     this.di.controller.dragNode(nodeId, dx, dy);
+
+    return this;
   }
 
   /**

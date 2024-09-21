@@ -29,6 +29,12 @@ export class HtmlController {
 
   private grabbedNodeId: string | null = null;
 
+  private touch1: [number, number] | null = null;
+
+  private touch2Distance: number | null = null;
+
+  private touch2Scale = 1;
+
   private currentZIndex = 0;
 
   private readonly onPointerDown = (event: MouseEvent) => {
@@ -41,6 +47,84 @@ export class HtmlController {
     }
 
     this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
+  };
+
+  private readonly onTouchStart = (event: TouchEvent) => {
+    if (this.di.options.shift.enabled === false) {
+      return;
+    }
+
+    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
+
+    if (event.touches.length > 1) {
+      const dx = event.touches[1].clientX - event.touches[0].clientX;
+      const dy = event.touches[1].clientY - event.touches[0].clientY;
+      this.touch2Distance = Math.sqrt(dx * dx + dy * dy);
+      this.touch2Scale = this.di.viewportTransformer.getAbsoluteScale();
+    }
+  };
+
+  private readonly onTouchMove = (event: TouchEvent) => {
+    if (this.grabbedNodeId !== null) {
+      if (this.di.options.nodes.draggable === false) {
+        return;
+      }
+
+      if (this.touch1 !== null) {
+        this.di.eventSubject.dispatch(GraphEventType.DragNode, {
+          nodeId: this.grabbedNodeId,
+          dx: event.touches[0].clientX - this.touch1[0],
+          dy: event.touches[0].clientY - this.touch1[1],
+        });
+      }
+    } else {
+      if (this.di.options.shift.enabled === false) {
+        return;
+      }
+
+      if (this.touch1 !== null) {
+        this.di.eventSubject.dispatch(GraphEventType.DragViewport, {
+          dx: event.touches[0].clientX - this.touch1[0],
+          dy: event.touches[0].clientY - this.touch1[1],
+        });
+      }
+
+      if (this.touch1 !== null && this.touch2Distance !== null) {
+        const dxn = event.touches[1].clientX - this.touch1[0];
+        const dyn = event.touches[1].clientY - this.touch1[1];
+        const nextScale = Math.sqrt(dxn * dxn + dyn * dyn);
+        const { left, top } = this.host.getBoundingClientRect();
+        this.di.eventSubject.dispatch(GraphEventType.SetViewportScale, {
+          scale:
+            ((nextScale / this.touch2Distance) *
+              this.di.viewportTransformer.getAbsoluteScale()) /
+            this.touch2Scale,
+          centerX:
+            (event.touches[1].clientX + event.touches[0].clientX) / 2 - left,
+          centerY:
+            (event.touches[1].clientY + event.touches[0].clientY) / 2 - top,
+        });
+      }
+    }
+
+    event.preventDefault();
+
+    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
+  };
+
+  private readonly onTouchEnd = (event: TouchEvent) => {
+    if (this.di.options.shift.enabled === false) {
+      return;
+    }
+
+    if (event.touches.length < 2) {
+      this.touch2Distance = null;
+      this.touch2Scale = 1;
+    }
+
+    if (event.touches.length < 1) {
+      this.touch1 = null;
+    }
   };
 
   private readonly onPointerMove = (event: MouseEvent) => {
@@ -86,8 +170,6 @@ export class HtmlController {
   private readonly onWheelScroll = (event: WheelEvent) => {
     if (this.di.options.scale.enabled === false) {
       return;
-    } else {
-      event.preventDefault();
     }
 
     const trigger = this.di.options.scale.trigger;
@@ -115,6 +197,8 @@ export class HtmlController {
       centerX,
       centerY,
     });
+
+    event.preventDefault();
   };
 
   private readonly onNodePointerDown = (event: MouseEvent) => {
@@ -132,6 +216,36 @@ export class HtmlController {
     this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
       nodeId,
     });
+  };
+
+  private readonly onNodeTouchStart = (event: TouchEvent) => {
+    if (this.di.options.nodes.draggable == false) {
+      return;
+    }
+
+    event.stopPropagation();
+
+    const nodeId = this.nodeElementToIdMap.get(
+      event.currentTarget as HTMLElement,
+    )!;
+
+    this.grabbedNodeId = nodeId;
+    this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
+      nodeId,
+    });
+
+    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
+  };
+
+  private readonly onNodeTouchEnd = (event: TouchEvent) => {
+    if (this.di.options.nodes.draggable == false) {
+      return;
+    }
+
+    event.stopPropagation();
+
+    this.grabbedNodeId = null;
+    this.di.eventSubject.dispatch(GraphEventType.Release);
   };
 
   private readonly onNodePointerUp = (event: MouseEvent) => {
@@ -207,6 +321,10 @@ export class HtmlController {
     this.host.addEventListener("mouseup", this.onPointerUp);
     this.host.addEventListener("mousemove", this.onPointerMove);
     this.host.addEventListener("wheel", this.onWheelScroll);
+    this.host.addEventListener("touchstart", this.onTouchStart);
+    this.host.addEventListener("touchmove", this.onTouchMove);
+    this.host.addEventListener("touchend", this.onTouchEnd);
+    this.host.addEventListener("touchcancel", this.onTouchEnd);
 
     this.canvas = this.createCanvas();
     this.nodesContainer = this.createNodesContainer();
@@ -249,6 +367,10 @@ export class HtmlController {
     this.host.removeEventListener("mouseup", this.onPointerUp);
     this.host.removeEventListener("mousemove", this.onPointerMove);
     this.host.removeEventListener("wheel", this.onWheelScroll);
+    this.host.removeEventListener("touchstart", this.onTouchStart);
+    this.host.removeEventListener("touchmove", this.onTouchMove);
+    this.host.removeEventListener("touchend", this.onTouchEnd);
+    this.host.removeEventListener("touchcancel", this.onTouchEnd);
     this.hostResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.canvas);
@@ -313,6 +435,8 @@ export class HtmlController {
     wrapper.style.visibility = "visible";
     node.element.addEventListener("mousedown", this.onNodePointerDown);
     node.element.addEventListener("mouseup", this.onNodePointerUp);
+    node.element.addEventListener("touchstart", this.onNodeTouchStart);
+    node.element.addEventListener("touchend", this.onNodeTouchEnd);
   }
 
   detachNode(nodeId: string): void {
@@ -323,6 +447,8 @@ export class HtmlController {
 
     node.element.removeEventListener("mousedown", this.onNodePointerDown);
     node.element.removeEventListener("mouseup", this.onNodePointerUp);
+    node.element.removeEventListener("touchstart", this.onNodeTouchStart);
+    node.element.removeEventListener("touchend", this.onNodeTouchEnd);
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     wrapper.removeChild(node.element);

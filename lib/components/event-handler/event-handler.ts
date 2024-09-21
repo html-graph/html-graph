@@ -19,6 +19,14 @@ export class EventHandler {
       );
     });
 
+    this.di.eventSubject.on(GraphEventType.SetViewportScale, (payload) => {
+      this.di.controller.scaleContent(
+        payload.scale,
+        payload.centerX,
+        payload.centerY,
+      );
+    });
+
     this.di.eventSubject.on(GraphEventType.GrabNode, (payload) => {
       this.di.controller.grabNode(payload.nodeId);
     });

@@ -35,4 +35,12 @@ export type GraphEvent =
         dx: number;
         dy: number;
       };
+    }
+  | {
+      type: GraphEventType.SetViewportScale;
+      payload: {
+        scale: number;
+        centerX: number;
+        centerY: number;
+      };
     };
