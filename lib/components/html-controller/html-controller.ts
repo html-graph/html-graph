@@ -117,7 +117,7 @@ export class HtmlController {
     });
   };
 
-  private readonly onNodePointerDown = (event: PointerEvent) => {
+  private readonly onNodePointerDown = (event: MouseEvent) => {
     if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
@@ -134,7 +134,7 @@ export class HtmlController {
     });
   };
 
-  private readonly onNodePointerUp = (event: PointerEvent) => {
+  private readonly onNodePointerUp = (event: MouseEvent) => {
     if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
@@ -203,9 +203,9 @@ export class HtmlController {
     private readonly di: DiContainer,
   ) {
     this.host = this.createHost();
-    this.host.addEventListener("pointerdown", this.onPointerDown);
-    this.host.addEventListener("pointerup", this.onPointerUp);
-    this.host.addEventListener("pointermove", this.onPointerMove);
+    this.host.addEventListener("mousedown", this.onPointerDown);
+    this.host.addEventListener("mouseup", this.onPointerUp);
+    this.host.addEventListener("mousemove", this.onPointerMove);
     this.host.addEventListener("wheel", this.onWheelScroll);
 
     this.canvas = this.createCanvas();
@@ -245,9 +245,9 @@ export class HtmlController {
   }
 
   destroy(): void {
-    this.host.removeEventListener("pointerdown", this.onPointerDown);
-    this.host.removeEventListener("pointerup", this.onPointerUp);
-    this.host.removeEventListener("pointermove", this.onPointerMove);
+    this.host.removeEventListener("mousedown", this.onPointerDown);
+    this.host.removeEventListener("mouseup", this.onPointerUp);
+    this.host.removeEventListener("mousemove", this.onPointerMove);
     this.host.removeEventListener("wheel", this.onWheelScroll);
     this.hostResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
@@ -311,8 +311,8 @@ export class HtmlController {
     this.nodesResizeObserver.observe(wrapper);
 
     wrapper.style.visibility = "visible";
-    node.element.addEventListener("pointerdown", this.onNodePointerDown);
-    node.element.addEventListener("pointerup", this.onNodePointerUp);
+    node.element.addEventListener("mousedown", this.onNodePointerDown);
+    node.element.addEventListener("mouseup", this.onNodePointerUp);
   }
 
   detachNode(nodeId: string): void {
@@ -321,8 +321,8 @@ export class HtmlController {
     this.nodesResizeObserver.unobserve(node.element);
     this.nodesContainer.removeChild(node.element);
 
-    node.element.removeEventListener("pointerdown", this.onNodePointerDown);
-    node.element.removeEventListener("pointerup", this.onNodePointerUp);
+    node.element.removeEventListener("mousedown", this.onNodePointerDown);
+    node.element.removeEventListener("mouseup", this.onNodePointerUp);
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     wrapper.removeChild(node.element);

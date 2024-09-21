@@ -32,18 +32,18 @@ class NodesDragHandler {
       .addConnection({ from: "port-2-2", to: "port-4-1" });
 
     this.nodes.forEach((value, key) => {
-      value.addEventListener("pointerdown", () => {
+      value.addEventListener("mousedown", () => {
         this.element.style.cursor = "grab";
         this.grabbedNode = key;
       });
 
-      value.addEventListener("pointerup", () => {
+      value.addEventListener("mouseup", () => {
         this.element.style.removeProperty("cursor");
         this.grabbedNode = null;
       });
     });
 
-    element.addEventListener("pointermove", (event: PointerEvent) => {
+    element.addEventListener("mousemove", (event: MouseEvent) => {
       if (this.grabbedNode !== null) {
         canvas.dragNode(this.grabbedNode, event.movementX, event.movementY);
       }

@@ -18,6 +18,7 @@ This library fits for tasks where easy nodes customization and interactiveness a
 - easy nodes customization using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas with draggable nodes
+- exhaustive set of usage examples
 - typescript support
 
 ## Getting started:

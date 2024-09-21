@@ -3,6 +3,8 @@ import { ApiPortsPayload, Canvas } from "../../lib/main";
 const canvasElement = document.getElementById("canvas")!;
 
 const canvas = new Canvas(canvasElement, {
+  scale: { enabled: true },
+  shift: { enabled: true },
   nodes: { draggable: true },
   background: { type: "dots" },
 });
@@ -41,33 +43,3 @@ canvas
   .addConnection({ from: "port-1-2", to: "port-2-1" })
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });
-
-class ViewportTransformer {
-  private isGrabbed = false;
-
-  constructor(
-    private readonly element: HTMLElement,
-    private readonly canvas: Canvas,
-  ) {
-    this.element.addEventListener("mousedown", () => {
-      this.element.style.cursor = "grab";
-      this.isGrabbed = true;
-    });
-
-    this.element.addEventListener("mouseup", () => {
-      this.element.style.removeProperty("cursor");
-      this.isGrabbed = false;
-    });
-
-    this.element.addEventListener("mousemove", (event) => {
-      if (this.isGrabbed) {
-        this.canvas.moveContent({
-          x: event.movementX,
-          y: event.movementY,
-        });
-      }
-    });
-  }
-}
-
-new ViewportTransformer(canvasElement, canvas);
