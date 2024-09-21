@@ -20,6 +20,7 @@ This library fits for tasks where easy nodes customization and interactiveness a
 - draggable and scalable canvas with draggable nodes
 - exhaustive set of usage examples
 - typescript support
+- mobile devices support
 
 ## Getting started:
 

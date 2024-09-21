@@ -114,7 +114,7 @@ export class Canvas {
   /**
    * applies transformation for viewport
    */
-  setViewportTransform(apiTransform: ApiTransform): Canvas {
+  patchViewportTransform(apiTransform: ApiTransform): Canvas {
     this.di.controller.patchViewportTransform(
       apiTransform.scale ?? null,
       apiTransform.x ?? null,

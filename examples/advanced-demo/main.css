@@ -17,10 +17,6 @@ body {
   flex-grow: 1;
 }
 
-.templates {
-  display: none;
-}
-
 .node {
   min-width: 15rem;
   position: relative;

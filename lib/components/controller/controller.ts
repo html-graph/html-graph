@@ -1,12 +1,45 @@
 import { CenterFn } from "../../models/center/center-fn";
 import { ConnectionController } from "../../models/connection/connection-controller";
+import { GraphEventType } from "../../models/events/graph-event-type";
 import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionControllerFactory } from "../../utils/resolve-connection-controller-factory/resolve-connection-controller-factory";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
-  constructor(private readonly di: DiContainer) {}
+  constructor(private readonly di: DiContainer) {
+    this.di.eventSubject.on(GraphEventType.GrabViewport, () => {
+      this.grabViewport();
+    });
+
+    this.di.eventSubject.on(GraphEventType.DragViewport, (payload) => {
+      this.dragViewport(payload.dx, payload.dy);
+    });
+
+    this.di.eventSubject.on(GraphEventType.ScaleViewport, (payload) => {
+      this.scaleCanvas(payload.deltaY, payload.centerX, payload.centerY);
+    });
+
+    this.di.eventSubject.on(GraphEventType.SetViewportScale, (payload) => {
+      this.scaleContent(payload.scale, payload.centerX, payload.centerY);
+    });
+
+    this.di.eventSubject.on(GraphEventType.GrabNode, (payload) => {
+      this.grabNode(payload.nodeId);
+    });
+
+    this.di.eventSubject.on(GraphEventType.DragNode, (payload) => {
+      this.dragNode(payload.nodeId, payload.dx, payload.dy);
+    });
+
+    this.di.eventSubject.on(GraphEventType.ReleaseViewport, () => {
+      this.release();
+    });
+
+    this.di.eventSubject.on(GraphEventType.ReleaseNode, () => {
+      this.release();
+    });
+  }
 
   grabViewport(): void {
     this.di.htmlController.setCursor("grab");
@@ -183,7 +216,7 @@ export class Controller {
       throw new Error("failed to add connection to nonexisting port");
     }
 
-    const controller =
+    const controllerFactory =
       options !== undefined
         ? resolveConnectionControllerFactory(options)
         : this.di.options.connections.controllerFactory;
@@ -192,7 +225,7 @@ export class Controller {
       connectionId,
       fromPortId,
       toPortId,
-      controller(),
+      controllerFactory(),
     );
 
     this.di.htmlController.attachConnection(connectionId);

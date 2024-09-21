@@ -12,7 +12,10 @@ export type GraphEvent =
       };
     }
   | {
-      type: GraphEventType.Release;
+      type: GraphEventType.ReleaseViewport;
+    }
+  | {
+      type: GraphEventType.ReleaseNode;
     }
   | {
       type: GraphEventType.ScaleViewport;

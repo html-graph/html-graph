@@ -103,15 +103,15 @@ export class GraphHtmlHelper {
   private prepareNodeInputElement(element: HTMLElement): void {
     let hover = false;
 
-    element.addEventListener("pointerover", () => {
+    element.addEventListener("mouseover", () => {
       hover = true;
     });
 
-    element.addEventListener("pointerleave", () => {
+    element.addEventListener("mouseleave", () => {
       hover = false;
     });
 
-    element.addEventListener("pointermove", (event: Event) => {
+    element.addEventListener("mousemove", (event: Event) => {
       if (hover && document.activeElement === event.target) {
         event.stopPropagation();
       }
@@ -129,7 +129,7 @@ export class GraphHtmlHelper {
       hover = false;
     });
 
-    element.addEventListener("pointermove", (event: Event) => {
+    element.addEventListener("mousemove", (event: Event) => {
       if (hover) {
         event.stopPropagation();
       }

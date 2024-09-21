@@ -29,20 +29,14 @@ export class HtmlController {
 
   private grabbedNodeId: string | null = null;
 
-  private touch1: [number, number] | null = null;
+  private prevTouches: [number, number, number, number] = [0, 0, 0, 0];
 
-  private touch2Distance: number | null = null;
-
-  private touch2Scale = 1;
+  private touchStartScale = 0;
 
   private currentZIndex = 0;
 
-  private readonly onPointerDown = (event: MouseEvent) => {
-    if (event.button !== 0) {
-      return;
-    }
-
-    if (this.di.options.shift.enabled === false) {
+  private readonly onMouseDown = (event: MouseEvent) => {
+    if (event.button !== 0 || this.di.options.shift.enabled === false) {
       return;
     }
 
@@ -54,62 +48,55 @@ export class HtmlController {
       return;
     }
 
-    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
-
-    if (event.touches.length > 1) {
-      const dx = event.touches[1].clientX - event.touches[0].clientX;
-      const dy = event.touches[1].clientY - event.touches[0].clientY;
-      this.touch2Distance = Math.sqrt(dx * dx + dy * dy);
-      this.touch2Scale = this.di.viewportTransformer.getAbsoluteScale();
+    this.prevTouches = this.getAverageTouch(event);
+    if (this.prevTouches[3] > 1) {
+      this.touchStartScale =
+        this.prevTouches[2] * this.di.viewportTransformer.getAbsoluteScale();
     }
   };
 
   private readonly onTouchMove = (event: TouchEvent) => {
-    if (this.grabbedNodeId !== null) {
-      if (this.di.options.nodes.draggable === false) {
-        return;
-      }
+    const currentTouches = this.getAverageTouch(event);
 
-      if (this.touch1 !== null) {
+    if (this.grabbedNodeId !== null) {
+      if (currentTouches[3] === 1 && this.di.options.nodes.draggable) {
         this.di.eventSubject.dispatch(GraphEventType.DragNode, {
           nodeId: this.grabbedNodeId,
-          dx: event.touches[0].clientX - this.touch1[0],
-          dy: event.touches[0].clientY - this.touch1[1],
+          dx: currentTouches[0] - this.prevTouches[0],
+          dy: currentTouches[1] - this.prevTouches[1],
         });
       }
     } else {
-      if (this.di.options.shift.enabled === false) {
-        return;
-      }
-
-      if (this.touch1 !== null) {
+      if (
+        (currentTouches[3] === 1 || currentTouches[3] === 2) &&
+        this.di.options.shift.enabled
+      ) {
         this.di.eventSubject.dispatch(GraphEventType.DragViewport, {
-          dx: event.touches[0].clientX - this.touch1[0],
-          dy: event.touches[0].clientY - this.touch1[1],
+          dx: currentTouches[0] - this.prevTouches[0],
+          dy: currentTouches[1] - this.prevTouches[1],
         });
       }
 
-      if (this.touch1 !== null && this.touch2Distance !== null) {
-        const dxn = event.touches[1].clientX - this.touch1[0];
-        const dyn = event.touches[1].clientY - this.touch1[1];
-        const nextScale = Math.sqrt(dxn * dxn + dyn * dyn);
+      if (currentTouches[3] === 2 && this.di.options.scale.enabled) {
+        const centerX = this.prevTouches[0];
+        const centerY = this.prevTouches[1];
+        const nextScale = currentTouches[2];
         const { left, top } = this.host.getBoundingClientRect();
+        const scale =
+          (nextScale * this.di.viewportTransformer.getAbsoluteScale()) /
+          this.touchStartScale;
+
         this.di.eventSubject.dispatch(GraphEventType.SetViewportScale, {
-          scale:
-            ((nextScale / this.touch2Distance) *
-              this.di.viewportTransformer.getAbsoluteScale()) /
-            this.touch2Scale,
-          centerX:
-            (event.touches[1].clientX + event.touches[0].clientX) / 2 - left,
-          centerY:
-            (event.touches[1].clientY + event.touches[0].clientY) / 2 - top,
+          scale,
+          centerX: centerX - left,
+          centerY: centerY - top,
         });
       }
     }
 
     event.preventDefault();
 
-    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
+    this.prevTouches = currentTouches;
   };
 
   private readonly onTouchEnd = (event: TouchEvent) => {
@@ -117,17 +104,10 @@ export class HtmlController {
       return;
     }
 
-    if (event.touches.length < 2) {
-      this.touch2Distance = null;
-      this.touch2Scale = 1;
-    }
-
-    if (event.touches.length < 1) {
-      this.touch1 = null;
-    }
+    this.prevTouches = this.getAverageTouch(event);
   };
 
-  private readonly onPointerMove = (event: MouseEvent) => {
+  private readonly onMouseMove = (event: MouseEvent) => {
     if (event.buttons !== 1) {
       return;
     }
@@ -154,7 +134,7 @@ export class HtmlController {
     }
   };
 
-  private readonly onPointerUp = (event: MouseEvent) => {
+  private readonly onMouseUp = (event: MouseEvent) => {
     if (event.button !== 0) {
       return;
     }
@@ -164,7 +144,7 @@ export class HtmlController {
     }
 
     this.grabbedNodeId = null;
-    this.di.eventSubject.dispatch(GraphEventType.Release);
+    this.di.eventSubject.dispatch(GraphEventType.ReleaseViewport);
   };
 
   private readonly onWheelScroll = (event: WheelEvent) => {
@@ -201,7 +181,7 @@ export class HtmlController {
     event.preventDefault();
   };
 
-  private readonly onNodePointerDown = (event: MouseEvent) => {
+  private readonly onNodeMouseDown = (event: MouseEvent) => {
     if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
@@ -234,7 +214,7 @@ export class HtmlController {
       nodeId,
     });
 
-    this.touch1 = [event.touches[0].clientX, event.touches[0].clientY];
+    this.prevTouches = this.getAverageTouch(event);
   };
 
   private readonly onNodeTouchEnd = (event: TouchEvent) => {
@@ -244,11 +224,12 @@ export class HtmlController {
 
     event.stopPropagation();
 
+    this.prevTouches = this.getAverageTouch(event);
     this.grabbedNodeId = null;
-    this.di.eventSubject.dispatch(GraphEventType.Release);
+    this.di.eventSubject.dispatch(GraphEventType.ReleaseNode);
   };
 
-  private readonly onNodePointerUp = (event: MouseEvent) => {
+  private readonly onNodeMouseUp = (event: MouseEvent) => {
     if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
@@ -256,7 +237,7 @@ export class HtmlController {
     event.stopPropagation();
 
     this.grabbedNodeId = null;
-    this.di.eventSubject.dispatch(GraphEventType.Release);
+    this.di.eventSubject.dispatch(GraphEventType.ReleaseNode);
   };
 
   private readonly layers: { [key in LayersMode]: LayersController } = {
@@ -317,9 +298,9 @@ export class HtmlController {
     private readonly di: DiContainer,
   ) {
     this.host = this.createHost();
-    this.host.addEventListener("mousedown", this.onPointerDown);
-    this.host.addEventListener("mouseup", this.onPointerUp);
-    this.host.addEventListener("mousemove", this.onPointerMove);
+    this.host.addEventListener("mousedown", this.onMouseDown);
+    this.host.addEventListener("mouseup", this.onMouseUp);
+    this.host.addEventListener("mousemove", this.onMouseMove);
     this.host.addEventListener("wheel", this.onWheelScroll);
     this.host.addEventListener("touchstart", this.onTouchStart);
     this.host.addEventListener("touchmove", this.onTouchMove);
@@ -363,9 +344,9 @@ export class HtmlController {
   }
 
   destroy(): void {
-    this.host.removeEventListener("mousedown", this.onPointerDown);
-    this.host.removeEventListener("mouseup", this.onPointerUp);
-    this.host.removeEventListener("mousemove", this.onPointerMove);
+    this.host.removeEventListener("mousedown", this.onMouseDown);
+    this.host.removeEventListener("mouseup", this.onMouseUp);
+    this.host.removeEventListener("mousemove", this.onMouseMove);
     this.host.removeEventListener("wheel", this.onWheelScroll);
     this.host.removeEventListener("touchstart", this.onTouchStart);
     this.host.removeEventListener("touchmove", this.onTouchMove);
@@ -433,8 +414,8 @@ export class HtmlController {
     this.nodesResizeObserver.observe(wrapper);
 
     wrapper.style.visibility = "visible";
-    node.element.addEventListener("mousedown", this.onNodePointerDown);
-    node.element.addEventListener("mouseup", this.onNodePointerUp);
+    node.element.addEventListener("mousedown", this.onNodeMouseDown);
+    node.element.addEventListener("mouseup", this.onNodeMouseUp);
     node.element.addEventListener("touchstart", this.onNodeTouchStart);
     node.element.addEventListener("touchend", this.onNodeTouchEnd);
   }
@@ -445,8 +426,8 @@ export class HtmlController {
     this.nodesResizeObserver.unobserve(node.element);
     this.nodesContainer.removeChild(node.element);
 
-    node.element.removeEventListener("mousedown", this.onNodePointerDown);
-    node.element.removeEventListener("mouseup", this.onNodePointerUp);
+    node.element.removeEventListener("mousedown", this.onNodeMouseDown);
+    node.element.removeEventListener("mouseup", this.onNodeMouseUp);
     node.element.removeEventListener("touchstart", this.onNodeTouchStart);
     node.element.removeEventListener("touchend", this.onNodeTouchEnd);
 
@@ -650,5 +631,31 @@ export class HtmlController {
     element.style.transform = `matrix(${flipHor ? 1 : -1}, 0, 0, ${flipVert ? 1 : -1}, ${x}, ${y})`;
 
     connection.controller.update(x, y, width, height, portFrom, portTo);
+  }
+
+  private getAverageTouch(event: TouchEvent): [number, number, number, number] {
+    const touches: [number, number][] = [];
+
+    const cnt = event.touches.length;
+
+    for (let i = 0; i < cnt; i++) {
+      touches.push([event.touches[i].clientX, event.touches[i].clientY]);
+    }
+
+    const sum: [number, number] = touches.reduce(
+      (acc, cur) => [acc[0] + cur[0], acc[1] + cur[1]],
+      [0, 0],
+    );
+
+    const avg = [sum[0] / cnt, sum[1] / cnt];
+
+    const distances = touches.map((cur) => [cur[0] - avg[0], cur[1] - avg[1]]);
+
+    const distance = distances.reduce(
+      (acc, cur) => acc + Math.sqrt(cur[0] * cur[0] + cur[1] * cur[1]),
+      0,
+    );
+
+    return [avg[0], avg[1], distance / cnt, cnt];
   }
 }
