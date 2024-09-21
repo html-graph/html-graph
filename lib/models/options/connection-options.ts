@@ -6,7 +6,6 @@ export type ConnectionOptions =
       readonly color?: string;
       readonly width?: number;
       readonly curvature?: number;
-      readonly adaptiveCurvature?: number;
       readonly arowLength?: number;
       readonly arowWidth?: number;
       readonly hasSourceArrow?: boolean;
@@ -15,4 +14,13 @@ export type ConnectionOptions =
   | {
       readonly type: "custom";
       readonly controllerFactory: ConnectionControllerFactory;
+    }
+  | {
+      readonly type: "straight";
+      readonly color?: string;
+      readonly width?: number;
+      readonly arowLength?: number;
+      readonly arowWidth?: number;
+      readonly hasSourceArrow?: boolean;
+      readonly hasTargetArrow?: boolean;
     };
