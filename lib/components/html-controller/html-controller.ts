@@ -36,6 +36,10 @@ export class HtmlController {
       return;
     }
 
+    if (this.di.options.shift.enabled === false) {
+      return;
+    }
+
     this.di.eventSubject.dispatch(GraphEventType.GrabViewport);
   };
 
@@ -45,12 +49,20 @@ export class HtmlController {
     }
 
     if (this.grabbedNodeId !== null) {
+      if (this.di.options.nodes.draggable === false) {
+        return;
+      }
+
       this.di.eventSubject.dispatch(GraphEventType.DragNode, {
         nodeId: this.grabbedNodeId,
         dx: event.movementX,
         dy: event.movementY,
       });
     } else {
+      if (this.di.options.shift.enabled === false) {
+        return;
+      }
+
       this.di.eventSubject.dispatch(GraphEventType.DragViewport, {
         dx: event.movementX,
         dy: event.movementY,
@@ -63,11 +75,21 @@ export class HtmlController {
       return;
     }
 
+    if (this.di.options.shift.enabled === false) {
+      return;
+    }
+
     this.grabbedNodeId = null;
     this.di.eventSubject.dispatch(GraphEventType.Release);
   };
 
   private readonly onWheelScroll = (event: WheelEvent) => {
+    if (this.di.options.scale.enabled === false) {
+      return;
+    } else {
+      event.preventDefault();
+    }
+
     const trigger = this.di.options.scale.trigger;
 
     if (
@@ -93,16 +115,14 @@ export class HtmlController {
       centerX,
       centerY,
     });
-
-    if (this.di.options.scale.enabled) {
-      event.preventDefault();
-    }
   };
 
   private readonly onNodePointerDown = (event: PointerEvent) => {
     if (event.button !== 0 || this.di.options.nodes.draggable == false) {
       return;
     }
+
+    event.stopPropagation();
 
     const nodeId = this.nodeElementToIdMap.get(
       event.currentTarget as HTMLElement,
@@ -112,6 +132,17 @@ export class HtmlController {
     this.di.eventSubject.dispatch(GraphEventType.GrabNode, {
       nodeId,
     });
+  };
+
+  private readonly onNodePointerUp = (event: PointerEvent) => {
+    if (event.button !== 0 || this.di.options.nodes.draggable == false) {
+      return;
+    }
+
+    event.stopPropagation();
+
+    this.grabbedNodeId = null;
+    this.di.eventSubject.dispatch(GraphEventType.Release);
   };
 
   private readonly layers: { [key in LayersMode]: LayersController } = {
@@ -227,7 +258,11 @@ export class HtmlController {
   }
 
   setCursor(type: "grab" | "default"): void {
-    this.host.style.cursor = type;
+    if (type === "grab") {
+      this.host.style.cursor = "grab";
+    } else {
+      this.host.style.removeProperty("cursor");
+    }
   }
 
   applyTransform(): void {
@@ -277,6 +312,7 @@ export class HtmlController {
 
     wrapper.style.visibility = "visible";
     node.element.addEventListener("pointerdown", this.onNodePointerDown);
+    node.element.addEventListener("pointerup", this.onNodePointerUp);
   }
 
   detachNode(nodeId: string): void {
@@ -286,6 +322,7 @@ export class HtmlController {
     this.nodesContainer.removeChild(node.element);
 
     node.element.removeEventListener("pointerdown", this.onNodePointerDown);
+    node.element.removeEventListener("pointerup", this.onNodePointerUp);
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     wrapper.removeChild(node.element);
@@ -344,7 +381,7 @@ export class HtmlController {
     });
   }
 
-  getViewportDimenstions(): Point {
+  getViewportDimensions(): Point {
     const rect = this.host.getBoundingClientRect();
 
     return [rect.width, rect.height];
@@ -357,7 +394,6 @@ export class HtmlController {
     host.style.height = "100%";
     host.style.position = "relative";
     host.style.overflow = "hidden";
-    host.style.cursor = "default";
 
     return host;
   }

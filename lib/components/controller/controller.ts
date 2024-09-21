@@ -9,18 +9,10 @@ export class Controller {
   constructor(private readonly di: DiContainer) {}
 
   grabViewport(): void {
-    if (this.di.options.shift.enabled === false) {
-      return;
-    }
-
     this.di.htmlController.setCursor("grab");
   }
 
   grabNode(nodeId: string): void {
-    if (this.di.options.nodes.draggable === false) {
-      return;
-    }
-
     this.di.htmlController.setCursor("grab");
 
     this.di.htmlController.moveNodeOnTop(nodeId);
@@ -259,7 +251,7 @@ export class Controller {
 
     const avgX = x / nodes.length;
     const avgY = y / nodes.length;
-    const [width, height] = this.di.htmlController.getViewportDimenstions();
+    const [width, height] = this.di.htmlController.getViewportDimensions();
     const sa = this.di.viewportTransformer.getAbsoluteScale();
 
     const targetX = avgX - (sa * width) / 2;

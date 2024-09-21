@@ -22,10 +22,6 @@ export class ViewportTransformer {
    * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
    */
   applyShift(dx: number, dy: number): void {
-    if (this.di.options.shift.enabled === false) {
-      return;
-    }
-
     this.state = {
       scale: this.state.scale,
       x: this.state.scale * dx + this.state.x,
@@ -45,10 +41,6 @@ export class ViewportTransformer {
    * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
    */
   applyScale(s2: number, cx: number, cy: number): void {
-    if (this.di.options.scale.enabled === false) {
-      return;
-    }
-
     const max = this.di.options.scale.max;
     const min = this.di.options.scale.min;
 
