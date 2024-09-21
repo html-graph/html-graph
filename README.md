@@ -1,6 +1,6 @@
 # HTMLGraph
 
-## Graph visualization library that enables to customize graph nodes using HTML
+## Graph visualization library that enables to customize nodes using HTML
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
@@ -18,7 +18,7 @@ This library fits for tasks where easy nodes customization and interactiveness a
 - easy nodes customization using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas with draggable nodes
-- exhaustive set of usage examples
+- exhaustive set of examples
 - typescript support
 - mobile devices support
 
@@ -82,6 +82,12 @@ Use node version >= 20
 npm install
 
 npm run start
+```
+
+or
+
+```
+docker compose up
 ```
 
 Open `http://localhost:3100`

@@ -22,9 +22,10 @@
     "visualization",
     "visualisation",
     "graph",
+    "network",
+    "flow",
     "html",
-    "svg",
-    "network"
+    "svg"
   ],
   "scripts": {
     "start": "vite --port 3100 --host 0.0.0.0",

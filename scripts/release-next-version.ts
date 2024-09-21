@@ -58,12 +58,12 @@ class Releaser {
 
     let newVersion = `${major}.${minor}.${patch + 1}`;
 
-    if (isMajor) {
-      newVersion = `${major + 1}.0.0`;
-    }
-
     if (isMinor) {
       newVersion = `${major}.${minor + 1}.0`;
+    }
+
+    if (isMajor) {
+      newVersion = `${major + 1}.0.0`;
     }
 
     pkg.version = newVersion;
@@ -89,9 +89,7 @@ class Releaser {
 
     this.execute(cmdsBeforePublish.join(" && "))
       .then(() => this.askCode())
-      .then((token) =>
-        this.execute(`npm publish --access=public --otp=${token}`),
-      )
+      .then((otp) => this.execute(`npm publish --access=public --otp=${otp}`))
       .then(() => this.execute(cmdsAfterPublish.join(" && ")))
       .catch(() => this.execute("git reset --hard"));
   }
