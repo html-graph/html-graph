@@ -9,7 +9,7 @@ import { DiContainer } from "../di-container/di-container";
 export class Controller {
   constructor(private readonly di: DiContainer) {
     this.di.eventSubject.on(GraphEventType.GrabViewport, () => {
-      this.grabViewport();
+      this.setGrabCursor();
     });
 
     this.di.eventSubject.on(GraphEventType.DragViewport, (payload) => {
@@ -33,15 +33,15 @@ export class Controller {
     });
 
     this.di.eventSubject.on(GraphEventType.ReleaseViewport, () => {
-      this.release();
+      this.unsetGrabCursor();
     });
 
     this.di.eventSubject.on(GraphEventType.ReleaseNode, () => {
-      this.release();
+      this.unsetGrabCursor();
     });
   }
 
-  grabViewport(): void {
+  setGrabCursor(): void {
     this.di.htmlController.setCursor("grab");
   }
 
@@ -80,7 +80,7 @@ export class Controller {
     this.di.htmlController.updateNodePosition(nodeId);
   }
 
-  release(): void {
+  unsetGrabCursor(): void {
     this.di.htmlController.setCursor("default");
   }
 
