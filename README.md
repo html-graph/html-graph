@@ -1,5 +1,5 @@
 <h1>
-  <img src="/media/favicon.png" alt="HTMLGraph" width="30" height="30"/> HTMLGraph
+  <img src="/media/favicon.png" alt="HTMLGraph" width="25" height="25"/> HTMLGraph
 </h1>
 
 ## Graph visualization library that enables to customize nodes using HTML
