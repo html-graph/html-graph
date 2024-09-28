@@ -6,6 +6,8 @@
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
+Visit <a href="https://html-graph.github.io">live demo</a>
+
 <a href="https://html-graph.github.io/">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
