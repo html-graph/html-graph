@@ -1,59 +1,19 @@
 import { CenterFn } from "../../models/center/center-fn";
 import { ConnectionController } from "../../models/connection/connection-controller";
-import { GraphEventType } from "../../models/events/graph-event-type";
 import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionControllerFactory } from "../../utils/resolve-connection-controller-factory/resolve-connection-controller-factory";
 import { DiContainer } from "../di-container/di-container";
 
 export class Controller {
-  constructor(private readonly di: DiContainer) {
-    this.di.eventSubject.on(GraphEventType.GrabViewport, () => {
-      this.setGrabCursor();
-    });
+  constructor(private readonly di: DiContainer) {}
 
-    this.di.eventSubject.on(GraphEventType.DragViewport, (payload) => {
-      this.dragViewport(payload.dx, payload.dy);
-    });
-
-    this.di.eventSubject.on(GraphEventType.ScaleViewport, (payload) => {
-      this.scaleCanvas(payload.deltaY, payload.centerX, payload.centerY);
-    });
-
-    this.di.eventSubject.on(GraphEventType.SetViewportScale, (payload) => {
-      this.scaleContent(payload.scale, payload.centerX, payload.centerY);
-    });
-
-    this.di.eventSubject.on(GraphEventType.GrabNode, (payload) => {
-      this.grabNode(payload.nodeId);
-    });
-
-    this.di.eventSubject.on(GraphEventType.DragNode, (payload) => {
-      this.dragNode(payload.nodeId, payload.dx, payload.dy);
-    });
-
-    this.di.eventSubject.on(GraphEventType.ReleaseViewport, () => {
-      this.unsetGrabCursor();
-    });
-
-    this.di.eventSubject.on(GraphEventType.ReleaseNode, () => {
-      this.unsetGrabCursor();
-    });
-  }
-
-  setGrabCursor(): void {
-    this.di.htmlController.setCursor("grab");
-  }
-
-  grabNode(nodeId: string): void {
-    this.di.htmlController.setCursor("grab");
+  moveNodeOnTop(nodeId: string): void {
+    if (!this.di.graphStore.hasNode(nodeId)) {
+      throw new Error("failed to move on top nonexisting node");
+    }
 
     this.di.htmlController.moveNodeOnTop(nodeId);
-  }
-
-  dragViewport(dx: number, dy: number): void {
-    this.di.viewportTransformer.applyShift(-dx, -dy);
-    this.di.htmlController.applyTransform();
   }
 
   dragNode(nodeId: string, dx: number, dy: number): void {
@@ -78,20 +38,6 @@ export class Controller {
 
     this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
     this.di.htmlController.updateNodePosition(nodeId);
-  }
-
-  unsetGrabCursor(): void {
-    this.di.htmlController.setCursor("default");
-  }
-
-  scaleCanvas(deltaY: number, centerX: number, centerY: number): void {
-    const scaleVelocity = this.di.options.scale.velocity;
-    const velocity = deltaY < 0 ? scaleVelocity : 1 / scaleVelocity;
-    const viewportVelocity = 1 / velocity;
-
-    this.di.viewportTransformer.applyScale(viewportVelocity, centerX, centerY);
-
-    this.di.htmlController.applyTransform();
   }
 
   addNode(
@@ -311,7 +257,7 @@ export class Controller {
     controller: ConnectionController,
   ): void {
     if (!this.di.graphStore.hasConnection(connectionId)) {
-      throw new Error("failed to update nonexisting connection controller");
+      throw new Error("failed to update nonexisting connection");
     }
 
     this.di.htmlController.detachConnection(connectionId);

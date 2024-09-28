@@ -1,18 +1,24 @@
-import { Canvas } from "../../lib/main";
+import {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 import { GraphHtmlHelper } from "./graph-html-helper";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true, centerFn: () => [0, 0] },
-  connections: {
-    type: "bezier",
-    color: "var(--color-1)",
-  },
-  background: { type: "dots" },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      nodes: { centerFn: () => [0, 0] },
+      connections: {
+        type: "bezier",
+        color: "var(--color-1)",
+      },
+      background: { type: "dots" },
+    }),
+  ),
+);
 
 const helper = new GraphHtmlHelper();
 
@@ -48,6 +54,7 @@ const [node5, ports5] = helper.createNodeElement("Node 5", "input-5", {
 });
 
 canvas
+  .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
   .addNode({ element: node3, x: 600, y: 200, ports: ports3 })

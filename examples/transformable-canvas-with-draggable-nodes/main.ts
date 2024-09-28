@@ -1,16 +1,20 @@
-import { Canvas } from "../../lib/canvas/canvas";
 import {
   ApiPortsPayload,
   CanvasCore,
+  TransformableCanvas,
   DraggableNodesCanvas,
 } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new DraggableNodesCanvas(
-  new CanvasCore({
-    background: { type: "dots" },
-  }),
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      // scale: { enabled: true },
+      // shift: { enabled: true },
+      background: { type: "dots" },
+    }),
+  ),
 );
 
 function createNode(
@@ -48,33 +52,3 @@ canvas
   .addConnection({ from: "port-1-2", to: "port-2-1" })
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });
-
-class ViewportTransformer {
-  private isGrabbed = false;
-
-  constructor(
-    private readonly element: HTMLElement,
-    private readonly canvas: Canvas<unknown>,
-  ) {
-    this.element.addEventListener("mousedown", () => {
-      this.element.style.cursor = "grab";
-      this.isGrabbed = true;
-    });
-
-    this.element.addEventListener("mouseup", () => {
-      this.element.style.removeProperty("cursor");
-      this.isGrabbed = false;
-    });
-
-    this.element.addEventListener("mousemove", (event) => {
-      if (this.isGrabbed) {
-        this.canvas.moveContent({
-          x: event.movementX,
-          y: event.movementY,
-        });
-      }
-    });
-  }
-}
-
-new ViewportTransformer(canvasElement, canvas);

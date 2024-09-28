@@ -1,168 +1,74 @@
-import { DiContainer } from "../components/di-container/di-container";
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiUpdateConnection } from "../models/connection/api-update-connection";
 import { ApiNode } from "../models/nodes/api-node";
-import { ApiOptions } from "../models/options/api-options";
-import { Options } from "../models/options/options";
 import { ApiPort } from "../models/port/api-port";
 import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
-import { createOptions } from "../utils/create-options/create-options";
 
-/**
- * Provides API for acting on graph
- */
-export class Canvas {
-  private readonly options: Options;
-
-  private readonly di: DiContainer;
-
-  constructor(
-    private readonly canvasWrapper: HTMLElement,
-    private readonly apiOptions?: ApiOptions,
-  ) {
-    this.options = createOptions(this.apiOptions ?? {});
-
-    this.di = new DiContainer(this.canvasWrapper, this.options);
-  }
-
+export interface Canvas<T> {
   /**
    * adds node to graph
    */
-  addNode(node: ApiNode): Canvas {
-    this.di.controller.addNode(
-      node.id,
-      node.element,
-      node.x,
-      node.y,
-      node.ports,
-      node.centerFn,
-    );
-
-    return this;
-  }
+  addNode(node: ApiNode): T;
 
   /**
    * removes node from graph
    * all the ports of node get unmarked
    * all the connections adjacent to node get removed
    */
-  removeNode(nodeId: string): Canvas {
-    this.di.controller.removeNode(nodeId);
-
-    return this;
-  }
+  removeNode(nodeId: string): T;
 
   /**
    * marks element as port of node
    */
-  markPort(port: ApiPort): Canvas {
-    this.di.controller.markPort(
-      port.id,
-      port.element,
-      port.nodeId,
-      port.centerFn,
-      port.direction,
-    );
-
-    return this;
-  }
+  markPort(port: ApiPort): T;
 
   /**
    * updates connections attached to port
    */
-  updatePortConnections(portId: string): Canvas {
-    this.di.controller.updatePortConnections(portId);
-
-    return this;
-  }
+  updatePortConnections(portId: string): T;
 
   /**
    * ummarks element as port of node
    * all the connections adjacent to port get removed
    */
-  unmarkPort(portId: string): Canvas {
-    this.di.controller.unmarkPort(portId);
-
-    return this;
-  }
+  unmarkPort(portId: string): T;
 
   /**
    * adds connection to graph
    */
-  addConnection(connection: ApiConnection): Canvas {
-    this.di.controller.addConnection(
-      connection.id,
-      connection.from,
-      connection.to,
-      connection.options,
-    );
-
-    return this;
-  }
+  addConnection(connection: ApiConnection): T;
 
   /**
    * removes connection from graph
    */
-  removeConnection(connectionId: string): Canvas {
-    this.di.controller.removeConnection(connectionId);
-
-    return this;
-  }
+  removeConnection(connectionId: string): T;
 
   /**
    * applies transformation for viewport
    */
-  patchViewportTransform(apiTransform: ApiTransform): Canvas {
-    this.di.controller.patchViewportTransform(
-      apiTransform.scale ?? null,
-      apiTransform.x ?? null,
-      apiTransform.y ?? null,
-    );
-
-    return this;
-  }
+  patchViewportTransform(apiTransform: ApiTransform): T;
 
   /**
    * applies move transformation for content
    */
-  moveContent(apiTransform: ApiContentMoveTransform): Canvas {
-    this.di.controller.moveContent(apiTransform.x ?? 0, apiTransform.y ?? 0);
-
-    return this;
-  }
+  moveContent(apiTransform: ApiContentMoveTransform): T;
 
   /**
    * applies scale transformation for content
    */
-  scaleContent(apiTransform: ApiContentScaleTransform): Canvas {
-    this.di.controller.scaleContent(
-      apiTransform.scale ?? 1,
-      apiTransform.x ?? 0,
-      apiTransform.y ?? 0,
-    );
-
-    return this;
-  }
+  scaleContent(apiTransform: ApiContentScaleTransform): T;
 
   /**
    * applies shift transformation for content
    */
-  moveToNodes(nodeIds: readonly string[]): Canvas {
-    this.di.controller.moveToNodes(nodeIds);
-
-    return this;
-  }
+  moveToNodes(nodeIds: readonly string[]): T;
 
   /**
    * updates node absolute coordinates
    */
-  updateNodeCoords(nodeId: string, x: number, y: number): Canvas {
-    this.di.controller.updateNodeCoords(nodeId, x, y);
-
-    return this;
-  }
+  updateNodeCoords(nodeId: string, x: number, y: number): T;
 
   /**
    * updates connection
@@ -170,43 +76,44 @@ export class Canvas {
   updateConnectionOptions(
     connectionId: string,
     options: ApiUpdateConnection,
-  ): Canvas {
-    if (options.controller !== undefined) {
-      this.di.controller.updateConnectionController(
-        connectionId,
-        options.controller,
-      );
-    }
-
-    return this;
-  }
+  ): T;
 
   /**
    * drags node in viewport
    */
-  dragNode(nodeId: string, dx: number, dy: number): Canvas {
-    this.di.controller.dragNode(nodeId, dx, dy);
-
-    return this;
-  }
+  dragNode(nodeId: string, dx: number, dy: number): T;
 
   /**
    * clears graph
    * graph gets rolled back to initial state
    * canvas can be reused
    */
-  clear(): Canvas {
-    this.di.controller.clear();
+  clear(): T;
 
-    return this;
-  }
+  /**
+   * attaches canvas to given element
+   */
+  attach(element: HTMLElement): T;
+
+  /**
+   * detaches canvas from element
+   */
+  detach(): T;
 
   /**
    * destroys canvas
    * canvas element gets rolled back to initial state
    * canvas requires reinitialization in order to be used again
    */
-  destroy(): void {
-    this.di.controller.destroy();
-  }
+  destroy(): void;
+
+  /**
+   * sets html cursor
+   */
+  setCursor(cursor: string | null): T;
+
+  /**
+   * moves specified node on top
+   */
+  moveNodeOnTop(nodeId: string): T;
 }

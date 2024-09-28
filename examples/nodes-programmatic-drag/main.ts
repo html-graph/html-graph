@@ -1,4 +1,4 @@
-import { ApiPortsPayload, Canvas } from "../../lib/main";
+import { ApiPortsPayload, CanvasCore } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -8,7 +8,7 @@ class NodesDragHandler {
   private grabbedNode: string | null = null;
 
   constructor(private readonly element: HTMLElement) {
-    const canvas = new Canvas(this.element, {
+    const canvas = new CanvasCore({
       background: { type: "dots" },
     });
 
@@ -23,6 +23,7 @@ class NodesDragHandler {
     this.nodes.set("node-4", node4);
 
     canvas
+      .attach(canvasElement)
       .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
       .addNode({ id: "node-2", element: node2, x: 600, y: 500, ports: ports2 })
       .addNode({ id: "node-3", element: node3, x: 200, y: 800, ports: ports3 })

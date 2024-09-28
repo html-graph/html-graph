@@ -1,16 +1,22 @@
-import { ApiPortsPayload, Canvas } from "../../lib/main";
+import {
+  ApiPortsPayload,
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-  connections: {
-    type: "straight",
-  },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+      connections: {
+        type: "straight",
+      },
+    }),
+  ),
+);
 
 function createNode(
   name: string,
@@ -39,6 +45,7 @@ const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
 const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
 
 canvas
+  .attach(canvasElement)
   .addNode({ element: node1, x: 300, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
   .addNode({ element: node3, x: 200, y: 800, ports: ports3 })

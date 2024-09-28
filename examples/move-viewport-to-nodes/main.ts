@@ -1,13 +1,19 @@
-import { Canvas } from "../../lib/main";
+import {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  background: { type: "dots" },
-  nodes: { draggable: true },
-  scale: { enabled: true },
-  shift: { enabled: true },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+      layers: { mode: "connections-on-top" },
+    }),
+  ),
+);
 
 const node1 = document.createElement("div");
 node1.classList.add("node");
@@ -39,6 +45,7 @@ btn1.innerText = "Move to 2 and 3";
 node1.appendChild(btn1);
 
 canvas
+  .attach(canvasElement)
   .addNode({ id: "node-1", element: node1, x: 700, y: 300 })
   .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
   .addNode({ id: "node-2", element: node2, x: 1700, y: 300 })

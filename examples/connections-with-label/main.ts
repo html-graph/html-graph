@@ -1,19 +1,22 @@
 import {
   ApiPortsPayload,
   BezierConnectionController,
-  Canvas,
+  CanvasCore,
+  DraggableNodesCanvas,
   PortPayload,
+  TransformableCanvas,
 } from "../../lib/main";
 import { ConnectionController } from "../../lib/models/connection/connection-controller";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+    }),
+  ),
+);
 
 function createNode(
   name: string,
@@ -99,6 +102,7 @@ class CustomConnectionController implements ConnectionController {
 }
 
 canvas
+  .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 470, y: 600, ports: ports2 })
   .addConnection({
