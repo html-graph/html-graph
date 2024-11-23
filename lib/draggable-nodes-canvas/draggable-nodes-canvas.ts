@@ -6,7 +6,7 @@ import { ApiPort } from "../models/port/api-port";
 import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
-import { Canvas } from "./canvas";
+import { Canvas } from "../canvas/canvas";
 
 export class DraggableNodesCanvas implements Canvas<DraggableNodesCanvas> {
   private readonly nodes = new Map<

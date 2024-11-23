@@ -1,6 +1,5 @@
 # TODO
 
-- fix touch scaling
 - implement builder
 - add options for wrappers
 - same port cycle

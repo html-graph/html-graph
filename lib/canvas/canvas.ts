@@ -84,13 +84,6 @@ export interface Canvas<T> {
   dragNode(nodeId: string, dx: number, dy: number): T;
 
   /**
-   * clears graph
-   * graph gets rolled back to initial state
-   * canvas can be reused
-   */
-  clear(): T;
-
-  /**
    * attaches canvas to given element
    */
   attach(element: HTMLElement): T;
@@ -99,6 +92,13 @@ export interface Canvas<T> {
    * detaches canvas from element
    */
   detach(): T;
+
+  /**
+   * clears graph
+   * graph gets rolled back to initial state
+   * canvas can be reused
+   */
+  clear(): T;
 
   /**
    * destroys canvas

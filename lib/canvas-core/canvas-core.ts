@@ -9,7 +9,7 @@ import { ApiContentMoveTransform } from "../models/transform/api-content-move-tr
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
 import { createOptions } from "../utils/create-options/create-options";
-import { Canvas } from "./canvas";
+import { Canvas } from "../canvas/canvas";
 
 /**
  * Provides core API for acting on graph

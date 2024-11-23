@@ -10,8 +10,6 @@ const canvasElement = document.getElementById("canvas")!;
 const canvas = new TransformableCanvas(
   new DraggableNodesCanvas(
     new CanvasCore({
-      // scale: { enabled: true },
-      // shift: { enabled: true },
       background: { type: "dots" },
     }),
   ),

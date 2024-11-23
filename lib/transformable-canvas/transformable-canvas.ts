@@ -5,14 +5,8 @@ import { ApiPort } from "../models/port/api-port";
 import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
-import { Canvas } from "./canvas";
-
-interface TouchState {
-  x: number;
-  y: number;
-  scale: number;
-  touchesCnt: number;
-}
+import { Canvas } from "../canvas/canvas";
+import { TouchState } from "./touch-state";
 
 export class TransformableCanvas implements Canvas<TransformableCanvas> {
   private element: HTMLElement | null = null;
@@ -86,6 +80,8 @@ export class TransformableCanvas implements Canvas<TransformableCanvas> {
     }
 
     this.prevTouches = currentTouches;
+
+    event.preventDefault();
   };
 
   private readonly onTouchEnd = () => {
