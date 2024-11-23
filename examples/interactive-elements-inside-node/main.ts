@@ -1,15 +1,22 @@
-import { Canvas } from "../../lib/main";
+import {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+    }),
+  ),
+);
 
 let angle = 0;
+
+canvas.attach(canvasElement);
 
 const createNode = () => {
   const node = document.createElement("div");

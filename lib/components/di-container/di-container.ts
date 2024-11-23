@@ -1,6 +1,5 @@
 import { Options } from "../../models/options/options";
 import { HtmlController } from "../html-controller/html-controller";
-import { EventSubject } from "../event-subject/event-subject";
 import { ViewportTransformer } from "../viewport-transformer/viewport-transformer";
 import { PublicViewportTransformer } from "../public-viewport-transformer/public-viewport-transformer";
 import { Controller } from "../controller/controller";
@@ -9,8 +8,6 @@ import { IdGenerator } from "../id-generator/id-generator";
 
 export class DiContainer {
   readonly htmlController: HtmlController;
-
-  readonly eventSubject: EventSubject;
 
   readonly viewportTransformer: ViewportTransformer;
 
@@ -26,15 +23,10 @@ export class DiContainer {
 
   readonly connectionIdGenerator: IdGenerator;
 
-  constructor(
-    canvasWrapper: HTMLElement,
-    readonly options: Options,
-  ) {
-    this.htmlController = new HtmlController(canvasWrapper, this);
+  constructor(readonly options: Options) {
+    this.htmlController = new HtmlController(this);
 
-    this.eventSubject = new EventSubject();
-
-    this.viewportTransformer = new ViewportTransformer(this);
+    this.viewportTransformer = new ViewportTransformer();
 
     this.publicViewportTransformer = new PublicViewportTransformer(
       this.viewportTransformer,

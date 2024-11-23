@@ -1,11 +1,17 @@
-import { ApiPortsPayload, Canvas } from "../../lib/main";
+import { Canvas } from "../../lib/canvas/canvas";
+import {
+  ApiPortsPayload,
+  CanvasCore,
+  DraggableNodesCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new DraggableNodesCanvas(
+  new CanvasCore({
+    background: { type: "dots" },
+  }),
+);
 
 function createNode(
   name: string,
@@ -34,6 +40,7 @@ const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
 const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
 
 canvas
+  .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
   .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
@@ -47,7 +54,7 @@ class ViewportTransformer {
 
   constructor(
     private readonly element: HTMLElement,
-    private readonly canvas: Canvas,
+    private readonly canvas: Canvas<unknown>,
   ) {
     this.element.addEventListener("wheel", (event) => {
       const { left, top } = this.element.getBoundingClientRect();

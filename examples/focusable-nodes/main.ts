@@ -1,13 +1,18 @@
-import { Canvas } from "../../lib/main";
+import {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+    }),
+  ),
+);
 
 function createNode(name: string) {
   const node = document.createElement("button");
@@ -23,6 +28,8 @@ const map: Map<string, [HTMLElement, number, number]> = new Map([
   ["node-3", [createNode("3"), 1200, 500]],
   ["node-4", [createNode("4"), 1700, 500]],
 ]);
+
+canvas.attach(canvasElement);
 
 map.forEach((value, key) => {
   canvas.addNode({ id: key, element: value[0], x: value[1], y: value[2] });

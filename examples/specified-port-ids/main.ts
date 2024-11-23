@@ -1,8 +1,8 @@
-import { Canvas } from "../../lib/main";
+import { CanvasCore } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement);
+const canvas = new CanvasCore();
 
 const node1 = document.createElement("div");
 node1.classList.add("node");
@@ -24,6 +24,7 @@ node1.appendChild(port1);
 node2.appendChild(port2);
 
 canvas
+  .attach(canvasElement)
   .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
   .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
   .addNode({ id: "node-2", element: node2, x: 600, y: 500 })

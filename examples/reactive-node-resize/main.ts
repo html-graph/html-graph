@@ -1,13 +1,18 @@
-import { Canvas } from "../../lib/main";
+import {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new Canvas(canvasElement, {
-  scale: { enabled: true },
-  shift: { enabled: true },
-  nodes: { draggable: true },
-  background: { type: "dots" },
-});
+const canvas = new TransformableCanvas(
+  new DraggableNodesCanvas(
+    new CanvasCore({
+      background: { type: "dots" },
+    }),
+  ),
+);
 
 const node1 = document.createElement("div");
 node1.classList.add("node");
@@ -37,6 +42,7 @@ node1.appendChild(port1);
 node2.appendChild(port2);
 
 canvas
+  .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 300, ports: { "port-1": port1 } })
   .addNode({ element: node2, x: 600, y: 500, ports: { "port-2": port2 } })
   .addConnection({ from: "port-1", to: "port-2" });
