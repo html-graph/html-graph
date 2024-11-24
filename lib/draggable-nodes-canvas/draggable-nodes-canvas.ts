@@ -79,7 +79,7 @@ export class DraggableNodesCanvas implements Canvas {
 
   constructor(private readonly canvas: Canvas) {}
 
-  addNode(node: ApiNode): DraggableNodesCanvas {
+  addNode(node: ApiNode): Canvas {
     let nodeId = node.id;
 
     if (nodeId === undefined) {
@@ -118,7 +118,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  removeNode(nodeId: string): DraggableNodesCanvas {
+  removeNode(nodeId: string): Canvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -132,61 +132,61 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  markPort(port: ApiPort): DraggableNodesCanvas {
+  markPort(port: ApiPort): Canvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  updatePortConnections(portId: string): DraggableNodesCanvas {
+  updatePortConnections(portId: string): Canvas {
     this.canvas.updatePortConnections(portId);
 
     return this;
   }
 
-  unmarkPort(portId: string): DraggableNodesCanvas {
+  unmarkPort(portId: string): Canvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  addConnection(connection: ApiConnection): DraggableNodesCanvas {
+  addConnection(connection: ApiConnection): Canvas {
     this.canvas.addConnection(connection);
 
     return this;
   }
 
-  removeConnection(connectionId: string): DraggableNodesCanvas {
+  removeConnection(connectionId: string): Canvas {
     this.canvas.removeConnection(connectionId);
 
     return this;
   }
 
-  patchViewportTransform(apiTransform: ApiTransform): DraggableNodesCanvas {
+  patchViewportTransform(apiTransform: ApiTransform): Canvas {
     this.canvas.patchViewportTransform(apiTransform);
 
     return this;
   }
 
-  moveContent(apiTransform: ApiContentMoveTransform): DraggableNodesCanvas {
+  moveContent(apiTransform: ApiContentMoveTransform): Canvas {
     this.canvas.moveContent(apiTransform);
 
     return this;
   }
 
-  scaleContent(apiTransform: ApiContentScaleTransform): DraggableNodesCanvas {
+  scaleContent(apiTransform: ApiContentScaleTransform): Canvas {
     this.canvas.scaleContent(apiTransform);
 
     return this;
   }
 
-  moveToNodes(nodeIds: readonly string[]): DraggableNodesCanvas {
+  moveToNodes(nodeIds: readonly string[]): Canvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): DraggableNodesCanvas {
+  updateNodeCoords(nodeId: string, x: number, y: number): Canvas {
     this.canvas.updateNodeCoords(nodeId, x, y);
 
     return this;
@@ -195,25 +195,25 @@ export class DraggableNodesCanvas implements Canvas {
   updateConnectionOptions(
     connectionId: string,
     options: ApiUpdateConnection,
-  ): DraggableNodesCanvas {
+  ): Canvas {
     this.canvas.updateConnectionOptions(connectionId, options);
 
     return this;
   }
 
-  dragNode(nodeId: string, dx: number, dy: number): DraggableNodesCanvas {
+  dragNode(nodeId: string, dx: number, dy: number): Canvas {
     this.canvas.dragNode(nodeId, dx, dy);
 
     return this;
   }
 
-  moveNodeOnTop(nodeId: string): DraggableNodesCanvas {
+  moveNodeOnTop(nodeId: string): Canvas {
     this.canvas.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  clear(): DraggableNodesCanvas {
+  clear(): Canvas {
     this.canvas.clear();
 
     this.nodes.forEach((value) => {
@@ -224,7 +224,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  attach(element: HTMLElement): DraggableNodesCanvas {
+  attach(element: HTMLElement): Canvas {
     this.canvas.attach(element);
     this.element = element;
 
@@ -238,7 +238,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  detach(): DraggableNodesCanvas {
+  detach(): Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {

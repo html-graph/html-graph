@@ -6,71 +6,69 @@ import { ApiContentMoveTransform } from "../models/transform/api-content-move-tr
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
 
-export type Canvas = SelfRefCanvas<Canvas>;
-
-interface SelfRefCanvas<T extends SelfRefCanvas<T>> {
+export interface Canvas {
   /**
    * adds node to graph
    */
-  addNode(node: ApiNode): T;
+  addNode(node: ApiNode): Canvas;
 
   /**
    * removes node from graph
    * all the ports of node get unmarked
    * all the connections adjacent to node get removed
    */
-  removeNode(nodeId: string): T;
+  removeNode(nodeId: string): Canvas;
 
   /**
    * marks element as port of node
    */
-  markPort(port: ApiPort): T;
+  markPort(port: ApiPort): Canvas;
 
   /**
    * updates connections attached to port
    */
-  updatePortConnections(portId: string): T;
+  updatePortConnections(portId: string): Canvas;
 
   /**
    * ummarks element as port of node
    * all the connections adjacent to port get removed
    */
-  unmarkPort(portId: string): T;
+  unmarkPort(portId: string): Canvas;
 
   /**
    * adds connection to graph
    */
-  addConnection(connection: ApiConnection): T;
+  addConnection(connection: ApiConnection): Canvas;
 
   /**
    * removes connection from graph
    */
-  removeConnection(connectionId: string): T;
+  removeConnection(connectionId: string): Canvas;
 
   /**
    * applies transformation for viewport
    */
-  patchViewportTransform(apiTransform: ApiTransform): T;
+  patchViewportTransform(apiTransform: ApiTransform): Canvas;
 
   /**
    * applies move transformation for content
    */
-  moveContent(apiTransform: ApiContentMoveTransform): T;
+  moveContent(apiTransform: ApiContentMoveTransform): Canvas;
 
   /**
    * applies scale transformation for content
    */
-  scaleContent(apiTransform: ApiContentScaleTransform): T;
+  scaleContent(apiTransform: ApiContentScaleTransform): Canvas;
 
   /**
    * applies shift transformation for content
    */
-  moveToNodes(nodeIds: readonly string[]): T;
+  moveToNodes(nodeIds: readonly string[]): Canvas;
 
   /**
    * updates node absolute coordinates
    */
-  updateNodeCoords(nodeId: string, x: number, y: number): T;
+  updateNodeCoords(nodeId: string, x: number, y: number): Canvas;
 
   /**
    * updates connection
@@ -78,29 +76,29 @@ interface SelfRefCanvas<T extends SelfRefCanvas<T>> {
   updateConnectionOptions(
     connectionId: string,
     options: ApiUpdateConnection,
-  ): T;
+  ): Canvas;
 
   /**
    * drags node in viewport
    */
-  dragNode(nodeId: string, dx: number, dy: number): T;
+  dragNode(nodeId: string, dx: number, dy: number): Canvas;
 
   /**
    * attaches canvas to given element
    */
-  attach(element: HTMLElement): T;
+  attach(element: HTMLElement): Canvas;
 
   /**
    * detaches canvas from element
    */
-  detach(): T;
+  detach(): Canvas;
 
   /**
    * clears graph
    * graph gets rolled back to initial state
    * canvas can be reused
    */
-  clear(): T;
+  clear(): Canvas;
 
   /**
    * destroys canvas
@@ -112,5 +110,5 @@ interface SelfRefCanvas<T extends SelfRefCanvas<T>> {
   /**
    * moves specified node on top
    */
-  moveNodeOnTop(nodeId: string): T;
+  moveNodeOnTop(nodeId: string): Canvas;
 }
