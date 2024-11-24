@@ -39,8 +39,8 @@ const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 function createNode(
