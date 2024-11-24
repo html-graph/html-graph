@@ -33,22 +33,17 @@ npm i @html-graph/core
 ```
 
 ```typescript
-import {
-  CanvasCore,
-  TransformableCanvas,
-  DraggableNodesCanvas,
-  ApiPortPayload,
-} from "@html-graph/core";
+import { ApiPortPayload, CanvasBuilder } from "@html-graph/core";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new TransformableCanvas(
-  new DraggableNodesCanvas(
-    new CanvasCore({
-      background: { type: "dots" },
-    }),
-  ),
-);
+const canvas = new CanvasBuilder()
+  .options({
+    background: { type: "dots" },
+  })
+  .draggable()
+  .transformable()
+  .build();
 
 function createNode(
   name: string,

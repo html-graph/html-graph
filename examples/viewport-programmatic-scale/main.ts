@@ -1,17 +1,14 @@
 import { Canvas } from "../../lib/canvas/canvas";
-import {
-  ApiPortsPayload,
-  CanvasCore,
-  DraggableNodesCanvas,
-} from "../../lib/main";
+import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new DraggableNodesCanvas(
-  new CanvasCore({
+const canvas = new CanvasBuilder()
+  .options({
     background: { type: "dots" },
-  }),
-);
+  })
+  .draggable()
+  .build();
 
 function createNode(
   name: string,
@@ -54,7 +51,7 @@ class ViewportTransformer {
 
   constructor(
     private readonly element: HTMLElement,
-    private readonly canvas: Canvas<unknown>,
+    private readonly canvas: Canvas,
   ) {
     this.element.addEventListener("wheel", (event) => {
       const { left, top } = this.element.getBoundingClientRect();

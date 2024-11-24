@@ -8,7 +8,7 @@ import { ApiContentScaleTransform } from "../models/transform/api-content-scale-
 import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
 
-export class DraggableNodesCanvas implements Canvas<DraggableNodesCanvas> {
+export class DraggableNodesCanvas implements Canvas {
   private readonly nodes = new Map<
     string,
     {
@@ -73,7 +73,7 @@ export class DraggableNodesCanvas implements Canvas<DraggableNodesCanvas> {
 
   private previousTouchCoords: [number, number] | null = null;
 
-  constructor(private readonly canvas: Canvas<unknown>) {}
+  constructor(private readonly canvas: Canvas) {}
 
   addNode(node: ApiNode): DraggableNodesCanvas {
     let nodeId = node.id;

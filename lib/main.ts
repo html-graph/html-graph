@@ -1,3 +1,4 @@
+export { CanvasBuilder } from "./canvas-builder/canvas-builder";
 export { CanvasCore } from "./canvas-core/canvas-core";
 export { DraggableNodesCanvas } from "./draggable-nodes-canvas/draggable-nodes-canvas";
 export { TransformableCanvas } from "./transformable-canvas/transformable-canvas";

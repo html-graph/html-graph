@@ -1,4 +1,4 @@
-import { ApiPortsPayload, CanvasCore } from "../../lib/main";
+import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -8,9 +8,11 @@ class NodesDragHandler {
   private grabbedNode: string | null = null;
 
   constructor(private readonly element: HTMLElement) {
-    const canvas = new CanvasCore({
-      background: { type: "dots" },
-    });
+    const canvas = new CanvasBuilder()
+      .options({
+        background: { type: "dots" },
+      })
+      .build();
 
     const [node1, ports1] = this.createNode("Node 1", "port-1-1", "port-1-2");
     const [node2, ports2] = this.createNode("Node 2", "port-2-1", "port-2-2");

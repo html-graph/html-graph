@@ -1,22 +1,17 @@
-import {
-  ApiPortsPayload,
-  CanvasCore,
-  DraggableNodesCanvas,
-  TransformableCanvas,
-} from "../../lib/main";
+import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new TransformableCanvas(
-  new DraggableNodesCanvas(
-    new CanvasCore({
-      background: { type: "dots" },
-      connections: {
-        type: "straight",
-      },
-    }),
-  ),
-);
+const canvas = new CanvasBuilder()
+  .options({
+    background: { type: "dots" },
+    connections: {
+      type: "straight",
+    },
+  })
+  .draggable()
+  .transformable()
+  .build();
 
 function createNode(
   name: string,

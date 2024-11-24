@@ -1,18 +1,14 @@
-import {
-  CanvasCore,
-  DraggableNodesCanvas,
-  TransformableCanvas,
-} from "../../lib/main";
+import { CanvasBuilder } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new TransformableCanvas(
-  new DraggableNodesCanvas(
-    new CanvasCore({
-      background: { type: "dots" },
-    }),
-  ),
-);
+const canvas = new CanvasBuilder()
+  .options({
+    background: { type: "dots" },
+  })
+  .draggable()
+  .transformable()
+  .build();
 
 const node1 = document.createElement("div");
 node1.classList.add("node");

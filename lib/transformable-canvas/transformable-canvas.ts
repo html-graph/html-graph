@@ -8,7 +8,7 @@ import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
 import { TouchState } from "./touch-state";
 
-export class TransformableCanvas implements Canvas<TransformableCanvas> {
+export class TransformableCanvas implements Canvas {
   private element: HTMLElement | null = null;
 
   private isMoving = false;
@@ -88,7 +88,7 @@ export class TransformableCanvas implements Canvas<TransformableCanvas> {
     this.prevTouches = null;
   };
 
-  constructor(private readonly canvas: Canvas<unknown>) {}
+  constructor(private readonly canvas: Canvas) {}
 
   addNode(node: ApiNode): TransformableCanvas {
     this.canvas.addNode(node);

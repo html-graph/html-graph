@@ -6,7 +6,9 @@ import { ApiContentMoveTransform } from "../models/transform/api-content-move-tr
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
 
-export interface Canvas<T> {
+export type Canvas = CanvasInterface<Canvas>;
+
+interface CanvasInterface<T extends CanvasInterface<T>> {
   /**
    * adds node to graph
    */

@@ -14,7 +14,7 @@ import { Canvas } from "../canvas/canvas";
 /**
  * Provides core API for acting on graph
  */
-export class CanvasCore implements Canvas<CanvasCore> {
+export class CanvasCore implements Canvas {
   private readonly options: Options;
 
   private readonly di: DiContainer;

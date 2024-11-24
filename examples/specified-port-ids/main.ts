@@ -1,8 +1,8 @@
-import { CanvasCore } from "../../lib/main";
+import { CanvasBuilder } from "../../lib/main";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new CanvasCore();
+const canvas = new CanvasBuilder().build();
 
 const node1 = document.createElement("div");
 node1.classList.add("node");

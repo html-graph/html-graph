@@ -1,24 +1,20 @@
-import {
-  CanvasCore,
-  DraggableNodesCanvas,
-  TransformableCanvas,
-} from "../../lib/main";
+import { CanvasBuilder } from "../../lib/main";
 import { GraphHtmlHelper } from "./graph-html-helper";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new TransformableCanvas(
-  new DraggableNodesCanvas(
-    new CanvasCore({
-      nodes: { centerFn: () => [0, 0] },
-      connections: {
-        type: "bezier",
-        color: "var(--color-1)",
-      },
-      background: { type: "dots" },
-    }),
-  ),
-);
+const canvas = new CanvasBuilder()
+  .options({
+    nodes: { centerFn: () => [0, 0] },
+    connections: {
+      type: "bezier",
+      color: "var(--color-1)",
+    },
+    background: { type: "dots" },
+  })
+  .draggable()
+  .transformable()
+  .build();
 
 const helper = new GraphHtmlHelper();
 
