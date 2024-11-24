@@ -18,7 +18,7 @@ export class DraggableNodesCanvas implements Canvas {
     }
   >();
 
-  private grabbedNode: string | null = null;
+  private grabbedNodeId: string | null = null;
 
   private readonly nodeIdGenerator = new IdGenerator();
 
@@ -26,13 +26,17 @@ export class DraggableNodesCanvas implements Canvas {
 
   private readonly onCanvasMouseUp = () => {
     this.setCursor(null);
-    this.grabbedNode = null;
+    this.grabbedNodeId = null;
   };
 
   private readonly onCanvasMouseMove = (event: MouseEvent) => {
-    if (this.grabbedNode !== null) {
+    if (this.grabbedNodeId !== null) {
       event.stopPropagation();
-      this.canvas.dragNode(this.grabbedNode, event.movementX, event.movementY);
+      this.canvas.dragNode(
+        this.grabbedNodeId,
+        event.movementX,
+        event.movementY,
+      );
     }
   };
 
@@ -45,7 +49,7 @@ export class DraggableNodesCanvas implements Canvas {
 
   private readonly onCanvasTouchMove = (event: TouchEvent) => {
     if (
-      this.grabbedNode === null ||
+      this.grabbedNodeId === null ||
       event.touches.length !== 1 ||
       this.previousTouchCoords === null
     ) {
@@ -59,7 +63,7 @@ export class DraggableNodesCanvas implements Canvas {
       event.touches[0].clientY - this.previousTouchCoords[1],
     ];
 
-    this.canvas.dragNode(this.grabbedNode, dx, dy);
+    this.canvas.dragNode(this.grabbedNodeId, dx, dy);
     this.previousTouchCoords = [
       event.touches[0].clientX,
       event.touches[0].clientY,
@@ -68,7 +72,7 @@ export class DraggableNodesCanvas implements Canvas {
 
   private readonly onCanvasTouchEnd = () => {
     this.previousTouchCoords = null;
-    this.grabbedNode = null;
+    this.grabbedNodeId = null;
   };
 
   private previousTouchCoords: [number, number] | null = null;
@@ -88,7 +92,7 @@ export class DraggableNodesCanvas implements Canvas {
 
     const onMouseDown = (event: MouseEvent) => {
       event.stopImmediatePropagation();
-      this.grabbedNode = nodeId;
+      this.grabbedNodeId = nodeId;
       this.setCursor("grab");
       this.canvas.moveNodeOnTop(nodeId);
     };
@@ -98,7 +102,7 @@ export class DraggableNodesCanvas implements Canvas {
         return;
       }
 
-      this.grabbedNode = nodeId;
+      this.grabbedNodeId = nodeId;
       this.canvas.moveNodeOnTop(nodeId);
     };
 
