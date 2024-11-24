@@ -6,7 +6,8 @@ import { ApiContentMoveTransform } from "../models/transform/api-content-move-tr
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
-import { TouchState } from "./touch-state";
+import { TransformOptions } from "../main";
+import { TouchState } from "../models/touch-state/touch-state";
 
 export class TransformableCanvas implements Canvas {
   private element: HTMLElement | null = null;
@@ -15,7 +16,17 @@ export class TransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
-  private readonly scaleVelocity = 1.2;
+  private scale = 1;
+
+  private readonly isScalable: boolean;
+
+  private readonly isShiftable: boolean;
+
+  private readonly minScale: number | null;
+
+  private readonly maxScale: number | null;
+
+  private readonly wheelSensitivity: number;
 
   private readonly onMouseDown = () => {
     this.canvas.setCursor("grab");
@@ -23,7 +34,7 @@ export class TransformableCanvas implements Canvas {
   };
 
   private readonly onMouseMove = (event: MouseEvent) => {
-    if (!this.isMoving) {
+    if (!this.isMoving || !this.isShiftable) {
       return;
     }
 
@@ -36,7 +47,7 @@ export class TransformableCanvas implements Canvas {
   };
 
   private readonly onWheelScroll = (event: WheelEvent) => {
-    if (this.element === null) {
+    if (this.element === null || this.isScalable === false) {
       return;
     }
 
@@ -47,8 +58,15 @@ export class TransformableCanvas implements Canvas {
     const centerY = event.clientY - top;
 
     const velocity =
-      event.deltaY < 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
+      event.deltaY < 0 ? this.wheelSensitivity : 1 / this.wheelSensitivity;
 
+    const nextScale = this.scale * velocity;
+
+    if (!this.checkNextScaleValid(nextScale)) {
+      return;
+    }
+
+    this.scale = nextScale;
     this.canvas.scaleContent({ scale: velocity, x: centerX, y: centerY });
   };
 
@@ -57,7 +75,11 @@ export class TransformableCanvas implements Canvas {
   };
 
   private readonly onTouchMove = (event: TouchEvent) => {
-    if (this.prevTouches === null || this.element === null) {
+    if (
+      this.prevTouches === null ||
+      this.element === null ||
+      !this.isShiftable
+    ) {
       return;
     }
 
@@ -70,13 +92,17 @@ export class TransformableCanvas implements Canvas {
       });
     }
 
-    if (currentTouches.touchesCnt === 2) {
+    if (currentTouches.touchesCnt === 2 && this.isScalable) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches.x - left;
       const y = this.prevTouches.y - top;
       const scale = currentTouches.scale / this.prevTouches.scale;
+      const nextScale = this.scale * scale;
 
-      this.canvas.scaleContent({ scale, x, y });
+      if (this.checkNextScaleValid(nextScale)) {
+        this.scale = nextScale;
+        this.canvas.scaleContent({ scale, x, y });
+      }
     }
 
     this.prevTouches = currentTouches;
@@ -88,7 +114,18 @@ export class TransformableCanvas implements Canvas {
     this.prevTouches = null;
   };
 
-  constructor(private readonly canvas: Canvas) {}
+  constructor(
+    private readonly canvas: Canvas,
+    private readonly options?: TransformOptions,
+  ) {
+    this.isScalable = this.options?.scale?.enabled !== false;
+    this.minScale = this.options?.scale?.min ?? null;
+    this.maxScale = this.options?.scale?.max ?? null;
+    this.isShiftable = this.options?.shift?.enabled !== false;
+
+    const wheelVelocity = this.options?.scale?.wheelSensitivity;
+    this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
+  }
 
   addNode(node: ApiNode): TransformableCanvas {
     this.canvas.addNode(node);
@@ -260,5 +297,25 @@ export class TransformableCanvas implements Canvas {
     );
 
     return { x: avg[0], y: avg[1], scale: distance / cnt, touchesCnt: cnt };
+  }
+
+  private checkNextScaleValid(nextScale: number): boolean {
+    if (
+      this.maxScale !== null &&
+      nextScale > this.maxScale &&
+      nextScale > this.scale
+    ) {
+      return false;
+    }
+
+    if (
+      this.minScale !== null &&
+      nextScale < this.minScale &&
+      nextScale < this.scale
+    ) {
+      return false;
+    }
+
+    return true;
   }
 }

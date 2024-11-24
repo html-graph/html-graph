@@ -14,3 +14,5 @@ export type { BackgroundDrawingFn } from "./models/options/background-drawing-fn
 export type { PortPayload } from "./models/store/port-payload";
 export type { ApiContentScaleTransform } from "./models/transform/api-content-scale-transform";
 export type { ApiContentMoveTransform } from "./models/transform/api-content-move-transform";
+export type { CoreOptions } from "./models/options/core-options";
+export type { TransformOptions } from "./models/options/transform-options";

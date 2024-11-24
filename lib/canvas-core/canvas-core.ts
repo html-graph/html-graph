@@ -109,7 +109,7 @@ export class CanvasCore implements Canvas {
 
   scaleContent(apiTransform: ApiContentScaleTransform): CanvasCore {
     this.di.controller.scaleContent(
-      apiTransform.scale ?? 1,
+      apiTransform.scale,
       apiTransform.x ?? 0,
       apiTransform.y ?? 0,
     );

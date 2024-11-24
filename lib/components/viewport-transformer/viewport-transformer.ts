@@ -38,10 +38,8 @@ export class ViewportTransformer {
    * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
    */
   applyScale(s2: number, cx: number, cy: number): void {
-    const newScale = this.state.scale * s2;
-
     this.state = {
-      scale: newScale,
+      scale: this.state.scale * s2,
       x: this.state.scale * (1 - s2) * cx + this.state.x,
       y: this.state.scale * (1 - s2) * cy + this.state.y,
     };

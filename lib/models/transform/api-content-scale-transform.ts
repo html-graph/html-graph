@@ -1,5 +1,5 @@
 export interface ApiContentScaleTransform {
-  scale?: number;
+  scale: number;
   x?: number;
   y?: number;
 }
