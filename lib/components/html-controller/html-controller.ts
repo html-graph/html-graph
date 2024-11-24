@@ -142,14 +142,6 @@ export class HtmlController {
     }
   }
 
-  setCursor(type: string | null): void {
-    if (type !== null) {
-      this.host.style.cursor = type;
-    } else {
-      this.host.style.removeProperty("cursor");
-    }
-  }
-
   applyTransform(): void {
     this.canvasCtx.clearRect(
       0,

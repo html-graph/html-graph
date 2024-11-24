@@ -29,7 +29,7 @@ export class TransformableCanvas implements Canvas {
   private readonly wheelSensitivity: number;
 
   private readonly onMouseDown = () => {
-    this.canvas.setCursor("grab");
+    this.setCursor("grab");
     this.isMoving = true;
   };
 
@@ -42,7 +42,7 @@ export class TransformableCanvas implements Canvas {
   };
 
   private readonly onMouseUp = () => {
-    this.canvas.setCursor(null);
+    this.setCursor(null);
     this.isMoving = false;
   };
 
@@ -214,12 +214,6 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  setCursor(cursor: string | null): TransformableCanvas {
-    this.canvas.setCursor(cursor);
-
-    return this;
-  }
-
   moveNodeOnTop(nodeId: string): TransformableCanvas {
     this.canvas.moveNodeOnTop(nodeId);
 
@@ -317,5 +311,17 @@ export class TransformableCanvas implements Canvas {
     }
 
     return true;
+  }
+
+  private setCursor(type: string | null): void {
+    if (this.element === null) {
+      return;
+    }
+
+    if (type !== null) {
+      this.element.style.cursor = type;
+    } else {
+      this.element.style.removeProperty("cursor");
+    }
   }
 }

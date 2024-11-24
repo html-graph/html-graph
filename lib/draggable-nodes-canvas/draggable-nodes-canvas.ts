@@ -25,7 +25,7 @@ export class DraggableNodesCanvas implements Canvas {
   private element: HTMLElement | null = null;
 
   private readonly onCanvasMouseUp = () => {
-    this.canvas.setCursor(null);
+    this.setCursor(null);
     this.grabbedNode = null;
   };
 
@@ -89,7 +89,7 @@ export class DraggableNodesCanvas implements Canvas {
     const onMouseDown = (event: MouseEvent) => {
       event.stopImmediatePropagation();
       this.grabbedNode = nodeId;
-      this.canvas.setCursor("grab");
+      this.setCursor("grab");
       this.canvas.moveNodeOnTop(nodeId);
     };
 
@@ -203,12 +203,6 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  setCursor(cursor: string | null): DraggableNodesCanvas {
-    this.canvas.setCursor(cursor);
-
-    return this;
-  }
-
   moveNodeOnTop(nodeId: string): DraggableNodesCanvas {
     this.canvas.moveNodeOnTop(nodeId);
 
@@ -266,5 +260,17 @@ export class DraggableNodesCanvas implements Canvas {
     });
 
     this.canvas.destroy();
+  }
+
+  private setCursor(type: string | null): void {
+    if (this.element === null) {
+      return;
+    }
+
+    if (type !== null) {
+      this.element.style.cursor = type;
+    } else {
+      this.element.style.removeProperty("cursor");
+    }
   }
 }

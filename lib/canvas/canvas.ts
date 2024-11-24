@@ -110,11 +110,6 @@ interface SelfRefCanvas<T extends SelfRefCanvas<T>> {
   destroy(): void;
 
   /**
-   * sets html cursor
-   */
-  setCursor(cursor: string | null): T;
-
-  /**
    * moves specified node on top
    */
   moveNodeOnTop(nodeId: string): T;

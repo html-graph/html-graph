@@ -149,12 +149,6 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  setCursor(cursor: string | null): CanvasCore {
-    this.di.htmlController.setCursor(cursor);
-
-    return this;
-  }
-
   clear(): CanvasCore {
     this.di.controller.clear();
 
