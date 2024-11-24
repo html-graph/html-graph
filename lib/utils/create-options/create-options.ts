@@ -1,11 +1,11 @@
 import { standardCenterFn } from "../../const/standard-center-fn/standard-center-fn";
-import { ApiOptions } from "../../models/options/api-options";
+import { CoreOptions } from "../../models/options/core-options";
 import { Options } from "../../models/options/options";
 import { resolveBackgroundDrawingFn } from "../resolve-background-drawing-fn/resolve-background-drawing-fn";
 import { resolveConnectionControllerFactory } from "../resolve-connection-controller-factory/resolve-connection-controller-factory";
 
-export const createOptions: (apiOptions: ApiOptions) => Options = (
-  apiOptions: ApiOptions,
+export const createOptions: (apiOptions: CoreOptions) => Options = (
+  apiOptions: CoreOptions,
 ) => {
   return {
     background: {

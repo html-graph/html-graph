@@ -2,7 +2,7 @@ import { DiContainer } from "../components/di-container/di-container";
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiUpdateConnection } from "../models/connection/api-update-connection";
 import { ApiNode } from "../models/nodes/api-node";
-import { ApiOptions } from "../models/options/api-options";
+import { CoreOptions } from "../models/options/core-options";
 import { Options } from "../models/options/options";
 import { ApiPort } from "../models/port/api-port";
 import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
@@ -19,7 +19,7 @@ export class CanvasCore implements Canvas {
 
   private readonly di: DiContainer;
 
-  constructor(private readonly apiOptions?: ApiOptions) {
+  constructor(private readonly apiOptions?: CoreOptions) {
     this.options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(this.options);

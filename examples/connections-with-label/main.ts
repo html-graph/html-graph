@@ -6,14 +6,12 @@ import {
 } from "../../lib/main";
 import { ConnectionController } from "../../lib/models/connection/connection-controller";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 function createNode(
@@ -98,6 +96,8 @@ class CustomConnectionController implements ConnectionController {
     this.text.setAttribute("y", `${height / 2}`);
   }
 }
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)

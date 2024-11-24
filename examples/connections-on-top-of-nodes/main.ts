@@ -1,7 +1,5 @@
 import { CanvasBuilder } from "../../lib/main";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
@@ -9,8 +7,8 @@ const canvas = new CanvasBuilder()
       mode: "connections-on-top",
     },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 const node1 = document.createElement("div");
@@ -27,6 +25,8 @@ port2.classList.add("port");
 
 node1.appendChild(port1);
 node2.appendChild(port2);
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)

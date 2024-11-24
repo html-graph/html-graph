@@ -1,7 +1,5 @@
 import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 
-const canvasElement = document.getElementById("canvas")!;
-
 class NodesDragHandler {
   private readonly nodes = new Map<string, HTMLElement>();
 
@@ -74,5 +72,7 @@ class NodesDragHandler {
     return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
   }
 }
+
+const canvasElement = document.getElementById("canvas")!;
 
 new NodesDragHandler(canvasElement);

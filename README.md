@@ -35,8 +35,6 @@ npm i @html-graph/core
 ```typescript
 import { ApiPortPayload, CanvasBuilder } from "@html-graph/core";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
@@ -70,6 +68,8 @@ function createNode(
 
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
 const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)

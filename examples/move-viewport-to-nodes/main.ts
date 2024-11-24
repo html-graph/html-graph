@@ -1,14 +1,12 @@
 import { CanvasBuilder } from "../../lib/main";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
     layers: { mode: "connections-on-top" },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 const node1 = document.createElement("div");
@@ -39,6 +37,8 @@ node3.appendChild(port3);
 const btn1 = document.createElement("button");
 btn1.innerText = "Move to 2 and 3";
 node1.appendChild(btn1);
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)

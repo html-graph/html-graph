@@ -1,27 +1,27 @@
 import { Canvas } from "../canvas/canvas";
 import { CanvasCore, DraggableNodesCanvas, TransformableCanvas } from "../main";
-import { ApiOptions } from "../models/options/api-options";
+import { CoreOptions } from "../models/options/core-options";
 
 export class CanvasBuilder {
-  private coreOptions: ApiOptions | undefined = undefined;
+  private coreOptions: CoreOptions | undefined = undefined;
 
   private isDraggable = false;
 
   private isTransformable = false;
 
-  options(options: ApiOptions): CanvasBuilder {
+  options(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
-  draggable(): CanvasBuilder {
+  draggableNodes(): CanvasBuilder {
     this.isDraggable = true;
 
     return this;
   }
 
-  transformable(): CanvasBuilder {
+  transformableCanvas(): CanvasBuilder {
     this.isTransformable = true;
 
     return this;

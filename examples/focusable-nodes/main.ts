@@ -1,13 +1,11 @@
 import { CanvasBuilder } from "../../lib/main";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 function createNode(name: string) {
@@ -24,6 +22,8 @@ const map: Map<string, [HTMLElement, number, number]> = new Map([
   ["node-3", [createNode("3"), 1200, 500]],
   ["node-4", [createNode("4"), 1700, 500]],
 ]);
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas.attach(canvasElement);
 

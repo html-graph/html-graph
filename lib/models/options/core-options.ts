@@ -3,7 +3,7 @@ import { BackgroundOptions } from "./background-options";
 import { ConnectionOptions } from "./connection-options";
 import { LayersMode } from "./layers-mode";
 
-export interface ApiOptions {
+export interface CoreOptions {
   /**
    * canvas background settings
    */

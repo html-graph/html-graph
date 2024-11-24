@@ -1,8 +1,6 @@
 import { CanvasBuilder } from "../../lib/main";
 import { GraphHtmlHelper } from "./graph-html-helper";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvas = new CanvasBuilder()
   .options({
     nodes: { centerFn: () => [0, 0] },
@@ -12,8 +10,8 @@ const canvas = new CanvasBuilder()
     },
     background: { type: "dots" },
   })
-  .draggable()
-  .transformable()
+  .draggableNodes()
+  .transformableCanvas()
   .build();
 
 const helper = new GraphHtmlHelper();
@@ -48,6 +46,8 @@ const [node5, ports5] = helper.createNodeElement("Node 5", "input-5", {
   "output-5-1": "Port 1",
   "output-5-2": "Port 2",
 });
+
+const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
