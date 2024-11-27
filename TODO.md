@@ -1,5 +1,6 @@
 # TODO
 
+- fix artificial transform
 - same port cycle
 - same node cycle
 - number | string node id and port id
