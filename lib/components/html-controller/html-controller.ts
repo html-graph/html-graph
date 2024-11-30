@@ -159,8 +159,8 @@ export class HtmlController {
 
     this.canvasCtx.restore();
 
-    const [xv, yv] = this.di.viewportTransformer.getViewportCoords(0, 0);
-    const sv = this.di.viewportTransformer.getViewportScale();
+    const [xv, yv] = this.di.viewportTransformer.getViewCoords(0, 0);
+    const sv = this.di.viewportTransformer.getViewScale();
 
     this.layers[this.di.options.layers.mode].update(sv, xv, yv);
   }
@@ -340,7 +340,7 @@ export class HtmlController {
   private updateNodeCoords(nodeId: string, x: number, y: number): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
-    const sa = this.di.viewportTransformer.getAbsoluteScale();
+    const sa = this.di.viewportTransformer.getAbsScale();
     const node = this.di.graphStore.getNode(nodeId)!;
     const [centerX, centerY] = node.centerFn(width, height);
 
@@ -356,17 +356,17 @@ export class HtmlController {
     const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
 
-    const [xAbsFrom, yAbsFrom] = this.di.viewportTransformer.getAbsoluteCoords(
+    const [xAbsFrom, yAbsFrom] = this.di.viewportTransformer.getAbsCoords(
       rectFrom.left - rect.left,
       rectFrom.top - rect.top,
     );
 
-    const [xAbsTo, yAbsTo] = this.di.viewportTransformer.getAbsoluteCoords(
+    const [xAbsTo, yAbsTo] = this.di.viewportTransformer.getAbsCoords(
       rectTo.left - rect.left,
       rectTo.top - rect.top,
     );
 
-    const sa = this.di.viewportTransformer.getAbsoluteScale();
+    const sa = this.di.viewportTransformer.getAbsScale();
 
     const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
       rectFrom.width * sa,

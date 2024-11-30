@@ -45,25 +45,25 @@ export class ViewportTransformer {
     };
   }
 
-  getViewportCoords(xa: number, ya: number): [number, number] {
+  getViewCoords(xa: number, ya: number): [number, number] {
     return [
       (xa - this.state.x) / this.state.scale,
       (ya - this.state.y) / this.state.scale,
     ];
   }
 
-  getViewportScale(): number {
+  getViewScale(): number {
     return 1 / this.state.scale;
   }
 
-  getAbsoluteCoords(xv: number, yv: number): [number, number] {
+  getAbsCoords(xv: number, yv: number): [number, number] {
     return [
       xv * this.state.scale + this.state.x,
       yv * this.state.scale + this.state.y,
     ];
   }
 
-  getAbsoluteScale(): number {
+  getAbsScale(): number {
     return this.state.scale;
   }
 

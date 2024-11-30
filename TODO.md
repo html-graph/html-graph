@@ -1,5 +1,7 @@
 # TODO
 
+- provide node coordinates and transformation matrix
+- refactor dragable and scalable canvas
 - fix artificial transform
 - same port cycle
 - same node cycle

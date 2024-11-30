@@ -25,7 +25,7 @@ export class CanvasCore implements Canvas {
     this.di = new DiContainer(this.options);
   }
 
-  addNode(node: ApiNode): Canvas {
+  addNode(node: ApiNode): CanvasCore {
     this.di.controller.addNode(
       node.id,
       node.element,
@@ -38,19 +38,19 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveNodeOnTop(nodeId: string): Canvas {
+  moveNodeOnTop(nodeId: string): CanvasCore {
     this.di.controller.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  removeNode(nodeId: string): Canvas {
+  removeNode(nodeId: string): CanvasCore {
     this.di.controller.removeNode(nodeId);
 
     return this;
   }
 
-  markPort(port: ApiPort): Canvas {
+  markPort(port: ApiPort): CanvasCore {
     this.di.controller.markPort(
       port.id,
       port.element,
@@ -62,19 +62,19 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  updatePortConnections(portId: string): Canvas {
+  updatePortConnections(portId: string): CanvasCore {
     this.di.controller.updatePortConnections(portId);
 
     return this;
   }
 
-  unmarkPort(portId: string): Canvas {
+  unmarkPort(portId: string): CanvasCore {
     this.di.controller.unmarkPort(portId);
 
     return this;
   }
 
-  addConnection(connection: ApiConnection): Canvas {
+  addConnection(connection: ApiConnection): CanvasCore {
     this.di.controller.addConnection(
       connection.id,
       connection.from,
@@ -85,13 +85,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  removeConnection(connectionId: string): Canvas {
+  removeConnection(connectionId: string): CanvasCore {
     this.di.controller.removeConnection(connectionId);
 
     return this;
   }
 
-  patchViewportTransform(apiTransform: ApiTransform): Canvas {
+  patchViewportTransform(apiTransform: ApiTransform): CanvasCore {
     this.di.controller.patchViewportTransform(
       apiTransform.scale ?? null,
       apiTransform.x ?? null,
@@ -101,13 +101,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveContent(apiTransform: ApiContentMoveTransform): Canvas {
+  moveContent(apiTransform: ApiContentMoveTransform): CanvasCore {
     this.di.controller.moveContent(apiTransform.x ?? 0, apiTransform.y ?? 0);
 
     return this;
   }
 
-  scaleContent(apiTransform: ApiContentScaleTransform): Canvas {
+  scaleContent(apiTransform: ApiContentScaleTransform): CanvasCore {
     this.di.controller.scaleContent(
       apiTransform.scale,
       apiTransform.x ?? 0,
@@ -117,13 +117,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveToNodes(nodeIds: readonly string[]): Canvas {
+  moveToNodes(nodeIds: readonly string[]): CanvasCore {
     this.di.controller.moveToNodes(nodeIds);
 
     return this;
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): Canvas {
+  updateNodeCoords(nodeId: string, x: number, y: number): CanvasCore {
     this.di.controller.updateNodeCoords(nodeId, x, y);
 
     return this;
@@ -132,7 +132,7 @@ export class CanvasCore implements Canvas {
   updateConnectionOptions(
     connectionId: string,
     options: ApiUpdateConnection,
-  ): Canvas {
+  ): CanvasCore {
     if (options.controller !== undefined) {
       this.di.controller.updateConnectionController(
         connectionId,
@@ -143,25 +143,25 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  dragNode(nodeId: string, dx: number, dy: number): Canvas {
+  dragNode(nodeId: string, dx: number, dy: number): CanvasCore {
     this.di.controller.dragNode(nodeId, dx, dy);
 
     return this;
   }
 
-  clear(): Canvas {
+  clear(): CanvasCore {
     this.di.controller.clear();
 
     return this;
   }
 
-  attach(element: HTMLElement): Canvas {
+  attach(element: HTMLElement): CanvasCore {
     this.di.htmlController.attach(element);
 
     return this;
   }
 
-  detach(): Canvas {
+  detach(): CanvasCore {
     this.di.htmlController.detach();
 
     return this;

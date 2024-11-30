@@ -8,7 +8,7 @@ export class PublicViewportTransformer {
    * viewport coordinated represent actual coordinates on screen for given absolute coordinates
    */
   getViewCoords(xa: number, ya: number): [number, number] {
-    return this.transformer.getViewportCoords(xa, ya);
+    return this.transformer.getViewCoords(xa, ya);
   }
 
   /**
@@ -16,7 +16,7 @@ export class PublicViewportTransformer {
    * it represents scale at which entities on canvas should be scaled to fit current scale
    */
   getViewScale(): number {
-    return this.transformer.getViewportScale();
+    return this.transformer.getViewScale();
   }
 
   /**
@@ -24,7 +24,7 @@ export class PublicViewportTransformer {
    * absolute coordinates represent actual coordinates, which stay constant even for transformed canvas
    */
   getAbsCoords(xv: number, yv: number): [number, number] {
-    return this.transformer.getAbsoluteCoords(xv, yv);
+    return this.transformer.getAbsCoords(xv, yv);
   }
 
   /**
@@ -32,6 +32,6 @@ export class PublicViewportTransformer {
    * it represents scale at which current viewport was scaled compared to initial state
    */
   getAbsScale(): number {
-    return this.transformer.getAbsoluteScale();
+    return this.transformer.getAbsScale();
   }
 }

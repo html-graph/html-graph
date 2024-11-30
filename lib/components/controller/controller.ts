@@ -23,7 +23,7 @@ export class Controller {
 
     const node = this.di.graphStore.getNode(nodeId);
 
-    const [xv, yv] = this.di.viewportTransformer.getViewportCoords(
+    const [xv, yv] = this.di.viewportTransformer.getViewCoords(
       node.x,
       node.y,
     );
@@ -31,7 +31,7 @@ export class Controller {
     const nodeX = xv + dx;
     const nodeY = yv + dy;
 
-    const [xa, ya] = this.di.viewportTransformer.getAbsoluteCoords(
+    const [xa, ya] = this.di.viewportTransformer.getAbsCoords(
       nodeX,
       nodeY,
     );
@@ -235,7 +235,7 @@ export class Controller {
     const avgX = x / nodes.length;
     const avgY = y / nodes.length;
     const [width, height] = this.di.htmlController.getViewportDimensions();
-    const sa = this.di.viewportTransformer.getAbsoluteScale();
+    const sa = this.di.viewportTransformer.getAbsScale();
 
     const targetX = avgX - (sa * width) / 2;
     const targetY = avgY - (sa * height) / 2;
