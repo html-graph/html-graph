@@ -46,11 +46,11 @@ canvas
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });
 
-console.log(canvas.graph.getAllNodes());
-console.log(canvas.graph.getAllPorts());
-console.log(canvas.graph.getAllConnections());
+console.log(canvas.model.getAllNodes());
+console.log(canvas.model.getAllPorts());
+console.log(canvas.model.getAllConnections());
 
-canvas.graph.getAllNodes().forEach((nodeId) => {
-  console.log({ id: nodeId, coords: canvas.graph.getNode(nodeId) });
-  console.log(canvas.graph.getNodeOutcomingConnections(nodeId));
+canvas.model.getAllNodes().forEach((nodeId) => {
+  console.log({ id: nodeId, coords: canvas.model.getNode(nodeId) });
+  console.log(canvas.model.getNodeOutcomingConnections(nodeId));
 });

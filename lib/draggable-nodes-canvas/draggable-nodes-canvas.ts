@@ -13,7 +13,7 @@ import { PublicGraphStore } from "../components/public-graph-store/public-graph-
 export class DraggableNodesCanvas implements Canvas {
   readonly transformation: PublicViewportTransformer;
 
-  readonly graph: PublicGraphStore;
+  readonly model: PublicGraphStore;
 
   private readonly nodes = new Map<
     string,
@@ -86,7 +86,7 @@ export class DraggableNodesCanvas implements Canvas {
   constructor(private readonly canvas: Canvas) {
     this.transformation = this.canvas.transformation;
 
-    this.graph = this.canvas.graph;
+    this.model = this.canvas.model;
   }
 
   addNode(node: ApiNode): DraggableNodesCanvas {

@@ -17,7 +17,7 @@ export interface Canvas {
   /**
    * provides api for graph structure access
    */
-  readonly graph: PublicGraphStore;
+  readonly model: PublicGraphStore;
 
   /**
    * adds node to graph

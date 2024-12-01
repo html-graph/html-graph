@@ -19,7 +19,7 @@ import { PublicGraphStore } from "../components/public-graph-store/public-graph-
 export class CanvasCore implements Canvas {
   readonly transformation: PublicViewportTransformer;
 
-  readonly graph: PublicGraphStore;
+  readonly model: PublicGraphStore;
 
   private readonly options: Options;
 
@@ -32,7 +32,7 @@ export class CanvasCore implements Canvas {
 
     this.transformation = this.di.publicViewportTransformer;
 
-    this.graph = this.di.publicGraphStore;
+    this.model = this.di.publicGraphStore;
   }
 
   addNode(node: ApiNode): CanvasCore {

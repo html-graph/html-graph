@@ -14,7 +14,7 @@ import { PublicGraphStore } from "../components/public-graph-store/public-graph-
 export class TransformableCanvas implements Canvas {
   readonly transformation: PublicViewportTransformer;
 
-  readonly graph: PublicGraphStore;
+  readonly model: PublicGraphStore;
 
   private element: HTMLElement | null = null;
 
@@ -121,7 +121,7 @@ export class TransformableCanvas implements Canvas {
     private readonly options?: TransformOptions,
   ) {
     this.transformation = this.canvas.transformation;
-    this.graph = this.canvas.graph;
+    this.model = this.canvas.model;
 
     this.isScalable = this.options?.scale?.enabled !== false;
     this.minContentScale = this.options?.scale?.minContent ?? null;
