@@ -23,18 +23,12 @@ export class Controller {
 
     const node = this.di.graphStore.getNode(nodeId);
 
-    const [xv, yv] = this.di.viewportTransformer.getViewCoords(
-      node.x,
-      node.y,
-    );
+    const [xv, yv] = this.di.viewportTransformer.getViewCoords(node.x, node.y);
 
     const nodeX = xv + dx;
     const nodeY = yv + dy;
 
-    const [xa, ya] = this.di.viewportTransformer.getAbsCoords(
-      nodeX,
-      nodeY,
-    );
+    const [xa, ya] = this.di.viewportTransformer.getAbsCoords(nodeX, nodeY);
 
     this.di.graphStore.updateNodeCoords(nodeId, xa, ya);
     this.di.htmlController.updateNodePosition(nodeId);
