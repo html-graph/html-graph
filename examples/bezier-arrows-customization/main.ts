@@ -4,7 +4,6 @@ const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
     connections: {
-      type: "bezier",
       hasSourceArrow: true,
       hasTargetArrow: true,
     },

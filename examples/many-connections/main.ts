@@ -3,13 +3,8 @@ import { CanvasBuilder } from "../../lib/main";
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
-    layers: {
-      mode: "connections-on-top",
-    },
-    connections: {
-      type: "bezier",
-      hasTargetArrow: true,
-    },
+    layers: { mode: "connections-on-top" },
+    connections: { hasTargetArrow: true },
   })
   .draggableNodes()
   .transformableCanvas()

@@ -2,13 +2,8 @@ import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
   .options({
-    background: {
-      type: "dots",
-    },
-    connections: {
-      type: "bezier",
-      hasTargetArrow: true,
-    },
+    background: { type: "dots" },
+    connections: { hasTargetArrow: true },
   })
   .transformableCanvas({
     shift: {

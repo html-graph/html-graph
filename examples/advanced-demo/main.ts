@@ -5,7 +5,6 @@ const canvas = new CanvasBuilder()
   .options({
     nodes: { centerFn: () => [0, 0] },
     connections: {
-      type: "bezier",
       color: "var(--color-1)",
       hasTargetArrow: true,
     },

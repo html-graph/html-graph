@@ -1,5 +1,5 @@
 export interface BezierConnectionOptions {
-  readonly type: "bezier";
+  readonly type?: "bezier";
   readonly color?: string;
   readonly width?: number;
   readonly curvature?: number;

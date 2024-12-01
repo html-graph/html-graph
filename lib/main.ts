@@ -4,6 +4,7 @@ export { DraggableNodesCanvas } from "./draggable-nodes-canvas/draggable-nodes-c
 export { TransformableCanvas } from "./transformable-canvas/transformable-canvas";
 export { BezierConnectionController } from "./const/bezier-connection-controller/bezier-connection-controller";
 export { StraightConnectionController } from "./const/straight-connection-controller/straight-connection-controller";
+export { ConnectionUtils } from "./utils/connection-utils/connection-utils";
 export type { Canvas } from "./canvas/canvas";
 export type { PublicViewportTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
 export type { ApiNode } from "./models/nodes/api-node";

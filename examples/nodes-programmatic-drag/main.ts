@@ -9,10 +9,7 @@ class NodesDragHandler {
     const canvas = new CanvasBuilder()
       .options({
         background: { type: "dots" },
-        connections: {
-          type: "bezier",
-          hasTargetArrow: true,
-        },
+        connections: { hasTargetArrow: true },
       })
       .build();
 

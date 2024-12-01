@@ -33,7 +33,7 @@ npm i @html-graph/core
 ```
 
 ```typescript
-import { ApiPortPayload, CanvasBuilder } from "@html-graph/core";
+import { ApiPortPayload, CanvasBuilder } from "@html-graph/html-graph";
 
 const canvas = new CanvasBuilder()
   .options({
