@@ -2,7 +2,7 @@ import { PublicViewportTransformer } from "../../components/public-viewport-tran
 
 const dotsBackgroundDrawingFn = (
   ctx: CanvasRenderingContext2D,
-  transformer: PublicViewportTransformer,
+  transformation: PublicViewportTransformer,
   dotColor: string,
   gap: number,
   radius: number,
@@ -11,8 +11,8 @@ const dotsBackgroundDrawingFn = (
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  const zeroViewCoords = transformer.getViewCoords(0, 0);
-  const viewScale = transformer.getViewScale();
+  const zeroViewCoords = transformation.getViewCoords(0, 0);
+  const viewScale = transformation.getViewScale();
   const viewGap = gap * viewScale;
 
   let iterationsHorizontal = 0;

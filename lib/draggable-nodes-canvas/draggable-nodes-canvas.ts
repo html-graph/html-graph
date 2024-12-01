@@ -7,8 +7,11 @@ import { ApiContentMoveTransform } from "../models/transform/api-content-move-tr
 import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
 import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
+import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
 
 export class DraggableNodesCanvas implements Canvas {
+  readonly transformation: PublicViewportTransformer;
+
   private readonly nodes = new Map<
     string,
     {
@@ -77,7 +80,9 @@ export class DraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: [number, number] | null = null;
 
-  constructor(private readonly canvas: Canvas) {}
+  constructor(private readonly canvas: Canvas) {
+    this.transformation = this.canvas.transformation;
+  }
 
   addNode(node: ApiNode): DraggableNodesCanvas {
     let nodeId = node.id;
@@ -220,6 +225,8 @@ export class DraggableNodesCanvas implements Canvas {
       value.el.removeEventListener("mousedown", value.onMouseDown);
       value.el.removeEventListener("touchstart", value.onTouchStart);
     });
+
+    this.nodes.clear();
 
     return this;
   }

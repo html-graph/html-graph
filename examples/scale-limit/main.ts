@@ -9,8 +9,8 @@ const canvas = new CanvasBuilder()
   .transformableCanvas({
     scale: {
       enabled: true,
-      min: 0.5,
-      max: 2,
+      minContent: 0.5,
+      maxContent: 1.5,
     },
   })
   .build();

@@ -1,8 +1,8 @@
 export interface TransformOptions {
   scale?: {
     enabled?: boolean;
-    min?: number;
-    max?: number;
+    minContent?: number;
+    maxContent?: number;
     wheelSensitivity?: number;
   };
   shift?: {

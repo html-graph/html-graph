@@ -1,3 +1,4 @@
+import { PublicViewportTransformer } from "../main";
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiUpdateConnection } from "../models/connection/api-update-connection";
 import { ApiNode } from "../models/nodes/api-node";
@@ -7,6 +8,11 @@ import { ApiContentScaleTransform } from "../models/transform/api-content-scale-
 import { ApiTransform } from "../models/transform/api-transform";
 
 export interface Canvas {
+  /**
+   * provides api for canvas transformation
+   */
+  readonly transformation: PublicViewportTransformer;
+
   /**
    * adds node to graph
    */
@@ -84,6 +90,11 @@ export interface Canvas {
   dragNode(nodeId: string, dx: number, dy: number): Canvas;
 
   /**
+   * moves specified node on top
+   */
+  moveNodeOnTop(nodeId: string): Canvas;
+
+  /**
    * attaches canvas to given element
    */
   attach(element: HTMLElement): Canvas;
@@ -106,9 +117,4 @@ export interface Canvas {
    * canvas requires reinitialization in order to be used again
    */
   destroy(): void;
-
-  /**
-   * moves specified node on top
-   */
-  moveNodeOnTop(nodeId: string): Canvas;
 }

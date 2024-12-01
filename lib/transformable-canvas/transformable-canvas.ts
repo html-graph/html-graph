@@ -8,23 +8,24 @@ import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
 import { TransformOptions } from "../main";
 import { TouchState } from "../models/touch-state/touch-state";
+import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
 
 export class TransformableCanvas implements Canvas {
+  readonly transformation: PublicViewportTransformer;
+
   private element: HTMLElement | null = null;
 
   private isMoving = false;
 
   private prevTouches: TouchState | null = null;
 
-  private scale = 1;
-
   private readonly isScalable: boolean;
 
   private readonly isShiftable: boolean;
 
-  private readonly minScale: number | null;
+  private readonly minContentScale: number | null;
 
-  private readonly maxScale: number | null;
+  private readonly maxContentScale: number | null;
 
   private readonly wheelSensitivity: number;
 
@@ -60,13 +61,12 @@ export class TransformableCanvas implements Canvas {
     const velocity =
       event.deltaY < 0 ? this.wheelSensitivity : 1 / this.wheelSensitivity;
 
-    const nextScale = this.scale * velocity;
+    const nextScale = this.canvas.transformation.getViewScale() * velocity;
 
     if (!this.checkNextScaleValid(nextScale)) {
       return;
     }
 
-    this.scale = nextScale;
     this.canvas.scaleContent({ scale: velocity, x: centerX, y: centerY });
   };
 
@@ -97,10 +97,9 @@ export class TransformableCanvas implements Canvas {
       const x = this.prevTouches.x - left;
       const y = this.prevTouches.y - top;
       const scale = currentTouches.scale / this.prevTouches.scale;
-      const nextScale = this.scale * scale;
+      const nextScale = this.canvas.transformation.getViewScale() * scale;
 
       if (this.checkNextScaleValid(nextScale)) {
-        this.scale = nextScale;
         this.canvas.scaleContent({ scale, x, y });
       }
     }
@@ -118,9 +117,10 @@ export class TransformableCanvas implements Canvas {
     private readonly canvas: Canvas,
     private readonly options?: TransformOptions,
   ) {
+    this.transformation = this.canvas.transformation;
     this.isScalable = this.options?.scale?.enabled !== false;
-    this.minScale = this.options?.scale?.min ?? null;
-    this.maxScale = this.options?.scale?.max ?? null;
+    this.minContentScale = this.options?.scale?.minContent ?? null;
+    this.maxContentScale = this.options?.scale?.maxContent ?? null;
     this.isShiftable = this.options?.shift?.enabled !== false;
 
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
@@ -294,18 +294,20 @@ export class TransformableCanvas implements Canvas {
   }
 
   private checkNextScaleValid(nextScale: number): boolean {
+    const scale = this.canvas.transformation.getViewScale();
+
     if (
-      this.maxScale !== null &&
-      nextScale > this.maxScale &&
-      nextScale > this.scale
+      this.maxContentScale !== null &&
+      nextScale > this.maxContentScale &&
+      nextScale > scale
     ) {
       return false;
     }
 
     if (
-      this.minScale !== null &&
-      nextScale < this.minScale &&
-      nextScale < this.scale
+      this.minContentScale !== null &&
+      nextScale < this.minContentScale &&
+      nextScale < scale
     ) {
       return false;
     }

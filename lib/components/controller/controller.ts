@@ -1,5 +1,5 @@
 import { CenterFn } from "../../models/center/center-fn";
-import { ConnectionController } from "../../models/connection/connection-controller";
+import { ApiUpdateConnection } from "../../models/connection/api-update-connection";
 import { ApiPortsPayload } from "../../models/nodes/api-ports-payload";
 import { ConnectionOptions } from "../../models/options/connection-options";
 import { resolveConnectionControllerFactory } from "../../utils/resolve-connection-controller-factory/resolve-connection-controller-factory";
@@ -246,16 +246,24 @@ export class Controller {
     this.di.htmlController.updateNodePosition(nodeId);
   }
 
-  updateConnectionController(
+  updateConnectionOptions(
     connectionId: string,
-    controller: ConnectionController,
+    options: ApiUpdateConnection,
   ): void {
+    if (options.controller === undefined) {
+      return;
+    }
+
     if (!this.di.graphStore.hasConnection(connectionId)) {
       throw new Error("failed to update nonexisting connection");
     }
 
     this.di.htmlController.detachConnection(connectionId);
-    this.di.graphStore.updateConnectionController(connectionId, controller);
+    this.di.graphStore.updateConnectionController(
+      connectionId,
+      options.controller,
+    );
+
     this.di.htmlController.attachConnection(connectionId);
   }
 

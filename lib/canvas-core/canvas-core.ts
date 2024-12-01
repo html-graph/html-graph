@@ -10,11 +10,14 @@ import { ApiContentScaleTransform } from "../models/transform/api-content-scale-
 import { ApiTransform } from "../models/transform/api-transform";
 import { createOptions } from "../utils/create-options/create-options";
 import { Canvas } from "../canvas/canvas";
+import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
 
 /**
  * Provides core API for acting on graph
  */
 export class CanvasCore implements Canvas {
+  readonly transformation: PublicViewportTransformer;
+
   private readonly options: Options;
 
   private readonly di: DiContainer;
@@ -23,6 +26,8 @@ export class CanvasCore implements Canvas {
     this.options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(this.options);
+
+    this.transformation = this.di.publicViewportTransformer;
   }
 
   addNode(node: ApiNode): CanvasCore {
@@ -133,12 +138,7 @@ export class CanvasCore implements Canvas {
     connectionId: string,
     options: ApiUpdateConnection,
   ): CanvasCore {
-    if (options.controller !== undefined) {
-      this.di.controller.updateConnectionController(
-        connectionId,
-        options.controller,
-      );
-    }
+    this.di.controller.updateConnectionOptions(connectionId, options);
 
     return this;
   }
