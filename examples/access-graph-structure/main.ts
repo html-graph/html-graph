@@ -51,6 +51,6 @@ console.log(canvas.model.getAllPorts());
 console.log(canvas.model.getAllConnections());
 
 canvas.model.getAllNodes().forEach((nodeId) => {
-  console.log({ id: nodeId, coords: canvas.model.getNode(nodeId) });
+  console.log({ id: nodeId, ...canvas.model.getNode(nodeId) });
   console.log(canvas.model.getNodeOutcomingConnections(nodeId));
 });
