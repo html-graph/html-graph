@@ -1,33 +1,7 @@
-import { BezierConnectionController } from "../../const/bezier-connection-controller/bezier-connection-controller";
-import { StraightConnectionController } from "../../const/straight-connection-controller/straight-connection-controller";
-import { BezierConnectionOptions } from "../../models/options/bezier-connection-options";
+import { createBezierConnectionControllerFactory } from "../../const/create-bezier-connection-controller-factory/create-bezier-connection-controller-factory";
+import { createStraightConnectionControllerFactory } from "../../const/create-straight-connection-controller-factory/create-straight-connection-controller-factory";
 import { ConnectionControllerFactory } from "../../models/options/connection-controller-factory";
 import { ConnectionOptions } from "../../models/options/connection-options";
-import { StraightConnectionOptions } from "../../models/options/straight-connection-options";
-
-const createStraightConnectionControllerFactory =
-  (options: StraightConnectionOptions) => () =>
-    new StraightConnectionController(
-      options.color ?? "#5c5c5c",
-      options.width ?? 1,
-      options.arrowLength ?? 15,
-      options.arrowWidth ?? 4,
-      options.minPortOffset ?? 15,
-      options.hasSourceArrow ?? false,
-      options.hasTargetArrow ?? false,
-    );
-
-const createBezierConnectionControllerFactory =
-  (options: BezierConnectionOptions) => () =>
-    new BezierConnectionController(
-      options.color ?? "#5c5c5c",
-      options.width ?? 1,
-      options.curvature ?? 90,
-      options.arrowLength ?? 15,
-      options.arrowWidth ?? 4,
-      options.hasSourceArrow ?? false,
-      options.hasTargetArrow ?? false,
-    );
 
 export const resolveConnectionControllerFactory: (
   options: ConnectionOptions,
@@ -36,8 +10,24 @@ export const resolveConnectionControllerFactory: (
     case "custom":
       return options.controllerFactory;
     case "straight":
-      return createStraightConnectionControllerFactory(options);
+      return createStraightConnectionControllerFactory({
+        color: options.color ?? "#5c5c5c",
+        width: options.width ?? 1,
+        arrowLength: options.arrowLength ?? 15,
+        arrowWidth: options.arrowWidth ?? 4,
+        minPortOffset: options.minPortOffset ?? 15,
+        hasSourceArrow: options.hasSourceArrow ?? false,
+        hasTargetArrow: options.hasTargetArrow ?? false,
+      });
     default:
-      return createBezierConnectionControllerFactory(options);
+      return createBezierConnectionControllerFactory({
+        color: options.color ?? "#5c5c5c",
+        width: options.width ?? 1,
+        curvature: options.curvature ?? 90,
+        arrowLength: options.arrowLength ?? 15,
+        arrowWidth: options.arrowWidth ?? 4,
+        hasSourceArrow: options.hasSourceArrow ?? false,
+        hasTargetArrow: options.hasTargetArrow ?? false,
+      });
   }
 };
