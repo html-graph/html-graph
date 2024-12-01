@@ -1,6 +1,5 @@
 # TODO
 
-- provide public graph store
 - same port cycle
 - same node cycle
 - number | string node id and port id
