@@ -234,8 +234,7 @@ export class HtmlController {
 
   updateNodePosition(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
-    const connections =
-      this.di.graphStore.getNodeAdjacentConnections(nodeId);
+    const connections = this.di.graphStore.getNodeAdjacentConnections(nodeId);
 
     this.updateNodeCoords(nodeId, node.x, node.y);
 
@@ -245,8 +244,7 @@ export class HtmlController {
   }
 
   updatePortConnections(portId: string): void {
-    const connections =
-      this.di.graphStore.getPortAdjacentConnections(portId);
+    const connections = this.di.graphStore.getPortAdjacentConnections(portId);
 
     connections.forEach((connection) => {
       this.updateConnectionCoords(connection);
