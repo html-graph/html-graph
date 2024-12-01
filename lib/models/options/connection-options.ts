@@ -1,27 +1,8 @@
-import { ConnectionControllerFactory } from "./connection-controller-factory";
+import { BezierConnectionOptions } from "./bezier-connection-options";
+import { CustomConnectionOptions } from "./custom-connection-options";
+import { StraightConnectionOptions } from "./straight-connection-options";
 
 export type ConnectionOptions =
-  | {
-      readonly type: "bezier";
-      readonly color?: string;
-      readonly width?: number;
-      readonly curvature?: number;
-      readonly arowLength?: number;
-      readonly arowWidth?: number;
-      readonly hasSourceArrow?: boolean;
-      readonly hasTargetArrow?: boolean;
-    }
-  | {
-      readonly type: "custom";
-      readonly controllerFactory: ConnectionControllerFactory;
-    }
-  | {
-      readonly type: "straight";
-      readonly color?: string;
-      readonly width?: number;
-      readonly arowLength?: number;
-      readonly arowWidth?: number;
-      readonly minPortOffset?: number;
-      readonly hasSourceArrow?: boolean;
-      readonly hasTargetArrow?: boolean;
-    };
+  | BezierConnectionOptions
+  | StraightConnectionOptions
+  | CustomConnectionOptions;

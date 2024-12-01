@@ -3,6 +3,10 @@ import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .build();

@@ -9,6 +9,10 @@ import { ConnectionController } from "../../lib/models/connection/connection-con
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .transformableCanvas()

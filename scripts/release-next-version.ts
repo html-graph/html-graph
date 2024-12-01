@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from "fs";
 import readline from "readline";
 import { stdin as input, stdout as output } from "process";
 
-class Releaser {
+class ReleaseNextVersion {
   private static execute(cmd: string): Promise<void> {
     return new Promise((res, rej) => {
       const proc = spawn(cmd, [], {
@@ -37,7 +37,7 @@ class Releaser {
     });
   }
 
-  static release(): void {
+  static do(): void {
     const content = readFileSync("./package.json", "utf8");
 
     const pkg = JSON.parse(content);
@@ -95,4 +95,4 @@ class Releaser {
   }
 }
 
-Releaser.release();
+ReleaseNextVersion.do();

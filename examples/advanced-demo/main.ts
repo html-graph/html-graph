@@ -7,6 +7,7 @@ const canvas = new CanvasBuilder()
     connections: {
       type: "bezier",
       color: "var(--color-1)",
+      hasTargetArrow: true,
     },
     background: { type: "dots" },
   })

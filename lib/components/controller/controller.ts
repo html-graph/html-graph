@@ -146,7 +146,7 @@ export class Controller {
     if (connectionId === undefined) {
       do {
         connectionId = this.di.connectionIdGenerator.next();
-      } while (this.di.graphStore.hasPort(connectionId));
+      } while (this.di.graphStore.hasConnection(connectionId));
     }
     if (!this.di.graphStore.hasPort(fromPortId)) {
       throw new Error("failed to add connection from nonexisting port");

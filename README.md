@@ -38,6 +38,10 @@ import { ApiPortPayload, CanvasBuilder } from "@html-graph/core";
 const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .transformableCanvas()

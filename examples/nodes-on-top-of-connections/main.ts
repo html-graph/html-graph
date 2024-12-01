@@ -4,6 +4,10 @@ const canvas = new CanvasBuilder()
   .options({
     background: { type: "dots" },
     layers: { mode: "nodes-on-top" },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .transformableCanvas()

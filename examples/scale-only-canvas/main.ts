@@ -5,6 +5,10 @@ const canvas = new CanvasBuilder()
     background: {
       type: "dots",
     },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .transformableCanvas({
     shift: {

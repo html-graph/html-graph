@@ -6,6 +6,10 @@ const canvas = new CanvasBuilder()
       centerFn: () => [0, 0],
     },
     background: { type: "dots" },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .transformableCanvas()

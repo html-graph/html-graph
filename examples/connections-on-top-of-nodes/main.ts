@@ -6,6 +6,10 @@ const canvas = new CanvasBuilder()
     layers: {
       mode: "connections-on-top",
     },
+    connections: {
+      type: "bezier",
+      hasTargetArrow: true,
+    },
   })
   .draggableNodes()
   .transformableCanvas()
