@@ -59,7 +59,7 @@ export class HtmlController {
         this.currentZIndex += 2;
         wrapper.style.zIndex = `${this.currentZIndex}`;
         const connections =
-          this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+          this.di.graphStore.getNodeAdjacentConnections(nodeId);
         connections.forEach((connection) => {
           this.connectionIdToElementMap.get(connection)!.style.zIndex =
             `${this.currentZIndex - 1}`;
@@ -235,7 +235,7 @@ export class HtmlController {
   updateNodePosition(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
     const connections =
-      this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+      this.di.graphStore.getNodeAdjacentConnections(nodeId);
 
     this.updateNodeCoords(nodeId, node.x, node.y);
 
@@ -246,7 +246,7 @@ export class HtmlController {
 
   updatePortConnections(portId: string): void {
     const connections =
-      this.di.graphStore.getAllAdjacentToPortConnections(portId);
+      this.di.graphStore.getPortAdjacentConnections(portId);
 
     connections.forEach((connection) => {
       this.updateConnectionCoords(connection);
@@ -321,7 +321,7 @@ export class HtmlController {
         this.updateNodeCoords(nodeId, node.x, node.y);
 
         const connections =
-          this.di.graphStore.getAllAdjacentToNodeConnections(nodeId);
+          this.di.graphStore.getNodeAdjacentConnections(nodeId);
 
         connections.forEach((connection) => {
           this.updateConnectionCoords(connection);

@@ -9,9 +9,12 @@ import { Canvas } from "../canvas/canvas";
 import { TransformOptions } from "../main";
 import { TouchState } from "../models/touch-state/touch-state";
 import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
+import { PublicGraphStore } from "../components/public-graph-store/public-graph-store";
 
 export class TransformableCanvas implements Canvas {
   readonly transformation: PublicViewportTransformer;
+
+  readonly graph: PublicGraphStore;
 
   private element: HTMLElement | null = null;
 
@@ -118,6 +121,8 @@ export class TransformableCanvas implements Canvas {
     private readonly options?: TransformOptions,
   ) {
     this.transformation = this.canvas.transformation;
+    this.graph = this.canvas.graph;
+
     this.isScalable = this.options?.scale?.enabled !== false;
     this.minContentScale = this.options?.scale?.minContent ?? null;
     this.maxContentScale = this.options?.scale?.maxContent ?? null;

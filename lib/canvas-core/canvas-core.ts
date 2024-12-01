@@ -11,12 +11,15 @@ import { ApiTransform } from "../models/transform/api-transform";
 import { createOptions } from "../utils/create-options/create-options";
 import { Canvas } from "../canvas/canvas";
 import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
+import { PublicGraphStore } from "../components/public-graph-store/public-graph-store";
 
 /**
  * Provides core API for acting on graph
  */
 export class CanvasCore implements Canvas {
   readonly transformation: PublicViewportTransformer;
+
+  readonly graph: PublicGraphStore;
 
   private readonly options: Options;
 
@@ -28,6 +31,8 @@ export class CanvasCore implements Canvas {
     this.di = new DiContainer(this.options);
 
     this.transformation = this.di.publicViewportTransformer;
+
+    this.graph = this.di.publicGraphStore;
   }
 
   addNode(node: ApiNode): CanvasCore {

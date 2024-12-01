@@ -8,9 +8,12 @@ import { ApiContentScaleTransform } from "../models/transform/api-content-scale-
 import { ApiTransform } from "../models/transform/api-transform";
 import { Canvas } from "../canvas/canvas";
 import { PublicViewportTransformer } from "../components/public-viewport-transformer/public-viewport-transformer";
+import { PublicGraphStore } from "../components/public-graph-store/public-graph-store";
 
 export class DraggableNodesCanvas implements Canvas {
   readonly transformation: PublicViewportTransformer;
+
+  readonly graph: PublicGraphStore;
 
   private readonly nodes = new Map<
     string,
@@ -82,6 +85,8 @@ export class DraggableNodesCanvas implements Canvas {
 
   constructor(private readonly canvas: Canvas) {
     this.transformation = this.canvas.transformation;
+
+    this.graph = this.canvas.graph;
   }
 
   addNode(node: ApiNode): DraggableNodesCanvas {

@@ -1,3 +1,4 @@
+import { PublicGraphStore } from "../components/public-graph-store/public-graph-store";
 import { PublicViewportTransformer } from "../main";
 import { ApiConnection } from "../models/connection/api-connection";
 import { ApiUpdateConnection } from "../models/connection/api-update-connection";
@@ -12,6 +13,11 @@ export interface Canvas {
    * provides api for canvas transformation
    */
   readonly transformation: PublicViewportTransformer;
+
+  /**
+   * provides api for graph structure access
+   */
+  readonly graph: PublicGraphStore;
 
   /**
    * adds node to graph

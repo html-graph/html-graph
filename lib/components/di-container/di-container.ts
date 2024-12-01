@@ -5,6 +5,7 @@ import { PublicViewportTransformer } from "../public-viewport-transformer/public
 import { Controller } from "../controller/controller";
 import { GraphStore } from "../graph-store/graph-store";
 import { IdGenerator } from "../id-generator/id-generator";
+import { PublicGraphStore } from "../public-graph-store/public-graph-store";
 
 export class DiContainer {
   readonly htmlController: HtmlController;
@@ -16,6 +17,8 @@ export class DiContainer {
   readonly controller: Controller;
 
   readonly graphStore: GraphStore;
+
+  readonly publicGraphStore: PublicGraphStore;
 
   readonly nodeIdGenerator: IdGenerator;
 
@@ -35,6 +38,8 @@ export class DiContainer {
     this.controller = new Controller(this);
 
     this.graphStore = new GraphStore();
+
+    this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
     this.nodeIdGenerator = new IdGenerator();
 

@@ -129,7 +129,7 @@ export class Controller {
     }
 
     this.di.graphStore
-      .getAllAdjacentToPortConnections(portId)
+      .getPortAdjacentConnections(portId)
       .forEach((connectionId) => {
         this.removeConnection(connectionId);
       });
