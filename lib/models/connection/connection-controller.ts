@@ -3,12 +3,12 @@ import { PortPayload } from "../store/port-payload";
 export interface ConnectionController {
   readonly svg: SVGSVGElement;
 
-  update: (
-    width: number,
-    height: number,
+  update(
     x: number,
     y: number,
+    width: number,
+    height: number,
     from: PortPayload,
     to: PortPayload,
-  ) => void;
+  ): void;
 }

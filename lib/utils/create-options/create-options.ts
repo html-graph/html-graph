@@ -19,7 +19,7 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
     },
     connections: {
       controllerFactory: resolveConnectionControllerFactory(
-        apiOptions.connections ?? { type: "bezier" },
+        apiOptions.connections ?? {},
       ),
     },
     layers: {
