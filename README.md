@@ -29,7 +29,7 @@ This library fits for tasks where easy nodes customization and interactiveness a
 ## Getting started:
 
 ```
-npm i @html-graph/core
+npm i @html-graph/html-graph
 ```
 
 ```typescript
