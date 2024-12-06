@@ -1,19 +1,29 @@
-export { CanvasBuilder } from "./canvas-builder/canvas-builder";
-export { CanvasCore } from "./canvas-core/canvas-core";
-export { DraggableNodesCanvas } from "./draggable-nodes-canvas/draggable-nodes-canvas";
-export { TransformableCanvas } from "./transformable-canvas/transformable-canvas";
-export { BezierConnectionController } from "./const/bezier-connection-controller/bezier-connection-controller";
-export { StraightConnectionController } from "./const/straight-connection-controller/straight-connection-controller";
-export { ConnectionUtils } from "./utils/connection-utils/connection-utils";
-export type { Canvas } from "./canvas/canvas";
-export type { PublicViewportTransformer } from "./components/public-viewport-transformer/public-viewport-transformer";
-export type { ApiNode } from "./models/nodes/api-node";
-export type { ApiPortsPayload } from "./models/nodes/api-ports-payload";
-export type { ApiConnection } from "./models/connection/api-connection";
+export { CanvasBuilder } from "./canvas-builder";
+export {
+  CanvasCore,
+  DraggableNodesCanvas,
+  TransformableCanvas,
+} from "./canvas";
+export type {
+  Canvas,
+  CoreOptions,
+  TransformOptions,
+  AddConnectionRequest,
+  ApiTransform,
+  ApiContentMoveTransform,
+  ApiContentScaleTransform,
+} from "./canvas";
+export {
+  BezierConnectionController,
+  createBezierConnectionControllerFactory,
+  StraightConnectionController,
+  createStraightConnectionControllerFactory,
+  ConnectionUtils,
+} from "./connections";
+export type { PublicViewportTransformer } from "./viewport-transformer";
+export type { AddNodeRequest } from "./models/nodes/add-node-request";
+export type { MarkPortRequest } from "./models/nodes/mark-port-request";
 export type { ApiPort } from "./models/port/api-port";
-export type { BackgroundDrawingFn } from "./models/options/background-drawing-fn";
-export type { PortPayload } from "./models/store/port-payload";
-export type { ApiContentScaleTransform } from "./models/transform/api-content-scale-transform";
-export type { ApiContentMoveTransform } from "./models/transform/api-content-move-transform";
-export type { CoreOptions } from "./models/options/core-options";
-export type { TransformOptions } from "./models/options/transform-options";
+export type { BackgroundDrawingFn } from "./background";
+export type { PortPayload } from "./graph-store";
+export type { ConnectionController, ConnectionType } from "./connections";

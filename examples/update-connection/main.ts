@@ -1,12 +1,12 @@
 import { BezierConnectionController, CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 const node1 = document.createElement("div");
@@ -60,13 +60,9 @@ const greenController = new BezierConnectionController(
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updateConnectionOptions("con-1", {
-      controller: redController,
-    });
+    canvas.updateConnectionController("con-1", redController);
   } else {
-    canvas.updateConnectionOptions("con-1", {
-      controller: greenController,
-    });
+    canvas.updateConnectionController("con-1", greenController);
   }
 
   i++;

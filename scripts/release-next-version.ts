@@ -4,39 +4,6 @@ import readline from "readline";
 import { stdin as input, stdout as output } from "process";
 
 class ReleaseNextVersion {
-  private static execute(cmd: string): Promise<void> {
-    return new Promise((res, rej) => {
-      const proc = spawn(cmd, [], {
-        cwd: "./",
-        shell: true,
-      });
-
-      proc.stderr.setEncoding("utf-8");
-      proc.stdout.pipe(process.stdout);
-      proc.stderr.pipe(process.stderr);
-
-      proc.on("close", (code) => {
-        if (code === 0) {
-          res();
-        } else {
-          rej();
-        }
-      });
-    });
-  }
-
-  private static askCode(): Promise<string> {
-    return new Promise((resolve) => {
-      const rl = readline.createInterface({ input, output });
-
-      rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
-        resolve(answer);
-
-        rl.close();
-      });
-    });
-  }
-
   static do(): void {
     const content = readFileSync("./package.json", "utf8");
 
@@ -92,6 +59,39 @@ class ReleaseNextVersion {
       .then((otp) => this.execute(`npm publish --access=public --otp=${otp}`))
       .then(() => this.execute(cmdsAfterPublish.join(" && ")))
       .catch(() => this.execute("git reset --hard"));
+  }
+
+  private static execute(cmd: string): Promise<void> {
+    return new Promise((res, rej) => {
+      const proc = spawn(cmd, [], {
+        cwd: "./",
+        shell: true,
+      });
+
+      proc.stderr.setEncoding("utf-8");
+      proc.stdout.pipe(process.stdout);
+      proc.stderr.pipe(process.stderr);
+
+      proc.on("close", (code) => {
+        if (code === 0) {
+          res();
+        } else {
+          rej();
+        }
+      });
+    });
+  }
+
+  private static askCode(): Promise<string> {
+    return new Promise((resolve) => {
+      const rl = readline.createInterface({ input, output });
+
+      rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
+        resolve(answer);
+
+        rl.close();
+      });
+    });
   }
 }
 

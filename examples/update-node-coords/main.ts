@@ -1,12 +1,12 @@
 import { CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 const node1 = document.createElement("div");

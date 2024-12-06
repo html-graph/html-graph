@@ -33,22 +33,22 @@ npm i @html-graph/html-graph
 ```
 
 ```typescript
-import { ApiPortPayload, CanvasBuilder } from "@html-graph/html-graph";
+import { MarkPortRequest, CanvasBuilder } from "@html-graph/html-graph";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, ApiPortPayload>] {
+): [HTMLElement, Record<string, MarkPortRequest>] {
   const node = document.createElement("div");
   node.classList.add("node");
 

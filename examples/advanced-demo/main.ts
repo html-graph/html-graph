@@ -2,7 +2,7 @@ import { CanvasBuilder } from "../../lib/main";
 import { GraphHtmlHelper } from "./graph-html-helper";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     nodes: { centerFn: () => [0, 0] },
     connections: {
       color: "var(--color-1)",
@@ -10,8 +10,8 @@ const canvas = new CanvasBuilder()
     },
     background: { type: "dots" },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 const helper = new GraphHtmlHelper();

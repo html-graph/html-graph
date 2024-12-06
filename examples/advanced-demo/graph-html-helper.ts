@@ -1,4 +1,4 @@
-import { ApiPortsPayload } from "../../lib/main";
+import { MarkPortRequest } from "../../lib/main";
 
 export class GraphHtmlHelper {
   createNodeElement(
@@ -6,11 +6,11 @@ export class GraphHtmlHelper {
     frontPortId: string | null,
     ports: Record<string, string>,
     footerContent?: HTMLElement,
-  ): [HTMLElement, Record<string, ApiPortsPayload>] {
+  ): [HTMLElement, Record<string, MarkPortRequest>] {
     const node = document.createElement("div");
     node.classList.add("node");
 
-    let portElements: Record<string, ApiPortsPayload> = {};
+    let portElements: Record<string, MarkPortRequest> = {};
 
     if (frontPortId !== null) {
       const inputPort = this.createInputPort();
@@ -77,11 +77,11 @@ export class GraphHtmlHelper {
 
   private createBodyElement(
     ports: Record<string, string>,
-  ): [HTMLElement, Record<string, ApiPortsPayload>] {
+  ): [HTMLElement, Record<string, MarkPortRequest>] {
     const body = document.createElement("div");
     body.classList.add("node-body");
 
-    const portElements: Record<string, ApiPortsPayload> = {};
+    const portElements: Record<string, MarkPortRequest> = {};
 
     Object.entries(ports).forEach(([key, value]) => {
       const portContent = document.createElement("div");

@@ -1,4 +1,4 @@
-import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
+import { MarkPortRequest, CanvasBuilder } from "../../lib/main";
 
 class NodesDragHandler {
   private readonly nodes = new Map<string, HTMLElement>();
@@ -7,7 +7,7 @@ class NodesDragHandler {
 
   constructor(private readonly element: HTMLElement) {
     const canvas = new CanvasBuilder()
-      .options({
+      .setOptions({
         background: { type: "dots" },
         connections: { hasTargetArrow: true },
       })
@@ -56,7 +56,7 @@ class NodesDragHandler {
     name: string,
     frontPortId: string,
     backPortId: string,
-  ): [HTMLElement, Record<string, ApiPortsPayload>] {
+  ): [HTMLElement, Record<string, MarkPortRequest>] {
     const node = document.createElement("div");
     node.classList.add("node");
 

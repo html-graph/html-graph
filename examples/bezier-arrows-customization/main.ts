@@ -1,15 +1,15 @@
 import { CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: {
       hasSourceArrow: true,
       hasTargetArrow: true,
     },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 function createNode(

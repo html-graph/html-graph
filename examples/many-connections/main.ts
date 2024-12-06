@@ -1,13 +1,13 @@
 import { CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     layers: { mode: "connections-on-top" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 let angle = 0;

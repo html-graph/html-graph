@@ -1,25 +1,25 @@
 import {
-  ApiPortsPayload,
+  MarkPortRequest,
   BezierConnectionController,
   CanvasBuilder,
   PortPayload,
+  ConnectionController,
 } from "../../lib/main";
-import { ConnectionController } from "../../lib/models/connection/connection-controller";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
-  .transformableCanvas()
+  .setDraggableNodes()
+  .setTransformableCanvas()
   .build();
 
 function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, ApiPortsPayload>] {
+): [HTMLElement, Record<string, MarkPortRequest>] {
   const node = document.createElement("div");
   node.classList.add("node");
 

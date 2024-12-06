@@ -1,5 +1,7 @@
 # TODO
 
+- refactor structure
+- get all coords
 - same port cycle
 - same node cycle
 - number | string node id and port id

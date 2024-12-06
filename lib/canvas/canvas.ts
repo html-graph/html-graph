@@ -1,12 +1,13 @@
-import { PublicGraphStore } from "../components/public-graph-store/public-graph-store";
-import { PublicViewportTransformer } from "../main";
-import { ApiConnection } from "../models/connection/api-connection";
-import { ApiUpdateConnection } from "../models/connection/api-update-connection";
-import { ApiNode } from "../models/nodes/api-node";
+import { PublicGraphStore } from "../graph-store";
+import { ConnectionController, PublicViewportTransformer } from "../main";
+import { AddNodeRequest } from "../models/nodes/add-node-request";
 import { ApiPort } from "../models/port/api-port";
-import { ApiContentMoveTransform } from "../models/transform/api-content-move-transform";
-import { ApiContentScaleTransform } from "../models/transform/api-content-scale-transform";
-import { ApiTransform } from "../models/transform/api-transform";
+import { AddConnectionRequest } from "./add-connection-request";
+import {
+  ApiContentMoveTransform,
+  ApiContentScaleTransform,
+  ApiTransform,
+} from "./transform";
 
 export interface Canvas {
   /**
@@ -22,7 +23,7 @@ export interface Canvas {
   /**
    * adds node to graph
    */
-  addNode(node: ApiNode): Canvas;
+  addNode(node: AddNodeRequest): Canvas;
 
   /**
    * removes node from graph
@@ -50,7 +51,7 @@ export interface Canvas {
   /**
    * adds connection to graph
    */
-  addConnection(connection: ApiConnection): Canvas;
+  addConnection(connection: AddConnectionRequest): Canvas;
 
   /**
    * removes connection from graph
@@ -85,9 +86,9 @@ export interface Canvas {
   /**
    * updates connection
    */
-  updateConnectionOptions(
+  updateConnectionController(
     connectionId: string,
-    options: ApiUpdateConnection,
+    controller: ConnectionController,
   ): Canvas;
 
   /**

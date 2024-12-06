@@ -1,4 +1,4 @@
-import { CenterFn } from "../center/center-fn";
+import { CenterFn } from "../../center-fn";
 
 export interface ApiPort {
   readonly id?: string;

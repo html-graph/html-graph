@@ -1,11 +1,11 @@
-import { Canvas } from "../canvas/canvas";
 import {
+  Canvas,
   CanvasCore,
+  CoreOptions,
   DraggableNodesCanvas,
   TransformableCanvas,
   TransformOptions,
-} from "../main";
-import { CoreOptions } from "../models/options/core-options";
+} from "../canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions | undefined = undefined;
@@ -16,19 +16,19 @@ export class CanvasBuilder {
 
   private isTransformable = false;
 
-  options(options: CoreOptions): CanvasBuilder {
+  setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
-  draggableNodes(): CanvasBuilder {
+  setDraggableNodes(): CanvasBuilder {
     this.isDraggable = true;
 
     return this;
   }
 
-  transformableCanvas(options?: TransformOptions): CanvasBuilder {
+  setTransformableCanvas(options?: TransformOptions): CanvasBuilder {
     this.isTransformable = true;
     this.transformOptions = options;
 

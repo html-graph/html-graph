@@ -1,19 +1,19 @@
-import { Canvas } from "../../lib/canvas/canvas";
-import { ApiPortsPayload, CanvasBuilder } from "../../lib/main";
+import { Canvas } from "../../lib/main";
+import { MarkPortRequest, CanvasBuilder } from "../../lib/main";
 
 const canvas = new CanvasBuilder()
-  .options({
+  .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .draggableNodes()
+  .setDraggableNodes()
   .build();
 
 function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, ApiPortsPayload>] {
+): [HTMLElement, Record<string, MarkPortRequest>] {
   const node = document.createElement("div");
   node.classList.add("node");
 
