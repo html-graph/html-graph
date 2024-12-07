@@ -50,7 +50,7 @@ canvas
 class ViewportTransformer {
   private readonly scaleVelocity = 1.2;
 
-  constructor(
+  public constructor(
     private readonly element: HTMLElement,
     private readonly canvas: Canvas,
   ) {

@@ -16,26 +16,26 @@ export class CanvasBuilder {
 
   private isTransformable = false;
 
-  setOptions(options: CoreOptions): CanvasBuilder {
+  public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
-  setDraggableNodes(): CanvasBuilder {
+  public setDraggableNodes(): CanvasBuilder {
     this.isDraggable = true;
 
     return this;
   }
 
-  setTransformableCanvas(options?: TransformOptions): CanvasBuilder {
+  public setTransformableCanvas(options?: TransformOptions): CanvasBuilder {
     this.isTransformable = true;
     this.transformOptions = options;
 
     return this;
   }
 
-  build(): Canvas {
+  public build(): Canvas {
     let res: Canvas = new CanvasCore(this.coreOptions);
 
     if (this.isDraggable) {

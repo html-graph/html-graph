@@ -13,9 +13,9 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { ConnectionController } from "@/connections";
 
 export class DraggableNodesCanvas implements Canvas {
-  readonly transformation: PublicViewportTransformer;
+  public readonly transformation: PublicViewportTransformer;
 
-  readonly model: PublicGraphStore;
+  public readonly model: PublicGraphStore;
 
   private readonly nodes = new Map<
     string,
@@ -85,13 +85,13 @@ export class DraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: [number, number] | null = null;
 
-  constructor(private readonly canvas: Canvas) {
+  public constructor(private readonly canvas: Canvas) {
     this.transformation = this.canvas.transformation;
 
     this.model = this.canvas.model;
   }
 
-  addNode(node: AddNodeRequest): DraggableNodesCanvas {
+  public addNode(node: AddNodeRequest): DraggableNodesCanvas {
     let nodeId = node.id;
 
     if (nodeId === undefined) {
@@ -130,7 +130,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  removeNode(nodeId: string): DraggableNodesCanvas {
+  public removeNode(nodeId: string): DraggableNodesCanvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -144,67 +144,77 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  markPort(port: ApiPort): DraggableNodesCanvas {
+  public markPort(port: ApiPort): DraggableNodesCanvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  updatePortConnections(portId: string): DraggableNodesCanvas {
+  public updatePortConnections(portId: string): DraggableNodesCanvas {
     this.canvas.updatePortConnections(portId);
 
     return this;
   }
 
-  unmarkPort(portId: string): DraggableNodesCanvas {
+  public unmarkPort(portId: string): DraggableNodesCanvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  addConnection(connection: AddConnectionRequest): DraggableNodesCanvas {
+  public addConnection(connection: AddConnectionRequest): DraggableNodesCanvas {
     this.canvas.addConnection(connection);
 
     return this;
   }
 
-  removeConnection(connectionId: string): DraggableNodesCanvas {
+  public removeConnection(connectionId: string): DraggableNodesCanvas {
     this.canvas.removeConnection(connectionId);
 
     return this;
   }
 
-  patchViewportTransform(apiTransform: ApiTransform): DraggableNodesCanvas {
+  public patchViewportTransform(
+    apiTransform: ApiTransform,
+  ): DraggableNodesCanvas {
     this.canvas.patchViewportTransform(apiTransform);
 
     return this;
   }
 
-  moveContent(apiTransform: ApiContentMoveTransform): DraggableNodesCanvas {
+  public moveContent(
+    apiTransform: ApiContentMoveTransform,
+  ): DraggableNodesCanvas {
     this.canvas.moveContent(apiTransform);
 
     return this;
   }
 
-  scaleContent(apiTransform: ApiContentScaleTransform): DraggableNodesCanvas {
+  public scaleContent(
+    apiTransform: ApiContentScaleTransform,
+  ): DraggableNodesCanvas {
     this.canvas.scaleContent(apiTransform);
 
     return this;
   }
 
-  moveToNodes(nodeIds: readonly string[]): DraggableNodesCanvas {
+  public moveToNodes(nodeIds: readonly string[]): DraggableNodesCanvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): DraggableNodesCanvas {
+  public updateNodeCoords(
+    nodeId: string,
+    x: number,
+    y: number,
+  ): DraggableNodesCanvas {
     this.canvas.updateNodeCoords(nodeId, x, y);
 
     return this;
   }
 
-  updateConnectionController(
+  public updateConnectionController(
     connectionId: string,
     controller: ConnectionController,
   ): DraggableNodesCanvas {
@@ -213,19 +223,23 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  dragNode(nodeId: string, dx: number, dy: number): DraggableNodesCanvas {
+  public dragNode(
+    nodeId: string,
+    dx: number,
+    dy: number,
+  ): DraggableNodesCanvas {
     this.canvas.dragNode(nodeId, dx, dy);
 
     return this;
   }
 
-  moveNodeOnTop(nodeId: string): DraggableNodesCanvas {
+  public moveNodeOnTop(nodeId: string): DraggableNodesCanvas {
     this.canvas.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  clear(): DraggableNodesCanvas {
+  public clear(): DraggableNodesCanvas {
     this.canvas.clear();
 
     this.nodes.forEach((value) => {
@@ -238,7 +252,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  attach(element: HTMLElement): DraggableNodesCanvas {
+  public attach(element: HTMLElement): DraggableNodesCanvas {
     this.canvas.attach(element);
     this.element = element;
 
@@ -252,7 +266,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  detach(): DraggableNodesCanvas {
+  public detach(): DraggableNodesCanvas {
     this.canvas.detach();
 
     if (this.element !== null) {
@@ -269,7 +283,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.detach();
 
     this.nodes.forEach((value) => {

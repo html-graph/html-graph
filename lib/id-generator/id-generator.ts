@@ -1,7 +1,7 @@
 export class IdGenerator {
   private counter = 0;
 
-  next(): string {
+  public next(): string {
     const id = `${this.counter}`;
 
     this.counter++;
@@ -9,7 +9,7 @@ export class IdGenerator {
     return id;
   }
 
-  reset(): void {
+  public reset(): void {
     this.counter = 0;
   }
 }

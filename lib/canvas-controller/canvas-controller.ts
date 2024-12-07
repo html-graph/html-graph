@@ -8,9 +8,9 @@ import {
 import { MarkPortRequest } from "@/canvas/canvas";
 
 export class CanvasController {
-  constructor(private readonly di: DiContainer) {}
+  public constructor(private readonly di: DiContainer) {}
 
-  moveNodeOnTop(nodeId: string): void {
+  public moveNodeOnTop(nodeId: string): void {
     if (!this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to move on top nonexisting node");
     }
@@ -18,7 +18,7 @@ export class CanvasController {
     this.di.htmlController.moveNodeOnTop(nodeId);
   }
 
-  dragNode(nodeId: string, dx: number, dy: number): void {
+  public dragNode(nodeId: string, dx: number, dy: number): void {
     if (!this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to drag nonexisting node");
     }
@@ -36,7 +36,7 @@ export class CanvasController {
     this.di.htmlController.updateNodePosition(nodeId);
   }
 
-  addNode(
+  public addNode(
     nodeId: string | undefined,
     element: HTMLElement,
     x: number,
@@ -87,7 +87,7 @@ export class CanvasController {
     }
   }
 
-  markPort(
+  public markPort(
     portId: string | undefined,
     element: HTMLElement,
     nodeId: string,
@@ -117,7 +117,7 @@ export class CanvasController {
     );
   }
 
-  updatePortConnections(portId: string): void {
+  public updatePortConnections(portId: string): void {
     if (!this.di.graphStore.hasPort(portId)) {
       throw new Error("failed to unset nonexisting port");
     }
@@ -125,7 +125,7 @@ export class CanvasController {
     this.di.htmlController.updatePortConnections(portId);
   }
 
-  unmarkPort(portId: string): void {
+  public unmarkPort(portId: string): void {
     if (!this.di.graphStore.hasPort(portId)) {
       throw new Error("failed to unset nonexisting port");
     }
@@ -139,7 +139,7 @@ export class CanvasController {
     this.di.graphStore.removePort(portId);
   }
 
-  addConnection(
+  public addConnection(
     connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,
@@ -168,7 +168,7 @@ export class CanvasController {
     this.di.htmlController.attachConnection(connectionId);
   }
 
-  removeConnection(connectionId: string): void {
+  public removeConnection(connectionId: string): void {
     if (!this.di.graphStore.hasConnection(connectionId)) {
       throw new Error("failed to remove nonexisting connection");
     }
@@ -177,7 +177,7 @@ export class CanvasController {
     this.di.graphStore.removeConnection(connectionId);
   }
 
-  removeNode(nodeId: string): void {
+  public removeNode(nodeId: string): void {
     if (!this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to remove nonexisting node");
     }
@@ -186,7 +186,7 @@ export class CanvasController {
     this.di.graphStore.removeNode(nodeId);
   }
 
-  patchViewportTransform(
+  public patchViewportTransform(
     scale: number | null,
     x: number | null,
     y: number | null,
@@ -195,17 +195,17 @@ export class CanvasController {
     this.di.htmlController.applyTransform();
   }
 
-  moveContent(x: number, y: number): void {
+  public moveContent(x: number, y: number): void {
     this.di.viewportTransformer.applyShift(-x, -y);
     this.di.htmlController.applyTransform();
   }
 
-  scaleContent(scale: number, cx: number, cy: number): void {
+  public scaleContent(scale: number, cx: number, cy: number): void {
     this.di.viewportTransformer.applyScale(1 / scale, cx, cy);
     this.di.htmlController.applyTransform();
   }
 
-  moveToNodes(nodeIds: readonly string[]): void {
+  public moveToNodes(nodeIds: readonly string[]): void {
     if (nodeIds.length === 0) {
       return;
     }
@@ -234,7 +234,7 @@ export class CanvasController {
     this.patchViewportTransform(null, targetX, targetY);
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): void {
+  public updateNodeCoords(nodeId: string, x: number, y: number): void {
     if (!this.di.graphStore.hasNode(nodeId)) {
       throw new Error("failed to update coordinates of nonexisting node");
     }
@@ -243,7 +243,7 @@ export class CanvasController {
     this.di.htmlController.updateNodePosition(nodeId);
   }
 
-  updateConnectionOptions(
+  public updateConnectionOptions(
     connectionId: string,
     controller: ConnectionController,
   ): void {
@@ -257,7 +257,7 @@ export class CanvasController {
     this.di.htmlController.attachConnection(connectionId);
   }
 
-  clear(): void {
+  public clear(): void {
     this.di.htmlController.clear();
     this.di.graphStore.clear();
     this.di.nodeIdGenerator.reset();
@@ -265,7 +265,7 @@ export class CanvasController {
     this.di.connectionIdGenerator.reset();
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.di.htmlController.destroy();
   }
 }

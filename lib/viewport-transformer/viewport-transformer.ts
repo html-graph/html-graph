@@ -18,7 +18,7 @@ export class ViewportTransformer {
    *
    * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
    */
-  applyShift(dx: number, dy: number): void {
+  public applyShift(dx: number, dy: number): void {
     this.state = {
       scale: this.state.scale,
       x: this.state.scale * dx + this.state.x,
@@ -37,7 +37,7 @@ export class ViewportTransformer {
    *
    * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
    */
-  applyScale(s2: number, cx: number, cy: number): void {
+  public applyScale(s2: number, cx: number, cy: number): void {
     this.state = {
       scale: this.state.scale * s2,
       x: this.state.scale * (1 - s2) * cx + this.state.x,
@@ -45,29 +45,33 @@ export class ViewportTransformer {
     };
   }
 
-  getViewCoords(xa: number, ya: number): [number, number] {
+  public getViewCoords(xa: number, ya: number): [number, number] {
     return [
       (xa - this.state.x) / this.state.scale,
       (ya - this.state.y) / this.state.scale,
     ];
   }
 
-  getViewScale(): number {
+  public getViewScale(): number {
     return 1 / this.state.scale;
   }
 
-  getAbsCoords(xv: number, yv: number): [number, number] {
+  public getAbsCoords(xv: number, yv: number): [number, number] {
     return [
       xv * this.state.scale + this.state.x,
       yv * this.state.scale + this.state.y,
     ];
   }
 
-  getAbsScale(): number {
+  public getAbsScale(): number {
     return this.state.scale;
   }
 
-  patchState(scale: number | null, x: number | null, y: number | null): void {
+  public patchState(
+    scale: number | null,
+    x: number | null,
+    y: number | null,
+  ): void {
     this.state = {
       scale: scale ?? this.state.scale,
       x: x ?? this.state.x,

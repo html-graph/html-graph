@@ -2,7 +2,7 @@ import { PortPayload } from "@/graph-store";
 import { Point } from "./point";
 
 export class ConnectionUtils {
-  static getPortCenter(port: PortPayload): Point {
+  public static getPortCenter(port: PortPayload): Point {
     const { top, left, width, height } = port.element.getBoundingClientRect();
 
     const center = port.centerFn(width, height);
@@ -10,7 +10,7 @@ export class ConnectionUtils {
     return [left + center[0], top + center[1]];
   }
 
-  static rotate(point: Point, vector: Point, center: Point): Point {
+  public static rotate(point: Point, vector: Point, center: Point): Point {
     /**
      * translate to center
      *  1  0  c1
@@ -42,7 +42,7 @@ export class ConnectionUtils {
     ];
   }
 
-  static getDirectionVector(
+  public static getDirectionVector(
     direction: number | null,
     flipX: number,
     flipY: number,
@@ -50,7 +50,7 @@ export class ConnectionUtils {
     return [flipX * Math.cos(direction ?? 0), flipY * Math.sin(direction ?? 0)];
   }
 
-  static getArrowPath(
+  public static getArrowPath(
     vect: Point,
     shiftX: number,
     shiftY: number,
@@ -74,7 +74,7 @@ export class ConnectionUtils {
     return `${amove} ${aline1} ${aline2}`;
   }
 
-  static getArrowOffsetPath(
+  public static getArrowOffsetPath(
     vect: Point,
     shiftX: number,
     shiftY: number,

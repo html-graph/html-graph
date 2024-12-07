@@ -1,7 +1,7 @@
 import { MarkPortRequest } from "@html-graph/html-graph";
 
 export class GraphHtmlHelper {
-  createNodeElement(
+  public createNodeElement(
     name: string,
     frontPortId: string | null,
     ports: Record<string, string>,
@@ -40,7 +40,7 @@ export class GraphHtmlHelper {
     return [node, portElements];
   }
 
-  createTextArea(): HTMLElement {
+  public createTextArea(): HTMLElement {
     const area = document.createElement("textarea");
     area.classList.add("node-text");
     area.value =

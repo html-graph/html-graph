@@ -10,6 +10,9 @@ export default tseslint.config(
     files: ["**/*.{js,mjs,cjs,ts}"],
     languageOptions: { globals: globals.browser },
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
+    rules: {
+      "@typescript-eslint/explicit-member-accessibility": "error",
+    },
   },
   {
     files: ["examples/**/*.ts"],

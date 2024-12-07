@@ -5,7 +5,7 @@ class NodesDragHandler {
 
   private grabbedNode: string | null = null;
 
-  constructor(private readonly element: HTMLElement) {
+  public constructor(private readonly element: HTMLElement) {
     const canvas = new CanvasBuilder()
       .setOptions({
         background: { type: "dots" },
@@ -52,7 +52,7 @@ class NodesDragHandler {
     });
   }
 
-  createNode(
+  public createNode(
     name: string,
     frontPortId: string,
     backPortId: string,

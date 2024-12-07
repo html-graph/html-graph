@@ -50,7 +50,7 @@ class CustomConnectionController implements ConnectionController {
     true,
   );
 
-  readonly svg = this.controller.svg;
+  public readonly svg = this.controller.svg;
 
   private readonly text = document.createElementNS(
     "http://www.w3.org/2000/svg",
@@ -64,7 +64,7 @@ class CustomConnectionController implements ConnectionController {
 
   private readonly radius = 5;
 
-  constructor(name: string) {
+  public constructor(name: string) {
     this.text.textContent = name;
 
     this.rect.setAttribute("fill", "#fff");
@@ -76,7 +76,7 @@ class CustomConnectionController implements ConnectionController {
     this.svg.appendChild(this.text);
   }
 
-  update(
+  public update(
     x: number,
     y: number,
     width: number,

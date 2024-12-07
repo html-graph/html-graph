@@ -50,7 +50,7 @@ canvas
 class ViewportTransformer {
   private isGrabbed = false;
 
-  constructor(
+  public constructor(
     private readonly element: HTMLElement,
     private readonly canvas: Canvas,
   ) {

@@ -4,7 +4,7 @@ import readline from "readline";
 import { stdin as input, stdout as output } from "process";
 
 class ReleaseNextVersion {
-  static do(): void {
+  public static do(): void {
     const content = readFileSync("./package.json", "utf8");
 
     const pkg = JSON.parse(content);

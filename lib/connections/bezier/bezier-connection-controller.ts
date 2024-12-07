@@ -3,7 +3,7 @@ import { ConnectionController } from "../connection-controller";
 import { ConnectionUtils } from "../connection-utils";
 
 export class BezierConnectionController implements ConnectionController {
-  readonly svg: SVGSVGElement;
+  public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 
@@ -13,7 +13,7 @@ export class BezierConnectionController implements ConnectionController {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  constructor(
+  public constructor(
     private readonly color: string,
     private readonly width: number,
     private readonly curvature: number,
@@ -58,7 +58,7 @@ export class BezierConnectionController implements ConnectionController {
     this.svg.style.overflow = "visible";
   }
 
-  update(
+  public update(
     x: number,
     y: number,
     width: number,

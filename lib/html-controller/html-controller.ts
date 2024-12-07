@@ -82,7 +82,7 @@ export class HtmlController {
     },
   };
 
-  constructor(private readonly di: DiContainer) {
+  public constructor(private readonly di: DiContainer) {
     this.host = this.createHost();
     this.canvas = this.createCanvas();
     this.nodesContainer = this.createNodesContainer();
@@ -108,7 +108,7 @@ export class HtmlController {
     this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
-  clear(): void {
+  public clear(): void {
     Array.from(this.connectionIdToElementMap.keys()).forEach((connectionId) => {
       this.detachConnection(connectionId);
     });
@@ -118,18 +118,18 @@ export class HtmlController {
     });
   }
 
-  attach(canvasWrapper: HTMLElement): void {
+  public attach(canvasWrapper: HTMLElement): void {
     this.canvasWrapper = canvasWrapper;
     this.canvasWrapper.appendChild(this.host);
   }
 
-  detach(): void {
+  public detach(): void {
     if (this.canvasWrapper !== null) {
       this.canvasWrapper.removeChild(this.host);
     }
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.hostResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.canvas);
@@ -141,7 +141,7 @@ export class HtmlController {
     }
   }
 
-  applyTransform(): void {
+  public applyTransform(): void {
     this.canvasCtx.clearRect(
       0,
       0,
@@ -164,7 +164,7 @@ export class HtmlController {
     this.layers[this.di.options.layers.mode].update(sv, xv, yv);
   }
 
-  attachNode(nodeId: string): void {
+  public attachNode(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
 
     const wrapper = document.createElement("div");
@@ -189,7 +189,7 @@ export class HtmlController {
     wrapper.style.visibility = "visible";
   }
 
-  detachNode(nodeId: string): void {
+  public detachNode(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
 
     this.nodesResizeObserver.unobserve(node.element);
@@ -203,7 +203,7 @@ export class HtmlController {
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
-  attachConnection(connectionId: string): void {
+  public attachConnection(connectionId: string): void {
     const connection = this.di.graphStore.getConnection(connectionId);
     const element = connection.controller.svg;
 
@@ -221,17 +221,17 @@ export class HtmlController {
     this.connectionsContainer.appendChild(element);
   }
 
-  detachConnection(connectionId: string): void {
+  public detachConnection(connectionId: string): void {
     const element = this.connectionIdToElementMap.get(connectionId);
     this.connectionIdToElementMap.delete(connectionId);
     this.connectionsContainer.removeChild(element!);
   }
 
-  moveNodeOnTop(nodeId: string): void {
+  public moveNodeOnTop(nodeId: string): void {
     this.layers[this.di.options.layers.mode].moveOnTop(nodeId);
   }
 
-  updateNodePosition(nodeId: string): void {
+  public updateNodePosition(nodeId: string): void {
     const node = this.di.graphStore.getNode(nodeId);
     const connections = this.di.graphStore.getNodeAdjacentConnections(nodeId);
 
@@ -242,7 +242,7 @@ export class HtmlController {
     });
   }
 
-  updatePortConnections(portId: string): void {
+  public updatePortConnections(portId: string): void {
     const connections = this.di.graphStore.getPortAdjacentConnections(portId);
 
     connections.forEach((connection) => {
@@ -250,7 +250,7 @@ export class HtmlController {
     });
   }
 
-  getViewportDimensions(): [number, number] {
+  public getViewportDimensions(): [number, number] {
     const rect = this.host.getBoundingClientRect();
 
     return [rect.width, rect.height];

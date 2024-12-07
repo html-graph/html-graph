@@ -20,15 +20,15 @@ import { ConnectionController } from "@/connections";
  * Provides core API for acting on graph
  */
 export class CanvasCore implements Canvas {
-  readonly transformation: PublicViewportTransformer;
+  public readonly transformation: PublicViewportTransformer;
 
-  readonly model: PublicGraphStore;
+  public readonly model: PublicGraphStore;
 
   private readonly options: Options;
 
   private readonly di: DiContainer;
 
-  constructor(private readonly apiOptions?: CoreOptions) {
+  public constructor(private readonly apiOptions?: CoreOptions) {
     this.options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(this.options);
@@ -38,7 +38,7 @@ export class CanvasCore implements Canvas {
     this.model = this.di.publicGraphStore;
   }
 
-  addNode(node: AddNodeRequest): CanvasCore {
+  public addNode(node: AddNodeRequest): CanvasCore {
     this.di.controller.addNode(
       node.id,
       node.element,
@@ -51,19 +51,19 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveNodeOnTop(nodeId: string): CanvasCore {
+  public moveNodeOnTop(nodeId: string): CanvasCore {
     this.di.controller.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  removeNode(nodeId: string): CanvasCore {
+  public removeNode(nodeId: string): CanvasCore {
     this.di.controller.removeNode(nodeId);
 
     return this;
   }
 
-  markPort(port: ApiPort): CanvasCore {
+  public markPort(port: ApiPort): CanvasCore {
     this.di.controller.markPort(
       port.id,
       port.element,
@@ -75,19 +75,19 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  updatePortConnections(portId: string): CanvasCore {
+  public updatePortConnections(portId: string): CanvasCore {
     this.di.controller.updatePortConnections(portId);
 
     return this;
   }
 
-  unmarkPort(portId: string): CanvasCore {
+  public unmarkPort(portId: string): CanvasCore {
     this.di.controller.unmarkPort(portId);
 
     return this;
   }
 
-  addConnection(connection: AddConnectionRequest): CanvasCore {
+  public addConnection(connection: AddConnectionRequest): CanvasCore {
     const controllerFactory =
       connection.options !== undefined
         ? resolveConnectionControllerFactory(connection.options)
@@ -103,13 +103,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  removeConnection(connectionId: string): CanvasCore {
+  public removeConnection(connectionId: string): CanvasCore {
     this.di.controller.removeConnection(connectionId);
 
     return this;
   }
 
-  patchViewportTransform(apiTransform: ApiTransform): CanvasCore {
+  public patchViewportTransform(apiTransform: ApiTransform): CanvasCore {
     this.di.controller.patchViewportTransform(
       apiTransform.scale ?? null,
       apiTransform.x ?? null,
@@ -119,13 +119,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveContent(apiTransform: ApiContentMoveTransform): CanvasCore {
+  public moveContent(apiTransform: ApiContentMoveTransform): CanvasCore {
     this.di.controller.moveContent(apiTransform.x ?? 0, apiTransform.y ?? 0);
 
     return this;
   }
 
-  scaleContent(apiTransform: ApiContentScaleTransform): CanvasCore {
+  public scaleContent(apiTransform: ApiContentScaleTransform): CanvasCore {
     this.di.controller.scaleContent(
       apiTransform.scale,
       apiTransform.x ?? 0,
@@ -135,19 +135,19 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  moveToNodes(nodeIds: readonly string[]): CanvasCore {
+  public moveToNodes(nodeIds: readonly string[]): CanvasCore {
     this.di.controller.moveToNodes(nodeIds);
 
     return this;
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): CanvasCore {
+  public updateNodeCoords(nodeId: string, x: number, y: number): CanvasCore {
     this.di.controller.updateNodeCoords(nodeId, x, y);
 
     return this;
   }
 
-  updateConnectionController(
+  public updateConnectionController(
     connectionId: string,
     controller: ConnectionController,
   ): CanvasCore {
@@ -156,31 +156,31 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  dragNode(nodeId: string, dx: number, dy: number): CanvasCore {
+  public dragNode(nodeId: string, dx: number, dy: number): CanvasCore {
     this.di.controller.dragNode(nodeId, dx, dy);
 
     return this;
   }
 
-  clear(): CanvasCore {
+  public clear(): CanvasCore {
     this.di.controller.clear();
 
     return this;
   }
 
-  attach(element: HTMLElement): CanvasCore {
+  public attach(element: HTMLElement): CanvasCore {
     this.di.htmlController.attach(element);
 
     return this;
   }
 
-  detach(): CanvasCore {
+  public detach(): CanvasCore {
     this.di.htmlController.detach();
 
     return this;
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.di.controller.destroy();
   }
 }

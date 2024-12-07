@@ -25,19 +25,19 @@ export class GraphStore {
   private cycleConnections: Record<string, Record<string, true>> =
     Object.create(null);
 
-  getAllNodes(): readonly string[] {
+  public getAllNodes(): readonly string[] {
     return Object.keys(this.nodes);
   }
 
-  getAllPorts(): readonly string[] {
+  public getAllPorts(): readonly string[] {
     return Object.keys(this.ports);
   }
 
-  getAllConnections(): readonly string[] {
+  public getAllConnections(): readonly string[] {
     return Object.keys(this.connections);
   }
 
-  addNode(
+  public addNode(
     nodeId: string,
     element: HTMLElement,
     x: number,
@@ -48,27 +48,27 @@ export class GraphStore {
     this.nodePorts[nodeId] = Object.create(null);
   }
 
-  hasNode(nodeId: string): boolean {
+  public hasNode(nodeId: string): boolean {
     return this.nodes[nodeId] !== undefined;
   }
 
-  getNode(nodeId: string): NodePayload {
+  public getNode(nodeId: string): NodePayload {
     return this.nodes[nodeId];
   }
 
-  updateNodeCoords(nodeId: string, x: number, y: number): void {
+  public updateNodeCoords(nodeId: string, x: number, y: number): void {
     this.nodes[nodeId].x = x;
     this.nodes[nodeId].y = y;
   }
 
-  updateConnectionController(
+  public updateConnectionController(
     connectionId: string,
     controller: ConnectionController,
   ): void {
     this.connections[connectionId].controller = controller;
   }
 
-  removeNode(nodeId: string): void {
+  public removeNode(nodeId: string): void {
     const connections = this.getNodeAdjacentConnections(nodeId);
 
     connections.forEach((connectionId) => {
@@ -85,7 +85,7 @@ export class GraphStore {
     delete this.nodePorts[nodeId];
   }
 
-  addPort(
+  public addPort(
     portId: string,
     element: HTMLElement,
     nodeId: string,
@@ -105,19 +105,19 @@ export class GraphStore {
     }
   }
 
-  getPort(portId: string): PortPayload {
+  public getPort(portId: string): PortPayload {
     return this.ports[portId];
   }
 
-  getPortNode(portId: string): string {
+  public getPortNode(portId: string): string {
     return this.portNodeId[portId];
   }
 
-  hasPort(portId: string): boolean {
+  public hasPort(portId: string): boolean {
     return this.portNodeId[portId] !== undefined;
   }
 
-  removePort(portId: string): void {
+  public removePort(portId: string): void {
     Object.keys(this.cycleConnections[portId]).forEach((connectionId) => {
       this.removeConnection(connectionId);
     });
@@ -144,7 +144,7 @@ export class GraphStore {
     delete this.ports[portId];
   }
 
-  addConnection(
+  public addConnection(
     connectionId: string,
     fromPortId: string,
     toPortId: string,
@@ -164,15 +164,15 @@ export class GraphStore {
     }
   }
 
-  getConnection(connectionId: string): ConnectionPayload {
+  public getConnection(connectionId: string): ConnectionPayload {
     return this.connections[connectionId];
   }
 
-  hasConnection(connectionId: string): boolean {
+  public hasConnection(connectionId: string): boolean {
     return this.connections[connectionId] !== undefined;
   }
 
-  removeConnection(connectionId: string): void {
+  public removeConnection(connectionId: string): void {
     const connection = this.connections[connectionId];
     const portFromId = connection.from;
     const portToId = connection.to;
@@ -187,19 +187,19 @@ export class GraphStore {
     delete this.connections[connectionId];
   }
 
-  getPortIncomingConnections(portId: string): readonly string[] {
+  public getPortIncomingConnections(portId: string): readonly string[] {
     return Object.keys(this.incommingConnections[portId] ?? {});
   }
 
-  getPortOutcomingConnections(portId: string): readonly string[] {
+  public getPortOutcomingConnections(portId: string): readonly string[] {
     return Object.keys(this.outcommingConnections[portId] ?? {});
   }
 
-  getPortCycleConnections(portId: string): readonly string[] {
+  public getPortCycleConnections(portId: string): readonly string[] {
     return Object.keys(this.cycleConnections[portId] ?? {});
   }
 
-  getPortAdjacentConnections(portId: string): readonly string[] {
+  public getPortAdjacentConnections(portId: string): readonly string[] {
     return [
       ...this.getPortIncomingConnections(portId),
       ...this.getPortOutcomingConnections(portId),
@@ -207,7 +207,7 @@ export class GraphStore {
     ];
   }
 
-  getNodeIncomingConnections(nodeId: string): readonly string[] {
+  public getNodeIncomingConnections(nodeId: string): readonly string[] {
     const ports = Object.keys(this.nodePorts[nodeId]);
     let res: string[] = [];
 
@@ -218,7 +218,7 @@ export class GraphStore {
     return res;
   }
 
-  getNodeOutcomingConnections(nodeId: string): readonly string[] {
+  public getNodeOutcomingConnections(nodeId: string): readonly string[] {
     const ports = Object.keys(this.nodePorts[nodeId]);
     let res: string[] = [];
 
@@ -229,7 +229,7 @@ export class GraphStore {
     return res;
   }
 
-  getNodeCycleConnections(nodeId: string): readonly string[] {
+  public getNodeCycleConnections(nodeId: string): readonly string[] {
     const ports = Object.keys(this.nodePorts[nodeId]);
     let res: string[] = [];
 
@@ -240,7 +240,7 @@ export class GraphStore {
     return res;
   }
 
-  getNodeAdjacentConnections(nodeId: string): readonly string[] {
+  public getNodeAdjacentConnections(nodeId: string): readonly string[] {
     return [
       ...this.getNodeIncomingConnections(nodeId),
       ...this.getNodeOutcomingConnections(nodeId),
@@ -248,7 +248,7 @@ export class GraphStore {
     ];
   }
 
-  clear(): void {
+  public clear(): void {
     this.nodes = Object.create(null);
     this.ports = Object.create(null);
     this.nodePorts = Object.create(null);

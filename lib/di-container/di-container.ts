@@ -9,25 +9,25 @@ import { Options } from "@/canvas/canvas-core/options";
 import { CanvasController } from "@/canvas-controller";
 
 export class DiContainer {
-  readonly htmlController: HtmlController;
+  public readonly htmlController: HtmlController;
 
-  readonly viewportTransformer: ViewportTransformer;
+  public readonly viewportTransformer: ViewportTransformer;
 
-  readonly publicViewportTransformer: PublicViewportTransformer;
+  public readonly publicViewportTransformer: PublicViewportTransformer;
 
-  readonly controller: CanvasController;
+  public readonly controller: CanvasController;
 
-  readonly graphStore: GraphStore;
+  public readonly graphStore: GraphStore;
 
-  readonly publicGraphStore: PublicGraphStore;
+  public readonly publicGraphStore: PublicGraphStore;
 
-  readonly nodeIdGenerator: IdGenerator;
+  public readonly nodeIdGenerator: IdGenerator;
 
-  readonly portIdGenerator: IdGenerator;
+  public readonly portIdGenerator: IdGenerator;
 
-  readonly connectionIdGenerator: IdGenerator;
+  public readonly connectionIdGenerator: IdGenerator;
 
-  constructor(readonly options: Options) {
+  public constructor(public readonly options: Options) {
     this.htmlController = new HtmlController(this);
 
     this.viewportTransformer = new ViewportTransformer();
