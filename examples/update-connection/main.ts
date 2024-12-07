@@ -1,4 +1,4 @@
-import { BezierConnectionController, CanvasBuilder } from "../../lib/main";
+import { BezierConnectionController, CanvasBuilder } from "@html-graph/html-graph";
 
 const canvas = new CanvasBuilder()
   .setOptions({

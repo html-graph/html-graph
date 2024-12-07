@@ -1,4 +1,4 @@
-import { MarkPortRequest, CanvasBuilder } from "../../lib/main";
+import { MarkPortRequest, CanvasBuilder } from "@html-graph/html-graph";
 
 const canvas = new CanvasBuilder()
   .setOptions({

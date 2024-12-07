@@ -1,4 +1,4 @@
-import { CanvasBuilder } from "../../lib/main";
+import { CanvasBuilder } from "@html-graph/html-graph";
 import { GraphHtmlHelper } from "./graph-html-helper";
 
 const canvas = new CanvasBuilder()

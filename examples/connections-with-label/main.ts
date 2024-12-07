@@ -4,7 +4,7 @@ import {
   CanvasBuilder,
   PortPayload,
   ConnectionController,
-} from "../../lib/main";
+} from "@html-graph/html-graph";
 
 const canvas = new CanvasBuilder()
   .setOptions({

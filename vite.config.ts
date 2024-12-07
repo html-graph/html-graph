@@ -4,6 +4,11 @@ import dts from "vite-plugin-dts";
 import checker from "vite-plugin-checker";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "@html-graph/html-graph": resolve(__dirname, "./lib"),
+    },
+  },
   plugins: [
     dts({
       include: ["lib"],
@@ -13,7 +18,7 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, "lib/main.ts"),
+      entry: resolve(__dirname, "lib/index.ts"),
       formats: ["es", "umd"],
       fileName: "main",
       name: "HTMLGraph",

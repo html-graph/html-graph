@@ -1,4 +1,4 @@
-import { MarkPortRequest } from "../../lib/main";
+import { MarkPortRequest } from "@html-graph/html-graph";
 
 export class GraphHtmlHelper {
   createNodeElement(
