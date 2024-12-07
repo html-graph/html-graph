@@ -42,7 +42,7 @@ class ReleaseNextVersion {
     const cmdsBeforePublish = [
       `npx prettier ./package.json --write`,
       `npm install`,
-      "npm run prebuild",
+      "npm run beforebuild",
       "npm run build",
     ];
 

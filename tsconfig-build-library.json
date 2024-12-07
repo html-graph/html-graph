@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
@@ -13,7 +14,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@/*": ["./lib/*"]
+    }
   },
   "include": ["lib"]
 }
