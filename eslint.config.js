@@ -24,6 +24,9 @@ export default tseslint.config(
             {
               group: ["@html-graph/html-graph/**", "!@html-graph/html-graph"],
             },
+            {
+              group: ["@/**"],
+            },
           ],
         },
       ],
