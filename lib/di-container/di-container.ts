@@ -15,7 +15,7 @@ export class DiContainer {
 
   public readonly publicViewportTransformer: PublicViewportTransformer;
 
-  public readonly controller: CanvasController;
+  public readonly canvasController: CanvasController;
 
   public readonly graphStore: GraphStore;
 
@@ -28,24 +28,37 @@ export class DiContainer {
   public readonly connectionIdGenerator: IdGenerator;
 
   public constructor(public readonly options: Options) {
-    this.htmlController = new HtmlController(this);
-
     this.viewportTransformer = new ViewportTransformer();
 
     this.publicViewportTransformer = new PublicViewportTransformer(
       this.viewportTransformer,
     );
 
-    this.controller = new CanvasController(this);
-
     this.graphStore = new GraphStore();
 
     this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
+    this.htmlController = new HtmlController(
+      this.graphStore,
+      this.viewportTransformer,
+      this.publicViewportTransformer,
+      this.options.layers.mode,
+      this.options.background.drawingFn,
+    );
+
     this.nodeIdGenerator = new IdGenerator();
-
     this.portIdGenerator = new IdGenerator();
-
     this.connectionIdGenerator = new IdGenerator();
+
+    this.canvasController = new CanvasController(
+      this.graphStore,
+      this.htmlController,
+      this.viewportTransformer,
+      this.nodeIdGenerator,
+      this.portIdGenerator,
+      this.connectionIdGenerator,
+      this.options.nodes.centerFn,
+      this.options.ports.centerFn,
+    );
   }
 }

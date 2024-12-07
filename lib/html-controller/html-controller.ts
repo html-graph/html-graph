@@ -1,6 +1,11 @@
-import { DiContainer } from "@/di-container";
 import { LayersMode } from "@/layers";
 import { LayersController } from "./layers-controller";
+import { GraphStore } from "@/graph-store";
+import {
+  PublicViewportTransformer,
+  ViewportTransformer,
+} from "@/viewport-transformer";
+import { BackgroundDrawingFn } from "@/background";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -57,8 +62,7 @@ export class HtmlController {
         const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
         this.currentZIndex += 2;
         wrapper.style.zIndex = `${this.currentZIndex}`;
-        const connections =
-          this.di.graphStore.getNodeAdjacentConnections(nodeId);
+        const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
         connections.forEach((connection) => {
           this.connectionIdToElementMap.get(connection)!.style.zIndex =
             `${this.currentZIndex - 1}`;
@@ -82,7 +86,13 @@ export class HtmlController {
     },
   };
 
-  public constructor(private readonly di: DiContainer) {
+  public constructor(
+    private readonly graphStore: GraphStore,
+    private readonly viewportTransformer: ViewportTransformer,
+    private readonly publicViewportTransformer: PublicViewportTransformer,
+    private readonly layersMode: LayersMode,
+    private readonly backgroundDrawingFn: BackgroundDrawingFn,
+  ) {
     this.host = this.createHost();
     this.canvas = this.createCanvas();
     this.nodesContainer = this.createNodesContainer();
@@ -98,9 +108,7 @@ export class HtmlController {
 
     this.host.appendChild(this.canvas);
 
-    const mode = this.di.options.layers.mode;
-
-    this.layers[mode].create();
+    this.layers[this.layersMode].create();
 
     this.hostResizeObserver = this.createHostResizeObserver();
     this.hostResizeObserver.observe(this.host);
@@ -151,21 +159,18 @@ export class HtmlController {
 
     this.canvasCtx.save();
 
-    this.di.options.background.drawingFn(
-      this.canvasCtx,
-      this.di.publicViewportTransformer,
-    );
+    this.backgroundDrawingFn(this.canvasCtx, this.publicViewportTransformer);
 
     this.canvasCtx.restore();
 
-    const [xv, yv] = this.di.viewportTransformer.getViewCoords(0, 0);
-    const sv = this.di.viewportTransformer.getViewScale();
+    const [xv, yv] = this.viewportTransformer.getViewCoords(0, 0);
+    const sv = this.viewportTransformer.getViewScale();
 
-    this.layers[this.di.options.layers.mode].update(sv, xv, yv);
+    this.layers[this.layersMode].update(sv, xv, yv);
   }
 
   public attachNode(nodeId: string): void {
-    const node = this.di.graphStore.getNode(nodeId);
+    const node = this.graphStore.getNode(nodeId);
 
     const wrapper = document.createElement("div");
     wrapper.appendChild(node.element);
@@ -190,7 +195,7 @@ export class HtmlController {
   }
 
   public detachNode(nodeId: string): void {
-    const node = this.di.graphStore.getNode(nodeId);
+    const node = this.graphStore.getNode(nodeId);
 
     this.nodesResizeObserver.unobserve(node.element);
     this.nodesContainer.removeChild(node.element);
@@ -204,7 +209,7 @@ export class HtmlController {
   }
 
   public attachConnection(connectionId: string): void {
-    const connection = this.di.graphStore.getConnection(connectionId);
+    const connection = this.graphStore.getConnection(connectionId);
     const element = connection.controller.svg;
 
     element.style.transformOrigin = "50% 50%";
@@ -228,12 +233,12 @@ export class HtmlController {
   }
 
   public moveNodeOnTop(nodeId: string): void {
-    this.layers[this.di.options.layers.mode].moveOnTop(nodeId);
+    this.layers[this.layersMode].moveOnTop(nodeId);
   }
 
   public updateNodePosition(nodeId: string): void {
-    const node = this.di.graphStore.getNode(nodeId);
-    const connections = this.di.graphStore.getNodeAdjacentConnections(nodeId);
+    const node = this.graphStore.getNode(nodeId);
+    const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
 
     this.updateNodeCoords(nodeId, node.x, node.y);
 
@@ -243,7 +248,7 @@ export class HtmlController {
   }
 
   public updatePortConnections(portId: string): void {
-    const connections = this.di.graphStore.getPortAdjacentConnections(portId);
+    const connections = this.graphStore.getPortAdjacentConnections(portId);
 
     connections.forEach((connection) => {
       this.updateConnectionCoords(connection);
@@ -313,12 +318,11 @@ export class HtmlController {
       entries.forEach((entry) => {
         const wrapper = entry.target as HTMLElement;
         const nodeId = this.nodeWrapperElementToIdMap.get(wrapper)!;
-        const node = this.di.graphStore.getNode(nodeId!);
+        const node = this.graphStore.getNode(nodeId!);
 
         this.updateNodeCoords(nodeId, node.x, node.y);
 
-        const connections =
-          this.di.graphStore.getNodeAdjacentConnections(nodeId);
+        const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
 
         connections.forEach((connection) => {
           this.updateConnectionCoords(connection);
@@ -337,33 +341,33 @@ export class HtmlController {
   private updateNodeCoords(nodeId: string, x: number, y: number): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
-    const sa = this.di.viewportTransformer.getAbsScale();
-    const node = this.di.graphStore.getNode(nodeId)!;
+    const sa = this.viewportTransformer.getAbsScale();
+    const node = this.graphStore.getNode(nodeId)!;
     const [centerX, centerY] = node.centerFn(width, height);
 
     wrapper.style.transform = `matrix(1, 0, 0, 1, ${x - sa * centerX}, ${y - sa * centerY})`;
   }
 
   private updateConnectionCoords(connectionId: string): void {
-    const connection = this.di.graphStore.getConnection(connectionId);
-    const portFrom = this.di.graphStore.getPort(connection.from);
-    const portTo = this.di.graphStore.getPort(connection.to);
+    const connection = this.graphStore.getConnection(connectionId);
+    const portFrom = this.graphStore.getPort(connection.from);
+    const portTo = this.graphStore.getPort(connection.to);
 
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
 
-    const [xAbsFrom, yAbsFrom] = this.di.viewportTransformer.getAbsCoords(
+    const [xAbsFrom, yAbsFrom] = this.viewportTransformer.getAbsCoords(
       rectFrom.left - rect.left,
       rectFrom.top - rect.top,
     );
 
-    const [xAbsTo, yAbsTo] = this.di.viewportTransformer.getAbsCoords(
+    const [xAbsTo, yAbsTo] = this.viewportTransformer.getAbsCoords(
       rectTo.left - rect.left,
       rectTo.top - rect.top,
     );
 
-    const sa = this.di.viewportTransformer.getAbsScale();
+    const sa = this.viewportTransformer.getAbsScale();
 
     const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
       rectFrom.width * sa,

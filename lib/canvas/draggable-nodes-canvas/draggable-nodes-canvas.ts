@@ -7,7 +7,7 @@ import {
   ApiPort,
   ApiTransform,
   Canvas,
-} from "..";
+} from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { ConnectionController } from "@/connections";

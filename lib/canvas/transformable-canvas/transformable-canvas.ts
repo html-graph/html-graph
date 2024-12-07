@@ -6,8 +6,8 @@ import {
   ApiPort,
   ApiTransform,
   Canvas,
-  TransformOptions,
-} from "..";
+} from "../canvas";
+import { TransformOptions } from "./transform-options";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { ConnectionController } from "@/connections";
