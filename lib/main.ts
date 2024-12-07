@@ -12,6 +12,9 @@ export type {
   ApiTransform,
   ApiContentMoveTransform,
   ApiContentScaleTransform,
+  ApiPort,
+  AddNodeRequest,
+  MarkPortRequest,
 } from "./canvas";
 export {
   BezierConnectionController,
@@ -21,9 +24,6 @@ export {
   ConnectionUtils,
 } from "./connections";
 export type { PublicViewportTransformer } from "./viewport-transformer";
-export type { AddNodeRequest } from "./models/nodes/add-node-request";
-export type { MarkPortRequest } from "./models/nodes/mark-port-request";
-export type { ApiPort } from "./models/port/api-port";
 export type { BackgroundDrawingFn } from "./background";
 export type { PortPayload } from "./graph-store";
 export type { ConnectionController, ConnectionType } from "./connections";

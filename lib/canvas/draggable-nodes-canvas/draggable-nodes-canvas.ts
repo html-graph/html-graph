@@ -1,10 +1,10 @@
 import { IdGenerator } from "../../id-generator";
-import { AddNodeRequest } from "../../models/nodes/add-node-request";
-import { ApiPort } from "../../models/port/api-port";
 import {
   AddConnectionRequest,
+  AddNodeRequest,
   ApiContentMoveTransform,
   ApiContentScaleTransform,
+  ApiPort,
   ApiTransform,
   Canvas,
 } from "..";

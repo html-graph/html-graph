@@ -1,13 +1,12 @@
-import { PublicGraphStore } from "../graph-store";
-import { ConnectionController, PublicViewportTransformer } from "../main";
-import { AddNodeRequest } from "../models/nodes/add-node-request";
-import { ApiPort } from "../models/port/api-port";
+import { ConnectionController } from "../../connections";
+import { PublicGraphStore } from "../../graph-store";
+import { PublicViewportTransformer } from "../../viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
-import {
-  ApiContentMoveTransform,
-  ApiContentScaleTransform,
-  ApiTransform,
-} from "./transform";
+import { AddNodeRequest } from "./add-node-request";
+import { ApiContentMoveTransform } from "./api-content-move-transform";
+import { ApiContentScaleTransform } from "./api-content-scale-transform";
+import { ApiPort } from "./api-port";
+import { ApiTransform } from "./api-transform";
 
 export interface Canvas {
   /**

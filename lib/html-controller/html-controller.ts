@@ -1,6 +1,6 @@
-import { LayersController } from "../models/layers/layers-controller";
-import { LayersMode } from "../models/layers/layers-mode";
 import { DiContainer } from "../di-container";
+import { LayersMode } from "../layers/layers-mode";
+import { LayersController } from "./layers-controller";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;

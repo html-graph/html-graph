@@ -1,4 +1,3 @@
-import { MarkPortRequest } from "../models/nodes/mark-port-request";
 import { DiContainer } from "../di-container";
 import { CenterFn } from "../center-fn";
 import {
@@ -6,6 +5,7 @@ import {
   ConnectionControllerFactory,
   ConnectionType,
 } from "../connections";
+import { MarkPortRequest } from "../canvas/canvas";
 
 export class Controller {
   constructor(private readonly di: DiContainer) {}

@@ -1,6 +1,6 @@
 import { CenterFn } from "../../center-fn";
-import { LayersMode } from "../../models/layers/layers-mode";
-import { ConnectionOptions } from "../connection-options";
+import { LayersMode } from "../../layers/layers-mode";
+import { ConnectionOptions } from "../canvas/connection-options";
 import { BackgroundOptions } from "./background-options";
 
 export interface CoreOptions {
