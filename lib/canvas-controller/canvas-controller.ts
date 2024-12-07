@@ -7,7 +7,7 @@ import {
 } from "../connections";
 import { MarkPortRequest } from "../canvas/canvas";
 
-export class Controller {
+export class CanvasController {
   constructor(private readonly di: DiContainer) {}
 
   moveNodeOnTop(nodeId: string): void {

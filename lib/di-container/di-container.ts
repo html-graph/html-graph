@@ -3,10 +3,10 @@ import {
   PublicViewportTransformer,
   ViewportTransformer,
 } from "../viewport-transformer";
-import { Controller } from "../controller";
 import { GraphStore, PublicGraphStore } from "../graph-store";
 import { IdGenerator } from "../id-generator";
 import { Options } from "../canvas/canvas-core/options";
+import { CanvasController } from "../canvas-controller";
 
 export class DiContainer {
   readonly htmlController: HtmlController;
@@ -15,7 +15,7 @@ export class DiContainer {
 
   readonly publicViewportTransformer: PublicViewportTransformer;
 
-  readonly controller: Controller;
+  readonly controller: CanvasController;
 
   readonly graphStore: GraphStore;
 
@@ -36,7 +36,7 @@ export class DiContainer {
       this.viewportTransformer,
     );
 
-    this.controller = new Controller(this);
+    this.controller = new CanvasController(this);
 
     this.graphStore = new GraphStore();
 
