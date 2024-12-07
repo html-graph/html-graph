@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@html-graph/html-graph": resolve(__dirname, "./lib"),
+      "@/*": resolve(__dirname, "./lib/*"),
     },
   },
   plugins: [

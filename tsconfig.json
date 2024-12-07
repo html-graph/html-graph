@@ -15,7 +15,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@html-graph/html-graph": ["./lib"]
+      "@html-graph/html-graph": ["./lib"],
+      "@/*": ["./lib/*"]
     }
   },
   "include": ["examples", "lib"]
