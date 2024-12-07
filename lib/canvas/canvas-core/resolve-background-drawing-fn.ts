@@ -2,7 +2,7 @@ import {
   createColorBackgroundDrawingFn,
   createDotsBackgroundDrawingFn,
   createNoopBackgroundDrawingFn,
-} from "../../background";
+} from "@/background";
 import { BackgroundOptions } from "./background-options";
 
 export const resolveBackgroundDrawingFn = (options: BackgroundOptions) => {

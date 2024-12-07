@@ -1,4 +1,4 @@
-import { ConnectionController } from "../connections";
+import { ConnectionController } from "@/connections";
 
 export interface ConnectionPayload {
   from: string;

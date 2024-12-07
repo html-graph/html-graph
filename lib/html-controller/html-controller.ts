@@ -1,5 +1,5 @@
-import { DiContainer } from "../di-container";
-import { LayersMode } from "../layers/layers-mode";
+import { DiContainer } from "@/di-container";
+import { LayersMode } from "@/layers";
 import { LayersController } from "./layers-controller";
 
 export class HtmlController {

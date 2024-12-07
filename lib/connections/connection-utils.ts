@@ -1,4 +1,4 @@
-import { PortPayload } from "../graph-store";
+import { PortPayload } from "@/graph-store";
 import { Point } from "./point";
 
 export class ConnectionUtils {

@@ -8,9 +8,9 @@ import {
   Canvas,
   TransformOptions,
 } from "..";
-import { PublicGraphStore } from "../../graph-store";
-import { PublicViewportTransformer } from "../../viewport-transformer";
-import { ConnectionController } from "../../connections";
+import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
+import { ConnectionController } from "@/connections";
 import { TouchState } from "./touch-state";
 
 export class TransformableCanvas implements Canvas {

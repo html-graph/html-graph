@@ -5,10 +5,13 @@ import checker from "vite-plugin-checker";
 
 export default defineConfig({
   resolve: {
-    alias: {
-      "@html-graph/html-graph": resolve(__dirname, "./lib"),
-      "@/*": resolve(__dirname, "./lib/*"),
-    },
+    alias: [
+      { find: "@", replacement: resolve(__dirname, "lib") },
+      {
+        find: "@html-graph/html-graph",
+        replacement: resolve(__dirname, "lib"),
+      },
+    ],
   },
   plugins: [
     dts({

@@ -1,4 +1,4 @@
-import { ConnectionControllerFactory } from "../../connections";
+import { ConnectionControllerFactory } from "@/connections";
 
 export interface CustomConnectionOptions {
   readonly type: "custom";

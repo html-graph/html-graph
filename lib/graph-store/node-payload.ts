@@ -1,4 +1,4 @@
-import { CenterFn } from "../center-fn";
+import { CenterFn } from "@/center-fn";
 
 export interface NodePayload {
   element: HTMLElement;

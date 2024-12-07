@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "../viewport-transformer";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 
 export type BackgroundDrawingFn = (
   ctx: CanvasRenderingContext2D,

@@ -1,4 +1,4 @@
-import { standardCenterFn } from "../../center-fn";
+import { standardCenterFn } from "@/center-fn";
 import { CoreOptions } from "./core-options";
 import { Options } from "./options";
 import { resolveBackgroundDrawingFn } from "./resolve-background-drawing-fn";

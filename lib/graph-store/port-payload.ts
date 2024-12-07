@@ -1,4 +1,4 @@
-import { CenterFn } from "../center-fn";
+import { CenterFn } from "@/center-fn";
 
 export interface PortPayload {
   element: HTMLElement;

@@ -1,5 +1,5 @@
-import { CenterFn } from "../../center-fn";
-import { LayersMode } from "../../layers/layers-mode";
+import { CenterFn } from "@/center-fn";
+import { LayersMode } from "@/layers";
 import { ConnectionOptions } from "../canvas/connection-options";
 import { BackgroundOptions } from "./background-options";
 

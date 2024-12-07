@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "../viewport-transformer";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "./background-drawing-fn";
 
 const dotsBackgroundDrawingFn = (

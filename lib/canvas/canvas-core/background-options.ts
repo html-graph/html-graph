@@ -1,4 +1,4 @@
-import { BackgroundDrawingFn } from "../../background";
+import { BackgroundDrawingFn } from "@/background";
 
 export type BackgroundOptions =
   | {

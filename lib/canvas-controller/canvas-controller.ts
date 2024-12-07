@@ -1,11 +1,11 @@
-import { DiContainer } from "../di-container";
-import { CenterFn } from "../center-fn";
+import { DiContainer } from "@/di-container";
+import { CenterFn } from "@/center-fn";
 import {
   ConnectionController,
   ConnectionControllerFactory,
   ConnectionType,
-} from "../connections";
-import { MarkPortRequest } from "../canvas/canvas";
+} from "@/connections";
+import { MarkPortRequest } from "@/canvas/canvas";
 
 export class CanvasController {
   constructor(private readonly di: DiContainer) {}

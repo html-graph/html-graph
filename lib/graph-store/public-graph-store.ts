@@ -1,4 +1,4 @@
-import { GraphStore } from "../graph-store";
+import { GraphStore } from "./graph-store";
 
 export class PublicGraphStore {
   constructor(private readonly graphStore: GraphStore) {}

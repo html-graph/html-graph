@@ -1,12 +1,12 @@
-import { HtmlController } from "../html-controller";
+import { HtmlController } from "@/html-controller";
 import {
   PublicViewportTransformer,
   ViewportTransformer,
-} from "../viewport-transformer";
-import { GraphStore, PublicGraphStore } from "../graph-store";
-import { IdGenerator } from "../id-generator";
-import { Options } from "../canvas/canvas-core/options";
-import { CanvasController } from "../canvas-controller";
+} from "@/viewport-transformer";
+import { GraphStore, PublicGraphStore } from "@/graph-store";
+import { IdGenerator } from "@/id-generator";
+import { Options } from "@/canvas/canvas-core/options";
+import { CanvasController } from "@/canvas-controller";
 
 export class DiContainer {
   readonly htmlController: HtmlController;

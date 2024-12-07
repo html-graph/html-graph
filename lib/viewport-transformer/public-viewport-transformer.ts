@@ -1,4 +1,4 @@
-import { ViewportTransformer } from "../viewport-transformer";
+import { ViewportTransformer } from "./viewport-transformer";
 
 export class PublicViewportTransformer {
   constructor(private readonly transformer: ViewportTransformer) {}

@@ -1,5 +1,5 @@
-import { CenterFn } from "../center-fn";
-import { ConnectionController } from "../connections";
+import { CenterFn } from "@/center-fn";
+import { ConnectionController } from "@/connections";
 import { ConnectionPayload } from "./connection-payload";
 import { NodePayload } from "./node-payload";
 import { PortPayload } from "./port-payload";

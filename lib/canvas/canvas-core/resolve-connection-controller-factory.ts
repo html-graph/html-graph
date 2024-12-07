@@ -2,7 +2,7 @@ import {
   ConnectionControllerFactory,
   createBezierConnectionControllerFactory,
   createStraightConnectionControllerFactory,
-} from "../../connections";
+} from "@/connections";
 import { ConnectionOptions } from "../canvas/connection-options";
 
 export const resolveConnectionControllerFactory: (

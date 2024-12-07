@@ -1,6 +1,6 @@
-import { ConnectionController } from "../../connections";
-import { PublicGraphStore } from "../../graph-store";
-import { PublicViewportTransformer } from "../../viewport-transformer";
+import { ConnectionController } from "@/connections";
+import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
 import { AddNodeRequest } from "./add-node-request";
 import { ApiContentMoveTransform } from "./api-content-move-transform";

@@ -5,7 +5,7 @@ import {
   DraggableNodesCanvas,
   TransformableCanvas,
   TransformOptions,
-} from "../canvas";
+} from "@/canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions | undefined = undefined;

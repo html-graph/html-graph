@@ -1,4 +1,4 @@
-import { IdGenerator } from "../../id-generator";
+import { IdGenerator } from "@/id-generator";
 import {
   AddConnectionRequest,
   AddNodeRequest,
@@ -8,9 +8,9 @@ import {
   ApiTransform,
   Canvas,
 } from "..";
-import { PublicGraphStore } from "../../graph-store";
-import { PublicViewportTransformer } from "../../viewport-transformer";
-import { ConnectionController } from "../../connections";
+import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
+import { ConnectionController } from "@/connections";
 
 export class DraggableNodesCanvas implements Canvas {
   readonly transformation: PublicViewportTransformer;

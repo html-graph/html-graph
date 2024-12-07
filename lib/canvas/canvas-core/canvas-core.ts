@@ -1,4 +1,4 @@
-import { DiContainer } from "../../di-container";
+import { DiContainer } from "@/di-container";
 import {
   AddConnectionRequest,
   AddNodeRequest,
@@ -8,13 +8,13 @@ import {
   ApiTransform,
   Canvas,
 } from "..";
-import { PublicGraphStore } from "../../graph-store";
-import { PublicViewportTransformer } from "../../viewport-transformer";
+import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { resolveConnectionControllerFactory } from "./resolve-connection-controller-factory";
-import { ConnectionController } from "../../connections";
+import { ConnectionController } from "@/connections";
 
 /**
  * Provides core API for acting on graph
