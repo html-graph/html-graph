@@ -1,6 +1,6 @@
-import { MarkPortRequest, CanvasBuilder } from "@html-graph/html-graph";
+import { MarkPortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
-const canvas = new CanvasBuilder()
+const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },

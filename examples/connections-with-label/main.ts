@@ -1,12 +1,12 @@
 import {
   MarkPortRequest,
   BezierConnectionController,
-  CanvasBuilder,
+  HtmlGraphBuilder,
   PortPayload,
   ConnectionController,
 } from "@html-graph/html-graph";
 
-const canvas = new CanvasBuilder()
+const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },

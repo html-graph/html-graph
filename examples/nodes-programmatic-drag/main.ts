@@ -1,4 +1,4 @@
-import { MarkPortRequest, CanvasBuilder } from "@html-graph/html-graph";
+import { MarkPortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 class NodesDragHandler {
   private readonly nodes = new Map<string, HTMLElement>();
@@ -6,7 +6,7 @@ class NodesDragHandler {
   private grabbedNode: string | null = null;
 
   public constructor(private readonly element: HTMLElement) {
-    const canvas = new CanvasBuilder()
+    const canvas = new HtmlGraphBuilder()
       .setOptions({
         background: { type: "dots" },
         connections: { hasTargetArrow: true },

@@ -1,6 +1,6 @@
-import { CanvasBuilder } from "@html-graph/html-graph";
+import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
-const canvas = new CanvasBuilder().build();
+const canvas = new HtmlGraphBuilder().build();
 
 const node1 = document.createElement("div");
 node1.classList.add("node");

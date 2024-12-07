@@ -1,4 +1,4 @@
-export { CanvasBuilder } from "./canvas-builder";
+export { HtmlGraphBuilder } from "./html-graph-builder";
 export {
   CanvasCore,
   DraggableNodesCanvas,

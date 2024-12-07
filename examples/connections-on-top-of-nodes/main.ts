@@ -1,6 +1,6 @@
-import { CanvasBuilder } from "@html-graph/html-graph";
+import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
-const canvas = new CanvasBuilder()
+const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     layers: { mode: "connections-on-top" },

@@ -1,9 +1,9 @@
 import {
   BezierConnectionController,
-  CanvasBuilder,
+  HtmlGraphBuilder,
 } from "@html-graph/html-graph";
 
-const canvas = new CanvasBuilder()
+const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },

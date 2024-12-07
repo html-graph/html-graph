@@ -7,7 +7,7 @@ import {
   TransformOptions,
 } from "@/canvas";
 
-export class CanvasBuilder {
+export class HtmlGraphBuilder {
   private coreOptions: CoreOptions | undefined = undefined;
 
   private transformOptions: TransformOptions | undefined = undefined;
@@ -16,19 +16,19 @@ export class CanvasBuilder {
 
   private isTransformable = false;
 
-  public setOptions(options: CoreOptions): CanvasBuilder {
+  public setOptions(options: CoreOptions): HtmlGraphBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
-  public setDraggableNodes(): CanvasBuilder {
+  public setDraggableNodes(): HtmlGraphBuilder {
     this.isDraggable = true;
 
     return this;
   }
 
-  public setTransformableCanvas(options?: TransformOptions): CanvasBuilder {
+  public setTransformableCanvas(options?: TransformOptions): HtmlGraphBuilder {
     this.isTransformable = true;
     this.transformOptions = options;
 
