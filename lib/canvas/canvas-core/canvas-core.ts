@@ -34,7 +34,12 @@ export class CanvasCore implements Canvas {
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
 
-    this.di = new DiContainer(options);
+    this.di = new DiContainer(
+      options.layers.mode,
+      options.background.drawingFn,
+      options.nodes.centerFn,
+      options.ports.centerFn,
+    );
 
     this.transformation = this.di.publicViewportTransformer;
 
@@ -159,7 +164,10 @@ export class CanvasCore implements Canvas {
     connectionId: string,
     controller: ConnectionController,
   ): CanvasCore {
-    this.di.canvasController.updateConnectionOptions(connectionId, controller);
+    this.di.canvasController.updateConnectionController(
+      connectionId,
+      controller,
+    );
 
     return this;
   }

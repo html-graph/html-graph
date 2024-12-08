@@ -4,8 +4,10 @@ import {
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { GraphStore, PublicGraphStore } from "@/graph-store";
-import { Options } from "@/canvas/canvas-core/options";
 import { CanvasController } from "@/canvas-controller";
+import { LayersMode } from "@/layers";
+import { BackgroundDrawingFn } from "@/background";
+import { CenterFn } from "@/center-fn";
 
 export class DiContainer {
   private readonly htmlController: HtmlController;
@@ -20,7 +22,12 @@ export class DiContainer {
 
   public readonly canvasController: CanvasController;
 
-  public constructor(private readonly options: Options) {
+  public constructor(
+    layersMode: LayersMode,
+    backgroundDrawingFn: BackgroundDrawingFn,
+    nodesCenterFn: CenterFn,
+    portsCenterFn: CenterFn,
+  ) {
     this.viewportTransformer = new ViewportTransformer();
 
     this.publicViewportTransformer = new PublicViewportTransformer(
@@ -35,16 +42,16 @@ export class DiContainer {
       this.graphStore,
       this.viewportTransformer,
       this.publicViewportTransformer,
-      this.options.layers.mode,
-      this.options.background.drawingFn,
+      layersMode,
+      backgroundDrawingFn,
     );
 
     this.canvasController = new CanvasController(
       this.graphStore,
       this.htmlController,
       this.viewportTransformer,
-      this.options.nodes.centerFn,
-      this.options.ports.centerFn,
+      nodesCenterFn,
+      portsCenterFn,
     );
   }
 }

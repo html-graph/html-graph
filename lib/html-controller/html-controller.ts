@@ -150,18 +150,7 @@ export class HtmlController {
   }
 
   public applyTransform(): void {
-    this.canvasCtx.clearRect(
-      0,
-      0,
-      this.canvasCtx.canvas.width,
-      this.canvasCtx.canvas.height,
-    );
-
-    this.canvasCtx.save();
-
     this.backgroundDrawingFn(this.canvasCtx, this.publicViewportTransformer);
-
-    this.canvasCtx.restore();
 
     const [xv, yv] = this.viewportTransformer.getViewCoords(0, 0);
     const sv = this.viewportTransformer.getViewScale();

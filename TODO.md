@@ -1,6 +1,7 @@
 # TODO
 
-- refactor structure
+- refactor move viewport method
+- refactor update connection controller method
 - get all coords
 - same port cycle
 - same node cycle

@@ -252,7 +252,7 @@ export class CanvasController {
     this.htmlController.updateNodePosition(nodeId);
   }
 
-  public updateConnectionOptions(
+  public updateConnectionController(
     connectionId: string,
     controller: ConnectionController,
   ): void {
