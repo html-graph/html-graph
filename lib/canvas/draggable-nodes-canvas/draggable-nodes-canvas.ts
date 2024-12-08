@@ -5,7 +5,7 @@ import {
   MoveViewportRequest,
   ScaleViewportRequest,
   MarkPortRequest,
-  PatchViewRequest,
+  PatchViewportRequest,
   Canvas,
   UpdateConnectionRequest,
 } from "../canvas";
@@ -42,11 +42,7 @@ export class DraggableNodesCanvas implements Canvas {
   ) => {
     if (this.grabbedNodeId !== null) {
       event.stopPropagation();
-      this.canvas.dragNode(
-        this.grabbedNodeId,
-        event.movementX,
-        event.movementY,
-      );
+      this.dragNode(this.grabbedNodeId, event.movementX, event.movementY);
     }
   };
 
@@ -77,7 +73,7 @@ export class DraggableNodesCanvas implements Canvas {
       event.touches[0].clientY - this.previousTouchCoords[1],
     ];
 
-    this.canvas.dragNode(this.grabbedNodeId, dx, dy);
+    this.dragNode(this.grabbedNodeId, dx, dy);
     this.previousTouchCoords = [
       event.touches[0].clientX,
       event.touches[0].clientY,
@@ -180,7 +176,9 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(request: PatchViewRequest): DraggableNodesCanvas {
+  public patchViewportState(
+    request: PatchViewportRequest,
+  ): DraggableNodesCanvas {
     this.canvas.patchViewportState(request);
 
     return this;
@@ -219,16 +217,6 @@ export class DraggableNodesCanvas implements Canvas {
     request: UpdateConnectionRequest,
   ): DraggableNodesCanvas {
     this.canvas.updateConnection(connectionId, request);
-
-    return this;
-  }
-
-  public dragNode(
-    nodeId: string,
-    dx: number,
-    dy: number,
-  ): DraggableNodesCanvas {
-    this.canvas.dragNode(nodeId, dx, dy);
 
     return this;
   }
@@ -304,5 +292,22 @@ export class DraggableNodesCanvas implements Canvas {
     } else {
       this.element.style.removeProperty("cursor");
     }
+  }
+
+  private dragNode(nodeId: string, dx: number, dy: number): void {
+    const node = this.model.getNode(nodeId);
+
+    if (node === null) {
+      throw new Error("failed to drag nonexisting node");
+    }
+
+    const [xv, yv] = this.transformation.getViewCoords(node.x, node.y);
+
+    const nodeX = xv + dx;
+    const nodeY = yv + dy;
+
+    const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
+
+    this.canvas.updateNodeCoords(nodeId, xa, ya);
   }
 }

@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import readline from "readline";
-import { stdin as input, stdout as output } from "process";
+import { stdin, stdout } from "process";
 
 class ReleaseNextVersion {
   public static do(): void {
@@ -84,7 +84,7 @@ class ReleaseNextVersion {
 
   private static askCode(): Promise<string> {
     return new Promise((resolve) => {
-      const rl = readline.createInterface({ input, output });
+      const rl = readline.createInterface({ input: stdin, output: stdout });
 
       rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
         resolve(answer);

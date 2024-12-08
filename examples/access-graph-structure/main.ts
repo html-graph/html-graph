@@ -39,7 +39,7 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
+  .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
   .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
   .addNode({ element: node4, x: 1000, y: 600, ports: ports4 })
@@ -47,11 +47,5 @@ canvas
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });
 
+console.log(canvas.model.getNode("node-1"));
 console.log(canvas.model.getAllNodes());
-console.log(canvas.model.getAllPorts());
-console.log(canvas.model.getAllConnections());
-
-canvas.model.getAllNodes().forEach((nodeId) => {
-  console.log({ id: nodeId, ...canvas.model.getNode(nodeId) });
-  console.log(canvas.model.getNodeOutcomingConnections(nodeId));
-});

@@ -134,6 +134,7 @@ export class HtmlController {
   public detach(): void {
     if (this.canvasWrapper !== null) {
       this.canvasWrapper.removeChild(this.host);
+      this.canvasWrapper = null;
     }
   }
 
@@ -146,6 +147,7 @@ export class HtmlController {
 
     if (this.canvasWrapper !== null) {
       this.canvasWrapper.removeChild(this.host);
+      this.canvasWrapper = null;
     }
   }
 

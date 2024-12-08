@@ -33,24 +33,6 @@ export class CanvasController {
     this.htmlController.moveNodeOnTop(nodeId);
   }
 
-  public dragNode(nodeId: string, dx: number, dy: number): void {
-    if (!this.graphStore.hasNode(nodeId)) {
-      throw new Error("failed to drag nonexisting node");
-    }
-
-    const node = this.graphStore.getNode(nodeId);
-
-    const [xv, yv] = this.viewportTransformer.getViewCoords(node.x, node.y);
-
-    const nodeX = xv + dx;
-    const nodeY = yv + dy;
-
-    const [xa, ya] = this.viewportTransformer.getAbsCoords(nodeX, nodeY);
-
-    this.graphStore.updateNodeCoords(nodeId, xa, ya);
-    this.htmlController.updateNodePosition(nodeId);
-  }
-
   public addNode(
     nodeId: string | undefined,
     element: HTMLElement,

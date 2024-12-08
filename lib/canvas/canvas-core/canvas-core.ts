@@ -5,7 +5,7 @@ import {
   MoveViewportRequest,
   ScaleViewportRequest,
   MarkPortRequest,
-  PatchViewRequest,
+  PatchViewportRequest,
   Canvas,
   UpdateConnectionRequest,
 } from "../canvas";
@@ -117,7 +117,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewportState(request: PatchViewRequest): CanvasCore {
+  public patchViewportState(request: PatchViewportRequest): CanvasCore {
     this.di.canvasController.patchViewportState(
       request.scale ?? null,
       request.x ?? null,
@@ -165,12 +165,6 @@ export class CanvasCore implements Canvas {
         request.controller,
       );
     }
-
-    return this;
-  }
-
-  public dragNode(nodeId: string, dx: number, dy: number): CanvasCore {
-    this.di.canvasController.dragNode(nodeId, dx, dy);
 
     return this;
   }

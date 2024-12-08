@@ -5,7 +5,7 @@ import { AddNodeRequest } from "./add-node-request";
 import { MoveViewportRequest } from "./move-viewport-request";
 import { ScaleViewportRequest } from "./scale-viewport-request";
 import { MarkPortRequest } from "./mark-port-request";
-import { PatchViewRequest } from "./patch-view-request";
+import { PatchViewportRequest } from "./patch-viewport-request";
 import { UpdateConnectionRequest } from "./update-connection-request";
 
 export interface Canvas {
@@ -60,7 +60,7 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewportState(request: PatchViewRequest): Canvas;
+  patchViewportState(request: PatchViewportRequest): Canvas;
 
   /**
    * applies move transformation for viewport
@@ -89,11 +89,6 @@ export interface Canvas {
     connectionId: string,
     request: UpdateConnectionRequest,
   ): Canvas;
-
-  /**
-   * drags node in viewport
-   */
-  dragNode(nodeId: string, dx: number, dy: number): Canvas;
 
   /**
    * moves specified node on top

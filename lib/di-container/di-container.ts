@@ -23,12 +23,11 @@ export class DiContainer {
     portsCenterFn: CenterFn,
   ) {
     const viewportTransformer = new ViewportTransformer();
+    const graphStore = new GraphStore();
 
     this.publicViewportTransformer = new PublicViewportTransformer(
       viewportTransformer,
     );
-
-    const graphStore = new GraphStore();
 
     this.publicGraphStore = new PublicGraphStore(graphStore);
 

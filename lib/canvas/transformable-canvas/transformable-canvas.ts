@@ -4,7 +4,7 @@ import {
   MoveViewportRequest,
   ScaleViewportRequest,
   MarkPortRequest,
-  PatchViewRequest,
+  PatchViewportRequest,
   Canvas,
   UpdateConnectionRequest,
 } from "../canvas";
@@ -184,7 +184,9 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(request: PatchViewRequest): TransformableCanvas {
+  public patchViewportState(
+    request: PatchViewportRequest,
+  ): TransformableCanvas {
     this.canvas.patchViewportState(request);
 
     return this;
@@ -223,12 +225,6 @@ export class TransformableCanvas implements Canvas {
     request: UpdateConnectionRequest,
   ): TransformableCanvas {
     this.canvas.updateConnection(connectionId, request);
-
-    return this;
-  }
-
-  public dragNode(nodeId: string, dx: number, dy: number): TransformableCanvas {
-    this.canvas.dragNode(nodeId, dx, dy);
 
     return this;
   }

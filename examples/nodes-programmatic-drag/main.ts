@@ -47,7 +47,20 @@ class NodesDragHandler {
 
     element.addEventListener("mousemove", (event: MouseEvent) => {
       if (this.grabbedNode !== null) {
-        canvas.dragNode(this.grabbedNode, event.movementX, event.movementY);
+        const node = canvas.model.getNode(this.grabbedNode);
+
+        if (node === null) {
+          throw new Error("failed to drag nonexisting node");
+        }
+
+        const [xv, yv] = canvas.transformation.getViewCoords(node.x, node.y);
+
+        const nodeX = xv + event.movementX;
+        const nodeY = yv + event.movementY;
+
+        const [xa, ya] = canvas.transformation.getAbsCoords(nodeX, nodeY);
+
+        canvas.updateNodeCoords(this.grabbedNode, xa, ya);
       }
     });
   }

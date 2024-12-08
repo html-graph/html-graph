@@ -4,18 +4,6 @@ export {
   DraggableNodesCanvas,
   TransformableCanvas,
 } from "./canvas";
-export type {
-  Canvas,
-  CoreOptions,
-  TransformOptions,
-  AddConnectionRequest,
-  PatchViewRequest,
-  MoveViewportRequest,
-  ScaleViewportRequest,
-  MarkPortRequest,
-  AddNodeRequest,
-  MarkNodePortRequest,
-} from "./canvas";
 export {
   BezierConnectionController,
   createBezierConnectionControllerFactory,
@@ -23,8 +11,21 @@ export {
   createStraightConnectionControllerFactory,
   ConnectionUtils,
 } from "./connections";
+export { ConnectionType } from "./connections";
+export type {
+  Canvas,
+  CoreOptions,
+  TransformOptions,
+  AddConnectionRequest,
+  PatchViewportRequest,
+  MoveViewportRequest,
+  ScaleViewportRequest,
+  MarkPortRequest,
+  AddNodeRequest,
+  MarkNodePortRequest,
+} from "./canvas";
+export type { NodeResponse, NodeItem } from "./graph-store";
 export type { PublicViewportTransformer } from "./viewport-transformer";
 export type { BackgroundDrawingFn } from "./background";
 export type { PortPayload } from "@/port-payload";
 export type { ConnectionController } from "./connections";
-export { ConnectionType } from "./connections";

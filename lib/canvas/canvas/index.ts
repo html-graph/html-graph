@@ -2,7 +2,7 @@ export * from "./connection-options";
 export * from "./bezier-connection-options";
 export * from "./straight-connection-options";
 export * from "./custom-connection-options";
-export * from "./patch-view-request";
+export * from "./patch-viewport-request";
 export * from "./move-viewport-request";
 export * from "./scale-viewport-request";
 export * from "./add-connection-request";
