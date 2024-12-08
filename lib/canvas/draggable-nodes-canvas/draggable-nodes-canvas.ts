@@ -174,25 +174,19 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewState(
-    apiTransform: PatchViewRequest,
-  ): DraggableNodesCanvas {
+  public patchViewState(apiTransform: PatchViewRequest): DraggableNodesCanvas {
     this.canvas.patchViewState(apiTransform);
 
     return this;
   }
 
-  public moveContent(
-    apiTransform: MoveContentRequest,
-  ): DraggableNodesCanvas {
+  public moveContent(apiTransform: MoveContentRequest): DraggableNodesCanvas {
     this.canvas.moveContent(apiTransform);
 
     return this;
   }
 
-  public scaleContent(
-    apiTransform: ScaleContentRequest,
-  ): DraggableNodesCanvas {
+  public scaleContent(apiTransform: ScaleContentRequest): DraggableNodesCanvas {
     this.canvas.scaleContent(apiTransform);
 
     return this;

@@ -176,25 +176,19 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public patchViewState(
-    apiTransform: PatchViewRequest,
-  ): TransformableCanvas {
+  public patchViewState(apiTransform: PatchViewRequest): TransformableCanvas {
     this.canvas.patchViewState(apiTransform);
 
     return this;
   }
 
-  public moveContent(
-    apiTransform: MoveContentRequest,
-  ): TransformableCanvas {
+  public moveContent(apiTransform: MoveContentRequest): TransformableCanvas {
     this.canvas.moveContent(apiTransform);
 
     return this;
   }
 
-  public scaleContent(
-    apiTransform: ScaleContentRequest,
-  ): TransformableCanvas {
+  public scaleContent(apiTransform: ScaleContentRequest): TransformableCanvas {
     this.canvas.scaleContent(apiTransform);
 
     return this;
