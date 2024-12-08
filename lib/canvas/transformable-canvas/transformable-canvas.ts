@@ -247,14 +247,14 @@ export class TransformableCanvas implements Canvas {
     this.canvas.attach(element);
     this.element = element;
 
-    element.addEventListener("mousedown", this.onMouseDown);
-    element.addEventListener("mousemove", this.onMouseMove);
-    element.addEventListener("mouseup", this.onMouseUp);
-    element.addEventListener("wheel", this.onWheelScroll);
-    element.addEventListener("touchstart", this.onTouchStart);
-    element.addEventListener("touchmove", this.onTouchMove);
-    element.addEventListener("touchend", this.onTouchEnd);
-    element.addEventListener("touchcancel", this.onTouchEnd);
+    this.element.addEventListener("mousedown", this.onMouseDown);
+    this.element.addEventListener("mousemove", this.onMouseMove);
+    this.element.addEventListener("mouseup", this.onMouseUp);
+    this.element.addEventListener("wheel", this.onWheelScroll);
+    this.element.addEventListener("touchstart", this.onTouchStart);
+    this.element.addEventListener("touchmove", this.onTouchMove);
+    this.element.addEventListener("touchend", this.onTouchEnd);
+    this.element.addEventListener("touchcancel", this.onTouchEnd);
 
     return this;
   }

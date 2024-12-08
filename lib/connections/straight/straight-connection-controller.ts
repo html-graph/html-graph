@@ -1,4 +1,4 @@
-import { PortPayload } from "@/graph-store";
+import { PortPayload } from "@/port-payload";
 import { ConnectionController } from "../connection-controller";
 import { ConnectionUtils } from "../connection-utils";
 

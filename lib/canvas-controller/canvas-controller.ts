@@ -11,13 +11,16 @@ import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 
 export class CanvasController {
+  public readonly nodeIdGenerator = new IdGenerator();
+
+  public readonly portIdGenerator = new IdGenerator();
+
+  public readonly connectionIdGenerator = new IdGenerator();
+
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
     private readonly viewportTransformer: ViewportTransformer,
-    private readonly nodeIdGenerator: IdGenerator,
-    private readonly portIdGenerator: IdGenerator,
-    private readonly connectionIdGenerator: IdGenerator,
     private readonly nodesCenterFn: CenterFn,
     private readonly portsCenterFn: CenterFn,
   ) {}
@@ -260,6 +263,14 @@ export class CanvasController {
     this.htmlController.detachConnection(connectionId);
     this.graphStore.updateConnectionController(connectionId, controller);
     this.htmlController.attachConnection(connectionId);
+  }
+
+  public attach(element: HTMLElement): void {
+    this.htmlController.attach(element);
+  }
+
+  public detach(): void {
+    this.htmlController.detach();
   }
 
   public clear(): void {

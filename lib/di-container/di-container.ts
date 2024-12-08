@@ -4,28 +4,21 @@ import {
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { GraphStore, PublicGraphStore } from "@/graph-store";
-import { IdGenerator } from "@/id-generator";
 import { Options } from "@/canvas/canvas-core/options";
 import { CanvasController } from "@/canvas-controller";
 
 export class DiContainer {
-  public readonly htmlController: HtmlController;
+  private readonly htmlController: HtmlController;
 
-  public readonly viewportTransformer: ViewportTransformer;
+  private readonly viewportTransformer: ViewportTransformer;
 
   public readonly publicViewportTransformer: PublicViewportTransformer;
 
+  private readonly graphStore: GraphStore;
+
   public readonly canvasController: CanvasController;
 
-  public readonly graphStore: GraphStore;
-
   public readonly publicGraphStore: PublicGraphStore;
-
-  public readonly nodeIdGenerator: IdGenerator;
-
-  public readonly portIdGenerator: IdGenerator;
-
-  public readonly connectionIdGenerator: IdGenerator;
 
   public constructor(public readonly options: Options) {
     this.viewportTransformer = new ViewportTransformer();
@@ -46,17 +39,10 @@ export class DiContainer {
       this.options.background.drawingFn,
     );
 
-    this.nodeIdGenerator = new IdGenerator();
-    this.portIdGenerator = new IdGenerator();
-    this.connectionIdGenerator = new IdGenerator();
-
     this.canvasController = new CanvasController(
       this.graphStore,
       this.htmlController,
       this.viewportTransformer,
-      this.nodeIdGenerator,
-      this.portIdGenerator,
-      this.connectionIdGenerator,
       this.options.nodes.centerFn,
       this.options.ports.centerFn,
     );

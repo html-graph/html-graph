@@ -172,13 +172,13 @@ export class CanvasCore implements Canvas {
   }
 
   public attach(element: HTMLElement): CanvasCore {
-    this.di.htmlController.attach(element);
+    this.di.canvasController.attach(element);
 
     return this;
   }
 
   public detach(): CanvasCore {
-    this.di.htmlController.detach();
+    this.di.canvasController.detach();
 
     return this;
   }

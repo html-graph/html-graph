@@ -25,5 +25,5 @@ export {
 } from "./connections";
 export type { PublicViewportTransformer } from "./viewport-transformer";
 export type { BackgroundDrawingFn } from "./background";
-export type { PortPayload } from "./graph-store";
+export type { PortPayload } from "@/port-payload";
 export type { ConnectionController, ConnectionType } from "./connections";
