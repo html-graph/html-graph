@@ -33,7 +33,7 @@ npm i @html-graph/html-graph
 ```
 
 ```typescript
-import { MarkPortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({

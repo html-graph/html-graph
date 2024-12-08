@@ -1,4 +1,4 @@
-import { MarkPortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -17,7 +17,7 @@ function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, MarkPortRequest>] {
+): [HTMLElement, Record<string, MarkNodePortRequest>] {
   const node = document.createElement("div");
   node.classList.add("node");
 

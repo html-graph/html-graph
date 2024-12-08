@@ -1,4 +1,4 @@
-import { MarkPortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 class NodesDragHandler {
   private readonly nodes = new Map<string, HTMLElement>();
@@ -56,7 +56,7 @@ class NodesDragHandler {
     name: string,
     frontPortId: string,
     backPortId: string,
-  ): [HTMLElement, Record<string, MarkPortRequest>] {
+  ): [HTMLElement, Record<string, MarkNodePortRequest>] {
     const node = document.createElement("div");
     node.classList.add("node");
 

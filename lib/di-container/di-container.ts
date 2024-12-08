@@ -12,15 +12,15 @@ export class DiContainer {
 
   private readonly viewportTransformer: ViewportTransformer;
 
-  public readonly publicViewportTransformer: PublicViewportTransformer;
-
   private readonly graphStore: GraphStore;
 
-  public readonly canvasController: CanvasController;
+  public readonly publicViewportTransformer: PublicViewportTransformer;
 
   public readonly publicGraphStore: PublicGraphStore;
 
-  public constructor(public readonly options: Options) {
+  public readonly canvasController: CanvasController;
+
+  public constructor(private readonly options: Options) {
     this.viewportTransformer = new ViewportTransformer();
 
     this.publicViewportTransformer = new PublicViewportTransformer(

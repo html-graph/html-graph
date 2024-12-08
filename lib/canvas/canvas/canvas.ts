@@ -3,10 +3,10 @@ import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
 import { AddNodeRequest } from "./add-node-request";
-import { ApiContentMoveTransform } from "./api-content-move-transform";
-import { ApiContentScaleTransform } from "./api-content-scale-transform";
-import { ApiPort } from "./api-port";
-import { ApiTransform } from "./api-transform";
+import { MoveContentRequest } from "./move-content-request";
+import { ScaleContentRequest } from "./scale-content-request";
+import { MarkPortRequest } from "./mark-port-request";
+import { PatchViewRequest } from "./patch-view-request";
 
 export interface Canvas {
   /**
@@ -34,7 +34,7 @@ export interface Canvas {
   /**
    * marks element as port of node
    */
-  markPort(port: ApiPort): Canvas;
+  markPort(port: MarkPortRequest): Canvas;
 
   /**
    * updates connections attached to port
@@ -60,17 +60,17 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewportTransform(apiTransform: ApiTransform): Canvas;
+  patchViewState(apiTransform: PatchViewRequest): Canvas;
 
   /**
    * applies move transformation for content
    */
-  moveContent(apiTransform: ApiContentMoveTransform): Canvas;
+  moveContent(apiTransform: MoveContentRequest): Canvas;
 
   /**
    * applies scale transformation for content
    */
-  scaleContent(apiTransform: ApiContentScaleTransform): Canvas;
+  scaleContent(apiTransform: ScaleContentRequest): Canvas;
 
   /**
    * applies shift transformation for content

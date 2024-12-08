@@ -1,10 +1,10 @@
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  ApiContentMoveTransform,
-  ApiContentScaleTransform,
-  ApiPort,
-  ApiTransform,
+  MoveContentRequest,
+  ScaleContentRequest,
+  MarkPortRequest,
+  PatchViewRequest,
   Canvas,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
@@ -146,7 +146,7 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public markPort(port: ApiPort): TransformableCanvas {
+  public markPort(port: MarkPortRequest): TransformableCanvas {
     this.canvas.markPort(port);
 
     return this;
@@ -176,16 +176,16 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportTransform(
-    apiTransform: ApiTransform,
+  public patchViewState(
+    apiTransform: PatchViewRequest,
   ): TransformableCanvas {
-    this.canvas.patchViewportTransform(apiTransform);
+    this.canvas.patchViewState(apiTransform);
 
     return this;
   }
 
   public moveContent(
-    apiTransform: ApiContentMoveTransform,
+    apiTransform: MoveContentRequest,
   ): TransformableCanvas {
     this.canvas.moveContent(apiTransform);
 
@@ -193,7 +193,7 @@ export class TransformableCanvas implements Canvas {
   }
 
   public scaleContent(
-    apiTransform: ApiContentScaleTransform,
+    apiTransform: ScaleContentRequest,
   ): TransformableCanvas {
     this.canvas.scaleContent(apiTransform);
 

@@ -2,10 +2,10 @@ import { IdGenerator } from "@/id-generator";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  ApiContentMoveTransform,
-  ApiContentScaleTransform,
-  ApiPort,
-  ApiTransform,
+  MoveContentRequest,
+  ScaleContentRequest,
+  MarkPortRequest,
+  PatchViewRequest,
   Canvas,
 } from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
@@ -144,7 +144,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public markPort(port: ApiPort): DraggableNodesCanvas {
+  public markPort(port: MarkPortRequest): DraggableNodesCanvas {
     this.canvas.markPort(port);
 
     return this;
@@ -174,16 +174,16 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportTransform(
-    apiTransform: ApiTransform,
+  public patchViewState(
+    apiTransform: PatchViewRequest,
   ): DraggableNodesCanvas {
-    this.canvas.patchViewportTransform(apiTransform);
+    this.canvas.patchViewState(apiTransform);
 
     return this;
   }
 
   public moveContent(
-    apiTransform: ApiContentMoveTransform,
+    apiTransform: MoveContentRequest,
   ): DraggableNodesCanvas {
     this.canvas.moveContent(apiTransform);
 
@@ -191,7 +191,7 @@ export class DraggableNodesCanvas implements Canvas {
   }
 
   public scaleContent(
-    apiTransform: ApiContentScaleTransform,
+    apiTransform: ScaleContentRequest,
   ): DraggableNodesCanvas {
     this.canvas.scaleContent(apiTransform);
 

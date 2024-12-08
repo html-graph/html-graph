@@ -1,4 +1,4 @@
-import { MarkPortRequest } from "@html-graph/html-graph";
+import { MarkNodePortRequest } from "@html-graph/html-graph";
 
 export class GraphHtmlHelper {
   public createNodeElement(
@@ -6,11 +6,11 @@ export class GraphHtmlHelper {
     frontPortId: string | null,
     ports: Record<string, string>,
     footerContent?: HTMLElement,
-  ): [HTMLElement, Record<string, MarkPortRequest>] {
+  ): [HTMLElement, Record<string, MarkNodePortRequest>] {
     const node = document.createElement("div");
     node.classList.add("node");
 
-    let portElements: Record<string, MarkPortRequest> = {};
+    let portElements: Record<string, MarkNodePortRequest> = {};
 
     if (frontPortId !== null) {
       const inputPort = this.createInputPort();
@@ -77,11 +77,11 @@ export class GraphHtmlHelper {
 
   private createBodyElement(
     ports: Record<string, string>,
-  ): [HTMLElement, Record<string, MarkPortRequest>] {
+  ): [HTMLElement, Record<string, MarkNodePortRequest>] {
     const body = document.createElement("div");
     body.classList.add("node-body");
 
-    const portElements: Record<string, MarkPortRequest> = {};
+    const portElements: Record<string, MarkNodePortRequest> = {};
 
     Object.entries(ports).forEach(([key, value]) => {
       const portContent = document.createElement("div");

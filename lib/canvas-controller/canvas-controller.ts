@@ -4,7 +4,7 @@ import {
   ConnectionControllerFactory,
   ConnectionType,
 } from "@/connections";
-import { MarkPortRequest } from "@/canvas/canvas";
+import { MarkNodePortRequest } from "@/canvas/canvas";
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
@@ -56,7 +56,7 @@ export class CanvasController {
     element: HTMLElement,
     x: number,
     y: number,
-    ports: Record<string, MarkPortRequest> | undefined,
+    ports: Record<string, MarkNodePortRequest> | undefined,
     centerFn: CenterFn | undefined,
   ): void {
     if (nodeId === undefined) {
@@ -195,7 +195,7 @@ export class CanvasController {
     this.graphStore.removeNode(nodeId);
   }
 
-  public patchViewportTransform(
+  public patchViewState(
     scale: number | null,
     x: number | null,
     y: number | null,
@@ -240,7 +240,7 @@ export class CanvasController {
     const targetX = avgX - (sa * width) / 2;
     const targetY = avgY - (sa * height) / 2;
 
-    this.patchViewportTransform(null, targetX, targetY);
+    this.patchViewState(null, targetX, targetY);
   }
 
   public updateNodeCoords(nodeId: string, x: number, y: number): void {

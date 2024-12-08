@@ -1,9 +1,9 @@
 import { CenterFn } from "@/center-fn";
 
-export type MarkPortRequest =
-  | HTMLElement
-  | {
-      readonly element: HTMLElement;
-      readonly centerFn?: CenterFn;
-      readonly direction?: number | null;
-    };
+export interface MarkPortRequest {
+  readonly id?: string;
+  readonly element: HTMLElement;
+  readonly nodeId: string;
+  readonly centerFn?: CenterFn;
+  readonly direction?: number | null;
+}

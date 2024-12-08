@@ -2,10 +2,10 @@ import { DiContainer } from "@/di-container";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  ApiContentMoveTransform,
-  ApiContentScaleTransform,
-  ApiPort,
-  ApiTransform,
+  MoveContentRequest,
+  ScaleContentRequest,
+  MarkPortRequest,
+  PatchViewRequest,
   Canvas,
 } from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
@@ -14,28 +14,33 @@ import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { resolveConnectionControllerFactory } from "./resolve-connection-controller-factory";
-import { ConnectionController } from "@/connections";
+import {
+  ConnectionController,
+  ConnectionControllerFactory,
+} from "@/connections";
 
 /**
- * Provides core API for acting on graph
+ * Provides low level API for acting on graph
  */
 export class CanvasCore implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   public readonly model: PublicGraphStore;
 
-  private readonly options: Options;
-
   private readonly di: DiContainer;
 
-  public constructor(private readonly apiOptions?: CoreOptions) {
-    this.options = createOptions(this.apiOptions ?? {});
+  private readonly connectionControllerFactory: ConnectionControllerFactory;
 
-    this.di = new DiContainer(this.options);
+  public constructor(private readonly apiOptions?: CoreOptions) {
+    const options: Options = createOptions(this.apiOptions ?? {});
+
+    this.di = new DiContainer(options);
 
     this.transformation = this.di.publicViewportTransformer;
 
     this.model = this.di.publicGraphStore;
+
+    this.connectionControllerFactory = options.connections.controllerFactory;
   }
 
   public addNode(node: AddNodeRequest): CanvasCore {
@@ -63,7 +68,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public markPort(port: ApiPort): CanvasCore {
+  public markPort(port: MarkPortRequest): CanvasCore {
     this.di.canvasController.markPort(
       port.id,
       port.element,
@@ -91,7 +96,7 @@ export class CanvasCore implements Canvas {
     const controllerFactory =
       connection.options !== undefined
         ? resolveConnectionControllerFactory(connection.options)
-        : this.di.options.connections.controllerFactory;
+        : this.connectionControllerFactory;
 
     this.di.canvasController.addConnection(
       connection.id,
@@ -109,8 +114,8 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewportTransform(apiTransform: ApiTransform): CanvasCore {
-    this.di.canvasController.patchViewportTransform(
+  public patchViewState(apiTransform: PatchViewRequest): CanvasCore {
+    this.di.canvasController.patchViewState(
       apiTransform.scale ?? null,
       apiTransform.x ?? null,
       apiTransform.y ?? null,
@@ -119,7 +124,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public moveContent(apiTransform: ApiContentMoveTransform): CanvasCore {
+  public moveContent(apiTransform: MoveContentRequest): CanvasCore {
     this.di.canvasController.moveContent(
       apiTransform.x ?? 0,
       apiTransform.y ?? 0,
@@ -128,7 +133,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public scaleContent(apiTransform: ApiContentScaleTransform): CanvasCore {
+  public scaleContent(apiTransform: ScaleContentRequest): CanvasCore {
     this.di.canvasController.scaleContent(
       apiTransform.scale,
       apiTransform.x ?? 0,

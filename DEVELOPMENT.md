@@ -38,3 +38,11 @@ npm run release-next-version // next patch version
 npm run release-next-version --minor // next minor version
 npm run release-next-version --major // next major version
 ```
+
+## Create dependency graph
+
+```
+npm run make-deps-graph // next patch version
+```
+
+`./deps-graph/deps-graph.dot` will contain dependency graph in DOT format. It can be opened by software such as `xdot`.
