@@ -1,9 +1,12 @@
 # TODO
 
-- refactor update connection controller method
 - get all coords
+- refactor scale
 - same port cycle
 - same node cycle
+- move to nodes autoscale
+- move to nodes smooth
+- move and drag cursor customization
 - number | string node id and port id
 - virtual scroll
 - drag connection creation

@@ -10,12 +10,6 @@ import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
 
 export class DiContainer {
-  private readonly htmlController: HtmlController;
-
-  private readonly viewportTransformer: ViewportTransformer;
-
-  private readonly graphStore: GraphStore;
-
   public readonly publicViewportTransformer: PublicViewportTransformer;
 
   public readonly publicGraphStore: PublicGraphStore;
@@ -28,28 +22,28 @@ export class DiContainer {
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
   ) {
-    this.viewportTransformer = new ViewportTransformer();
+    const viewportTransformer = new ViewportTransformer();
 
     this.publicViewportTransformer = new PublicViewportTransformer(
-      this.viewportTransformer,
+      viewportTransformer,
     );
 
-    this.graphStore = new GraphStore();
+    const graphStore = new GraphStore();
 
-    this.publicGraphStore = new PublicGraphStore(this.graphStore);
+    this.publicGraphStore = new PublicGraphStore(graphStore);
 
-    this.htmlController = new HtmlController(
-      this.graphStore,
-      this.viewportTransformer,
+    const htmlController = new HtmlController(
+      graphStore,
+      viewportTransformer,
       this.publicViewportTransformer,
       layersMode,
       backgroundDrawingFn,
     );
 
     this.canvasController = new CanvasController(
-      this.graphStore,
-      this.htmlController,
-      this.viewportTransformer,
+      graphStore,
+      htmlController,
+      viewportTransformer,
       nodesCenterFn,
       portsCenterFn,
     );

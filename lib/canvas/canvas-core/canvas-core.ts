@@ -117,30 +117,27 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewportState(apiTransform: PatchViewRequest): CanvasCore {
+  public patchViewportState(request: PatchViewRequest): CanvasCore {
     this.di.canvasController.patchViewportState(
-      apiTransform.scale ?? null,
-      apiTransform.x ?? null,
-      apiTransform.y ?? null,
+      request.scale ?? null,
+      request.x ?? null,
+      request.y ?? null,
     );
 
     return this;
   }
 
-  public moveViewport(apiTransform: MoveViewportRequest): CanvasCore {
-    this.di.canvasController.moveViewport(
-      apiTransform.x ?? 0,
-      apiTransform.y ?? 0,
-    );
+  public moveViewport(request: MoveViewportRequest): CanvasCore {
+    this.di.canvasController.moveViewport(request.x ?? 0, request.y ?? 0);
 
     return this;
   }
 
-  public scaleViewport(apiTransform: ScaleViewportRequest): CanvasCore {
+  public scaleViewport(request: ScaleViewportRequest): CanvasCore {
     this.di.canvasController.scaleContent(
-      apiTransform.scale,
-      apiTransform.x ?? 0,
-      apiTransform.y ?? 0,
+      request.scale,
+      request.x ?? 0,
+      request.y ?? 0,
     );
 
     return this;

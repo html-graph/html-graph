@@ -60,20 +60,20 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewportState(apiTransform: PatchViewRequest): Canvas;
+  patchViewportState(request: PatchViewRequest): Canvas;
 
   /**
-   * applies move transformation for content
+   * applies move transformation for viewport
    */
-  moveViewport(apiTransform: MoveViewportRequest): Canvas;
+  moveViewport(request: MoveViewportRequest): Canvas;
 
   /**
-   * applies scale transformation for content
+   * applies scale transformation for viewport
    */
-  scaleViewport(apiTransform: ScaleViewportRequest): Canvas;
+  scaleViewport(request: ScaleViewportRequest): Canvas;
 
   /**
-   * applies shift transformation for content
+   * moves viewport to nodes
    */
   moveToNodes(nodeIds: readonly string[]): Canvas;
 

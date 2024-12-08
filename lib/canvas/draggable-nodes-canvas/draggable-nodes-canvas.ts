@@ -180,24 +180,20 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(
-    apiTransform: PatchViewRequest,
-  ): DraggableNodesCanvas {
-    this.canvas.patchViewportState(apiTransform);
+  public patchViewportState(request: PatchViewRequest): DraggableNodesCanvas {
+    this.canvas.patchViewportState(request);
 
     return this;
   }
 
-  public moveViewport(apiTransform: MoveViewportRequest): DraggableNodesCanvas {
-    this.canvas.moveViewport(apiTransform);
+  public moveViewport(request: MoveViewportRequest): DraggableNodesCanvas {
+    this.canvas.moveViewport(request);
 
     return this;
   }
 
-  public scaleViewport(
-    apiTransform: ScaleViewportRequest,
-  ): DraggableNodesCanvas {
-    this.canvas.scaleViewport(apiTransform);
+  public scaleViewport(request: ScaleViewportRequest): DraggableNodesCanvas {
+    this.canvas.scaleViewport(request);
 
     return this;
   }

@@ -6,8 +6,6 @@
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
-Visit <a target="_blank" href="https://html-graph.github.io">live demo</a>
-
 <a target="_blank" href="https://html-graph.github.io/">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
@@ -16,6 +14,8 @@ Instead of connecting nodes dirrectly this library uses concept of ports, which 
 Port is an entity of the node to which connection can be attached to.
 
 This library fits for tasks where easy nodes customization and interactiveness are required.
+
+Visit <a target="_blank" href="https://html-graph.github.io">live demo</a>
 
 ## Features:
 
