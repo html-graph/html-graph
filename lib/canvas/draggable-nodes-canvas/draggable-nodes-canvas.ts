@@ -32,12 +32,14 @@ export class DraggableNodesCanvas implements Canvas {
 
   private element: HTMLElement | null = null;
 
-  private readonly onCanvasMouseUp = () => {
+  private readonly onCanvasMouseUp: () => void = () => {
     this.setCursor(null);
     this.grabbedNodeId = null;
   };
 
-  private readonly onCanvasMouseMove = (event: MouseEvent) => {
+  private readonly onCanvasMouseMove: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
     if (this.grabbedNodeId !== null) {
       event.stopPropagation();
       this.canvas.dragNode(
@@ -48,14 +50,18 @@ export class DraggableNodesCanvas implements Canvas {
     }
   };
 
-  private readonly onCanvasTouchStart = (event: TouchEvent) => {
+  private readonly onCanvasTouchStart: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
     this.previousTouchCoords = [
       event.touches[0].clientX,
       event.touches[0].clientY,
     ];
   };
 
-  private readonly onCanvasTouchMove = (event: TouchEvent) => {
+  private readonly onCanvasTouchMove: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
     if (
       this.grabbedNodeId === null ||
       event.touches.length !== 1 ||
@@ -78,7 +84,7 @@ export class DraggableNodesCanvas implements Canvas {
     ];
   };
 
-  private readonly onCanvasTouchEnd = () => {
+  private readonly onCanvasTouchEnd: () => void = () => {
     this.previousTouchCoords = null;
     this.grabbedNodeId = null;
   };
@@ -102,14 +108,14 @@ export class DraggableNodesCanvas implements Canvas {
 
     this.canvas.addNode(node);
 
-    const onMouseDown = (event: MouseEvent) => {
+    const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
       this.setCursor("grab");
       this.canvas.moveNodeOnTop(nodeId);
     };
 
-    const onTouchStart = (event: TouchEvent) => {
+    const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
       if (event.touches.length !== 1) {
         return;
       }

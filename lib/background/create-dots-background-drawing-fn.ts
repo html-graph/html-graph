@@ -1,7 +1,14 @@
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "./background-drawing-fn";
 
-const dotsBackgroundDrawingFn = (
+const dotsBackgroundDrawingFn: (
+  ctx: CanvasRenderingContext2D,
+  transformation: PublicViewportTransformer,
+  dotColor: string,
+  gap: number,
+  radius: number,
+  color: string,
+) => void = (
   ctx: CanvasRenderingContext2D,
   transformation: PublicViewportTransformer,
   dotColor: string,

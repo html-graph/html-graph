@@ -1,9 +1,9 @@
 import { BackgroundDrawingFn } from "./background-drawing-fn";
 
-const colorBackgroundDrawingFn = (
+const colorBackgroundDrawingFn: (
   ctx: CanvasRenderingContext2D,
   color: string,
-) => {
+) => void = (ctx: CanvasRenderingContext2D, color: string) => {
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 };

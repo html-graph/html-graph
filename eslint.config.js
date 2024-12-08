@@ -12,6 +12,7 @@ export default tseslint.config(
     extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
     rules: {
       "@typescript-eslint/explicit-member-accessibility": "error",
+      "@typescript-eslint/explicit-function-return-type": "error",
     },
   },
   {

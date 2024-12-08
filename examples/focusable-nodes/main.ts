@@ -9,7 +9,7 @@ const canvas = new HtmlGraphBuilder()
   .setTransformableCanvas()
   .build();
 
-function createNode(name: string) {
+function createNode(name: string): HTMLElement {
   const node = document.createElement("button");
   node.classList.add("node");
   node.innerText = name;

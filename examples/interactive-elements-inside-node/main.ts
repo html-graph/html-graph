@@ -15,7 +15,7 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas.attach(canvasElement);
 
-const createNode = () => {
+const createNode: () => void = () => {
   const node = document.createElement("div");
   node.classList.add("node");
 

@@ -34,12 +34,14 @@ export class TransformableCanvas implements Canvas {
 
   private readonly wheelSensitivity: number;
 
-  private readonly onMouseDown = () => {
+  private readonly onMouseDown: () => void = () => {
     this.setCursor("grab");
     this.isMoving = true;
   };
 
-  private readonly onMouseMove = (event: MouseEvent) => {
+  private readonly onMouseMove: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
     if (!this.isMoving || !this.isShiftable) {
       return;
     }
@@ -47,12 +49,14 @@ export class TransformableCanvas implements Canvas {
     this.canvas.moveContent({ x: event.movementX, y: event.movementY });
   };
 
-  private readonly onMouseUp = () => {
+  private readonly onMouseUp: () => void = () => {
     this.setCursor(null);
     this.isMoving = false;
   };
 
-  private readonly onWheelScroll = (event: WheelEvent) => {
+  private readonly onWheelScroll: (event: WheelEvent) => void = (
+    event: WheelEvent,
+  ) => {
     if (this.element === null || this.isScalable === false) {
       return;
     }
@@ -75,11 +79,15 @@ export class TransformableCanvas implements Canvas {
     this.canvas.scaleContent({ scale: velocity, x: centerX, y: centerY });
   };
 
-  private readonly onTouchStart = (event: TouchEvent) => {
+  private readonly onTouchStart: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
     this.prevTouches = this.getAverageTouch(event);
   };
 
-  private readonly onTouchMove = (event: TouchEvent) => {
+  private readonly onTouchMove: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
     if (
       this.prevTouches === null ||
       this.element === null ||
@@ -114,7 +122,7 @@ export class TransformableCanvas implements Canvas {
     event.preventDefault();
   };
 
-  private readonly onTouchEnd = () => {
+  private readonly onTouchEnd: () => void = () => {
     this.prevTouches = null;
   };
 

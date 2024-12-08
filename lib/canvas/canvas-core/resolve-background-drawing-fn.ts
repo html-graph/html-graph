@@ -1,11 +1,14 @@
 import {
+  BackgroundDrawingFn,
   createColorBackgroundDrawingFn,
   createDotsBackgroundDrawingFn,
   createNoopBackgroundDrawingFn,
 } from "@/background";
 import { BackgroundOptions } from "./background-options";
 
-export const resolveBackgroundDrawingFn = (options: BackgroundOptions) => {
+export const resolveBackgroundDrawingFn: (
+  options: BackgroundOptions,
+) => BackgroundDrawingFn = (options: BackgroundOptions) => {
   switch (options?.type) {
     case "custom":
       return options.drawingFn;
