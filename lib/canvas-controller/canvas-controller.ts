@@ -11,11 +11,11 @@ import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 
 export class CanvasController {
-  public readonly nodeIdGenerator = new IdGenerator();
+  private readonly nodeIdGenerator = new IdGenerator();
 
-  public readonly portIdGenerator = new IdGenerator();
+  private readonly portIdGenerator = new IdGenerator();
 
-  public readonly connectionIdGenerator = new IdGenerator();
+  private readonly connectionIdGenerator = new IdGenerator();
 
   public constructor(
     private readonly graphStore: GraphStore,
@@ -195,7 +195,7 @@ export class CanvasController {
     this.graphStore.removeNode(nodeId);
   }
 
-  public patchViewState(
+  public patchViewportState(
     scale: number | null,
     x: number | null,
     y: number | null,
@@ -204,13 +204,13 @@ export class CanvasController {
     this.htmlController.applyTransform();
   }
 
-  public moveContent(x: number, y: number): void {
-    this.viewportTransformer.applyShift(-x, -y);
+  public moveViewport(x: number, y: number): void {
+    this.viewportTransformer.applyShift(x, y);
     this.htmlController.applyTransform();
   }
 
   public scaleContent(scale: number, cx: number, cy: number): void {
-    this.viewportTransformer.applyScale(1 / scale, cx, cy);
+    this.viewportTransformer.applyScale(scale, cx, cy);
     this.htmlController.applyTransform();
   }
 
@@ -240,7 +240,7 @@ export class CanvasController {
     const targetX = avgX - (sa * width) / 2;
     const targetY = avgY - (sa * height) / 2;
 
-    this.patchViewState(null, targetX, targetY);
+    this.patchViewportState(null, targetX, targetY);
   }
 
   public updateNodeCoords(nodeId: string, x: number, y: number): void {

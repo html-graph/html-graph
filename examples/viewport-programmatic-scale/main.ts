@@ -63,8 +63,8 @@ class ViewportTransformer {
       const centerY = event.clientY - top;
 
       const velocity =
-        event.deltaY < 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
-      this.canvas.scaleContent({
+        event.deltaY > 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
+      this.canvas.scaleViewport({
         scale: velocity,
         x: centerX,
         y: centerY,

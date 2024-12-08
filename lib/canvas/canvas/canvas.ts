@@ -3,8 +3,8 @@ import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
 import { AddNodeRequest } from "./add-node-request";
-import { MoveContentRequest } from "./move-content-request";
-import { ScaleContentRequest } from "./scale-content-request";
+import { MoveViewportRequest } from "./move-viewport-request";
+import { ScaleViewportRequest } from "./scale-viewport-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { PatchViewRequest } from "./patch-view-request";
 
@@ -60,17 +60,17 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewState(apiTransform: PatchViewRequest): Canvas;
+  patchViewportState(apiTransform: PatchViewRequest): Canvas;
 
   /**
    * applies move transformation for content
    */
-  moveContent(apiTransform: MoveContentRequest): Canvas;
+  moveViewport(apiTransform: MoveViewportRequest): Canvas;
 
   /**
    * applies scale transformation for content
    */
-  scaleContent(apiTransform: ScaleContentRequest): Canvas;
+  scaleViewport(apiTransform: ScaleViewportRequest): Canvas;
 
   /**
    * applies shift transformation for content

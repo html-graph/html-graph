@@ -35,5 +35,5 @@ canvas
   .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
   .addConnection({ id: "con-1", from: "port-1", to: "port-2" })
-  .moveContent({ x: -200, y: -300 })
-  .scaleContent({ scale: 3, x: -100, y: -100 });
+  .moveViewport({ x: 200, y: 300 })
+  .scaleViewport({ scale: 1 / 3, x: -100, y: -100 });

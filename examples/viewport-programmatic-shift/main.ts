@@ -69,9 +69,9 @@ class ViewportTransformer {
 
     this.element.addEventListener("mousemove", (event) => {
       if (this.isGrabbed) {
-        this.canvas.moveContent({
-          x: event.movementX,
-          y: event.movementY,
+        this.canvas.moveViewport({
+          x: -event.movementX,
+          y: -event.movementY,
         });
       }
     });

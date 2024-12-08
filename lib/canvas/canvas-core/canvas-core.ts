@@ -2,8 +2,8 @@ import { DiContainer } from "@/di-container";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveContentRequest,
-  ScaleContentRequest,
+  MoveViewportRequest,
+  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
@@ -119,8 +119,8 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewState(apiTransform: PatchViewRequest): CanvasCore {
-    this.di.canvasController.patchViewState(
+  public patchViewportState(apiTransform: PatchViewRequest): CanvasCore {
+    this.di.canvasController.patchViewportState(
       apiTransform.scale ?? null,
       apiTransform.x ?? null,
       apiTransform.y ?? null,
@@ -129,8 +129,8 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public moveContent(apiTransform: MoveContentRequest): CanvasCore {
-    this.di.canvasController.moveContent(
+  public moveViewport(apiTransform: MoveViewportRequest): CanvasCore {
+    this.di.canvasController.moveViewport(
       apiTransform.x ?? 0,
       apiTransform.y ?? 0,
     );
@@ -138,7 +138,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public scaleContent(apiTransform: ScaleContentRequest): CanvasCore {
+  public scaleViewport(apiTransform: ScaleViewportRequest): CanvasCore {
     this.di.canvasController.scaleContent(
       apiTransform.scale,
       apiTransform.x ?? 0,

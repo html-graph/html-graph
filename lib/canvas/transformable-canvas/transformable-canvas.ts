@@ -1,8 +1,8 @@
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveContentRequest,
-  ScaleContentRequest,
+  MoveViewportRequest,
+  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
@@ -46,7 +46,7 @@ export class TransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.moveContent({ x: event.movementX, y: event.movementY });
+    this.canvas.moveViewport({ x: -event.movementX, y: -event.movementY });
   };
 
   private readonly onMouseUp: () => void = () => {
@@ -76,7 +76,7 @@ export class TransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.scaleContent({ scale: velocity, x: centerX, y: centerY });
+    this.canvas.scaleViewport({ scale: 1 / velocity, x: centerX, y: centerY });
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -99,9 +99,9 @@ export class TransformableCanvas implements Canvas {
     const currentTouches = this.getAverageTouch(event);
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
-      this.canvas.moveContent({
-        x: currentTouches.x - this.prevTouches.x,
-        y: currentTouches.y - this.prevTouches.y,
+      this.canvas.moveViewport({
+        x: -(currentTouches.x - this.prevTouches.x),
+        y: -(currentTouches.y - this.prevTouches.y),
       });
     }
 
@@ -113,7 +113,7 @@ export class TransformableCanvas implements Canvas {
       const nextScale = this.canvas.transformation.getViewScale() * scale;
 
       if (this.checkNextScaleValid(nextScale)) {
-        this.canvas.scaleContent({ scale, x, y });
+        this.canvas.scaleViewport({ scale: 1 / scale, x, y });
       }
     }
 
@@ -184,20 +184,24 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public patchViewState(apiTransform: PatchViewRequest): TransformableCanvas {
-    this.canvas.patchViewState(apiTransform);
+  public patchViewportState(
+    apiTransform: PatchViewRequest,
+  ): TransformableCanvas {
+    this.canvas.patchViewportState(apiTransform);
 
     return this;
   }
 
-  public moveContent(apiTransform: MoveContentRequest): TransformableCanvas {
-    this.canvas.moveContent(apiTransform);
+  public moveViewport(apiTransform: MoveViewportRequest): TransformableCanvas {
+    this.canvas.moveViewport(apiTransform);
 
     return this;
   }
 
-  public scaleContent(apiTransform: ScaleContentRequest): TransformableCanvas {
-    this.canvas.scaleContent(apiTransform);
+  public scaleViewport(
+    apiTransform: ScaleViewportRequest,
+  ): TransformableCanvas {
+    this.canvas.scaleViewport(apiTransform);
 
     return this;
   }

@@ -35,4 +35,4 @@ canvas
   .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
   .addConnection({ id: "con-1", from: "port-1", to: "port-2" })
-  .patchViewState({ x: -300, y: -300 });
+  .patchViewportState({ x: -300, y: -300 });

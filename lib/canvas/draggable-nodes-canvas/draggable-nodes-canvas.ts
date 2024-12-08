@@ -2,8 +2,8 @@ import { IdGenerator } from "@/id-generator";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveContentRequest,
-  ScaleContentRequest,
+  MoveViewportRequest,
+  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
@@ -180,20 +180,20 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewState(apiTransform: PatchViewRequest): DraggableNodesCanvas {
-    this.canvas.patchViewState(apiTransform);
+  public patchViewportState(apiTransform: PatchViewRequest): DraggableNodesCanvas {
+    this.canvas.patchViewportState(apiTransform);
 
     return this;
   }
 
-  public moveContent(apiTransform: MoveContentRequest): DraggableNodesCanvas {
-    this.canvas.moveContent(apiTransform);
+  public moveViewport(apiTransform: MoveViewportRequest): DraggableNodesCanvas {
+    this.canvas.moveViewport(apiTransform);
 
     return this;
   }
 
-  public scaleContent(apiTransform: ScaleContentRequest): DraggableNodesCanvas {
-    this.canvas.scaleContent(apiTransform);
+  public scaleViewport(apiTransform: ScaleViewportRequest): DraggableNodesCanvas {
+    this.canvas.scaleViewport(apiTransform);
 
     return this;
   }
