@@ -120,7 +120,10 @@ export class CanvasCore implements Canvas {
   }
 
   public moveContent(apiTransform: ApiContentMoveTransform): CanvasCore {
-    this.di.canvasController.moveContent(apiTransform.x ?? 0, apiTransform.y ?? 0);
+    this.di.canvasController.moveContent(
+      apiTransform.x ?? 0,
+      apiTransform.y ?? 0,
+    );
 
     return this;
   }
