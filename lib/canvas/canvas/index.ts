@@ -10,3 +10,4 @@ export * from "./mark-port-request";
 export * from "./canvas";
 export * from "./add-node-request";
 export * from "./mark-node-port-request";
+export * from "./update-connection-request";

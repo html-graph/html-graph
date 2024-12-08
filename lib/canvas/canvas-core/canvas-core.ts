@@ -7,6 +7,7 @@ import {
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
+  UpdateConnectionRequest,
 } from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
@@ -14,10 +15,7 @@ import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { resolveConnectionControllerFactory } from "./resolve-connection-controller-factory";
-import {
-  ConnectionController,
-  ConnectionControllerFactory,
-} from "@/connections";
+import { ConnectionControllerFactory } from "@/connections";
 
 /**
  * Provides low level API for acting on graph
@@ -160,14 +158,16 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateConnectionController(
+  public updateConnection(
     connectionId: string,
-    controller: ConnectionController,
+    request: UpdateConnectionRequest,
   ): CanvasCore {
-    this.di.canvasController.updateConnectionController(
-      connectionId,
-      controller,
-    );
+    if (request.controller !== undefined) {
+      this.di.canvasController.updateConnectionController(
+        connectionId,
+        request.controller,
+      );
+    }
 
     return this;
   }

@@ -1,4 +1,3 @@
-import { ConnectionController } from "@/connections";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
@@ -7,6 +6,7 @@ import { MoveViewportRequest } from "./move-viewport-request";
 import { ScaleViewportRequest } from "./scale-viewport-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { PatchViewRequest } from "./patch-view-request";
+import { UpdateConnectionRequest } from "./update-connection-request";
 
 export interface Canvas {
   /**
@@ -85,9 +85,9 @@ export interface Canvas {
   /**
    * updates connection
    */
-  updateConnectionController(
+  updateConnection(
     connectionId: string,
-    controller: ConnectionController,
+    request: UpdateConnectionRequest,
   ): Canvas;
 
   /**

@@ -7,10 +7,10 @@ import {
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
+  UpdateConnectionRequest,
 } from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
-import { ConnectionController } from "@/connections";
 
 export class DraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -20,9 +20,9 @@ export class DraggableNodesCanvas implements Canvas {
   private readonly nodes = new Map<
     string,
     {
-      el: HTMLElement;
-      onMouseDown: (event: MouseEvent) => void;
-      onTouchStart: (event: TouchEvent) => void;
+      readonly el: HTMLElement;
+      readonly onMouseDown: (event: MouseEvent) => void;
+      readonly onTouchStart: (event: TouchEvent) => void;
     }
   >();
 
@@ -180,7 +180,9 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(apiTransform: PatchViewRequest): DraggableNodesCanvas {
+  public patchViewportState(
+    apiTransform: PatchViewRequest,
+  ): DraggableNodesCanvas {
     this.canvas.patchViewportState(apiTransform);
 
     return this;
@@ -192,7 +194,9 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public scaleViewport(apiTransform: ScaleViewportRequest): DraggableNodesCanvas {
+  public scaleViewport(
+    apiTransform: ScaleViewportRequest,
+  ): DraggableNodesCanvas {
     this.canvas.scaleViewport(apiTransform);
 
     return this;
@@ -214,11 +218,11 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updateConnectionController(
+  public updateConnection(
     connectionId: string,
-    controller: ConnectionController,
+    request: UpdateConnectionRequest,
   ): DraggableNodesCanvas {
-    this.canvas.updateConnectionController(connectionId, controller);
+    this.canvas.updateConnection(connectionId, request);
 
     return this;
   }

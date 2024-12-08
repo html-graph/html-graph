@@ -6,11 +6,11 @@ import {
   MarkPortRequest,
   PatchViewRequest,
   Canvas,
+  UpdateConnectionRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
-import { ConnectionController } from "@/connections";
 import { TouchState } from "./touch-state";
 
 export class TransformableCanvas implements Canvas {
@@ -222,11 +222,11 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public updateConnectionController(
+  public updateConnection(
     connectionId: string,
-    controller: ConnectionController,
+    request: UpdateConnectionRequest,
   ): TransformableCanvas {
-    this.canvas.updateConnectionController(connectionId, controller);
+    this.canvas.updateConnection(connectionId, request);
 
     return this;
   }
