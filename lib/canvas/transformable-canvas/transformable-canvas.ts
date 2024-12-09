@@ -122,8 +122,14 @@ export class TransformableCanvas implements Canvas {
     event.preventDefault();
   };
 
-  private readonly onTouchEnd: () => void = () => {
-    this.prevTouches = null;
+  private readonly onTouchEnd: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
+    if (event.touches.length > 0) {
+      this.prevTouches = this.getAverageTouch(event);
+    } else {
+      this.prevTouches = null;
+    }
   };
 
   public constructor(
@@ -210,12 +216,12 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public updateNodeCoords(
+  public updateNodePosition(
     nodeId: string,
     x: number,
     y: number,
   ): TransformableCanvas {
-    this.canvas.updateNodeCoords(nodeId, x, y);
+    this.canvas.updateNodePosition(nodeId, x, y);
 
     return this;
   }

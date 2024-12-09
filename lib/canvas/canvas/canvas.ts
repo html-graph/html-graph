@@ -80,7 +80,7 @@ export interface Canvas {
   /**
    * updates node absolute coordinates
    */
-  updateNodeCoords(nodeId: string, x: number, y: number): Canvas;
+  updateNodePosition(nodeId: string, x: number, y: number): Canvas;
 
   /**
    * updates connection

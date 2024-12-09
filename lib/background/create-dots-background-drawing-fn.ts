@@ -17,7 +17,6 @@ const dotsBackgroundDrawingFn: (
   color: string,
 ) => {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.save();
 
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -62,8 +61,6 @@ const dotsBackgroundDrawingFn: (
       ctx.fill();
     }
   }
-
-  ctx.restore();
 };
 
 export const createDotsBackgroundDrawingFn: (

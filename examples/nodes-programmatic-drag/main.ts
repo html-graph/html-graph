@@ -60,7 +60,7 @@ class NodesDragHandler {
 
         const [xa, ya] = canvas.transformation.getAbsCoords(nodeX, nodeY);
 
-        canvas.updateNodeCoords(this.grabbedNode, xa, ya);
+        canvas.updateNodePosition(this.grabbedNode, xa, ya);
       }
     });
   }

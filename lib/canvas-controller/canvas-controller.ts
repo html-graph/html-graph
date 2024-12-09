@@ -191,7 +191,7 @@ export class CanvasController {
     this.htmlController.applyTransform();
   }
 
-  public scaleContent(scale: number, cx: number, cy: number): void {
+  public scaleViewport(scale: number, cx: number, cy: number): void {
     this.viewportTransformer.applyScale(scale, cx, cy);
     this.htmlController.applyTransform();
   }
@@ -225,7 +225,7 @@ export class CanvasController {
     this.patchViewportState(null, targetX, targetY);
   }
 
-  public updateNodeCoords(nodeId: string, x: number, y: number): void {
+  public updateNodePosition(nodeId: string, x: number, y: number): void {
     if (!this.graphStore.hasNode(nodeId)) {
       throw new Error("failed to update coordinates of nonexisting node");
     }

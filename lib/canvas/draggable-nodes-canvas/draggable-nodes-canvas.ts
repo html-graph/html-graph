@@ -80,9 +80,18 @@ export class DraggableNodesCanvas implements Canvas {
     ];
   };
 
-  private readonly onCanvasTouchEnd: () => void = () => {
-    this.previousTouchCoords = null;
-    this.grabbedNodeId = null;
+  private readonly onCanvasTouchEnd: (event: TouchEvent) => void = (
+    event: TouchEvent,
+  ) => {
+    if (event.touches.length > 0) {
+      this.previousTouchCoords = [
+        event.touches[0].clientX,
+        event.touches[0].clientY,
+      ];
+    } else {
+      this.previousTouchCoords = null;
+      this.grabbedNodeId = null;
+    }
   };
 
   private previousTouchCoords: [number, number] | null = null;
@@ -202,12 +211,12 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updateNodeCoords(
+  public updateNodePosition(
     nodeId: string,
     x: number,
     y: number,
   ): DraggableNodesCanvas {
-    this.canvas.updateNodeCoords(nodeId, x, y);
+    this.canvas.updateNodePosition(nodeId, x, y);
 
     return this;
   }
@@ -279,6 +288,8 @@ export class DraggableNodesCanvas implements Canvas {
       value.el.removeEventListener("touchstart", value.onTouchStart);
     });
 
+    this.nodes.clear();
+
     this.canvas.destroy();
   }
 
@@ -308,6 +319,6 @@ export class DraggableNodesCanvas implements Canvas {
 
     const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
 
-    this.canvas.updateNodeCoords(nodeId, xa, ya);
+    this.canvas.updateNodePosition(nodeId, xa, ya);
   }
 }

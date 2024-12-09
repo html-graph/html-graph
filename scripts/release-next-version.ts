@@ -40,18 +40,18 @@ class ReleaseNextVersion {
     writeFileSync("./package.json", newContent);
 
     const cmdsBeforePublish = [
-      `npx prettier ./package.json --write`,
-      `npm install`,
+      "npx prettier ./package.json --write",
+      "npm install",
       "npm run beforebuild",
       "npm run build",
     ];
 
     const cmdsAfterPublish = [
-      `git add -A`,
+      "git add -A",
       `git commit -m "release ${newVersion}"`,
       `git tag -a v${newVersion} -m "new version ${newVersion}"`,
-      `git push`,
-      `git push --tags`,
+      "git push",
+      "git push --tags",
     ];
 
     this.execute(cmdsBeforePublish.join(" && "))

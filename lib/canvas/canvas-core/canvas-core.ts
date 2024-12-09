@@ -134,7 +134,7 @@ export class CanvasCore implements Canvas {
   }
 
   public scaleViewport(request: ScaleViewportRequest): CanvasCore {
-    this.di.canvasController.scaleContent(
+    this.di.canvasController.scaleViewport(
       request.scale,
       request.x ?? 0,
       request.y ?? 0,
@@ -149,8 +149,8 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateNodeCoords(nodeId: string, x: number, y: number): CanvasCore {
-    this.di.canvasController.updateNodeCoords(nodeId, x, y);
+  public updateNodePosition(nodeId: string, x: number, y: number): CanvasCore {
+    this.di.canvasController.updateNodePosition(nodeId, x, y);
 
     return this;
   }

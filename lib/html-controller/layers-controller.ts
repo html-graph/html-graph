@@ -1,5 +1,5 @@
 export interface LayersController {
-  create: () => void;
-  update: (sv: number, xv: number, yv: number) => void;
-  moveOnTop: (nodeId: string) => void;
+  readonly create: () => void;
+  readonly update: (sv: number, xv: number, yv: number) => void;
+  readonly moveOnTop: (nodeId: string) => void;
 }
