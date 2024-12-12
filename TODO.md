@@ -1,7 +1,5 @@
 # TODO
 
-- events for user actions
-- refactor scale
 - same port cycle
 - same node cycle
 - move to nodes autoscale

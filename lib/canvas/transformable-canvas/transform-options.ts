@@ -8,4 +8,7 @@ export interface TransformOptions {
   shift?: {
     enabled?: boolean;
   };
+  events?: {
+    onTransform?: () => void;
+  };
 }

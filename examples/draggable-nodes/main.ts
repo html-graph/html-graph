@@ -5,7 +5,13 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
+  .setDraggableNodes({
+    events: {
+      onNodeDrag: (nodeId: string) => {
+        console.log(nodeId);
+      },
+    },
+  })
   .build();
 
 function createNode(

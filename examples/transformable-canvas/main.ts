@@ -5,7 +5,13 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setTransformableCanvas()
+  .setTransformableCanvas({
+    events: {
+      onTransform: () => {
+        console.log("transform");
+      },
+    },
+  })
   .build();
 
 function createNode(

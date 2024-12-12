@@ -9,6 +9,7 @@ import {
 } from "../canvas";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
+import { DragOptions } from "./drag-options";
 
 export class DraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -25,6 +26,8 @@ export class DraggableNodesCanvas implements Canvas {
   >();
 
   private grabbedNodeId: string | null = null;
+
+  private onNodeDrag: (nodeId: string) => void;
 
   private readonly nodeIdGenerator = new IdGenerator();
 
@@ -94,10 +97,19 @@ export class DraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: [number, number] | null = null;
 
-  public constructor(private readonly canvas: Canvas) {
+  public constructor(
+    private readonly canvas: Canvas,
+    dragOptions?: DragOptions,
+  ) {
     this.transformation = this.canvas.transformation;
 
     this.model = this.canvas.model;
+
+    this.onNodeDrag =
+      dragOptions?.events?.onNodeDrag ??
+      ((): void => {
+        // no implementation by default
+      });
   }
 
   public addNode(node: AddNodeRequest): DraggableNodesCanvas {
@@ -306,5 +318,7 @@ export class DraggableNodesCanvas implements Canvas {
     const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
 
     this.canvas.updateNodeCoordinates(nodeId, xa, ya);
+
+    this.onNodeDrag(nodeId);
   }
 }

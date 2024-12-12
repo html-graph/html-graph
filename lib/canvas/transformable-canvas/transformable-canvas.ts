@@ -22,6 +22,8 @@ export class TransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
+  private onTransform: () => void;
+
   private readonly isScalable: boolean;
 
   private readonly isShiftable: boolean;
@@ -44,7 +46,10 @@ export class TransformableCanvas implements Canvas {
       return;
     }
 
-    this.moveViewport(-event.movementX, -event.movementY);
+    const deltaViewX = -event.movementX;
+    const deltaViewY = -event.movementY;
+
+    this.moveViewport(deltaViewX, deltaViewY);
   };
 
   private readonly onMouseUp: () => void = () => {
@@ -139,6 +144,12 @@ export class TransformableCanvas implements Canvas {
 
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
+
+    this.onTransform =
+      options?.events?.onTransform ??
+      ((): void => {
+        // no implementation by default
+      });
   }
 
   public addNode(node: AddNodeRequest): TransformableCanvas {
@@ -327,6 +338,7 @@ export class TransformableCanvas implements Canvas {
       x: dx1 + s1 * dx2,
       y: dy1 + s1 * dy2,
     });
+    this.onTransform();
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
@@ -335,8 +347,8 @@ export class TransformableCanvas implements Canvas {
 
     /**
      * s2 - scale
-     * cx - scale pivot x
-     * cy - scale pivot y
+     * cx - scale center x
+     * cy - scale center y
      *
      *  s1  0   dx1     s2  0   (1 - s2) * cx
      *  0   s1  dy1     0   s2  (1 - s2) * cy
@@ -357,5 +369,6 @@ export class TransformableCanvas implements Canvas {
     }
 
     this.canvas.patchViewportState({ scale, x, y });
+    this.onTransform();
   }
 }

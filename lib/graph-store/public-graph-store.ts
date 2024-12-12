@@ -15,8 +15,8 @@ export class PublicGraphStore {
     return { x: node.x, y: node.y, element: node.element };
   }
 
-  public getAllNodes(): readonly NodeItem[] {
-    return Object.entries(this.graphStore.getAllNodes()).map(
+  public getNodes(ids?: readonly string[]): readonly NodeItem[] {
+    const result = Object.entries(this.graphStore.getAllNodes()).map(
       ([key, value]) => ({
         id: key,
         x: value.x,
@@ -24,5 +24,17 @@ export class PublicGraphStore {
         element: value.element,
       }),
     );
+
+    if (ids !== undefined) {
+      const idsSet = new Set<string>();
+
+      ids.forEach((id) => {
+        idsSet.add(id);
+      });
+
+      return result.filter((entry) => idsSet.has(entry.id));
+    }
+
+    return result;
   }
 }

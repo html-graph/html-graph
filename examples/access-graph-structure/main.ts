@@ -48,4 +48,4 @@ canvas
   .addConnection({ from: "port-2-2", to: "port-4-1" });
 
 console.log(canvas.model.getNode("node-1"));
-console.log(canvas.model.getAllNodes());
+console.log(canvas.model.getNodes());

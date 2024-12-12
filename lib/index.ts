@@ -16,6 +16,7 @@ export type {
   Canvas,
   CoreOptions,
   TransformOptions,
+  DragOptions,
   AddConnectionRequest,
   PatchViewportRequest,
   MarkPortRequest,
