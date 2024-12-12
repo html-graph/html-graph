@@ -2,8 +2,6 @@ import { IdGenerator } from "@/id-generator";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveViewportRequest,
-  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
@@ -193,30 +191,18 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public moveViewport(request: MoveViewportRequest): DraggableNodesCanvas {
-    this.canvas.moveViewport(request);
-
-    return this;
-  }
-
-  public scaleViewport(request: ScaleViewportRequest): DraggableNodesCanvas {
-    this.canvas.scaleViewport(request);
-
-    return this;
-  }
-
   public moveToNodes(nodeIds: readonly string[]): DraggableNodesCanvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
   }
 
-  public updateNodePosition(
+  public updateNodeCoordinates(
     nodeId: string,
     x: number,
     y: number,
   ): DraggableNodesCanvas {
-    this.canvas.updateNodePosition(nodeId, x, y);
+    this.canvas.updateNodeCoordinates(nodeId, x, y);
 
     return this;
   }
@@ -319,6 +305,6 @@ export class DraggableNodesCanvas implements Canvas {
 
     const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
 
-    this.canvas.updateNodePosition(nodeId, xa, ya);
+    this.canvas.updateNodeCoordinates(nodeId, xa, ya);
   }
 }

@@ -1,8 +1,6 @@
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveViewportRequest,
-  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
@@ -28,9 +26,9 @@ export class TransformableCanvas implements Canvas {
 
   private readonly isShiftable: boolean;
 
-  private readonly minContentScale: number | null;
+  private readonly minViewScale: number | null;
 
-  private readonly maxContentScale: number | null;
+  private readonly maxViewScale: number | null;
 
   private readonly wheelSensitivity: number;
 
@@ -46,7 +44,7 @@ export class TransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.moveViewport({ x: -event.movementX, y: -event.movementY });
+    this.moveViewport(-event.movementX, -event.movementY);
   };
 
   private readonly onMouseUp: () => void = () => {
@@ -66,17 +64,11 @@ export class TransformableCanvas implements Canvas {
     const { left, top } = this.element.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
-
-    const velocity =
+    const deltaScale =
       event.deltaY < 0 ? this.wheelSensitivity : 1 / this.wheelSensitivity;
+    const deltaViewScale = 1 / deltaScale;
 
-    const nextScale = this.canvas.transformation.getViewScale() * velocity;
-
-    if (!this.checkNextScaleValid(nextScale)) {
-      return;
-    }
-
-    this.canvas.scaleViewport({ scale: 1 / velocity, x: centerX, y: centerY });
+    this.scaleViewport(deltaViewScale, centerX, centerY);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -99,22 +91,20 @@ export class TransformableCanvas implements Canvas {
     const currentTouches = this.getAverageTouch(event);
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
-      this.canvas.moveViewport({
-        x: -(currentTouches.x - this.prevTouches.x),
-        y: -(currentTouches.y - this.prevTouches.y),
-      });
+      this.moveViewport(
+        -(currentTouches.x - this.prevTouches.x),
+        -(currentTouches.y - this.prevTouches.y),
+      );
     }
 
     if (currentTouches.touchesCnt === 2 && this.isScalable) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches.x - left;
       const y = this.prevTouches.y - top;
-      const scale = currentTouches.scale / this.prevTouches.scale;
-      const nextScale = this.canvas.transformation.getViewScale() * scale;
+      const deltaScale = currentTouches.scale / this.prevTouches.scale;
+      const deltaViewScale = 1 / deltaScale;
 
-      if (this.checkNextScaleValid(nextScale)) {
-        this.canvas.scaleViewport({ scale: 1 / scale, x, y });
-      }
+      this.scaleViewport(deltaViewScale, x, y);
     }
 
     this.prevTouches = currentTouches;
@@ -139,9 +129,12 @@ export class TransformableCanvas implements Canvas {
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
 
+    const minContentScale = this.options?.scale?.minContent ?? null;
+    const maxContentScale = this.options?.scale?.maxContent ?? null;
+
     this.isScalable = this.options?.scale?.enabled !== false;
-    this.minContentScale = this.options?.scale?.minContent ?? null;
-    this.maxContentScale = this.options?.scale?.maxContent ?? null;
+    this.minViewScale = maxContentScale !== null ? 1 / maxContentScale : null;
+    this.maxViewScale = minContentScale !== null ? 1 / minContentScale : null;
     this.isShiftable = this.options?.shift?.enabled !== false;
 
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
@@ -198,30 +191,18 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public moveViewport(request: MoveViewportRequest): TransformableCanvas {
-    this.canvas.moveViewport(request);
-
-    return this;
-  }
-
-  public scaleViewport(request: ScaleViewportRequest): TransformableCanvas {
-    this.canvas.scaleViewport(request);
-
-    return this;
-  }
-
   public moveToNodes(nodeIds: readonly string[]): TransformableCanvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
   }
 
-  public updateNodePosition(
+  public updateNodeCoordinates(
     nodeId: string,
     x: number,
     y: number,
   ): TransformableCanvas {
-    this.canvas.updateNodePosition(nodeId, x, y);
+    this.canvas.updateNodeCoordinates(nodeId, x, y);
 
     return this;
   }
@@ -314,28 +295,6 @@ export class TransformableCanvas implements Canvas {
     return { x: avg[0], y: avg[1], scale: distance / cnt, touchesCnt: cnt };
   }
 
-  private checkNextScaleValid(nextScale: number): boolean {
-    const scale = this.canvas.transformation.getViewScale();
-
-    if (
-      this.maxContentScale !== null &&
-      nextScale > this.maxContentScale &&
-      nextScale > scale
-    ) {
-      return false;
-    }
-
-    if (
-      this.minContentScale !== null &&
-      nextScale < this.minContentScale &&
-      nextScale < scale
-    ) {
-      return false;
-    }
-
-    return true;
-  }
-
   private setCursor(type: string | null): void {
     if (this.element === null) {
       return;
@@ -346,5 +305,57 @@ export class TransformableCanvas implements Canvas {
     } else {
       this.element.style.removeProperty("cursor");
     }
+  }
+
+  private moveViewport(dx2: number, dy2: number): void {
+    /**
+     * dx2 - traslate x
+     * dy2 - traslate y
+     *
+     * direct transform
+     *  s1  0   dx1     1   0   dx2
+     *  0   s1  dy1     0   1   dy2
+     *  0   0   1       0   0   1
+     *
+     * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
+     */
+    const [dx1, dy1] = this.transformation.getAbsCoords(0, 0);
+    const s1 = this.canvas.transformation.getAbsScale();
+
+    this.canvas.patchViewportState({
+      scale: s1,
+      x: dx1 + s1 * dx2,
+      y: dy1 + s1 * dy2,
+    });
+  }
+
+  private scaleViewport(s2: number, cx: number, cy: number): void {
+    const [dx1, dy1] = this.canvas.transformation.getAbsCoords(0, 0);
+    const s1 = this.canvas.transformation.getAbsScale();
+
+    /**
+     * s2 - scale
+     * cx - scale pivot x
+     * cy - scale pivot y
+     *
+     *  s1  0   dx1     s2  0   (1 - s2) * cx
+     *  0   s1  dy1     0   s2  (1 - s2) * cy
+     *  0   0   1       0   0   1
+     *
+     * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
+     */
+    const scale = s1 * s2;
+    const x = s1 * (1 - s2) * cx + dx1;
+    const y = s1 * (1 - s2) * cy + dy1;
+
+    if (this.maxViewScale !== null && scale > this.maxViewScale && scale > s1) {
+      return;
+    }
+
+    if (this.minViewScale !== null && scale < this.minViewScale && scale < s1) {
+      return;
+    }
+
+    this.canvas.patchViewportState({ scale, x, y });
   }
 }

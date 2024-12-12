@@ -186,16 +186,6 @@ export class CanvasController {
     this.htmlController.applyTransform();
   }
 
-  public moveViewport(x: number, y: number): void {
-    this.viewportTransformer.applyShift(x, y);
-    this.htmlController.applyTransform();
-  }
-
-  public scaleViewport(scale: number, cx: number, cy: number): void {
-    this.viewportTransformer.applyScale(scale, cx, cy);
-    this.htmlController.applyTransform();
-  }
-
   public moveToNodes(nodeIds: readonly string[]): void {
     if (nodeIds.length === 0) {
       return;
@@ -225,13 +215,13 @@ export class CanvasController {
     this.patchViewportState(null, targetX, targetY);
   }
 
-  public updateNodePosition(nodeId: string, x: number, y: number): void {
+  public updateNodeCoordinates(nodeId: string, x: number, y: number): void {
     if (!this.graphStore.hasNode(nodeId)) {
       throw new Error("failed to update coordinates of nonexisting node");
     }
 
     this.graphStore.updateNodeCoords(nodeId, x, y);
-    this.htmlController.updateNodePosition(nodeId);
+    this.htmlController.updateNodeCoordinates(nodeId);
   }
 
   public updateConnectionController(

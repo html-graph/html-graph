@@ -64,12 +64,19 @@ class ViewportTransformer {
 
       const velocity =
         event.deltaY > 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
-      this.canvas.scaleViewport({
-        scale: velocity,
-        x: centerX,
-        y: centerY,
-      });
+      this.scaleViewport(velocity, centerX, centerY);
     });
+  }
+
+  private scaleViewport(s2: number, cx: number, cy: number): void {
+    const [dx1, dy1] = this.canvas.transformation.getAbsCoords(0, 0);
+    const s1 = this.canvas.transformation.getAbsScale();
+
+    const scale = s1 * s2;
+    const x = s1 * (1 - s2) * cx + dx1;
+    const y = s1 * (1 - s2) * cy + dy1;
+
+    this.canvas.patchViewportState({ scale, x, y });
   }
 }
 

@@ -18,8 +18,6 @@ export type {
   TransformOptions,
   AddConnectionRequest,
   PatchViewportRequest,
-  MoveViewportRequest,
-  ScaleViewportRequest,
   MarkPortRequest,
   AddNodeRequest,
   MarkNodePortRequest,

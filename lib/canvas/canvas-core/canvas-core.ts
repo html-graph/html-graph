@@ -2,8 +2,6 @@ import { DiContainer } from "@/di-container";
 import {
   AddConnectionRequest,
   AddNodeRequest,
-  MoveViewportRequest,
-  ScaleViewportRequest,
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
@@ -127,30 +125,18 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public moveViewport(request: MoveViewportRequest): CanvasCore {
-    this.di.canvasController.moveViewport(request.x ?? 0, request.y ?? 0);
-
-    return this;
-  }
-
-  public scaleViewport(request: ScaleViewportRequest): CanvasCore {
-    this.di.canvasController.scaleViewport(
-      request.scale,
-      request.x ?? 0,
-      request.y ?? 0,
-    );
-
-    return this;
-  }
-
   public moveToNodes(nodeIds: readonly string[]): CanvasCore {
     this.di.canvasController.moveToNodes(nodeIds);
 
     return this;
   }
 
-  public updateNodePosition(nodeId: string, x: number, y: number): CanvasCore {
-    this.di.canvasController.updateNodePosition(nodeId, x, y);
+  public updateNodeCoordinates(
+    nodeId: string,
+    x: number,
+    y: number,
+  ): CanvasCore {
+    this.di.canvasController.updateNodeCoordinates(nodeId, x, y);
 
     return this;
   }

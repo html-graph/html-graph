@@ -227,7 +227,7 @@ export class HtmlController {
     this.layers[this.layersMode].moveOnTop(nodeId);
   }
 
-  public updateNodePosition(nodeId: string): void {
+  public updateNodeCoordinates(nodeId: string): void {
     const node = this.graphStore.getNode(nodeId);
     const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
 

@@ -7,44 +7,6 @@ export class ViewportTransformer {
     y: 0,
   };
 
-  /**
-   * dx2 - traslate x
-   * dy2 - traslate y
-   *
-   * direct transform
-   *  s1  0   dx1     1   0   dx2
-   *  0   s1  dy1     0   1   dy2
-   *  0   0   1       0   0   1
-   *
-   * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
-   */
-  public applyShift(dx: number, dy: number): void {
-    this.state = {
-      scale: this.state.scale,
-      x: this.state.scale * dx + this.state.x,
-      y: this.state.scale * dy + this.state.y,
-    };
-  }
-
-  /**
-   * s2 - scale
-   * cx - scale pivot x
-   * cy - scale pivot y
-   *
-   *  s1  0   dx1     s2  0   (1 - s2) * cx
-   *  0   s1  dy1     0   s2  (1 - s2) * cy
-   *  0   0   1       0   0   1
-   *
-   * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
-   */
-  public applyScale(s2: number, cx: number, cy: number): void {
-    this.state = {
-      scale: this.state.scale * s2,
-      x: this.state.scale * (1 - s2) * cx + this.state.x,
-      y: this.state.scale * (1 - s2) * cy + this.state.y,
-    };
-  }
-
   public getViewCoords(xa: number, ya: number): [number, number] {
     return [
       (xa - this.state.x) / this.state.scale,
