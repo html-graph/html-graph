@@ -7,27 +7,27 @@ import {
   Canvas,
   UpdateConnectionRequest,
 } from "../canvas";
-import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
+import { NodeDragPayload } from "./node-drag-payload";
 
 export class DraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
-  public readonly model: PublicGraphStore;
-
   private readonly nodes = new Map<
     string,
     {
-      readonly el: HTMLElement;
+      readonly element: HTMLElement;
       readonly onMouseDown: (event: MouseEvent) => void;
       readonly onTouchStart: (event: TouchEvent) => void;
+      x: number;
+      y: number;
     }
   >();
 
   private grabbedNodeId: string | null = null;
 
-  private onNodeDrag: (nodeId: string) => void;
+  private onNodeDrag: (payload: NodeDragPayload) => void;
 
   private readonly nodeIdGenerator = new IdGenerator();
 
@@ -103,13 +103,11 @@ export class DraggableNodesCanvas implements Canvas {
   ) {
     this.transformation = this.canvas.transformation;
 
-    this.model = this.canvas.model;
+    const onNodeDragDefault: (payload: NodeDragPayload) => void = () => {
+      // no implementation by default
+    };
 
-    this.onNodeDrag =
-      dragOptions?.events?.onNodeDrag ??
-      ((): void => {
-        // no implementation by default
-      });
+    this.onNodeDrag = dragOptions?.events?.onNodeDrag ?? onNodeDragDefault;
   }
 
   public addNode(node: AddNodeRequest): DraggableNodesCanvas {
@@ -140,9 +138,11 @@ export class DraggableNodesCanvas implements Canvas {
     };
 
     this.nodes.set(nodeId, {
-      el: node.element,
+      element: node.element,
       onMouseDown,
       onTouchStart,
+      x: node.x,
+      y: node.y,
     });
 
     node.element.addEventListener("mousedown", onMouseDown);
@@ -155,8 +155,8 @@ export class DraggableNodesCanvas implements Canvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
-      node.el.removeEventListener("mousedown", node.onMouseDown);
-      node.el.removeEventListener("touchstart", node.onTouchStart);
+      node.element.removeEventListener("mousedown", node.onMouseDown);
+      node.element.removeEventListener("touchstart", node.onTouchStart);
     }
 
     this.canvas.removeNode(nodeId);
@@ -238,8 +238,8 @@ export class DraggableNodesCanvas implements Canvas {
     this.canvas.clear();
 
     this.nodes.forEach((value) => {
-      value.el.removeEventListener("mousedown", value.onMouseDown);
-      value.el.removeEventListener("touchstart", value.onTouchStart);
+      value.element.removeEventListener("mousedown", value.onMouseDown);
+      value.element.removeEventListener("touchstart", value.onTouchStart);
     });
 
     this.nodes.clear();
@@ -282,8 +282,8 @@ export class DraggableNodesCanvas implements Canvas {
     this.detach();
 
     this.nodes.forEach((value) => {
-      value.el.removeEventListener("mousedown", value.onMouseDown);
-      value.el.removeEventListener("touchstart", value.onTouchStart);
+      value.element.removeEventListener("mousedown", value.onMouseDown);
+      value.element.removeEventListener("touchstart", value.onTouchStart);
     });
 
     this.nodes.clear();
@@ -304,9 +304,9 @@ export class DraggableNodesCanvas implements Canvas {
   }
 
   private dragNode(nodeId: string, dx: number, dy: number): void {
-    const node = this.model.getNode(nodeId);
+    const node = this.nodes.get(nodeId);
 
-    if (node === null) {
+    if (node === undefined) {
       throw new Error("failed to drag nonexisting node");
     }
 
@@ -316,9 +316,16 @@ export class DraggableNodesCanvas implements Canvas {
     const nodeY = yv + dy;
 
     const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
+    node.x = xa;
+    node.y = ya;
 
     this.canvas.updateNodeCoordinates(nodeId, xa, ya);
 
-    this.onNodeDrag(nodeId);
+    this.onNodeDrag({
+      nodeId,
+      element: node.element,
+      x: node.x,
+      y: node.y,
+    });
   }
 }

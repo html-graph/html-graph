@@ -2,7 +2,7 @@
   <img src="/media/favicon.png" alt="HTMLGraph" width="25" height="25"/> HTMLGraph
 </h1>
 
-## Graph visualization library that enables to customize nodes using HTML
+## Graph visualization library that enables nodes customization using HTML
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 

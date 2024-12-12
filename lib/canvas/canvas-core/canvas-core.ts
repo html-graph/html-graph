@@ -7,7 +7,6 @@ import {
   Canvas,
   UpdateConnectionRequest,
 } from "../canvas";
-import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
@@ -20,8 +19,6 @@ import { ConnectionControllerFactory } from "@/connections";
  */
 export class CanvasCore implements Canvas {
   public readonly transformation: PublicViewportTransformer;
-
-  public readonly model: PublicGraphStore;
 
   private readonly di: DiContainer;
 
@@ -38,8 +35,6 @@ export class CanvasCore implements Canvas {
     );
 
     this.transformation = this.di.publicViewportTransformer;
-
-    this.model = this.di.publicGraphStore;
 
     this.connectionControllerFactory = options.connections.controllerFactory;
   }

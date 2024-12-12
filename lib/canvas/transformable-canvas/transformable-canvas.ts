@@ -7,14 +7,11 @@ import {
   UpdateConnectionRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
-import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 
 export class TransformableCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
-
-  public readonly model: PublicGraphStore;
 
   private element: HTMLElement | null = null;
 
@@ -132,7 +129,6 @@ export class TransformableCanvas implements Canvas {
     private readonly options?: TransformOptions,
   ) {
     this.transformation = this.canvas.transformation;
-    this.model = this.canvas.model;
 
     const minContentScale = this.options?.scale?.minContent ?? null;
     const maxContentScale = this.options?.scale?.maxContent ?? null;

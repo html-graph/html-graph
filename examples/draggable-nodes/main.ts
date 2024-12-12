@@ -1,4 +1,8 @@
-import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  MarkNodePortRequest,
+  HtmlGraphBuilder,
+  NodeDragPayload,
+} from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -7,8 +11,8 @@ const canvas = new HtmlGraphBuilder()
   })
   .setDraggableNodes({
     events: {
-      onNodeDrag: (nodeId: string) => {
-        console.log(nodeId);
+      onNodeDrag: (payload: NodeDragPayload) => {
+        console.log(payload);
       },
     },
   })

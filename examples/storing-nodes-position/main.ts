@@ -1,11 +1,44 @@
 import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
+const nodes = new Map<
+  string,
+  { name: string; x: number; y: number; input: string; output: string }
+>([
+  [
+    "node-1",
+    { name: "Node 1", x: 200, y: 400, input: "port-1-1", output: "port-1-2" },
+  ],
+  [
+    "node-2",
+    { name: "Node 2", x: 600, y: 500, input: "port-2-1", output: "port-2-2" },
+  ],
+  [
+    "node-3",
+    { name: "Node 3", x: 200, y: 800, input: "port-3-1", output: "port-3-2" },
+  ],
+  [
+    "node-4",
+    { name: "Node 4", x: 1000, y: 600, input: "port-4-1", output: "port-4-2" },
+  ],
+]);
+
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
+  .setDraggableNodes({
+    events: {
+      onNodeDrag: (payload) => {
+        const node = nodes.get(payload.nodeId)!;
+
+        node.x = payload.x;
+        node.y = payload.y;
+
+        console.log(nodes);
+      },
+    },
+  })
   .setTransformableCanvas()
   .build();
 
@@ -30,22 +63,17 @@ function createNode(
   return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
 }
 
-const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
-const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
-const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
-
 const canvasElement = document.getElementById("canvas")!;
 
+canvas.attach(canvasElement);
+
+nodes.forEach((value, key) => {
+  const [node, ports] = createNode(value.name, value.input, value.output);
+
+  canvas.addNode({ id: key, element: node, x: value.x, y: value.y, ports });
+});
+
 canvas
-  .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
-  .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
-  .addNode({ element: node4, x: 1000, y: 600, ports: ports4 })
   .addConnection({ from: "port-1-2", to: "port-2-1" })
   .addConnection({ from: "port-3-2", to: "port-2-1" })
   .addConnection({ from: "port-2-2", to: "port-4-1" });
-
-console.log(canvas.model.getNode("node-1"));
-console.log(canvas.model.getNodes());

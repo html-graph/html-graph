@@ -1,4 +1,3 @@
-import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddConnectionRequest } from "./add-connection-request";
 import { AddNodeRequest } from "./add-node-request";
@@ -11,11 +10,6 @@ export interface Canvas {
    * provides api for canvas transformation
    */
   readonly transformation: PublicViewportTransformer;
-
-  /**
-   * provides api for graph structure access
-   */
-  readonly model: PublicGraphStore;
 
   /**
    * adds node to graph

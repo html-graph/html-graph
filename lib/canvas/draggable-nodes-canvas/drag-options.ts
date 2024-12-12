@@ -1,5 +1,7 @@
+import { NodeDragPayload } from "./node-drag-payload";
+
 export interface DragOptions {
   events?: {
-    onNodeDrag?: (nodeId: string) => void;
+    onNodeDrag?: (payload: NodeDragPayload) => void;
   };
 }

@@ -1,5 +1,7 @@
 # TODO
 
+- onBeforeDrag, onBeforeTransform
+- no PublicViewportTransformer?
 - same port cycle
 - same node cycle
 - move to nodes autoscale

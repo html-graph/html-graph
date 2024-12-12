@@ -1,7 +1,57 @@
 import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 class NodesDragHandler {
-  private readonly nodes = new Map<string, HTMLElement>();
+  private readonly nodes = new Map<
+    string,
+    {
+      name: string;
+      x: number;
+      y: number;
+      input: string;
+      output: string;
+    }
+  >([
+    [
+      "node-1",
+      {
+        name: "Node 1",
+        x: 200,
+        y: 400,
+        input: "port-1-1",
+        output: "port-1-2",
+      },
+    ],
+    [
+      "node-2",
+      {
+        name: "Node 2",
+        x: 600,
+        y: 500,
+        input: "port-2-1",
+        output: "port-2-2",
+      },
+    ],
+    [
+      "node-3",
+      {
+        name: "Node 3",
+        x: 200,
+        y: 800,
+        input: "port-3-1",
+        output: "port-3-2",
+      },
+    ],
+    [
+      "node-4",
+      {
+        name: "Node 4",
+        x: 1000,
+        y: 600,
+        input: "port-4-1",
+        output: "port-4-2",
+      },
+    ],
+  ]);
 
   private grabbedNode: string | null = null;
 
@@ -13,43 +63,39 @@ class NodesDragHandler {
       })
       .build();
 
-    const [node1, ports1] = this.createNode("Node 1", "port-1-1", "port-1-2");
-    const [node2, ports2] = this.createNode("Node 2", "port-2-1", "port-2-2");
-    const [node3, ports3] = this.createNode("Node 3", "port-3-1", "port-3-2");
-    const [node4, ports4] = this.createNode("Node 4", "port-4-1", "port-4-2");
-
-    this.nodes.set("node-1", node1);
-    this.nodes.set("node-2", node2);
-    this.nodes.set("node-3", node3);
-    this.nodes.set("node-4", node4);
-
-    canvas
-      .attach(canvasElement)
-      .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
-      .addNode({ id: "node-2", element: node2, x: 600, y: 500, ports: ports2 })
-      .addNode({ id: "node-3", element: node3, x: 200, y: 800, ports: ports3 })
-      .addNode({ id: "node-4", element: node4, x: 1000, y: 600, ports: ports4 })
-      .addConnection({ from: "port-1-2", to: "port-2-1" })
-      .addConnection({ from: "port-3-2", to: "port-2-1" })
-      .addConnection({ from: "port-2-2", to: "port-4-1" });
+    canvas.attach(canvasElement);
 
     this.nodes.forEach((value, key) => {
-      value.addEventListener("mousedown", () => {
+      const [element, ports] = this.createNode(
+        value.name,
+        value.input,
+        value.output,
+      );
+
+      element.addEventListener("mousedown", () => {
         this.element.style.cursor = "grab";
         this.grabbedNode = key;
       });
 
-      value.addEventListener("mouseup", () => {
-        this.element.style.removeProperty("cursor");
-        this.grabbedNode = null;
+      canvas.addNode({
+        id: key,
+        element,
+        x: value.x,
+        y: value.y,
+        ports,
       });
     });
 
+    canvas
+      .addConnection({ from: "port-1-2", to: "port-2-1" })
+      .addConnection({ from: "port-3-2", to: "port-2-1" })
+      .addConnection({ from: "port-2-2", to: "port-4-1" });
+
     element.addEventListener("mousemove", (event: MouseEvent) => {
       if (this.grabbedNode !== null) {
-        const node = canvas.model.getNode(this.grabbedNode);
+        const node = this.nodes.get(this.grabbedNode);
 
-        if (node === null) {
+        if (node === undefined) {
           throw new Error("failed to drag nonexisting node");
         }
 
@@ -59,9 +105,16 @@ class NodesDragHandler {
         const nodeY = yv + event.movementY;
 
         const [xa, ya] = canvas.transformation.getAbsCoords(nodeX, nodeY);
+        node.x = xa;
+        node.y = ya;
 
-        canvas.updateNodeCoordinates(this.grabbedNode, xa, ya);
+        canvas.updateNodeCoordinates(this.grabbedNode, node.x, node.y);
       }
+    });
+
+    element.addEventListener("mouseup", () => {
+      this.element.style.removeProperty("cursor");
+      this.grabbedNode = null;
     });
   }
 
