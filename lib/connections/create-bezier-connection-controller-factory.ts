@@ -1,9 +1,7 @@
-import {
-  BezierConnectionController,
-  CycleBezierConnectionController,
-} from "./bezier";
+import { BezierConnectionController } from "./bezier";
 import { ConnectionControllerFactory } from "./connection-controller-factory";
 import { ConnectionType } from "./connection-type";
+import { CycleCircleConnectionController } from "./cycle-circle";
 
 export const createBezierConnectionControllerFactory: (options: {
   color: string;
@@ -14,16 +12,18 @@ export const createBezierConnectionControllerFactory: (options: {
   hasSourceArrow: boolean;
   hasTargetArrow: boolean;
   cycleRadius: number;
+  smallCycleRadius: number;
 }) => ConnectionControllerFactory =
   (options) => (connectionType: ConnectionType) => {
     if (connectionType === "cycle") {
-      return new CycleBezierConnectionController(
+      return new CycleCircleConnectionController(
         options.color,
         options.width,
         options.arrowLength,
         options.arrowWidth,
         options.hasSourceArrow || options.hasTargetArrow,
         options.cycleRadius,
+        options.smallCycleRadius,
       );
     }
 

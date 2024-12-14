@@ -3,7 +3,7 @@ import { ConnectionController } from "../connection-controller";
 import { ConnectionUtils } from "../connection-utils";
 import { Point } from "../point";
 
-export class CycleBezierConnectionController implements ConnectionController {
+export class CycleCircleConnectionController implements ConnectionController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -19,6 +19,7 @@ export class CycleBezierConnectionController implements ConnectionController {
     private readonly arrowWidth: number,
     private readonly hasArrow: boolean,
     private readonly radius: number,
+    private readonly smallRadius: number,
   ) {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
@@ -59,34 +60,30 @@ export class CycleBezierConnectionController implements ConnectionController {
 
     const fromVect = ConnectionUtils.getDirectionVector(from.direction, 1, 1);
 
+    const r = this.smallRadius;
+    const R = this.radius;
+    const len = Math.sqrt(r * r + R * R);
+    const g = r + R;
+    const px = this.arrowLength + len * (1 - R / g);
+    const py = (r * R) / g;
+
     const points: Point[] = [
       [this.arrowLength, 0],
-      [this.arrowLength + this.radius, 0],
-      [this.arrowLength + this.radius, -this.radius],
-      [this.arrowLength + this.radius, -2 * this.radius],
-      [this.arrowLength + 2 * this.radius, -2 * this.radius],
-      [this.arrowLength + 4 * this.radius, -2 * this.radius],
-      [this.arrowLength + 4 * this.radius, 0],
-      [this.arrowLength + 4 * this.radius, 2 * this.radius],
-      [this.arrowLength + 2 * this.radius, 2 * this.radius],
-      [this.arrowLength + this.radius, 2 * this.radius],
-      [this.arrowLength + this.radius, this.radius],
+      [px, py],
+      [px, -py],
     ];
 
     const rp = points.map((p) => ConnectionUtils.rotate(p, fromVect, [0, 0]));
 
-    const nl = [
+    const c = [
       `M ${rp[0][0]} ${rp[0][1]}`,
-      `C ${rp[1][0]} ${rp[1][1]}, ${rp[1][0]} ${rp[1][1]}, ${rp[2][0]} ${rp[2][1]}`,
-      `C ${rp[3][0]} ${rp[3][1]}, ${rp[3][0]} ${rp[3][1]}, ${rp[4][0]} ${rp[4][1]}`,
-      `C ${rp[5][0]} ${rp[5][1]}, ${rp[5][0]} ${rp[5][1]}, ${rp[6][0]} ${rp[6][1]}`,
-      `C ${rp[7][0]} ${rp[7][1]}, ${rp[7][0]} ${rp[7][1]}, ${rp[8][0]} ${rp[8][1]}`,
-      `C ${rp[9][0]} ${rp[9][1]}, ${rp[9][0]} ${rp[9][1]}, ${rp[10][0]} ${rp[10][1]}`,
-      `C ${rp[1][0]} ${rp[1][1]}, ${rp[1][0]} ${rp[1][1]}, ${rp[0][0]} ${rp[0][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
+      `A ${R} ${R} 0 1 0 ${rp[2][0]} ${rp[2][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[0][0]} ${rp[0][1]}`,
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.hasArrow ? "" : preLine}${nl}`;
+    const linePath = `${this.hasArrow ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);
 
