@@ -23,6 +23,7 @@ export type {
   AddNodeRequest,
   MarkNodePortRequest,
   NodeDragPayload,
+  TransformPayload,
 } from "./canvas";
 export type { NodeResponse, NodeItem } from "./graph-store";
 export type { PublicViewportTransformer } from "./viewport-transformer";

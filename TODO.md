@@ -1,7 +1,9 @@
 # TODO
 
-- onBeforeDrag, onBeforeTransform
-- no PublicViewportTransformer?
+- extract viewport transformation only for transformable canvas
+  background drawing function should be available ony for transformable canvas
+
+- onTransform, onBeforeTransform
 - same port cycle
 - same node cycle
 - move to nodes autoscale

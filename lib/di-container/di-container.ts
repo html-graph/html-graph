@@ -3,7 +3,7 @@ import {
   PublicViewportTransformer,
   ViewportTransformer,
 } from "@/viewport-transformer";
-import { GraphStore, PublicGraphStore } from "@/graph-store";
+import { GraphStore } from "@/graph-store";
 import { CanvasController } from "@/canvas-controller";
 import { LayersMode } from "@/layers";
 import { BackgroundDrawingFn } from "@/background";
@@ -11,8 +11,6 @@ import { CenterFn } from "@/center-fn";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
-
-  public readonly publicGraphStore: PublicGraphStore;
 
   public readonly canvasController: CanvasController;
 
@@ -28,8 +26,6 @@ export class DiContainer {
     this.publicViewportTransformer = new PublicViewportTransformer(
       viewportTransformer,
     );
-
-    this.publicGraphStore = new PublicGraphStore(graphStore);
 
     const htmlController = new HtmlController(
       graphStore,

@@ -11,8 +11,8 @@ const canvas = new HtmlGraphBuilder()
   })
   .setDraggableNodes({
     events: {
-      onNodeDrag: (payload: NodeDragPayload) => {
-        console.log(payload);
+      onBeforeNodeDrag: (payload: NodeDragPayload) => {
+        return payload.nodeId !== "node-1";
       },
     },
   })

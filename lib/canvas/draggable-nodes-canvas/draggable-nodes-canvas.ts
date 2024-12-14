@@ -29,6 +29,8 @@ export class DraggableNodesCanvas implements Canvas {
 
   private onNodeDrag: (payload: NodeDragPayload) => void;
 
+  private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
+
   private readonly nodeIdGenerator = new IdGenerator();
 
   private element: HTMLElement | null = null;
@@ -108,6 +110,15 @@ export class DraggableNodesCanvas implements Canvas {
     };
 
     this.onNodeDrag = dragOptions?.events?.onNodeDrag ?? onNodeDragDefault;
+
+    const onBeforeNodeDragDefault: (
+      payload: NodeDragPayload,
+    ) => boolean = () => {
+      return true;
+    };
+
+    this.onBeforeNodeDrag =
+      dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
   }
 
   public addNode(node: AddNodeRequest): DraggableNodesCanvas {
@@ -122,6 +133,17 @@ export class DraggableNodesCanvas implements Canvas {
     this.canvas.addNode(node);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
+      const isDragAllowed = this.onBeforeNodeDrag({
+        nodeId,
+        element: node.element,
+        x: node.x,
+        y: node.y,
+      });
+
+      if (!isDragAllowed) {
+        return;
+      }
+
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
       this.setCursor("grab");
@@ -129,6 +151,17 @@ export class DraggableNodesCanvas implements Canvas {
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
+      const isDragAllowed = this.onBeforeNodeDrag({
+        nodeId,
+        element: node.element,
+        x: node.x,
+        y: node.y,
+      });
+
+      if (!isDragAllowed) {
+        return;
+      }
+
       if (event.touches.length !== 1) {
         return;
       }
