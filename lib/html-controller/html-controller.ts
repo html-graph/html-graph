@@ -127,6 +127,8 @@ export class HtmlController {
   }
 
   public attach(canvasWrapper: HTMLElement): void {
+    this.detach();
+
     this.canvasWrapper = canvasWrapper;
     this.canvasWrapper.appendChild(this.host);
   }

@@ -1,5 +1,5 @@
-import { ConnectionControllerFactory } from "../connection-controller-factory";
-import { StraightConnectionController } from "./straight-connection-controller";
+import { ConnectionControllerFactory } from "./connection-controller-factory";
+import { StraightConnectionController } from "./straight";
 
 export const createStraightConnectionControllerFactory: (options: {
   color: string;

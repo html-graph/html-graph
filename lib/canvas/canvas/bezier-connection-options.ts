@@ -7,4 +7,5 @@ export interface BezierConnectionOptions {
   readonly arrowWidth?: number;
   readonly hasSourceArrow?: boolean;
   readonly hasTargetArrow?: boolean;
+  readonly cycleRadius?: number;
 }

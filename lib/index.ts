@@ -6,6 +6,7 @@ export {
 } from "./canvas";
 export {
   BezierConnectionController,
+  CycleBezierConnectionController,
   createBezierConnectionControllerFactory,
   StraightConnectionController,
   createStraightConnectionControllerFactory,

@@ -30,6 +30,7 @@ export const resolveConnectionControllerFactory: (
         arrowWidth: options.arrowWidth ?? 4,
         hasSourceArrow: options.hasSourceArrow ?? false,
         hasTargetArrow: options.hasTargetArrow ?? false,
+        cycleRadius: options.cycleRadius ?? 20,
       });
   }
 };

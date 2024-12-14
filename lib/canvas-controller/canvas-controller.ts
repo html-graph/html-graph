@@ -149,11 +149,17 @@ export class CanvasController {
       throw new Error("failed to add connection to nonexisting port");
     }
 
+    let connectionType = ConnectionType.Regular;
+
+    if (fromPortId === toPortId) {
+      connectionType = ConnectionType.Cycle;
+    }
+
     this.graphStore.addConnection(
       connectionId,
       fromPortId,
       toPortId,
-      controllerFactory(ConnectionType.Regular),
+      controllerFactory(connectionType),
     );
 
     this.htmlController.attachConnection(connectionId);
