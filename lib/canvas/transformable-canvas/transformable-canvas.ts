@@ -9,6 +9,7 @@ import {
 import { TransformOptions } from "./transform-options";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
+import { TransformPayload } from "./transform-payload";
 
 export class TransformableCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -19,7 +20,9 @@ export class TransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
-  private onTransform: () => void;
+  private onTransform: (payload: TransformPayload) => void;
+
+  private onBeforeTransform: (payload: TransformPayload) => boolean;
 
   private readonly isScalable: boolean;
 
@@ -141,11 +144,20 @@ export class TransformableCanvas implements Canvas {
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
 
-    this.onTransform =
-      options?.events?.onTransform ??
-      ((): void => {
-        // no implementation by default
-      });
+    const onTransformDefault: (payload: TransformPayload) => void = () => {
+      // no implementation by default
+    };
+
+    this.onTransform = options?.events?.onTransform ?? onTransformDefault;
+
+    const onBeforeTransformDefault: (
+      payload: TransformPayload,
+    ) => boolean = () => {
+      return true;
+    };
+
+    this.onBeforeTransform =
+      options?.events?.onBeforeTransform ?? onBeforeTransformDefault;
   }
 
   public addNode(node: AddNodeRequest): TransformableCanvas {
@@ -236,9 +248,10 @@ export class TransformableCanvas implements Canvas {
   }
 
   public attach(element: HTMLElement): TransformableCanvas {
-    this.canvas.attach(element);
+    this.detach();
     this.element = element;
 
+    this.canvas.attach(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
     this.element.addEventListener("mousemove", this.onMouseMove);
     this.element.addEventListener("mouseup", this.onMouseUp);
@@ -263,9 +276,8 @@ export class TransformableCanvas implements Canvas {
       this.element.removeEventListener("touchmove", this.onTouchMove);
       this.element.removeEventListener("touchend", this.onTouchEnd);
       this.element.removeEventListener("touchcancel", this.onTouchEnd);
+      this.element = null;
     }
-
-    this.element = null;
 
     return this;
   }
@@ -329,12 +341,18 @@ export class TransformableCanvas implements Canvas {
     const [dx1, dy1] = this.transformation.getAbsCoords(0, 0);
     const s1 = this.canvas.transformation.getAbsScale();
 
-    this.canvas.patchViewportState({
+    const transform: TransformPayload = {
       scale: s1,
       x: dx1 + s1 * dx2,
       y: dy1 + s1 * dy2,
-    });
-    this.onTransform();
+    };
+
+    if (!this.onBeforeTransform({ ...transform })) {
+      return;
+    }
+
+    this.canvas.patchViewportState(transform);
+    this.onTransform(transform);
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
@@ -364,7 +382,13 @@ export class TransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.patchViewportState({ scale, x, y });
-    this.onTransform();
+    const transform: TransformPayload = { scale, x, y };
+
+    if (!this.onBeforeTransform({ ...transform })) {
+      return;
+    }
+
+    this.canvas.patchViewportState(transform);
+    this.onTransform(transform);
   }
 }

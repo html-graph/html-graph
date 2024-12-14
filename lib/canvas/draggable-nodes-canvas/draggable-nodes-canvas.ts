@@ -281,9 +281,10 @@ export class DraggableNodesCanvas implements Canvas {
   }
 
   public attach(element: HTMLElement): DraggableNodesCanvas {
-    this.canvas.attach(element);
+    this.detach();
     this.element = element;
 
+    this.canvas.attach(this.element);
     this.element.addEventListener("mouseup", this.onCanvasMouseUp);
     this.element.addEventListener("mousemove", this.onCanvasMouseMove);
     this.element.addEventListener("touchstart", this.onCanvasTouchStart);

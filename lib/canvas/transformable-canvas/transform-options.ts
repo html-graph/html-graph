@@ -1,3 +1,5 @@
+import { TransformPayload } from "./transform-payload";
+
 export interface TransformOptions {
   scale?: {
     enabled?: boolean;
@@ -9,6 +11,7 @@ export interface TransformOptions {
     enabled?: boolean;
   };
   events?: {
-    onTransform?: () => void;
+    onTransform?: (payload: TransformPayload) => void;
+    onBeforeTransform?: (payload: TransformPayload) => boolean;
   };
 }

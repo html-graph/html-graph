@@ -380,13 +380,6 @@ export class HtmlController {
     const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
     const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
 
-    const element = this.connectionIdToElementMap.get(connectionId)!;
-
-    const flipHor = xAbsCenterFrom <= xAbsCenterTo;
-    const flipVert = yAbsCenterFrom <= yAbsCenterTo;
-
-    element.style.transform = `matrix(${flipHor ? 1 : -1}, 0, 0, ${flipVert ? 1 : -1}, ${x}, ${y})`;
-
     connection.controller.update(x, y, width, height, portFrom, portTo);
   }
 }
