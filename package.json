@@ -35,7 +35,7 @@
     "fix-lint": "eslint . --fix",
     "build": "tsc --p ./tsconfig-build-library.json && vite build",
     "preview": "vite preview",
-    "beforebuild": "npm run lint && npm run check-formatting",
+    "before-build": "npm run lint && npm run check-formatting",
     "release-next-version": "tsx ./scripts/release-next-version.ts",
     "make-deps-graph": "npx depcruise lib --include-only \"^lib\" --output-type dot > ./deps-graph/deps-graph.dot"
   },

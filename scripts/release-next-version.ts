@@ -42,11 +42,8 @@ class ReleaseNextVersion {
     const cmdsBeforePublish = [
       "npx prettier ./package.json --write",
       "npm install",
-      "npm run beforebuild",
+      "npm run before-build",
       "npm run build",
-    ];
-
-    const cmdsAfterPublish = [
       "git add -A",
       `git commit -m "release ${newVersion}"`,
       `git tag -a v${newVersion} -m "new version ${newVersion}"`,
@@ -56,9 +53,7 @@ class ReleaseNextVersion {
 
     this.execute(cmdsBeforePublish.join(" && "))
       .then(() => this.askCode())
-      .then((otp) => this.execute(`npm publish --access=public --otp=${otp}`))
-      .then(() => this.execute(cmdsAfterPublish.join(" && ")))
-      .catch(() => this.execute("git reset --hard"));
+      .then((otp) => this.execute(`npm publish --access=public --otp=${otp}`));
   }
 
   private static execute(cmd: string): Promise<void> {
