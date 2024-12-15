@@ -12,6 +12,8 @@ export class CycleSquareConnectionController implements ConnectionController {
 
   private readonly arrow: SVGPathElement | null = null;
 
+  private readonly roundness: number;
+
   public constructor(
     private readonly color: string,
     private readonly width: number,
@@ -20,7 +22,9 @@ export class CycleSquareConnectionController implements ConnectionController {
     private readonly hasArrow: boolean,
     private readonly side: number,
     private readonly gap: number,
+    roundness: number,
   ) {
+    this.roundness = Math.min(roundness, this.gap, this.side);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -64,14 +68,19 @@ export class CycleSquareConnectionController implements ConnectionController {
     const s = this.side;
     const x1 = this.arrowLength + g;
     const x2 = x1 + 2 * s;
+    const r = this.roundness;
+
+    console.log(r);
 
     const points: Point[] = [
       [this.arrowLength, 0],
-      [x1, 0],
+      [x1 - r, 0],
+      [x1, r],
       [x1, s],
       [x2, s],
       [x2, -s],
       [x1, -s],
+      [x1, -r],
     ];
 
     const rp = points.map((p) => ConnectionUtils.rotate(p, fromVect, [0, 0]));
@@ -79,11 +88,13 @@ export class CycleSquareConnectionController implements ConnectionController {
     const c = [
       `M ${rp[0][0]} ${rp[0][1]}`,
       `L ${rp[1][0]} ${rp[1][1]}`,
-      `L ${rp[2][0]} ${rp[2][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[2][0]} ${rp[2][1]}`,
       `L ${rp[3][0]} ${rp[3][1]}`,
       `L ${rp[4][0]} ${rp[4][1]}`,
       `L ${rp[5][0]} ${rp[5][1]}`,
-      `L ${rp[1][0]} ${rp[1][1]}`,
+      `L ${rp[6][0]} ${rp[6][1]}`,
+      `L ${rp[7][0]} ${rp[7][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;

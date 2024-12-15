@@ -22,6 +22,7 @@ export const resolveConnectionControllerFactory: (
         hasTargetArrow: options.hasTargetArrow ?? false,
         cycleSquareSide: options.cycleSquareSide ?? 30,
         cycleGap: options.cycleGap ?? 10,
+        roundness: options.roundness ?? 5,
       });
     default:
       return createBezierConnectionControllerFactory({

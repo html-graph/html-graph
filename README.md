@@ -2,7 +2,7 @@
   <img src="/media/favicon.png" alt="HTMLGraph" width="25" height="25"/> HTMLGraph
 </h1>
 
-## Graph visualization library that enables nodes customization using HTML
+### Graph visualization library that enables nodes customization using HTML
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
@@ -40,8 +40,8 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 function createNode(

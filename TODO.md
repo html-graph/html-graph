@@ -1,6 +1,8 @@
 # TODO
 
 - straight connection roundness
+- straight connections node drag bug
+- horizontal straight connections
 - same node cycle
 - move to nodes autoscale
 - move to nodes smooth

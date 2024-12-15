@@ -1,6 +1,7 @@
 import { PortPayload } from "@/port-payload";
 import { ConnectionController } from "../connection-controller";
 import { ConnectionUtils } from "../connection-utils";
+import { Point } from "../point";
 
 export class StraightConnectionController implements ConnectionController {
   public readonly svg: SVGSVGElement;
@@ -21,6 +22,7 @@ export class StraightConnectionController implements ConnectionController {
     private readonly minPortOffset: number,
     private readonly hasSourceArrow: boolean,
     private readonly hasTargetArrow: boolean,
+    private readonly roundness: number,
   ) {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
@@ -82,33 +84,45 @@ export class StraightConnectionController implements ConnectionController {
       flipX,
       flipY,
     );
+
     const toVect = ConnectionUtils.getDirectionVector(
       to.direction,
       flipX,
       flipY,
     );
 
-    const pointBegin = ConnectionUtils.rotate(
-      [this.arrowLength + this.minPortOffset, 0],
-      fromVect,
-      [0, 0],
-    );
+    console.log(this.roundness);
 
-    const pointEnd = ConnectionUtils.rotate(
-      [width - this.arrowLength - this.minPortOffset, height],
-      toVect,
-      [width, height],
-    );
+    const gap = this.arrowLength + this.minPortOffset;
+    const pb = ConnectionUtils.rotate([gap, 0], fromVect, [0, 0]);
+    const pe = ConnectionUtils.rotate([width - gap, height], toVect, [
+      width,
+      height,
+    ]);
 
-    const [halfX, halfY] = [width / 2, height / 2];
+    const [hx, hy] = [width / 2, height / 2];
+
+    const px: Point[] = [
+      [pb[0], pb[1]],
+      [hx, pb[1]],
+      [hx, pe[1]],
+      [pe[0], pe[1]],
+    ];
+
+    const py: Point[] = [
+      [pb[0], pb[1]],
+      [pb[0], hy],
+      [pe[0], hy],
+      [pe[0], pe[1]],
+    ];
 
     const line =
-      flipX * (pointEnd[0] - pointBegin[0]) > 0
-        ? `M ${pointBegin[0]} ${pointBegin[1]} L ${halfX} ${pointBegin[1]} L ${halfX} ${pointEnd[1]} L ${pointEnd[0]} ${pointEnd[1]}`
-        : `M ${pointBegin[0]} ${pointBegin[1]} L ${pointBegin[0]} ${halfY} L ${pointEnd[0]} ${halfY} L ${pointEnd[0]} ${pointEnd[1]}`;
+      flipX * (pe[0] - pb[0]) > 0
+        ? `M ${px[0][0]} ${px[0][1]} L ${px[1][0]} ${px[1][1]} L ${px[2][0]} ${px[2][1]} L ${px[3][0]} ${px[3][1]}`
+        : `M ${py[0][0]} ${py[0][1]} L ${py[1][0]} ${py[1][1]} L ${py[2][0]} ${py[2][1]} L ${py[3][0]} ${py[3][1]}`;
 
-    const preLine = `M ${0} ${0} L ${pointBegin[0]} ${pointBegin[1]} `;
-    const postLine = ` M ${pointEnd[0]} ${pointEnd[1]} L ${width} ${height}`;
+    const preLine = `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
+    const postLine = ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
     const preOffsetLine = ConnectionUtils.getArrowOffsetPath(
       fromVect,
       0,

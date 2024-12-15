@@ -9,4 +9,5 @@ export interface StraightConnectionOptions {
   readonly hasTargetArrow?: boolean;
   readonly cycleSquareSide?: number;
   readonly cycleGap?: number;
+  readonly roundness?: number;
 }
