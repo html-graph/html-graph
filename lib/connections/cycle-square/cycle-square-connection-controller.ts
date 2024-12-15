@@ -14,17 +14,19 @@ export class CycleSquareConnectionController implements ConnectionController {
 
   private readonly roundness: number;
 
+  private readonly points: readonly Point[];
+
   public constructor(
     private readonly color: string,
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
-    private readonly hasArrow: boolean,
+    hasArrow: boolean,
     private readonly side: number,
-    private readonly gap: number,
+    private readonly minPortOffset: number,
     roundness: number,
   ) {
-    this.roundness = Math.min(roundness, this.gap, this.side);
+    this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -38,7 +40,7 @@ export class CycleSquareConnectionController implements ConnectionController {
     this.group.appendChild(this.line);
     this.group.style.transformOrigin = `50% 50%`;
 
-    if (this.hasArrow) {
+    if (hasArrow) {
       this.arrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
@@ -51,6 +53,33 @@ export class CycleSquareConnectionController implements ConnectionController {
     this.svg.style.overflow = "visible";
     this.svg.style.width = `0px`;
     this.svg.style.height = `0px`;
+
+    const g = this.minPortOffset;
+    const s = this.side;
+    const x1 = this.arrowLength + g;
+    const r = this.roundness;
+    const x1l = x1 - r;
+    const x1m = x1 + r;
+    const y1l = s - r;
+    const x2 = x1 + 2 * s;
+    const x2l = x2 - r;
+
+    console.log(r);
+
+    this.points = [
+      [this.arrowLength, 0],
+      [x1l, 0],
+      [x1, r],
+      [x1, y1l],
+      [x1m, s],
+      [x2l, s],
+      [x2, y1l],
+      [x2, -y1l],
+      [x2l, -s],
+      [x1m, -s],
+      [x1, -y1l],
+      [x1, -r],
+    ];
   }
 
   public update(
@@ -64,41 +93,29 @@ export class CycleSquareConnectionController implements ConnectionController {
 
     const fromVect = ConnectionUtils.getDirectionVector(from.direction, 1, 1);
 
-    const g = this.gap;
-    const s = this.side;
-    const x1 = this.arrowLength + g;
-    const x2 = x1 + 2 * s;
     const r = this.roundness;
-
-    console.log(r);
-
-    const points: Point[] = [
-      [this.arrowLength, 0],
-      [x1 - r, 0],
-      [x1, r],
-      [x1, s],
-      [x2, s],
-      [x2, -s],
-      [x1, -s],
-      [x1, -r],
-    ];
-
-    const rp = points.map((p) => ConnectionUtils.rotate(p, fromVect, [0, 0]));
+    const rp = this.points.map((p) =>
+      ConnectionUtils.rotate(p, fromVect, [0, 0]),
+    );
 
     const c = [
       `M ${rp[0][0]} ${rp[0][1]}`,
       `L ${rp[1][0]} ${rp[1][1]}`,
       `A ${r} ${r} 0 0 1 ${rp[2][0]} ${rp[2][1]}`,
       `L ${rp[3][0]} ${rp[3][1]}`,
-      `L ${rp[4][0]} ${rp[4][1]}`,
+      `A ${r} ${r} 0 0 0 ${rp[4][0]} ${rp[4][1]}`,
       `L ${rp[5][0]} ${rp[5][1]}`,
-      `L ${rp[6][0]} ${rp[6][1]}`,
+      `A ${r} ${r} 0 0 0 ${rp[6][0]} ${rp[6][1]}`,
       `L ${rp[7][0]} ${rp[7][1]}`,
+      `A ${r} ${r} 0 0 0 ${rp[8][0]} ${rp[8][1]}`,
+      `L ${rp[9][0]} ${rp[9][1]}`,
+      `A ${r} ${r} 0 0 0 ${rp[10][0]} ${rp[10][1]}`,
+      `L ${rp[11][0]} ${rp[11][1]}`,
       `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.hasArrow ? "" : preLine}${c}`;
+    const linePath = `${this.arrow ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);
 

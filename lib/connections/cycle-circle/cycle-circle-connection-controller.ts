@@ -17,7 +17,7 @@ export class CycleCircleConnectionController implements ConnectionController {
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
-    private readonly hasArrow: boolean,
+    hasArrow: boolean,
     private readonly radius: number,
     private readonly smallRadius: number,
   ) {
@@ -34,7 +34,7 @@ export class CycleCircleConnectionController implements ConnectionController {
     this.group.appendChild(this.line);
     this.group.style.transformOrigin = `50% 50%`;
 
-    if (this.hasArrow) {
+    if (hasArrow) {
       this.arrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
@@ -83,7 +83,7 @@ export class CycleCircleConnectionController implements ConnectionController {
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.hasArrow ? "" : preLine}${c}`;
+    const linePath = `${this.arrow !== null ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);
 

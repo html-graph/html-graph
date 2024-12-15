@@ -20,8 +20,8 @@ export class StraightConnectionController implements ConnectionController {
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     private readonly minPortOffset: number,
-    private readonly hasSourceArrow: boolean,
-    private readonly hasTargetArrow: boolean,
+    hasSourceArrow: boolean,
+    hasTargetArrow: boolean,
     private readonly roundness: number,
   ) {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -37,7 +37,7 @@ export class StraightConnectionController implements ConnectionController {
     this.group.appendChild(this.line);
     this.group.style.transformOrigin = `50% 50%`;
 
-    if (this.hasSourceArrow) {
+    if (hasSourceArrow) {
       this.sourceArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
@@ -47,7 +47,7 @@ export class StraightConnectionController implements ConnectionController {
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (this.hasTargetArrow) {
+    if (hasTargetArrow) {
       this.targetArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
@@ -100,26 +100,22 @@ export class StraightConnectionController implements ConnectionController {
       height,
     ]);
 
-    const [hx, hy] = [width / 2, height / 2];
+    const [cx, cy] = [width / 2, height / 2];
+    const isOverflown = flipX * (pe[0] - pb[0]) > 0;
 
-    const px: Point[] = [
-      [pb[0], pb[1]],
-      [hx, pb[1]],
-      [hx, pe[1]],
-      [pe[0], pe[1]],
-    ];
-
-    const py: Point[] = [
-      [pb[0], pb[1]],
-      [pb[0], hy],
-      [pe[0], hy],
-      [pe[0], pe[1]],
-    ];
-
-    const line =
-      flipX * (pe[0] - pb[0]) > 0
-        ? `M ${px[0][0]} ${px[0][1]} L ${px[1][0]} ${px[1][1]} L ${px[2][0]} ${px[2][1]} L ${px[3][0]} ${px[3][1]}`
-        : `M ${py[0][0]} ${py[0][1]} L ${py[1][0]} ${py[1][1]} L ${py[2][0]} ${py[2][1]} L ${py[3][0]} ${py[3][1]}`;
+    const line = isOverflown
+      ? this.createSvgPath([
+          [pb[0], pb[1]],
+          [cx, pb[1]],
+          [cx, pe[1]],
+          [pe[0], pe[1]],
+        ])
+      : this.createSvgPath([
+          [pb[0], pb[1]],
+          [pb[0], cy],
+          [pe[0], cy],
+          [pe[0], pe[1]],
+        ]);
 
     const preLine = `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
     const postLine = ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
@@ -137,7 +133,10 @@ export class StraightConnectionController implements ConnectionController {
       -this.arrowLength,
       -this.minPortOffset,
     );
-    const linePath = `${this.sourceArrow ? preOffsetLine : preLine}${line}${this.targetArrow ? postOffsetLine : postLine}`;
+
+    const pre = this.sourceArrow ? preOffsetLine : preLine;
+    const post = this.targetArrow ? postOffsetLine : postLine;
+    const linePath = `${pre}${line}${post}`;
 
     this.line.setAttribute("d", linePath);
 
@@ -164,5 +163,9 @@ export class StraightConnectionController implements ConnectionController {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
+  }
+
+  private createSvgPath(p: Point[]): string {
+    return `M ${p[0][0]} ${p[0][1]} L ${p[1][0]} ${p[1][1]} L ${p[2][0]} ${p[2][1]} L ${p[3][0]} ${p[3][1]}`;
   }
 }

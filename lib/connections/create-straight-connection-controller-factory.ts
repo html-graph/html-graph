@@ -12,7 +12,6 @@ export const createStraightConnectionControllerFactory: (options: {
   hasSourceArrow: boolean;
   hasTargetArrow: boolean;
   cycleSquareSide: number;
-  cycleGap: number;
   roundness: number;
 }) => ConnectionControllerFactory =
   (options) => (connectionType: ConnectionType) => {
@@ -25,7 +24,7 @@ export const createStraightConnectionControllerFactory: (options: {
           options.arrowWidth,
           options.hasSourceArrow || options.hasTargetArrow,
           options.cycleSquareSide,
-          options.cycleGap,
+          options.minPortOffset,
           options.roundness,
         );
       }

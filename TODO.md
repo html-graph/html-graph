@@ -3,6 +3,7 @@
 - straight connection roundness
 - straight connections node drag bug
 - horizontal straight connections
+- assing layer behavior to connection
 - same node cycle
 - move to nodes autoscale
 - move to nodes smooth

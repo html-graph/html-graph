@@ -19,8 +19,8 @@ export class BezierConnectionController implements ConnectionController {
     private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
-    private readonly hasSourceArrow: boolean,
-    private readonly hasTargetArrow: boolean,
+    hasSourceArrow: boolean,
+    hasTargetArrow: boolean,
   ) {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
@@ -35,7 +35,7 @@ export class BezierConnectionController implements ConnectionController {
     this.group.appendChild(this.line);
     this.group.style.transformOrigin = `50% 50%`;
 
-    if (this.hasSourceArrow) {
+    if (hasSourceArrow) {
       this.sourceArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
@@ -45,7 +45,7 @@ export class BezierConnectionController implements ConnectionController {
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (this.hasTargetArrow) {
+    if (hasTargetArrow) {
       this.targetArrow = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "path",
