@@ -1,6 +1,6 @@
 # TODO
 
-- same port cycle
+- straight connection roundness
 - same node cycle
 - move to nodes autoscale
 - move to nodes smooth

@@ -2,9 +2,9 @@ import {
   Canvas,
   CanvasCore,
   CoreOptions,
-  DraggableNodesCanvas,
+  UserDraggableNodesCanvas,
   DragOptions,
-  TransformableCanvas,
+  UserTransformableCanvas,
   TransformOptions,
 } from "@/canvas";
 
@@ -25,14 +25,16 @@ export class HtmlGraphBuilder {
     return this;
   }
 
-  public setDraggableNodes(dragOptions?: DragOptions): HtmlGraphBuilder {
+  public setUserDraggableNodes(options?: DragOptions): HtmlGraphBuilder {
     this.isDraggable = true;
-    this.dragOptions = dragOptions;
+    this.dragOptions = options;
 
     return this;
   }
 
-  public setTransformableCanvas(options?: TransformOptions): HtmlGraphBuilder {
+  public setUserTransformableCanvas(
+    options?: TransformOptions,
+  ): HtmlGraphBuilder {
     this.isTransformable = true;
     this.transformOptions = options;
 
@@ -43,11 +45,11 @@ export class HtmlGraphBuilder {
     let res: Canvas = new CanvasCore(this.coreOptions);
 
     if (this.isDraggable) {
-      res = new DraggableNodesCanvas(res, this.dragOptions);
+      res = new UserDraggableNodesCanvas(res, this.dragOptions);
     }
 
     if (this.isTransformable) {
-      res = new TransformableCanvas(res, this.transformOptions);
+      res = new UserTransformableCanvas(res, this.transformOptions);
     }
 
     return res;

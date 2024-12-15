@@ -20,6 +20,8 @@ export const resolveConnectionControllerFactory: (
         minPortOffset: options.minPortOffset ?? 15,
         hasSourceArrow: options.hasSourceArrow ?? false,
         hasTargetArrow: options.hasTargetArrow ?? false,
+        cycleSquareSide: options.cycleSquareSide ?? 30,
+        cycleGap: options.cycleGap ?? 10,
       });
     default:
       return createBezierConnectionControllerFactory({

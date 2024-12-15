@@ -11,7 +11,7 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { TransformPayload } from "./transform-payload";
 
-export class TransformableCanvas implements Canvas {
+export class UserTransformableCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   private element: HTMLElement | null = null;
@@ -160,43 +160,45 @@ export class TransformableCanvas implements Canvas {
       options?.events?.onBeforeTransform ?? onBeforeTransformDefault;
   }
 
-  public addNode(node: AddNodeRequest): TransformableCanvas {
+  public addNode(node: AddNodeRequest): UserTransformableCanvas {
     this.canvas.addNode(node);
 
     return this;
   }
 
-  public removeNode(nodeId: string): TransformableCanvas {
+  public removeNode(nodeId: string): UserTransformableCanvas {
     this.canvas.removeNode(nodeId);
 
     return this;
   }
 
-  public markPort(port: MarkPortRequest): TransformableCanvas {
+  public markPort(port: MarkPortRequest): UserTransformableCanvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePortConnections(portId: string): TransformableCanvas {
+  public updatePortConnections(portId: string): UserTransformableCanvas {
     this.canvas.updatePortConnections(portId);
 
     return this;
   }
 
-  public unmarkPort(portId: string): TransformableCanvas {
+  public unmarkPort(portId: string): UserTransformableCanvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addConnection(connection: AddConnectionRequest): TransformableCanvas {
+  public addConnection(
+    connection: AddConnectionRequest,
+  ): UserTransformableCanvas {
     this.canvas.addConnection(connection);
 
     return this;
   }
 
-  public removeConnection(connectionId: string): TransformableCanvas {
+  public removeConnection(connectionId: string): UserTransformableCanvas {
     this.canvas.removeConnection(connectionId);
 
     return this;
@@ -204,13 +206,13 @@ export class TransformableCanvas implements Canvas {
 
   public patchViewportState(
     request: PatchViewportRequest,
-  ): TransformableCanvas {
+  ): UserTransformableCanvas {
     this.canvas.patchViewportState(request);
 
     return this;
   }
 
-  public moveToNodes(nodeIds: readonly string[]): TransformableCanvas {
+  public moveToNodes(nodeIds: readonly string[]): UserTransformableCanvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
@@ -220,7 +222,7 @@ export class TransformableCanvas implements Canvas {
     nodeId: string,
     x: number,
     y: number,
-  ): TransformableCanvas {
+  ): UserTransformableCanvas {
     this.canvas.updateNodeCoordinates(nodeId, x, y);
 
     return this;
@@ -229,25 +231,25 @@ export class TransformableCanvas implements Canvas {
   public updateConnection(
     connectionId: string,
     request: UpdateConnectionRequest,
-  ): TransformableCanvas {
+  ): UserTransformableCanvas {
     this.canvas.updateConnection(connectionId, request);
 
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): TransformableCanvas {
+  public moveNodeOnTop(nodeId: string): UserTransformableCanvas {
     this.canvas.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  public clear(): TransformableCanvas {
+  public clear(): UserTransformableCanvas {
     this.canvas.clear();
 
     return this;
   }
 
-  public attach(element: HTMLElement): TransformableCanvas {
+  public attach(element: HTMLElement): UserTransformableCanvas {
     this.detach();
     this.element = element;
 
@@ -264,7 +266,7 @@ export class TransformableCanvas implements Canvas {
     return this;
   }
 
-  public detach(): TransformableCanvas {
+  public detach(): UserTransformableCanvas {
     this.canvas.detach();
 
     if (this.element !== null) {

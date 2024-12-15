@@ -9,7 +9,7 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes({
+  .setUserDraggableNodes({
     events: {
       onNodeDrag: (payload: NodeDragPayload) => {
         console.log(payload);

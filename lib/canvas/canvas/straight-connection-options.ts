@@ -7,4 +7,6 @@ export interface StraightConnectionOptions {
   readonly minPortOffset?: number;
   readonly hasSourceArrow?: boolean;
   readonly hasTargetArrow?: boolean;
+  readonly cycleSquareSide?: number;
+  readonly cycleGap?: number;
 }

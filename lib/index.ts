@@ -1,8 +1,8 @@
 export { HtmlGraphBuilder } from "./html-graph-builder";
 export {
   CanvasCore,
-  DraggableNodesCanvas,
-  TransformableCanvas,
+  UserDraggableNodesCanvas,
+  UserTransformableCanvas,
 } from "./canvas";
 export {
   BezierConnectionController,

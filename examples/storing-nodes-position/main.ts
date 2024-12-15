@@ -27,7 +27,7 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes({
+  .setUserDraggableNodes({
     events: {
       onNodeDrag: (payload) => {
         const node = nodes.get(payload.nodeId)!;
@@ -39,7 +39,7 @@ const canvas = new HtmlGraphBuilder()
       },
     },
   })
-  .setTransformableCanvas()
+  .setUserTransformableCanvas()
   .build();
 
 function createNode(

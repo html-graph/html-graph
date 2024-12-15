@@ -11,8 +11,8 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 function createNode(

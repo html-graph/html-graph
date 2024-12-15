@@ -5,7 +5,7 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setTransformableCanvas({
+  .setUserTransformableCanvas({
     scale: {
       enabled: true,
       wheelSensitivity: 1.5,

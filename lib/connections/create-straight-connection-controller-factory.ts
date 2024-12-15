@@ -1,4 +1,6 @@
 import { ConnectionControllerFactory } from "./connection-controller-factory";
+import { ConnectionType } from "./connection-type";
+import { CycleSquareConnectionController } from "./cycle-square";
 import { StraightConnectionController } from "./straight";
 
 export const createStraightConnectionControllerFactory: (options: {
@@ -9,13 +11,31 @@ export const createStraightConnectionControllerFactory: (options: {
   minPortOffset: number;
   hasSourceArrow: boolean;
   hasTargetArrow: boolean;
-}) => ConnectionControllerFactory = (options) => () =>
-  new StraightConnectionController(
-    options.color,
-    options.width,
-    options.arrowLength,
-    options.arrowWidth,
-    options.minPortOffset,
-    options.hasSourceArrow,
-    options.hasTargetArrow,
-  );
+  cycleSquareSide: number;
+  cycleGap: number;
+}) => ConnectionControllerFactory =
+  (options) => (connectionType: ConnectionType) => {
+    if (connectionType === ConnectionType.Cycle) {
+      if (connectionType === "cycle") {
+        return new CycleSquareConnectionController(
+          options.color,
+          options.width,
+          options.arrowLength,
+          options.arrowWidth,
+          options.hasSourceArrow || options.hasTargetArrow,
+          options.cycleSquareSide,
+          options.cycleGap,
+        );
+      }
+    }
+
+    return new StraightConnectionController(
+      options.color,
+      options.width,
+      options.arrowLength,
+      options.arrowWidth,
+      options.minPortOffset,
+      options.hasSourceArrow,
+      options.hasTargetArrow,
+    );
+  };

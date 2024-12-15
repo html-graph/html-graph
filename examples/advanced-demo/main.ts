@@ -10,8 +10,8 @@ const canvas = new HtmlGraphBuilder()
     },
     background: { type: "dots" },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 const helper = new GraphHtmlHelper();

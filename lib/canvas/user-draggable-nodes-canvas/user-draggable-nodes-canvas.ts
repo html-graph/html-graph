@@ -11,7 +11,7 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 
-export class DraggableNodesCanvas implements Canvas {
+export class UserDraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   private readonly nodes = new Map<
@@ -121,7 +121,7 @@ export class DraggableNodesCanvas implements Canvas {
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
   }
 
-  public addNode(node: AddNodeRequest): DraggableNodesCanvas {
+  public addNode(node: AddNodeRequest): UserDraggableNodesCanvas {
     let nodeId = node.id;
 
     if (nodeId === undefined) {
@@ -184,7 +184,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public removeNode(nodeId: string): DraggableNodesCanvas {
+  public removeNode(nodeId: string): UserDraggableNodesCanvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -198,31 +198,33 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public markPort(port: MarkPortRequest): DraggableNodesCanvas {
+  public markPort(port: MarkPortRequest): UserDraggableNodesCanvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePortConnections(portId: string): DraggableNodesCanvas {
+  public updatePortConnections(portId: string): UserDraggableNodesCanvas {
     this.canvas.updatePortConnections(portId);
 
     return this;
   }
 
-  public unmarkPort(portId: string): DraggableNodesCanvas {
+  public unmarkPort(portId: string): UserDraggableNodesCanvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addConnection(connection: AddConnectionRequest): DraggableNodesCanvas {
+  public addConnection(
+    connection: AddConnectionRequest,
+  ): UserDraggableNodesCanvas {
     this.canvas.addConnection(connection);
 
     return this;
   }
 
-  public removeConnection(connectionId: string): DraggableNodesCanvas {
+  public removeConnection(connectionId: string): UserDraggableNodesCanvas {
     this.canvas.removeConnection(connectionId);
 
     return this;
@@ -230,13 +232,13 @@ export class DraggableNodesCanvas implements Canvas {
 
   public patchViewportState(
     request: PatchViewportRequest,
-  ): DraggableNodesCanvas {
+  ): UserDraggableNodesCanvas {
     this.canvas.patchViewportState(request);
 
     return this;
   }
 
-  public moveToNodes(nodeIds: readonly string[]): DraggableNodesCanvas {
+  public moveToNodes(nodeIds: readonly string[]): UserDraggableNodesCanvas {
     this.canvas.moveToNodes(nodeIds);
 
     return this;
@@ -246,7 +248,7 @@ export class DraggableNodesCanvas implements Canvas {
     nodeId: string,
     x: number,
     y: number,
-  ): DraggableNodesCanvas {
+  ): UserDraggableNodesCanvas {
     this.canvas.updateNodeCoordinates(nodeId, x, y);
 
     return this;
@@ -255,19 +257,19 @@ export class DraggableNodesCanvas implements Canvas {
   public updateConnection(
     connectionId: string,
     request: UpdateConnectionRequest,
-  ): DraggableNodesCanvas {
+  ): UserDraggableNodesCanvas {
     this.canvas.updateConnection(connectionId, request);
 
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): DraggableNodesCanvas {
+  public moveNodeOnTop(nodeId: string): UserDraggableNodesCanvas {
     this.canvas.moveNodeOnTop(nodeId);
 
     return this;
   }
 
-  public clear(): DraggableNodesCanvas {
+  public clear(): UserDraggableNodesCanvas {
     this.canvas.clear();
 
     this.nodes.forEach((value) => {
@@ -280,7 +282,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public attach(element: HTMLElement): DraggableNodesCanvas {
+  public attach(element: HTMLElement): UserDraggableNodesCanvas {
     this.detach();
     this.element = element;
 
@@ -295,7 +297,7 @@ export class DraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public detach(): DraggableNodesCanvas {
+  public detach(): UserDraggableNodesCanvas {
     this.canvas.detach();
 
     if (this.element !== null) {

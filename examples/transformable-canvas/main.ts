@@ -5,7 +5,7 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setTransformableCanvas({
+  .setUserTransformableCanvas({
     events: {
       onTransform: () => {
         console.log("transform");

@@ -5,8 +5,8 @@ const canvas = new HtmlGraphBuilder()
     background: { type: "dots" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas({
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas({
     events: {
       onBeforeTransform: (payload) => {
         return payload.scale <= 1 && payload.x > -500;

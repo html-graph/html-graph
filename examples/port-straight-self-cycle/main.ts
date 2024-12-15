@@ -3,10 +3,10 @@ import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    connections: { type: "straight", hasTargetArrow: true },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 function createNode(

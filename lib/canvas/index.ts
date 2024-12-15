@@ -1,4 +1,4 @@
 export * from "./canvas";
 export * from "./canvas-core";
-export * from "./draggable-nodes-canvas";
-export * from "./transformable-canvas";
+export * from "./user-draggable-nodes-canvas";
+export * from "./user-transformable-canvas";

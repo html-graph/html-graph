@@ -8,8 +8,8 @@ const canvas = new HtmlGraphBuilder()
       hasTargetArrow: true,
     },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 function createNode(

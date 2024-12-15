@@ -6,8 +6,8 @@ const canvas = new HtmlGraphBuilder()
     layers: { mode: "connections-on-top" },
     connections: { hasTargetArrow: true },
   })
-  .setDraggableNodes()
-  .setTransformableCanvas()
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
   .build();
 
 const node1 = document.createElement("div");
