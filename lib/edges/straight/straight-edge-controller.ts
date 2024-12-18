@@ -1,9 +1,8 @@
 import { PortPayload } from "@/port-payload";
-import { ConnectionController } from "../connection-controller";
-import { ConnectionUtils } from "../connection-utils";
-import { Point } from "../point";
+import { EdgeController } from "../edge-controller";
+import { EdgeUtils } from "../edge-utils";
 
-export class StraightConnectionController implements ConnectionController {
+export class StraightEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -14,6 +13,8 @@ export class StraightConnectionController implements ConnectionController {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
+  private readonly roundness: number;
+
   public constructor(
     private readonly color: string,
     private readonly width: number,
@@ -22,8 +23,9 @@ export class StraightConnectionController implements ConnectionController {
     private readonly minPortOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
-    private readonly roundness: number,
+    roundness: number,
   ) {
+    this.roundness = Math.min(this.minPortOffset, roundness);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -71,62 +73,49 @@ export class StraightConnectionController implements ConnectionController {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
 
-    const fromCenter = ConnectionUtils.getPortCenter(from);
-    const toCenter = ConnectionUtils.getPortCenter(to);
+    const fromCenter = EdgeUtils.getPortCenter(from);
+    const toCenter = EdgeUtils.getPortCenter(to);
     const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
     const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
 
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = ConnectionUtils.getDirectionVector(
-      from.direction,
-      flipX,
-      flipY,
-    );
+    const fromVect = EdgeUtils.getDirectionVector(from.direction, flipX, flipY);
 
-    const toVect = ConnectionUtils.getDirectionVector(
-      to.direction,
-      flipX,
-      flipY,
-    );
+    const toVect = EdgeUtils.getDirectionVector(to.direction, flipX, flipY);
 
     console.log(this.roundness);
 
     const gap = this.arrowLength + this.minPortOffset;
-    const pb = ConnectionUtils.rotate([gap, 0], fromVect, [0, 0]);
-    const pe = ConnectionUtils.rotate([width - gap, height], toVect, [
-      width,
-      height,
-    ]);
+    const pb = EdgeUtils.rotate([gap, 0], fromVect, [0, 0]);
+    const pe = EdgeUtils.rotate([width - gap, height], toVect, [width, height]);
 
     const [cx, cy] = [width / 2, height / 2];
     const isOverflown = flipX * (pe[0] - pb[0]) > 0;
 
     const line = isOverflown
-      ? this.createSvgPath([
+      ? EdgeUtils.createStraightPath([
           [pb[0], pb[1]],
           [cx, pb[1]],
           [cx, pe[1]],
           [pe[0], pe[1]],
         ])
-      : this.createSvgPath([
+      : EdgeUtils.createStraightPath([
           [pb[0], pb[1]],
           [pb[0], cy],
           [pe[0], cy],
           [pe[0], pe[1]],
         ]);
 
-    const preLine = `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
-    const postLine = ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
-    const preOffsetLine = ConnectionUtils.getArrowOffsetPath(
+    const preOffsetLine = EdgeUtils.getArrowOffsetPath(
       fromVect,
       0,
       0,
       this.arrowLength,
       this.minPortOffset,
     );
-    const postOffsetLine = ConnectionUtils.getArrowOffsetPath(
+    const postOffsetLine = EdgeUtils.getArrowOffsetPath(
       toVect,
       width,
       height,
@@ -134,14 +123,17 @@ export class StraightConnectionController implements ConnectionController {
       -this.minPortOffset,
     );
 
+    const preLine = `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
+    const postLine = ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
     const pre = this.sourceArrow ? preOffsetLine : preLine;
     const post = this.targetArrow ? postOffsetLine : postLine;
+
     const linePath = `${pre}${line}${post}`;
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = ConnectionUtils.getArrowPath(
+      const arrowPath = EdgeUtils.getArrowPath(
         fromVect,
         0,
         0,
@@ -153,7 +145,7 @@ export class StraightConnectionController implements ConnectionController {
     }
 
     if (this.targetArrow) {
-      const arrowPath = ConnectionUtils.getArrowPath(
+      const arrowPath = EdgeUtils.getArrowPath(
         toVect,
         width,
         height,
@@ -163,9 +155,5 @@ export class StraightConnectionController implements ConnectionController {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createSvgPath(p: Point[]): string {
-    return `M ${p[0][0]} ${p[0][1]} L ${p[1][0]} ${p[1][1]} L ${p[2][0]} ${p[2][1]} L ${p[3][0]} ${p[3][1]}`;
   }
 }

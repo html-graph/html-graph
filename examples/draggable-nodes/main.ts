@@ -7,7 +7,7 @@ import {
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes({
     events: {
@@ -52,6 +52,6 @@ canvas
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
   .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
   .addNode({ element: node4, x: 1000, y: 600, ports: ports4 })
-  .addConnection({ from: "port-1-2", to: "port-2-1" })
-  .addConnection({ from: "port-3-2", to: "port-2-1" })
-  .addConnection({ from: "port-2-2", to: "port-4-1" });
+  .addEdge({ from: "port-1-2", to: "port-2-1" })
+  .addEdge({ from: "port-3-2", to: "port-2-1" })
+  .addEdge({ from: "port-2-2", to: "port-4-1" });

@@ -3,8 +3,8 @@ import { TransformPayload } from "./transform-payload";
 export interface TransformOptions {
   scale?: {
     enabled?: boolean;
-    minContent?: number;
-    maxContent?: number;
+    min?: number;
+    max?: number;
     wheelSensitivity?: number;
   };
   shift?: {

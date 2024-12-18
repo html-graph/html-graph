@@ -4,7 +4,7 @@ const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     layers: { mode: "nodes-on-top" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -41,5 +41,5 @@ canvas
   .attach(canvasElement)
   .addNode({ element: node1, x: 600, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 200, y: 500, ports: ports2 })
-  .addConnection({ from: "port-1-2", to: "port-2-1" })
+  .addEdge({ from: "port-1-2", to: "port-2-1" })
   .addNode({ element: node3, x: 400, y: 450, ports: ports3 });

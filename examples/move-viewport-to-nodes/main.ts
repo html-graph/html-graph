@@ -3,8 +3,8 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    layers: { mode: "connections-on-top" },
-    connections: { hasTargetArrow: true },
+    layers: { mode: "edges-on-top" },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -49,8 +49,8 @@ canvas
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
   .addNode({ id: "node-3", element: node3, x: 2000, y: 300 })
   .markPort({ nodeId: "node-3", element: port3, id: "port-3" })
-  .addConnection({ from: "port-1", to: "port-2" })
-  .addConnection({ from: "port-2", to: "port-3" });
+  .addEdge({ from: "port-1", to: "port-2" })
+  .addEdge({ from: "port-2", to: "port-3" });
 
 btn1.addEventListener("click", () => {
   canvas.moveToNodes(["node-2", "node-3"]);

@@ -3,8 +3,8 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    layers: { mode: "connections-on-top" },
-    connections: { hasTargetArrow: true },
+    layers: { mode: "edges-on-top" },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -36,7 +36,7 @@ for (let i = 0; i < total; i++) {
   });
 
   if (prevPortId) {
-    canvas.addConnection({ from: prevPortId, to: newPortId });
+    canvas.addEdge({ from: prevPortId, to: newPortId });
   }
 
   offset += 300;

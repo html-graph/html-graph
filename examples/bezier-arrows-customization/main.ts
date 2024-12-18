@@ -3,7 +3,7 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: {
+    edges: {
       hasSourceArrow: true,
       hasTargetArrow: true,
     },
@@ -42,4 +42,4 @@ canvas
   .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
-  .addConnection({ from: "port-1-2", to: "port-2-1" });
+  .addEdge({ from: "port-1-2", to: "port-2-1" });

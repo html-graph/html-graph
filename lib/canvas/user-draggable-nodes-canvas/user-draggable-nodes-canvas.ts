@@ -1,6 +1,6 @@
 import { IdGenerator } from "@/id-generator";
 import {
-  AddConnectionRequest,
+  AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
   PatchViewportRequest,
@@ -204,8 +204,8 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePortConnections(portId: string): UserDraggableNodesCanvas {
-    this.canvas.updatePortConnections(portId);
+  public updatePortEdges(portId: string): UserDraggableNodesCanvas {
+    this.canvas.updatePortEdges(portId);
 
     return this;
   }
@@ -216,16 +216,14 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public addConnection(
-    connection: AddConnectionRequest,
-  ): UserDraggableNodesCanvas {
-    this.canvas.addConnection(connection);
+  public addEdge(connection: AddEdgeRequest): UserDraggableNodesCanvas {
+    this.canvas.addEdge(connection);
 
     return this;
   }
 
-  public removeConnection(connectionId: string): UserDraggableNodesCanvas {
-    this.canvas.removeConnection(connectionId);
+  public removeEdge(connectionId: string): UserDraggableNodesCanvas {
+    this.canvas.removeEdge(connectionId);
 
     return this;
   }

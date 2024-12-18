@@ -3,7 +3,7 @@ import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -36,4 +36,4 @@ const canvasElement = document.getElementById("canvas")!;
 canvas
   .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
-  .addConnection({ from: "port-1-2", to: "port-1-2" });
+  .addEdge({ from: "port-1-2", to: "port-1-2" });

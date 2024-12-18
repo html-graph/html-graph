@@ -4,7 +4,7 @@ import { GraphHtmlHelper } from "./graph-html-helper";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     nodes: { centerFn: () => [0, 0] },
-    connections: {
+    edges: {
       color: "var(--color-1)",
       hasTargetArrow: true,
     },
@@ -56,8 +56,8 @@ canvas
   .addNode({ element: node3, x: 600, y: 200, ports: ports3 })
   .addNode({ element: node4, x: 1100, y: 400, ports: ports4 })
   .addNode({ element: node5, x: 1100, y: 550, ports: ports5 })
-  .addConnection({ from: "output-1-1", to: "input-3" })
-  .addConnection({ from: "output-1-2", to: "input-2" })
-  .addConnection({ from: "output-2-1", to: "input-4" })
-  .addConnection({ from: "output-3-1", to: "input-4" })
-  .addConnection({ from: "output-2-2", to: "input-5" });
+  .addEdge({ from: "output-1-1", to: "input-3" })
+  .addEdge({ from: "output-1-2", to: "input-2" })
+  .addEdge({ from: "output-2-1", to: "input-4" })
+  .addEdge({ from: "output-3-1", to: "input-4" })
+  .addEdge({ from: "output-2-2", to: "input-5" });

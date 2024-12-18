@@ -25,7 +25,7 @@ const nodes = new Map<
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes({
     events: {
@@ -74,6 +74,6 @@ nodes.forEach((value, key) => {
 });
 
 canvas
-  .addConnection({ from: "port-1-2", to: "port-2-1" })
-  .addConnection({ from: "port-3-2", to: "port-2-1" })
-  .addConnection({ from: "port-2-2", to: "port-4-1" });
+  .addEdge({ from: "port-1-2", to: "port-2-1" })
+  .addEdge({ from: "port-3-2", to: "port-2-1" })
+  .addEdge({ from: "port-2-2", to: "port-4-1" });

@@ -3,7 +3,7 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -55,5 +55,5 @@ canvas
   .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
   .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addConnection({ id: "con-1", from: "port-1", to: "port-2" })
+  .addEdge({ id: "con-1", from: "port-1", to: "port-2" })
   .patchViewportState({ scale: s, x, y });

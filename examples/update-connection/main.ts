@@ -1,12 +1,9 @@
-import {
-  BezierConnectionController,
-  HtmlGraphBuilder,
-} from "@html-graph/html-graph";
+import { BezierEdgeController, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -37,11 +34,11 @@ canvas
   .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 300, ports: { "port-1": port1 } })
   .addNode({ element: node2, x: 600, y: 500, ports: { "port-2": port2 } })
-  .addConnection({ id: "con-1", from: "port-1", to: "port-2" });
+  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
 
 let i = 0;
 
-const redController = new BezierConnectionController(
+const redController = new BezierEdgeController(
   "red",
   2,
   90,
@@ -51,7 +48,7 @@ const redController = new BezierConnectionController(
   false,
 );
 
-const greenController = new BezierConnectionController(
+const greenController = new BezierEdgeController(
   "green",
   2,
   90,

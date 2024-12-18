@@ -1,5 +1,5 @@
 import {
-  AddConnectionRequest,
+  AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
   PatchViewportRequest,
@@ -133,8 +133,8 @@ export class UserTransformableCanvas implements Canvas {
   ) {
     this.transformation = this.canvas.transformation;
 
-    const minContentScale = this.options?.scale?.minContent ?? null;
-    const maxContentScale = this.options?.scale?.maxContent ?? null;
+    const minContentScale = this.options?.scale?.min ?? null;
+    const maxContentScale = this.options?.scale?.max ?? null;
 
     this.isScalable = this.options?.scale?.enabled !== false;
     this.minViewScale = maxContentScale !== null ? 1 / maxContentScale : null;
@@ -178,8 +178,8 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public updatePortConnections(portId: string): UserTransformableCanvas {
-    this.canvas.updatePortConnections(portId);
+  public updatePortEdges(portId: string): UserTransformableCanvas {
+    this.canvas.updatePortEdges(portId);
 
     return this;
   }
@@ -190,16 +190,14 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public addConnection(
-    connection: AddConnectionRequest,
-  ): UserTransformableCanvas {
-    this.canvas.addConnection(connection);
+  public addEdge(connection: AddEdgeRequest): UserTransformableCanvas {
+    this.canvas.addEdge(connection);
 
     return this;
   }
 
-  public removeConnection(connectionId: string): UserTransformableCanvas {
-    this.canvas.removeConnection(connectionId);
+  public removeEdge(connectionId: string): UserTransformableCanvas {
+    this.canvas.removeEdge(connectionId);
 
     return this;
   }

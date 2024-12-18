@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
 import { LayersMode } from "@/layers";
-import { ConnectionOptions } from "../canvas/connection-options";
+import { EdgeOptions } from "../canvas/edge-options";
 import { BackgroundOptions } from "./background-options";
 
 export interface CoreOptions {
@@ -31,7 +31,7 @@ export interface CoreOptions {
   /**
    *connections related behavior
    */
-  readonly connections?: ConnectionOptions;
+  readonly edges?: EdgeOptions;
 
   /**
    * layers related behavior

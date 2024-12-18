@@ -1,9 +1,9 @@
 import { PortPayload } from "@/port-payload";
-import { ConnectionController } from "../connection-controller";
-import { ConnectionUtils } from "../connection-utils";
+import { EdgeController } from "../edge-controller";
+import { EdgeUtils } from "../edge-utils";
 import { Point } from "../point";
 
-export class CycleSquareConnectionController implements ConnectionController {
+export class CycleCircleEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -12,21 +12,15 @@ export class CycleSquareConnectionController implements ConnectionController {
 
   private readonly arrow: SVGPathElement | null = null;
 
-  private readonly roundness: number;
-
-  private readonly points: readonly Point[];
-
   public constructor(
     private readonly color: string,
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     hasArrow: boolean,
-    private readonly side: number,
-    private readonly minPortOffset: number,
-    roundness: number,
+    private readonly radius: number,
+    private readonly smallRadius: number,
   ) {
-    this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -53,33 +47,6 @@ export class CycleSquareConnectionController implements ConnectionController {
     this.svg.style.overflow = "visible";
     this.svg.style.width = `0px`;
     this.svg.style.height = `0px`;
-
-    const g = this.minPortOffset;
-    const s = this.side;
-    const x1 = this.arrowLength + g;
-    const r = this.roundness;
-    const x1l = x1 - r;
-    const x1m = x1 + r;
-    const y1l = s - r;
-    const x2 = x1 + 2 * s;
-    const x2l = x2 - r;
-
-    console.log(r);
-
-    this.points = [
-      [this.arrowLength, 0],
-      [x1l, 0],
-      [x1, r],
-      [x1, y1l],
-      [x1m, s],
-      [x2l, s],
-      [x2, y1l],
-      [x2, -y1l],
-      [x2l, -s],
-      [x1m, -s],
-      [x1, -y1l],
-      [x1, -r],
-    ];
   }
 
   public update(
@@ -91,36 +58,37 @@ export class CycleSquareConnectionController implements ConnectionController {
   ): void {
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
 
-    const fromVect = ConnectionUtils.getDirectionVector(from.direction, 1, 1);
+    const fromVect = EdgeUtils.getDirectionVector(from.direction, 1, 1);
 
-    const r = this.roundness;
-    const rp = this.points.map((p) =>
-      ConnectionUtils.rotate(p, fromVect, [0, 0]),
-    );
+    const r = this.smallRadius;
+    const R = this.radius;
+    const len = Math.sqrt(r * r + R * R);
+    const g = r + R;
+    const px = this.arrowLength + len * (1 - R / g);
+    const py = (r * R) / g;
+
+    const points: Point[] = [
+      [this.arrowLength, 0],
+      [px, py],
+      [px, -py],
+    ];
+
+    const rp = points.map((p) => EdgeUtils.rotate(p, fromVect, [0, 0]));
 
     const c = [
       `M ${rp[0][0]} ${rp[0][1]}`,
-      `L ${rp[1][0]} ${rp[1][1]}`,
-      `A ${r} ${r} 0 0 1 ${rp[2][0]} ${rp[2][1]}`,
-      `L ${rp[3][0]} ${rp[3][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[4][0]} ${rp[4][1]}`,
-      `L ${rp[5][0]} ${rp[5][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[6][0]} ${rp[6][1]}`,
-      `L ${rp[7][0]} ${rp[7][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[8][0]} ${rp[8][1]}`,
-      `L ${rp[9][0]} ${rp[9][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[10][0]} ${rp[10][1]}`,
-      `L ${rp[11][0]} ${rp[11][1]}`,
       `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
+      `A ${R} ${R} 0 1 0 ${rp[2][0]} ${rp[2][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[0][0]} ${rp[0][1]}`,
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.arrow ? "" : preLine}${c}`;
+    const linePath = `${this.arrow !== null ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);
 
     if (this.arrow) {
-      const arrowPath = ConnectionUtils.getArrowPath(
+      const arrowPath = EdgeUtils.getArrowPath(
         fromVect,
         0,
         0,

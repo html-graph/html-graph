@@ -1,6 +1,6 @@
 import { DiContainer } from "@/di-container";
 import {
-  AddConnectionRequest,
+  AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
   PatchViewportRequest,
@@ -11,8 +11,8 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
-import { resolveConnectionControllerFactory } from "./resolve-connection-controller-factory";
-import { ConnectionControllerFactory } from "@/connections";
+import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
+import { EdgeControllerFactory } from "@/edges";
 
 /**
  * Provides low level API for acting on graph
@@ -22,7 +22,7 @@ export class CanvasCore implements Canvas {
 
   private readonly di: DiContainer;
 
-  private readonly connectionControllerFactory: ConnectionControllerFactory;
+  private readonly connectionControllerFactory: EdgeControllerFactory;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
@@ -36,7 +36,7 @@ export class CanvasCore implements Canvas {
 
     this.transformation = this.di.publicViewportTransformer;
 
-    this.connectionControllerFactory = options.connections.controllerFactory;
+    this.connectionControllerFactory = options.edges.controllerFactory;
   }
 
   public addNode(node: AddNodeRequest): CanvasCore {
@@ -76,7 +76,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updatePortConnections(portId: string): CanvasCore {
+  public updatePortEdges(portId: string): CanvasCore {
     this.di.canvasController.updatePortConnections(portId);
 
     return this;
@@ -88,10 +88,10 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public addConnection(connection: AddConnectionRequest): CanvasCore {
+  public addEdge(connection: AddEdgeRequest): CanvasCore {
     const controllerFactory =
       connection.options !== undefined
-        ? resolveConnectionControllerFactory(connection.options)
+        ? resolveEdgeControllerFactory(connection.options)
         : this.connectionControllerFactory;
 
     this.di.canvasController.addConnection(
@@ -104,7 +104,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public removeConnection(connectionId: string): CanvasCore {
+  public removeEdge(connectionId: string): CanvasCore {
     this.di.canvasController.removeConnection(connectionId);
 
     return this;

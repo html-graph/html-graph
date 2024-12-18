@@ -5,21 +5,21 @@ export {
   UserTransformableCanvas,
 } from "./canvas";
 export {
-  BezierConnectionController,
-  StraightConnectionController,
-  CycleCircleConnectionController,
-  CycleSquareConnectionController,
-  createBezierConnectionControllerFactory,
-  createStraightConnectionControllerFactory,
-  ConnectionUtils,
-} from "./connections";
-export { ConnectionType } from "./connections";
+  BezierEdgeController,
+  StraightEdgeController,
+  CycleCircleEdgeController,
+  CycleSquareEdgeController,
+  createBezierEdgeControllerFactory,
+  createStraightEdgeControllerFactory,
+  EdgeUtils,
+  EdgeType,
+} from "./edges";
 export type {
   Canvas,
   CoreOptions,
   TransformOptions,
   DragOptions,
-  AddConnectionRequest,
+  AddEdgeRequest,
   PatchViewportRequest,
   MarkPortRequest,
   AddNodeRequest,
@@ -31,4 +31,4 @@ export type { NodeResponse, NodeItem } from "./graph-store";
 export type { PublicViewportTransformer } from "./viewport-transformer";
 export type { BackgroundDrawingFn } from "./background";
 export type { PortPayload } from "@/port-payload";
-export type { ConnectionController } from "./connections";
+export type { EdgeController } from "./edges";

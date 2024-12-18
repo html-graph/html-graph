@@ -35,7 +35,7 @@ export class HtmlController {
   private currentZIndex = 0;
 
   private readonly layers: { [key in LayersMode]: LayersController } = {
-    "connections-on-top": {
+    "edges-on-top": {
       create: () => {
         this.host.appendChild(this.nodesContainer);
         this.host.appendChild(this.connectionsContainer);
@@ -50,7 +50,7 @@ export class HtmlController {
         wrapper.style.zIndex = `${this.currentZIndex}`;
       },
     },
-    "connections-follow-node": {
+    "edges-follow-node": {
       create: () => {
         this.host.appendChild(this.nodesContainer);
         this.connectionsContainer = this.nodesContainer;

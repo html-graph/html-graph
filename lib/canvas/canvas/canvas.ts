@@ -1,9 +1,9 @@
 import { PublicViewportTransformer } from "@/viewport-transformer";
-import { AddConnectionRequest } from "./add-connection-request";
+import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { PatchViewportRequest } from "./patch-viewport-request";
-import { UpdateConnectionRequest } from "./update-connection-request";
+import { UpdateConnectionRequest } from "./update-edge-request";
 
 export interface Canvas {
   /**
@@ -19,7 +19,7 @@ export interface Canvas {
   /**
    * removes node from graph
    * all the ports of node get unmarked
-   * all the connections adjacent to node get removed
+   * all the edges adjacent to node get removed
    */
   removeNode(nodeId: string): Canvas;
 
@@ -29,25 +29,25 @@ export interface Canvas {
   markPort(port: MarkPortRequest): Canvas;
 
   /**
-   * updates connections attached to port
+   * updates edge attached to port
    */
-  updatePortConnections(portId: string): Canvas;
+  updatePortEdges(portId: string): Canvas;
 
   /**
    * ummarks element as port of node
-   * all the connections adjacent to port get removed
+   * all the edges adjacent to port get removed
    */
   unmarkPort(portId: string): Canvas;
 
   /**
-   * adds connection to graph
+   * adds edge to graph
    */
-  addConnection(connection: AddConnectionRequest): Canvas;
+  addEdge(edge: AddEdgeRequest): Canvas;
 
   /**
-   * removes connection from graph
+   * removes edge from graph
    */
-  removeConnection(connectionId: string): Canvas;
+  removeEdge(edgeId: string): Canvas;
 
   /**
    * applies transformation for viewport
@@ -65,12 +65,9 @@ export interface Canvas {
   updateNodeCoordinates(nodeId: string, x: number, y: number): Canvas;
 
   /**
-   * updates connection
+   * updates edge
    */
-  updateConnection(
-    connectionId: string,
-    request: UpdateConnectionRequest,
-  ): Canvas;
+  updateConnection(edgeId: string, request: UpdateConnectionRequest): Canvas;
 
   /**
    * moves specified node on top

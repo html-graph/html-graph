@@ -2,6 +2,7 @@
 
 - straight connection roundness
 - straight connections node drag bug
+- rename connection to edge
 - horizontal straight connections
 - assign layer behavior to connection
 - connection hover behavior

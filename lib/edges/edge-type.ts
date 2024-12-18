@@ -1,4 +1,4 @@
-export enum ConnectionType {
+export enum EdgeType {
   Regular = "regular",
   Cycle = "cycle",
 }

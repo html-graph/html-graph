@@ -1,12 +1,12 @@
-export interface StraightConnectionOptions {
-  readonly type: "straight";
+export interface BezierEdgeOptions {
+  readonly type?: "bezier";
   readonly color?: string;
   readonly width?: number;
+  readonly curvature?: number;
   readonly arrowLength?: number;
   readonly arrowWidth?: number;
-  readonly minPortOffset?: number;
   readonly hasSourceArrow?: boolean;
   readonly hasTargetArrow?: boolean;
-  readonly cycleSquareSide?: number;
-  readonly roundness?: number;
+  readonly cycleRadius?: number;
+  readonly smallCycleRadius?: number;
 }

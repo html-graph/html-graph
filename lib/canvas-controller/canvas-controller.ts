@@ -1,9 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import {
-  ConnectionController,
-  ConnectionControllerFactory,
-  ConnectionType,
-} from "@/connections";
+import { EdgeController, EdgeControllerFactory, EdgeType } from "@/edges";
 import { MarkNodePortRequest } from "@/canvas/canvas";
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
@@ -134,7 +130,7 @@ export class CanvasController {
     connectionId: string | undefined,
     fromPortId: string,
     toPortId: string,
-    controllerFactory: ConnectionControllerFactory,
+    controllerFactory: EdgeControllerFactory,
   ): void {
     if (connectionId === undefined) {
       do {
@@ -149,10 +145,10 @@ export class CanvasController {
       throw new Error("failed to add connection to nonexisting port");
     }
 
-    let connectionType = ConnectionType.Regular;
+    let connectionType = EdgeType.Regular;
 
     if (fromPortId === toPortId) {
-      connectionType = ConnectionType.Cycle;
+      connectionType = EdgeType.Cycle;
     }
 
     this.graphStore.addConnection(
@@ -232,7 +228,7 @@ export class CanvasController {
 
   public updateConnectionController(
     connectionId: string,
-    controller: ConnectionController,
+    controller: EdgeController,
   ): void {
     if (!this.graphStore.hasConnection(connectionId)) {
       throw new Error("failed to update nonexisting connection");

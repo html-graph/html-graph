@@ -1,8 +1,8 @@
 import { PortPayload } from "@/port-payload";
-import { ConnectionController } from "../connection-controller";
-import { ConnectionUtils } from "../connection-utils";
+import { EdgeController } from "../edge-controller";
+import { EdgeUtils } from "../edge-utils";
 
-export class BezierConnectionController implements ConnectionController {
+export class BezierEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -69,57 +69,45 @@ export class BezierConnectionController implements ConnectionController {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
 
-    const fromCenter = ConnectionUtils.getPortCenter(from);
-    const toCenter = ConnectionUtils.getPortCenter(to);
+    const fromCenter = EdgeUtils.getPortCenter(from);
+    const toCenter = EdgeUtils.getPortCenter(to);
     const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
     const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
 
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = ConnectionUtils.getDirectionVector(
-      from.direction,
-      flipX,
-      flipY,
-    );
-    const toVect = ConnectionUtils.getDirectionVector(
-      to.direction,
-      flipX,
-      flipY,
-    );
+    const fromVect = EdgeUtils.getDirectionVector(from.direction, flipX, flipY);
+    const toVect = EdgeUtils.getDirectionVector(to.direction, flipX, flipY);
 
-    const pointBegin = ConnectionUtils.rotate(
-      [this.arrowLength, 0],
-      fromVect,
-      [0, 0],
-    );
+    const pb = EdgeUtils.rotate([this.arrowLength, 0], fromVect, [0, 0]);
 
-    const pointEnd = ConnectionUtils.rotate(
-      [width - this.arrowLength, height],
-      toVect,
-      [width, height],
-    );
+    const pe = EdgeUtils.rotate([width - this.arrowLength, height], toVect, [
+      width,
+      height,
+    ]);
 
     const bpb = [
-      pointBegin[0] + fromVect[0] * this.curvature,
-      pointBegin[1] + fromVect[1] * this.curvature,
+      pb[0] + fromVect[0] * this.curvature,
+      pb[1] + fromVect[1] * this.curvature,
     ];
 
     const bpe = [
-      pointEnd[0] - toVect[0] * this.curvature,
-      pointEnd[1] - toVect[1] * this.curvature,
+      pe[0] - toVect[0] * this.curvature,
+      pe[1] - toVect[1] * this.curvature,
     ];
 
-    const lmove = `M ${pointBegin[0]} ${pointBegin[1]}`;
-    const lcurve = `C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pointEnd[0]} ${pointEnd[1]}`;
-    const preLine = `M ${0} ${0} L ${pointBegin[0]} ${pointBegin[1]} `;
-    const postLine = ` M ${pointEnd[0]} ${pointEnd[1]} L ${width} ${height}`;
-    const linePath = `${this.sourceArrow ? "" : preLine}${lmove} ${lcurve}${this.targetArrow ? "" : postLine}`;
+    const lcurve = `M ${pb[0]} ${pb[1]} C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pe[0]} ${pe[1]}`;
+    const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
+    const postLine = this.targetArrow
+      ? ""
+      : ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
+    const linePath = `${preLine}${lcurve}${postLine}`;
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = ConnectionUtils.getArrowPath(
+      const arrowPath = EdgeUtils.getArrowPath(
         fromVect,
         0,
         0,
@@ -131,7 +119,7 @@ export class BezierConnectionController implements ConnectionController {
     }
 
     if (this.targetArrow) {
-      const arrowPath = ConnectionUtils.getArrowPath(
+      const arrowPath = EdgeUtils.getArrowPath(
         toVect,
         width,
         height,

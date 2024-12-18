@@ -1,18 +1,18 @@
 import {
-  ConnectionControllerFactory,
-  createBezierConnectionControllerFactory,
-  createStraightConnectionControllerFactory,
-} from "@/connections";
-import { ConnectionOptions } from "../canvas/connection-options";
+  EdgeControllerFactory,
+  createBezierEdgeControllerFactory,
+  createStraightEdgeControllerFactory,
+} from "@/edges";
+import { EdgeOptions } from "../canvas/edge-options";
 
-export const resolveConnectionControllerFactory: (
-  options: ConnectionOptions,
-) => ConnectionControllerFactory = (options: ConnectionOptions) => {
+export const resolveEdgeControllerFactory: (
+  options: EdgeOptions,
+) => EdgeControllerFactory = (options: EdgeOptions) => {
   switch (options?.type) {
     case "custom":
       return options.controllerFactory;
     case "straight":
-      return createStraightConnectionControllerFactory({
+      return createStraightEdgeControllerFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         arrowLength: options.arrowLength ?? 15,
@@ -24,7 +24,7 @@ export const resolveConnectionControllerFactory: (
         roundness: options.roundness ?? 5,
       });
     default:
-      return createBezierConnectionControllerFactory({
+      return createBezierEdgeControllerFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         curvature: options.curvature ?? 90,

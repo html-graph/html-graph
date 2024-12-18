@@ -1,15 +1,15 @@
 import {
   MarkNodePortRequest,
-  BezierConnectionController,
+  BezierEdgeController,
   HtmlGraphBuilder,
   PortPayload,
-  ConnectionController,
+  EdgeController,
 } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    connections: { hasTargetArrow: true },
+    edges: { hasTargetArrow: true },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -39,8 +39,8 @@ function createNode(
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
 const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
 
-class CustomConnectionController implements ConnectionController {
-  private controller = new BezierConnectionController(
+class CustomEdgeController implements EdgeController {
+  private controller = new BezierEdgeController(
     "#5c5c5c",
     1,
     90,
@@ -104,11 +104,11 @@ canvas
   .attach(canvasElement)
   .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
   .addNode({ element: node2, x: 470, y: 600, ports: ports2 })
-  .addConnection({
+  .addEdge({
     from: "port-1-2",
     to: "port-2-1",
     options: {
       type: "custom",
-      controllerFactory: () => new CustomConnectionController("Connection 1"),
+      controllerFactory: () => new CustomEdgeController("Connection 1"),
     },
   });

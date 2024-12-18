@@ -27,7 +27,6 @@ Use node version 20
 
 ```
 npm install
-
 npm run start
 ```
 

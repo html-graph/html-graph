@@ -1,7 +1,7 @@
 import { PortPayload } from "@/port-payload";
 import { Point } from "./point";
 
-export class ConnectionUtils {
+export class EdgeUtils {
   public static getPortCenter(port: PortPayload): Point {
     const { top, left, width, height } = port.element.getBoundingClientRect();
 
@@ -91,5 +91,9 @@ export class ConnectionUtils {
       .map((p) => [p[0] + shiftX, p[1] + shiftY]);
 
     return `M ${p[0][0]} ${p[0][1]} L ${p[1][0]} ${p[1][1]}`;
+  }
+
+  public static createStraightPath(ps: Point[]): string {
+    return ps.map((p, i) => `${i === 0 ? "M" : "L"} ${p[0]} ${p[1]}`).join(" ");
   }
 }

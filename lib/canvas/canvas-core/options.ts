@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { ConnectionControllerFactory } from "@/connections";
+import { EdgeControllerFactory } from "@/edges";
 import { LayersMode } from "@/layers";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 
@@ -16,8 +16,8 @@ export interface Options {
   readonly ports: {
     readonly centerFn: CenterFn;
   };
-  readonly connections: {
-    readonly controllerFactory: ConnectionControllerFactory;
+  readonly edges: {
+    readonly controllerFactory: EdgeControllerFactory;
   };
   readonly layers: {
     readonly mode: LayersMode;

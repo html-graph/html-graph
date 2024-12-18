@@ -2,7 +2,7 @@ import { standardCenterFn } from "@/center-fn";
 import { CoreOptions } from "./core-options";
 import { Options } from "./options";
 import { resolveBackgroundDrawingFn } from "./resolve-background-drawing-fn";
-import { resolveConnectionControllerFactory } from "./resolve-connection-controller-factory";
+import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
 
 export const createOptions: (apiOptions: CoreOptions) => Options = (
   apiOptions: CoreOptions,
@@ -19,13 +19,11 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
     ports: {
       centerFn: apiOptions.ports?.centerFn ?? standardCenterFn,
     },
-    connections: {
-      controllerFactory: resolveConnectionControllerFactory(
-        apiOptions.connections ?? {},
-      ),
+    edges: {
+      controllerFactory: resolveEdgeControllerFactory(apiOptions.edges ?? {}),
     },
     layers: {
-      mode: apiOptions.layers?.mode ?? "connections-follow-node",
+      mode: apiOptions.layers?.mode ?? "edges-follow-node",
     },
   };
 };

@@ -59,7 +59,7 @@ class NodesDragHandler {
     const canvas = new HtmlGraphBuilder()
       .setOptions({
         background: { type: "dots" },
-        connections: { hasTargetArrow: true },
+        edges: { hasTargetArrow: true },
       })
       .build();
 
@@ -87,9 +87,9 @@ class NodesDragHandler {
     });
 
     canvas
-      .addConnection({ from: "port-1-2", to: "port-2-1" })
-      .addConnection({ from: "port-3-2", to: "port-2-1" })
-      .addConnection({ from: "port-2-2", to: "port-4-1" });
+      .addEdge({ from: "port-1-2", to: "port-2-1" })
+      .addEdge({ from: "port-3-2", to: "port-2-1" })
+      .addEdge({ from: "port-2-2", to: "port-4-1" });
 
     element.addEventListener("mousemove", (event: MouseEvent) => {
       if (this.grabbedNode !== null) {

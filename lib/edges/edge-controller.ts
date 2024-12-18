@@ -1,6 +1,6 @@
 import { PortPayload } from "@/port-payload";
 
-export interface ConnectionController {
+export interface EdgeController {
   readonly svg: SVGSVGElement;
 
   update(
