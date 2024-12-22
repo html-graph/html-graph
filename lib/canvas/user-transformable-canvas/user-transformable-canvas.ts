@@ -190,14 +190,14 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public addEdge(connection: AddEdgeRequest): UserTransformableCanvas {
-    this.canvas.addEdge(connection);
+  public addEdge(edge: AddEdgeRequest): UserTransformableCanvas {
+    this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public removeEdge(connectionId: string): UserTransformableCanvas {
-    this.canvas.removeEdge(connectionId);
+  public removeEdge(edgeId: string): UserTransformableCanvas {
+    this.canvas.removeEdge(edgeId);
 
     return this;
   }
@@ -227,10 +227,10 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   public updateEdge(
-    connectionId: string,
+    edgeId: string,
     request: UpdateEdgeRequest,
   ): UserTransformableCanvas {
-    this.canvas.updateEdge(connectionId, request);
+    this.canvas.updateEdge(edgeId, request);
 
     return this;
   }

@@ -11,7 +11,7 @@ export class CanvasController {
 
   private readonly portIdGenerator = new IdGenerator();
 
-  private readonly connectionIdGenerator = new IdGenerator();
+  private readonly edgeIdGenerator = new IdGenerator();
 
   public constructor(
     private readonly graphStore: GraphStore,
@@ -104,12 +104,12 @@ export class CanvasController {
     );
   }
 
-  public updatePortConnections(portId: string): void {
+  public updatePortEdge(portId: string): void {
     if (!this.graphStore.hasPort(portId)) {
       throw new Error("failed to unset nonexisting port");
     }
 
-    this.htmlController.updatePortConnections(portId);
+    this.htmlController.updatePortEdges(portId);
   }
 
   public unmarkPort(portId: string): void {
@@ -117,57 +117,55 @@ export class CanvasController {
       throw new Error("failed to unset nonexisting port");
     }
 
-    this.graphStore
-      .getPortAdjacentConnections(portId)
-      .forEach((connectionId) => {
-        this.removeConnection(connectionId);
-      });
+    this.graphStore.getPortAdjacentEdgess(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
 
     this.graphStore.removePort(portId);
   }
 
-  public addConnection(
-    connectionId: string | undefined,
+  public addEdge(
+    edgeId: string | undefined,
     fromPortId: string,
     toPortId: string,
     controllerFactory: EdgeControllerFactory,
   ): void {
-    if (connectionId === undefined) {
+    if (edgeId === undefined) {
       do {
-        connectionId = this.connectionIdGenerator.next();
-      } while (this.graphStore.hasConnection(connectionId));
+        edgeId = this.edgeIdGenerator.next();
+      } while (this.graphStore.hasEdge(edgeId));
     }
     if (!this.graphStore.hasPort(fromPortId)) {
-      throw new Error("failed to add connection from nonexisting port");
+      throw new Error("failed to add edge from nonexisting port");
     }
 
     if (!this.graphStore.hasPort(toPortId)) {
-      throw new Error("failed to add connection to nonexisting port");
+      throw new Error("failed to add edge to nonexisting port");
     }
 
-    let connectionType = EdgeType.Regular;
+    let edgeType = EdgeType.Regular;
 
     if (fromPortId === toPortId) {
-      connectionType = EdgeType.Cycle;
+      edgeType = EdgeType.Cycle;
     }
 
-    this.graphStore.addConnection(
-      connectionId,
+    this.graphStore.addEdge(
+      edgeId,
       fromPortId,
       toPortId,
-      controllerFactory(connectionType),
+      controllerFactory(edgeType),
     );
 
-    this.htmlController.attachConnection(connectionId);
+    this.htmlController.attachEdge(edgeId);
   }
 
-  public removeConnection(connectionId: string): void {
-    if (!this.graphStore.hasConnection(connectionId)) {
-      throw new Error("failed to remove nonexisting connection");
+  public removeEdge(edgeId: string): void {
+    if (!this.graphStore.hasEdge(edgeId)) {
+      throw new Error("failed to remove nonexisting edge");
     }
 
-    this.htmlController.detachConnection(connectionId);
-    this.graphStore.removeConnection(connectionId);
+    this.htmlController.detachEdge(edgeId);
+    this.graphStore.removeEdge(edgeId);
   }
 
   public removeNode(nodeId: string): void {
@@ -226,17 +224,17 @@ export class CanvasController {
     this.htmlController.updateNodeCoordinates(nodeId);
   }
 
-  public updateConnectionController(
-    connectionId: string,
+  public updateEdgeController(
+    edgeId: string,
     controller: EdgeController,
   ): void {
-    if (!this.graphStore.hasConnection(connectionId)) {
-      throw new Error("failed to update nonexisting connection");
+    if (!this.graphStore.hasEdge(edgeId)) {
+      throw new Error("failed to update nonexisting edge");
     }
 
-    this.htmlController.detachConnection(connectionId);
-    this.graphStore.updateConnectionController(connectionId, controller);
-    this.htmlController.attachConnection(connectionId);
+    this.htmlController.detachEdge(edgeId);
+    this.graphStore.updateEdgeController(edgeId, controller);
+    this.htmlController.attachEdge(edgeId);
   }
 
   public attach(element: HTMLElement): void {
@@ -252,7 +250,7 @@ export class CanvasController {
     this.graphStore.clear();
     this.nodeIdGenerator.reset();
     this.portIdGenerator.reset();
-    this.connectionIdGenerator.reset();
+    this.edgeIdGenerator.reset();
   }
 
   public destroy(): void {

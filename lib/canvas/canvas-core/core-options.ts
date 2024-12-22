@@ -24,12 +24,12 @@ export interface CoreOptions {
   readonly ports?: {
     /**
      * specifies how to determine center of port
-     * center of port determines point to which connection attaches
+     * center of port determines point to which edge attaches
      */
     readonly centerFn?: CenterFn;
   };
   /**
-   *connections related behavior
+   *edges related behavior
    */
   readonly edges?: EdgeOptions;
 

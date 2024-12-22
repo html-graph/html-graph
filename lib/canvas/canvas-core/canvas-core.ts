@@ -22,7 +22,7 @@ export class CanvasCore implements Canvas {
 
   private readonly di: DiContainer;
 
-  private readonly connectionControllerFactory: EdgeControllerFactory;
+  private readonly edgeControllerFactory: EdgeControllerFactory;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
@@ -36,7 +36,7 @@ export class CanvasCore implements Canvas {
 
     this.transformation = this.di.publicViewportTransformer;
 
-    this.connectionControllerFactory = options.edges.controllerFactory;
+    this.edgeControllerFactory = options.edges.controllerFactory;
   }
 
   public addNode(node: AddNodeRequest): CanvasCore {
@@ -77,7 +77,7 @@ export class CanvasCore implements Canvas {
   }
 
   public updatePortEdges(portId: string): CanvasCore {
-    this.di.canvasController.updatePortConnections(portId);
+    this.di.canvasController.updatePortEdge(portId);
 
     return this;
   }
@@ -88,24 +88,24 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public addEdge(connection: AddEdgeRequest): CanvasCore {
+  public addEdge(edge: AddEdgeRequest): CanvasCore {
     const controllerFactory =
-      connection.options !== undefined
-        ? resolveEdgeControllerFactory(connection.options)
-        : this.connectionControllerFactory;
+      edge.options !== undefined
+        ? resolveEdgeControllerFactory(edge.options)
+        : this.edgeControllerFactory;
 
-    this.di.canvasController.addConnection(
-      connection.id,
-      connection.from,
-      connection.to,
+    this.di.canvasController.addEdge(
+      edge.id,
+      edge.from,
+      edge.to,
       controllerFactory,
     );
 
     return this;
   }
 
-  public removeEdge(connectionId: string): CanvasCore {
-    this.di.canvasController.removeConnection(connectionId);
+  public removeEdge(edgeId: string): CanvasCore {
+    this.di.canvasController.removeEdge(edgeId);
 
     return this;
   }
@@ -136,15 +136,9 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateEdge(
-    connectionId: string,
-    request: UpdateEdgeRequest,
-  ): CanvasCore {
+  public updateEdge(edgeId: string, request: UpdateEdgeRequest): CanvasCore {
     if (request.controller !== undefined) {
-      this.di.canvasController.updateConnectionController(
-        connectionId,
-        request.controller,
-      );
+      this.di.canvasController.updateEdgeController(edgeId, request.controller);
     }
 
     return this;

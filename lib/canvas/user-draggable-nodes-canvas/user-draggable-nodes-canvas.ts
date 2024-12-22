@@ -216,14 +216,14 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public addEdge(connection: AddEdgeRequest): UserDraggableNodesCanvas {
-    this.canvas.addEdge(connection);
+  public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
+    this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public removeEdge(connectionId: string): UserDraggableNodesCanvas {
-    this.canvas.removeEdge(connectionId);
+  public removeEdge(edgeId: string): UserDraggableNodesCanvas {
+    this.canvas.removeEdge(edgeId);
 
     return this;
   }
@@ -253,10 +253,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public updateEdge(
-    connectionId: string,
+    edgeId: string,
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.updateEdge(connectionId, request);
+    this.canvas.updateEdge(edgeId, request);
 
     return this;
   }

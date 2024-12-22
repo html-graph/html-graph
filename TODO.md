@@ -1,10 +1,10 @@
 # TODO
 
-- straight connection roundness
-- straight connections node drag bug
-- horizontal straight connections
-- assign layer behavior to connection
-- connection hover behavior
+- straight edge roundness
+- straight edges node drag bug
+- horizontal straight edges
+- assign layer behavior to edge
+- edge hover behavior
 - same node cycle
 - move to nodes autoscale
 - move to nodes smooth
@@ -12,7 +12,7 @@
 - move and drag cursor customization
 - number | string node id and port id
 - virtual scroll
-- drag connection creation
+- drag edge creation
 - node drag handle example
 - snap nodes to grid
 - unit tests

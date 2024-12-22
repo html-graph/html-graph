@@ -14,7 +14,7 @@ export class HtmlController {
 
   private readonly nodesContainer: HTMLElement;
 
-  private connectionsContainer: HTMLElement;
+  private edgesContainer: HTMLElement;
 
   private readonly canvas: HTMLCanvasElement;
 
@@ -30,7 +30,7 @@ export class HtmlController {
 
   private readonly nodeIdToWrapperElementMap = new Map<string, HTMLElement>();
 
-  private readonly connectionIdToElementMap = new Map<string, SVGSVGElement>();
+  private readonly edgeIdToElementMap = new Map<string, SVGSVGElement>();
 
   private currentZIndex = 0;
 
@@ -38,11 +38,11 @@ export class HtmlController {
     "edges-on-top": {
       create: () => {
         this.host.appendChild(this.nodesContainer);
-        this.host.appendChild(this.connectionsContainer);
+        this.host.appendChild(this.edgesContainer);
       },
       update: (sv: number, xv: number, yv: number) => {
         this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
-        this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+        this.edgesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
       },
       moveOnTop: (nodeId: string) => {
         this.currentZIndex += 1;
@@ -53,7 +53,7 @@ export class HtmlController {
     "edges-follow-node": {
       create: () => {
         this.host.appendChild(this.nodesContainer);
-        this.connectionsContainer = this.nodesContainer;
+        this.edgesContainer = this.nodesContainer;
       },
       update: (sv: number, xv: number, yv: number) => {
         this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
@@ -62,21 +62,21 @@ export class HtmlController {
         const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
         this.currentZIndex += 2;
         wrapper.style.zIndex = `${this.currentZIndex}`;
-        const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
-        connections.forEach((connection) => {
-          this.connectionIdToElementMap.get(connection)!.style.zIndex =
+        const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
+        edges.forEach((edge) => {
+          this.edgeIdToElementMap.get(edge)!.style.zIndex =
             `${this.currentZIndex - 1}`;
         });
       },
     },
     "nodes-on-top": {
       create: () => {
-        this.host.appendChild(this.connectionsContainer);
+        this.host.appendChild(this.edgesContainer);
         this.host.appendChild(this.nodesContainer);
       },
       update: (sv: number, xv: number, yv: number) => {
         this.nodesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
-        this.connectionsContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+        this.edgesContainer.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
       },
       moveOnTop: (nodeId: string) => {
         this.currentZIndex += 1;
@@ -96,7 +96,7 @@ export class HtmlController {
     this.host = this.createHost();
     this.canvas = this.createCanvas();
     this.nodesContainer = this.createNodesContainer();
-    this.connectionsContainer = this.createConnectionsContainer();
+    this.edgesContainer = this.createEdgesContainer();
 
     const context = this.canvas.getContext("2d");
 
@@ -117,8 +117,8 @@ export class HtmlController {
   }
 
   public clear(): void {
-    Array.from(this.connectionIdToElementMap.keys()).forEach((connectionId) => {
-      this.detachConnection(connectionId);
+    Array.from(this.edgeIdToElementMap.keys()).forEach((edgeId) => {
+      this.detachEdge(edgeId);
     });
 
     Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
@@ -144,7 +144,7 @@ export class HtmlController {
     this.hostResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.canvas);
-    this.host.removeChild(this.connectionsContainer);
+    this.host.removeChild(this.edgesContainer);
     this.host.removeChild(this.nodesContainer);
 
     if (this.canvasWrapper !== null) {
@@ -201,9 +201,9 @@ export class HtmlController {
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
-  public attachConnection(connectionId: string): void {
-    const connection = this.graphStore.getConnection(connectionId);
-    const element = connection.controller.svg;
+  public attachEdge(edgeId: string): void {
+    const edge = this.graphStore.getEdge(edgeId);
+    const element = edge.controller.svg;
 
     element.style.transformOrigin = "50% 50%";
     element.style.position = "absolute";
@@ -212,17 +212,17 @@ export class HtmlController {
     element.style.zIndex = `${this.currentZIndex}`;
     this.currentZIndex += 1;
 
-    this.connectionIdToElementMap.set(connectionId, element);
+    this.edgeIdToElementMap.set(edgeId, element);
 
-    this.updateConnectionCoords(connectionId);
+    this.updateEdgeCoords(edgeId);
 
-    this.connectionsContainer.appendChild(element);
+    this.edgesContainer.appendChild(element);
   }
 
-  public detachConnection(connectionId: string): void {
-    const element = this.connectionIdToElementMap.get(connectionId);
-    this.connectionIdToElementMap.delete(connectionId);
-    this.connectionsContainer.removeChild(element!);
+  public detachEdge(edgeId: string): void {
+    const element = this.edgeIdToElementMap.get(edgeId);
+    this.edgeIdToElementMap.delete(edgeId);
+    this.edgesContainer.removeChild(element!);
   }
 
   public moveNodeOnTop(nodeId: string): void {
@@ -231,20 +231,20 @@ export class HtmlController {
 
   public updateNodeCoordinates(nodeId: string): void {
     const node = this.graphStore.getNode(nodeId);
-    const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
+    const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
 
     this.updateNodeCoords(nodeId, node.x, node.y);
 
-    connections.forEach((connection) => {
-      this.updateConnectionCoords(connection);
+    edges.forEach((edge) => {
+      this.updateEdgeCoords(edge);
     });
   }
 
-  public updatePortConnections(portId: string): void {
-    const connections = this.graphStore.getPortAdjacentConnections(portId);
+  public updatePortEdges(portId: string): void {
+    const edges = this.graphStore.getPortAdjacentEdgess(portId);
 
-    connections.forEach((connection) => {
-      this.updateConnectionCoords(connection);
+    edges.forEach((edge) => {
+      this.updateEdgeCoords(edge);
     });
   }
 
@@ -286,7 +286,7 @@ export class HtmlController {
     return nodesContainer;
   }
 
-  private createConnectionsContainer(): HTMLDivElement {
+  private createEdgesContainer(): HTMLDivElement {
     const edgesContainer = document.createElement("div");
 
     edgesContainer.style.position = "absolute";
@@ -315,10 +315,10 @@ export class HtmlController {
 
         this.updateNodeCoords(nodeId, node.x, node.y);
 
-        const connections = this.graphStore.getNodeAdjacentConnections(nodeId);
+        const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
 
-        connections.forEach((connection) => {
-          this.updateConnectionCoords(connection);
+        edges.forEach((edge) => {
+          this.updateEdgeCoords(edge);
         });
       });
     });
@@ -341,10 +341,10 @@ export class HtmlController {
     wrapper.style.transform = `matrix(1, 0, 0, 1, ${x - sa * centerX}, ${y - sa * centerY})`;
   }
 
-  private updateConnectionCoords(connectionId: string): void {
-    const connection = this.graphStore.getConnection(connectionId);
-    const portFrom = this.graphStore.getPort(connection.from);
-    const portTo = this.graphStore.getPort(connection.to);
+  private updateEdgeCoords(edgeId: string): void {
+    const edge = this.graphStore.getEdge(edgeId);
+    const portFrom = this.graphStore.getPort(edge.from);
+    const portTo = this.graphStore.getPort(edge.to);
 
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
@@ -382,6 +382,6 @@ export class HtmlController {
     const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
     const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
 
-    connection.controller.update(x, y, width, height, portFrom, portTo);
+    edge.controller.update(x, y, width, height, portFrom, portTo);
   }
 }
