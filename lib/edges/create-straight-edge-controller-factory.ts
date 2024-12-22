@@ -8,7 +8,7 @@ export const createStraightEdgeControllerFactory: (options: {
   width: number;
   arrowLength: number;
   arrowWidth: number;
-  minPortOffset: number;
+  arrowOffset: number;
   hasSourceArrow: boolean;
   hasTargetArrow: boolean;
   cycleSquareSide: number;
@@ -23,7 +23,7 @@ export const createStraightEdgeControllerFactory: (options: {
         options.arrowWidth,
         options.hasSourceArrow || options.hasTargetArrow,
         options.cycleSquareSide,
-        options.minPortOffset,
+        options.arrowOffset,
         options.roundness,
       );
     }
@@ -34,7 +34,7 @@ export const createStraightEdgeControllerFactory: (options: {
     options.width,
     options.arrowLength,
     options.arrowWidth,
-    options.minPortOffset,
+    options.arrowOffset,
     options.hasSourceArrow,
     options.hasTargetArrow,
     options.roundness,

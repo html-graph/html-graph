@@ -20,12 +20,12 @@ export class StraightEdgeController implements EdgeController {
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
-    private readonly minPortOffset: number,
+    private readonly arrowOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
     roundness: number,
   ) {
-    this.roundness = Math.min(this.minPortOffset, roundness);
+    this.roundness = Math.min(this.arrowOffset, roundness);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -82,53 +82,51 @@ export class StraightEdgeController implements EdgeController {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = EdgeUtils.getDirectionVector(from.direction, flipX, flipY);
-
     const toVect = EdgeUtils.getDirectionVector(to.direction, flipX, flipY);
 
-    console.log(this.roundness);
-
-    const gap = this.arrowLength + this.minPortOffset;
-    const pb = EdgeUtils.rotate([gap, 0], fromVect, [0, 0]);
-    const pe = EdgeUtils.rotate([width - gap, height], toVect, [width, height]);
-
-    const [cx, cy] = [width / 2, height / 2];
-    const isOverflown = flipX * (pe[0] - pb[0]) > 0;
-
-    const line = isOverflown
-      ? EdgeUtils.createStraightPath([
-          [pb[0], pb[1]],
-          [cx, pb[1]],
-          [cx, pe[1]],
-          [pe[0], pe[1]],
+    const pba = this.sourceArrow
+      ? EdgeUtils.rotate([this.arrowLength, 0], fromVect, [0, 0])
+      : [0, 0];
+    const pea = this.targetArrow
+      ? EdgeUtils.rotate([width - this.arrowLength, height], toVect, [
+          width,
+          height,
         ])
-      : EdgeUtils.createStraightPath([
-          [pb[0], pb[1]],
-          [pb[0], cy],
-          [pe[0], cy],
-          [pe[0], pe[1]],
-        ]);
+      : [width, height];
 
-    const preOffsetLine = EdgeUtils.getArrowOffsetPath(
-      fromVect,
-      0,
-      0,
-      this.arrowLength,
-      this.minPortOffset,
-    );
-    const postOffsetLine = EdgeUtils.getArrowOffsetPath(
-      toVect,
+    const gap1 = this.arrowLength + this.arrowOffset;
+    const gap3 = gap1 - this.roundness;
+    const gwidth = width - gap1 * 2 * flipX;
+    const maxRoundness = Math.sqrt(gwidth * gwidth + height * height) / 2;
+    const realRoundness = Math.min(this.roundness, maxRoundness);
+
+    const pb1 = EdgeUtils.rotate([gap3, 0], fromVect, [0, 0]);
+    const pe1 = EdgeUtils.rotate([width - gap3, height], toVect, [
       width,
       height,
-      -this.arrowLength,
-      -this.minPortOffset,
-    );
+    ]);
 
-    const preLine = `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
-    const postLine = ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
-    const pre = this.sourceArrow ? preOffsetLine : preLine;
-    const post = this.targetArrow ? postOffsetLine : postLine;
+    const pb2 = EdgeUtils.rotate([gap1, 0], fromVect, [0, 0]);
+    const pe2 = EdgeUtils.rotate([width - gap1, height], toVect, [
+      width,
+      height,
+    ]);
 
-    const linePath = `${pre}${line}${post}`;
+    const dw2 = (pe2[0] - pb2[0]) / 2;
+    const dh2 = (pe2[1] - pb2[1]) / 2;
+    const m = realRoundness / maxRoundness;
+
+    const pb3 = [pb2[0] + dw2 * m, pb2[1] + dh2 * m];
+    const pe3 = [pe2[0] - dw2 * m, pe2[1] - dh2 * m];
+
+    const linePath = [
+      `M ${pba[0]} ${pba[1]}`,
+      `L ${pb1[0]} ${pb1[1]}`,
+      `C ${pb2[0]} ${pb2[1]} ${pb2[0]} ${pb2[1]} ${pb3[0]} ${pb3[1]}`,
+      `L ${pe3[0]} ${pe3[1]}`,
+      `C ${pe2[0]} ${pe2[1]} ${pe2[0]} ${pe2[1]} ${pe1[0]} ${pe1[1]}`,
+      `L ${pea[0]} ${pea[1]}`,
+    ].join(" ");
 
     this.line.setAttribute("d", linePath);
 

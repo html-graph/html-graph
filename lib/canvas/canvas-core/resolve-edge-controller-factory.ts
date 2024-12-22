@@ -17,7 +17,7 @@ export const resolveEdgeControllerFactory: (
         width: options.width ?? 1,
         arrowLength: options.arrowLength ?? 15,
         arrowWidth: options.arrowWidth ?? 4,
-        minPortOffset: options.minPortOffset ?? 15,
+        arrowOffset: options.arrowOffset ?? 15,
         hasSourceArrow: options.hasSourceArrow ?? false,
         hasTargetArrow: options.hasTargetArrow ?? false,
         cycleSquareSide: options.cycleSquareSide ?? 30,

@@ -77,7 +77,7 @@ export class CanvasCore implements Canvas {
   }
 
   public updatePortEdges(portId: string): CanvasCore {
-    this.di.canvasController.updatePortEdge(portId);
+    this.di.canvasController.updatePortEdges(portId);
 
     return this;
   }

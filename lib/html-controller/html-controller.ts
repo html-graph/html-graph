@@ -241,7 +241,7 @@ export class HtmlController {
   }
 
   public updatePortEdges(portId: string): void {
-    const edges = this.graphStore.getPortAdjacentEdgess(portId);
+    const edges = this.graphStore.getPortAdjacentEdges(portId);
 
     edges.forEach((edge) => {
       this.updateEdgeCoords(edge);

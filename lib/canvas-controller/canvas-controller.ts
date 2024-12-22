@@ -104,7 +104,7 @@ export class CanvasController {
     );
   }
 
-  public updatePortEdge(portId: string): void {
+  public updatePortEdges(portId: string): void {
     if (!this.graphStore.hasPort(portId)) {
       throw new Error("failed to unset nonexisting port");
     }
@@ -117,7 +117,7 @@ export class CanvasController {
       throw new Error("failed to unset nonexisting port");
     }
 
-    this.graphStore.getPortAdjacentEdgess(portId).forEach((edgeId) => {
+    this.graphStore.getPortAdjacentEdges(portId).forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
 

@@ -25,10 +25,6 @@ export class GraphStore {
   private cycleEdges: Record<string, Record<string, true>> =
     Object.create(null);
 
-  public getAllNodes(): Readonly<Record<string, NodePayload>> {
-    return this.nodes;
-  }
-
   public addNode(
     nodeId: string,
     element: HTMLElement,
@@ -179,7 +175,7 @@ export class GraphStore {
     delete this.edges[edgeId];
   }
 
-  public getPortAdjacentEdgess(portId: string): readonly string[] {
+  public getPortAdjacentEdges(portId: string): readonly string[] {
     return [
       ...this.getPortIncomingEdges(portId),
       ...this.getPortOutcomingEdges(portId),

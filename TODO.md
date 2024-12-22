@@ -1,11 +1,12 @@
 # TODO
 
-- straight edge roundness
+- same node cycle
+- add default port direction
+- perpendicular connections with roundness
 - straight edges node drag bug
-- horizontal straight edges
+- horizontal perpendicular edges
 - assign layer behavior to edge
 - edge hover behavior
-- same node cycle
 - move to nodes autoscale
 - move to nodes smooth
 - refactor node id generation
