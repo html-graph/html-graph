@@ -5,7 +5,7 @@ import {
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
-  UpdateConnectionRequest,
+  UpdateEdgeRequest,
 } from "../canvas";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
@@ -252,11 +252,11 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updateConnection(
+  public updateEdge(
     connectionId: string,
-    request: UpdateConnectionRequest,
+    request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.updateConnection(connectionId, request);
+    this.canvas.updateEdge(connectionId, request);
 
     return this;
   }

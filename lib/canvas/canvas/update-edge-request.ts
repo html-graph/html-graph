@@ -1,5 +1,5 @@
 import { EdgeController } from "@/edges";
 
-export interface UpdateConnectionRequest {
+export interface UpdateEdgeRequest {
   readonly controller?: EdgeController;
 }

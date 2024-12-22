@@ -5,7 +5,7 @@ import {
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
-  UpdateConnectionRequest,
+  UpdateEdgeRequest,
 } from "../canvas";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
@@ -136,9 +136,9 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateConnection(
+  public updateEdge(
     connectionId: string,
-    request: UpdateConnectionRequest,
+    request: UpdateEdgeRequest,
   ): CanvasCore {
     if (request.controller !== undefined) {
       this.di.canvasController.updateConnectionController(

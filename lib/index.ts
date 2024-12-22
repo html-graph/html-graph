@@ -20,6 +20,7 @@ export type {
   TransformOptions,
   DragOptions,
   AddEdgeRequest,
+  UpdateEdgeRequest,
   PatchViewportRequest,
   MarkPortRequest,
   AddNodeRequest,

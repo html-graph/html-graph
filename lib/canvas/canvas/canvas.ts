@@ -3,7 +3,7 @@ import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { PatchViewportRequest } from "./patch-viewport-request";
-import { UpdateConnectionRequest } from "./update-edge-request";
+import { UpdateEdgeRequest } from "./update-edge-request";
 
 export interface Canvas {
   /**
@@ -67,7 +67,7 @@ export interface Canvas {
   /**
    * updates edge
    */
-  updateConnection(edgeId: string, request: UpdateConnectionRequest): Canvas;
+  updateEdge(edgeId: string, request: UpdateEdgeRequest): Canvas;
 
   /**
    * moves specified node on top

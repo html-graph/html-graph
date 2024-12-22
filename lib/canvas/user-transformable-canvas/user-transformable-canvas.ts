@@ -4,7 +4,7 @@ import {
   MarkPortRequest,
   PatchViewportRequest,
   Canvas,
-  UpdateConnectionRequest,
+  UpdateEdgeRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
 import { PublicViewportTransformer } from "@/viewport-transformer";
@@ -226,11 +226,11 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public updateConnection(
+  public updateEdge(
     connectionId: string,
-    request: UpdateConnectionRequest,
+    request: UpdateEdgeRequest,
   ): UserTransformableCanvas {
-    this.canvas.updateConnection(connectionId, request);
+    this.canvas.updateEdge(connectionId, request);
 
     return this;
   }
