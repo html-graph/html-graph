@@ -9,4 +9,6 @@ export interface StraightEdgeOptions {
   readonly hasTargetArrow?: boolean;
   readonly cycleSquareSide?: number;
   readonly roundness?: number;
+  readonly detourDistance?: number;
+  readonly detourDirection?: number;
 }

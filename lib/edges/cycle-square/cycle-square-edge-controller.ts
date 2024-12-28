@@ -1,7 +1,11 @@
 import { PortPayload } from "@/port-payload";
 import { EdgeController } from "../edge-controller";
-import { EdgeUtils } from "../edge-utils";
 import { Point } from "../point";
+import {
+  createArrowPath,
+  createDirectionVector,
+  createRotatedPoint,
+} from "../utils";
 
 export class CycleSquareEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
@@ -91,10 +95,10 @@ export class CycleSquareEdgeController implements EdgeController {
   ): void {
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
 
-    const fromVect = EdgeUtils.getDirectionVector(from.direction, 1, 1);
+    const fromVect = createDirectionVector(from.direction, 1, 1);
 
     const r = this.roundness;
-    const rp = this.points.map((p) => EdgeUtils.rotate(p, fromVect, [0, 0]));
+    const rp = this.points.map((p) => createRotatedPoint(p, fromVect, [0, 0]));
 
     const c = [
       `M ${rp[0][0]} ${rp[0][1]}`,
@@ -118,7 +122,7 @@ export class CycleSquareEdgeController implements EdgeController {
     this.line.setAttribute("d", linePath);
 
     if (this.arrow) {
-      const arrowPath = EdgeUtils.getArrowPath(
+      const arrowPath = createArrowPath(
         fromVect,
         0,
         0,

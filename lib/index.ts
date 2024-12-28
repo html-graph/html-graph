@@ -9,9 +9,9 @@ export {
   StraightEdgeController,
   CycleCircleEdgeController,
   CycleSquareEdgeController,
+  DetourSquareEdgeController,
   createBezierEdgeControllerFactory,
   createStraightEdgeControllerFactory,
-  EdgeUtils,
   EdgeType,
 } from "./edges";
 export type {

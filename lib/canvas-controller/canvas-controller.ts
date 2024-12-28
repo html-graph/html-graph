@@ -152,8 +152,13 @@ export class CanvasController {
 
     let edgeType = EdgeType.Regular;
 
+    const fromNodeId = this.graphStore.getPortNode(fromPortId);
+    const toNodeId = this.graphStore.getPortNode(toPortId);
+
     if (fromPortId === toPortId) {
-      edgeType = EdgeType.Cycle;
+      edgeType = EdgeType.PortCycle;
+    } else if (fromNodeId === toNodeId) {
+      edgeType = EdgeType.NodeCycle;
     }
 
     this.graphStore.addEdge(

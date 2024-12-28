@@ -1,6 +1,11 @@
 import { PortPayload } from "@/port-payload";
 import { EdgeController } from "../edge-controller";
-import { EdgeUtils } from "../edge-utils";
+import {
+  createArrowPath,
+  createDirectionVector,
+  createPortCenter,
+  createRotatedPoint,
+} from "../utils";
 
 export class BezierEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
@@ -69,20 +74,20 @@ export class BezierEdgeController implements EdgeController {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
 
-    const fromCenter = EdgeUtils.getPortCenter(from);
-    const toCenter = EdgeUtils.getPortCenter(to);
+    const fromCenter = createPortCenter(from);
+    const toCenter = createPortCenter(to);
     const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
     const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
 
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = EdgeUtils.getDirectionVector(from.direction, flipX, flipY);
-    const toVect = EdgeUtils.getDirectionVector(to.direction, flipX, flipY);
+    const fromVect = createDirectionVector(from.direction, flipX, flipY);
+    const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const pb = EdgeUtils.rotate([this.arrowLength, 0], fromVect, [0, 0]);
+    const pb = createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0]);
 
-    const pe = EdgeUtils.rotate([width - this.arrowLength, height], toVect, [
+    const pe = createRotatedPoint([width - this.arrowLength, height], toVect, [
       width,
       height,
     ]);
@@ -107,7 +112,7 @@ export class BezierEdgeController implements EdgeController {
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = EdgeUtils.getArrowPath(
+      const arrowPath = createArrowPath(
         fromVect,
         0,
         0,
@@ -119,7 +124,7 @@ export class BezierEdgeController implements EdgeController {
     }
 
     if (this.targetArrow) {
-      const arrowPath = EdgeUtils.getArrowPath(
+      const arrowPath = createArrowPath(
         toVect,
         width,
         height,

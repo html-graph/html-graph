@@ -22,6 +22,8 @@ export const resolveEdgeControllerFactory: (
         hasTargetArrow: options.hasTargetArrow ?? false,
         cycleSquareSide: options.cycleSquareSide ?? 30,
         roundness: options.roundness ?? 5,
+        detourDistance: options.detourDistance ?? 100,
+        detourDirection: options.detourDistance ?? -Math.PI / 2,
       });
     default:
       return createBezierEdgeControllerFactory({

@@ -1,4 +1,5 @@
 export enum EdgeType {
   Regular = "regular",
-  Cycle = "cycle",
+  PortCycle = "cycle",
+  NodeCycle = "node-cycle",
 }

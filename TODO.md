@@ -1,9 +1,10 @@
 # TODO
 
-- same node cycle
+- node detour square
+- node detour circle
 - perpendicular connections with roundness
-- straight edges node drag bug
 - horizontal perpendicular edges
+- straight edges node drag bug
 - assign layer behavior to edge
 - edge hover behavior
 - move to nodes autoscale
@@ -17,3 +18,4 @@
 - snap nodes to grid
 - unit tests
 - e2e tests
+- sankey connections
