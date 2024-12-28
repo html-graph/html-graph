@@ -5,5 +5,5 @@ export interface MarkPortRequest {
   readonly element: HTMLElement;
   readonly nodeId: string;
   readonly centerFn?: CenterFn;
-  readonly direction?: number | null;
+  readonly direction?: number;
 }

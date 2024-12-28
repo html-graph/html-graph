@@ -78,7 +78,7 @@ export class GraphStore {
     element: HTMLElement,
     nodeId: string,
     centerFn: CenterFn,
-    dir: number | null,
+    dir: number,
   ): void {
     this.ports[portId] = { element, centerFn, direction: dir };
     this.cycleEdges[portId] = {};

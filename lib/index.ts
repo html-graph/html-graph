@@ -31,5 +31,5 @@ export type {
 export type { NodeResponse, NodeItem } from "./graph-store";
 export type { PublicViewportTransformer } from "./viewport-transformer";
 export type { BackgroundDrawingFn } from "./background";
-export type { PortPayload } from "@/port-payload";
+export type { PortPayload } from "./port-payload";
 export type { EdgeController } from "./edges";

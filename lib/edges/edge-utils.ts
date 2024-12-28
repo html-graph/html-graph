@@ -43,11 +43,11 @@ export class EdgeUtils {
   }
 
   public static getDirectionVector(
-    direction: number | null,
+    direction: number,
     flipX: number,
     flipY: number,
   ): Point {
-    return [flipX * Math.cos(direction ?? 0), flipY * Math.sin(direction ?? 0)];
+    return [flipX * Math.cos(direction), flipY * Math.sin(direction)];
   }
 
   public static getArrowPath(

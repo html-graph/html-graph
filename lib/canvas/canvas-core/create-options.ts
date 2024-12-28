@@ -18,6 +18,7 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
     },
     ports: {
       centerFn: apiOptions.ports?.centerFn ?? standardCenterFn,
+      direction: apiOptions.ports?.direction ?? 0,
     },
     edges: {
       controllerFactory: resolveEdgeControllerFactory(apiOptions.edges ?? {}),

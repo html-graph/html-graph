@@ -1,7 +1,6 @@
 # TODO
 
 - same node cycle
-- add default port direction
 - perpendicular connections with roundness
 - straight edges node drag bug
 - horizontal perpendicular edges

@@ -15,6 +15,7 @@ export interface Options {
   };
   readonly ports: {
     readonly centerFn: CenterFn;
+    readonly direction: number;
   };
   readonly edges: {
     readonly controllerFactory: EdgeControllerFactory;

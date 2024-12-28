@@ -32,6 +32,7 @@ export class CanvasCore implements Canvas {
       options.background.drawingFn,
       options.nodes.centerFn,
       options.ports.centerFn,
+      options.ports.direction,
     );
 
     this.transformation = this.di.publicViewportTransformer;

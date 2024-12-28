@@ -19,6 +19,7 @@ export class DiContainer {
     backgroundDrawingFn: BackgroundDrawingFn,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
+    portsDirection: number,
   ) {
     const viewportTransformer = new ViewportTransformer();
     const graphStore = new GraphStore();
@@ -41,6 +42,7 @@ export class DiContainer {
       viewportTransformer,
       nodesCenterFn,
       portsCenterFn,
+      portsDirection,
     );
   }
 }

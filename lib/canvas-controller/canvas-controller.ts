@@ -19,6 +19,7 @@ export class CanvasController {
     private readonly viewportTransformer: ViewportTransformer,
     private readonly nodesCenterFn: CenterFn,
     private readonly portsCenterFn: CenterFn,
+    private readonly portsDirection: number,
   ) {}
 
   public moveNodeOnTop(nodeId: string): void {
@@ -60,14 +61,20 @@ export class CanvasController {
     if (ports !== undefined) {
       Object.entries(ports).forEach(([portId, element]) => {
         if (element instanceof HTMLElement) {
-          this.markPort(portId, element, nodeId, this.portsCenterFn, null);
+          this.markPort(
+            portId,
+            element,
+            nodeId,
+            this.portsCenterFn,
+            this.portsDirection,
+          );
         } else {
           this.markPort(
             portId,
             element.element,
             nodeId,
             element.centerFn ?? this.portsCenterFn,
-            element.direction ?? null,
+            element.direction ?? this.portsDirection,
           );
         }
       });
@@ -79,7 +86,7 @@ export class CanvasController {
     element: HTMLElement,
     nodeId: string,
     centerFn: CenterFn | undefined,
-    dir: number | null | undefined,
+    dir: number | undefined,
   ): void {
     if (portId === undefined) {
       do {
@@ -100,7 +107,7 @@ export class CanvasController {
       element,
       nodeId,
       centerFn ?? this.portsCenterFn,
-      dir ?? null,
+      dir ?? 0,
     );
   }
 
