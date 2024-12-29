@@ -99,14 +99,20 @@ export class DetourSquareEdgeController implements EdgeController {
       ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
       : [0, 0];
     const pea = this.targetArrow
-      ? createRotatedPoint([width - this.arrowLength, height], toVect, [width, height])
+      ? createRotatedPoint([width - this.arrowLength, height], toVect, [
+          width,
+          height,
+        ])
       : [width, height];
 
     const gap1 = this.arrowLength + this.arrowOffset;
 
     const pbl1 = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
     const pbl2 = [pbl1[0] - this.detourX, pbl1[1] - this.detourY];
-    const pel1 = createRotatedPoint([width - gap1, height], toVect, [width, height]);
+    const pel1 = createRotatedPoint([width - gap1, height], toVect, [
+      width,
+      height,
+    ]);
     const pel2 = [pel1[0] - this.detourX, pel1[1] - this.detourY];
 
     const linePath = [

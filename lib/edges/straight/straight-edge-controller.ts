@@ -93,7 +93,10 @@ export class StraightEdgeController implements EdgeController {
       ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
       : [0, 0];
     const pea = this.targetArrow
-      ? createRotatedPoint([width - this.arrowLength, height], toVect, [width, height])
+      ? createRotatedPoint([width - this.arrowLength, height], toVect, [
+          width,
+          height,
+        ])
       : [width, height];
 
     const gap1 = this.arrowLength + this.arrowOffset;
@@ -103,10 +106,16 @@ export class StraightEdgeController implements EdgeController {
     const realRoundness = Math.min(this.roundness, maxRoundness);
 
     const pb1 = createRotatedPoint([gap3, 0], fromVect, [0, 0]);
-    const pe1 = createRotatedPoint([width - gap3, height], toVect, [width, height]);
+    const pe1 = createRotatedPoint([width - gap3, height], toVect, [
+      width,
+      height,
+    ]);
 
     const pb2 = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
-    const pe2 = createRotatedPoint([width - gap1, height], toVect, [width, height]);
+    const pe2 = createRotatedPoint([width - gap1, height], toVect, [
+      width,
+      height,
+    ]);
 
     const dw2 = (pe2[0] - pb2[0]) / 2;
     const dh2 = (pe2[1] - pb2[1]) / 2;
