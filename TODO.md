@@ -1,6 +1,6 @@
 # TODO
 
-- node detour square
+- port cycle roundness
 - node detour circle
 - perpendicular connections with roundness
 - horizontal perpendicular edges

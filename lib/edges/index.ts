@@ -2,7 +2,7 @@ export * from "./bezier";
 export * from "./straight";
 export * from "./cycle-circle";
 export * from "./cycle-square";
-export * from "./detour-square";
+export * from "./detour-rounded";
 export * from "./edge-controller";
 export * from "./edge-controller-factory";
 export * from "./edge-type";

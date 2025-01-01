@@ -6,8 +6,10 @@ import {
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
+import { createRoundedPath } from "../utils/create-rounded-path";
+import { Point } from "../point";
 
-export class DetourSquareEdgeController implements EdgeController {
+export class DetourRoundedEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -80,7 +82,6 @@ export class DetourSquareEdgeController implements EdgeController {
     from: PortPayload,
     to: PortPayload,
   ): void {
-    console.log(this.roundness);
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
 
@@ -95,10 +96,10 @@ export class DetourSquareEdgeController implements EdgeController {
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const pba = this.sourceArrow
+    const pba: Point = this.sourceArrow
       ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
       : [0, 0];
-    const pea = this.targetArrow
+    const pea: Point = this.targetArrow
       ? createRotatedPoint([width - this.arrowLength, height], toVect, [
           width,
           height,
@@ -107,22 +108,18 @@ export class DetourSquareEdgeController implements EdgeController {
 
     const gap1 = this.arrowLength + this.arrowOffset;
 
-    const pbl1 = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
-    const pbl2 = [pbl1[0] - this.detourX, pbl1[1] - this.detourY];
-    const pel1 = createRotatedPoint([width - gap1, height], toVect, [
+    const pbl1: Point = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
+    const pbl2: Point = [pbl1[0] - this.detourX, pbl1[1] - this.detourY];
+    const pel1: Point = createRotatedPoint([width - gap1, height], toVect, [
       width,
       height,
     ]);
-    const pel2 = [pel1[0] - this.detourX, pel1[1] - this.detourY];
+    const pel2: Point = [pel1[0] - this.detourX, pel1[1] - this.detourY];
 
-    const linePath = [
-      `M ${pba[0]} ${pba[1]}`,
-      `L ${pbl1[0]} ${pbl1[1]}`,
-      `L ${pbl2[0]} ${pbl2[1]}`,
-      `L ${pel2[0]} ${pel2[1]}`,
-      `L ${pel1[0]} ${pel1[1]}`,
-      `L ${pea[0]} ${pea[1]}`,
-    ].join(" ");
+    const linePath = createRoundedPath(
+      [pba, pbl1, pbl2, pel2, pel1, pea],
+      this.roundness,
+    );
 
     this.line.setAttribute("d", linePath);
 

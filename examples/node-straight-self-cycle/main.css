@@ -32,12 +32,12 @@ body {
 
 .front-port {
   position: absolute;
-  top: 25%;
+  top: 50%;
   left: 0;
 }
 
 .back-port {
   position: absolute;
-  bottom: 25%;
+  bottom: 50%;
   right: 0;
 }

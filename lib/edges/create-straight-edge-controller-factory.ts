@@ -2,7 +2,7 @@ import { EdgeControllerFactory } from "./edge-controller-factory";
 import { EdgeType } from "./edge-type";
 import { CycleSquareEdgeController } from "./cycle-square";
 import { StraightEdgeController } from "./straight";
-import { DetourSquareEdgeController } from "./detour-square";
+import { DetourRoundedEdgeController } from "./detour-rounded";
 
 export const createStraightEdgeControllerFactory: (options: {
   color: string;
@@ -31,7 +31,7 @@ export const createStraightEdgeControllerFactory: (options: {
   }
 
   if (edgeType === EdgeType.NodeCycle) {
-    return new DetourSquareEdgeController(
+    return new DetourRoundedEdgeController(
       options.color,
       options.width,
       options.arrowLength,

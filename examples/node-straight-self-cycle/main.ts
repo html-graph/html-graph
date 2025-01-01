@@ -3,7 +3,11 @@ import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    edges: { type: "straight", hasTargetArrow: true, arrowOffset: 30 },
+    edges: {
+      type: "straight",
+      hasTargetArrow: true,
+      detourDirection: Math.PI / 2,
+    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -32,8 +36,8 @@ function createNode(
   return [
     node,
     {
-      [frontPortId]: { element: frontPort, direction: Math.PI / 4 },
-      [backPortId]: { element: backPort, direction: -Math.PI / 4 },
+      [frontPortId]: frontPort,
+      [backPortId]: backPort,
     },
   ];
 }
