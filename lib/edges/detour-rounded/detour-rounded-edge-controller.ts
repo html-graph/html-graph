@@ -109,12 +109,12 @@ export class DetourRoundedEdgeController implements EdgeController {
     const gap1 = this.arrowLength + this.arrowOffset;
 
     const pbl1: Point = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
-    const pbl2: Point = [pbl1[0] - this.detourX, pbl1[1] - this.detourY];
+    const pbl2: Point = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
     const pel1: Point = createRotatedPoint([width - gap1, height], toVect, [
       width,
       height,
     ]);
-    const pel2: Point = [pel1[0] - this.detourX, pel1[1] - this.detourY];
+    const pel2: Point = [pel1[0] + this.detourX, pel1[1] + this.detourY];
 
     const linePath = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],

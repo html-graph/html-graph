@@ -6,7 +6,6 @@ const canvas = new HtmlGraphBuilder()
     edges: {
       type: "straight",
       hasTargetArrow: true,
-      detourDirection: Math.PI / 2,
     },
   })
   .setUserDraggableNodes()
