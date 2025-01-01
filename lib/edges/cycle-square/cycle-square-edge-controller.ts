@@ -6,6 +6,7 @@ import {
   createDirectionVector,
   createRotatedPoint,
 } from "../utils";
+import { createRoundedPath } from "../utils/create-rounded-path";
 
 export class CycleSquareEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
@@ -18,7 +19,7 @@ export class CycleSquareEdgeController implements EdgeController {
 
   private readonly roundness: number;
 
-  private readonly points: readonly Point[];
+  private readonly linePoints: readonly Point[];
 
   public constructor(
     private readonly color: string,
@@ -62,27 +63,19 @@ export class CycleSquareEdgeController implements EdgeController {
     const s = this.side;
     const x1 = this.arrowLength + g;
     const r = this.roundness;
-    const x1l = x1 - r;
-    const x1m = x1 + r;
-    const y1l = s - r;
     const x2 = x1 + 2 * s;
-    const x2l = x2 - r;
 
     console.log(r);
 
-    this.points = [
+    this.linePoints = [
       [this.arrowLength, 0],
-      [x1l, 0],
-      [x1, r],
-      [x1, y1l],
-      [x1m, s],
-      [x2l, s],
-      [x2, y1l],
-      [x2, -y1l],
-      [x2l, -s],
-      [x1m, -s],
-      [x1, -y1l],
-      [x1, -r],
+      [x1, 0],
+      [x1, this.side],
+      [x2, this.side],
+      [x2, -this.side],
+      [x1, -this.side],
+      [x1, 0],
+      [this.arrowLength, 0],
     ];
   }
 
@@ -97,27 +90,12 @@ export class CycleSquareEdgeController implements EdgeController {
 
     const fromVect = createDirectionVector(from.direction, 1, 1);
 
-    const r = this.roundness;
-    const rp = this.points.map((p) => createRotatedPoint(p, fromVect, [0, 0]));
-
-    const c = [
-      `M ${rp[0][0]} ${rp[0][1]}`,
-      `L ${rp[1][0]} ${rp[1][1]}`,
-      `A ${r} ${r} 0 0 1 ${rp[2][0]} ${rp[2][1]}`,
-      `L ${rp[3][0]} ${rp[3][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[4][0]} ${rp[4][1]}`,
-      `L ${rp[5][0]} ${rp[5][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[6][0]} ${rp[6][1]}`,
-      `L ${rp[7][0]} ${rp[7][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[8][0]} ${rp[8][1]}`,
-      `L ${rp[9][0]} ${rp[9][1]}`,
-      `A ${r} ${r} 0 0 0 ${rp[10][0]} ${rp[10][1]}`,
-      `L ${rp[11][0]} ${rp[11][1]}`,
-      `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
-    ].join(" ");
+    const rp = this.linePoints.map((p) =>
+      createRotatedPoint(p, fromVect, [0, 0]),
+    );
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.arrow ? "" : preLine}${c}`;
+    const linePath = `${this.arrow ? "" : preLine}${createRoundedPath(rp, this.roundness)}`;
 
     this.line.setAttribute("d", linePath);
 
