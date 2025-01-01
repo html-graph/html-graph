@@ -6,6 +6,8 @@ import {
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
+import { createRoundedPath } from "../utils/create-rounded-path";
+import { Point } from "../point";
 
 export class StraightEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
@@ -18,8 +20,6 @@ export class StraightEdgeController implements EdgeController {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  private readonly roundness: number;
-
   public constructor(
     private readonly color: string,
     private readonly width: number,
@@ -28,9 +28,8 @@ export class StraightEdgeController implements EdgeController {
     private readonly arrowOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
-    roundness: number,
+    private readonly roundness: number,
   ) {
-    this.roundness = Math.min(this.arrowOffset, roundness);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -89,49 +88,25 @@ export class StraightEdgeController implements EdgeController {
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const pba = this.sourceArrow
+    const pba: Point = this.sourceArrow
       ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
       : [0, 0];
-    const pea = this.targetArrow
+    const pea: Point = this.targetArrow
       ? createRotatedPoint([width - this.arrowLength, height], toVect, [
           width,
           height,
         ])
       : [width, height];
 
-    const gap1 = this.arrowLength + this.arrowOffset;
-    const gap3 = gap1 - this.roundness;
-    const gwidth = width - gap1 * 2 * flipX;
-    const maxRoundness = Math.sqrt(gwidth * gwidth + height * height) / 2;
-    const realRoundness = Math.min(this.roundness, maxRoundness);
+    const gap = this.arrowLength + this.arrowOffset;
 
-    const pb1 = createRotatedPoint([gap3, 0], fromVect, [0, 0]);
-    const pe1 = createRotatedPoint([width - gap3, height], toVect, [
+    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
+    const pel = createRotatedPoint([width - gap, height], toVect, [
       width,
       height,
     ]);
 
-    const pb2 = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
-    const pe2 = createRotatedPoint([width - gap1, height], toVect, [
-      width,
-      height,
-    ]);
-
-    const dw2 = (pe2[0] - pb2[0]) / 2;
-    const dh2 = (pe2[1] - pb2[1]) / 2;
-    const m = realRoundness / maxRoundness;
-
-    const pb3 = [pb2[0] + dw2 * m, pb2[1] + dh2 * m];
-    const pe3 = [pe2[0] - dw2 * m, pe2[1] - dh2 * m];
-
-    const linePath = [
-      `M ${pba[0]} ${pba[1]}`,
-      `L ${pb1[0]} ${pb1[1]}`,
-      `C ${pb2[0]} ${pb2[1]} ${pb2[0]} ${pb2[1]} ${pb3[0]} ${pb3[1]}`,
-      `L ${pe3[0]} ${pe3[1]}`,
-      `C ${pe2[0]} ${pe2[1]} ${pe2[0]} ${pe2[1]} ${pe1[0]} ${pe1[1]}`,
-      `L ${pea[0]} ${pea[1]}`,
-    ].join(" ");
+    const linePath = createRoundedPath([pba, pbl, pel, pea], this.roundness);
 
     this.line.setAttribute("d", linePath);
 

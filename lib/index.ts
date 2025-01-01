@@ -9,7 +9,7 @@ export {
   StraightEdgeController,
   CycleCircleEdgeController,
   CycleSquareEdgeController,
-  DetourRoundedEdgeController,
+  DetourRoundedStraightEdgeController,
   createBezierEdgeControllerFactory,
   createStraightEdgeControllerFactory,
   EdgeType,

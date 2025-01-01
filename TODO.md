@@ -1,6 +1,6 @@
 # TODO
 
-- node detour circle
+- node detour bezier
 - perpendicular connections with roundness
 - horizontal perpendicular edges
 - straight edges node drag bug

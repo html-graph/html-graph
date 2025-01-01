@@ -9,7 +9,7 @@ import {
 import { createRoundedPath } from "../utils/create-rounded-path";
 import { Point } from "../point";
 
-export class DetourRoundedEdgeController implements EdgeController {
+export class DetourRoundedStraightEdgeController implements EdgeController {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;

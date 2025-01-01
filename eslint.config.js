@@ -23,13 +23,13 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ["../../lib/**", "!../../lib"],
-            },
-            {
-              group: ["@html-graph/html-graph/**", "!@html-graph/html-graph"],
+              group: ["../../lib/**"],
             },
             {
               group: ["@/**"],
+            },
+            {
+              group: ["@html-graph/html-graph/**", "!@html-graph/html-graph"],
             },
           ],
         },

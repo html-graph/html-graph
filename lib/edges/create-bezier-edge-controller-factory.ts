@@ -14,7 +14,7 @@ export const createBezierEdgeControllerFactory: (options: {
   cycleRadius: number;
   smallCycleRadius: number;
 }) => EdgeControllerFactory = (options) => (edgeType: EdgeType) => {
-  if (edgeType === "cycle") {
+  if (edgeType === EdgeType.PortCycle) {
     return new CycleCircleEdgeController(
       options.color,
       options.width,

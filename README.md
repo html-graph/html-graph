@@ -81,7 +81,7 @@ canvas
 
 Refer to [Examples](examples) for more.
 
-## Run examples locally
+## Run examples
 
 Use node version >= 20
 
