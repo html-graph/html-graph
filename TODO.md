@@ -1,9 +1,10 @@
 # TODO
 
-- node detour bezier
-- perpendicular connections with roundness
-- horizontal perpendicular edges
+- horizontal edges
+- vertical edges
+- edge controller constructor 1 parameter
 - straight edges node drag bug
+- fix encapsulation for edge controllers
 - assign layer behavior to edge
 - edge hover behavior
 - move to nodes autoscale
@@ -14,7 +15,8 @@
 - virtual scroll
 - drag edge creation
 - node drag handle example
-- snap nodes to grid
 - unit tests
+- change bezier self-cycle port to bezier curve
+- snap nodes to grid
 - e2e tests
 - sankey connections

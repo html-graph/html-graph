@@ -15,16 +15,29 @@ body {
 }
 
 .node {
+  position: relative;
   width: 150px;
   max-width: 150px;
   height: 50px;
   max-height: 50px;
   background: #ffdbab;
   border: 1px solid #bababa;
-  border-radius: 1000px;
+  border-radius: 10px;
   white-space: nowrap;
   user-select: none;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+}
+
+.front-port {
+  position: absolute;
+  top: 50%;
+  left: 0;
+}
+
+.back-port {
+  position: absolute;
+  bottom: 50%;
+  right: 0;
 }

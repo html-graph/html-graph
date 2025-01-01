@@ -36,6 +36,8 @@ export const resolveEdgeControllerFactory: (
         hasTargetArrow: options.hasTargetArrow ?? false,
         cycleRadius: options.cycleRadius ?? 30,
         smallCycleRadius: options.smallCycleRadius ?? 15,
+        detourDistance: options.detourDistance ?? 100,
+        detourDirection: options.detourDirection ?? -Math.PI / 2,
       });
   }
 };

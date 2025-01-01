@@ -9,4 +9,6 @@ export interface BezierEdgeOptions {
   readonly hasTargetArrow?: boolean;
   readonly cycleRadius?: number;
   readonly smallCycleRadius?: number;
+  readonly detourDistance?: number;
+  readonly detourDirection?: number;
 }

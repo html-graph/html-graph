@@ -11,7 +11,7 @@
 </a>
 
 Instead of connecting nodes dirrectly this library uses concept of ports, which provide greater fexibility at managing edges.
-Port is an entity of the node to which edge can be attached to.
+Port is an entity of a node to which edge can be attached to.
 
 This library fits for tasks where easy nodes customization and interactiveness are required.
 
