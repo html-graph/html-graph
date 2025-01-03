@@ -7,11 +7,13 @@ export {
 export {
   BezierEdgeController,
   StraightEdgeController,
+  HorizontalEdgeController,
   CycleCircleEdgeController,
   CycleSquareEdgeController,
   DetourStraightEdgeController,
   createBezierEdgeControllerFactory,
   createStraightEdgeControllerFactory,
+  createHorizontalEdgeControllerFactory,
   EdgeType,
 } from "./edges";
 export type {

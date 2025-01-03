@@ -1,9 +1,7 @@
 # TODO
 
-- horizontal edges
 - vertical edges
 - edge controller constructor 1 parameter
-- straight edges node drag bug
 - fix encapsulation for edge controllers
 - assign layer behavior to edge
 - edge hover behavior
