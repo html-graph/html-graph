@@ -31,8 +31,9 @@ export class GraphStore {
     x: number,
     y: number,
     centerFn: CenterFn,
+    priority: number,
   ): void {
-    this.nodes[nodeId] = { element, x, y, centerFn };
+    this.nodes[nodeId] = { element, x, y, centerFn, priority };
     this.nodePorts[nodeId] = Object.create(null);
   }
 
@@ -42,18 +43,6 @@ export class GraphStore {
 
   public getNode(nodeId: string): NodePayload {
     return this.nodes[nodeId];
-  }
-
-  public updateNodeCoords(nodeId: string, x: number, y: number): void {
-    this.nodes[nodeId].x = x;
-    this.nodes[nodeId].y = y;
-  }
-
-  public updateEdgeController(
-    edgeId: string,
-    controller: EdgeController,
-  ): void {
-    this.edges[edgeId].controller = controller;
   }
 
   public removeNode(nodeId: string): void {
@@ -137,11 +126,13 @@ export class GraphStore {
     fromPortId: string,
     toPortId: string,
     svgController: EdgeController,
+    priority: number,
   ): void {
     this.edges[edgeId] = {
       from: fromPortId,
       to: toPortId,
       controller: svgController,
+      priority,
     };
 
     if (fromPortId !== toPortId) {

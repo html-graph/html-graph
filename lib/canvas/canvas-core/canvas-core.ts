@@ -48,6 +48,7 @@ export class CanvasCore implements Canvas {
       node.y,
       node.ports,
       node.centerFn,
+      node.priority,
     );
 
     return this;
@@ -100,6 +101,7 @@ export class CanvasCore implements Canvas {
       edge.from,
       edge.to,
       controllerFactory,
+      edge.priority,
     );
 
     return this;

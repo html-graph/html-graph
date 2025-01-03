@@ -8,4 +8,5 @@ export interface AddNodeRequest {
   y: number;
   ports?: Record<string, MarkNodePortRequest>;
   centerFn?: CenterFn;
+  priority?: number;
 }

@@ -5,4 +5,5 @@ export interface NodePayload {
   x: number;
   y: number;
   centerFn: CenterFn;
+  priority: number;
 }

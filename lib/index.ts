@@ -8,12 +8,14 @@ export {
   BezierEdgeController,
   StraightEdgeController,
   HorizontalEdgeController,
+  VerticalEdgeController,
   CycleCircleEdgeController,
   CycleSquareEdgeController,
   DetourStraightEdgeController,
   createBezierEdgeControllerFactory,
   createStraightEdgeControllerFactory,
   createHorizontalEdgeControllerFactory,
+  createVerticalEdgeControllerFactory,
   EdgeType,
 } from "./edges";
 export type {

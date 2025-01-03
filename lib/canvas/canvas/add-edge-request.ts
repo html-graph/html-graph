@@ -5,4 +5,5 @@ export interface AddEdgeRequest {
   from: string;
   to: string;
   options?: EdgeOptions;
+  priority?: number;
 }

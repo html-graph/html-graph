@@ -72,6 +72,7 @@ class CustomEdgeController implements EdgeController {
     this.rect.setAttribute("rx", `${this.radius}`);
     this.text.setAttribute("dominant-baseline", "middle");
     this.text.setAttribute("text-anchor", "middle");
+    this.text.setAttribute("font-size", "10px");
     this.svg.appendChild(this.rect);
     this.svg.appendChild(this.text);
   }

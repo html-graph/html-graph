@@ -126,7 +126,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     if (nodeId === undefined) {
       do {
-        nodeId = this.nodeIdGenerator.next();
+        nodeId = this.nodeIdGenerator.create();
       } while (this.nodes.has(nodeId));
     }
 

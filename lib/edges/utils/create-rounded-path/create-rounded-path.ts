@@ -1,7 +1,7 @@
 import { Point } from "../../point";
 
 export const createRoundedPath: (
-  ps: readonly Point[],
+  path: readonly Point[],
   roundness: number,
 ) => string = (path: readonly Point[], roundness: number) => {
   const parts: string[] = [];

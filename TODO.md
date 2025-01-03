@@ -1,8 +1,12 @@
 # TODO
 
-- vertical edges
-- edge controller constructor 1 parameter
-- fix encapsulation for edge controllers
+- refactor layers behavior
+- freeze node layer priority
+- refactor z-index
+- improve connection with label example
+- fix encapsulation for edge controllers ?
+- investigate bug with drag delay
+- edge controller constructor 1 parameter ?
 - assign layer behavior to edge
 - edge hover behavior
 - move to nodes autoscale

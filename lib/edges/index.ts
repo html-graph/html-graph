@@ -1,6 +1,7 @@
 export * from "./bezier";
 export * from "./straight";
 export * from "./horizontal";
+export * from "./vertical";
 export * from "./cycle-circle";
 export * from "./cycle-square";
 export * from "./detour-straight";
@@ -10,3 +11,4 @@ export * from "./edge-type";
 export * from "./create-bezier-edge-controller-factory";
 export * from "./create-straight-edge-controller-factory";
 export * from "./create-horizontal-edge-controller-factory";
+export * from "./create-vertical-edge-controller-factory";
