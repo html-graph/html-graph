@@ -6,6 +6,7 @@ import {
   PatchViewportRequest,
   Canvas,
   UpdateEdgeRequest,
+  UpdateNodeRequest,
 } from "../canvas";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
@@ -13,6 +14,7 @@ import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
 import { EdgeControllerFactory } from "@/edges";
+import { UpdatePortRequest } from "../canvas/update-port-request";
 
 /**
  * Provides low level API for acting on graph
@@ -54,14 +56,26 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): CanvasCore {
-    this.di.canvasController.moveNodeOnTop(nodeId);
+  public updateNode(nodeId: string, request: UpdateNodeRequest): CanvasCore {
+    this.di.canvasController.updateNode(
+      nodeId,
+      request.x,
+      request.y,
+      request.priority,
+      request.centerFn,
+    );
 
     return this;
   }
 
   public removeNode(nodeId: string): CanvasCore {
     this.di.canvasController.removeNode(nodeId);
+
+    return this;
+  }
+
+  public moveNodeOnTop(nodeId: string): CanvasCore {
+    this.di.canvasController.moveNodeOnTop(nodeId);
 
     return this;
   }
@@ -78,8 +92,8 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updatePortEdges(portId: string): CanvasCore {
-    this.di.canvasController.updatePortEdges(portId);
+  public updatePort(portId: string, request: UpdatePortRequest): CanvasCore {
+    this.di.canvasController.updatePort(portId, request);
 
     return this;
   }
@@ -107,6 +121,12 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
+  public updateEdge(edgeId: string, request: UpdateEdgeRequest): CanvasCore {
+    this.di.canvasController.updateEdge(edgeId, request);
+
+    return this;
+  }
+
   public removeEdge(edgeId: string): CanvasCore {
     this.di.canvasController.removeEdge(edgeId);
 
@@ -125,24 +145,6 @@ export class CanvasCore implements Canvas {
 
   public moveToNodes(nodeIds: readonly string[]): CanvasCore {
     this.di.canvasController.moveToNodes(nodeIds);
-
-    return this;
-  }
-
-  public updateNodeCoordinates(
-    nodeId: string,
-    x: number,
-    y: number,
-  ): CanvasCore {
-    this.di.canvasController.updateNodeCoordinates(nodeId, x, y);
-
-    return this;
-  }
-
-  public updateEdge(edgeId: string, request: UpdateEdgeRequest): CanvasCore {
-    if (request.controller !== undefined) {
-      this.di.canvasController.updateEdgeController(edgeId, request.controller);
-    }
 
     return this;
   }

@@ -9,3 +9,4 @@ export * from "./canvas";
 export * from "./add-node-request";
 export * from "./mark-node-port-request";
 export * from "./update-edge-request";
+export * from "./update-node-request";

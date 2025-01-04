@@ -1,10 +1,4 @@
-import {
-  EdgesFollowNodeLayer,
-  EdgesOnTopLayer,
-  Layer,
-  LayersMode,
-  NodesOnTopLayer,
-} from "@/layers";
+import { Layer, LayersMode } from "@/layers";
 import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,
@@ -12,6 +6,7 @@ import {
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
 import { createCanvas, createHost } from "./utils";
+import { layers } from "./layers";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -34,14 +29,6 @@ export class HtmlController {
 
   private readonly edgeIdToElementMap = new Map<string, SVGSVGElement>();
 
-  private readonly layers: {
-    [key in LayersMode]: (host: HTMLElement) => Layer;
-  } = {
-    "edges-on-top": (host) => new EdgesOnTopLayer(host),
-    "edges-follow-node": (host) => new EdgesFollowNodeLayer(host),
-    "nodes-on-top": (host) => new NodesOnTopLayer(host),
-  };
-
   private readonly layer: Layer;
 
   public constructor(
@@ -60,7 +47,7 @@ export class HtmlController {
     this.canvasCtx = context;
 
     this.host.appendChild(this.canvas);
-    this.layer = this.layers[this.layersMode](this.host);
+    this.layer = layers[this.layersMode](this.host);
 
     this.hostResizeObserver = this.createHostResizeObserver();
     this.hostResizeObserver.observe(this.host);

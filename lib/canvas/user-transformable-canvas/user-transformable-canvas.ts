@@ -5,11 +5,13 @@ import {
   PatchViewportRequest,
   Canvas,
   UpdateEdgeRequest,
+  UpdateNodeRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { TransformPayload } from "./transform-payload";
+import { UpdatePortRequest } from "../canvas/update-port-request";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -166,6 +168,15 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
+  public updateNode(
+    nodeId: string,
+    request: UpdateNodeRequest,
+  ): UserTransformableCanvas {
+    this.canvas.updateNode(nodeId, request);
+
+    return this;
+  }
+
   public removeNode(nodeId: string): UserTransformableCanvas {
     this.canvas.removeNode(nodeId);
 
@@ -178,8 +189,11 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public updatePortEdges(portId: string): UserTransformableCanvas {
-    this.canvas.updatePortEdges(portId);
+  public updatePort(
+    portId: string,
+    request: UpdatePortRequest,
+  ): UserTransformableCanvas {
+    this.canvas.updatePort(portId, request);
 
     return this;
   }
@@ -212,16 +226,6 @@ export class UserTransformableCanvas implements Canvas {
 
   public moveToNodes(nodeIds: readonly string[]): UserTransformableCanvas {
     this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
-  public updateNodeCoordinates(
-    nodeId: string,
-    x: number,
-    y: number,
-  ): UserTransformableCanvas {
-    this.canvas.updateNodeCoordinates(nodeId, x, y);
 
     return this;
   }

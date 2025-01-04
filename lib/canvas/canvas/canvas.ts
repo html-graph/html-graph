@@ -4,6 +4,8 @@ import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { PatchViewportRequest } from "./patch-viewport-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
+import { UpdateNodeRequest } from "./update-node-request";
+import { UpdatePortRequest } from "./update-port-request";
 
 export interface Canvas {
   /**
@@ -15,6 +17,11 @@ export interface Canvas {
    * adds node to graph
    */
   addNode(node: AddNodeRequest): Canvas;
+
+  /**
+   * updates node absolute coordinates
+   */
+  updateNode(nodeId: string, request: UpdateNodeRequest): Canvas;
 
   /**
    * removes node from graph
@@ -29,9 +36,9 @@ export interface Canvas {
   markPort(port: MarkPortRequest): Canvas;
 
   /**
-   * updates edge attached to port
+   * updates port and attached edges
    */
-  updatePortEdges(portId: string): Canvas;
+  updatePort(portId: string, request?: UpdatePortRequest): Canvas;
 
   /**
    * ummarks element as port of node
@@ -43,6 +50,11 @@ export interface Canvas {
    * adds edge to graph
    */
   addEdge(edge: AddEdgeRequest): Canvas;
+
+  /**
+   * updates edge
+   */
+  updateEdge(edgeId: string, request: UpdateEdgeRequest): Canvas;
 
   /**
    * removes edge from graph
@@ -58,16 +70,6 @@ export interface Canvas {
    * moves viewport to nodes
    */
   moveToNodes(nodeIds: readonly string[]): Canvas;
-
-  /**
-   * updates node absolute coordinates
-   */
-  updateNodeCoordinates(nodeId: string, x: number, y: number): Canvas;
-
-  /**
-   * updates edge
-   */
-  updateEdge(edgeId: string, request: UpdateEdgeRequest): Canvas;
 
   /**
    * moves specified node on top
@@ -94,7 +96,7 @@ export interface Canvas {
   /**
    * destroys canvas
    * canvas element gets rolled back to initial state
-   * canvas requires reinitialization in order to be used again
+   * canvas can not be reused
    */
   destroy(): void;
 }

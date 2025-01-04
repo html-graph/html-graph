@@ -1,8 +1,8 @@
 # TODO
 
-- refactor layers behavior
+- replace moveNodeOnTop with updateNode
 - freeze node layer priority
-- refactor z-index
+- patch node and edge methods
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay

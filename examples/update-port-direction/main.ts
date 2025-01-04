@@ -28,21 +28,30 @@ port2.style.left = "0";
 node1.appendChild(port1);
 node2.appendChild(port2);
 
-let i = 0;
-
 const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
-  .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
+  .addNode({
+    id: "node-1",
+    element: node1,
+    x: 200,
+    y: 300,
+    ports: { "port-1": port1 },
+  })
+  .addNode({
+    id: "node-2",
+    element: node2,
+    x: 600,
+    y: 500,
+    ports: { "port-2": port2 },
+  })
+  .addEdge({ from: "port-1", to: "port-2" });
+
+let i = 1;
 
 setInterval(() => {
-  port2.style.top = i % 2 ? "0" : "100%";
-  canvas.updatePort("port-2");
+  canvas.updatePort("port-2", { direction: (Math.PI * i) / 12 });
 
   i++;
 }, 1000);

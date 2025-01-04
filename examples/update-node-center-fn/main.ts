@@ -1,4 +1,8 @@
-import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  MarkNodePortRequest,
+  HtmlGraphBuilder,
+  CenterFn,
+} from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -31,18 +35,29 @@ function createNode(
 }
 
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
-const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
-const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
 
 const canvasElement = document.getElementById("canvas")!;
 
-canvas
-  .attach(canvasElement)
-  .addNode({ element: node1, x: 400, y: 450, ports: ports1, priority: 3 })
-  .addNode({ element: node2, x: 450, y: 500, ports: ports2, priority: 2 })
-  .addNode({ element: node3, x: 500, y: 550, ports: ports3, priority: 1 })
-  .addNode({ element: node4, x: 550, y: 600, ports: ports4, priority: 0 })
-  .addEdge({ from: "port-1-2", to: "port-2-1", priority: 4 })
-  .addEdge({ from: "port-3-2", to: "port-4-1", priority: 4 })
-  .addEdge({ from: "port-2-2", to: "port-3-1", priority: 4 });
+canvas.attach(canvasElement).addNode({
+  id: "node-1",
+  element: node1,
+  x: 400,
+  y: 450,
+  ports: ports1,
+  priority: 3,
+});
+
+let i = 0;
+
+const topLeftCenterFn: CenterFn = () => [0, 0];
+const bottomRightCenterFn: CenterFn = (w, h) => [w, h];
+
+setInterval(() => {
+  if (i % 2) {
+    canvas.updateNode("node-1", { centerFn: topLeftCenterFn });
+  } else {
+    canvas.updateNode("node-1", { centerFn: bottomRightCenterFn });
+  }
+
+  i++;
+}, 1000);

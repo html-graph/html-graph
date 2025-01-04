@@ -6,10 +6,12 @@ import {
   PatchViewportRequest,
   Canvas,
   UpdateEdgeRequest,
+  UpdateNodeRequest,
 } from "../canvas";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
+import { UpdatePortRequest } from "../canvas/update-port-request";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -184,6 +186,15 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
+  public updateNode(
+    nodeId: string,
+    request: UpdateNodeRequest,
+  ): UserDraggableNodesCanvas {
+    this.canvas.updateNode(nodeId, request);
+
+    return this;
+  }
+
   public removeNode(nodeId: string): UserDraggableNodesCanvas {
     const node = this.nodes.get(nodeId);
 
@@ -204,8 +215,11 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePortEdges(portId: string): UserDraggableNodesCanvas {
-    this.canvas.updatePortEdges(portId);
+  public updatePort(
+    portId: string,
+    request?: UpdatePortRequest,
+  ): UserDraggableNodesCanvas {
+    this.canvas.updatePort(portId, request);
 
     return this;
   }
@@ -218,6 +232,15 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
     this.canvas.addEdge(edge);
+
+    return this;
+  }
+
+  public updateEdge(
+    edgeId: string,
+    request: UpdateEdgeRequest,
+  ): UserDraggableNodesCanvas {
+    this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
@@ -238,25 +261,6 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public moveToNodes(nodeIds: readonly string[]): UserDraggableNodesCanvas {
     this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
-  public updateNodeCoordinates(
-    nodeId: string,
-    x: number,
-    y: number,
-  ): UserDraggableNodesCanvas {
-    this.canvas.updateNodeCoordinates(nodeId, x, y);
-
-    return this;
-  }
-
-  public updateEdge(
-    edgeId: string,
-    request: UpdateEdgeRequest,
-  ): UserDraggableNodesCanvas {
-    this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
@@ -353,7 +357,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     node.x = xa;
     node.y = ya;
 
-    this.canvas.updateNodeCoordinates(nodeId, xa, ya);
+    this.canvas.updateNode(nodeId, { x: xa, y: ya });
 
     this.onNodeDrag({
       nodeId,

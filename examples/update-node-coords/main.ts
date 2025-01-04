@@ -52,9 +52,9 @@ let i = 0;
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updateNodeCoordinates("node-1", 200, 300);
+    canvas.updateNode("node-1", { x: 200, y: 300 });
   } else {
-    canvas.updateNodeCoordinates("node-1", 900, 300);
+    canvas.updateNode("node-1", { x: 900, y: 300 });
   }
 
   i++;

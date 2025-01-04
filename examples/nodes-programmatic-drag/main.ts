@@ -108,7 +108,7 @@ class NodesDragHandler {
         node.x = xa;
         node.y = ya;
 
-        canvas.updateNodeCoordinates(this.grabbedNode, node.x, node.y);
+        canvas.updateNode(this.grabbedNode, { x: node.x, y: node.y });
       }
     });
 
