@@ -1,8 +1,8 @@
 # TODO
 
+- number | string node id, port id, edge id
 - replace moveNodeOnTop with updateNode
 - freeze node layer priority
-- patch node and edge methods
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay
@@ -13,7 +13,6 @@
 - move to nodes smooth
 - refactor node id generation
 - move and drag cursor customization
-- number | string node id and port id
 - virtual scroll
 - drag edge creation
 - node drag handle example

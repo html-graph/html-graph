@@ -5,25 +5,21 @@ import { NodePayload } from "./node-payload";
 import { PortPayload } from "@/port-payload";
 
 export class GraphStore {
-  private nodes: Record<string, NodePayload> = Object.create(null);
+  private readonly nodes = new Map<string, NodePayload>();
 
-  private ports: Record<string, PortPayload> = Object.create(null);
+  private readonly ports = new Map<string, PortPayload>();
 
-  private nodePorts: Record<string, Record<string, HTMLElement>> =
-    Object.create(null);
+  private readonly nodePorts = new Map<string, Map<string, HTMLElement>>();
 
-  private portNodeId: Record<string, string> = Object.create(null);
+  private readonly portNodeId = new Map<string, string>();
 
-  private edges: Record<string, EdgePayload> = Object.create(null);
+  private readonly edges = new Map<string, EdgePayload>();
 
-  private incommingEdges: Record<string, Record<string, true>> =
-    Object.create(null);
+  private readonly incommingEdges = new Map<string, Set<string>>();
 
-  private outcommingEdges: Record<string, Record<string, true>> =
-    Object.create(null);
+  private readonly outcommingEdges = new Map<string, Set<string>>();
 
-  private cycleEdges: Record<string, Record<string, true>> =
-    Object.create(null);
+  private readonly cycleEdges = new Map<string, Set<string>>();
 
   public addNode(
     nodeId: string,
@@ -33,16 +29,12 @@ export class GraphStore {
     centerFn: CenterFn,
     priority: number,
   ): void {
-    this.nodes[nodeId] = { element, x, y, centerFn, priority };
-    this.nodePorts[nodeId] = Object.create(null);
+    this.nodes.set(nodeId, { element, x, y, centerFn, priority });
+    this.nodePorts.set(nodeId, new Map<string, HTMLElement>());
   }
 
-  public hasNode(nodeId: string): boolean {
-    return this.nodes[nodeId] !== undefined;
-  }
-
-  public getNode(nodeId: string): NodePayload {
-    return this.nodes[nodeId];
+  public getNode(nodeId: string): NodePayload | undefined {
+    return this.nodes.get(nodeId);
   }
 
   public removeNode(nodeId: string): void {
@@ -52,14 +44,14 @@ export class GraphStore {
       this.removeEdge(edgeId);
     });
 
-    delete this.nodes[nodeId];
-    const ports = this.nodePorts[nodeId];
+    this.nodes.delete(nodeId);
+    const ports = this.nodePorts.get(nodeId)!;
 
-    Object.keys(ports).forEach((port) => {
-      delete this.portNodeId[port];
+    ports.forEach((_port, key) => {
+      this.portNodeId.delete(key);
     });
 
-    delete this.nodePorts[nodeId];
+    this.nodePorts.delete(nodeId);
   }
 
   public addPort(
@@ -69,56 +61,46 @@ export class GraphStore {
     centerFn: CenterFn,
     dir: number,
   ): void {
-    this.ports[portId] = { element, centerFn, direction: dir };
-    this.cycleEdges[portId] = {};
-    this.incommingEdges[portId] = {};
-    this.outcommingEdges[portId] = {};
-    this.portNodeId[portId] = nodeId;
+    this.ports.set(portId, { element, centerFn, direction: dir });
+    this.cycleEdges.set(portId, new Set());
+    this.incommingEdges.set(portId, new Set());
+    this.outcommingEdges.set(portId, new Set());
+    this.portNodeId.set(portId, nodeId);
 
-    const ports = this.nodePorts[nodeId];
-
-    if (ports !== undefined) {
-      ports[portId] = element;
-    }
+    this.nodePorts.get(nodeId)!.set(portId, element);
   }
 
-  public getPort(portId: string): PortPayload {
-    return this.ports[portId];
+  public getPort(portId: string): PortPayload | undefined {
+    return this.ports.get(portId);
   }
 
-  public getPortNode(portId: string): string {
-    return this.portNodeId[portId];
-  }
-
-  public hasPort(portId: string): boolean {
-    return this.portNodeId[portId] !== undefined;
+  public getPortNode(portId: string): string | undefined {
+    return this.portNodeId.get(portId);
   }
 
   public removePort(portId: string): void {
-    Object.keys(this.cycleEdges[portId]).forEach((edgeId) => {
+    this.cycleEdges.get(portId)!.forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
-    delete this.cycleEdges[portId];
+    this.cycleEdges.delete(portId);
 
-    Object.keys(this.incommingEdges[portId]).forEach((edgeId) => {
+    this.incommingEdges.get(portId)!.forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
-    delete this.incommingEdges[portId];
+    this.incommingEdges.delete(portId);
 
-    Object.keys(this.outcommingEdges[portId]).forEach((edgeId) => {
+    this.outcommingEdges.get(portId)!.forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
-    delete this.outcommingEdges[portId];
+    this.outcommingEdges.get(portId);
 
-    const node = this.portNodeId[portId];
+    const node = this.portNodeId.get(portId)!;
 
-    delete this.portNodeId[portId];
+    this.portNodeId.delete(portId);
 
-    const ports = this.nodePorts[node];
+    this.nodePorts.get(node)!.delete(portId);
 
-    delete ports[portId];
-
-    delete this.ports[portId];
+    this.ports.delete(portId);
   }
 
   public addEdge(
@@ -128,42 +110,38 @@ export class GraphStore {
     svgController: EdgeController,
     priority: number,
   ): void {
-    this.edges[edgeId] = {
+    this.edges.set(edgeId, {
       from: fromPortId,
       to: toPortId,
       controller: svgController,
       priority,
-    };
+    });
 
     if (fromPortId !== toPortId) {
-      this.outcommingEdges[fromPortId][edgeId] = true;
-      this.incommingEdges[toPortId][edgeId] = true;
+      this.outcommingEdges.get(fromPortId)!.add(edgeId);
+      this.incommingEdges.get(toPortId)!.add(edgeId);
     } else {
-      this.cycleEdges[fromPortId][edgeId] = true;
+      this.cycleEdges.get(fromPortId)!.add(edgeId);
     }
   }
 
-  public getEdge(edgeId: string): EdgePayload {
-    return this.edges[edgeId];
-  }
-
-  public hasEdge(edgeId: string): boolean {
-    return this.edges[edgeId] !== undefined;
+  public getEdge(edgeId: string): EdgePayload | undefined {
+    return this.edges.get(edgeId);
   }
 
   public removeEdge(edgeId: string): void {
-    const edge = this.edges[edgeId];
+    const edge = this.edges.get(edgeId)!;
     const portFromId = edge.from;
     const portToId = edge.to;
 
-    delete this.cycleEdges[portFromId][edgeId];
-    delete this.cycleEdges[portToId][edgeId];
-    delete this.incommingEdges[portFromId][edgeId];
-    delete this.incommingEdges[portToId][edgeId];
-    delete this.outcommingEdges[portFromId][edgeId];
-    delete this.outcommingEdges[portToId][edgeId];
+    this.cycleEdges.get(portFromId)!.delete(edgeId);
+    this.cycleEdges.get(portToId)!.delete(edgeId);
+    this.incommingEdges.get(portFromId)!.delete(edgeId);
+    this.incommingEdges.get(portToId)!.delete(edgeId);
+    this.outcommingEdges.get(portFromId)!.delete(edgeId);
+    this.outcommingEdges.get(portToId)!.delete(edgeId);
 
-    delete this.edges[edgeId];
+    this.edges.delete(edgeId);
   }
 
   public getPortAdjacentEdges(portId: string): readonly string[] {
@@ -183,30 +161,30 @@ export class GraphStore {
   }
 
   public clear(): void {
-    this.nodes = Object.create(null);
-    this.ports = Object.create(null);
-    this.nodePorts = Object.create(null);
-    this.portNodeId = Object.create(null);
-    this.edges = Object.create(null);
-    this.incommingEdges = Object.create(null);
-    this.outcommingEdges = Object.create(null);
-    this.cycleEdges = Object.create(null);
+    this.nodes.clear();
+    this.ports.clear();
+    this.nodePorts.clear();
+    this.portNodeId.clear();
+    this.edges.clear();
+    this.incommingEdges.clear();
+    this.outcommingEdges.clear();
+    this.cycleEdges.clear();
   }
 
   private getPortIncomingEdges(portId: string): readonly string[] {
-    return Object.keys(this.incommingEdges[portId] ?? {});
+    return Array.from(this.incommingEdges.get(portId)!);
   }
 
   private getPortOutcomingEdges(portId: string): readonly string[] {
-    return Object.keys(this.outcommingEdges[portId] ?? {});
+    return Array.from(this.outcommingEdges.get(portId)!);
   }
 
   private getPortCycleEdges(portId: string): readonly string[] {
-    return Object.keys(this.cycleEdges[portId] ?? {});
+    return Array.from(this.cycleEdges.get(portId)!);
   }
 
   private getNodeIncomingEdges(nodeId: string): readonly string[] {
-    const ports = Object.keys(this.nodePorts[nodeId]);
+    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: string[] = [];
 
     ports.forEach((portId) => {
@@ -217,7 +195,7 @@ export class GraphStore {
   }
 
   private getNodeOutcomingEdges(nodeId: string): readonly string[] {
-    const ports = Object.keys(this.nodePorts[nodeId]);
+    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: string[] = [];
 
     ports.forEach((portId) => {
@@ -228,7 +206,7 @@ export class GraphStore {
   }
 
   private getNodeCycleEdges(nodeId: string): readonly string[] {
-    const ports = Object.keys(this.nodePorts[nodeId]);
+    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: string[] = [];
 
     ports.forEach((portId) => {

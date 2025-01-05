@@ -101,7 +101,7 @@ export class HtmlController {
     const node = this.graphStore.getNode(nodeId);
 
     const wrapper = document.createElement("div");
-    wrapper.appendChild(node.element);
+    wrapper.appendChild(node!.element);
 
     wrapper.style.position = "absolute";
     wrapper.style.top = "0";
@@ -110,7 +110,7 @@ export class HtmlController {
 
     this.layer.appendNodeElement(wrapper);
 
-    this.nodeElementToIdMap.set(node.element, nodeId);
+    this.nodeElementToIdMap.set(node!.element, nodeId);
     this.nodeWrapperElementToIdMap.set(wrapper, nodeId);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
@@ -124,19 +124,19 @@ export class HtmlController {
   public detachNode(nodeId: string): void {
     const node = this.graphStore.getNode(nodeId);
 
-    this.nodesResizeObserver.unobserve(node.element);
+    this.nodesResizeObserver.unobserve(node!.element);
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    wrapper.removeChild(node.element);
+    wrapper.removeChild(node!.element);
     this.layer.removeNodeElement(wrapper);
 
-    this.nodeElementToIdMap.delete(node.element);
+    this.nodeElementToIdMap.delete(node!.element);
     this.nodeWrapperElementToIdMap.delete(wrapper);
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
   public attachEdge(edgeId: string): void {
-    const edge = this.graphStore.getEdge(edgeId);
+    const edge = this.graphStore.getEdge(edgeId)!;
     const element = edge.controller.svg;
 
     element.style.position = "absolute";
@@ -161,11 +161,11 @@ export class HtmlController {
     const node = this.graphStore.getNode(nodeId);
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
 
-    wrapper.style.zIndex = `${node.priority}`;
+    wrapper.style.zIndex = `${node!.priority}`;
   }
 
   public updateEdgePriority(edgeId: string): void {
-    const edge = this.graphStore.getEdge(edgeId);
+    const edge = this.graphStore.getEdge(edgeId)!;
 
     this.edgeIdToElementMap.get(edgeId)!.style.zIndex = `${edge.priority}`;
   }
@@ -236,12 +236,12 @@ export class HtmlController {
   }
 
   private updateEdgeCoords(edgeId: string): void {
-    const edge = this.graphStore.getEdge(edgeId);
-    const portFrom = this.graphStore.getPort(edge.from);
-    const portTo = this.graphStore.getPort(edge.to);
+    const edge = this.graphStore.getEdge(edgeId)!;
+    const portFrom = this.graphStore.getPort(edge.from)!;
+    const portTo = this.graphStore.getPort(edge.to)!;
 
-    const rectFrom = portFrom.element.getBoundingClientRect();
-    const rectTo = portTo.element.getBoundingClientRect();
+    const rectFrom = portFrom!.element.getBoundingClientRect();
+    const rectTo = portTo!.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
 
     const [xAbsFrom, yAbsFrom] = this.viewportTransformer.getAbsCoords(
