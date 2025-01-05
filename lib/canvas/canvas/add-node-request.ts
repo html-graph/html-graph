@@ -1,12 +1,12 @@
 import { CenterFn } from "@/center-fn";
-import { MarkNodePortRequest } from "./mark-node-port-request";
+import { AddNodePorts } from "./add-node-ports";
 
 export interface AddNodeRequest {
   id?: unknown;
   element: HTMLElement;
   x: number;
   y: number;
-  ports?: Map<unknown, MarkNodePortRequest>;
+  ports?: AddNodePorts;
   centerFn?: CenterFn;
   priority?: number;
 }

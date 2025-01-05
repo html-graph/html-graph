@@ -1,4 +1,4 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import { AddNodePorts, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -16,7 +16,7 @@ function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Map<unknown, HTMLElement>] {
+): [HTMLElement, AddNodePorts] {
   const node = document.createElement("div");
   node.classList.add("node");
 

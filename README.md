@@ -33,7 +33,7 @@ npm i @html-graph/html-graph
 ```
 
 ```typescript
-import { MarkNodePortRequest, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { AddNodePorts, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -48,7 +48,7 @@ function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, MarkNodePortRequest>] {
+): [HTMLElement, AddNodePorts] {
   const node = document.createElement("div");
   node.classList.add("node");
 
@@ -64,7 +64,12 @@ function createNode(
   backPort.classList.add("port");
   node.appendChild(backPort);
 
-  return [node, { [frontPortId]: frontPort, [backPortId]: backPort }];
+  const ports = new Map([
+    [frontPortId, frontPort],
+    [backPortId, backPort],
+  ]);
+
+  return [node, ports];
 }
 
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");

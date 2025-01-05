@@ -1,4 +1,4 @@
-import { MarkNodePortRequest } from "@html-graph/html-graph";
+import { AddNodePorts, MarkNodePortRequest } from "@html-graph/html-graph";
 
 export class GraphHtmlHelper {
   public createNodeElement(
@@ -6,7 +6,7 @@ export class GraphHtmlHelper {
     frontPortId: string | null,
     ports: Record<string, string>,
     footerContent?: HTMLElement,
-  ): [HTMLElement, Map<unknown, MarkNodePortRequest>] {
+  ): [HTMLElement, AddNodePorts] {
     const node = document.createElement("div");
     node.classList.add("node");
 

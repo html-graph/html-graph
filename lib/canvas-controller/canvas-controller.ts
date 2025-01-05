@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeControllerFactory, EdgeType } from "@/edges";
-import { MarkNodePortRequest, UpdateEdgeRequest } from "@/canvas/canvas";
+import { AddNodePorts, UpdateEdgeRequest } from "@/canvas/canvas";
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
@@ -54,7 +54,7 @@ export class CanvasController {
     element: HTMLElement,
     x: number,
     y: number,
-    ports: Map<unknown, MarkNodePortRequest> | undefined,
+    ports: AddNodePorts | undefined,
     centerFn: CenterFn | undefined,
     priority: number | undefined,
   ): void {
