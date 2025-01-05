@@ -83,27 +83,27 @@ export class CanvasController {
 
     this.htmlController.attachNode(nodeId);
 
-    if (ports !== undefined) {
-      ports.forEach((element, portId) => {
-        if (element instanceof HTMLElement) {
-          this.markPort(
-            portId,
-            element,
-            nodeId,
-            this.portsCenterFn,
-            this.portsDirection,
-          );
-        } else {
-          this.markPort(
-            portId,
-            element.element,
-            nodeId,
-            element.centerFn ?? this.portsCenterFn,
-            element.direction ?? this.portsDirection,
-          );
-        }
-      });
-    }
+    const map = new Map(ports ?? []);
+
+    map.forEach((element, portId) => {
+      if (element instanceof HTMLElement) {
+        this.markPort(
+          portId,
+          element,
+          nodeId,
+          this.portsCenterFn,
+          this.portsDirection,
+        );
+      } else {
+        this.markPort(
+          portId,
+          element.element,
+          nodeId,
+          element.centerFn ?? this.portsCenterFn,
+          element.direction ?? this.portsDirection,
+        );
+      }
+    });
   }
 
   public updateNode(

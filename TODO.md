@@ -1,5 +1,7 @@
 # TODO
 
+- simplify add node ports model
+- simplify getting started
 - replace moveNodeOnTop with updateNode
 - freeze node layer priority
 - improve connection with label example
@@ -16,7 +18,6 @@
 - drag edge creation
 - node drag handle example
 - unit tests
-- change bezier self-cycle port to bezier curve
 - snap nodes to grid
 - e2e tests
 - sankey connections

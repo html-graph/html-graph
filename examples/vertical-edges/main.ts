@@ -35,10 +35,10 @@ function createNode(
 
   return [
     node,
-    new Map([
+    [
       [frontPortId, frontPort],
       [backPortId, backPort],
-    ]),
+    ],
   ];
 }
 

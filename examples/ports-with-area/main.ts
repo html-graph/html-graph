@@ -45,7 +45,7 @@ canvas
     element: node1,
     x: 200,
     y: 300,
-    ports: new Map([
+    ports: [
       [
         "port-1",
         {
@@ -53,14 +53,14 @@ canvas
           centerFn: (w, h): [number, number] => [w, h / 2],
         },
       ],
-    ]),
+    ],
   })
   .addNode({
     id: "node-2",
     element: node2,
     x: 600,
     y: 500,
-    ports: new Map([
+    ports: [
       [
         "port-2",
         {
@@ -68,6 +68,6 @@ canvas
           centerFn: (_w, h): [number, number] => [0, h / 2],
         },
       ],
-    ]),
+    ],
   })
   .addEdge({ from: "port-1", to: "port-2" });

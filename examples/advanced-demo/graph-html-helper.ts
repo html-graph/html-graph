@@ -10,12 +10,12 @@ export class GraphHtmlHelper {
     const node = document.createElement("div");
     node.classList.add("node");
 
-    const portElements = new Map<unknown, MarkNodePortRequest>();
+    const portElements: [unknown, MarkNodePortRequest][] = [];
 
     if (frontPortId !== null) {
       const inputPort = this.createInputPort();
       node.appendChild(inputPort);
-      portElements.set(frontPortId, inputPort);
+      portElements.push([frontPortId, inputPort]);
     }
 
     const content = this.createContentElement();
@@ -28,7 +28,7 @@ export class GraphHtmlHelper {
       const [body, elements] = this.createBodyElement(ports);
       content.appendChild(body);
       elements.forEach((value, key) => {
-        portElements.set(key, value);
+        portElements.push([key, value]);
       });
     }
 

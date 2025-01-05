@@ -32,7 +32,7 @@ for (let i = 0; i < total; i++) {
     element: node,
     x: Math.cos(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
     y: Math.sin(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
-    ports: new Map([[newPortId, port]]),
+    ports: [[newPortId, port]],
   });
 
   portIds.forEach((prevPortId) => {

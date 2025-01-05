@@ -138,10 +138,10 @@ class NodesDragHandler {
 
     return [
       node,
-      new Map([
+      [
         [frontPortId, frontPort],
         [backPortId, backPort],
-      ]),
+      ],
     ];
   }
 }
