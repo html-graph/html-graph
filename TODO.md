@@ -1,7 +1,5 @@
 # TODO
 
-- simplify add node ports model
-- simplify getting started
 - replace moveNodeOnTop with updateNode
 - freeze node layer priority
 - improve connection with label example

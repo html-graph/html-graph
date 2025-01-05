@@ -64,12 +64,13 @@ function createNode(
   backPort.classList.add("port");
   node.appendChild(backPort);
 
-  const ports = new Map([
-    [frontPortId, frontPort],
-    [backPortId, backPort],
-  ]);
-
-  return [node, ports];
+  return [
+    node,
+    [
+      [frontPortId, frontPort],
+      [backPortId, backPort],
+    ],
+  ];
 }
 
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
