@@ -21,14 +21,14 @@ export interface Canvas {
   /**
    * updates node absolute coordinates
    */
-  updateNode(nodeId: string, request: UpdateNodeRequest): Canvas;
+  updateNode(nodeId: unknown, request: UpdateNodeRequest): Canvas;
 
   /**
    * removes node from graph
    * all the ports of node get unmarked
    * all the edges adjacent to node get removed
    */
-  removeNode(nodeId: string): Canvas;
+  removeNode(nodeId: unknown): Canvas;
 
   /**
    * marks element as port of node
@@ -54,12 +54,12 @@ export interface Canvas {
   /**
    * updates edge
    */
-  updateEdge(edgeId: string, request: UpdateEdgeRequest): Canvas;
+  updateEdge(edgeId: unknown, request: UpdateEdgeRequest): Canvas;
 
   /**
    * removes edge from graph
    */
-  removeEdge(edgeId: string): Canvas;
+  removeEdge(edgeId: unknown): Canvas;
 
   /**
    * applies transformation for viewport
@@ -74,7 +74,7 @@ export interface Canvas {
   /**
    * moves specified node on top
    */
-  moveNodeOnTop(nodeId: string): Canvas;
+  moveNodeOnTop(nodeId: unknown): Canvas;
 
   /**
    * attaches canvas to given element

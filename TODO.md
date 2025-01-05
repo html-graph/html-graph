@@ -1,6 +1,5 @@
 # TODO
 
-- number | string node id, port id, edge id
 - replace moveNodeOnTop with updateNode
 - freeze node layer priority
 - improve connection with label example

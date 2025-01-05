@@ -6,16 +6,16 @@ export class GraphHtmlHelper {
     frontPortId: string | null,
     ports: Record<string, string>,
     footerContent?: HTMLElement,
-  ): [HTMLElement, Record<string, MarkNodePortRequest>] {
+  ): [HTMLElement, Map<unknown, MarkNodePortRequest>] {
     const node = document.createElement("div");
     node.classList.add("node");
 
-    let portElements: Record<string, MarkNodePortRequest> = {};
+    const portElements = new Map<unknown, MarkNodePortRequest>();
 
     if (frontPortId !== null) {
       const inputPort = this.createInputPort();
       node.appendChild(inputPort);
-      portElements[frontPortId] = inputPort;
+      portElements.set(frontPortId, inputPort);
     }
 
     const content = this.createContentElement();
@@ -27,7 +27,9 @@ export class GraphHtmlHelper {
     if (Object.keys(ports).length > 0) {
       const [body, elements] = this.createBodyElement(ports);
       content.appendChild(body);
-      portElements = { ...portElements, ...elements };
+      elements.forEach((value, key) => {
+        portElements.set(key, value);
+      });
     }
 
     if (footerContent) {
@@ -77,11 +79,11 @@ export class GraphHtmlHelper {
 
   private createBodyElement(
     ports: Record<string, string>,
-  ): [HTMLElement, Record<string, MarkNodePortRequest>] {
+  ): [HTMLElement, Map<unknown, MarkNodePortRequest>] {
     const body = document.createElement("div");
     body.classList.add("node-body");
 
-    const portElements: Record<string, MarkNodePortRequest> = {};
+    const portElements = new Map<string, MarkNodePortRequest>();
 
     Object.entries(ports).forEach(([key, value]) => {
       const portContent = document.createElement("div");
@@ -94,7 +96,7 @@ export class GraphHtmlHelper {
       portContent.appendChild(port);
 
       body.appendChild(portContent);
-      portElements[key] = port;
+      portElements.set(key, port);
     });
 
     return [body, portElements];

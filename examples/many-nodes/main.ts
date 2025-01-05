@@ -32,7 +32,7 @@ for (let i = 0; i < total; i++) {
     element: node,
     x: offset,
     y: 300 + Math.random() * 200,
-    ports: { [newPortId]: port },
+    ports: new Map([[newPortId, port]]),
   });
 
   if (prevPortId) {

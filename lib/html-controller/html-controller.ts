@@ -21,13 +21,13 @@ export class HtmlController {
 
   private readonly nodesResizeObserver: ResizeObserver;
 
-  private readonly nodeElementToIdMap = new Map<HTMLElement, string>();
+  private readonly nodeElementToIdMap = new Map<HTMLElement, unknown>();
 
-  private readonly nodeWrapperElementToIdMap = new Map<HTMLElement, string>();
+  private readonly nodeWrapperElementToIdMap = new Map<HTMLElement, unknown>();
 
-  private readonly nodeIdToWrapperElementMap = new Map<string, HTMLElement>();
+  private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
-  private readonly edgeIdToElementMap = new Map<string, SVGSVGElement>();
+  private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   private readonly layer: Layer;
 
@@ -97,7 +97,7 @@ export class HtmlController {
     this.layer.update(sv, xv, yv);
   }
 
-  public attachNode(nodeId: string): void {
+  public attachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
     const wrapper = document.createElement("div");
@@ -121,7 +121,7 @@ export class HtmlController {
     wrapper.style.visibility = "visible";
   }
 
-  public detachNode(nodeId: string): void {
+  public detachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
     this.nodesResizeObserver.unobserve(node!.element);
@@ -135,7 +135,7 @@ export class HtmlController {
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
-  public attachEdge(edgeId: string): void {
+  public attachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const element = edge.controller.svg;
 
@@ -151,26 +151,26 @@ export class HtmlController {
     this.layer.appendEdgeElement(element);
   }
 
-  public detachEdge(edgeId: string): void {
+  public detachEdge(edgeId: unknown): void {
     const element = this.edgeIdToElementMap.get(edgeId)!;
     this.edgeIdToElementMap.delete(edgeId);
     this.layer.removeEdgeElement(element);
   }
 
-  public updateNodePriority(nodeId: string): void {
+  public updateNodePriority(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
 
     wrapper.style.zIndex = `${node!.priority}`;
   }
 
-  public updateEdgePriority(edgeId: string): void {
+  public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
     this.edgeIdToElementMap.get(edgeId)!.style.zIndex = `${edge.priority}`;
   }
 
-  public updateNodeCoordinates(nodeId: string): void {
+  public updateNodeCoordinates(nodeId: unknown): void {
     const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
 
     this.updateNodeCoords(nodeId);
@@ -225,7 +225,7 @@ export class HtmlController {
     this.canvas.height = height;
   }
 
-  private updateNodeCoords(nodeId: string): void {
+  private updateNodeCoords(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
     const sa = this.viewportTransformer.getAbsScale();
@@ -235,7 +235,7 @@ export class HtmlController {
     wrapper.style.transform = `matrix(1, 0, 0, 1, ${node.x - sa * centerX}, ${node.y - sa * centerY})`;
   }
 
-  private updateEdgeCoords(edgeId: string): void {
+  private updateEdgeCoords(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;

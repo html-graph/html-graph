@@ -16,7 +16,7 @@ function createNode(
   name: string,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, Record<string, MarkNodePortRequest>] {
+): [HTMLElement, Map<unknown, MarkNodePortRequest>] {
   const node = document.createElement("div");
   node.classList.add("node");
 
@@ -34,10 +34,10 @@ function createNode(
 
   return [
     node,
-    {
-      [frontPortId]: frontPort,
-      [backPortId]: backPort,
-    },
+    new Map([
+      [frontPortId, frontPort],
+      [backPortId, backPort],
+    ]),
   ];
 }
 

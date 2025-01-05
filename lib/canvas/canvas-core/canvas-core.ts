@@ -56,7 +56,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateNode(nodeId: string, request: UpdateNodeRequest): CanvasCore {
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest): CanvasCore {
     this.di.canvasController.updateNode(
       nodeId,
       request.x,
@@ -68,13 +68,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public removeNode(nodeId: string): CanvasCore {
+  public removeNode(nodeId: unknown): CanvasCore {
     this.di.canvasController.removeNode(nodeId);
 
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): CanvasCore {
+  public moveNodeOnTop(nodeId: unknown): CanvasCore {
     this.di.canvasController.moveNodeOnTop(nodeId);
 
     return this;
@@ -121,13 +121,13 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateEdge(edgeId: string, request: UpdateEdgeRequest): CanvasCore {
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): CanvasCore {
     this.di.canvasController.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: string): CanvasCore {
+  public removeEdge(edgeId: unknown): CanvasCore {
     this.di.canvasController.removeEdge(edgeId);
 
     return this;

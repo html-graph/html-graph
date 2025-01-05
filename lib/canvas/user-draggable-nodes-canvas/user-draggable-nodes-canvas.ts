@@ -17,7 +17,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   private readonly nodes = new Map<
-    string,
+    unknown,
     {
       readonly element: HTMLElement;
       readonly onMouseDown: (event: MouseEvent) => void;
@@ -27,7 +27,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
   >();
 
-  private grabbedNodeId: string | null = null;
+  private grabbedNodeId: unknown | null = null;
 
   private onNodeDrag: (payload: NodeDragPayload) => void;
 
@@ -187,7 +187,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public updateNode(
-    nodeId: string,
+    nodeId: unknown,
     request: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.updateNode(nodeId, request);
@@ -195,7 +195,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public removeNode(nodeId: string): UserDraggableNodesCanvas {
+  public removeNode(nodeId: unknown): UserDraggableNodesCanvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -237,7 +237,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public updateEdge(
-    edgeId: string,
+    edgeId: unknown,
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.updateEdge(edgeId, request);
@@ -245,7 +245,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public removeEdge(edgeId: string): UserDraggableNodesCanvas {
+  public removeEdge(edgeId: unknown): UserDraggableNodesCanvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
@@ -341,7 +341,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
   }
 
-  private dragNode(nodeId: string, dx: number, dy: number): void {
+  private dragNode(nodeId: unknown, dx: number, dy: number): void {
     const node = this.nodes.get(nodeId);
 
     if (node === undefined) {

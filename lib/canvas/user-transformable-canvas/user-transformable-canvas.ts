@@ -169,7 +169,7 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   public updateNode(
-    nodeId: string,
+    nodeId: unknown,
     request: UpdateNodeRequest,
   ): UserTransformableCanvas {
     this.canvas.updateNode(nodeId, request);
@@ -177,7 +177,7 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public removeNode(nodeId: string): UserTransformableCanvas {
+  public removeNode(nodeId: unknown): UserTransformableCanvas {
     this.canvas.removeNode(nodeId);
 
     return this;
@@ -210,7 +210,16 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public removeEdge(edgeId: string): UserTransformableCanvas {
+  public updateEdge(
+    edgeId: unknown,
+    request: UpdateEdgeRequest,
+  ): UserTransformableCanvas {
+    this.canvas.updateEdge(edgeId, request);
+
+    return this;
+  }
+
+  public removeEdge(edgeId: unknown): UserTransformableCanvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
@@ -226,15 +235,6 @@ export class UserTransformableCanvas implements Canvas {
 
   public moveToNodes(nodeIds: readonly string[]): UserTransformableCanvas {
     this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
-  public updateEdge(
-    edgeId: string,
-    request: UpdateEdgeRequest,
-  ): UserTransformableCanvas {
-    this.canvas.updateEdge(edgeId, request);
 
     return this;
   }

@@ -26,7 +26,7 @@ export class CanvasController {
     private readonly portsDirection: number,
   ) {}
 
-  public moveNodeOnTop(nodeId: string): void {
+  public moveNodeOnTop(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
@@ -50,11 +50,11 @@ export class CanvasController {
   }
 
   public addNode(
-    nodeId: string | undefined,
+    nodeId: unknown | undefined,
     element: HTMLElement,
     x: number,
     y: number,
-    ports: Record<string, MarkNodePortRequest> | undefined,
+    ports: Map<unknown, MarkNodePortRequest> | undefined,
     centerFn: CenterFn | undefined,
     priority: number | undefined,
   ): void {
@@ -84,7 +84,7 @@ export class CanvasController {
     this.htmlController.attachNode(nodeId);
 
     if (ports !== undefined) {
-      Object.entries(ports).forEach(([portId, element]) => {
+      ports.forEach((element, portId) => {
         if (element instanceof HTMLElement) {
           this.markPort(
             portId,
@@ -107,7 +107,7 @@ export class CanvasController {
   }
 
   public updateNode(
-    nodeId: string,
+    nodeId: unknown,
     x: number | undefined,
     y: number | undefined,
     priority: number | undefined,
@@ -133,9 +133,9 @@ export class CanvasController {
   }
 
   public markPort(
-    portId: string | undefined,
+    portId: unknown | undefined,
     element: HTMLElement,
-    nodeId: string,
+    nodeId: unknown,
     centerFn: CenterFn | undefined,
     dir: number | undefined,
   ): void {
@@ -191,7 +191,7 @@ export class CanvasController {
   }
 
   public addEdge(
-    edgeId: string | undefined,
+    edgeId: unknown | undefined,
     fromPortId: string,
     toPortId: string,
     controllerFactory: EdgeControllerFactory,
@@ -241,7 +241,7 @@ export class CanvasController {
     this.htmlController.attachEdge(edgeId);
   }
 
-  public updateEdge(edgeId: string, request: UpdateEdgeRequest): void {
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     const edge = this.graphStore.getEdge(edgeId);
     if (edge === undefined) {
       throw new Error("failed to update nonexisting edge");
@@ -259,7 +259,7 @@ export class CanvasController {
     }
   }
 
-  public removeEdge(edgeId: string): void {
+  public removeEdge(edgeId: unknown): void {
     if (this.graphStore.getEdge(edgeId) === undefined) {
       throw new Error("failed to remove nonexisting edge");
     }
@@ -268,7 +268,7 @@ export class CanvasController {
     this.graphStore.removeEdge(edgeId);
   }
 
-  public removeNode(nodeId: string): void {
+  public removeNode(nodeId: unknown): void {
     if (this.graphStore.getNode(nodeId) === undefined) {
       throw new Error("failed to remove nonexisting node");
     }

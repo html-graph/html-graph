@@ -1,7 +1,7 @@
 import { EdgeOptions } from "./edge-options";
 
 export interface AddEdgeRequest {
-  id?: string;
+  id?: unknown;
   from: string;
   to: string;
   options?: EdgeOptions;
