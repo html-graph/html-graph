@@ -6,16 +6,15 @@
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay
 - edge controller constructor 1 parameter ?
-- assign layer behavior to edge
 - edge hover behavior
 - move to nodes autoscale
 - move to nodes smooth
 - refactor node id generation
 - move and drag cursor customization
-- virtual scroll
 - drag edge creation
+- virtual scroll
 - node drag handle example
 - unit tests
-- snap nodes to grid
 - e2e tests
+- snap nodes to grid
 - sankey connections

@@ -1,6 +1,5 @@
 import {
   BackgroundDrawingFn,
-  createColorBackgroundDrawingFn,
   createDotsBackgroundDrawingFn,
   createNoopBackgroundDrawingFn,
 } from "@/background";
@@ -19,8 +18,6 @@ export const resolveBackgroundDrawingFn: (
         options.dotRadius ?? 1.5,
         options.color ?? "#ffffff",
       );
-    case "color":
-      return createColorBackgroundDrawingFn(options.color ?? "#ffffff");
     default:
       return createNoopBackgroundDrawingFn();
   }

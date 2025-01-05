@@ -5,10 +5,6 @@ export type BackgroundOptions =
       readonly type: "none";
     }
   | {
-      readonly type: "color";
-      readonly color?: string;
-    }
-  | {
       readonly type: "dots";
       readonly dotColor?: string;
       readonly dotGap?: number;

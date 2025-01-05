@@ -1,8 +1,8 @@
 export class IdGenerator {
   private counter = 0;
 
-  public create(): string {
-    const id = `${this.counter}`;
+  public create(): number {
+    const id = this.counter;
 
     this.counter++;
 
