@@ -143,7 +143,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
 
     if (node.priority !== undefined) {
-      this.pushPriority(node.priority);
+      this.updateMaxPriority(node.priority);
     }
 
     this.canvas.addNode(node);
@@ -205,7 +205,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     request: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
     if (request.priority !== undefined) {
-      this.pushPriority(request.priority);
+      this.updateMaxPriority(request.priority);
     }
 
     this.canvas.updateNode(nodeId, request);
@@ -250,7 +250,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
     if (edge.priority !== undefined) {
-      this.pushPriority(edge.priority);
+      this.updateMaxPriority(edge.priority);
     }
 
     this.canvas.addEdge(edge);
@@ -263,7 +263,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
     if (request.priority !== undefined) {
-      this.pushPriority(request.priority);
+      this.updateMaxPriority(request.priority);
     }
 
     this.canvas.updateEdge(edgeId, request);
@@ -388,7 +388,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
   }
 
-  private pushPriority(priority: number): void {
+  private updateMaxPriority(priority: number): void {
     this.maxPriority = Math.max(this.maxPriority, priority);
   }
 
