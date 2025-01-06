@@ -33,7 +33,7 @@ export type {
   TransformPayload,
   AddNodePorts,
 } from "./canvas";
-export type { NodeResponse, NodeItem } from "./graph-store";
+export type { GraphNode, GraphPort, GraphEdge } from "./graph-store";
 export type { PublicViewportTransformer } from "./viewport-transformer";
 export type { BackgroundDrawingFn } from "./background";
 export type { PortPayload } from "./port-payload";

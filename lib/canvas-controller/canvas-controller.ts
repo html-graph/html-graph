@@ -5,7 +5,6 @@ import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
-import { PriorityGenerator } from "@/priority-generator";
 import { UpdatePortRequest } from "@/canvas/canvas/update-port-request";
 
 export class CanvasController {
@@ -15,8 +14,6 @@ export class CanvasController {
 
   private readonly edgeIdGenerator = new IdGenerator();
 
-  private readonly priorityGenerator = new PriorityGenerator();
-
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
@@ -25,29 +22,6 @@ export class CanvasController {
     private readonly portsCenterFn: CenterFn,
     private readonly portsDirection: number,
   ) {}
-
-  public moveNodeOnTop(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId);
-
-    if (node === undefined) {
-      throw new Error("failed to move on top nonexisting node");
-    }
-
-    const newEdgesPriority = this.priorityGenerator.create();
-    const newNodePriority = this.priorityGenerator.create();
-
-    node.priority = newNodePriority;
-    this.htmlController.updateNodePriority(nodeId);
-
-    const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
-
-    edges.forEach((edgeId) => {
-      const edge = this.graphStore.getEdge(edgeId)!;
-      edge.priority = newEdgesPriority;
-
-      this.htmlController.updateEdgePriority(edgeId);
-    });
-  }
 
   public addNode(
     nodeId: unknown | undefined,
@@ -68,17 +42,13 @@ export class CanvasController {
       throw new Error("failed to add node with existing id");
     }
 
-    if (priority !== undefined) {
-      this.priorityGenerator.push(priority);
-    }
-
     this.graphStore.addNode(
       nodeId,
       element,
       x,
       y,
       centerFn ?? this.nodesCenterFn,
-      priority ?? this.priorityGenerator.create(),
+      priority ?? 0,
     );
 
     this.htmlController.attachNode(nodeId);
@@ -127,7 +97,6 @@ export class CanvasController {
 
     if (priority !== undefined) {
       node.priority = priority;
-
       this.htmlController.updateNodePriority(nodeId);
     }
   }
@@ -226,16 +195,12 @@ export class CanvasController {
       edgeType = EdgeType.NodeCycle;
     }
 
-    if (priority !== undefined) {
-      this.priorityGenerator.push(priority);
-    }
-
     this.graphStore.addEdge(
       edgeId,
       fromPortId,
       toPortId,
       controllerFactory(edgeType),
-      priority ?? this.priorityGenerator.create(),
+      priority ?? 0,
     );
 
     this.htmlController.attachEdge(edgeId);
@@ -329,7 +294,6 @@ export class CanvasController {
     this.nodeIdGenerator.reset();
     this.portIdGenerator.reset();
     this.edgeIdGenerator.reset();
-    this.priorityGenerator.reset();
   }
 
   public destroy(): void {

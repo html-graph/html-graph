@@ -12,8 +12,11 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { TransformPayload } from "./transform-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
+import { PublicGraphStore } from "@/graph-store/public-graph-store";
 
 export class UserTransformableCanvas implements Canvas {
+  public readonly model: PublicGraphStore;
+
   public readonly transformation: PublicViewportTransformer;
 
   private element: HTMLElement | null = null;
@@ -134,6 +137,7 @@ export class UserTransformableCanvas implements Canvas {
     private readonly options?: TransformOptions,
   ) {
     this.transformation = this.canvas.transformation;
+    this.model = this.canvas.model;
 
     const minContentScale = this.options?.scale?.min ?? null;
     const maxContentScale = this.options?.scale?.max ?? null;
@@ -235,12 +239,6 @@ export class UserTransformableCanvas implements Canvas {
 
   public moveToNodes(nodeIds: readonly string[]): UserTransformableCanvas {
     this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
-  public moveNodeOnTop(nodeId: string): UserTransformableCanvas {
-    this.canvas.moveNodeOnTop(nodeId);
 
     return this;
   }

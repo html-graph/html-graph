@@ -12,9 +12,14 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
+import { PublicGraphStore } from "@/graph-store/public-graph-store";
 
 export class UserDraggableNodesCanvas implements Canvas {
+  public readonly model: PublicGraphStore;
+
   public readonly transformation: PublicViewportTransformer;
+
+  private currentPriority = 0;
 
   private readonly nodes = new Map<
     unknown,
@@ -106,6 +111,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     dragOptions?: DragOptions,
   ) {
     this.transformation = this.canvas.transformation;
+    this.model = this.canvas.model;
 
     const onNodeDragDefault: (payload: NodeDragPayload) => void = () => {
       // no implementation by default
@@ -132,6 +138,10 @@ export class UserDraggableNodesCanvas implements Canvas {
       } while (this.nodes.has(nodeId));
     }
 
+    if (node.priority !== undefined) {
+      this.pushPriority(node.priority);
+    }
+
     this.canvas.addNode(node);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
@@ -149,7 +159,7 @@ export class UserDraggableNodesCanvas implements Canvas {
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
       this.setCursor("grab");
-      this.canvas.moveNodeOnTop(nodeId);
+      this.moveNodeOnTop(nodeId);
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
@@ -169,7 +179,7 @@ export class UserDraggableNodesCanvas implements Canvas {
       }
 
       this.grabbedNodeId = nodeId;
-      this.canvas.moveNodeOnTop(nodeId);
+      this.moveNodeOnTop(nodeId);
     };
 
     this.nodes.set(nodeId, {
@@ -190,6 +200,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     nodeId: unknown,
     request: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
+    if (request.priority !== undefined) {
+      this.pushPriority(request.priority);
+    }
+
     this.canvas.updateNode(nodeId, request);
 
     return this;
@@ -231,6 +245,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
+    if (edge.priority !== undefined) {
+      this.pushPriority(edge.priority);
+    }
+
     this.canvas.addEdge(edge);
 
     return this;
@@ -240,6 +258,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     edgeId: unknown,
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
+    if (request.priority !== undefined) {
+      this.pushPriority(request.priority);
+    }
+
     this.canvas.updateEdge(edgeId, request);
 
     return this;
@@ -265,12 +287,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): UserDraggableNodesCanvas {
-    this.canvas.moveNodeOnTop(nodeId);
-
-    return this;
-  }
-
   public clear(): UserDraggableNodesCanvas {
     this.canvas.clear();
 
@@ -280,6 +296,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
 
     this.nodes.clear();
+    this.currentPriority = 0;
 
     return this;
   }
@@ -364,6 +381,23 @@ export class UserDraggableNodesCanvas implements Canvas {
       element: node.element,
       x: node.x,
       y: node.y,
+    });
+  }
+
+  private pushPriority(priority: number): void {
+    this.currentPriority = Math.max(this.currentPriority, priority);
+  }
+
+  private moveNodeOnTop(nodeId: unknown): void {
+    this.currentPriority += 2;
+    this.updateNode(nodeId, { priority: this.currentPriority });
+
+    const edgePriority = this.currentPriority - 1;
+
+    const edges = this.model.getNodeAdjacentEdges(nodeId);
+
+    edges.forEach((edgeId) => {
+      this.updateEdge(edgeId, { priority: edgePriority });
     });
   }
 }
