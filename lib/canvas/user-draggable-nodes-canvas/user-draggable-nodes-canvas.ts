@@ -19,7 +19,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public readonly transformation: PublicViewportTransformer;
 
-  private currentPriority = 0;
+  private maxPriority = 0;
 
   private readonly nodes = new Map<
     unknown,
@@ -300,7 +300,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
 
     this.nodes.clear();
-    this.currentPriority = 0;
+    this.maxPriority = 0;
 
     return this;
   }
@@ -389,7 +389,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private pushPriority(priority: number): void {
-    this.currentPriority = Math.max(this.currentPriority, priority);
+    this.maxPriority = Math.max(this.maxPriority, priority);
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
@@ -397,10 +397,10 @@ export class UserDraggableNodesCanvas implements Canvas {
       return;
     }
 
-    this.currentPriority += 2;
-    this.updateNode(nodeId, { priority: this.currentPriority });
+    this.maxPriority += 2;
+    this.updateNode(nodeId, { priority: this.maxPriority });
 
-    const edgePriority = this.currentPriority - 1;
+    const edgePriority = this.maxPriority - 1;
 
     const edges = this.model.getNodeAdjacentEdges(nodeId);
 
