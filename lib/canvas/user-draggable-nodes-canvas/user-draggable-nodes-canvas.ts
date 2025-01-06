@@ -131,8 +131,8 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
   }
 
-  public addNode(node: AddNodeRequest): UserDraggableNodesCanvas {
-    let nodeId = node.id;
+  public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
+    let nodeId = request.id;
 
     if (nodeId === undefined) {
       do {
@@ -140,16 +140,18 @@ export class UserDraggableNodesCanvas implements Canvas {
       } while (this.nodes.has(nodeId));
     }
 
-    if (node.priority !== undefined) {
-      this.updateMaxPriority(node.priority);
+    if (request.priority !== undefined) {
+      this.updateMaxPriority(request.priority);
     }
 
-    this.canvas.addNode(node);
+    this.canvas.addNode({ ...request, id: nodeId });
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
+      const node = this.model.getNode(nodeId)!;
+
       const isDragAllowed = this.onBeforeNodeDrag({
         nodeId,
-        element: node.element,
+        element: request.element,
         x: node.x,
         y: node.y,
       });
@@ -165,9 +167,11 @@ export class UserDraggableNodesCanvas implements Canvas {
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
+      const node = this.model.getNode(nodeId)!;
+
       const isDragAllowed = this.onBeforeNodeDrag({
         nodeId,
-        element: node.element,
+        element: request.element,
         x: node.x,
         y: node.y,
       });
@@ -185,13 +189,13 @@ export class UserDraggableNodesCanvas implements Canvas {
     };
 
     this.nodes.set(nodeId, {
-      element: node.element,
+      element: request.element,
       onMouseDown,
       onTouchStart,
     });
 
-    node.element.addEventListener("mousedown", onMouseDown);
-    node.element.addEventListener("touchstart", onTouchStart);
+    request.element.addEventListener("mousedown", onMouseDown);
+    request.element.addEventListener("touchstart", onTouchStart);
 
     return this;
   }
