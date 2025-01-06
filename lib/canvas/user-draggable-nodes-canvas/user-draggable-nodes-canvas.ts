@@ -27,8 +27,6 @@ export class UserDraggableNodesCanvas implements Canvas {
       readonly element: HTMLElement;
       readonly onMouseDown: (event: MouseEvent) => void;
       readonly onTouchStart: (event: TouchEvent) => void;
-      x: number;
-      y: number;
     }
   >();
 
@@ -190,8 +188,6 @@ export class UserDraggableNodesCanvas implements Canvas {
       element: node.element,
       onMouseDown,
       onTouchStart,
-      x: node.x,
-      y: node.y,
     });
 
     node.element.addEventListener("mousedown", onMouseDown);
@@ -363,7 +359,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
-    const node = this.nodes.get(nodeId);
+    const node = this.model.getNode(nodeId);
 
     if (node === undefined) {
       throw new Error("failed to drag nonexisting node");
@@ -375,9 +371,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     const nodeY = yv + dy;
 
     const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
-    node.x = xa;
-    node.y = ya;
-
     this.canvas.updateNode(nodeId, { x: xa, y: ya });
 
     this.onNodeDrag({
