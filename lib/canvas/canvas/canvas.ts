@@ -6,8 +6,14 @@ import { PatchViewportRequest } from "./patch-viewport-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
+import { PublicGraphStore } from "@/graph-store/public-graph-store";
 
 export interface Canvas {
+  /**
+   * provides api for accessing graph model
+   */
+  readonly model: PublicGraphStore;
+
   /**
    * provides api for canvas transformation
    */
@@ -70,11 +76,6 @@ export interface Canvas {
    * moves viewport to nodes
    */
   moveToNodes(nodeIds: readonly string[]): Canvas;
-
-  /**
-   * moves specified node on top
-   */
-  moveNodeOnTop(nodeId: unknown): Canvas;
 
   /**
    * attaches canvas to given element

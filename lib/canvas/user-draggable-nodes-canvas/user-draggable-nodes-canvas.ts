@@ -12,9 +12,14 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
+import { PublicGraphStore } from "@/graph-store/public-graph-store";
 
 export class UserDraggableNodesCanvas implements Canvas {
+  public readonly model: PublicGraphStore;
+
   public readonly transformation: PublicViewportTransformer;
+
+  private maxPriority = 0;
 
   private readonly nodes = new Map<
     unknown,
@@ -101,11 +106,14 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: [number, number] | null = null;
 
+  private freezePriority: boolean;
+
   public constructor(
     private readonly canvas: Canvas,
     dragOptions?: DragOptions,
   ) {
     this.transformation = this.canvas.transformation;
+    this.model = this.canvas.model;
 
     const onNodeDragDefault: (payload: NodeDragPayload) => void = () => {
       // no implementation by default
@@ -121,6 +129,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     this.onBeforeNodeDrag =
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
+
+    this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
   }
 
   public addNode(node: AddNodeRequest): UserDraggableNodesCanvas {
@@ -130,6 +140,10 @@ export class UserDraggableNodesCanvas implements Canvas {
       do {
         nodeId = this.nodeIdGenerator.create();
       } while (this.nodes.has(nodeId));
+    }
+
+    if (node.priority !== undefined) {
+      this.updateMaxPriority(node.priority);
     }
 
     this.canvas.addNode(node);
@@ -149,7 +163,7 @@ export class UserDraggableNodesCanvas implements Canvas {
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
       this.setCursor("grab");
-      this.canvas.moveNodeOnTop(nodeId);
+      this.moveNodeOnTop(nodeId);
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
@@ -169,7 +183,7 @@ export class UserDraggableNodesCanvas implements Canvas {
       }
 
       this.grabbedNodeId = nodeId;
-      this.canvas.moveNodeOnTop(nodeId);
+      this.moveNodeOnTop(nodeId);
     };
 
     this.nodes.set(nodeId, {
@@ -190,6 +204,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     nodeId: unknown,
     request: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
+    if (request.priority !== undefined) {
+      this.updateMaxPriority(request.priority);
+    }
+
     this.canvas.updateNode(nodeId, request);
 
     return this;
@@ -231,6 +249,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
+    if (edge.priority !== undefined) {
+      this.updateMaxPriority(edge.priority);
+    }
+
     this.canvas.addEdge(edge);
 
     return this;
@@ -240,6 +262,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     edgeId: unknown,
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
+    if (request.priority !== undefined) {
+      this.updateMaxPriority(request.priority);
+    }
+
     this.canvas.updateEdge(edgeId, request);
 
     return this;
@@ -265,12 +291,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public moveNodeOnTop(nodeId: string): UserDraggableNodesCanvas {
-    this.canvas.moveNodeOnTop(nodeId);
-
-    return this;
-  }
-
   public clear(): UserDraggableNodesCanvas {
     this.canvas.clear();
 
@@ -280,6 +300,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
 
     this.nodes.clear();
+    this.maxPriority = 0;
 
     return this;
   }
@@ -364,6 +385,27 @@ export class UserDraggableNodesCanvas implements Canvas {
       element: node.element,
       x: node.x,
       y: node.y,
+    });
+  }
+
+  private updateMaxPriority(priority: number): void {
+    this.maxPriority = Math.max(this.maxPriority, priority);
+  }
+
+  private moveNodeOnTop(nodeId: unknown): void {
+    if (this.freezePriority) {
+      return;
+    }
+
+    this.maxPriority += 2;
+    this.updateNode(nodeId, { priority: this.maxPriority });
+
+    const edgePriority = this.maxPriority - 1;
+
+    const edges = this.model.getNodeAdjacentEdges(nodeId);
+
+    edges.forEach((edgeId) => {
+      this.updateEdge(edgeId, { priority: edgePriority });
     });
   }
 }

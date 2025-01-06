@@ -1,7 +1,6 @@
 # TODO
 
-- replace moveNodeOnTop with updateNode
-- freeze node layer priority
+- add layer priority autoincrement
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay

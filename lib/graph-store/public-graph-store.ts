@@ -1,0 +1,84 @@
+import { GraphEdge } from "./graph-edge";
+import { GraphNode } from "./graph-node";
+import { GraphPort } from "./graph-port";
+import { GraphStore } from "./graph-store";
+
+export class PublicGraphStore {
+  public constructor(private readonly graphStore: GraphStore) {}
+
+  public getNode(nodeId: unknown): GraphNode | undefined {
+    const node = this.graphStore.getNode(nodeId);
+
+    if (node === undefined) {
+      return undefined;
+    }
+
+    return {
+      element: node.element,
+      x: node.x,
+      y: node.y,
+      centerFn: node.centerFn,
+      priority: node.priority,
+    };
+  }
+
+  public getPort(portId: unknown): GraphPort | undefined {
+    const port = this.graphStore.getPort(portId);
+
+    if (port === undefined) {
+      return undefined;
+    }
+
+    return {
+      element: port.element,
+      centerFn: port.centerFn,
+      direction: port.direction,
+    };
+  }
+
+  public getPortNode(portId: string): unknown | undefined {
+    return this.graphStore.getPortNode(portId);
+  }
+
+  public getEdge(edgeId: unknown): GraphEdge | undefined {
+    const edge = this.graphStore.getEdge(edgeId);
+
+    if (edge === undefined) {
+      return undefined;
+    }
+
+    return { from: edge.from, to: edge.to, priority: edge.priority };
+  }
+
+  public getPortAdjacentEdges(portId: string): readonly unknown[] {
+    return this.graphStore.getPortAdjacentEdges(portId);
+  }
+
+  public getNodeAdjacentEdges(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeAdjacentEdges(nodeId);
+  }
+
+  public getPortIncomingEdges(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortIncomingEdges(portId);
+  }
+
+  public getPortOutcomingEdges(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortOutcomingEdges(portId);
+  }
+
+  public getPortCycleEdges(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortCycleEdges(portId);
+  }
+
+  public getNodeIncomingEdges(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeIncomingEdges(nodeId);
+  }
+
+  public getNodeOutcomingEdges(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeOutcomingEdges(nodeId);
+  }
+
+  public getNodeCycleEdges(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeCycleEdges(nodeId);
+  }
+}

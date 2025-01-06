@@ -15,12 +15,15 @@ import { createOptions } from "./create-options";
 import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
 import { EdgeControllerFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
+import { PublicGraphStore } from "@/graph-store/public-graph-store";
 
 /**
  * Provides low level API for acting on graph
  */
 export class CanvasCore implements Canvas {
   public readonly transformation: PublicViewportTransformer;
+
+  public readonly model: PublicGraphStore;
 
   private readonly di: DiContainer;
 
@@ -38,6 +41,7 @@ export class CanvasCore implements Canvas {
     );
 
     this.transformation = this.di.publicViewportTransformer;
+    this.model = this.di.publicGraphStore;
 
     this.edgeControllerFactory = options.edges.controllerFactory;
   }
@@ -70,12 +74,6 @@ export class CanvasCore implements Canvas {
 
   public removeNode(nodeId: unknown): CanvasCore {
     this.di.canvasController.removeNode(nodeId);
-
-    return this;
-  }
-
-  public moveNodeOnTop(nodeId: unknown): CanvasCore {
-    this.di.canvasController.moveNodeOnTop(nodeId);
 
     return this;
   }
