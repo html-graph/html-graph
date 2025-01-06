@@ -46,10 +46,17 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
-  .addNode({ element: node3, x: 200, y: 800, ports: ports3 })
-  .addNode({ element: node4, x: 1000, y: 600, ports: ports4 })
+  .addNode({
+    id: "node-1",
+    element: node1,
+    x: 200,
+    y: 400,
+    ports: ports1,
+    priority: 1,
+  })
+  .addNode({ element: node2, x: 600, y: 500, ports: ports2, priority: 1 })
+  .addNode({ element: node3, x: 200, y: 800, ports: ports3, priority: 1 })
+  .addNode({ element: node4, x: 1000, y: 600, ports: ports4, priority: 1 })
   .addEdge({ from: "port-1-2", to: "port-2-1" })
   .addEdge({ from: "port-3-2", to: "port-2-1" })
   .addEdge({ from: "port-2-2", to: "port-4-1" });
