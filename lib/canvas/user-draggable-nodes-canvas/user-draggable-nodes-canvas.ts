@@ -106,6 +106,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: [number, number] | null = null;
 
+  private freezePriority: boolean;
+
   public constructor(
     private readonly canvas: Canvas,
     dragOptions?: DragOptions,
@@ -127,6 +129,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     this.onBeforeNodeDrag =
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
+
+    this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
   }
 
   public addNode(node: AddNodeRequest): UserDraggableNodesCanvas {
@@ -389,6 +393,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
+    if (this.freezePriority) {
+      return;
+    }
+
     this.currentPriority += 2;
     this.updateNode(nodeId, { priority: this.currentPriority });
 

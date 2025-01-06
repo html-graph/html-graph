@@ -1,8 +1,6 @@
 # TODO
 
-- freeze node layer priority for draggable nodes canvas
 - add layer priority autoincrement
-- replace moveNodeOnTop with updateNode
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay
