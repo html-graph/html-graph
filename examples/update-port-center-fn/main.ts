@@ -3,12 +3,11 @@ import { CenterFn, HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    edges: { hasTargetArrow: true },
-    layers: {
-      mode: "edges-on-top",
-    },
+    edges: { shape: { hasTargetArrow: true } },
   })
-  .setUserDraggableNodes()
+  .setUserDraggableNodes({
+    grabPriorityStrategy: "freeze",
+  })
   .setUserTransformableCanvas()
   .build();
 
@@ -37,6 +36,7 @@ canvas
     x: 200,
     y: 300,
     ports: [["port-1", port1]],
+    priority: 0,
   })
   .addNode({
     id: "node-2",
@@ -44,8 +44,9 @@ canvas
     x: 600,
     y: 500,
     ports: [["port-2", port2]],
+    priority: 0,
   })
-  .addEdge({ from: "port-1", to: "port-2" });
+  .addEdge({ from: "port-1", to: "port-2", priority: 1 });
 
 const topLeftCenterFn: CenterFn = () => [0, 0];
 const bottomRightCenterFn: CenterFn = (w, h) => [w, h];

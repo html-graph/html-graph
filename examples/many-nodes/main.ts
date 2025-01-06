@@ -3,10 +3,11 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    layers: { mode: "edges-on-top" },
-    edges: { hasTargetArrow: true },
+    edges: { shape: { hasTargetArrow: true } },
   })
-  .setUserDraggableNodes()
+  .setUserDraggableNodes({
+    grabPriorityStrategy: "freeze",
+  })
   .setUserTransformableCanvas()
   .build();
 
@@ -33,10 +34,11 @@ for (let i = 0; i < total; i++) {
     x: offset,
     y: 300 + Math.random() * 200,
     ports: [[newPortId, port]],
+    priority: 0,
   });
 
   if (prevPortId) {
-    canvas.addEdge({ from: prevPortId, to: newPortId });
+    canvas.addEdge({ from: prevPortId, to: newPortId, priority: 1 });
   }
 
   offset += 300;

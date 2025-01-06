@@ -21,10 +21,9 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
       direction: apiOptions.ports?.direction ?? 0,
     },
     edges: {
-      controllerFactory: resolveEdgeControllerFactory(apiOptions.edges ?? {}),
-    },
-    layers: {
-      mode: apiOptions.layers?.mode ?? "edges-follow-node",
+      controllerFactory: resolveEdgeControllerFactory(
+        apiOptions.edges?.shape ?? {},
+      ),
     },
   };
 };

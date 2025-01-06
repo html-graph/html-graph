@@ -6,7 +6,7 @@ import { PatchViewportRequest } from "./patch-viewport-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { PublicGraphStore } from "@/graph-store/public-graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 export interface Canvas {
   /**

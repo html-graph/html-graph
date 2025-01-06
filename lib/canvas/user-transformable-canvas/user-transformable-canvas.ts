@@ -12,7 +12,7 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { TransformPayload } from "./transform-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { PublicGraphStore } from "@/graph-store/public-graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;

@@ -12,14 +12,14 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { PublicGraphStore } from "@/graph-store/public-graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
   public readonly transformation: PublicViewportTransformer;
 
-  private maxPriority = 0;
+  private maxNodePriority = 0;
 
   private readonly nodes = new Map<
     unknown,
@@ -140,11 +140,9 @@ export class UserDraggableNodesCanvas implements Canvas {
       } while (this.nodes.has(nodeId));
     }
 
-    if (request.priority !== undefined) {
-      this.updateMaxPriority(request.priority);
-    }
-
     this.canvas.addNode({ ...request, id: nodeId });
+
+    this.updateMaxNodePriority(nodeId);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
       const node = this.model.getNode(nodeId)!;
@@ -204,11 +202,9 @@ export class UserDraggableNodesCanvas implements Canvas {
     nodeId: unknown,
     request: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
-    if (request.priority !== undefined) {
-      this.updateMaxPriority(request.priority);
-    }
-
     this.canvas.updateNode(nodeId, request);
+
+    this.updateMaxNodePriority(nodeId);
 
     return this;
   }
@@ -249,10 +245,6 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
-    if (edge.priority !== undefined) {
-      this.updateMaxPriority(edge.priority);
-    }
-
     this.canvas.addEdge(edge);
 
     return this;
@@ -262,10 +254,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     edgeId: unknown,
     request: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
-    if (request.priority !== undefined) {
-      this.updateMaxPriority(request.priority);
-    }
-
     this.canvas.updateEdge(edgeId, request);
 
     return this;
@@ -300,7 +288,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
 
     this.nodes.clear();
-    this.maxPriority = 0;
+    this.maxNodePriority = 0;
 
     return this;
   }
@@ -385,8 +373,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
   }
 
-  private updateMaxPriority(priority: number): void {
-    this.maxPriority = Math.max(this.maxPriority, priority);
+  private updateMaxNodePriority(nodeId: unknown): void {
+    const priority = this.model.getNode(nodeId)!.priority;
+
+    this.maxNodePriority = Math.max(this.maxNodePriority, priority);
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
@@ -394,10 +384,10 @@ export class UserDraggableNodesCanvas implements Canvas {
       return;
     }
 
-    this.maxPriority += 2;
-    this.updateNode(nodeId, { priority: this.maxPriority });
+    this.maxNodePriority += 2;
+    this.updateNode(nodeId, { priority: this.maxNodePriority });
 
-    const edgePriority = this.maxPriority - 1;
+    const edgePriority = this.maxNodePriority - 1;
 
     const edges = this.model.getNodeAdjacentEdges(nodeId);
 

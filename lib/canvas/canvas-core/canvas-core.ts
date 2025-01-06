@@ -15,7 +15,7 @@ import { createOptions } from "./create-options";
 import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
 import { EdgeControllerFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { PublicGraphStore } from "@/graph-store/public-graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 /**
  * Provides low level API for acting on graph
@@ -33,7 +33,6 @@ export class CanvasCore implements Canvas {
     const options: Options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(
-      options.layers.mode,
       options.background.drawingFn,
       options.nodes.centerFn,
       options.ports.centerFn,

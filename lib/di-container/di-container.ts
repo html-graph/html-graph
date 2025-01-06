@@ -5,10 +5,9 @@ import {
 } from "@/viewport-transformer";
 import { GraphStore } from "@/graph-store";
 import { CanvasController } from "@/canvas-controller";
-import { LayersMode } from "@/layers";
 import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
-import { PublicGraphStore } from "@/graph-store/public-graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -18,7 +17,6 @@ export class DiContainer {
   public readonly canvasController: CanvasController;
 
   public constructor(
-    layersMode: LayersMode,
     backgroundDrawingFn: BackgroundDrawingFn,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
@@ -37,7 +35,6 @@ export class DiContainer {
       graphStore,
       viewportTransformer,
       this.publicViewportTransformer,
-      layersMode,
       backgroundDrawingFn,
     );
 

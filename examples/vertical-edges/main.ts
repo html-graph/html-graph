@@ -4,8 +4,10 @@ const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     edges: {
-      type: "vertical",
-      hasTargetArrow: true,
+      shape: {
+        type: "vertical",
+        hasTargetArrow: true,
+      },
     },
     ports: {
       direction: Math.PI / 2,

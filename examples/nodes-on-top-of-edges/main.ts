@@ -3,10 +3,11 @@ import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    layers: { mode: "nodes-on-top" },
-    edges: { hasTargetArrow: true },
+    edges: { shape: { hasTargetArrow: true } },
   })
-  .setUserDraggableNodes()
+  .setUserDraggableNodes({
+    grabPriorityStrategy: "freeze",
+  })
   .setUserTransformableCanvas()
   .build();
 
@@ -45,7 +46,7 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ element: node1, x: 600, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 200, y: 500, ports: ports2 })
+  .addNode({ element: node1, x: 600, y: 400, ports: ports1, priority: 1 })
+  .addNode({ element: node2, x: 200, y: 500, ports: ports2, priority: 1 })
   .addEdge({ from: "port-1-2", to: "port-2-1" })
-  .addNode({ element: node3, x: 400, y: 450, ports: ports3 });
+  .addNode({ element: node3, x: 400, y: 450, ports: ports3, priority: 0 });

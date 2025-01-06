@@ -4,7 +4,7 @@ const canvas = new HtmlGraphBuilder()
   .setOptions({
     nodes: { centerFn: () => [0, 0] },
     background: { type: "dots" },
-    edges: { hasTargetArrow: true },
+    edges: { shape: { hasTargetArrow: true } },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()

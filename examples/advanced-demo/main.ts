@@ -5,8 +5,10 @@ const canvas = new HtmlGraphBuilder()
   .setOptions({
     nodes: { centerFn: () => [0, 0] },
     edges: {
-      color: "var(--color-1)",
-      hasTargetArrow: true,
+      shape: {
+        color: "var(--color-1)",
+        hasTargetArrow: true,
+      },
     },
     background: { type: "dots" },
   })

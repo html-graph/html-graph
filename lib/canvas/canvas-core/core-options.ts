@@ -1,5 +1,4 @@
 import { CenterFn } from "@/center-fn";
-import { LayersMode } from "@/layers";
 import { EdgeOptions } from "../canvas/edge-options";
 import { BackgroundOptions } from "./background-options";
 
@@ -35,15 +34,7 @@ export interface CoreOptions {
   /**
    *edges related behavior
    */
-  readonly edges?: EdgeOptions;
-
-  /**
-   * layers related behavior
-   */
-  readonly layers?: {
-    /**
-     * sets layers order
-     */
-    readonly mode?: LayersMode;
+  readonly edges?: {
+    shape?: EdgeOptions;
   };
 }

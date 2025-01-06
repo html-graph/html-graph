@@ -9,7 +9,7 @@ import {
 const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
-    edges: { hasTargetArrow: true },
+    edges: { shape: { hasTargetArrow: true } },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()

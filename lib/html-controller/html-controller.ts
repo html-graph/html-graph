@@ -1,12 +1,10 @@
-import { Layer, LayersMode } from "@/layers";
 import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
-import { createCanvas, createHost } from "./utils";
-import { layers } from "./layers";
+import { createCanvas, createContainer, createHost } from "./utils";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -14,6 +12,8 @@ export class HtmlController {
   private readonly host = createHost();
 
   private readonly canvas = createCanvas();
+
+  private readonly container = createContainer();
 
   private readonly canvasCtx: CanvasRenderingContext2D;
 
@@ -29,13 +29,10 @@ export class HtmlController {
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
-  private readonly layer: Layer;
-
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportTransformer: ViewportTransformer,
     private readonly publicViewportTransformer: PublicViewportTransformer,
-    private readonly layersMode: LayersMode,
     private readonly backgroundDrawingFn: BackgroundDrawingFn,
   ) {
     const context = this.canvas.getContext("2d");
@@ -47,7 +44,7 @@ export class HtmlController {
     this.canvasCtx = context;
 
     this.host.appendChild(this.canvas);
-    this.layer = layers[this.layersMode](this.host);
+    this.host.appendChild(this.container);
 
     this.hostResizeObserver = this.createHostResizeObserver();
     this.hostResizeObserver.observe(this.host);
@@ -83,7 +80,7 @@ export class HtmlController {
     this.hostResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.canvas);
-    this.layer.destroy();
+    this.host.removeChild(this.container);
 
     this.detach();
   }
@@ -94,7 +91,7 @@ export class HtmlController {
     const [xv, yv] = this.viewportTransformer.getViewCoords(0, 0);
     const sv = this.viewportTransformer.getViewScale();
 
-    this.layer.update(sv, xv, yv);
+    this.container.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
   }
 
   public attachNode(nodeId: unknown): void {
@@ -108,7 +105,7 @@ export class HtmlController {
     wrapper.style.left = "0";
     wrapper.style.visibility = "hidden";
 
-    this.layer.appendNodeElement(wrapper);
+    this.container.appendChild(wrapper);
 
     this.nodeElementToIdMap.set(node!.element, nodeId);
     this.nodeWrapperElementToIdMap.set(wrapper, nodeId);
@@ -128,7 +125,7 @@ export class HtmlController {
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     wrapper.removeChild(node!.element);
-    this.layer.removeNodeElement(wrapper);
+    this.container.removeChild(wrapper);
 
     this.nodeElementToIdMap.delete(node!.element);
     this.nodeWrapperElementToIdMap.delete(wrapper);
@@ -148,13 +145,13 @@ export class HtmlController {
     this.updateEdgeCoords(edgeId);
     this.updateEdgePriority(edgeId);
 
-    this.layer.appendEdgeElement(element);
+    this.container.appendChild(element);
   }
 
   public detachEdge(edgeId: unknown): void {
     const element = this.edgeIdToElementMap.get(edgeId)!;
     this.edgeIdToElementMap.delete(edgeId);
-    this.layer.removeEdgeElement(element);
+    this.container.removeChild(element);
   }
 
   public updateNodePriority(nodeId: unknown): void {
