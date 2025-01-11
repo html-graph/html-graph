@@ -245,12 +245,6 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public moveToNodes(nodeIds: readonly string[]): UserTransformableCanvas {
-    this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
   public clear(): UserTransformableCanvas {
     this.canvas.clear();
 

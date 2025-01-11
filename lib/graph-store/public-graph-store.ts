@@ -6,11 +6,11 @@ import { GraphStore } from "./graph-store";
 export class PublicGraphStore {
   public constructor(private readonly graphStore: GraphStore) {}
 
-  public getNode(nodeId: unknown): GraphNode | undefined {
+  public getNode(nodeId: unknown): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
-      return undefined;
+      return null;
     }
 
     return {
@@ -22,11 +22,11 @@ export class PublicGraphStore {
     };
   }
 
-  public getPort(portId: unknown): GraphPort | undefined {
+  public getPort(portId: unknown): GraphPort | null {
     const port = this.graphStore.getPort(portId);
 
     if (port === undefined) {
-      return undefined;
+      return null;
     }
 
     return {
@@ -36,15 +36,15 @@ export class PublicGraphStore {
     };
   }
 
-  public getPortNode(portId: string): unknown | undefined {
-    return this.graphStore.getPortNode(portId);
+  public getPortNode(portId: string): unknown | null {
+    return this.graphStore.getPortNode(portId) ?? null;
   }
 
-  public getEdge(edgeId: unknown): GraphEdge | undefined {
+  public getEdge(edgeId: unknown): GraphEdge | null {
     const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {
-      return undefined;
+      return null;
     }
 
     return { from: edge.from, to: edge.to, priority: edge.priority };

@@ -263,35 +263,6 @@ export class CanvasController {
     this.htmlController.applyTransform();
   }
 
-  public moveToNodes(nodeIds: readonly string[]): void {
-    if (nodeIds.length === 0) {
-      return;
-    }
-
-    const nodes = nodeIds
-      .map((nodeId) => this.graphStore.getNode(nodeId))
-      .filter((node) => node !== undefined);
-
-    if (nodes.length < nodeIds.length) {
-      throw new Error("failed to move to nonexisting node");
-    }
-
-    const [x, y] = nodes.reduce(
-      (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
-      [0, 0],
-    );
-
-    const avgX = x / nodes.length;
-    const avgY = y / nodes.length;
-    const [width, height] = this.htmlController.getViewportDimensions();
-    const sv = this.viewportTransformer.getViewportMatrix().scale;
-
-    const targetX = avgX - (sv * width) / 2;
-    const targetY = avgY - (sv * height) / 2;
-
-    this.patchViewportState(null, targetX, targetY);
-  }
-
   public attach(element: HTMLElement): void {
     this.htmlController.attach(element);
   }

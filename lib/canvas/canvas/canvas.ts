@@ -78,11 +78,6 @@ export interface Canvas {
   patchContentState(request: PatchTransformRequest): Canvas;
 
   /**
-   * moves viewport to nodes
-   */
-  moveToNodes(nodeIds: readonly string[]): Canvas;
-
-  /**
    * attaches canvas to given element
    */
   attach(element: HTMLElement): Canvas;

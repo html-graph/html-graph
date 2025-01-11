@@ -9,7 +9,6 @@ const canvas = new HtmlGraphBuilder()
       },
     },
   })
-  .setUserDraggableNodes()
   .setUserTransformableCanvas()
   .build();
 
@@ -36,6 +35,13 @@ map.forEach((value, key) => {
   canvas.addNode({ id: key, element: value[0], x: value[1], y: value[2] });
 
   value[0].addEventListener("focus", () => {
-    canvas.moveToNodes([key]);
+    const node = canvas.model.getNode(key)!;
+    const rect = canvasElement.getBoundingClientRect();
+    const sv = canvas.transformation.getViewportMatrix().scale;
+
+    const targetX = node.x - (sv * rect.width) / 2;
+    const targetY = node.y - (sv * rect.height) / 2;
+
+    canvas.patchViewportState({ x: targetX, y: targetY });
   });
 });

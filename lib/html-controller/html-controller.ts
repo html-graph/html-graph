@@ -184,12 +184,6 @@ export class HtmlController {
     });
   }
 
-  public getViewportDimensions(): [number, number] {
-    const rect = this.host.getBoundingClientRect();
-
-    return [rect.width, rect.height];
-  }
-
   private createHostResizeObserver(): ResizeObserver {
     return new ResizeObserver(() => {
       this.updateCanvasDimensions();

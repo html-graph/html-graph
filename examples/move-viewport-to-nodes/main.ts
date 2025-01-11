@@ -60,5 +60,23 @@ canvas
   .addEdge({ from: "port-2", to: "port-3", priority: 1 });
 
 btn1.addEventListener("click", () => {
-  canvas.moveToNodes(["node-2", "node-3"]);
+  const nodes = [
+    canvas.model.getNode("node-2")!,
+    canvas.model.getNode("node-3")!,
+  ];
+
+  const [x, y] = nodes.reduce(
+    (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
+    [0, 0],
+  );
+
+  const avgX = x / nodes.length;
+  const avgY = y / nodes.length;
+  const rect = canvasElement.getBoundingClientRect();
+  const sv = canvas.transformation.getViewportMatrix().scale;
+
+  const targetX = avgX - (sv * rect.width) / 2;
+  const targetY = avgY - (sv * rect.height) / 2;
+
+  canvas.patchViewportState({ x: targetX, y: targetY });
 });

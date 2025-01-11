@@ -1,6 +1,5 @@
 # TODO
 
-- rid of moveToNodes ?
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay

@@ -281,12 +281,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public moveToNodes(nodeIds: readonly string[]): UserDraggableNodesCanvas {
-    this.canvas.moveToNodes(nodeIds);
-
-    return this;
-  }
-
   public clear(): UserDraggableNodesCanvas {
     this.canvas.clear();
 
@@ -361,7 +355,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
     const node = this.model.getNode(nodeId);
 
-    if (node === undefined) {
+    if (node === null) {
       throw new Error("failed to drag nonexisting node");
     }
 

@@ -152,12 +152,6 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public moveToNodes(nodeIds: readonly string[]): CanvasCore {
-    this.di.canvasController.moveToNodes(nodeIds);
-
-    return this;
-  }
-
   public clear(): CanvasCore {
     this.di.canvasController.clear();
 
