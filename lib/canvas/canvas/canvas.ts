@@ -2,7 +2,7 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
-import { PatchViewportRequest } from "./patch-viewport-request";
+import { PatchTransformRequest } from "./patch-transform-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
@@ -70,7 +70,12 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewportState(request: PatchViewportRequest): Canvas;
+  patchViewportState(request: PatchTransformRequest): Canvas;
+
+  /**
+   * applies transformation for content
+   */
+  patchContentState(request: PatchTransformRequest): Canvas;
 
   /**
    * moves viewport to nodes

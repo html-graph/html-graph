@@ -1,5 +1,5 @@
 export * from "./edge-options";
-export * from "./patch-viewport-request";
+export * from "./patch-transform-request";
 export * from "./add-edge-request";
 export * from "./mark-port-request";
 export * from "./canvas";

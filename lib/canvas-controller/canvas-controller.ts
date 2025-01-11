@@ -254,6 +254,15 @@ export class CanvasController {
     this.htmlController.applyTransform();
   }
 
+  public patchContentState(
+    scale: number | null,
+    x: number | null,
+    y: number | null,
+  ): void {
+    this.viewportTransformer.patchContentState(scale, x, y);
+    this.htmlController.applyTransform();
+  }
+
   public moveToNodes(nodeIds: readonly string[]): void {
     if (nodeIds.length === 0) {
       return;

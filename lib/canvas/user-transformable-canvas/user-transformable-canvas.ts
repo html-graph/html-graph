@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
-  PatchViewportRequest,
+  PatchTransformRequest,
   Canvas,
   UpdateEdgeRequest,
   UpdateNodeRequest,
@@ -230,9 +230,17 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   public patchViewportState(
-    request: PatchViewportRequest,
+    request: PatchTransformRequest,
   ): UserTransformableCanvas {
     this.canvas.patchViewportState(request);
+
+    return this;
+  }
+
+  public patchContentState(
+    request: PatchTransformRequest,
+  ): UserTransformableCanvas {
+    this.canvas.patchContentState(request);
 
     return this;
   }

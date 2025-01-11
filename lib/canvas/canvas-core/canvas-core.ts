@@ -3,7 +3,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
-  PatchViewportRequest,
+  PatchTransformRequest,
   Canvas,
   UpdateEdgeRequest,
   UpdateNodeRequest,
@@ -132,8 +132,18 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewportState(request: PatchViewportRequest): CanvasCore {
+  public patchViewportState(request: PatchTransformRequest): CanvasCore {
     this.di.canvasController.patchViewportState(
+      request.scale ?? null,
+      request.x ?? null,
+      request.y ?? null,
+    );
+
+    return this;
+  }
+
+  public patchContentState(request: PatchTransformRequest): CanvasCore {
+    this.di.canvasController.patchContentState(
       request.scale ?? null,
       request.x ?? null,
       request.y ?? null,

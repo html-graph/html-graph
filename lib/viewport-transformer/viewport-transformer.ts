@@ -19,18 +19,34 @@ export class ViewportTransformer {
     x: number | null,
     y: number | null,
   ): void {
-    const viewportMatrix: TransformState = {
+    this.viewportMatrix = {
       scale: scale ?? this.viewportMatrix.scale,
       x: x ?? this.viewportMatrix.x,
       y: y ?? this.viewportMatrix.y,
     };
 
-    this.viewportMatrix = viewportMatrix;
+    this.contentMatrix = this.calculateReverseMatrix(this.viewportMatrix);
+  }
 
+  public patchContentState(
+    scale: number | null,
+    x: number | null,
+    y: number | null,
+  ): void {
     this.contentMatrix = {
-      scale: 1 / viewportMatrix.scale,
-      x: -viewportMatrix.x / viewportMatrix.scale,
-      y: -viewportMatrix.y / viewportMatrix.scale,
+      scale: scale ?? this.contentMatrix.scale,
+      x: x ?? this.contentMatrix.x,
+      y: y ?? this.contentMatrix.y,
+    };
+
+    this.viewportMatrix = this.calculateReverseMatrix(this.contentMatrix);
+  }
+
+  private calculateReverseMatrix(matrix: TransformState): TransformState {
+    return {
+      scale: 1 / matrix.scale,
+      x: -matrix.x / matrix.scale,
+      y: -matrix.y / matrix.scale,
     };
   }
 }
