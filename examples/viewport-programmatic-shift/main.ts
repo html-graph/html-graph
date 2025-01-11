@@ -79,7 +79,7 @@ class ViewportTransformer {
       if (this.isGrabbed) {
         const matrixViewport = this.canvas.transformation.getViewportMatrix();
 
-        this.canvas.patchViewportState({
+        this.canvas.patchViewportMatrix({
           x: matrixViewport.scale * -event.movementX + matrixViewport.x,
           y: matrixViewport.scale * -event.movementY + matrixViewport.y,
         });

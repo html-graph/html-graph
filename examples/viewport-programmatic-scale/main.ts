@@ -83,7 +83,7 @@ class ViewportTransformer {
     const x = matrixViewport.scale * (1 - s2) * cx + matrixViewport.x;
     const y = matrixViewport.scale * (1 - s2) * cy + matrixViewport.y;
 
-    this.canvas.patchViewportState({ scale, x, y });
+    this.canvas.patchViewportMatrix({ scale, x, y });
   }
 }
 

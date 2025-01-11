@@ -245,21 +245,21 @@ export class CanvasController {
     this.graphStore.removeNode(nodeId);
   }
 
-  public patchViewportState(
+  public patchViewportMatrix(
     scale: number | null,
     x: number | null,
     y: number | null,
   ): void {
-    this.viewportTransformer.patchViewportState(scale, x, y);
+    this.viewportTransformer.patchViewportMatrix(scale, x, y);
     this.htmlController.applyTransform();
   }
 
-  public patchContentState(
+  public patchContentMatrix(
     scale: number | null,
     x: number | null,
     y: number | null,
   ): void {
-    this.viewportTransformer.patchContentState(scale, x, y);
+    this.viewportTransformer.patchContentMatrix(scale, x, y);
     this.htmlController.applyTransform();
   }
 

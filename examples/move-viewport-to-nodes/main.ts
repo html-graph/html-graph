@@ -78,5 +78,5 @@ btn1.addEventListener("click", () => {
   const targetX = avgX - (sv * rect.width) / 2;
   const targetY = avgY - (sv * rect.height) / 2;
 
-  canvas.patchViewportState({ x: targetX, y: targetY });
+  canvas.patchViewportMatrix({ x: targetX, y: targetY });
 });

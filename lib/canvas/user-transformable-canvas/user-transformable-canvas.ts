@@ -229,18 +229,18 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(
+  public patchViewportMatrix(
     request: PatchTransformRequest,
   ): UserTransformableCanvas {
-    this.canvas.patchViewportState(request);
+    this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentState(
+  public patchContentMatrix(
     request: PatchTransformRequest,
   ): UserTransformableCanvas {
-    this.canvas.patchContentState(request);
+    this.canvas.patchContentMatrix(request);
 
     return this;
   }
@@ -354,7 +354,7 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.patchViewportState(transform);
+    this.canvas.patchViewportMatrix(transform);
     this.onTransform(transform);
   }
 
@@ -398,7 +398,7 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    this.canvas.patchViewportState(transform);
+    this.canvas.patchViewportMatrix(transform);
     this.onTransform(transform);
   }
 }

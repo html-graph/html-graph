@@ -265,18 +265,18 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public patchViewportState(
+  public patchViewportMatrix(
     request: PatchTransformRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.patchViewportState(request);
+    this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentState(
+  public patchContentMatrix(
     request: PatchTransformRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.patchContentState(request);
+    this.canvas.patchContentMatrix(request);
 
     return this;
   }

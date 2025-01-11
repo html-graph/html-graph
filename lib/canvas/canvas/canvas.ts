@@ -70,12 +70,12 @@ export interface Canvas {
   /**
    * applies transformation for viewport
    */
-  patchViewportState(request: PatchTransformRequest): Canvas;
+  patchViewportMatrix(request: PatchTransformRequest): Canvas;
 
   /**
    * applies transformation for content
    */
-  patchContentState(request: PatchTransformRequest): Canvas;
+  patchContentMatrix(request: PatchTransformRequest): Canvas;
 
   /**
    * attaches canvas to given element

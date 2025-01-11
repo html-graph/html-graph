@@ -5,8 +5,6 @@
 - investigate bug with drag delay
 - edge controller constructor 1 parameter ?
 - edge hover behavior
-- move to nodes autoscale
-- move to nodes smooth
 - refactor node id generation
 - move and drag cursor customization
 - drag edge creation

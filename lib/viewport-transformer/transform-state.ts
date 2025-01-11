@@ -1,5 +1,5 @@
 export interface TransformState {
-  scale: number;
-  x: number;
-  y: number;
+  readonly scale: number;
+  readonly x: number;
+  readonly y: number;
 }

@@ -7,14 +7,14 @@ export class ViewportTransformer {
   private contentMatrix: TransformState = initialMatrix;
 
   public getViewportMatrix(): TransformState {
-    return { ...this.viewportMatrix };
+    return this.viewportMatrix;
   }
 
   public getContentMatrix(): TransformState {
-    return { ...this.contentMatrix };
+    return this.contentMatrix;
   }
 
-  public patchViewportState(
+  public patchViewportMatrix(
     scale: number | null,
     x: number | null,
     y: number | null,
@@ -28,7 +28,7 @@ export class ViewportTransformer {
     this.contentMatrix = this.calculateReverseMatrix(this.viewportMatrix);
   }
 
-  public patchContentState(
+  public patchContentMatrix(
     scale: number | null,
     x: number | null,
     y: number | null,
