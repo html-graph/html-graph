@@ -357,12 +357,16 @@ export class UserDraggableNodesCanvas implements Canvas {
       throw new Error("failed to drag nonexisting node");
     }
 
-    const [xv, yv] = this.transformation.getViewCoords(node.x, node.y);
+    const mc = this.canvas.transformation.getContentMatrix();
+    const xc = mc.scale * node.x + mc.x;
+    const yc = mc.scale * node.y + mc.y;
 
-    const nodeX = xv + dx;
-    const nodeY = yv + dy;
+    const nodeX = xc + dx;
+    const nodeY = yc + dy;
 
-    const [xa, ya] = this.transformation.getAbsCoords(nodeX, nodeY);
+    const mv = this.canvas.transformation.getViewportMatrix();
+    const xa = mv.scale * nodeX + mv.x;
+    const ya = mv.scale * nodeY + mv.y;
     this.canvas.updateNode(nodeId, { x: xa, y: ya });
 
     this.onNodeDrag({

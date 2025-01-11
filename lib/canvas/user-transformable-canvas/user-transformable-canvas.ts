@@ -340,13 +340,12 @@ export class UserTransformableCanvas implements Canvas {
      *
      * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
      */
-    const [dx1, dy1] = this.transformation.getAbsCoords(0, 0);
-    const s1 = this.canvas.transformation.getAbsScale();
+    const m = this.transformation.getViewportMatrix();
 
     const transform: TransformPayload = {
-      scale: s1,
-      x: dx1 + s1 * dx2,
-      y: dy1 + s1 * dy2,
+      scale: m.scale,
+      x: m.x + m.scale * dx2,
+      y: m.y + m.scale * dy2,
     };
 
     if (!this.onBeforeTransform({ ...transform })) {
@@ -358,8 +357,7 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
-    const [dx1, dy1] = this.canvas.transformation.getAbsCoords(0, 0);
-    const s1 = this.canvas.transformation.getAbsScale();
+    const m = this.canvas.transformation.getViewportMatrix();
 
     /**
      * s2 - scale
@@ -372,15 +370,23 @@ export class UserTransformableCanvas implements Canvas {
      *
      * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
      */
-    const scale = s1 * s2;
-    const x = s1 * (1 - s2) * cx + dx1;
-    const y = s1 * (1 - s2) * cy + dy1;
+    const scale = m.scale * s2;
+    const x = m.scale * (1 - s2) * cx + m.x;
+    const y = m.scale * (1 - s2) * cy + m.y;
 
-    if (this.maxViewScale !== null && scale > this.maxViewScale && scale > s1) {
+    if (
+      this.maxViewScale !== null &&
+      scale > this.maxViewScale &&
+      scale > m.scale
+    ) {
       return;
     }
 
-    if (this.minViewScale !== null && scale < this.minViewScale && scale < s1) {
+    if (
+      this.minViewScale !== null &&
+      scale < this.minViewScale &&
+      scale < m.scale
+    ) {
       return;
     }
 

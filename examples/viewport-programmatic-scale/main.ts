@@ -77,12 +77,11 @@ class ViewportTransformer {
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
-    const [dx1, dy1] = this.canvas.transformation.getAbsCoords(0, 0);
-    const s1 = this.canvas.transformation.getAbsScale();
+    const m = this.canvas.transformation.getViewportMatrix();
 
-    const scale = s1 * s2;
-    const x = s1 * (1 - s2) * cx + dx1;
-    const y = s1 * (1 - s2) * cy + dy1;
+    const scale = m.scale * s2;
+    const x = m.scale * (1 - s2) * cx + m.x;
+    const y = m.scale * (1 - s2) * cy + m.y;
 
     this.canvas.patchViewportState({ scale, x, y });
   }

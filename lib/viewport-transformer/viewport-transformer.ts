@@ -1,43 +1,36 @@
+import { initialMatrix } from "./initial-matrix";
 import { TransformState } from "./transform-state";
 
 export class ViewportTransformer {
-  private state: TransformState = {
-    scale: 1,
-    x: 0,
-    y: 0,
-  };
+  private viewportMatrix: TransformState = initialMatrix;
 
-  public getViewCoords(xa: number, ya: number): [number, number] {
-    return [
-      (xa - this.state.x) / this.state.scale,
-      (ya - this.state.y) / this.state.scale,
-    ];
+  private contentMatrix: TransformState = initialMatrix;
+
+  public getViewportMatrix(): TransformState {
+    return { ...this.viewportMatrix };
   }
 
-  public getViewScale(): number {
-    return 1 / this.state.scale;
+  public getContentMatrix(): TransformState {
+    return { ...this.contentMatrix };
   }
 
-  public getAbsCoords(xv: number, yv: number): [number, number] {
-    return [
-      xv * this.state.scale + this.state.x,
-      yv * this.state.scale + this.state.y,
-    ];
-  }
-
-  public getAbsScale(): number {
-    return this.state.scale;
-  }
-
-  public patchState(
+  public patchViewportState(
     scale: number | null,
     x: number | null,
     y: number | null,
   ): void {
-    this.state = {
-      scale: scale ?? this.state.scale,
-      x: x ?? this.state.x,
-      y: y ?? this.state.y,
+    const viewportMatrix: TransformState = {
+      scale: scale ?? this.viewportMatrix.scale,
+      x: x ?? this.viewportMatrix.x,
+      y: y ?? this.viewportMatrix.y,
+    };
+
+    this.viewportMatrix = viewportMatrix;
+
+    this.contentMatrix = {
+      scale: 1 / viewportMatrix.scale,
+      x: -viewportMatrix.x / viewportMatrix.scale,
+      y: -viewportMatrix.y / viewportMatrix.scale,
     };
   }
 }

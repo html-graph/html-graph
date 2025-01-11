@@ -88,10 +88,9 @@ export class HtmlController {
   public applyTransform(): void {
     this.backgroundDrawingFn(this.canvasCtx, this.publicViewportTransformer);
 
-    const [xv, yv] = this.viewportTransformer.getViewCoords(0, 0);
-    const sv = this.viewportTransformer.getViewScale();
+    const m = this.viewportTransformer.getContentMatrix();
 
-    this.container.style.transform = `matrix(${sv}, 0, 0, ${sv}, ${xv}, ${yv})`;
+    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
   }
 
   public attachNode(nodeId: unknown): void {
@@ -225,7 +224,7 @@ export class HtmlController {
   private updateNodeCoords(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
-    const sa = this.viewportTransformer.getAbsScale();
+    const sa = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
     const [centerX, centerY] = node.centerFn(width, height);
 
@@ -240,27 +239,21 @@ export class HtmlController {
     const rectFrom = portFrom!.element.getBoundingClientRect();
     const rectTo = portTo!.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
+    const m = this.viewportTransformer.getViewportMatrix();
 
-    const [xAbsFrom, yAbsFrom] = this.viewportTransformer.getAbsCoords(
-      rectFrom.left - rect.left,
-      rectFrom.top - rect.top,
-    );
-
-    const [xAbsTo, yAbsTo] = this.viewportTransformer.getAbsCoords(
-      rectTo.left - rect.left,
-      rectTo.top - rect.top,
-    );
-
-    const sa = this.viewportTransformer.getAbsScale();
+    const xAbsFrom = m.scale * (rectFrom.left - rect.left) + m.x;
+    const yAbsFrom = m.scale * (rectFrom.top - rect.top) + m.y;
+    const xAbsTo = m.scale * (rectTo.left - rect.left) + m.x;
+    const yAbsTo = m.scale * (rectTo.top - rect.top) + m.y;
 
     const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
-      rectFrom.width * sa,
-      rectFrom.height * sa,
+      rectFrom.width * m.scale,
+      rectFrom.height * m.scale,
     );
 
     const [xCenterTo, yCenterTo] = portTo.centerFn(
-      rectTo.width * sa,
-      rectTo.height * sa,
+      rectTo.width * m.scale,
+      rectTo.height * m.scale,
     );
 
     const xAbsCenterFrom = xCenterFrom + xAbsFrom;

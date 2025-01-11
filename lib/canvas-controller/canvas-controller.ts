@@ -250,7 +250,7 @@ export class CanvasController {
     x: number | null,
     y: number | null,
   ): void {
-    this.viewportTransformer.patchState(scale, x, y);
+    this.viewportTransformer.patchViewportState(scale, x, y);
     this.htmlController.applyTransform();
   }
 
@@ -275,7 +275,7 @@ export class CanvasController {
     const avgX = x / nodes.length;
     const avgY = y / nodes.length;
     const [width, height] = this.htmlController.getViewportDimensions();
-    const sa = this.viewportTransformer.getAbsScale();
+    const sa = this.viewportTransformer.getViewportMatrix().scale;
 
     const targetX = avgX - (sa * width) / 2;
     const targetY = avgY - (sa * height) / 2;
