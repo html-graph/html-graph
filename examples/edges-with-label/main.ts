@@ -1,9 +1,9 @@
 import {
   HtmlGraphBuilder,
   PortPayload,
-  EdgeController,
   AddNodePorts,
   BezierEdgeShape,
+  EdgeShape,
 } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
@@ -49,7 +49,7 @@ function createNode(
 const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
 const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
 
-class CustomEdgeShape implements EdgeController {
+class CustomEdgeShape implements EdgeShape {
   private controller = new BezierEdgeShape(
     "#5c5c5c",
     1,
