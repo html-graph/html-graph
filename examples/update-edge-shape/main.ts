@@ -1,4 +1,4 @@
-import { BezierEdgeController, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { BezierEdgeShape, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -54,25 +54,9 @@ canvas
 
 let i = 0;
 
-const redController = new BezierEdgeController(
-  "red",
-  2,
-  90,
-  15,
-  4,
-  true,
-  false,
-);
+const redController = new BezierEdgeShape("red", 2, 90, 15, 4, true, false);
 
-const greenController = new BezierEdgeController(
-  "green",
-  2,
-  90,
-  15,
-  4,
-  false,
-  true,
-);
+const greenController = new BezierEdgeShape("green", 2, 90, 15, 4, false, true);
 
 setInterval(() => {
   if (i % 2) {

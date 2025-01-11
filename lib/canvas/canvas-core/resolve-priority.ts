@@ -44,5 +44,13 @@ export const resolvePriority: (
     res[1] = createConstantPriorityFn(edgesPriority);
   }
 
+  if (typeof nodesPriority === "function") {
+    res[0] = nodesPriority;
+  }
+
+  if (typeof edgesPriority === "function") {
+    res[1] = edgesPriority;
+  }
+
   return res;
 };
