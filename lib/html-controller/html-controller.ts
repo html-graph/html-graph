@@ -224,11 +224,13 @@ export class HtmlController {
   private updateNodeCoords(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
-    const sa = this.viewportTransformer.getViewportMatrix().scale;
+    const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
     const [centerX, centerY] = node.centerFn(width, height);
 
-    wrapper.style.transform = `matrix(1, 0, 0, 1, ${node.x - sa * centerX}, ${node.y - sa * centerY})`;
+    const x = node.x - scaleViewport * centerX;
+    const y = node.y - scaleViewport * centerY;
+    wrapper.style.transform = `matrix(1, 0, 0, 1, ${x}, ${y})`;
   }
 
   private updateEdgeCoords(edgeId: unknown): void {
@@ -239,32 +241,36 @@ export class HtmlController {
     const rectFrom = portFrom!.element.getBoundingClientRect();
     const rectTo = portTo!.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
-    const m = this.viewportTransformer.getViewportMatrix();
+    const matrixViewport = this.viewportTransformer.getViewportMatrix();
 
-    const xAbsFrom = m.scale * (rectFrom.left - rect.left) + m.x;
-    const yAbsFrom = m.scale * (rectFrom.top - rect.top) + m.y;
-    const xAbsTo = m.scale * (rectTo.left - rect.left) + m.x;
-    const yAbsTo = m.scale * (rectTo.top - rect.top) + m.y;
+    const fromX =
+      matrixViewport.scale * (rectFrom.left - rect.left) + matrixViewport.x;
+    const fromY =
+      matrixViewport.scale * (rectFrom.top - rect.top) + matrixViewport.y;
+    const toX =
+      matrixViewport.scale * (rectTo.left - rect.left) + matrixViewport.x;
+    const toY =
+      matrixViewport.scale * (rectTo.top - rect.top) + matrixViewport.y;
 
-    const [xCenterFrom, yCenterFrom] = portFrom.centerFn(
-      rectFrom.width * m.scale,
-      rectFrom.height * m.scale,
+    const [deltaCenterFromX, deltaCenterFromY] = portFrom.centerFn(
+      rectFrom.width * matrixViewport.scale,
+      rectFrom.height * matrixViewport.scale,
     );
 
-    const [xCenterTo, yCenterTo] = portTo.centerFn(
-      rectTo.width * m.scale,
-      rectTo.height * m.scale,
+    const [deltaCenterToX, deltaCenterToY] = portTo.centerFn(
+      rectTo.width * matrixViewport.scale,
+      rectTo.height * matrixViewport.scale,
     );
 
-    const xAbsCenterFrom = xCenterFrom + xAbsFrom;
-    const yAbsCenterFrom = yCenterFrom + yAbsFrom;
-    const xAbsCenterTo = xCenterTo + xAbsTo;
-    const yAbsCenterTo = yCenterTo + yAbsTo;
+    const centerFromX = deltaCenterFromX + fromX;
+    const centerFromY = deltaCenterFromY + fromY;
+    const centerToX = deltaCenterToX + toX;
+    const centerToY = deltaCenterToY + toY;
 
-    const x = Math.min(xAbsCenterFrom, xAbsCenterTo);
-    const y = Math.min(yAbsCenterFrom, yAbsCenterTo);
-    const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
-    const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
+    const x = Math.min(centerFromX, centerToX);
+    const y = Math.min(centerFromY, centerToY);
+    const width = Math.abs(centerToX - centerFromX);
+    const height = Math.abs(centerToY - centerFromY);
 
     edge.shape.update(x, y, width, height, portFrom, portTo);
   }

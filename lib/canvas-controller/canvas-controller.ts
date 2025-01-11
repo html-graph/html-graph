@@ -275,10 +275,10 @@ export class CanvasController {
     const avgX = x / nodes.length;
     const avgY = y / nodes.length;
     const [width, height] = this.htmlController.getViewportDimensions();
-    const sa = this.viewportTransformer.getViewportMatrix().scale;
+    const sv = this.viewportTransformer.getViewportMatrix().scale;
 
-    const targetX = avgX - (sa * width) / 2;
-    const targetY = avgY - (sa * height) / 2;
+    const targetX = avgX - (sv * width) / 2;
+    const targetY = avgY - (sv * height) / 2;
 
     this.patchViewportState(null, targetX, targetY);
   }

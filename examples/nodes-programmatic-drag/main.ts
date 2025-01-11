@@ -105,17 +105,17 @@ class NodesDragHandler {
           throw new Error("failed to drag nonexisting node");
         }
 
-        const mc = canvas.transformation.getContentMatrix();
+        const matrixContent = canvas.transformation.getContentMatrix();
 
-        const xc = mc.scale * node.x + mc.x;
-        const yc = mc.scale * node.y + mc.y;
+        const xViewport = matrixContent.scale * node.x + matrixContent.x;
+        const yViewport = matrixContent.scale * node.y + matrixContent.y;
 
-        const nodeX = xc + event.movementX;
-        const nodeY = yc + event.movementY;
+        const newNodeX = xViewport + event.movementX;
+        const newNodeY = yViewport + event.movementY;
 
-        const mv = canvas.transformation.getViewportMatrix();
-        node.x = mv.scale * nodeX + mv.x;
-        node.y = mv.scale * nodeY + mv.y;
+        const matrixViewport = canvas.transformation.getViewportMatrix();
+        node.x = matrixViewport.scale * newNodeX + matrixViewport.x;
+        node.y = matrixViewport.scale * newNodeY + matrixViewport.y;
 
         canvas.updateNode(this.grabbedNode, { x: node.x, y: node.y });
       }

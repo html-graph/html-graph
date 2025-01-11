@@ -21,11 +21,8 @@ const dotsBackgroundDrawingFn: (
   ctx.fillStyle = color;
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-  const m = transformation.getContentMatrix();
-  const zeroX = m.x;
-  const zeroY = m.y;
-  const viewScale = m.scale;
-  const viewGap = gap * viewScale;
+  const matrixContent = transformation.getContentMatrix();
+  const viewGap = gap * matrixContent.scale;
 
   let iterationsHorizontal = 0;
   let iterationsVertical = 0;
@@ -38,11 +35,13 @@ const dotsBackgroundDrawingFn: (
   } while (iterationsHorizontal * iterationsVertical > 10000);
 
   const zeroOffsetX =
-    zeroX - Math.floor(zeroX / adjustedViewGap) * adjustedViewGap;
+    matrixContent.x -
+    Math.floor(matrixContent.x / adjustedViewGap) * adjustedViewGap;
   const zeroOffsetY =
-    zeroY - Math.floor(zeroY / adjustedViewGap) * adjustedViewGap;
+    matrixContent.y -
+    Math.floor(matrixContent.y / adjustedViewGap) * adjustedViewGap;
 
-  const r = radius * viewScale;
+  const r = radius * matrixContent.scale;
   const pi2 = 2 * Math.PI;
 
   const xFrom = zeroOffsetX - adjustedViewGap;
