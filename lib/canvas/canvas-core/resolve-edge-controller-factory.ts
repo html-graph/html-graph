@@ -5,11 +5,11 @@ import {
   createStraightEdgeControllerFactory,
   createVerticalEdgeControllerFactory,
 } from "@/edges";
-import { EdgeOptions } from "../canvas/edge-options";
+import { EdgeShape } from "../canvas/edge-options";
 
 export const resolveEdgeControllerFactory: (
-  options: EdgeOptions,
-) => EdgeControllerFactory = (options: EdgeOptions) => {
+  options: EdgeShape,
+) => EdgeControllerFactory = (options: EdgeShape) => {
   switch (options?.type) {
     case "custom":
       return options.controllerFactory;

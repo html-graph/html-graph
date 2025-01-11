@@ -1,9 +1,9 @@
-import { EdgeOptions } from "./edge-options";
+import { EdgeShape } from "./edge-options";
 
 export interface AddEdgeRequest {
   id?: unknown;
   from: string;
   to: string;
-  options?: EdgeOptions;
+  options?: EdgeShape;
   priority?: number;
 }

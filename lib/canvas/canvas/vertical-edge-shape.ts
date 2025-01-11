@@ -1,4 +1,4 @@
-export interface VerticalEdgeOptions {
+export interface VerticalEdgeShape {
   readonly type: "vertical";
   readonly color?: string;
   readonly width?: number;

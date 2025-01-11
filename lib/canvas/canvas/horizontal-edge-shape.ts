@@ -1,5 +1,5 @@
-export interface StraightEdgeOptions {
-  readonly type: "straight";
+export interface HorizontalEdgeShape {
+  readonly type: "horizontal";
   readonly color?: string;
   readonly width?: number;
   readonly arrowLength?: number;

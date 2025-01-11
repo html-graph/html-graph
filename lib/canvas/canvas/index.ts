@@ -1,7 +1,4 @@
 export * from "./edge-options";
-export * from "./bezier-edge-options";
-export * from "./straight-edge-options";
-export * from "./custom-edge-options";
 export * from "./patch-viewport-request";
 export * from "./add-edge-request";
 export * from "./mark-port-request";

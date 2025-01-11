@@ -2,9 +2,17 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    nodes: { centerFn: () => [0, 0] },
-    background: { type: "dots" },
-    edges: { shape: { hasTargetArrow: true } },
+    nodes: {
+      centerFn: () => [0, 0],
+    },
+    background: {
+      type: "dots",
+    },
+    edges: {
+      shape: {
+        hasTargetArrow: true,
+      },
+    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()

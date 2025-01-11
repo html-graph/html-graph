@@ -1,12 +1,12 @@
-import { BezierEdgeOptions } from "./bezier-edge-options";
-import { CustomEdgeOptions } from "./custom-edge-options";
-import { HorizontalEdgeOptions } from "./horizontal-edge-options";
-import { StraightEdgeOptions } from "./straight-edge-options";
-import { VerticalEdgeOptions } from "./vertical-edge-options";
+import { BezierEdgeShape } from "./bezier-edge-shape";
+import { CustomEdgeShape } from "./custom-edge-shape";
+import { HorizontalEdgeShape } from "./horizontal-edge-shape";
+import { StraightEdgeShape } from "./straight-edge-shape";
+import { VerticalEdgeShape } from "./vertical-edge-shape";
 
-export type EdgeOptions =
-  | BezierEdgeOptions
-  | StraightEdgeOptions
-  | CustomEdgeOptions
-  | HorizontalEdgeOptions
-  | VerticalEdgeOptions;
+export type EdgeShape =
+  | BezierEdgeShape
+  | StraightEdgeShape
+  | CustomEdgeShape
+  | HorizontalEdgeShape
+  | VerticalEdgeShape;

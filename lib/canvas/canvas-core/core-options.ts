@@ -1,6 +1,7 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeOptions } from "../canvas/edge-options";
+import { EdgeShape } from "../canvas/edge-options";
 import { BackgroundOptions } from "./background-options";
+import { Priority } from "./priority";
 
 export interface CoreOptions {
   /**
@@ -16,6 +17,10 @@ export interface CoreOptions {
      * center of nodes specified in addNode method by x and y
      */
     readonly centerFn?: CenterFn;
+    /**
+     * specifies default z-index value
+     */
+    readonly priority?: Priority;
   };
   /**
    * ports related behavior
@@ -35,6 +40,13 @@ export interface CoreOptions {
    *edges related behavior
    */
   readonly edges?: {
-    shape?: EdgeOptions;
+    /**
+     * specifies default controller
+     */
+    readonly shape?: EdgeShape;
+    /**
+     * specifies default z-index value
+     */
+    readonly priority?: Priority;
   };
 }

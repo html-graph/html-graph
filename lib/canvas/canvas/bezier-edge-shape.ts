@@ -1,14 +1,14 @@
-export interface HorizontalEdgeOptions {
-  readonly type: "horizontal";
+export interface BezierEdgeShape {
+  readonly type?: "bezier";
   readonly color?: string;
   readonly width?: number;
+  readonly curvature?: number;
   readonly arrowLength?: number;
   readonly arrowWidth?: number;
-  readonly arrowOffset?: number;
   readonly hasSourceArrow?: boolean;
   readonly hasTargetArrow?: boolean;
-  readonly cycleSquareSide?: number;
-  readonly roundness?: number;
+  readonly cycleRadius?: number;
+  readonly smallCycleRadius?: number;
   readonly detourDistance?: number;
   readonly detourDirection?: number;
 }

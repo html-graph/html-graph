@@ -2,8 +2,14 @@ import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
-    edges: { shape: { hasTargetArrow: true } },
+    background: {
+      type: "dots",
+    },
+    edges: {
+      shape: {
+        hasTargetArrow: true,
+      },
+    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
