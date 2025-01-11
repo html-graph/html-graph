@@ -1,13 +1,15 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
+import { createRoundedPath } from "../utils/create-rounded-path";
+import { Point } from "../point";
 
-export class BezierEdgeController implements EdgeController {
+export class StraightEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -21,11 +23,12 @@ export class BezierEdgeController implements EdgeController {
   public constructor(
     private readonly color: string,
     private readonly width: number,
-    private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
+    private readonly arrowOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
+    private readonly roundness: number,
   ) {
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
@@ -85,29 +88,25 @@ export class BezierEdgeController implements EdgeController {
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const pb = createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0]);
+    const pba: Point = this.sourceArrow
+      ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
+      : [0, 0];
+    const pea: Point = this.targetArrow
+      ? createRotatedPoint([width - this.arrowLength, height], toVect, [
+          width,
+          height,
+        ])
+      : [width, height];
 
-    const pe = createRotatedPoint([width - this.arrowLength, height], toVect, [
+    const gap = this.arrowLength + this.arrowOffset;
+
+    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
+    const pel = createRotatedPoint([width - gap, height], toVect, [
       width,
       height,
     ]);
 
-    const bpb = [
-      pb[0] + fromVect[0] * this.curvature,
-      pb[1] + fromVect[1] * this.curvature,
-    ];
-
-    const bpe = [
-      pe[0] - toVect[0] * this.curvature,
-      pe[1] - toVect[1] * this.curvature,
-    ];
-
-    const lcurve = `M ${pb[0]} ${pb[1]} C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pe[0]} ${pe[1]}`;
-    const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
-    const postLine = this.targetArrow
-      ? ""
-      : ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
-    const linePath = `${preLine}${lcurve}${postLine}`;
+    const linePath = createRoundedPath([pba, pbl, pel, pea], this.roundness);
 
     this.line.setAttribute("d", linePath);
 

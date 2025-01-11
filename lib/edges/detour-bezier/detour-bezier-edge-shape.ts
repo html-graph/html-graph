@@ -1,15 +1,14 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
-import { createRoundedPath } from "../utils/create-rounded-path";
 import { Point } from "../point";
 
-export class DetourStraightEdgeController implements EdgeController {
+export class DetourBezierEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -27,12 +26,11 @@ export class DetourStraightEdgeController implements EdgeController {
   public constructor(
     private readonly color: string,
     private readonly width: number,
+    private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
-    private readonly arrowOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
-    private readonly roundness: number,
     detourDistance: number,
     detourDirection: number,
   ) {
@@ -106,7 +104,7 @@ export class DetourStraightEdgeController implements EdgeController {
         ])
       : [width, height];
 
-    const gap1 = this.arrowLength + this.arrowOffset;
+    const gap1 = this.arrowLength;
 
     const pbl1: Point = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
     const pbl2: Point = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
@@ -115,11 +113,27 @@ export class DetourStraightEdgeController implements EdgeController {
       height,
     ]);
     const pel2: Point = [pel1[0] + this.detourX, pel1[1] + this.detourY];
+    const pm = [(pbl2[0] + pel2[0]) / 2, (pbl2[1] + pel2[1]) / 2];
+    const pbc1 = [
+      pbl1[0] - this.curvature * Math.cos(from.direction),
+      pbl1[1] - this.curvature * Math.sin(from.direction),
+    ];
 
-    const linePath = createRoundedPath(
-      [pba, pbl1, pbl2, pel2, pel1, pea],
-      this.roundness,
-    );
+    const pec1 = [
+      pel1[0] + this.curvature * Math.cos(to.direction),
+      pel1[1] + this.curvature * Math.sin(to.direction),
+    ];
+
+    const pbc2 = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
+    const pec2 = [pel1[0] + this.detourX, pel1[1] + this.detourY];
+
+    const linePath = [
+      `M ${pba[0]} ${pba[1]}`,
+      `L ${pbl1[0]} ${pbl1[1]}`,
+      `C ${pbc1[0]} ${pbc1[1]} ${pbc2[0]} ${pbc2[1]} ${pm[0]} ${pm[1]}`,
+      `C ${pec2[0]} ${pec2[1]} ${pec1[0]} ${pec1[1]} ${pel1[0]} ${pel1[1]}`,
+      `L ${pea[0]} ${pea[1]}`,
+    ].join(" ");
 
     this.line.setAttribute("d", linePath);
 

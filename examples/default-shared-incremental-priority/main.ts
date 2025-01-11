@@ -4,22 +4,18 @@ const canvas = new HtmlGraphBuilder()
   .setOptions({
     background: { type: "dots" },
     nodes: {
-      priority: {
-        type: "constant",
-        value: 5,
-      },
+      priority: "shared-incremental",
     },
     edges: {
       shape: {
         hasTargetArrow: true,
       },
-      priority: {
-        type: "constant",
-        value: 10,
-      },
+      priority: "shared-incremental",
     },
   })
-  .setUserDraggableNodes()
+  .setUserDraggableNodes({
+    grabPriorityStrategy: "freeze",
+  })
   .setUserTransformableCanvas()
   .build();
 

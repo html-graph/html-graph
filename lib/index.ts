@@ -22,20 +22,20 @@ export type {
 } from "./canvas";
 
 export {
-  BezierEdgeController,
-  StraightEdgeController,
-  HorizontalEdgeController,
-  VerticalEdgeController,
-  CycleCircleEdgeController,
-  CycleSquareEdgeController,
-  DetourStraightEdgeController,
-  createBezierEdgeControllerFactory,
-  createStraightEdgeControllerFactory,
-  createHorizontalEdgeControllerFactory,
-  createVerticalEdgeControllerFactory,
+  BezierEdgeShape as BezierEdgeController,
+  StraightEdgeShape as StraightEdgeController,
+  HorizontalEdgeShape as HorizontalEdgeController,
+  VerticalEdgeShape as VerticalEdgeController,
+  CycleCircleEdgeShape as CycleCircleEdgeController,
+  CycleSquareEdgeShape as CycleSquareEdgeController,
+  DetourStraightEdgeShape as DetourStraightEdgeController,
+  createBezierEdgeShapeFactory as createBezierEdgeControllerFactory,
+  createStraightEdgeShareFactory as createStraightEdgeControllerFactory,
+  createHorizontalEdgeShapeFactory as createHorizontalEdgeControllerFactory,
+  createVerticalEdgeShapeFactory as createVerticalEdgeControllerFactory,
   EdgeType,
 } from "./edges";
-export type { EdgeController } from "./edges";
+export type { EdgeShape as EdgeController } from "./edges";
 
 export type { GraphNode, GraphPort, GraphEdge } from "./graph-store";
 

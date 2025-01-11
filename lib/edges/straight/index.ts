@@ -1,1 +1,1 @@
-export * from "./straight-edge-controller";
+export * from "./straight-edge-shape";

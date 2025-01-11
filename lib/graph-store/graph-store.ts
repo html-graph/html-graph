@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeController } from "@/edges";
+import { EdgeShape } from "@/edges";
 import { EdgePayload } from "./edge-payload";
 import { NodePayload } from "./node-payload";
 import { PortPayload } from "@/port-payload";
@@ -107,13 +107,13 @@ export class GraphStore {
     edgeId: unknown,
     fromPortId: string,
     toPortId: string,
-    svgController: EdgeController,
+    shape: EdgeShape,
     priority: number,
   ): void {
     this.edges.set(edgeId, {
       from: fromPortId,
       to: toPortId,
-      controller: svgController,
+      shape,
       priority,
     });
 

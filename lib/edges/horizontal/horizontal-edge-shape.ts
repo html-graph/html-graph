@@ -1,5 +1,5 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
@@ -9,7 +9,7 @@ import {
 import { createRoundedPath } from "../utils/create-rounded-path";
 import { Point } from "../point";
 
-export class StraightEdgeController implements EdgeController {
+export class HorizontalEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -105,8 +105,17 @@ export class StraightEdgeController implements EdgeController {
       width,
       height,
     ]);
+    const halfW = Math.max((pbl[0] + pel[0]) / 2, gap);
+    const halfH = height / 2;
+    const pb1: Point = [flipX > 0 ? halfW : -gap, pbl[1]];
+    const pb2: Point = [pb1[0], halfH];
+    const pe1: Point = [flipX > 0 ? width - halfW : width + gap, pel[1]];
+    const pe2: Point = [pe1[0], halfH];
 
-    const linePath = createRoundedPath([pba, pbl, pel, pea], this.roundness);
+    const linePath = createRoundedPath(
+      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
+      this.roundness,
+    );
 
     this.line.setAttribute("d", linePath);
 

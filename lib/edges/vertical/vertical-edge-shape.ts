@@ -1,14 +1,15 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
+import { createRoundedPath } from "../utils/create-rounded-path";
 import { Point } from "../point";
 
-export class DetourBezierEdgeController implements EdgeController {
+export class VerticalEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -19,23 +20,16 @@ export class DetourBezierEdgeController implements EdgeController {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  private readonly detourX: number;
-
-  private readonly detourY: number;
-
   public constructor(
     private readonly color: string,
     private readonly width: number,
-    private readonly curvature: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
+    private readonly arrowOffset: number,
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
-    detourDistance: number,
-    detourDirection: number,
+    private readonly roundness: number,
   ) {
-    this.detourX = Math.cos(detourDirection) * detourDistance;
-    this.detourY = Math.sin(detourDirection) * detourDistance;
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -104,36 +98,25 @@ export class DetourBezierEdgeController implements EdgeController {
         ])
       : [width, height];
 
-    const gap1 = this.arrowLength;
+    const gap = this.arrowLength + this.arrowOffset;
 
-    const pbl1: Point = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
-    const pbl2: Point = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
-    const pel1: Point = createRotatedPoint([width - gap1, height], toVect, [
+    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
+    const pel = createRotatedPoint([width - gap, height], toVect, [
       width,
       height,
     ]);
-    const pel2: Point = [pel1[0] + this.detourX, pel1[1] + this.detourY];
-    const pm = [(pbl2[0] + pel2[0]) / 2, (pbl2[1] + pel2[1]) / 2];
-    const pbc1 = [
-      pbl1[0] - this.curvature * Math.cos(from.direction),
-      pbl1[1] - this.curvature * Math.sin(from.direction),
-    ];
 
-    const pec1 = [
-      pel1[0] + this.curvature * Math.cos(to.direction),
-      pel1[1] + this.curvature * Math.sin(to.direction),
-    ];
+    const halfH = Math.max((pbl[1] + pel[1]) / 2, gap);
+    const halfW = width / 2;
+    const pb1: Point = [pbl[0], flipY > 0 ? halfH : -gap];
+    const pb2: Point = [halfW, pb1[1]];
+    const pe1: Point = [pel[0], flipY > 0 ? height - halfH : height + gap];
+    const pe2: Point = [halfW, pe1[1]];
 
-    const pbc2 = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
-    const pec2 = [pel1[0] + this.detourX, pel1[1] + this.detourY];
-
-    const linePath = [
-      `M ${pba[0]} ${pba[1]}`,
-      `L ${pbl1[0]} ${pbl1[1]}`,
-      `C ${pbc1[0]} ${pbc1[1]} ${pbc2[0]} ${pbc2[1]} ${pm[0]} ${pm[1]}`,
-      `C ${pec2[0]} ${pec2[1]} ${pec1[0]} ${pec1[1]} ${pel1[0]} ${pel1[1]}`,
-      `L ${pea[0]} ${pea[1]}`,
-    ].join(" ");
+    const linePath = createRoundedPath(
+      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
+      this.roundness,
+    );
 
     this.line.setAttribute("d", linePath);
 

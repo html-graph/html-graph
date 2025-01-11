@@ -1,8 +1,8 @@
-import { EdgeController } from "@/edges";
+import { EdgeShape } from "@/edges";
 
 export interface EdgePayload {
   from: string;
   to: string;
-  controller: EdgeController;
+  shape: EdgeShape;
   priority: number;
 }

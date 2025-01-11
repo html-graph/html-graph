@@ -1,10 +1,10 @@
-import { BezierEdgeController } from "./bezier";
-import { EdgeControllerFactory } from "./edge-controller-factory";
+import { BezierEdgeShape } from "./bezier";
+import { EdgeShapeFactory } from "./edge-shape-factory";
 import { EdgeType } from "./edge-type";
-import { CycleCircleEdgeController } from "./cycle-circle";
-import { DetourBezierEdgeController } from "./detour-bezier";
+import { CycleCircleEdgeShape } from "./cycle-circle";
+import { DetourBezierEdgeShape } from "./detour-bezier";
 
-export const createBezierEdgeControllerFactory: (options: {
+export const createBezierEdgeShapeFactory: (options: {
   color: string;
   width: number;
   arrowLength: number;
@@ -16,9 +16,9 @@ export const createBezierEdgeControllerFactory: (options: {
   smallCycleRadius: number;
   detourDistance: number;
   detourDirection: number;
-}) => EdgeControllerFactory = (options) => (edgeType: EdgeType) => {
+}) => EdgeShapeFactory = (options) => (edgeType: EdgeType) => {
   if (edgeType === EdgeType.PortCycle) {
-    return new CycleCircleEdgeController(
+    return new CycleCircleEdgeShape(
       options.color,
       options.width,
       options.arrowLength,
@@ -30,7 +30,7 @@ export const createBezierEdgeControllerFactory: (options: {
   }
 
   if (edgeType === EdgeType.NodeCycle) {
-    return new DetourBezierEdgeController(
+    return new DetourBezierEdgeShape(
       options.color,
       options.width,
       options.curvature,
@@ -43,7 +43,7 @@ export const createBezierEdgeControllerFactory: (options: {
     );
   }
 
-  return new BezierEdgeController(
+  return new BezierEdgeShape(
     options.color,
     options.width,
     options.curvature,

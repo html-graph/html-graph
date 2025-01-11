@@ -134,7 +134,7 @@ export class HtmlController {
 
   public attachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-    const element = edge.controller.svg;
+    const element = edge.shape.svg;
 
     element.style.position = "absolute";
     element.style.top = "0";
@@ -273,6 +273,6 @@ export class HtmlController {
     const width = Math.abs(xAbsCenterTo - xAbsCenterFrom);
     const height = Math.abs(yAbsCenterTo - yAbsCenterFrom);
 
-    edge.controller.update(x, y, width, height, portFrom, portTo);
+    edge.shape.update(x, y, width, height, portFrom, portTo);
   }
 }

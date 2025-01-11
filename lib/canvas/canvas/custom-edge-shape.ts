@@ -1,6 +1,6 @@
-import { EdgeControllerFactory } from "@/edges";
+import { EdgeShapeFactory } from "@/edges";
 
 export interface CustomEdgeShape {
   readonly type: "custom";
-  readonly controllerFactory: EdgeControllerFactory;
+  readonly controllerFactory: EdgeShapeFactory;
 }

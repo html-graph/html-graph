@@ -1,6 +1,5 @@
 # TODO
 
-- add layer priority constant
 - add layer priority autoincrement
 - rid of moveToNodes ?
 - improve connection with label example

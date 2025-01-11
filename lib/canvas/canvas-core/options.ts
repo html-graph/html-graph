@@ -1,5 +1,6 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeControllerFactory } from "@/edges";
+import { EdgeShapeFactory } from "@/edges";
+import { PriorityFn } from "@/priority";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 
 export interface Options {
@@ -11,12 +12,14 @@ export interface Options {
   };
   readonly nodes: {
     readonly centerFn: CenterFn;
+    readonly priorityFn: PriorityFn;
   };
   readonly ports: {
     readonly centerFn: CenterFn;
     readonly direction: number;
   };
   readonly edges: {
-    readonly controllerFactory: EdgeControllerFactory;
+    readonly shapeFactory: EdgeShapeFactory;
+    readonly priorityFn: PriorityFn;
   };
 }

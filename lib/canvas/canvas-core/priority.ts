@@ -1,6 +1,10 @@
-interface ConstantPriority {
-  readonly type?: "constant";
-  readonly value: number;
-}
+type ConstantPriority = number;
 
-export type Priority = ConstantPriority;
+type IncrementalPriority = "incremental";
+
+type SharedIncrementalPriority = "shared-incremental";
+
+export type Priority =
+  | ConstantPriority
+  | IncrementalPriority
+  | SharedIncrementalPriority;

@@ -12,8 +12,8 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
-import { resolveEdgeControllerFactory } from "./resolve-edge-controller-factory";
-import { EdgeControllerFactory } from "@/edges";
+import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
+import { EdgeShapeFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
 
@@ -27,7 +27,7 @@ export class CanvasCore implements Canvas {
 
   private readonly di: DiContainer;
 
-  private readonly edgeControllerFactory: EdgeControllerFactory;
+  private readonly edgeShapeFactory: EdgeShapeFactory;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
@@ -37,12 +37,14 @@ export class CanvasCore implements Canvas {
       options.nodes.centerFn,
       options.ports.centerFn,
       options.ports.direction,
+      options.nodes.priorityFn,
+      options.edges.priorityFn,
     );
 
     this.transformation = this.di.publicViewportTransformer;
     this.model = this.di.publicGraphStore;
 
-    this.edgeControllerFactory = options.edges.controllerFactory;
+    this.edgeShapeFactory = options.edges.shapeFactory;
   }
 
   public addNode(node: AddNodeRequest): CanvasCore {
@@ -102,16 +104,16 @@ export class CanvasCore implements Canvas {
   }
 
   public addEdge(edge: AddEdgeRequest): CanvasCore {
-    const controllerFactory =
+    const shapeFactory =
       edge.options !== undefined
-        ? resolveEdgeControllerFactory(edge.options)
-        : this.edgeControllerFactory;
+        ? resolveEdgeShapeFactory(edge.options)
+        : this.edgeShapeFactory;
 
     this.di.canvasController.addEdge(
       edge.id,
       edge.from,
       edge.to,
-      controllerFactory,
+      shapeFactory,
       edge.priority,
     );
 

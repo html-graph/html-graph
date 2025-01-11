@@ -1,20 +1,20 @@
 import {
-  EdgeControllerFactory,
-  createBezierEdgeControllerFactory,
-  createHorizontalEdgeControllerFactory,
-  createStraightEdgeControllerFactory,
-  createVerticalEdgeControllerFactory,
+  EdgeShapeFactory,
+  createBezierEdgeShapeFactory,
+  createHorizontalEdgeShapeFactory,
+  createStraightEdgeShareFactory,
+  createVerticalEdgeShapeFactory,
 } from "@/edges";
 import { EdgeShape } from "../canvas/edge-options";
 
-export const resolveEdgeControllerFactory: (
+export const resolveEdgeShapeFactory: (
   options: EdgeShape,
-) => EdgeControllerFactory = (options: EdgeShape) => {
+) => EdgeShapeFactory = (options: EdgeShape) => {
   switch (options?.type) {
     case "custom":
       return options.controllerFactory;
     case "straight":
-      return createStraightEdgeControllerFactory({
+      return createStraightEdgeShareFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         arrowLength: options.arrowLength ?? 15,
@@ -28,7 +28,7 @@ export const resolveEdgeControllerFactory: (
         detourDirection: options.detourDirection ?? -Math.PI / 2,
       });
     case "horizontal":
-      return createHorizontalEdgeControllerFactory({
+      return createHorizontalEdgeShapeFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         arrowLength: options.arrowLength ?? 15,
@@ -42,7 +42,7 @@ export const resolveEdgeControllerFactory: (
         detourDirection: options.detourDirection ?? -Math.PI / 2,
       });
     case "vertical":
-      return createVerticalEdgeControllerFactory({
+      return createVerticalEdgeShapeFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         arrowLength: options.arrowLength ?? 15,
@@ -56,7 +56,7 @@ export const resolveEdgeControllerFactory: (
         detourDirection: options.detourDirection ?? -Math.PI / 2,
       });
     default:
-      return createBezierEdgeControllerFactory({
+      return createBezierEdgeShapeFactory({
         color: options.color ?? "#5c5c5c",
         width: options.width ?? 1,
         curvature: options.curvature ?? 90,

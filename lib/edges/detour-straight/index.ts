@@ -1,1 +1,1 @@
-export * from "./detour-straight-edge-controller";
+export * from "./detour-straight-edge-shape";

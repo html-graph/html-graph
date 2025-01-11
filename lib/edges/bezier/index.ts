@@ -1,1 +1,1 @@
-export * from "./bezier-edge-controller";
+export * from "./bezier-edge-shape";

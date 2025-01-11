@@ -1,5 +1,5 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
@@ -9,7 +9,7 @@ import {
 import { createRoundedPath } from "../utils/create-rounded-path";
 import { Point } from "../point";
 
-export class HorizontalEdgeController implements EdgeController {
+export class DetourStraightEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -20,6 +20,10 @@ export class HorizontalEdgeController implements EdgeController {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
+  private readonly detourX: number;
+
+  private readonly detourY: number;
+
   public constructor(
     private readonly color: string,
     private readonly width: number,
@@ -29,7 +33,11 @@ export class HorizontalEdgeController implements EdgeController {
     hasSourceArrow: boolean,
     hasTargetArrow: boolean,
     private readonly roundness: number,
+    detourDistance: number,
+    detourDirection: number,
   ) {
+    this.detourX = Math.cos(detourDirection) * detourDistance;
+    this.detourY = Math.sin(detourDirection) * detourDistance;
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -98,22 +106,18 @@ export class HorizontalEdgeController implements EdgeController {
         ])
       : [width, height];
 
-    const gap = this.arrowLength + this.arrowOffset;
+    const gap1 = this.arrowLength + this.arrowOffset;
 
-    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
-    const pel = createRotatedPoint([width - gap, height], toVect, [
+    const pbl1: Point = createRotatedPoint([gap1, 0], fromVect, [0, 0]);
+    const pbl2: Point = [pbl1[0] + this.detourX, pbl1[1] + this.detourY];
+    const pel1: Point = createRotatedPoint([width - gap1, height], toVect, [
       width,
       height,
     ]);
-    const halfW = Math.max((pbl[0] + pel[0]) / 2, gap);
-    const halfH = height / 2;
-    const pb1: Point = [flipX > 0 ? halfW : -gap, pbl[1]];
-    const pb2: Point = [pb1[0], halfH];
-    const pe1: Point = [flipX > 0 ? width - halfW : width + gap, pel[1]];
-    const pe2: Point = [pe1[0], halfH];
+    const pel2: Point = [pel1[0] + this.detourX, pel1[1] + this.detourY];
 
     const linePath = createRoundedPath(
-      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
+      [pba, pbl1, pbl2, pel2, pel1, pea],
       this.roundness,
     );
 

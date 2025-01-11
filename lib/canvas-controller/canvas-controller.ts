@@ -1,11 +1,12 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeControllerFactory, EdgeType } from "@/edges";
+import { EdgeShapeFactory, EdgeType } from "@/edges";
 import { AddNodePorts, UpdateEdgeRequest } from "@/canvas/canvas";
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 import { UpdatePortRequest } from "@/canvas/canvas/update-port-request";
+import { PriorityFn } from "@/priority";
 
 export class CanvasController {
   private readonly nodeIdGenerator = new IdGenerator();
@@ -21,6 +22,8 @@ export class CanvasController {
     private readonly nodesCenterFn: CenterFn,
     private readonly portsCenterFn: CenterFn,
     private readonly portsDirection: number,
+    private readonly nodesPriorityFn: PriorityFn,
+    private readonly edgesPriorityFn: PriorityFn,
   ) {}
 
   public addNode(
@@ -48,7 +51,7 @@ export class CanvasController {
       x,
       y,
       centerFn ?? this.nodesCenterFn,
-      priority ?? 0,
+      priority ?? this.nodesPriorityFn(),
     );
 
     this.htmlController.attachNode(nodeId);
@@ -163,7 +166,7 @@ export class CanvasController {
     edgeId: unknown | undefined,
     fromPortId: string,
     toPortId: string,
-    controllerFactory: EdgeControllerFactory,
+    shapeFactory: EdgeShapeFactory,
     priority: number | undefined,
   ): void {
     if (edgeId === undefined) {
@@ -199,8 +202,8 @@ export class CanvasController {
       edgeId,
       fromPortId,
       toPortId,
-      controllerFactory(edgeType),
-      priority ?? 0,
+      shapeFactory(edgeType),
+      priority ?? this.edgesPriorityFn(),
     );
 
     this.htmlController.attachEdge(edgeId);
@@ -214,7 +217,7 @@ export class CanvasController {
 
     if (request.controller !== undefined) {
       this.htmlController.detachEdge(edgeId);
-      edge.controller = request.controller;
+      edge.shape = request.controller;
       this.htmlController.attachEdge(edgeId);
     }
 

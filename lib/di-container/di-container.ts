@@ -8,6 +8,7 @@ import { CanvasController } from "@/canvas-controller";
 import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
 import { PublicGraphStore } from "@/graph-store";
+import { PriorityFn } from "@/priority";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -21,6 +22,8 @@ export class DiContainer {
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,
+    nodesPriorityFn: PriorityFn,
+    edgesPriorityFn: PriorityFn,
   ) {
     const viewportTransformer = new ViewportTransformer();
     const graphStore = new GraphStore();
@@ -45,6 +48,8 @@ export class DiContainer {
       nodesCenterFn,
       portsCenterFn,
       portsDirection,
+      nodesPriorityFn,
+      edgesPriorityFn,
     );
   }
 }

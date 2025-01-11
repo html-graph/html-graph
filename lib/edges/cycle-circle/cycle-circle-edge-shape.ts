@@ -1,14 +1,13 @@
 import { PortPayload } from "@/port-payload";
-import { EdgeController } from "../edge-controller";
+import { EdgeShape } from "../edge-shape";
 import { Point } from "../point";
 import {
   createArrowPath,
   createDirectionVector,
   createRotatedPoint,
 } from "../utils";
-import { createRoundedPath } from "../utils/create-rounded-path";
 
-export class CycleSquareEdgeController implements EdgeController {
+export class CycleCircleEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -17,21 +16,15 @@ export class CycleSquareEdgeController implements EdgeController {
 
   private readonly arrow: SVGPathElement | null = null;
 
-  private readonly roundness: number;
-
-  private readonly linePoints: readonly Point[];
-
   public constructor(
     private readonly color: string,
     private readonly width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     hasArrow: boolean,
-    private readonly side: number,
-    private readonly minPortOffset: number,
-    roundness: number,
+    private readonly radius: number,
+    private readonly smallRadius: number,
   ) {
-    this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
 
@@ -58,25 +51,6 @@ export class CycleSquareEdgeController implements EdgeController {
     this.svg.style.overflow = "visible";
     this.svg.style.width = `0px`;
     this.svg.style.height = `0px`;
-
-    const g = this.minPortOffset;
-    const s = this.side;
-    const x1 = this.arrowLength + g;
-    const r = this.roundness;
-    const x2 = x1 + 2 * s;
-
-    console.log(r);
-
-    this.linePoints = [
-      [this.arrowLength, 0],
-      [x1, 0],
-      [x1, this.side],
-      [x2, this.side],
-      [x2, -this.side],
-      [x1, -this.side],
-      [x1, 0],
-      [this.arrowLength, 0],
-    ];
   }
 
   public update(
@@ -90,12 +64,30 @@ export class CycleSquareEdgeController implements EdgeController {
 
     const fromVect = createDirectionVector(from.direction, 1, 1);
 
-    const rp = this.linePoints.map((p) =>
-      createRotatedPoint(p, fromVect, [0, 0]),
-    );
+    const r = this.smallRadius;
+    const R = this.radius;
+    const len = Math.sqrt(r * r + R * R);
+    const g = r + R;
+    const px = this.arrowLength + len * (1 - R / g);
+    const py = (r * R) / g;
+
+    const points: Point[] = [
+      [this.arrowLength, 0],
+      [px, py],
+      [px, -py],
+    ];
+
+    const rp = points.map((p) => createRotatedPoint(p, fromVect, [0, 0]));
+
+    const c = [
+      `M ${rp[0][0]} ${rp[0][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
+      `A ${R} ${R} 0 1 0 ${rp[2][0]} ${rp[2][1]}`,
+      `A ${r} ${r} 0 0 1 ${rp[0][0]} ${rp[0][1]}`,
+    ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
-    const linePath = `${this.arrow ? "" : preLine}${createRoundedPath(rp, this.roundness)}`;
+    const linePath = `${this.arrow !== null ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);
 

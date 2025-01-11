@@ -1,1 +1,1 @@
-export * from "./cycle-circle-edge-controller";
+export * from "./cycle-circle-edge-shape";

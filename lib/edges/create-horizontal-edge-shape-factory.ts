@@ -1,10 +1,10 @@
-import { EdgeControllerFactory } from "./edge-controller-factory";
+import { EdgeShapeFactory } from "./edge-shape-factory";
 import { EdgeType } from "./edge-type";
-import { CycleSquareEdgeController } from "./cycle-square";
-import { HorizontalEdgeController } from "./horizontal";
-import { DetourStraightEdgeController } from "./detour-straight";
+import { CycleSquareEdgeShape } from "./cycle-square";
+import { HorizontalEdgeShape } from "./horizontal";
+import { DetourStraightEdgeShape } from "./detour-straight";
 
-export const createHorizontalEdgeControllerFactory: (options: {
+export const createHorizontalEdgeShapeFactory: (options: {
   color: string;
   width: number;
   arrowLength: number;
@@ -16,9 +16,9 @@ export const createHorizontalEdgeControllerFactory: (options: {
   roundness: number;
   detourDistance: number;
   detourDirection: number;
-}) => EdgeControllerFactory = (options) => (edgeType: EdgeType) => {
+}) => EdgeShapeFactory = (options) => (edgeType: EdgeType) => {
   if (edgeType === EdgeType.PortCycle) {
-    return new CycleSquareEdgeController(
+    return new CycleSquareEdgeShape(
       options.color,
       options.width,
       options.arrowLength,
@@ -31,7 +31,7 @@ export const createHorizontalEdgeControllerFactory: (options: {
   }
 
   if (edgeType === EdgeType.NodeCycle) {
-    return new DetourStraightEdgeController(
+    return new DetourStraightEdgeShape(
       options.color,
       options.width,
       options.arrowLength,
@@ -45,7 +45,7 @@ export const createHorizontalEdgeControllerFactory: (options: {
     );
   }
 
-  return new HorizontalEdgeController(
+  return new HorizontalEdgeShape(
     options.color,
     options.width,
     options.arrowLength,
