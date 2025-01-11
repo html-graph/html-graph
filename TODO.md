@@ -1,6 +1,5 @@
 # TODO
 
-- refactor transform matrices
 - rid of moveToNodes ?
 - improve connection with label example
 - fix encapsulation for edge controllers ?
