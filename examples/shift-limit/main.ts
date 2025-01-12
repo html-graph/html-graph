@@ -17,10 +17,10 @@ const canvas = new HtmlGraphBuilder()
     },
     transformPreprocessor: {
       type: "shift-limit",
-      minX: 0,
-      maxX: 500,
-      minY: 0,
-      maxY: 500,
+      minX: -500,
+      maxX: 2000,
+      minY: -500,
+      maxY: 2000,
     },
   })
   .build();

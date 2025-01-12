@@ -6,9 +6,14 @@ export const createCombinedTransformPreprocessor: (
 ) => TransformPreprocessorFn = (
   preprocessors: readonly TransformPreprocessorFn[],
 ) => {
-  return (prevTransform: TransformPayload, nextTransform: TransformPayload) => {
+  return (
+    prevTransform: TransformPayload,
+    nextTransform: TransformPayload,
+    canvasWidth: number,
+    canvasHeight: number,
+  ) => {
     return preprocessors.reduce(
-      (acc, cur) => cur(prevTransform, acc),
+      (acc, cur) => cur(prevTransform, acc, canvasWidth, canvasHeight),
       nextTransform,
     );
   };

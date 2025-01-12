@@ -134,6 +134,22 @@ export class UserTransformableCanvas implements Canvas {
     }
   };
 
+  private readonly observer = new ResizeObserver(() => {
+    if (this.element !== null) {
+      const prevTransform = this.canvas.transformation.getViewportMatrix();
+
+      const { width, height } = this.element.getBoundingClientRect();
+      const transform = this.transformPreprocessor(
+        prevTransform,
+        prevTransform,
+        width,
+        height,
+      );
+      this.canvas.patchViewportMatrix(transform);
+      this.onTransformFinished(transform);
+    }
+  });
+
   public constructor(
     private readonly canvas: Canvas,
     private readonly options?: TransformOptions,
@@ -256,6 +272,7 @@ export class UserTransformableCanvas implements Canvas {
   public attach(element: HTMLElement): UserTransformableCanvas {
     this.detach();
     this.element = element;
+    this.observer.observe(this.element);
 
     this.canvas.attach(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
@@ -274,6 +291,7 @@ export class UserTransformableCanvas implements Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {
+      this.observer.unobserve(this.element);
       this.element.removeEventListener("mousedown", this.onMouseDown);
       this.element.removeEventListener("mousemove", this.onMouseMove);
       this.element.removeEventListener("mouseup", this.onMouseUp);
@@ -352,10 +370,19 @@ export class UserTransformableCanvas implements Canvas {
       dy: prevTransform.dy + prevTransform.scale * dy,
     };
 
-    const transform = this.transformPreprocessor(prevTransform, nextTransform);
+    if (this.element !== null) {
+      const { width, height } = this.element.getBoundingClientRect();
 
-    this.canvas.patchViewportMatrix(transform);
-    this.onTransformFinished(transform);
+      const transform = this.transformPreprocessor(
+        prevTransform,
+        nextTransform,
+        width,
+        height,
+      );
+
+      this.canvas.patchViewportMatrix(transform);
+      this.onTransformFinished(transform);
+    }
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
@@ -378,9 +405,18 @@ export class UserTransformableCanvas implements Canvas {
       dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
     };
 
-    const transform = this.transformPreprocessor(prevTransform, nextTransform);
+    if (this.element !== null) {
+      const { width, height } = this.element.getBoundingClientRect();
 
-    this.canvas.patchViewportMatrix(transform);
-    this.onTransformFinished(transform);
+      const transform = this.transformPreprocessor(
+        prevTransform,
+        nextTransform,
+        width,
+        height,
+      );
+
+      this.canvas.patchViewportMatrix(transform);
+      this.onTransformFinished(transform);
+    }
   }
 }
