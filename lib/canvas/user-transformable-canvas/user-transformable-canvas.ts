@@ -17,6 +17,8 @@ import { TransformFinishedFn } from "./transform-finished-fn";
 import { transformFinishedDefault } from "./transform-finished-default-fn";
 import { transformPreprocessorDefault } from "./transform-preprocessor-default-fn";
 import { TransformPayload } from "./transform-payload";
+import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
+import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -36,10 +38,6 @@ export class UserTransformableCanvas implements Canvas {
   private readonly isScalable: boolean;
 
   private readonly isShiftable: boolean;
-
-  private readonly minViewScale: number | null;
-
-  private readonly maxViewScale: number | null;
 
   private readonly wheelSensitivity: number;
 
@@ -143,12 +141,7 @@ export class UserTransformableCanvas implements Canvas {
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
 
-    const minContentScale = this.options?.scale?.min ?? null;
-    const maxContentScale = this.options?.scale?.max ?? null;
-
     this.isScalable = this.options?.scale?.enabled !== false;
-    this.minViewScale = maxContentScale !== null ? 1 / maxContentScale : null;
-    this.maxViewScale = minContentScale !== null ? 1 / minContentScale : null;
     this.isShiftable = this.options?.shift?.enabled !== false;
 
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
@@ -157,8 +150,22 @@ export class UserTransformableCanvas implements Canvas {
     this.onTransformFinished =
       options?.events?.onTransformFinished ?? transformFinishedDefault;
 
-    this.transformPreprocessor =
-      options?.transformPreprocessor ?? transformPreprocessorDefault;
+    const preprocessors = options?.transformPreprocessor;
+
+    if (preprocessors !== undefined) {
+      if (Array.isArray(preprocessors)) {
+        this.transformPreprocessor = createCombinedTransformPreprocessor(
+          preprocessors.map((preprocessor) =>
+            resolveTransformPreprocessor(preprocessor),
+          ),
+        );
+      } else {
+        this.transformPreprocessor =
+          resolveTransformPreprocessor(preprocessors);
+      }
+    } else {
+      this.transformPreprocessor = transformPreprocessorDefault;
+    }
   }
 
   public addNode(node: AddNodeRequest): UserTransformableCanvas {
@@ -370,22 +377,6 @@ export class UserTransformableCanvas implements Canvas {
       dx: prevTransform.scale * (1 - s2) * cx + prevTransform.dx,
       dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
     };
-
-    if (
-      this.maxViewScale !== null &&
-      nextTransform.scale > this.maxViewScale &&
-      nextTransform.scale > prevTransform.scale
-    ) {
-      return;
-    }
-
-    if (
-      this.minViewScale !== null &&
-      nextTransform.scale < this.minViewScale &&
-      nextTransform.scale < prevTransform.scale
-    ) {
-      return;
-    }
 
     const transform = this.transformPreprocessor(prevTransform, nextTransform);
 

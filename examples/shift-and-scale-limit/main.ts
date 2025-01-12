@@ -15,11 +15,20 @@ const canvas = new HtmlGraphBuilder()
     scale: {
       enabled: true,
     },
-    transformPreprocessor: {
-      type: "scale-limit",
-      minContentScale: 0.5,
-      maxContentScale: 1.5,
-    },
+    transformPreprocessor: [
+      {
+        type: "shift-limit",
+        minX: 0,
+        maxX: 500,
+        minY: 0,
+        maxY: 500,
+      },
+      {
+        type: "scale-limit",
+        minContentScale: 0.5,
+        maxContentScale: 1.5,
+      },
+    ],
   })
   .build();
 

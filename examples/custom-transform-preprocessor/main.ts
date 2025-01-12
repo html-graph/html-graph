@@ -11,14 +11,21 @@ const canvas = new HtmlGraphBuilder()
       },
     },
   })
+  .setUserDraggableNodes()
   .setUserTransformableCanvas({
-    scale: {
-      enabled: true,
-    },
     transformPreprocessor: {
-      type: "scale-limit",
-      minContentScale: 0.5,
-      maxContentScale: 1.5,
+      type: "custom",
+      preprocessorFn: (prevTransform, nextTransform) => {
+        if (nextTransform.scale > 1) {
+          return prevTransform;
+        }
+
+        return {
+          scale: nextTransform.scale,
+          dx: Math.max(nextTransform.dx, -500),
+          dy: nextTransform.dy,
+        };
+      },
     },
   })
   .build();

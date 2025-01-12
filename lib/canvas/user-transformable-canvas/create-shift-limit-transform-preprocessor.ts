@@ -13,15 +13,25 @@ export const createShiftLimitTransformPreprocessor: (
   maxY: number | null,
 ) => {
   return (prevTransform: TransformPayload, nextTransform: TransformPayload) => {
-    if (
-      (minX !== null && nextTransform.dx < minX) ||
-      (maxX !== null && nextTransform.dx > maxX) ||
-      (minY !== null && nextTransform.dx < minY) ||
-      (maxY !== null && nextTransform.dx > maxY)
-    ) {
-      return prevTransform;
+    let dx = nextTransform.dx;
+    let dy = nextTransform.dy;
+
+    if (minX !== null && dx < minX && dx < prevTransform.dx) {
+      dx = prevTransform.dx;
     }
 
-    return nextTransform;
+    if (maxX !== null && dx > maxX && dx > prevTransform.dx) {
+      dx = prevTransform.dx;
+    }
+
+    if (minY !== null && dy < minY && dy < prevTransform.dy) {
+      dy = prevTransform.dy;
+    }
+
+    if (maxY !== null && dy > maxY && dy > prevTransform.dy) {
+      dy = prevTransform.dy;
+    }
+
+    return { scale: nextTransform.scale, dx, dy };
   };
 };

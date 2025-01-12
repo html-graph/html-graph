@@ -15,7 +15,7 @@ export const createScaleLimitTransformPreprocessor: (
     if (
       maxViewScale !== null &&
       nextTransform.scale > maxViewScale &&
-      prevTransform.scale > maxViewScale
+      nextTransform.scale > prevTransform.scale
     ) {
       return prevTransform;
     }
@@ -23,7 +23,7 @@ export const createScaleLimitTransformPreprocessor: (
     if (
       minViewScale !== null &&
       nextTransform.scale < minViewScale &&
-      prevTransform.scale < minViewScale
+      nextTransform.scale < prevTransform.scale
     ) {
       return prevTransform;
     }
