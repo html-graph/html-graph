@@ -220,7 +220,7 @@ export class HtmlController {
     const { width, height } = wrapper.getBoundingClientRect();
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
-    const [centerX, centerY] = node.centerFn(width, height);
+    const { x: centerX, y: centerY } = node.centerFn(width, height);
 
     const x = node.x - scaleViewport * centerX;
     const y = node.y - scaleViewport * centerY;
@@ -246,12 +246,12 @@ export class HtmlController {
     const toY =
       matrixViewport.scale * (rectTo.top - rect.top) + matrixViewport.y;
 
-    const [deltaCenterFromX, deltaCenterFromY] = portFrom.centerFn(
+    const { x: deltaCenterFromX, y: deltaCenterFromY } = portFrom.centerFn(
       rectFrom.width * matrixViewport.scale,
       rectFrom.height * matrixViewport.scale,
     );
 
-    const [deltaCenterToX, deltaCenterToY] = portTo.centerFn(
+    const { x: deltaCenterToX, y: deltaCenterToY } = portTo.centerFn(
       rectTo.width * matrixViewport.scale,
       rectTo.height * matrixViewport.scale,
     );

@@ -60,8 +60,8 @@ canvas.attach(canvasElement).addNode({
 
 let i = 0;
 
-const topLeftCenterFn: CenterFn = () => [0, 0];
-const bottomRightCenterFn: CenterFn = (w, h) => [w, h];
+const topLeftCenterFn: CenterFn = () => ({ x: 0, y: 0 });
+const bottomRightCenterFn: CenterFn = (w, h) => ({ x: w, y: h });
 
 setInterval(() => {
   if (i % 2) {

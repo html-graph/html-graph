@@ -1,6 +1,5 @@
 # TODO
 
-- refactor point interface
 - getAllNodes, getAllEdges, getNodePorts
 - transformation modification
 - check cursor in viewport

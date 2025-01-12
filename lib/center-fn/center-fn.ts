@@ -1,1 +1,3 @@
-export type CenterFn = (width: number, height: number) => [number, number];
+import { Point } from "@/edges";
+
+export type CenterFn = (width: number, height: number) => Point;

@@ -1,4 +1,4 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import { HtmlGraphBuilder, Point } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -56,7 +56,7 @@ canvas
         "port-1",
         {
           element: port1,
-          centerFn: (w, h): [number, number] => [w, h / 2],
+          centerFn: (w, h): Point => ({ x: w, y: h / 2 }),
         },
       ],
     ],
@@ -71,7 +71,7 @@ canvas
         "port-2",
         {
           element: port2,
-          centerFn: (_w, h): [number, number] => [0, h / 2],
+          centerFn: (_w, h): Point => ({ x: 0, y: h / 2 }),
         },
       ],
     ],

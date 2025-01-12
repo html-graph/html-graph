@@ -2,9 +2,6 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    nodes: {
-      centerFn: () => [0, 0],
-    },
     background: {
       type: "dots",
     },
@@ -54,13 +51,14 @@ canvas
     x: 200,
     y: 300,
     ports: [["port-1", port1]],
-    centerFn: (w, h) => [w, h],
+    centerFn: (w, h) => ({ x: w, y: h }),
   })
   .addNode({
     element: node2,
     x: 600,
     y: 500,
     ports: [["port-2", port2]],
+    centerFn: () => ({ x: 0, y: 0 }),
   })
   .addEdge({ from: "port-1", to: "port-2" });
 
