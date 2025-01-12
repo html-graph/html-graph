@@ -5,5 +5,5 @@ export const createDirectionVector: (
   flipX: number,
   flipY: number,
 ) => Point = (direction: number, flipX: number, flipY: number) => {
-  return [flipX * Math.cos(direction), flipY * Math.sin(direction)];
+  return { x: flipX * Math.cos(direction), y: flipY * Math.sin(direction) };
 };

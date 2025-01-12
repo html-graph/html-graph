@@ -6,6 +6,7 @@ import {
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
+import { Point } from "../point";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
@@ -73,40 +74,47 @@ export class BezierEdgeShape implements EdgeShape {
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
 
     const fromCenter = createPortCenter(from);
     const toCenter = createPortCenter(to);
-    const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
+    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
 
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const pb = createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0]);
+    const pb = createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
+      x: 0,
+      y: 0,
+    });
 
-    const pe = createRotatedPoint([width - this.arrowLength, height], toVect, [
-      width,
-      height,
-    ]);
+    const pe = createRotatedPoint(
+      { x: width - this.arrowLength, y: height },
+      toVect,
+      {
+        x: width,
+        y: height,
+      },
+    );
 
-    const bpb = [
-      pb[0] + fromVect[0] * this.curvature,
-      pb[1] + fromVect[1] * this.curvature,
-    ];
+    const bpb: Point = {
+      x: pb.x + fromVect.x * this.curvature,
+      y: pb.y + fromVect.y * this.curvature,
+    };
 
-    const bpe = [
-      pe[0] - toVect[0] * this.curvature,
-      pe[1] - toVect[1] * this.curvature,
-    ];
+    const bpe: Point = {
+      x: pe.x - toVect.x * this.curvature,
+      y: pe.y - toVect.y * this.curvature,
+    };
 
-    const lcurve = `M ${pb[0]} ${pb[1]} C ${bpb[0]} ${bpb[1]}, ${bpe[0]} ${bpe[1]}, ${pe[0]} ${pe[1]}`;
-    const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb[0]} ${pb[1]} `;
+    const lcurve = `M ${pb.x} ${pb.y} C ${bpb.x} ${bpb.y}, ${bpe.x} ${bpe.y}, ${pe.x} ${pe.y}`;
+    const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb.x} ${pb.y} `;
     const postLine = this.targetArrow
       ? ""
-      : ` M ${pe[0]} ${pe[1]} L ${width} ${height}`;
+      : ` M ${pe.x} ${pe.y} L ${width} ${height}`;
     const linePath = `${preLine}${lcurve}${postLine}`;
 
     this.line.setAttribute("d", linePath);

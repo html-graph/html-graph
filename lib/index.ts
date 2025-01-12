@@ -35,7 +35,7 @@ export {
   createVerticalEdgeShapeFactory,
   EdgeType,
 } from "./edges";
-export type { EdgeShape } from "./edges";
+export type { EdgeShape, Point } from "./edges";
 
 export type { GraphNode, GraphPort, GraphEdge } from "./graph-store";
 

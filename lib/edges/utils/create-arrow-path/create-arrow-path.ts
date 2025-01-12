@@ -14,19 +14,19 @@ export const createArrowPath: (
   arrowLength: number,
   arrowWidth: number,
 ) => {
-  const arrowPoints: [number, number][] = [
-    [0, 0],
-    [arrowLength, arrowWidth],
-    [arrowLength, -arrowWidth],
+  const arrowPoints: Point[] = [
+    { x: 0, y: 0 },
+    { x: arrowLength, y: arrowWidth },
+    { x: arrowLength, y: -arrowWidth },
   ];
 
-  const p = arrowPoints
-    .map((p) => createRotatedPoint(p, vect, [0, 0]))
-    .map((p) => [p[0] + shiftX, p[1] + shiftY]);
+  const p: readonly Point[] = arrowPoints
+    .map((p) => createRotatedPoint(p, vect, { x: 0, y: 0 }))
+    .map((p) => ({ x: p.x + shiftX, y: p.y + shiftY }));
 
-  const amove = `M ${p[0][0]} ${p[0][1]}`;
-  const aline1 = `L ${p[1][0]} ${p[1][1]}`;
-  const aline2 = `L ${p[2][0]} ${p[2][1]}`;
+  const amove = `M ${p[0].x} ${p[0].y}`;
+  const aline1 = `L ${p[1].x} ${p[1].y}`;
+  const aline2 = `L ${p[2].x} ${p[2].y}`;
 
   return `${amove} ${aline1} ${aline2}`;
 };

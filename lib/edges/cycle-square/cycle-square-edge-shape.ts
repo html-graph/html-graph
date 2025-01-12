@@ -68,14 +68,14 @@ export class CycleSquareEdgeShape implements EdgeShape {
     console.log(r);
 
     this.linePoints = [
-      [this.arrowLength, 0],
-      [x1, 0],
-      [x1, this.side],
-      [x2, this.side],
-      [x2, -this.side],
-      [x1, -this.side],
-      [x1, 0],
-      [this.arrowLength, 0],
+      { x: this.arrowLength, y: 0 },
+      { x: x1, y: 0 },
+      { x: x1, y: this.side },
+      { x: x2, y: this.side },
+      { x: x2, y: -this.side },
+      { x: x1, y: -this.side },
+      { x: x1, y: 0 },
+      { x: this.arrowLength, y: 0 },
     ];
   }
 
@@ -91,10 +91,10 @@ export class CycleSquareEdgeShape implements EdgeShape {
     const fromVect = createDirectionVector(from.direction, 1, 1);
 
     const rp = this.linePoints.map((p) =>
-      createRotatedPoint(p, fromVect, [0, 0]),
+      createRotatedPoint(p, fromVect, { x: 0, y: 0 }),
     );
 
-    const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
+    const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
     const linePath = `${this.arrow ? "" : preLine}${createRoundedPath(rp, this.roundness)}`;
 
     this.line.setAttribute("d", linePath);

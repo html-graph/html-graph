@@ -8,5 +8,5 @@ export const createPortCenter: (port: PortPayload) => Point = (
 
   const center = port.centerFn(width, height);
 
-  return [left + center[0], top + center[1]];
+  return { x: left + center[0], y: top + center[1] };
 };

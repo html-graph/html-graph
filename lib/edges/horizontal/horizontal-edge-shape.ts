@@ -76,41 +76,44 @@ export class HorizontalEdgeShape implements EdgeShape {
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
 
     const fromCenter = createPortCenter(from);
     const toCenter = createPortCenter(to);
-    const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
+    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
 
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
     const pba: Point = this.sourceArrow
-      ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
-      : [0, 0];
+      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
+          x: 0,
+          y: 0,
+        })
+      : { x: 0, y: 0 };
     const pea: Point = this.targetArrow
-      ? createRotatedPoint([width - this.arrowLength, height], toVect, [
-          width,
-          height,
-        ])
-      : [width, height];
+      ? createRotatedPoint({ x: width - this.arrowLength, y: height }, toVect, {
+          x: width,
+          y: height,
+        })
+      : { x: width, y: height };
 
     const gap = this.arrowLength + this.arrowOffset;
 
-    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
-    const pel = createRotatedPoint([width - gap, height], toVect, [
-      width,
-      height,
-    ]);
-    const halfW = Math.max((pbl[0] + pel[0]) / 2, gap);
+    const pbl = createRotatedPoint({ x: gap, y: 0 }, fromVect, { x: 0, y: 0 });
+    const pel = createRotatedPoint({ x: width - gap, y: height }, toVect, {
+      x: width,
+      y: height,
+    });
+    const halfW = Math.max((pbl.x + pel.x) / 2, gap);
     const halfH = height / 2;
-    const pb1: Point = [flipX > 0 ? halfW : -gap, pbl[1]];
-    const pb2: Point = [pb1[0], halfH];
-    const pe1: Point = [flipX > 0 ? width - halfW : width + gap, pel[1]];
-    const pe2: Point = [pe1[0], halfH];
+    const pb1: Point = { x: flipX > 0 ? halfW : -gap, y: pbl.y };
+    const pb2: Point = { x: pb1.x, y: halfH };
+    const pe1: Point = { x: flipX > 0 ? width - halfW : width + gap, y: pel.y };
+    const pe2: Point = { x: pe1.x, y: halfH };
 
     const linePath = createRoundedPath(
       [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],

@@ -26,12 +26,14 @@ export const createRotatedPoint: (
    *  0   0  1
    */
 
-  return [
-    vector[0] * point[0] -
-      vector[1] * point[1] +
-      ((1 - vector[0]) * center[0] + vector[1] * center[1]),
-    vector[1] * point[0] +
-      vector[0] * point[1] +
-      ((1 - vector[0]) * center[1] - vector[1] * center[0]),
-  ];
+  return {
+    x:
+      vector.x * point.x -
+      vector.y * point.y +
+      ((1 - vector.x) * center.x + vector.y * center.y),
+    y:
+      vector.y * point.x +
+      vector.x * point.y +
+      ((1 - vector.x) * center.y - vector.y * center.x),
+  };
 };

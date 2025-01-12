@@ -1,8 +1,9 @@
 # TODO
 
 - refactor point interface
-- getAllNodes, getAllEdges
+- getAllNodes, getAllEdges, getNodePorts
 - transformation modification
+- check cursor in viewport
 - improve connection with label example
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay

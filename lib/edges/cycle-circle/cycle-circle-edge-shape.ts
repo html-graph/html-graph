@@ -72,21 +72,23 @@ export class CycleCircleEdgeShape implements EdgeShape {
     const py = (r * R) / g;
 
     const points: Point[] = [
-      [this.arrowLength, 0],
-      [px, py],
-      [px, -py],
+      { x: this.arrowLength, y: 0 },
+      { x: px, y: py },
+      { x: px, y: -py },
     ];
 
-    const rp = points.map((p) => createRotatedPoint(p, fromVect, [0, 0]));
+    const rp = points.map((p) =>
+      createRotatedPoint(p, fromVect, { x: 0, y: 0 }),
+    );
 
     const c = [
-      `M ${rp[0][0]} ${rp[0][1]}`,
-      `A ${r} ${r} 0 0 1 ${rp[1][0]} ${rp[1][1]}`,
-      `A ${R} ${R} 0 1 0 ${rp[2][0]} ${rp[2][1]}`,
-      `A ${r} ${r} 0 0 1 ${rp[0][0]} ${rp[0][1]}`,
+      `M ${rp[0].x} ${rp[0].y}`,
+      `A ${r} ${r} 0 0 1 ${rp[1].x} ${rp[1].y}`,
+      `A ${R} ${R} 0 1 0 ${rp[2].x} ${rp[2].y}`,
+      `A ${r} ${r} 0 0 1 ${rp[0].x} ${rp[0].y}`,
     ].join(" ");
 
-    const preLine = `M ${0} ${0} L ${rp[0][0]} ${rp[0][1]} `;
+    const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
     const linePath = `${this.arrow !== null ? "" : preLine}${c}`;
 
     this.line.setAttribute("d", linePath);

@@ -1,1 +1,4 @@
-export type Point = [number, number];
+export interface Point {
+  readonly x: number;
+  readonly y: number;
+}

@@ -76,35 +76,38 @@ export class StraightEdgeShape implements EdgeShape {
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
 
     const fromCenter = createPortCenter(from);
     const toCenter = createPortCenter(to);
-    const flipX = fromCenter[0] <= toCenter[0] ? 1 : -1;
-    const flipY = fromCenter[1] <= toCenter[1] ? 1 : -1;
+    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
+    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
 
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
     const pba: Point = this.sourceArrow
-      ? createRotatedPoint([this.arrowLength, 0], fromVect, [0, 0])
-      : [0, 0];
+      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
+          x: 0,
+          y: 0,
+        })
+      : { x: 0, y: 0 };
     const pea: Point = this.targetArrow
-      ? createRotatedPoint([width - this.arrowLength, height], toVect, [
-          width,
-          height,
-        ])
-      : [width, height];
+      ? createRotatedPoint({ x: width - this.arrowLength, y: height }, toVect, {
+          x: width,
+          y: height,
+        })
+      : { x: width, y: height };
 
     const gap = this.arrowLength + this.arrowOffset;
 
-    const pbl = createRotatedPoint([gap, 0], fromVect, [0, 0]);
-    const pel = createRotatedPoint([width - gap, height], toVect, [
-      width,
-      height,
-    ]);
+    const pbl = createRotatedPoint({ x: gap, y: 0 }, fromVect, { x: 0, y: 0 });
+    const pel = createRotatedPoint({ x: width - gap, y: height }, toVect, {
+      x: width,
+      y: height,
+    });
 
     const linePath = createRoundedPath([pba, pbl, pel, pea], this.roundness);
 

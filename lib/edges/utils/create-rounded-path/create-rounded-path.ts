@@ -7,11 +7,11 @@ export const createRoundedPath: (
   const parts: string[] = [];
 
   if (path.length > 0) {
-    parts.push(`M ${path[0][0]} ${path[0][1]}`);
+    parts.push(`M ${path[0].x} ${path[0].y}`);
   }
 
   if (path.length === 2) {
-    parts.push(`L ${path[1][0]} ${path[1][1]}`);
+    parts.push(`L ${path[1].x} ${path[1].y}`);
   }
 
   if (path.length > 2) {
@@ -37,30 +37,30 @@ export const createRoundedPath: (
 
       if (isNotLast) {
         const nextPoint = path[i + 1];
-        dxNext = nextPoint[0] - point[0];
-        dyNext = nextPoint[1] - point[1];
+        dxNext = nextPoint.x - point.x;
+        dyNext = nextPoint.y - point.y;
         distanceNext = Math.sqrt(dxNext * dxNext + dyNext * dyNext);
       }
 
       const rNext = isMediate ? roundness : 0;
       const ratioNext = Math.min(rNext / distanceNext, i < last - 1 ? 0.5 : 1);
       const njp: Point = isMediate
-        ? [point[0] + dxNext * ratioNext, point[1] + dyNext * ratioNext]
+        ? { x: point.x + dxNext * ratioNext, y: point.y + dyNext * ratioNext }
         : point;
 
       const rPrev = isMediate ? roundness : 0;
       const ratioPrev = Math.min(rPrev / distancePrev, i > 1 ? 0.5 : 1);
       const pjp: Point = isMediate
-        ? [point[0] + dxPrev * ratioPrev, point[1] + dyPrev * ratioPrev]
+        ? { x: point.x + dxPrev * ratioPrev, y: point.y + dyPrev * ratioPrev }
         : point;
 
       if (i > 0) {
-        parts.push(`L ${pjp[0]} ${pjp[1]}`);
+        parts.push(`L ${pjp.x} ${pjp.y}`);
       }
 
       if (isMediate) {
         parts.push(
-          `C ${point[0]} ${point[1]} ${point[0]} ${point[1]} ${njp[0]} ${njp[1]}`,
+          `C ${point.x} ${point.y} ${point.x} ${point.y} ${njp.x} ${njp.y}`,
         );
       }
     });

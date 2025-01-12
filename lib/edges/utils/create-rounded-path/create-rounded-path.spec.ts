@@ -9,15 +9,15 @@ describe("createRoundedPath", () => {
   });
 
   it("should return dot for path with no lines", () => {
-    const res = createRoundedPath([[0, 0]], 0);
+    const res = createRoundedPath([{ x: 0, y: 0 }], 0);
 
     expect(res).toEqual("M 0 0");
   });
 
   it("should return line for path with no angles", () => {
     const path: Point[] = [
-      [0, 0],
-      [0, 15],
+      { x: 0, y: 0 },
+      { x: 0, y: 15 },
     ];
 
     const res = createRoundedPath(path, 0);
@@ -27,9 +27,9 @@ describe("createRoundedPath", () => {
 
   it("should return rounded line for three items array", () => {
     const path: Point[] = [
-      [0, 0],
-      [30, 0],
-      [30, 30],
+      { x: 0, y: 0 },
+      { x: 30, y: 0 },
+      { x: 30, y: 30 },
     ];
 
     const res = createRoundedPath(path, 10);
@@ -39,9 +39,9 @@ describe("createRoundedPath", () => {
 
   it("should limit roundness to available joint distance", () => {
     const path: Point[] = [
-      [0, 0],
-      [30, 0],
-      [30, 30],
+      { x: 0, y: 0 },
+      { x: 30, y: 0 },
+      { x: 30, y: 30 },
     ];
 
     const res = createRoundedPath(path, 100);
@@ -51,9 +51,9 @@ describe("createRoundedPath", () => {
 
   it("should erase gap limit near the start when roundness overflows", () => {
     const path: Point[] = [
-      [0, 0],
-      [30, 0],
-      [30, 30],
+      { x: 0, y: 0 },
+      { x: 30, y: 0 },
+      { x: 30, y: 30 },
     ];
 
     const res = createRoundedPath(path, 100);
