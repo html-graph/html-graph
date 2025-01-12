@@ -13,7 +13,7 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserTransformableCanvas({
     events: {
-      onTransform: () => {
+      onTransformFinished: () => {
         console.log("transform");
       },
     },

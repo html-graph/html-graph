@@ -13,18 +13,16 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas({
-    events: {
-      onBeforeTransform: (transform) => {
-        if (transform.scale > 1) {
-          return null;
-        }
+    transformPreprocessor: (transform) => {
+      if (transform.scale > 1) {
+        return null;
+      }
 
-        return {
-          scale: transform.scale,
-          dx: Math.max(transform.dx, -500),
-          dy: transform.dy,
-        };
-      },
+      return {
+        scale: transform.scale,
+        dx: Math.max(transform.dx, -500),
+        dy: transform.dy,
+      };
     },
   })
   .build();

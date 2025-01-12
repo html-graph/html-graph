@@ -19,6 +19,8 @@ export type {
   NodeDragPayload,
   TransformPayload,
   AddNodePorts,
+  TransformPreprocessorFn,
+  TransformFinishedFn,
 } from "./canvas";
 
 export {

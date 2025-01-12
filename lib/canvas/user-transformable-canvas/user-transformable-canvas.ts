@@ -10,9 +10,12 @@ import {
 import { TransformOptions } from "./transform-options";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
-import { TransformPayload } from "./transform-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
+import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
+import { TransformFinishedFn } from "./transform-finished-fn";
+import { transformFinishedDefault } from "./transform-finished-default-fn";
+import { transformPreprocessorDefault } from "./transform-preprocessor-default-fn";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -25,11 +28,9 @@ export class UserTransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
-  private readonly onTransform: (transform: TransformPayload) => void;
+  private readonly onTransformFinished: TransformFinishedFn;
 
-  private readonly onBeforeTransform: (
-    transform: TransformPayload,
-  ) => TransformPayload | null;
+  private readonly transformPreprocessor: TransformPreprocessorFn;
 
   private readonly isScalable: boolean;
 
@@ -152,20 +153,11 @@ export class UserTransformableCanvas implements Canvas {
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
 
-    const onTransformDefault: (transform: TransformPayload) => void = () => {
-      // no implementation by default
-    };
+    this.onTransformFinished =
+      options?.events?.onTransformFinished ?? transformFinishedDefault;
 
-    this.onTransform = options?.events?.onTransform ?? onTransformDefault;
-
-    const onBeforeTransformDefault: (
-      transform: TransformPayload,
-    ) => TransformPayload = (transform) => {
-      return transform;
-    };
-
-    this.onBeforeTransform =
-      options?.events?.onBeforeTransform ?? onBeforeTransformDefault;
+    this.transformPreprocessor =
+      options?.transformPreprocessor ?? transformPreprocessorDefault;
   }
 
   public addNode(node: AddNodeRequest): UserTransformableCanvas {
@@ -350,14 +342,14 @@ export class UserTransformableCanvas implements Canvas {
     const dx = matrixViewport.dx + matrixViewport.scale * dx2;
     const dy = matrixViewport.dy + matrixViewport.scale * dy2;
 
-    const transform = this.onBeforeTransform({ scale, dx, dy });
+    const transform = this.transformPreprocessor({ scale, dx, dy });
 
     if (transform === null) {
       return;
     }
 
     this.canvas.patchViewportMatrix(transform);
-    this.onTransform(transform);
+    this.onTransformFinished(transform);
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
@@ -394,13 +386,13 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    const transform = this.onBeforeTransform({ scale, dx, dy });
+    const transform = this.transformPreprocessor({ scale, dx, dy });
 
     if (transform === null) {
       return;
     }
 
     this.canvas.patchViewportMatrix(transform);
-    this.onTransform(transform);
+    this.onTransformFinished(transform);
   }
 }

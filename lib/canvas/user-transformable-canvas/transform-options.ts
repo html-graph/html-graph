@@ -1,4 +1,5 @@
-import { TransformPayload } from "./transform-payload";
+import { TransformFinishedFn } from "./transform-finished-fn";
+import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 
 export interface TransformOptions {
   readonly scale?: {
@@ -10,10 +11,8 @@ export interface TransformOptions {
   readonly shift?: {
     readonly enabled?: boolean;
   };
+  readonly transformPreprocessor?: TransformPreprocessorFn;
   readonly events?: {
-    readonly onTransform?: (payload: TransformPayload) => void;
-    readonly onBeforeTransform?: (
-      payload: TransformPayload,
-    ) => TransformPayload | null;
+    readonly onTransformFinished?: TransformFinishedFn;
   };
 }

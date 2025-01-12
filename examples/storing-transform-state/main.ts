@@ -14,7 +14,7 @@ const canvas = new HtmlGraphBuilder()
   .setUserDraggableNodes()
   .setUserTransformableCanvas({
     events: {
-      onTransform: () => {
+      onTransformFinished: () => {
         const viewportMatrix = canvas.transformation.getViewportMatrix();
 
         console.log(viewportMatrix);
