@@ -1,7 +1,8 @@
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 
 export const transformPreprocessorDefault: TransformPreprocessorFn = (
-  transform,
+  _prevTransform,
+  nextTransform,
 ) => {
-  return transform;
+  return nextTransform;
 };

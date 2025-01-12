@@ -11,23 +11,23 @@ export const createScaleLimitTransformPreprocessor: (
   const minViewScale = maxContentScale !== null ? 1 / maxContentScale : null;
   const maxViewScale = minContentScale !== null ? 1 / minContentScale : null;
 
-  return (transform: TransformPayload) => {
+  return (prevTransform: TransformPayload, nextTransform: TransformPayload) => {
     if (
       maxViewScale !== null &&
-      transform.scale > maxViewScale &&
-      transform.scale > transform.scale
+      nextTransform.scale > maxViewScale &&
+      prevTransform.scale > maxViewScale
     ) {
-      return null;
+      return prevTransform;
     }
 
     if (
       minViewScale !== null &&
-      transform.scale < minViewScale &&
-      transform.scale < transform.scale
+      nextTransform.scale < minViewScale &&
+      prevTransform.scale < minViewScale
     ) {
-      return null;
+      return prevTransform;
     }
 
-    return transform;
+    return nextTransform;
   };
 };

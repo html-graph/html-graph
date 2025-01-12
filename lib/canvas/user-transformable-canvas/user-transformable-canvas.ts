@@ -16,6 +16,7 @@ import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { TransformFinishedFn } from "./transform-finished-fn";
 import { transformFinishedDefault } from "./transform-finished-default-fn";
 import { transformPreprocessorDefault } from "./transform-preprocessor-default-fn";
+import { TransformPayload } from "./transform-payload";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -324,7 +325,7 @@ export class UserTransformableCanvas implements Canvas {
     }
   }
 
-  private moveViewport(dx2: number, dy2: number): void {
+  private moveViewport(dx: number, dy: number): void {
     /**
      * dx2 - traslate x
      * dy2 - traslate y
@@ -336,24 +337,22 @@ export class UserTransformableCanvas implements Canvas {
      *
      * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
      */
-    const matrixViewport = this.transformation.getViewportMatrix();
+    const prevTransform = this.transformation.getViewportMatrix();
 
-    const scale = matrixViewport.scale;
-    const dx = matrixViewport.dx + matrixViewport.scale * dx2;
-    const dy = matrixViewport.dy + matrixViewport.scale * dy2;
+    const nextTransform: TransformPayload = {
+      scale: prevTransform.scale,
+      dx: prevTransform.dx + prevTransform.scale * dx,
+      dy: prevTransform.dy + prevTransform.scale * dy,
+    };
 
-    const transform = this.transformPreprocessor({ scale, dx, dy });
-
-    if (transform === null) {
-      return;
-    }
+    const transform = this.transformPreprocessor(prevTransform, nextTransform);
 
     this.canvas.patchViewportMatrix(transform);
     this.onTransformFinished(transform);
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
-    const matrixViewport = this.canvas.transformation.getViewportMatrix();
+    const prevTransform = this.canvas.transformation.getViewportMatrix();
 
     /**
      * s2 - scale
@@ -366,31 +365,29 @@ export class UserTransformableCanvas implements Canvas {
      *
      * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
      */
-    const scale = matrixViewport.scale * s2;
-    const dx = matrixViewport.scale * (1 - s2) * cx + matrixViewport.dx;
-    const dy = matrixViewport.scale * (1 - s2) * cy + matrixViewport.dy;
+    const nextTransform: TransformPayload = {
+      scale: prevTransform.scale * s2,
+      dx: prevTransform.scale * (1 - s2) * cx + prevTransform.dx,
+      dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
+    };
 
     if (
       this.maxViewScale !== null &&
-      scale > this.maxViewScale &&
-      scale > matrixViewport.scale
+      nextTransform.scale > this.maxViewScale &&
+      nextTransform.scale > prevTransform.scale
     ) {
       return;
     }
 
     if (
       this.minViewScale !== null &&
-      scale < this.minViewScale &&
-      scale < matrixViewport.scale
+      nextTransform.scale < this.minViewScale &&
+      nextTransform.scale < prevTransform.scale
     ) {
       return;
     }
 
-    const transform = this.transformPreprocessor({ scale, dx, dy });
-
-    if (transform === null) {
-      return;
-    }
+    const transform = this.transformPreprocessor(prevTransform, nextTransform);
 
     this.canvas.patchViewportMatrix(transform);
     this.onTransformFinished(transform);
