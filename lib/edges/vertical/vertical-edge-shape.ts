@@ -7,7 +7,7 @@ import {
   createRotatedPoint,
 } from "../utils";
 import { createRoundedPath } from "../utils/create-rounded-path";
-import { Point } from "../point";
+import { Point } from "@/point";
 
 export class VerticalEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;

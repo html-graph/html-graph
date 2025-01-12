@@ -1,4 +1,4 @@
-import { Point } from "../../point";
+import { Point } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
 
 export const createArrowPath: (

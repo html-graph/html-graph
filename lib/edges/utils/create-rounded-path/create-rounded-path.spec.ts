@@ -1,4 +1,4 @@
-import { Point } from "../../point";
+import { Point } from "@/point";
 import { createRoundedPath } from "./create-rounded-path";
 
 describe("createRoundedPath", () => {

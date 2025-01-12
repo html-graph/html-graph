@@ -6,7 +6,7 @@ import {
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
-import { Point } from "../point";
+import { Point } from "@/point";
 
 export class DetourBezierEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;

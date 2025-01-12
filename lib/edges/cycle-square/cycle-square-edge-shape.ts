@@ -1,6 +1,6 @@
 import { PortPayload } from "@/port-payload";
 import { EdgeShape } from "../edge-shape";
-import { Point } from "../point";
+import { Point } from "@/point";
 import {
   createArrowPath,
   createDirectionVector,

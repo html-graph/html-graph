@@ -1,5 +1,5 @@
 import { PortPayload } from "@/port-payload";
-import { Point } from "../../point";
+import { Point } from "@/point";
 
 export const createPortCenter: (port: PortPayload) => Point = (
   port: PortPayload,
