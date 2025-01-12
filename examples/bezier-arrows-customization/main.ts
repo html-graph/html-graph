@@ -2,7 +2,9 @@ import { AddNodePorts, HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
+    background: {
+      type: "dots",
+    },
     edges: {
       shape: {
         hasSourceArrow: true,

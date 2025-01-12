@@ -2,11 +2,17 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
+    background: {
+      type: "dots",
+    },
     edges: {
       shape: {
         hasTargetArrow: true,
       },
+      priority: 1,
+    },
+    nodes: {
+      priority: 0,
     },
   })
   .setUserDraggableNodes({
@@ -38,11 +44,10 @@ for (let i = 0; i < total; i++) {
     x: Math.cos(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
     y: Math.sin(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
     ports: [[newPortId, port]],
-    priority: 0,
   });
 
   portIds.forEach((prevPortId) => {
-    canvas.addEdge({ from: prevPortId, to: newPortId, priority: 1 });
+    canvas.addEdge({ from: prevPortId, to: newPortId });
   });
 
   angle += (2 * Math.PI) / total;

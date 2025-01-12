@@ -1,6 +1,6 @@
 services:
-  portfolio:
+  html-graph-idle:
     extends:
       file: docker-compose.yml
-      service: portfolio
+      service: html-graph-idle
     command: tail -f /dev/null

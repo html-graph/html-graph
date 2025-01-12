@@ -9,6 +9,10 @@ const canvas = new HtmlGraphBuilder()
       shape: {
         hasTargetArrow: true,
       },
+      priority: 1,
+    },
+    nodes: {
+      priority: 0,
     },
   })
   .setUserDraggableNodes({
@@ -42,7 +46,6 @@ canvas
     x: 200,
     y: 300,
     ports: [["port-1", port1]],
-    priority: 0,
   })
   .addNode({
     id: "node-2",
@@ -50,9 +53,8 @@ canvas
     x: 600,
     y: 500,
     ports: [["port-2", port2]],
-    priority: 0,
   })
-  .addEdge({ from: "port-1", to: "port-2", priority: 1 });
+  .addEdge({ from: "port-1", to: "port-2" });
 
 const topLeftCenterFn: CenterFn = () => [0, 0];
 const bottomRightCenterFn: CenterFn = (w, h) => [w, h];

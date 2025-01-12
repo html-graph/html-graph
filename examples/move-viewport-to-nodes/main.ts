@@ -9,6 +9,10 @@ const canvas = new HtmlGraphBuilder()
       shape: {
         hasTargetArrow: true,
       },
+      priority: 1,
+    },
+    nodes: {
+      priority: 0,
     },
   })
   .setUserDraggableNodes({
@@ -50,14 +54,14 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 700, y: 300, priority: 0 })
+  .addNode({ id: "node-1", element: node1, x: 700, y: 300 })
   .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
-  .addNode({ id: "node-2", element: node2, x: 1700, y: 300, priority: 0 })
+  .addNode({ id: "node-2", element: node2, x: 1700, y: 300 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addNode({ id: "node-3", element: node3, x: 2000, y: 300, priority: 0 })
+  .addNode({ id: "node-3", element: node3, x: 2000, y: 300 })
   .markPort({ nodeId: "node-3", element: port3, id: "port-3" })
-  .addEdge({ from: "port-1", to: "port-2", priority: 1 })
-  .addEdge({ from: "port-2", to: "port-3", priority: 1 });
+  .addEdge({ from: "port-1", to: "port-2" })
+  .addEdge({ from: "port-2", to: "port-3" });
 
 btn1.addEventListener("click", () => {
   const nodes = [

@@ -2,11 +2,17 @@ import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
+    background: {
+      type: "dots",
+    },
     edges: {
       shape: {
         hasTargetArrow: true,
       },
+      priority: 1,
+    },
+    nodes: {
+      priority: 0,
     },
   })
   .setUserDraggableNodes({
@@ -34,8 +40,8 @@ const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300, priority: 0 })
+  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
   .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500, priority: 0 })
+  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addEdge({ id: "con-1", from: "port-1", to: "port-2", priority: 1 });
+  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });

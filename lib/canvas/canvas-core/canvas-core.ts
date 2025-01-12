@@ -3,7 +3,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
-  PatchTransformRequest,
+  PatchMatrixRequest,
   Canvas,
   UpdateEdgeRequest,
   UpdateNodeRequest,
@@ -132,7 +132,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchViewportMatrix(request: PatchTransformRequest): CanvasCore {
+  public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
     this.di.canvasController.patchViewportMatrix(
       request.scale ?? null,
       request.x ?? null,
@@ -142,7 +142,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public patchContentMatrix(request: PatchTransformRequest): CanvasCore {
+  public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
     this.di.canvasController.patchContentMatrix(
       request.scale ?? null,
       request.x ?? null,

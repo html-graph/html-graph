@@ -3,14 +3,18 @@ import { GraphHtmlHelper } from "./graph-html-helper";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    nodes: { centerFn: () => [0, 0] },
+    nodes: {
+      centerFn: () => [0, 0],
+    },
     edges: {
       shape: {
         color: "var(--color-1)",
         hasTargetArrow: true,
       },
     },
-    background: { type: "dots" },
+    background: {
+      type: "dots",
+    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()

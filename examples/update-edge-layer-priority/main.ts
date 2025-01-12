@@ -10,6 +10,9 @@ const canvas = new HtmlGraphBuilder()
         hasTargetArrow: true,
       },
     },
+    nodes: {
+      priority: 1,
+    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
@@ -46,21 +49,18 @@ canvas
     element: node1,
     x: 200,
     y: 300,
-    priority: 1,
     ports: [["port-1", port1]],
   })
   .addNode({
     element: node2,
     x: 600,
     y: 500,
-    priority: 1,
     ports: [["port-2", port2]],
   })
   .addNode({
     element: node3,
     x: 400,
     y: 400,
-    priority: 1,
   })
   .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
 

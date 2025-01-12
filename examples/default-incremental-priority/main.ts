@@ -2,7 +2,9 @@ import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
+    background: {
+      type: "dots",
+    },
     nodes: {
       priority: "incremental",
     },

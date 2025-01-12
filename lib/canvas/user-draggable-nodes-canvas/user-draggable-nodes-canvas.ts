@@ -3,7 +3,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   MarkPortRequest,
-  PatchTransformRequest,
+  PatchMatrixRequest,
   Canvas,
   UpdateEdgeRequest,
   UpdateNodeRequest,
@@ -266,7 +266,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public patchViewportMatrix(
-    request: PatchTransformRequest,
+    request: PatchMatrixRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.patchViewportMatrix(request);
 
@@ -274,7 +274,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public patchContentMatrix(
-    request: PatchTransformRequest,
+    request: PatchMatrixRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.patchContentMatrix(request);
 

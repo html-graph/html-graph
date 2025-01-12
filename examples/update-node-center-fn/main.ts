@@ -56,7 +56,6 @@ canvas.attach(canvasElement).addNode({
   x: 400,
   y: 450,
   ports: ports1,
-  priority: 3,
 });
 
 let i = 0;
