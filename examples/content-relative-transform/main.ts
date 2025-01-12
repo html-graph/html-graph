@@ -41,4 +41,4 @@ canvas
   .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
   .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
   .addEdge({ id: "con-1", from: "port-1", to: "port-2" })
-  .patchContentMatrix({ scale: 0.5, x: 200, y: 300 });
+  .patchContentMatrix({ scale: 0.5, dx: 200, dy: 300 });

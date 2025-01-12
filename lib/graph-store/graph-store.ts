@@ -33,8 +33,22 @@ export class GraphStore {
     this.nodePorts.set(nodeId, new Map<string, HTMLElement>());
   }
 
+  public getAllNodes(): readonly unknown[] {
+    return Array.from(this.nodes.keys());
+  }
+
   public getNode(nodeId: unknown): NodePayload | undefined {
     return this.nodes.get(nodeId);
+  }
+
+  public getNodePorts(nodeId: unknown): readonly unknown[] | undefined {
+    const ports = this.nodePorts.get(nodeId);
+
+    if (ports !== undefined) {
+      return Array.from(ports.keys());
+    }
+
+    return undefined;
   }
 
   public removeNode(nodeId: unknown): void {
@@ -68,6 +82,10 @@ export class GraphStore {
     this.portNodeId.set(portId, nodeId);
 
     this.nodePorts.get(nodeId)!.set(portId, element);
+  }
+
+  public getAllPorts(): readonly unknown[] {
+    return Array.from(this.ports.keys());
   }
 
   public getPort(portId: unknown): PortPayload | undefined {
@@ -123,6 +141,10 @@ export class GraphStore {
     } else {
       this.cycleEdges.get(fromPortId)!.add(edgeId);
     }
+  }
+
+  public getAllEdges(): readonly unknown[] {
+    return Array.from(this.edges.keys());
   }
 
   public getEdge(edgeId: unknown): EdgePayload | undefined {

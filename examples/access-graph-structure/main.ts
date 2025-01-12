@@ -60,3 +60,7 @@ canvas
   .addEdge({ from: "port-2-2", to: "port-4-1" });
 
 console.log(canvas.model.getNodeAdjacentEdges("node-2"));
+console.log(canvas.model.getNodePorts("node-2"));
+console.log(canvas.model.getAllNodes());
+console.log(canvas.model.getAllPorts());
+console.log(canvas.model.getAllEdges());

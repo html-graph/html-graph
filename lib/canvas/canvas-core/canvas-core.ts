@@ -135,8 +135,8 @@ export class CanvasCore implements Canvas {
   public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
     this.di.canvasController.patchViewportMatrix(
       request.scale ?? null,
-      request.x ?? null,
-      request.y ?? null,
+      request.dx ?? null,
+      request.dy ?? null,
     );
 
     return this;
@@ -145,8 +145,8 @@ export class CanvasCore implements Canvas {
   public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
     this.di.canvasController.patchContentMatrix(
       request.scale ?? null,
-      request.x ?? null,
-      request.y ?? null,
+      request.dx ?? null,
+      request.dy ?? null,
     );
 
     return this;

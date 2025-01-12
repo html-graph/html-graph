@@ -90,7 +90,7 @@ export class HtmlController {
 
     const m = this.viewportTransformer.getContentMatrix();
 
-    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
+    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.dx}, ${m.dy})`;
   }
 
   public attachNode(nodeId: unknown): void {
@@ -238,13 +238,13 @@ export class HtmlController {
     const matrixViewport = this.viewportTransformer.getViewportMatrix();
 
     const fromX =
-      matrixViewport.scale * (rectFrom.left - rect.left) + matrixViewport.x;
+      matrixViewport.scale * (rectFrom.left - rect.left) + matrixViewport.dx;
     const fromY =
-      matrixViewport.scale * (rectFrom.top - rect.top) + matrixViewport.y;
+      matrixViewport.scale * (rectFrom.top - rect.top) + matrixViewport.dy;
     const toX =
-      matrixViewport.scale * (rectTo.left - rect.left) + matrixViewport.x;
+      matrixViewport.scale * (rectTo.left - rect.left) + matrixViewport.dx;
     const toY =
-      matrixViewport.scale * (rectTo.top - rect.top) + matrixViewport.y;
+      matrixViewport.scale * (rectTo.top - rect.top) + matrixViewport.dy;
 
     const { x: deltaCenterFromX, y: deltaCenterFromY } = portFrom.centerFn(
       rectFrom.width * matrixViewport.scale,

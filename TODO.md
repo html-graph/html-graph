@@ -1,7 +1,6 @@
 # TODO
 
-- getAllNodes, getAllEdges, getNodePorts
-- transformation modification
+- refactor beforetransform presets
 - check cursor in viewport
 - improve connection with label example
 - fix encapsulation for edge controllers ?

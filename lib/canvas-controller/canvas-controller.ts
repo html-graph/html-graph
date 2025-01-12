@@ -247,19 +247,19 @@ export class CanvasController {
 
   public patchViewportMatrix(
     scale: number | null,
-    x: number | null,
-    y: number | null,
+    dx: number | null,
+    dy: number | null,
   ): void {
-    this.viewportTransformer.patchViewportMatrix(scale, x, y);
+    this.viewportTransformer.patchViewportMatrix(scale, dx, dy);
     this.htmlController.applyTransform();
   }
 
   public patchContentMatrix(
     scale: number | null,
-    x: number | null,
-    y: number | null,
+    dx: number | null,
+    dy: number | null,
   ): void {
-    this.viewportTransformer.patchContentMatrix(scale, x, y);
+    this.viewportTransformer.patchContentMatrix(scale, dx, dy);
     this.htmlController.applyTransform();
   }
 

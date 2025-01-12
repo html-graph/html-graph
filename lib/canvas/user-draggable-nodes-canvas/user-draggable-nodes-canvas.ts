@@ -360,15 +360,15 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
 
     const matrixContent = this.canvas.transformation.getContentMatrix();
-    const viewportX = matrixContent.scale * node.x + matrixContent.x;
-    const viewportY = matrixContent.scale * node.y + matrixContent.y;
+    const viewportX = matrixContent.scale * node.x + matrixContent.dx;
+    const viewportY = matrixContent.scale * node.y + matrixContent.dy;
 
     const newViewportX = viewportX + dx;
     const newViewportY = viewportY + dy;
 
     const matrixViewport = this.canvas.transformation.getViewportMatrix();
-    const contentX = matrixViewport.scale * newViewportX + matrixViewport.x;
-    const contentY = matrixViewport.scale * newViewportY + matrixViewport.y;
+    const contentX = matrixViewport.scale * newViewportX + matrixViewport.dx;
+    const contentY = matrixViewport.scale * newViewportY + matrixViewport.dy;
     this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
 
     this.onNodeDrag({

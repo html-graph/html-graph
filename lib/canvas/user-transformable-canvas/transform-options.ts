@@ -1,17 +1,19 @@
 import { TransformPayload } from "./transform-payload";
 
 export interface TransformOptions {
-  scale?: {
-    enabled?: boolean;
-    min?: number;
-    max?: number;
-    wheelSensitivity?: number;
+  readonly scale?: {
+    readonly enabled?: boolean;
+    readonly min?: number;
+    readonly max?: number;
+    readonly wheelSensitivity?: number;
   };
-  shift?: {
-    enabled?: boolean;
+  readonly shift?: {
+    readonly enabled?: boolean;
   };
-  events?: {
-    onTransform?: (payload: TransformPayload) => void;
-    onBeforeTransform?: (payload: TransformPayload) => boolean;
+  readonly events?: {
+    readonly onTransform?: (payload: TransformPayload) => void;
+    readonly onBeforeTransform?: (
+      payload: TransformPayload,
+    ) => TransformPayload | null;
   };
 }

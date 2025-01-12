@@ -44,6 +44,6 @@ map.forEach((value, key) => {
     const targetX = node.x - (sv * rect.width) / 2;
     const targetY = node.y - (sv * rect.height) / 2;
 
-    canvas.patchViewportMatrix({ x: targetX, y: targetY });
+    canvas.patchViewportMatrix({ dx: targetX, dy: targetY });
   });
 });

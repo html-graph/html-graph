@@ -25,9 +25,11 @@ export class UserTransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
-  private onTransform: (payload: TransformPayload) => void;
+  private readonly onTransform: (transform: TransformPayload) => void;
 
-  private onBeforeTransform: (payload: TransformPayload) => boolean;
+  private readonly onBeforeTransform: (
+    transform: TransformPayload,
+  ) => TransformPayload | null;
 
   private readonly isScalable: boolean;
 
@@ -150,16 +152,16 @@ export class UserTransformableCanvas implements Canvas {
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
 
-    const onTransformDefault: (payload: TransformPayload) => void = () => {
+    const onTransformDefault: (transform: TransformPayload) => void = () => {
       // no implementation by default
     };
 
     this.onTransform = options?.events?.onTransform ?? onTransformDefault;
 
     const onBeforeTransformDefault: (
-      payload: TransformPayload,
-    ) => boolean = () => {
-      return true;
+      transform: TransformPayload,
+    ) => TransformPayload = (transform) => {
+      return transform;
     };
 
     this.onBeforeTransform =
@@ -344,13 +346,13 @@ export class UserTransformableCanvas implements Canvas {
      */
     const matrixViewport = this.transformation.getViewportMatrix();
 
-    const transform: TransformPayload = {
-      scale: matrixViewport.scale,
-      x: matrixViewport.x + matrixViewport.scale * dx2,
-      y: matrixViewport.y + matrixViewport.scale * dy2,
-    };
+    const scale = matrixViewport.scale;
+    const dx = matrixViewport.dx + matrixViewport.scale * dx2;
+    const dy = matrixViewport.dy + matrixViewport.scale * dy2;
 
-    if (!this.onBeforeTransform({ ...transform })) {
+    const transform = this.onBeforeTransform({ scale, dx, dy });
+
+    if (transform === null) {
       return;
     }
 
@@ -373,8 +375,8 @@ export class UserTransformableCanvas implements Canvas {
      * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
      */
     const scale = matrixViewport.scale * s2;
-    const x = matrixViewport.scale * (1 - s2) * cx + matrixViewport.x;
-    const y = matrixViewport.scale * (1 - s2) * cy + matrixViewport.y;
+    const dx = matrixViewport.scale * (1 - s2) * cx + matrixViewport.dx;
+    const dy = matrixViewport.scale * (1 - s2) * cy + matrixViewport.dy;
 
     if (
       this.maxViewScale !== null &&
@@ -392,9 +394,9 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    const transform: TransformPayload = { scale, x, y };
+    const transform = this.onBeforeTransform({ scale, dx, dy });
 
-    if (!this.onBeforeTransform({ ...transform })) {
+    if (transform === null) {
       return;
     }
 

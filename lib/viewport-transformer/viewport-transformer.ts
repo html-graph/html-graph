@@ -21,8 +21,8 @@ export class ViewportTransformer {
   ): void {
     this.viewportMatrix = {
       scale: scale ?? this.viewportMatrix.scale,
-      x: x ?? this.viewportMatrix.x,
-      y: y ?? this.viewportMatrix.y,
+      dx: x ?? this.viewportMatrix.dx,
+      dy: y ?? this.viewportMatrix.dy,
     };
 
     this.contentMatrix = this.calculateReverseMatrix(this.viewportMatrix);
@@ -30,13 +30,13 @@ export class ViewportTransformer {
 
   public patchContentMatrix(
     scale: number | null,
-    x: number | null,
-    y: number | null,
+    dx: number | null,
+    dy: number | null,
   ): void {
     this.contentMatrix = {
       scale: scale ?? this.contentMatrix.scale,
-      x: x ?? this.contentMatrix.x,
-      y: y ?? this.contentMatrix.y,
+      dx: dx ?? this.contentMatrix.dx,
+      dy: dy ?? this.contentMatrix.dy,
     };
 
     this.viewportMatrix = this.calculateReverseMatrix(this.contentMatrix);
@@ -45,8 +45,8 @@ export class ViewportTransformer {
   private calculateReverseMatrix(matrix: TransformState): TransformState {
     return {
       scale: 1 / matrix.scale,
-      x: -matrix.x / matrix.scale,
-      y: -matrix.y / matrix.scale,
+      dx: -matrix.dx / matrix.scale,
+      dy: -matrix.dy / matrix.scale,
     };
   }
 }

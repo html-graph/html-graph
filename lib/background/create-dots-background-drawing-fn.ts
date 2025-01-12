@@ -35,11 +35,11 @@ const dotsBackgroundDrawingFn: (
   } while (iterationsHorizontal * iterationsVertical > 10000);
 
   const zeroOffsetX =
-    matrixContent.x -
-    Math.floor(matrixContent.x / adjustedViewGap) * adjustedViewGap;
+    matrixContent.dx -
+    Math.floor(matrixContent.dx / adjustedViewGap) * adjustedViewGap;
   const zeroOffsetY =
-    matrixContent.y -
-    Math.floor(matrixContent.y / adjustedViewGap) * adjustedViewGap;
+    matrixContent.dy -
+    Math.floor(matrixContent.dy / adjustedViewGap) * adjustedViewGap;
 
   const r = radius * matrixContent.scale;
   const pi2 = 2 * Math.PI;
