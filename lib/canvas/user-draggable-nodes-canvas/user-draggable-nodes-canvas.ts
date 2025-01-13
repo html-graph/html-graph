@@ -13,11 +13,14 @@ import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
+import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
   public readonly transformation: PublicViewportTransformer;
+
+  private readonly window = window;
 
   private maxNodePriority = 0;
 
@@ -41,8 +44,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private element: HTMLElement | null = null;
 
   private readonly onCanvasMouseUp: () => void = () => {
-    this.setCursor(null);
-    this.grabbedNodeId = null;
+    this.cancelMouseDrag();
   };
 
   private readonly onCanvasMouseMove: (event: MouseEvent) => void = (
@@ -51,6 +53,17 @@ export class UserDraggableNodesCanvas implements Canvas {
     if (this.grabbedNodeId !== null) {
       event.stopPropagation();
       this.dragNode(this.grabbedNodeId, event.movementX, event.movementY);
+    }
+  };
+
+  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
+    if (
+      !isOnCanvas(this.element, event.clientX, event.clientY) ||
+      !isOnWindow(this.window, event.clientX, event.clientY)
+    ) {
+      this.cancelMouseDrag();
     }
   };
 
@@ -76,10 +89,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     event.stopImmediatePropagation();
 
-    const [dx, dy] = [
-      event.touches[0].clientX - this.previousTouchCoords[0],
-      event.touches[0].clientY - this.previousTouchCoords[1],
-    ];
+    const dx = event.touches[0].clientX - this.previousTouchCoords[0];
+    const dy = event.touches[0].clientY - this.previousTouchCoords[1];
 
     this.dragNode(this.grabbedNodeId, dx, dy);
     this.previousTouchCoords = [
@@ -129,6 +140,8 @@ export class UserDraggableNodesCanvas implements Canvas {
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
 
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
+
+    window.addEventListener("mousemove", this.onWindowMouseMove);
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
@@ -160,7 +173,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
-      this.setCursor("grab");
+      setCursor(this.element, "grab");
       this.moveNodeOnTop(nodeId);
     };
 
@@ -335,21 +348,11 @@ export class UserDraggableNodesCanvas implements Canvas {
       value.element.removeEventListener("touchstart", value.onTouchStart);
     });
 
+    window.removeEventListener("mousemove", this.onWindowMouseMove);
+
     this.nodes.clear();
 
     this.canvas.destroy();
-  }
-
-  private setCursor(type: string | null): void {
-    if (this.element === null) {
-      return;
-    }
-
-    if (type !== null) {
-      this.element.style.cursor = type;
-    } else {
-      this.element.style.removeProperty("cursor");
-    }
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
@@ -400,5 +403,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     edges.forEach((edgeId) => {
       this.updateEdge(edgeId, { priority: edgePriority });
     });
+  }
+
+  private cancelMouseDrag(): void {
+    this.grabbedNodeId = null;
+    setCursor(this.element, null);
   }
 }
