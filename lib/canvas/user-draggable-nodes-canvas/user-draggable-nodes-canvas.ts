@@ -13,14 +13,12 @@ import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
-import { isOnCanvas, isOnWindow, setCursor } from "../utils";
+import { setCursor } from "../utils";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
   public readonly transformation: PublicViewportTransformer;
-
-  private readonly window = window;
 
   private maxNodePriority = 0;
 
@@ -55,17 +53,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
   };
 
-  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
-    if (
-      !isOnCanvas(this.element, event.clientX, event.clientY) ||
-      !isOnWindow(this.window, event.clientX, event.clientY)
-    ) {
-      this.cancelMouseDrag();
-    }
-  };
-
   private readonly onCanvasTouchStart: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
@@ -79,23 +66,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     event: TouchEvent,
   ) => {
     if (event.touches.length === 1) {
-      if (
-        !isOnCanvas(
-          this.element,
-          event.touches[0].clientX,
-          event.touches[0].clientY,
-        ) ||
-        !isOnWindow(
-          this.window,
-          event.touches[0].clientX,
-          event.touches[0].clientY,
-        )
-      ) {
-        this.cancelTouchDrag();
-        event.stopImmediatePropagation();
-        return;
-      }
-
       if (this.grabbedNodeId !== null && this.previousTouchCoords !== null) {
         event.stopImmediatePropagation();
         const dx = event.touches[0].clientX - this.previousTouchCoords[0];
@@ -150,8 +120,6 @@ export class UserDraggableNodesCanvas implements Canvas {
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
 
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
-
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
@@ -357,8 +325,6 @@ export class UserDraggableNodesCanvas implements Canvas {
       value.element.removeEventListener("mousedown", value.onMouseDown);
       value.element.removeEventListener("touchstart", value.onTouchStart);
     });
-
-    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
 
     this.nodes.clear();
 

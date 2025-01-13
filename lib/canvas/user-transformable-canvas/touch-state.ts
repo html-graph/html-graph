@@ -1,6 +1,7 @@
 export interface TouchState {
-  x: number;
-  y: number;
-  scale: number;
-  touchesCnt: number;
+  readonly x: number;
+  readonly y: number;
+  readonly scale: number;
+  readonly touchesCnt: number;
+  readonly touches: ReadonlyArray<readonly [number, number]>;
 }

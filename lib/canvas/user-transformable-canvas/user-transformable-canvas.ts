@@ -61,8 +61,7 @@ export class UserTransformableCanvas implements Canvas {
   };
 
   private readonly onMouseUp: () => void = () => {
-    setCursor(this.element, null);
-    this.isMoving = false;
+    this.cancelMouseMove();
   };
 
   private readonly onWheelScroll: (event: WheelEvent) => void = (
@@ -131,7 +130,7 @@ export class UserTransformableCanvas implements Canvas {
     if (event.touches.length > 0) {
       this.prevTouches = this.getAverageTouch(event);
     } else {
-      this.prevTouches = null;
+      this.cancelTouchMove();
     }
   };
 
@@ -336,7 +335,13 @@ export class UserTransformableCanvas implements Canvas {
       0,
     );
 
-    return { x: avg[0], y: avg[1], scale: distance / cnt, touchesCnt: cnt };
+    return {
+      x: avg[0],
+      y: avg[1],
+      scale: distance / cnt,
+      touchesCnt: cnt,
+      touches,
+    };
   }
 
   private moveViewport(dx: number, dy: number): void {
@@ -407,5 +412,14 @@ export class UserTransformableCanvas implements Canvas {
       this.canvas.patchViewportMatrix(transform);
       this.onTransformFinished(transform);
     }
+  }
+
+  private cancelMouseMove(): void {
+    setCursor(this.element, null);
+    this.isMoving = false;
+  }
+
+  private cancelTouchMove(): void {
+    this.prevTouches = null;
   }
 }
