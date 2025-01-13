@@ -51,7 +51,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     event: MouseEvent,
   ) => {
     if (this.grabbedNodeId !== null) {
-      event.stopPropagation();
       this.dragNode(this.grabbedNodeId, event.movementX, event.movementY);
     }
   };
@@ -79,6 +78,24 @@ export class UserDraggableNodesCanvas implements Canvas {
   private readonly onCanvasTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
+    if (event.touches.length === 1) {
+      if (
+        !isOnCanvas(
+          this.element,
+          event.touches[0].clientX,
+          event.touches[0].clientY,
+        ) ||
+        !isOnWindow(
+          this.window,
+          event.touches[0].clientX,
+          event.touches[0].clientY,
+        )
+      ) {
+        this.cancelTouchDrag();
+        event.stopImmediatePropagation();
+      }
+    }
+
     if (
       this.grabbedNodeId === null ||
       event.touches.length !== 1 ||
@@ -108,8 +125,7 @@ export class UserDraggableNodesCanvas implements Canvas {
         event.touches[0].clientY,
       ];
     } else {
-      this.previousTouchCoords = null;
-      this.grabbedNodeId = null;
+      this.cancelTouchDrag();
     }
   };
 
@@ -141,7 +157,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
 
-    window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove);
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
@@ -348,7 +365,8 @@ export class UserDraggableNodesCanvas implements Canvas {
       value.element.removeEventListener("touchstart", value.onTouchStart);
     });
 
-    window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
 
     this.nodes.clear();
 
@@ -408,5 +426,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   private cancelMouseDrag(): void {
     this.grabbedNodeId = null;
     setCursor(this.element, null);
+  }
+
+  private cancelTouchDrag(): void {
+    this.previousTouchCoords = null;
+    this.grabbedNodeId = null;
   }
 }

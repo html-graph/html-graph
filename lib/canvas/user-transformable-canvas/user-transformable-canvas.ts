@@ -19,6 +19,7 @@ import { transformPreprocessorDefault } from "./transform-preprocessor-default-f
 import { TransformPayload } from "./transform-payload";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
+import { setCursor } from "../utils";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -42,7 +43,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly wheelSensitivity: number;
 
   private readonly onMouseDown: () => void = () => {
-    this.setCursor("grab");
+    setCursor(this.element, "grab");
     this.isMoving = true;
   };
 
@@ -60,7 +61,7 @@ export class UserTransformableCanvas implements Canvas {
   };
 
   private readonly onMouseUp: () => void = () => {
-    this.setCursor(null);
+    setCursor(this.element, null);
     this.isMoving = false;
   };
 
@@ -336,18 +337,6 @@ export class UserTransformableCanvas implements Canvas {
     );
 
     return { x: avg[0], y: avg[1], scale: distance / cnt, touchesCnt: cnt };
-  }
-
-  private setCursor(type: string | null): void {
-    if (this.element === null) {
-      return;
-    }
-
-    if (type !== null) {
-      this.element.style.cursor = type;
-    } else {
-      this.element.style.removeProperty("cursor");
-    }
   }
 
   private moveViewport(dx: number, dy: number): void {
