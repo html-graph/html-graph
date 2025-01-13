@@ -93,27 +93,21 @@ export class UserDraggableNodesCanvas implements Canvas {
       ) {
         this.cancelTouchDrag();
         event.stopImmediatePropagation();
+        return;
+      }
+
+      if (this.grabbedNodeId !== null && this.previousTouchCoords !== null) {
+        event.stopImmediatePropagation();
+        const dx = event.touches[0].clientX - this.previousTouchCoords[0];
+        const dy = event.touches[0].clientY - this.previousTouchCoords[1];
+
+        this.dragNode(this.grabbedNodeId, dx, dy);
+        this.previousTouchCoords = [
+          event.touches[0].clientX,
+          event.touches[0].clientY,
+        ];
       }
     }
-
-    if (
-      this.grabbedNodeId === null ||
-      event.touches.length !== 1 ||
-      this.previousTouchCoords === null
-    ) {
-      return;
-    }
-
-    event.stopImmediatePropagation();
-
-    const dx = event.touches[0].clientX - this.previousTouchCoords[0];
-    const dy = event.touches[0].clientY - this.previousTouchCoords[1];
-
-    this.dragNode(this.grabbedNodeId, dx, dy);
-    this.previousTouchCoords = [
-      event.touches[0].clientX,
-      event.touches[0].clientY,
-    ];
   };
 
   private readonly onCanvasTouchEnd: (event: TouchEvent) => void = (
