@@ -158,7 +158,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
@@ -366,7 +365,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     });
 
     this.window.removeEventListener("mousemove", this.onWindowMouseMove);
-    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
 
     this.nodes.clear();
 
