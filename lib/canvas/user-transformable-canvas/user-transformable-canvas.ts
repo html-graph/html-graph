@@ -19,7 +19,7 @@ import { transformPreprocessorDefault } from "./transform-preprocessor-default-f
 import { TransformPayload } from "./transform-payload";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
-import { setCursor } from "../utils";
+import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -27,8 +27,6 @@ export class UserTransformableCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   private element: HTMLElement | null = null;
-
-  private isMoving = false;
 
   private prevTouches: TouchState | null = null;
 
@@ -42,15 +40,30 @@ export class UserTransformableCanvas implements Canvas {
 
   private readonly wheelSensitivity: number;
 
+  private window = window;
+
   private readonly onMouseDown: () => void = () => {
+    if (this.element === null) {
+      return;
+    }
+
     setCursor(this.element, "grab");
-    this.isMoving = true;
+    this.window.addEventListener("mousemove", this.onMouseMove);
+    this.window.addEventListener("mouseup", this.onMouseUp);
   };
 
   private readonly onMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (!this.isMoving || !this.isShiftable) {
+    if (!this.isShiftable || this.element === null) {
+      return;
+    }
+
+    if (
+      !isOnCanvas(this.element, event.clientX, event.clientY) ||
+      !isOnWindow(this.window, event.clientX, event.clientY)
+    ) {
+      this.stopMouseDrag();
       return;
     }
 
@@ -61,7 +74,7 @@ export class UserTransformableCanvas implements Canvas {
   };
 
   private readonly onMouseUp: () => void = () => {
-    this.cancelMouseMove();
+    this.stopMouseDrag();
   };
 
   private readonly onWheelScroll: (event: WheelEvent) => void = (
@@ -87,6 +100,9 @@ export class UserTransformableCanvas implements Canvas {
     event: TouchEvent,
   ) => {
     this.prevTouches = this.getAverageTouch(event);
+    this.window.addEventListener("touchmove", this.onTouchMove);
+    this.window.addEventListener("touchend", this.onTouchEnd);
+    this.window.addEventListener("touchcancel", this.onTouchEnd);
   };
 
   private readonly onTouchMove: (event: TouchEvent) => void = (
@@ -94,13 +110,24 @@ export class UserTransformableCanvas implements Canvas {
   ) => {
     if (
       this.prevTouches === null ||
-      this.element === null ||
-      !this.isShiftable
+      !this.isShiftable ||
+      this.element === null
     ) {
       return;
     }
 
     const currentTouches = this.getAverageTouch(event);
+
+    const isEvery = currentTouches.touches.every(
+      (t) =>
+        isOnCanvas(this.element!, t[0], t[1]) &&
+        isOnWindow(this.window, t[0], t[1]),
+    );
+
+    if (!isEvery) {
+      this.stopTouchDrag();
+      return;
+    }
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
@@ -130,7 +157,7 @@ export class UserTransformableCanvas implements Canvas {
     if (event.touches.length > 0) {
       this.prevTouches = this.getAverageTouch(event);
     } else {
-      this.cancelTouchMove();
+      this.stopTouchDrag();
     }
   };
 
@@ -276,13 +303,8 @@ export class UserTransformableCanvas implements Canvas {
 
     this.canvas.attach(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
-    this.element.addEventListener("mousemove", this.onMouseMove);
-    this.element.addEventListener("mouseup", this.onMouseUp);
     this.element.addEventListener("wheel", this.onWheelScroll);
     this.element.addEventListener("touchstart", this.onTouchStart);
-    this.element.addEventListener("touchmove", this.onTouchMove);
-    this.element.addEventListener("touchend", this.onTouchEnd);
-    this.element.addEventListener("touchcancel", this.onTouchEnd);
 
     return this;
   }
@@ -293,13 +315,12 @@ export class UserTransformableCanvas implements Canvas {
     if (this.element !== null) {
       this.observer.unobserve(this.element);
       this.element.removeEventListener("mousedown", this.onMouseDown);
-      this.element.removeEventListener("mousemove", this.onMouseMove);
-      this.element.removeEventListener("mouseup", this.onMouseUp);
       this.element.removeEventListener("wheel", this.onWheelScroll);
       this.element.removeEventListener("touchstart", this.onTouchStart);
-      this.element.removeEventListener("touchmove", this.onTouchMove);
-      this.element.removeEventListener("touchend", this.onTouchEnd);
-      this.element.removeEventListener("touchcancel", this.onTouchEnd);
+
+      this.stopMouseDrag();
+      this.stopTouchDrag();
+
       this.element = null;
     }
 
@@ -380,6 +401,10 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
+    if (this.element === null) {
+      return;
+    }
+
     const prevTransform = this.canvas.transformation.getViewportMatrix();
 
     /**
@@ -399,27 +424,32 @@ export class UserTransformableCanvas implements Canvas {
       dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
     };
 
+    const { width, height } = this.element.getBoundingClientRect();
+
+    const transform = this.transformPreprocessor(
+      prevTransform,
+      nextTransform,
+      width,
+      height,
+    );
+
+    this.canvas.patchViewportMatrix(transform);
+    this.onTransformFinished(transform);
+  }
+
+  private stopMouseDrag(): void {
     if (this.element !== null) {
-      const { width, height } = this.element.getBoundingClientRect();
-
-      const transform = this.transformPreprocessor(
-        prevTransform,
-        nextTransform,
-        width,
-        height,
-      );
-
-      this.canvas.patchViewportMatrix(transform);
-      this.onTransformFinished(transform);
+      setCursor(this.element, null);
     }
+
+    this.window.removeEventListener("mousemove", this.onMouseMove);
+    this.window.removeEventListener("mouseup", this.onMouseUp);
   }
 
-  private cancelMouseMove(): void {
-    setCursor(this.element, null);
-    this.isMoving = false;
-  }
-
-  private cancelTouchMove(): void {
+  private stopTouchDrag(): void {
     this.prevTouches = null;
+    this.window.removeEventListener("touchmove", this.onTouchMove);
+    this.window.removeEventListener("touchend", this.onTouchEnd);
+    this.window.removeEventListener("touchcancel", this.onTouchEnd);
   }
 }

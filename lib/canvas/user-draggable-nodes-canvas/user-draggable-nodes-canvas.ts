@@ -136,6 +136,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.updateMaxNodePriority(nodeId);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
+      if (this.element === null) {
+        return;
+      }
+
       const node = this.model.getNode(nodeId)!;
 
       const isDragAllowed = this.onBeforeNodeDrag({
@@ -383,7 +387,10 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private cancelMouseDrag(): void {
     this.grabbedNodeId = null;
-    setCursor(this.element, null);
+
+    if (this.element !== null) {
+      setCursor(this.element, null);
+    }
   }
 
   private cancelTouchDrag(): void {
