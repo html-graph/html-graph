@@ -147,8 +147,6 @@ export class UserTransformableCanvas implements Canvas {
     }
 
     this.prevTouches = currentTouches;
-
-    event.preventDefault();
   };
 
   private readonly onTouchEnd: (event: TouchEvent) => void = (
