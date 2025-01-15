@@ -344,6 +344,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.detach();
 
     this.removeMouseDragListeners();
+    this.removeTouchDragListeners();
 
     this.nodes.forEach((value) => {
       value.element.removeEventListener("mousedown", value.onMouseDown);
@@ -423,6 +424,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private cancelTouchDrag(): void {
     this.previousTouchCoords = null;
     this.grabbedNodeId = null;
+    this.removeTouchDragListeners();
   }
 
   private removeTouchDragListeners(): void {
