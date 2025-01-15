@@ -321,8 +321,8 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.detach();
     this.element = element;
 
+    this.element.addEventListener("touchstart", this.onCanvasTouchStart);
     this.canvas.attach(this.element);
-    this.window.addEventListener("touchstart", this.onCanvasTouchStart);
 
     return this;
   }
@@ -331,9 +331,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {
-      this.window.removeEventListener("touchstart", this.onCanvasTouchStart);
-      this.removeTouchDragListeners();
-
+      this.element.removeEventListener("touchstart", this.onCanvasTouchStart);
       this.element = null;
     }
 

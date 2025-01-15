@@ -300,11 +300,11 @@ export class UserTransformableCanvas implements Canvas {
     this.detach();
     this.element = element;
     this.observer.observe(this.element);
-
-    this.canvas.attach(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
     this.element.addEventListener("wheel", this.onWheelScroll);
     this.element.addEventListener("touchstart", this.onTouchStart);
+
+    this.canvas.attach(this.element);
 
     return this;
   }
@@ -318,9 +318,6 @@ export class UserTransformableCanvas implements Canvas {
       this.element.removeEventListener("wheel", this.onWheelScroll);
       this.element.removeEventListener("touchstart", this.onTouchStart);
 
-      this.removeMouseDragListeners();
-      this.removeTouchDragListeners();
-
       this.element = null;
     }
 
@@ -329,6 +326,9 @@ export class UserTransformableCanvas implements Canvas {
 
   public destroy(): void {
     this.detach();
+
+    this.removeMouseDragListeners();
+    this.removeTouchDragListeners();
 
     this.canvas.destroy();
   }
