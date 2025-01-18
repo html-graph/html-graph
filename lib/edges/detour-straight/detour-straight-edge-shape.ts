@@ -6,7 +6,7 @@ import {
   createPortCenter,
   createRotatedPoint,
 } from "../utils";
-import { createRoundedPath } from "../utils/create-rounded-path";
+import { createRoundedPath } from "../utils";
 import { Point } from "@/point";
 
 export class DetourStraightEdgeShape implements EdgeShape {
@@ -40,6 +40,9 @@ export class DetourStraightEdgeShape implements EdgeShape {
     this.detourY = Math.sin(detourDirection) * detourDistance;
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
+    this.svg.style.position = "absolute";
+    this.svg.style.top = "0";
+    this.svg.style.left = "0";
 
     this.group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     this.svg.appendChild(this.group);
@@ -74,7 +77,7 @@ export class DetourStraightEdgeShape implements EdgeShape {
     this.svg.style.overflow = "visible";
   }
 
-  public update(
+  public updatePosition(
     x: number,
     y: number,
     width: number,

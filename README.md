@@ -31,7 +31,7 @@ npm i @html-graph/html-graph
 ```
 
 ```typescript
-import { AddNodePorts, HtmlGraphBuilder } from "@html-graph/html-graph";
+import { HtmlGraphBuilder, AddNodeRequest } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -50,9 +50,11 @@ const canvas = new HtmlGraphBuilder()
 
 function createNode(
   name: string,
+  x: number,
+  y: number,
   frontPortId: string,
   backPortId: string,
-): [HTMLElement, AddNodePorts] {
+): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
 
@@ -68,32 +70,32 @@ function createNode(
   backPort.classList.add("port");
   node.appendChild(backPort);
 
-  return [
-    node,
-    [
-      [frontPortId, frontPort],
-      [backPortId, backPort],
+  return {
+    element: node,
+    x: x,
+    y: y,
+    ports: [
+      { id: frontPortId, element: frontPort },
+      { id: backPortId, element: backPort },
     ],
-  ];
+  };
 }
 
-const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
+const node1 = createNode("Node 1", 200, 400, "port-1-1", "port-1-2");
+const node2 = createNode("Node 2", 600, 500, "port-2-1", "port-2-2");
 
 const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
-  .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 600, y: 500, ports: ports2 })
+  .addNode(node1)
+  .addNode(node2)
   .addEdge({ from: "port-1-2", to: "port-2-1" });
 ```
 
-Refer to [Examples](examples) for more.
+Refer to [Use cases](use-cases) for more.
 
 ## Run examples
-
-Use node version >= 20
 
 ```
 npm install

@@ -6,7 +6,7 @@ import {
   createDirectionVector,
   createRotatedPoint,
 } from "../utils";
-import { createRoundedPath } from "../utils/create-rounded-path";
+import { createRoundedPath } from "../utils";
 
 export class CycleSquareEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
@@ -34,6 +34,9 @@ export class CycleSquareEdgeShape implements EdgeShape {
     this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this.svg.style.pointerEvents = "none";
+    this.svg.style.position = "absolute";
+    this.svg.style.top = "0";
+    this.svg.style.left = "0";
 
     this.group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     this.svg.appendChild(this.group);
@@ -79,7 +82,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     ];
   }
 
-  public update(
+  public updatePosition(
     x: number,
     y: number,
     _width: number,

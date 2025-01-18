@@ -3,7 +3,7 @@ import { PortPayload } from "@/port-payload";
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
 
-  update(
+  updatePosition(
     x: number,
     y: number,
     width: number,

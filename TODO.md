@@ -1,6 +1,7 @@
 # TODO
 
 - improve connection with label example
+- refactor use cases
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay
 - edge controller constructor 1 parameter ?
