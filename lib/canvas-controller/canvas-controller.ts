@@ -5,7 +5,6 @@ import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
-import { UpdatePortRequest } from "@/canvas/canvas/update-port-request";
 import { PriorityFn } from "@/priority";
 
 export class CanvasController {
@@ -139,7 +138,8 @@ export class CanvasController {
 
   public updatePort(
     portId: unknown,
-    request: UpdatePortRequest | undefined,
+    direction: number | undefined,
+    centerFn: CenterFn | undefined,
   ): void {
     const port = this.graphStore.getPort(portId);
 
@@ -147,8 +147,8 @@ export class CanvasController {
       throw new Error("failed to unset nonexisting port");
     }
 
-    port.direction = request?.direction ?? port.direction;
-    port.centerFn = request?.centerFn ?? port.centerFn;
+    port.direction = direction ?? port.direction;
+    port.centerFn = centerFn ?? port.centerFn;
 
     // virtual scroll check
     this.htmlController.updatePortEdges(portId);

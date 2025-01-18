@@ -4,6 +4,7 @@
   - figure out where to put it (html-controller, canvas-core, decorator, different API)
   - node creation factory function?
 - optimize store methods
+- fix roundness for connections
 - optimize memory dragggable nodes
 - refactor errors
 - drag edge creation

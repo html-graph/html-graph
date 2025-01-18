@@ -37,6 +37,8 @@ export class EdgeWithLabelShape implements EdgeShape {
 
   private readonly hasTargetArrow = true;
 
+  private readonly rectCurvature = 50;
+
   public constructor(label: string) {
     this.svg = this.createSvg();
 
@@ -129,13 +131,13 @@ export class EdgeWithLabelShape implements EdgeShape {
     };
 
     const pbrb: Point = {
-      x: pbr.x + this.curvature * fromRectVect.x,
-      y: pbr.y + this.curvature * fromRectVect.y,
+      x: pbr.x + this.rectCurvature * fromRectVect.x,
+      y: pbr.y + this.rectCurvature * fromRectVect.y,
     };
 
     const perb: Point = {
-      x: per.x + this.curvature * toRectVect.x,
-      y: per.y + this.curvature * toRectVect.y,
+      x: per.x + this.rectCurvature * toRectVect.x,
+      y: per.y + this.rectCurvature * toRectVect.y,
     };
 
     const preLine = this.sourceArrow
