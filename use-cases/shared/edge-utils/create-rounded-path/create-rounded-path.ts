@@ -1,4 +1,4 @@
-import { Point } from "@/point";
+import { Point } from "@html-graph/html-graph";
 
 export const createRoundedPath: (
   path: readonly Point[],

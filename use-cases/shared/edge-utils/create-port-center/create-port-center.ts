@@ -1,5 +1,4 @@
-import { PortPayload } from "@/port-payload";
-import { Point } from "@/point";
+import { Point, PortPayload } from "@html-graph/html-graph";
 
 export const createPortCenter: (port: PortPayload) => Point = (
   port: PortPayload,
