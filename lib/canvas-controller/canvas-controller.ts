@@ -281,17 +281,17 @@ export class CanvasController {
   }
 
   private resolveEdgeType(fromPortId: unknown, toPortId: unknown): EdgeType {
-    let edgeType = EdgeType.Regular;
+    if (fromPortId === toPortId) {
+      return EdgeType.PortCycle;
+    }
 
     const fromNodeId = this.graphStore.getPortNode(fromPortId);
     const toNodeId = this.graphStore.getPortNode(toPortId);
 
-    if (fromPortId === toPortId) {
-      edgeType = EdgeType.PortCycle;
-    } else if (fromNodeId === toNodeId) {
-      edgeType = EdgeType.NodeCycle;
+    if (fromNodeId === toNodeId) {
+      return EdgeType.NodeCycle;
     }
 
-    return edgeType;
+    return EdgeType.Regular;
   }
 }
