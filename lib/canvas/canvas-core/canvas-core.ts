@@ -105,8 +105,8 @@ export class CanvasCore implements Canvas {
 
   public addEdge(edge: AddEdgeRequest): CanvasCore {
     const shapeFactory =
-      edge.options !== undefined
-        ? resolveEdgeShapeFactory(edge.options)
+      edge.shape !== undefined
+        ? resolveEdgeShapeFactory(edge.shape)
         : this.edgeShapeFactory;
 
     this.di.canvasController.addEdge(

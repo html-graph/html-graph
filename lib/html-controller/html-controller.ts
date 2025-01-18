@@ -137,10 +137,9 @@ export class HtmlController {
 
     this.edgeIdToElementMap.set(edgeId, element);
 
+    this.container.appendChild(element);
     this.updateEdgeCoords(edgeId);
     this.updateEdgePriority(edgeId);
-
-    this.container.appendChild(element);
   }
 
   public detachEdge(edgeId: unknown): void {
@@ -262,6 +261,6 @@ export class HtmlController {
     const width = Math.abs(centerToX - centerFromX);
     const height = Math.abs(centerToY - centerFromY);
 
-    edge.shape.updatePosition(x, y, width, height, portFrom, portTo);
+    edge.shape.update(x, y, width, height, portFrom, portTo);
   }
 }

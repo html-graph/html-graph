@@ -56,7 +56,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
     this.svg.style.height = `0px`;
   }
 
-  public updatePosition(
+  public update(
     x: number,
     y: number,
     _width: number,

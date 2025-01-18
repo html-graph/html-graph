@@ -82,7 +82,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     ];
   }
 
-  public updatePosition(
+  public update(
     x: number,
     y: number,
     _width: number,

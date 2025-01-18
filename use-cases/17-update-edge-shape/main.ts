@@ -60,9 +60,9 @@ const greenController = new BezierEdgeShape("green", 2, 90, 15, 4, false, true);
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updateEdge("con-1", { controller: redController });
+    canvas.updateEdge("con-1", { shape: redController });
   } else {
-    canvas.updateEdge("con-1", { controller: greenController });
+    canvas.updateEdge("con-1", { shape: greenController });
   }
 
   i++;

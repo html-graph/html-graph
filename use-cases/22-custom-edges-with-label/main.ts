@@ -33,17 +33,32 @@ const node2 = createBasicNode({
   y: 600,
 });
 
-const edgeShape = new EdgeWithLabelShape("Connection 1");
+const edgeShape1 = new EdgeWithLabelShape("Connection AAA");
 
 const edge1: AddEdgeRequest = {
+  id: "edge-1",
   from: "port-1-2",
   to: "port-2-1",
-  options: {
+  shape: {
     type: "custom",
-    factory: () => edgeShape,
+    factory: () => edgeShape1,
   },
 };
+
+const edgeShape2 = new EdgeWithLabelShape("Connection ABCDEFG");
 
 const canvasElement = document.getElementById("canvas")!;
 
 canvas.attach(canvasElement).addNode(node1).addNode(node2).addEdge(edge1);
+
+let i = 0;
+
+setInterval(() => {
+  if (i % 2) {
+    canvas.updateEdge("edge-1", { shape: edgeShape1 });
+  } else {
+    canvas.updateEdge("edge-1", { shape: edgeShape2 });
+  }
+
+  i++;
+}, 2000);

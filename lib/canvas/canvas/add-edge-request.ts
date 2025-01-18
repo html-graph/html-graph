@@ -4,6 +4,6 @@ export interface AddEdgeRequest {
   id?: unknown;
   from: string;
   to: string;
-  options?: EdgeShape;
+  shape?: EdgeShape;
   priority?: number;
 }

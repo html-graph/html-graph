@@ -1,6 +1,6 @@
 import { EdgeShape } from "@/edges";
 
 export interface UpdateEdgeRequest {
-  readonly controller?: EdgeShape;
+  readonly shape?: EdgeShape;
   readonly priority?: number;
 }

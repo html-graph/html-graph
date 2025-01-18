@@ -69,7 +69,7 @@ export class HorizontalEdgeShape implements EdgeShape {
     this.svg.style.overflow = "visible";
   }
 
-  public updatePosition(
+  public update(
     x: number,
     y: number,
     width: number,

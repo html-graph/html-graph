@@ -203,9 +203,9 @@ export class CanvasController {
       throw new Error("failed to update nonexisting edge");
     }
 
-    if (request.controller !== undefined) {
+    if (request.shape !== undefined) {
       this.htmlController.detachEdge(edgeId);
-      edge.shape = request.controller;
+      edge.shape = request.shape;
       this.htmlController.attachEdge(edgeId);
     }
 
