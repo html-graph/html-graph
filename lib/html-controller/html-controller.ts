@@ -114,9 +114,8 @@ export class HtmlController {
   public detachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
-    this.nodesResizeObserver.unobserve(node!.element);
-
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    this.nodesResizeObserver.unobserve(wrapper);
     wrapper.removeChild(node!.element);
     this.container.removeChild(wrapper);
 
@@ -221,25 +220,25 @@ export class HtmlController {
     const rectFrom = portFrom!.element.getBoundingClientRect();
     const rectTo = portTo!.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
-    const matrixViewport = this.viewportTransformer.getViewportMatrix();
+    const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 
     const fromX =
-      matrixViewport.scale * (rectFrom.left - rect.left) + matrixViewport.dx;
+      viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.dx;
     const fromY =
-      matrixViewport.scale * (rectFrom.top - rect.top) + matrixViewport.dy;
+      viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.dy;
     const toX =
-      matrixViewport.scale * (rectTo.left - rect.left) + matrixViewport.dx;
+      viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.dx;
     const toY =
-      matrixViewport.scale * (rectTo.top - rect.top) + matrixViewport.dy;
+      viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy;
 
     const { x: deltaCenterFromX, y: deltaCenterFromY } = portFrom.centerFn(
-      rectFrom.width * matrixViewport.scale,
-      rectFrom.height * matrixViewport.scale,
+      rectFrom.width * viewportMatrix.scale,
+      rectFrom.height * viewportMatrix.scale,
     );
 
     const { x: deltaCenterToX, y: deltaCenterToY } = portTo.centerFn(
-      rectTo.width * matrixViewport.scale,
-      rectTo.height * matrixViewport.scale,
+      rectTo.width * viewportMatrix.scale,
+      rectTo.height * viewportMatrix.scale,
     );
 
     const centerFromX = deltaCenterFromX + fromX;
