@@ -11,4 +11,10 @@ export interface EdgeShape {
     from: PortPayload,
     to: PortPayload,
   ): void;
+
+  attach(container: HTMLElement): void;
+
+  detach(container: HTMLElement): void;
+
+  setPriority(priority: number): void;
 }

@@ -186,6 +186,18 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.text.setAttribute("y", `${halfH}`);
   }
 
+  public attach(container: HTMLElement): void {
+    container.appendChild(this.svg);
+  }
+
+  public detach(container: HTMLElement): void {
+    container.removeChild(this.svg);
+  }
+
+  public setPriority(priority: number): void {
+    this.svg.style.zIndex = `${priority}`;
+  }
+
   private createSvg(): SVGSVGElement {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
