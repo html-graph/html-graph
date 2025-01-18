@@ -1,4 +1,3 @@
-import { HtmlController } from "@/html-controller";
 import {
   PublicViewportTransformer,
   ViewportTransformer,
@@ -9,6 +8,7 @@ import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
 import { PublicGraphStore } from "@/graph-store";
 import { PriorityFn } from "@/priority";
+import { BasicHtmlController } from "@/html-controller/basic-html-controller";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -34,7 +34,7 @@ export class DiContainer {
       viewportTransformer,
     );
 
-    const htmlController = new HtmlController(
+    const htmlController = new BasicHtmlController(
       graphStore,
       viewportTransformer,
       this.publicViewportTransformer,
