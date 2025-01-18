@@ -95,7 +95,7 @@ canvas
 
 Refer to [Use cases](use-cases) for more.
 
-## Run examples
+## Run use cases
 
 ```
 npm install
