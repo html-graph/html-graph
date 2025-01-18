@@ -27,8 +27,6 @@ export class HtmlController {
 
   private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
-  private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
-
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportTransformer: ViewportTransformer,
@@ -53,10 +51,6 @@ export class HtmlController {
   }
 
   public clear(): void {
-    Array.from(this.edgeIdToElementMap.keys()).forEach((edgeId) => {
-      this.detachEdge(edgeId);
-    });
-
     Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
       this.detachNode(nodeId);
     });
@@ -135,17 +129,14 @@ export class HtmlController {
     const edge = this.graphStore.getEdge(edgeId)!;
     const element = edge.shape.svg;
 
-    this.edgeIdToElementMap.set(edgeId, element);
-
     this.container.appendChild(element);
     this.updateEdgeCoords(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
   public detachEdge(edgeId: unknown): void {
-    const element = this.edgeIdToElementMap.get(edgeId)!;
-    this.edgeIdToElementMap.delete(edgeId);
-    this.container.removeChild(element);
+    const edge = this.graphStore.getEdge(edgeId)!;
+    this.container.removeChild(edge.shape.svg);
   }
 
   public updateNodePriority(nodeId: unknown): void {
@@ -157,8 +148,7 @@ export class HtmlController {
 
   public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-
-    this.edgeIdToElementMap.get(edgeId)!.style.zIndex = `${edge.priority}`;
+    edge.shape.svg.style.zIndex = `${edge.priority}`;
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
