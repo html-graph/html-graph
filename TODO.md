@@ -2,6 +2,7 @@
 
 - virtual scroll
 - drag edge creation
+- layouts
 - limit node drag box
 - edge hover behavior
 - edge controller constructor 1 parameter ?
