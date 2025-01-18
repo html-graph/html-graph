@@ -19,18 +19,18 @@ const canvas = new HtmlGraphBuilder()
 
 const node1 = createBasicNode({
   name: "Node 1",
-  frontPortId: "port-1-1",
-  backPortId: "port-1-2",
   x: 200,
   y: 400,
+  frontPortId: "port-1-1",
+  backPortId: "port-1-2",
 });
 
 const node2 = createBasicNode({
   name: "Node 2",
+  x: 800,
+  y: 600,
   frontPortId: "port-2-1",
   backPortId: "port-2-2",
-  x: 470,
-  y: 600,
 });
 
 const edgeShape = new EdgeWithLabelShape("Connection");

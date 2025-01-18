@@ -84,50 +84,80 @@ export class EdgeWithLabelShape implements EdgeShape {
     const fromVect = createDirectionVector(from.direction, flipX, flipY);
     const toVect = createDirectionVector(to.direction, flipX, flipY);
 
-    const begin: Point = { x: 0, y: 0 };
-    const end: Point = { x: width, y: height };
+    const fromRectVect: Point = { x: -1 * flipX, y: 0 };
+    const toRectVect: Point = { x: 1 * flipX, y: 0 };
 
-    const pb = createRotatedPoint(
-      { x: this.arrowLength, y: 0 },
-      fromVect,
-      begin,
-    );
+    const pb: Point = { x: 0, y: 0 };
+    const pe: Point = { x: width, y: height };
 
-    const pe = createRotatedPoint(
+    const pbl = createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, pb);
+
+    const pel = createRotatedPoint(
       { x: width - this.arrowLength, y: height },
       toVect,
-      end,
+      pe,
     );
 
-    const bpb: Point = {
-      x: pb.x + fromVect.x * this.curvature,
-      y: pb.y + fromVect.y * this.curvature,
+    const pbb: Point = {
+      x: pbl.x + fromVect.x * this.curvature,
+      y: pbl.y + fromVect.y * this.curvature,
     };
 
-    const bpe: Point = {
-      x: pe.x - toVect.x * this.curvature,
-      y: pe.y - toVect.y * this.curvature,
+    const peb: Point = {
+      x: pel.x - toVect.x * this.curvature,
+      y: pel.y - toVect.y * this.curvature,
+    };
+
+    const box = this.text.getBBox();
+    const halfW = width / 2;
+    const halfH = height / 2;
+    const halfRectW = box.width / 2 + this.textRectRadius;
+    const halfRectH = box.height / 2 + this.textRectRadius;
+    const rectX = halfW - halfRectW;
+    const rectY = halfH - halfRectH;
+    const rectW = halfRectW * 2;
+    const rectH = halfRectH * 2;
+
+    const pbr: Point = {
+      x: halfW - halfRectW * flipX,
+      y: halfH,
+    };
+
+    const per: Point = {
+      x: halfW + halfRectW * flipX,
+      y: halfH,
+    };
+
+    const pbrb: Point = {
+      x: pbr.x + this.curvature * fromRectVect.x,
+      y: pbr.y + this.curvature * fromRectVect.y,
+    };
+
+    const perb: Point = {
+      x: per.x + this.curvature * toRectVect.x,
+      y: per.y + this.curvature * toRectVect.y,
     };
 
     const preLine = this.sourceArrow
       ? ""
-      : `M ${begin.x} ${begin.y} L ${pb.x} ${pb.y} `;
+      : `M ${pb.x} ${pb.y} L ${pbl.x} ${pbl.y} `;
 
-    const lcurve = `M ${pb.x} ${pb.y} C ${bpb.x} ${bpb.y}, ${bpe.x} ${bpe.y}, ${pe.x} ${pe.y}`;
+    const bcurve = `M ${pbl.x} ${pbl.y} C ${pbb.x} ${pbb.y}, ${pbrb.x} ${pbrb.y}, ${pbr.x} ${pbr.y}`;
+    const ecurve = `M ${per.x} ${per.y} C ${perb.x} ${perb.y}, ${peb.x} ${peb.y}, ${pe.x} ${pe.y}`;
 
     const postLine = this.targetArrow
       ? ""
-      : ` M ${pe.x} ${pe.y} L ${end.x} ${end.y}`;
+      : ` M ${pel.x} ${pel.y} L ${pe.x} ${pe.y}`;
 
-    const linePath = `${preLine}${lcurve}${postLine}`;
+    const linePath = `${preLine}${bcurve}${ecurve}${postLine}`;
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        begin.x,
-        begin.y,
+        pb.x,
+        pb.y,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -138,8 +168,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        end.x,
-        end.y,
+        pe.x,
+        pe.y,
         -this.arrowLength,
         this.arrowWidth,
       );
@@ -147,24 +177,10 @@ export class EdgeWithLabelShape implements EdgeShape {
       this.targetArrow.setAttribute("d", arrowPath);
     }
 
-    const box = this.text.getBBox();
-
-    this.textRect.setAttribute(
-      "x",
-      `${(width - box.width) / 2 - this.textRectRadius}`,
-    );
-    this.textRect.setAttribute(
-      "y",
-      `${(height - box.height) / 2 - this.textRectRadius}`,
-    );
-    this.textRect.setAttribute(
-      "width",
-      `${box.width + 2 * this.textRectRadius}`,
-    );
-    this.textRect.setAttribute(
-      "height",
-      `${box.height + 2 * this.textRectRadius}`,
-    );
+    this.textRect.setAttribute("x", `${rectX}`);
+    this.textRect.setAttribute("y", `${rectY}`);
+    this.textRect.setAttribute("width", `${rectW}`);
+    this.textRect.setAttribute("height", `${rectH}`);
 
     this.text.setAttribute("x", `${width / 2}`);
     this.text.setAttribute("y", `${height / 2}`);

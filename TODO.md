@@ -1,7 +1,5 @@
 # TODO
 
-- improve connection with label example
-- refactor use cases
 - fix encapsulation for edge controllers ?
 - investigate bug with drag delay
 - edge controller constructor 1 parameter ?
@@ -11,6 +9,7 @@
 - drag edge creation
 - virtual scroll
 - node drag handle example
+- refactor use cases
 - unit tests
 - e2e tests
 - snap nodes to grid
