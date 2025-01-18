@@ -12,9 +12,6 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserTransformableCanvas({
-    scale: {
-      enabled: true,
-    },
     transformPreprocessor: [
       {
         type: "shift-limit",
