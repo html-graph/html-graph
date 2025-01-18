@@ -182,8 +182,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.textRect.setAttribute("width", `${rectW}`);
     this.textRect.setAttribute("height", `${rectH}`);
 
-    this.text.setAttribute("x", `${width / 2}`);
-    this.text.setAttribute("y", `${height / 2}`);
+    this.text.setAttribute("x", `${halfW}`);
+    this.text.setAttribute("y", `${halfH}`);
   }
 
   private createSvg(): SVGSVGElement {
