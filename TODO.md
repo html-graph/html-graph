@@ -3,6 +3,8 @@
 - virtual scroll
   - figure out where to put it (html-controller, canvas-core, decorator, different API)
   - node creation factory function?
+- optimize memory dragggable nodes
+- refactor errors
 - drag edge creation
 - layouts
 - limit node drag box

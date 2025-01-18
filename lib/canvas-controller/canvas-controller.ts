@@ -9,17 +9,17 @@ import { UpdatePortRequest } from "@/canvas/canvas/update-port-request";
 import { PriorityFn } from "@/priority";
 
 export class CanvasController {
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) => {
-    return this.graphStore.getNode(nodeId) !== undefined;
-  });
+  private readonly nodeIdGenerator = new IdGenerator(
+    (nodeId) => this.graphStore.getNode(nodeId) !== undefined,
+  );
 
-  private readonly portIdGenerator = new IdGenerator((portId) => {
-    return this.graphStore.getPort(portId) !== undefined;
-  });
+  private readonly portIdGenerator = new IdGenerator(
+    (portId) => this.graphStore.getPort(portId) !== undefined,
+  );
 
-  private readonly edgeIdGenerator = new IdGenerator((edgeId) => {
-    return this.graphStore.getEdge(edgeId) !== undefined;
-  });
+  private readonly edgeIdGenerator = new IdGenerator(
+    (edgeId) => this.graphStore.getEdge(edgeId) !== undefined,
+  );
 
   public constructor(
     private readonly graphStore: GraphStore,
@@ -102,8 +102,8 @@ export class CanvasController {
       throw new Error("failed to remove nonexisting node");
     }
 
-    this.graphStore.getNodeAdjacentEdges(nodeId).forEach((edgeId) => {
-      this.removeEdge(edgeId);
+    (this.graphStore.getNodePorts(nodeId) ?? []).forEach((portId) => {
+      this.unmarkPort(portId);
     });
 
     // virtual scroll check
@@ -138,7 +138,7 @@ export class CanvasController {
   }
 
   public updatePort(
-    portId: string,
+    portId: unknown,
     request: UpdatePortRequest | undefined,
   ): void {
     const port = this.graphStore.getPort(portId);
@@ -154,7 +154,7 @@ export class CanvasController {
     this.htmlController.updatePortEdges(portId);
   }
 
-  public unmarkPort(portId: string): void {
+  public unmarkPort(portId: unknown): void {
     if (this.graphStore.getPort(portId) === undefined) {
       throw new Error("failed to unset nonexisting port");
     }
@@ -243,6 +243,7 @@ export class CanvasController {
     dy: number | null,
   ): void {
     this.viewportTransformer.patchViewportMatrix(scale, dx, dy);
+    // virtual scroll check
     this.htmlController.applyTransform();
   }
 
@@ -252,18 +253,22 @@ export class CanvasController {
     dy: number | null,
   ): void {
     this.viewportTransformer.patchContentMatrix(scale, dx, dy);
+    // virtual scroll check
     this.htmlController.applyTransform();
   }
 
   public attach(element: HTMLElement): void {
+    // virtual scroll check
     this.htmlController.attach(element);
   }
 
   public detach(): void {
+    // virtual scroll check
     this.htmlController.detach();
   }
 
   public clear(): void {
+    // virtual scroll check
     this.htmlController.clear();
     this.graphStore.clear();
     this.nodeIdGenerator.reset();

@@ -166,7 +166,7 @@ export class GraphStore {
     this.edges.delete(edgeId);
   }
 
-  public getPortAdjacentEdges(portId: string): readonly unknown[] {
+  public getPortAdjacentEdges(portId: unknown): readonly unknown[] {
     return [
       ...this.getPortIncomingEdges(portId),
       ...this.getPortOutcomingEdges(portId),

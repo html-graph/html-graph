@@ -161,7 +161,7 @@ export class HtmlController {
     });
   }
 
-  public updatePortEdges(portId: string): void {
+  public updatePortEdges(portId: unknown): void {
     const edges = this.graphStore.getPortAdjacentEdges(portId);
 
     edges.forEach((edge) => {

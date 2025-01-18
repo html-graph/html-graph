@@ -37,9 +37,9 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
 
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) => {
-    return this.nodes.has(nodeId);
-  });
+  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
+    this.nodes.has(nodeId),
+  );
 
   private element: HTMLElement | null = null;
 
