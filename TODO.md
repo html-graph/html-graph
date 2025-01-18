@@ -1,7 +1,8 @@
 # TODO
 
 - virtual scroll
-  - figure out where to put it (html-controller, canvas-core, decorator, different API)
+  - refactor update edge shape
+  - pass canvas host dimensions
   - node creation factory function?
 - optimize store methods
 - fix roundness for connections

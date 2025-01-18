@@ -39,7 +39,6 @@ export class CanvasCore implements Canvas {
       options.ports.direction,
       options.nodes.priorityFn,
       options.edges.priorityFn,
-      options.virtualScroll.enabled,
     );
 
     this.transformation = this.di.publicViewportTransformer;

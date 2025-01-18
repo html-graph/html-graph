@@ -5,9 +5,8 @@ import {
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
 import { createCanvas, createContainer, createHost } from "./utils";
-import { HtmlController } from "./html-controller";
 
-export class BasicHtmlController implements HtmlController {
+export class BaseHtmlController {
   private canvasWrapper: HTMLElement | null = null;
 
   private readonly host = createHost();
@@ -18,7 +17,7 @@ export class BasicHtmlController implements HtmlController {
 
   private readonly canvasCtx: CanvasRenderingContext2D;
 
-  private readonly hostResizeObserver: ResizeObserver;
+  private readonly canvasResizeObserver: ResizeObserver;
 
   private readonly nodesResizeObserver: ResizeObserver;
 
@@ -45,8 +44,7 @@ export class BasicHtmlController implements HtmlController {
     this.host.appendChild(this.canvas);
     this.host.appendChild(this.container);
 
-    this.hostResizeObserver = this.createHostResizeObserver();
-    this.hostResizeObserver.observe(this.host);
+    this.canvasResizeObserver = this.createHostResizeObserver();
 
     this.nodesResizeObserver = this.createNodesResizeObserver();
   }
@@ -55,6 +53,8 @@ export class BasicHtmlController implements HtmlController {
     Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
       this.detachNode(nodeId);
     });
+
+    this.host.innerHTML = "";
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -62,21 +62,24 @@ export class BasicHtmlController implements HtmlController {
 
     this.canvasWrapper = canvasWrapper;
     this.canvasWrapper.appendChild(this.host);
+    this.canvasResizeObserver.observe(this.canvasWrapper);
   }
 
   public detach(): void {
     if (this.canvasWrapper !== null) {
+      this.canvasResizeObserver.unobserve(this.canvasWrapper);
       this.canvasWrapper.removeChild(this.host);
       this.canvasWrapper = null;
     }
   }
 
   public destroy(): void {
-    this.hostResizeObserver.disconnect();
+    this.canvasResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.canvas);
     this.host.removeChild(this.container);
 
+    this.clear();
     this.detach();
   }
 
@@ -127,7 +130,7 @@ export class BasicHtmlController implements HtmlController {
 
   public attachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-    edge.shape.attach(this.container);
+    this.container.appendChild(edge.shape.svg);
 
     this.updateEdgeCoords(edgeId);
     this.updateEdgePriority(edgeId);
@@ -136,7 +139,7 @@ export class BasicHtmlController implements HtmlController {
   public detachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
-    edge.shape.detach(this.container);
+    this.container.removeChild(edge.shape.svg);
   }
 
   public updateNodePriority(nodeId: unknown): void {
@@ -149,7 +152,7 @@ export class BasicHtmlController implements HtmlController {
   public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
-    edge.shape.setPriority(edge.priority);
+    edge.shape.svg.style.zIndex = `${edge.priority}`;
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {

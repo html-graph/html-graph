@@ -8,11 +8,7 @@ import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
 import { PublicGraphStore } from "@/graph-store";
 import { PriorityFn } from "@/priority";
-import {
-  BasicHtmlController,
-  HtmlController,
-  VirtualScrollHtmlController,
-} from "@/html-controller";
+import { BaseHtmlController } from "@/html-controller";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -28,7 +24,6 @@ export class DiContainer {
     portsDirection: number,
     nodesPriorityFn: PriorityFn,
     edgesPriorityFn: PriorityFn,
-    isVirtualScrollEnabled: boolean,
   ) {
     const viewportTransformer = new ViewportTransformer();
     const graphStore = new GraphStore();
@@ -39,16 +34,12 @@ export class DiContainer {
       viewportTransformer,
     );
 
-    let htmlController: HtmlController = new BasicHtmlController(
+    const htmlController = new BaseHtmlController(
       graphStore,
       viewportTransformer,
       this.publicViewportTransformer,
       backgroundDrawingFn,
     );
-
-    if (isVirtualScrollEnabled) {
-      htmlController = new VirtualScrollHtmlController(htmlController);
-    }
 
     this.canvasController = new CanvasController(
       graphStore,

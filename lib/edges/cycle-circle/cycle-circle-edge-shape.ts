@@ -8,7 +8,7 @@ import {
 } from "../utils";
 
 export class CycleCircleEdgeShape implements EdgeShape {
-  private readonly svg: SVGSVGElement;
+  public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 
@@ -107,17 +107,5 @@ export class CycleCircleEdgeShape implements EdgeShape {
 
       this.arrow.setAttribute("d", arrowPath);
     }
-  }
-
-  public attach(container: HTMLElement): void {
-    container.appendChild(this.svg);
-  }
-
-  public detach(container: HTMLElement): void {
-    container.removeChild(this.svg);
-  }
-
-  public setPriority(priority: number): void {
-    this.svg.style.zIndex = `${priority}`;
   }
 }

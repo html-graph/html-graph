@@ -7,7 +7,7 @@ import {
 } from "../shared/edge-utils";
 
 export class EdgeWithLabelShape implements EdgeShape {
-  private readonly svg: SVGSVGElement;
+  public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 
@@ -186,18 +186,6 @@ export class EdgeWithLabelShape implements EdgeShape {
 
     this.text.setAttribute("x", `${halfW}`);
     this.text.setAttribute("y", `${halfH}`);
-  }
-
-  public attach(container: HTMLElement): void {
-    container.appendChild(this.svg);
-  }
-
-  public detach(container: HTMLElement): void {
-    container.removeChild(this.svg);
-  }
-
-  public setPriority(priority: number): void {
-    this.svg.style.zIndex = `${priority}`;
   }
 
   private createSvg(): SVGSVGElement {
