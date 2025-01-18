@@ -1,6 +1,5 @@
 # TODO
 
-- refactor node id generation
 - edge controller constructor 1 parameter ?
 - edge hover behavior
 - move and drag cursor customization

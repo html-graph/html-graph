@@ -9,11 +9,17 @@ import { UpdatePortRequest } from "@/canvas/canvas/update-port-request";
 import { PriorityFn } from "@/priority";
 
 export class CanvasController {
-  private readonly nodeIdGenerator = new IdGenerator();
+  private readonly nodeIdGenerator = new IdGenerator((nodeId) => {
+    return this.graphStore.getNode(nodeId) !== undefined;
+  });
 
-  private readonly portIdGenerator = new IdGenerator();
+  private readonly portIdGenerator = new IdGenerator((portId) => {
+    return this.graphStore.getPort(portId) !== undefined;
+  });
 
-  private readonly edgeIdGenerator = new IdGenerator();
+  private readonly edgeIdGenerator = new IdGenerator((edgeId) => {
+    return this.graphStore.getEdge(edgeId) !== undefined;
+  });
 
   public constructor(
     private readonly graphStore: GraphStore,
@@ -35,11 +41,7 @@ export class CanvasController {
     centerFn: CenterFn | undefined,
     priority: number | undefined,
   ): void {
-    if (nodeId === undefined) {
-      do {
-        nodeId = this.nodeIdGenerator.create();
-      } while (this.graphStore.getNode(nodeId) !== undefined);
-    }
+    nodeId = this.nodeIdGenerator.create(nodeId);
 
     if (this.graphStore.getNode(nodeId) !== undefined) {
       throw new Error("failed to add node with existing id");
@@ -58,7 +60,7 @@ export class CanvasController {
 
     Array.from(ports ?? []).forEach((element) => {
       this.markPort(
-        element.id ?? this.generatePortId(),
+        element.id,
         element.element,
         nodeId,
         element.centerFn ?? this.portsCenterFn,
@@ -99,11 +101,7 @@ export class CanvasController {
     centerFn: CenterFn | undefined,
     dir: number | undefined,
   ): void {
-    if (portId === undefined) {
-      do {
-        portId = this.portIdGenerator.create();
-      } while (this.graphStore.getPort(portId) !== undefined);
-    }
+    portId = this.portIdGenerator.create(portId);
 
     if (this.graphStore.getNode(nodeId) === undefined) {
       throw new Error("failed to set port on nonexisting node");
@@ -157,11 +155,7 @@ export class CanvasController {
     shapeFactory: EdgeShapeFactory,
     priority: number | undefined,
   ): void {
-    if (edgeId === undefined) {
-      do {
-        edgeId = this.edgeIdGenerator.create();
-      } while (this.graphStore.getEdge(edgeId) !== undefined);
-    }
+    edgeId = this.edgeIdGenerator.create(edgeId);
 
     if (this.graphStore.getPort(fromPortId) === undefined) {
       throw new Error("failed to add edge from nonexisting port");
@@ -266,16 +260,6 @@ export class CanvasController {
 
   public destroy(): void {
     this.htmlController.destroy();
-  }
-
-  private generatePortId(): unknown {
-    let portId: unknown;
-
-    do {
-      portId = this.nodeIdGenerator.create();
-    } while (this.graphStore.getPort(portId) !== undefined);
-
-    return portId;
   }
 
   private resolveEdgeType(fromPortId: unknown, toPortId: unknown): EdgeType {

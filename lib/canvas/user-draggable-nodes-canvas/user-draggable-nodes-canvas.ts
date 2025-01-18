@@ -37,7 +37,9 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
 
-  private readonly nodeIdGenerator = new IdGenerator();
+  private readonly nodeIdGenerator = new IdGenerator((nodeId) => {
+    return this.nodes.has(nodeId);
+  });
 
   private element: HTMLElement | null = null;
 
@@ -145,13 +147,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
-    let nodeId = request.id;
-
-    if (nodeId === undefined) {
-      do {
-        nodeId = this.nodeIdGenerator.create();
-      } while (this.nodes.has(nodeId));
-    }
+    const nodeId = this.nodeIdGenerator.create(request.id);
 
     this.canvas.addNode({ ...request, id: nodeId });
 

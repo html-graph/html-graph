@@ -1,12 +1,18 @@
 export class IdGenerator {
   private counter = 0;
 
-  public create(): number {
-    const id = this.counter;
+  public constructor(private readonly checkExists: (id: unknown) => boolean) {}
 
-    this.counter++;
+  public create(suggestedId: unknown | undefined): unknown {
+    if (suggestedId !== undefined) {
+      return suggestedId;
+    }
 
-    return id;
+    while (this.checkExists(this.counter)) {
+      this.counter++;
+    }
+
+    return this.counter;
   }
 
   public reset(): void {
