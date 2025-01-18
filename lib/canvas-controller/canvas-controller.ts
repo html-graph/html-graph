@@ -56,26 +56,14 @@ export class CanvasController {
 
     this.htmlController.attachNode(nodeId);
 
-    const map = new Map(ports ?? []);
-
-    map.forEach((element, portId) => {
-      if (element instanceof HTMLElement) {
-        this.markPort(
-          portId,
-          element,
-          nodeId,
-          this.portsCenterFn,
-          this.portsDirection,
-        );
-      } else {
-        this.markPort(
-          portId,
-          element.element,
-          nodeId,
-          element.centerFn ?? this.portsCenterFn,
-          element.direction ?? this.portsDirection,
-        );
-      }
+    Array.from(ports ?? []).forEach((element) => {
+      this.markPort(
+        element.id ?? this.generatePortId(),
+        element.element,
+        nodeId,
+        element.centerFn ?? this.portsCenterFn,
+        element.direction ?? this.portsDirection,
+      );
     });
   }
 
@@ -281,5 +269,15 @@ export class CanvasController {
 
   public destroy(): void {
     this.htmlController.destroy();
+  }
+
+  private generatePortId(): unknown {
+    let portId: unknown;
+
+    do {
+      portId = this.nodeIdGenerator.create();
+    } while (this.graphStore.getPort(portId) !== undefined);
+
+    return portId;
   }
 }

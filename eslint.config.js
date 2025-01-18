@@ -16,7 +16,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["examples/**/*.ts"],
+    files: ["use-cases/**/*.ts"],
     rules: {
       "no-restricted-imports": [
         "error",
