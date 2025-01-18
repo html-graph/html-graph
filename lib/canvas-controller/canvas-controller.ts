@@ -25,11 +25,11 @@ export class CanvasController {
     private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
     private readonly viewportTransformer: ViewportTransformer,
-    private readonly nodesCenterFn: CenterFn,
-    private readonly portsCenterFn: CenterFn,
-    private readonly portsDirection: number,
-    private readonly nodesPriorityFn: PriorityFn,
-    private readonly edgesPriorityFn: PriorityFn,
+    private readonly defaultNodesCenterFn: CenterFn,
+    private readonly defaultPortsCenterFn: CenterFn,
+    private readonly defaultPortsDirection: number,
+    private readonly defaultNodesPriorityFn: PriorityFn,
+    private readonly defaultEdgesPriorityFn: PriorityFn,
   ) {}
 
   public addNode(
@@ -52,8 +52,8 @@ export class CanvasController {
       element,
       x,
       y,
-      centerFn ?? this.nodesCenterFn,
-      priority ?? this.nodesPriorityFn(),
+      centerFn ?? this.defaultNodesCenterFn,
+      priority ?? this.defaultNodesPriorityFn(),
     );
 
     // virtual scroll check
@@ -64,8 +64,8 @@ export class CanvasController {
         port.id,
         port.element,
         nodeId,
-        port.centerFn ?? this.portsCenterFn,
-        port.direction ?? this.portsDirection,
+        port.centerFn ?? this.defaultPortsCenterFn,
+        port.direction ?? this.defaultPortsDirection,
       );
     });
   }
@@ -132,7 +132,7 @@ export class CanvasController {
       portId,
       element,
       nodeId,
-      centerFn ?? this.portsCenterFn,
+      centerFn ?? this.defaultPortsCenterFn,
       dir ?? 0,
     );
   }
@@ -194,7 +194,7 @@ export class CanvasController {
       fromPortId,
       toPortId,
       shapeFactory(edgeType),
-      priority ?? this.edgesPriorityFn(),
+      priority ?? this.defaultEdgesPriorityFn(),
     );
 
     // virtual scroll check
