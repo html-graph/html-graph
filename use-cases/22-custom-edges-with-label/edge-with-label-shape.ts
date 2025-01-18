@@ -148,7 +148,6 @@ export class EdgeWithLabelShape implements EdgeShape {
     }
 
     const box = this.text.getBBox();
-    console.log(box);
 
     this.textRect.setAttribute(
       "x",

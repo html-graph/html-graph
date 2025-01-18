@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeShapeFactory, EdgeType } from "@/edges";
-import { AddNodePorts, UpdateEdgeRequest } from "@/canvas/canvas";
+import { AddNodePorts } from "@/canvas/canvas";
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
@@ -175,16 +175,7 @@ export class CanvasController {
       throw new Error("failed to add edge with existing id");
     }
 
-    let edgeType = EdgeType.Regular;
-
-    const fromNodeId = this.graphStore.getPortNode(fromPortId);
-    const toNodeId = this.graphStore.getPortNode(toPortId);
-
-    if (fromPortId === toPortId) {
-      edgeType = EdgeType.PortCycle;
-    } else if (fromNodeId === toNodeId) {
-      edgeType = EdgeType.NodeCycle;
-    }
+    const edgeType = this.resolveEdgeType(fromPortId, toPortId);
 
     this.graphStore.addEdge(
       edgeId,
@@ -197,20 +188,26 @@ export class CanvasController {
     this.htmlController.attachEdge(edgeId);
   }
 
-  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
+  public updateEdge(
+    edgeId: unknown,
+    shape: EdgeShapeFactory | undefined,
+    priority: number | undefined,
+  ): void {
     const edge = this.graphStore.getEdge(edgeId);
     if (edge === undefined) {
       throw new Error("failed to update nonexisting edge");
     }
 
-    if (request.shape !== undefined) {
+    if (shape !== undefined) {
+      const edgeType = this.resolveEdgeType(edge.from, edge.to);
+
       this.htmlController.detachEdge(edgeId);
-      edge.shape = request.shape;
+      edge.shape = shape(edgeType);
       this.htmlController.attachEdge(edgeId);
     }
 
-    if (request.priority !== undefined) {
-      edge.priority = request.priority;
+    if (priority !== undefined) {
+      edge.priority = priority;
       this.htmlController.updateEdgePriority(edgeId);
     }
   }
@@ -279,5 +276,20 @@ export class CanvasController {
     } while (this.graphStore.getPort(portId) !== undefined);
 
     return portId;
+  }
+
+  private resolveEdgeType(fromPortId: unknown, toPortId: unknown): EdgeType {
+    let edgeType = EdgeType.Regular;
+
+    const fromNodeId = this.graphStore.getPortNode(fromPortId);
+    const toNodeId = this.graphStore.getPortNode(toPortId);
+
+    if (fromPortId === toPortId) {
+      edgeType = EdgeType.PortCycle;
+    } else if (fromNodeId === toNodeId) {
+      edgeType = EdgeType.NodeCycle;
+    }
+
+    return edgeType;
   }
 }

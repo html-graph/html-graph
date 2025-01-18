@@ -1,4 +1,4 @@
-import { EdgeShape } from "@/edges";
+import { EdgeShape } from "./edge-options";
 
 export interface UpdateEdgeRequest {
   readonly shape?: EdgeShape;

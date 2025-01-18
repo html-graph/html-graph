@@ -92,11 +92,11 @@ export class GraphStore {
     return this.ports.get(portId);
   }
 
-  public getPortNode(portId: string): unknown | undefined {
+  public getPortNode(portId: unknown): unknown | undefined {
     return this.portNodeId.get(portId);
   }
 
-  public removePort(portId: string): void {
+  public removePort(portId: unknown): void {
     this.cycleEdges.get(portId)!.forEach((edgeId) => {
       this.removeEdge(edgeId);
     });

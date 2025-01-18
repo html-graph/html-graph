@@ -121,7 +121,12 @@ export class CanvasCore implements Canvas {
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): CanvasCore {
-    this.di.canvasController.updateEdge(edgeId, request);
+    const shapeFactory =
+      request.shape !== undefined
+        ? resolveEdgeShapeFactory(request.shape)
+        : undefined;
+
+    this.di.canvasController.updateEdge(edgeId, shapeFactory, request.priority);
 
     return this;
   }
