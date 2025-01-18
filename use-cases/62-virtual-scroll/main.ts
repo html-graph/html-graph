@@ -31,8 +31,8 @@ let prevPortId: string | null = null;
 
 for (let i = 0; i < 20; i++) {
   for (let j = 0; j < 20; j++) {
-    const frontPortId = `port-${id}-in`;
-    const backPortId = `port-${id}-out`;
+    const frontPortId = `in-${id}`;
+    const backPortId = `out-${id}`;
 
     canvas.addNode(
       createBasicNode({
