@@ -94,6 +94,15 @@ export class CanvasController {
     }
   }
 
+  public removeNode(nodeId: unknown): void {
+    if (this.graphStore.getNode(nodeId) === undefined) {
+      throw new Error("failed to remove nonexisting node");
+    }
+
+    this.htmlController.detachNode(nodeId);
+    this.graphStore.removeNode(nodeId);
+  }
+
   public markPort(
     portId: unknown | undefined,
     element: HTMLElement,
@@ -213,15 +222,6 @@ export class CanvasController {
 
     this.htmlController.detachEdge(edgeId);
     this.graphStore.removeEdge(edgeId);
-  }
-
-  public removeNode(nodeId: unknown): void {
-    if (this.graphStore.getNode(nodeId) === undefined) {
-      throw new Error("failed to remove nonexisting node");
-    }
-
-    this.htmlController.detachNode(nodeId);
-    this.graphStore.removeNode(nodeId);
   }
 
   public patchViewportMatrix(
