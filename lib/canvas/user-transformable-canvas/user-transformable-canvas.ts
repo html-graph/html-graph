@@ -47,7 +47,7 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    setCursor(this.element, "grab");
+    setCursor(this.element, this.shiftCursor);
     this.window.addEventListener("mousemove", this.onMouseMove);
     this.window.addEventListener("mouseup", this.onMouseUp);
   };
@@ -175,6 +175,8 @@ export class UserTransformableCanvas implements Canvas {
     }
   });
 
+  private readonly shiftCursor: string | null;
+
   public constructor(
     private readonly canvas: Canvas,
     private readonly options?: TransformOptions,
@@ -207,6 +209,9 @@ export class UserTransformableCanvas implements Canvas {
     } else {
       this.transformPreprocessor = transformPreprocessorDefault;
     }
+
+    this.shiftCursor =
+      options?.shift?.cursor !== undefined ? options.shift.cursor : "grab";
   }
 
   public addNode(node: AddNodeRequest): UserTransformableCanvas {

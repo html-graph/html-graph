@@ -9,7 +9,7 @@ import {
 import { Point } from "@/point";
 
 export class BezierEdgeShape implements EdgeShape {
-  public readonly svg: SVGSVGElement;
+  private readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 

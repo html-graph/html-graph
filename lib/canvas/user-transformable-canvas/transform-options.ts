@@ -8,6 +8,7 @@ export interface TransformOptions {
   };
   readonly shift?: {
     readonly enabled?: boolean;
+    readonly cursor?: string | null;
   };
   readonly transformPreprocessor?:
     | TransformPreprocessorOption

@@ -8,7 +8,7 @@ import {
 } from "../utils";
 
 export class CycleCircleEdgeShape implements EdgeShape {
-  public readonly svg: SVGSVGElement;
+  private readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 

@@ -7,7 +7,7 @@ import {
 } from "../shared/edge-utils";
 
 export class EdgeWithLabelShape implements EdgeShape {
-  public readonly svg: SVGSVGElement;
+  private readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 

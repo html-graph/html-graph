@@ -1,12 +1,11 @@
 # TODO
 
-- edge controller constructor 1 parameter ?
-- edge hover behavior
-- move and drag cursor customization
-- limit node drag box
-- investigate bug with drag delay
-- drag edge creation
 - virtual scroll
+- drag edge creation
+- limit node drag box
+- edge hover behavior
+- edge controller constructor 1 parameter ?
+- investigate bug with drag delay
 - node drag handle example
 - refactor use cases
 - unit tests

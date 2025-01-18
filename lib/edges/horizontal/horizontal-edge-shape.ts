@@ -10,7 +10,7 @@ import { createRoundedPath } from "../utils";
 import { Point } from "@/point";
 
 export class HorizontalEdgeShape implements EdgeShape {
-  public readonly svg: SVGSVGElement;
+  private readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
 

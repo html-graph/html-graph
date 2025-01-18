@@ -121,6 +121,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private readonly window = window;
 
+  private readonly dragCursor: string | null;
+
   public constructor(
     private readonly canvas: Canvas,
     dragOptions?: DragOptions,
@@ -144,6 +146,9 @@ export class UserDraggableNodesCanvas implements Canvas {
       dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
 
     this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
+
+    this.dragCursor =
+      dragOptions?.dragCursor !== undefined ? dragOptions.dragCursor : "grab";
   }
 
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
@@ -173,7 +178,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
-      setCursor(this.element, "grab");
+      setCursor(this.element, this.dragCursor);
       this.moveNodeOnTop(nodeId);
       this.window.addEventListener("mouseup", this.onCanvasMouseUp);
       this.window.addEventListener("mousemove", this.onCanvasMouseMove);
