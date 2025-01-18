@@ -1,7 +1,7 @@
 # TODO
 
 - virtual scroll
-  - figure out where to put it
+  - figure out where to put it (html-controller, canvas-core, decorator, different API)
   - node creation factory function?
 - drag edge creation
 - layouts
