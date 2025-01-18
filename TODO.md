@@ -1,6 +1,5 @@
 # TODO
 
-- fix encapsulation for edge controllers ?
 - refactor node id generation
 - edge controller constructor 1 parameter ?
 - edge hover behavior
