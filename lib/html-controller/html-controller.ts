@@ -148,6 +148,7 @@ export class HtmlController {
 
   public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
+
     edge.shape.svg.style.zIndex = `${edge.priority}`;
   }
 
