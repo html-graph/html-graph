@@ -56,15 +56,16 @@ export class CanvasController {
       priority ?? this.nodesPriorityFn(),
     );
 
+    // virtual scroll check
     this.htmlController.attachNode(nodeId);
 
-    Array.from(ports ?? []).forEach((element) => {
+    Array.from(ports ?? []).forEach((port) => {
       this.markPort(
-        element.id,
-        element.element,
+        port.id,
+        port.element,
         nodeId,
-        element.centerFn ?? this.portsCenterFn,
-        element.direction ?? this.portsDirection,
+        port.centerFn ?? this.portsCenterFn,
+        port.direction ?? this.portsDirection,
       );
     });
   }
@@ -86,10 +87,12 @@ export class CanvasController {
     node.y = y ?? node.y;
     node.centerFn = centerFn ?? node.centerFn;
 
+    // virtual scroll check
     this.htmlController.updateNodeCoordinates(nodeId);
 
     if (priority !== undefined) {
       node.priority = priority;
+      // virtual scroll check
       this.htmlController.updateNodePriority(nodeId);
     }
   }
@@ -99,6 +102,11 @@ export class CanvasController {
       throw new Error("failed to remove nonexisting node");
     }
 
+    this.graphStore.getNodeAdjacentEdges(nodeId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+
+    // virtual scroll check
     this.htmlController.detachNode(nodeId);
     this.graphStore.removeNode(nodeId);
   }
@@ -142,6 +150,7 @@ export class CanvasController {
     port.direction = request?.direction ?? port.direction;
     port.centerFn = request?.centerFn ?? port.centerFn;
 
+    // virtual scroll check
     this.htmlController.updatePortEdges(portId);
   }
 
@@ -188,6 +197,7 @@ export class CanvasController {
       priority ?? this.edgesPriorityFn(),
     );
 
+    // virtual scroll check
     this.htmlController.attachEdge(edgeId);
   }
 
@@ -204,6 +214,7 @@ export class CanvasController {
     if (shape !== undefined) {
       const edgeType = this.resolveEdgeType(edge.from, edge.to);
 
+      // virtual scroll check
       this.htmlController.detachEdge(edgeId);
       edge.shape = shape(edgeType);
       this.htmlController.attachEdge(edgeId);
@@ -211,6 +222,7 @@ export class CanvasController {
 
     if (priority !== undefined) {
       edge.priority = priority;
+      // virtual scroll check
       this.htmlController.updateEdgePriority(edgeId);
     }
   }
@@ -220,6 +232,7 @@ export class CanvasController {
       throw new Error("failed to remove nonexisting edge");
     }
 
+    // virtual scroll check
     this.htmlController.detachEdge(edgeId);
     this.graphStore.removeEdge(edgeId);
   }
