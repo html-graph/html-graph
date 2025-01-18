@@ -12,7 +12,7 @@ export const resolveEdgeShapeFactory: (
 ) => EdgeShapeFactory = (options: EdgeShape) => {
   switch (options?.type) {
     case "custom":
-      return options.controllerFactory;
+      return options.factory;
     case "straight":
       return createStraightEdgeShareFactory({
         color: options.color ?? "#5c5c5c",
