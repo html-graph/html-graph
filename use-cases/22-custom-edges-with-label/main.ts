@@ -33,7 +33,7 @@ const node2 = createBasicNode({
   y: 600,
 });
 
-const edgeShape1 = new EdgeWithLabelShape("Connection");
+const edgeShape = new EdgeWithLabelShape("Connection");
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -47,18 +47,6 @@ canvas
     to: "port-2-1",
     shape: {
       type: "custom",
-      factory: () => edgeShape1,
+      factory: () => edgeShape,
     },
   });
-
-let i = 0;
-
-setInterval(() => {
-  const edgeShape2 = new EdgeWithLabelShape(`Connection ${i}`);
-
-  canvas.updateEdge("edge-1", {
-    shape: { type: "custom", factory: () => edgeShape2 },
-  });
-
-  i++;
-}, 1000);
