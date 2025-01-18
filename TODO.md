@@ -1,6 +1,8 @@
 # TODO
 
 - virtual scroll
+  - figure out where to put it
+  - node creation factory function?
 - drag edge creation
 - layouts
 - limit node drag box
