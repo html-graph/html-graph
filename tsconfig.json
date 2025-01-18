@@ -21,5 +21,5 @@
       "@/*": ["./lib/*"]
     }
   },
-  "include": ["examples", "lib"]
+  "include": ["use-cases", "lib"]
 }
