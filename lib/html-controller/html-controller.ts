@@ -127,16 +127,16 @@ export class HtmlController {
 
   public attachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-    const element = edge.shape.svg;
+    edge.shape.attach(this.container);
 
-    this.container.appendChild(element);
     this.updateEdgeCoords(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
   public detachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-    this.container.removeChild(edge.shape.svg);
+
+    edge.shape.detach(this.container);
   }
 
   public updateNodePriority(nodeId: unknown): void {
@@ -149,7 +149,7 @@ export class HtmlController {
   public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
-    edge.shape.svg.style.zIndex = `${edge.priority}`;
+    edge.shape.setPriority(edge.priority);
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
