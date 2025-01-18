@@ -22,4 +22,7 @@ export interface Options {
     readonly shapeFactory: EdgeShapeFactory;
     readonly priorityFn: PriorityFn;
   };
+  readonly virtualScroll: {
+    readonly enabled: boolean;
+  };
 }

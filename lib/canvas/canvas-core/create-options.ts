@@ -31,5 +31,8 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
       shapeFactory: resolveEdgeShapeFactory(apiOptions.edges?.shape ?? {}),
       priorityFn: edgesPriority,
     },
+    virtualScroll: {
+      enabled: apiOptions.virtualScroll?.enabled ?? true,
+    },
   };
 };

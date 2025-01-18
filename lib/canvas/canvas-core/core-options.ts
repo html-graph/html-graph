@@ -49,4 +49,13 @@ export interface CoreOptions {
      */
     readonly priority?: Priority;
   };
+  /**
+   * virtual scroll related behavior
+   */
+  readonly virtualScroll?: {
+    /**
+     * enabled virtual scroll
+     */
+    readonly enabled?: boolean;
+  };
 }
