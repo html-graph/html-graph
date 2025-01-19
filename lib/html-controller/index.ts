@@ -1,1 +1,1 @@
-export * from "./base-html-controller";
+export * from "./html-controller";

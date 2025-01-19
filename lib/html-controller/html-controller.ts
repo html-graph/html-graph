@@ -6,7 +6,7 @@ import {
 import { BackgroundDrawingFn } from "@/background";
 import { createCanvas, createContainer, createHost } from "./utils";
 
-export class BaseHtmlController {
+export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
 
   private readonly host = createHost();
@@ -26,6 +26,8 @@ export class BaseHtmlController {
   private readonly nodeWrapperElementToIdMap = new Map<HTMLElement, unknown>();
 
   private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
+
+  private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
     private readonly graphStore: GraphStore,
@@ -50,11 +52,13 @@ export class BaseHtmlController {
   }
 
   public clear(): void {
+    this.edgeIdToElementMap.forEach((_element, edgeId) => {
+      this.detachEdge(edgeId);
+    });
+
     Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
       this.detachNode(nodeId);
     });
-
-    this.host.innerHTML = "";
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -130,6 +134,7 @@ export class BaseHtmlController {
 
   public attachEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
+    this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
 
     this.updateEdgeCoords(edgeId);
@@ -140,6 +145,7 @@ export class BaseHtmlController {
     const edge = this.graphStore.getEdge(edgeId)!;
 
     this.container.removeChild(edge.shape.svg);
+    this.edgeIdToElementMap.delete(edgeId);
   }
 
   public updateNodePriority(nodeId: unknown): void {
