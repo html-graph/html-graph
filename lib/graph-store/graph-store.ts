@@ -2,7 +2,7 @@ import { CenterFn } from "@/center-fn";
 import { EdgeShape } from "@/edges";
 import { EdgePayload } from "./edge-payload";
 import { NodePayload } from "./node-payload";
-import { PortPayload } from "@/port-payload";
+import { PortPayload } from "./port-payload";
 
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();

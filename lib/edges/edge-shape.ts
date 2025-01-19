@@ -1,4 +1,4 @@
-import { PortPayload } from "@/port-payload";
+import { GraphPort } from "@/graph-store";
 
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
@@ -8,7 +8,7 @@ export interface EdgeShape {
     y: number,
     width: number,
     height: number,
-    from: PortPayload,
-    to: PortPayload,
+    from: GraphPort,
+    to: GraphPort,
   ): void;
 }

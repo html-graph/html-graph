@@ -47,8 +47,6 @@ export type { PublicViewportTransformer } from "./viewport-transformer";
 
 export type { BackgroundDrawingFn } from "./background";
 
-export type { PortPayload } from "./port-payload";
-
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";

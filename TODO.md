@@ -6,6 +6,7 @@
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
+- update edge ports
 - optimize memory draggable nodes
 - drag edge creation
 - layouts

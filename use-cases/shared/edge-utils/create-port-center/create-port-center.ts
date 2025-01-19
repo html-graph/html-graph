@@ -1,7 +1,7 @@
-import { Point, PortPayload } from "@html-graph/html-graph";
+import { Point, GraphPort } from "@html-graph/html-graph";
 
-export const createPortCenter: (port: PortPayload) => Point = (
-  port: PortPayload,
+export const createPortCenter: (port: GraphPort) => Point = (
+  port: GraphPort,
 ) => {
   const { top, left, width, height } = port.element.getBoundingClientRect();
 

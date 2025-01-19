@@ -1,4 +1,4 @@
-import { EdgeShape, Point, PortPayload } from "@html-graph/html-graph";
+import { EdgeShape, Point, GraphPort } from "@html-graph/html-graph";
 import {
   createArrowPath,
   createDirectionVector,
@@ -69,8 +69,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     y: number,
     width: number,
     height: number,
-    from: PortPayload,
-    to: PortPayload,
+    from: GraphPort,
+    to: GraphPort,
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;

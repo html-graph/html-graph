@@ -1,4 +1,4 @@
-import { PortPayload } from "@/port-payload";
+import { GraphPort } from "@/graph-store";
 import { EdgeShape } from "../edge-shape";
 import { Point } from "@/point";
 import {
@@ -87,7 +87,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     y: number,
     _width: number,
     _height: number,
-    from: PortPayload,
+    from: GraphPort,
   ): void {
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
 

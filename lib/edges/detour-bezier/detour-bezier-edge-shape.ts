@@ -1,4 +1,4 @@
-import { PortPayload } from "@/port-payload";
+import { GraphPort } from "@/graph-store";
 import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
@@ -80,8 +80,8 @@ export class DetourBezierEdgeShape implements EdgeShape {
     y: number,
     width: number,
     height: number,
-    from: PortPayload,
-    to: PortPayload,
+    from: GraphPort,
+    to: GraphPort,
   ): void {
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;

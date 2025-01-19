@@ -1,8 +1,8 @@
-import { PortPayload } from "@/port-payload";
+import { GraphPort } from "@/graph-store";
 import { Point } from "@/point";
 
-export const createPortCenter: (port: PortPayload) => Point = (
-  port: PortPayload,
+export const createPortCenter: (port: GraphPort) => Point = (
+  port: GraphPort,
 ) => {
   const { top, left, width, height } = port.element.getBoundingClientRect();
 
