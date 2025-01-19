@@ -1,6 +1,6 @@
 # TODO
 
-- fix roundness for connections
+- unit tests
 - virtual scroll
   - refactor update edge shape
   - pass canvas host dimensions
@@ -13,7 +13,6 @@
 - edge controller constructor 1 parameter ?
 - node drag handle example
 - refactor use cases
-- unit tests
 - e2e tests
 - snap nodes to grid
 - sankey connections

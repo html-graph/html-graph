@@ -105,9 +105,10 @@ export class HorizontalEdgeShape implements EdgeShape {
       : { x: width, y: height };
 
     const gap = this.arrowLength + this.arrowOffset;
+    const gapr = gap - this.roundness;
 
-    const pbl = createRotatedPoint({ x: gap, y: 0 }, fromVect, { x: 0, y: 0 });
-    const pel = createRotatedPoint({ x: width - gap, y: height }, toVect, {
+    const pbl = createRotatedPoint({ x: gapr, y: 0 }, fromVect, { x: 0, y: 0 });
+    const pel = createRotatedPoint({ x: width - gapr, y: height }, toVect, {
       x: width,
       y: height,
     });

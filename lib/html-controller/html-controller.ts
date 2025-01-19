@@ -4,7 +4,12 @@ import {
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
-import { createCanvas, createContainer, createHost } from "./utils";
+import {
+  createCanvas,
+  createContainer,
+  createHost,
+  createNodeWrapper,
+} from "./utils";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -98,13 +103,8 @@ export class HtmlController {
   public attachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
-    const wrapper = document.createElement("div");
+    const wrapper = createNodeWrapper();
     wrapper.appendChild(node!.element);
-
-    wrapper.style.position = "absolute";
-    wrapper.style.top = "0";
-    wrapper.style.left = "0";
-    wrapper.style.visibility = "hidden";
 
     this.container.appendChild(wrapper);
 
