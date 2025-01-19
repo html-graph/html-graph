@@ -207,6 +207,7 @@ export class CanvasController {
     priority: number | undefined,
   ): void {
     const edge = this.graphStore.getEdge(edgeId);
+
     if (edge === undefined) {
       throw new Error("failed to update nonexisting edge");
     }
@@ -214,10 +215,9 @@ export class CanvasController {
     if (shape !== undefined) {
       const edgeType = this.resolveEdgeType(edge.from, edge.to);
 
-      this.htmlController.detachEdge(edgeId);
       edge.shape = shape(edgeType);
       // virtual scroll check
-      this.htmlController.attachEdge(edgeId);
+      this.htmlController.updateEdgeShape(edgeId);
     }
 
     if (priority !== undefined) {

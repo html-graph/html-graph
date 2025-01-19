@@ -56,7 +56,7 @@ export class HtmlController {
       this.detachEdge(edgeId);
     });
 
-    Array.from(this.nodeElementToIdMap.values()).forEach((nodeId) => {
+    this.nodeIdToWrapperElementMap.forEach((_element, nodeId) => {
       this.detachNode(nodeId);
     });
   }
@@ -148,19 +148,6 @@ export class HtmlController {
     this.edgeIdToElementMap.delete(edgeId);
   }
 
-  public updateNodePriority(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId);
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-
-    wrapper.style.zIndex = `${node!.priority}`;
-  }
-
-  public updateEdgePriority(edgeId: unknown): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
-
-    edge.shape.svg.style.zIndex = `${edge.priority}`;
-  }
-
   public updateNodeCoordinates(nodeId: unknown): void {
     const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
 
@@ -169,6 +156,29 @@ export class HtmlController {
     edges.forEach((edge) => {
       this.updateEdgeCoords(edge);
     });
+  }
+
+  public updateNodePriority(nodeId: unknown): void {
+    const node = this.graphStore.getNode(nodeId);
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+
+    wrapper.style.zIndex = `${node!.priority}`;
+  }
+
+  public updateEdgeShape(edgeId: unknown): void {
+    const element = this.edgeIdToElementMap.get(edgeId)!;
+    this.container.removeChild(element);
+
+    const edge = this.graphStore.getEdge(edgeId)!;
+    this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
+    this.container.appendChild(edge.shape.svg);
+    this.updateEdgeCoords(edgeId);
+  }
+
+  public updateEdgePriority(edgeId: unknown): void {
+    const edge = this.graphStore.getEdge(edgeId)!;
+
+    edge.shape.svg.style.zIndex = `${edge.priority}`;
   }
 
   public updatePortEdges(portId: unknown): void {
