@@ -1,19 +1,16 @@
 # TODO
 
+- fix roundness for connections
 - virtual scroll
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
-- optimize store methods
-- fix roundness for connections
-- optimize memory dragggable nodes
+- optimize memory draggable nodes
 - refactor errors
 - drag edge creation
 - layouts
 - limit node drag box
-- edge hover behavior
 - edge controller constructor 1 parameter ?
-- investigate bug with drag delay
 - node drag handle example
 - refactor use cases
 - unit tests

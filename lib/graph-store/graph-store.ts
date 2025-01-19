@@ -52,18 +52,7 @@ export class GraphStore {
   }
 
   public removeNode(nodeId: unknown): void {
-    const edges = this.getNodeAdjacentEdges(nodeId);
-
-    edges.forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-
     this.nodes.delete(nodeId);
-    const ports = this.nodePorts.get(nodeId)!;
-
-    ports.forEach((_port, key) => {
-      this.portNodeId.delete(key);
-    });
 
     this.nodePorts.delete(nodeId);
   }
@@ -97,21 +86,6 @@ export class GraphStore {
   }
 
   public removePort(portId: unknown): void {
-    this.cycleEdges.get(portId)!.forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-    this.cycleEdges.delete(portId);
-
-    this.incommingEdges.get(portId)!.forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-    this.incommingEdges.delete(portId);
-
-    this.outcommingEdges.get(portId)!.forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-    this.outcommingEdges.get(portId);
-
     const node = this.portNodeId.get(portId)!;
 
     this.portNodeId.delete(portId);
