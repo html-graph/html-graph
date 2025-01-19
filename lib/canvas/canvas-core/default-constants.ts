@@ -1,0 +1,15 @@
+export const defaultConstants = {
+  edgeColor: "#5c5c5c",
+  edgeWidth: 1,
+  edgeArrowLength: 15,
+  edgeArrowWidth: 4,
+  edgeArrowOffset: 15,
+  hasSourceArrow: false,
+  hasTargetArrow: false,
+  cycleSize: 30,
+  roundness: 10,
+  detourDistance: 100,
+  detourDirection: -Math.PI / 2,
+  smallCycleSize: 15,
+  curvature: 90,
+};

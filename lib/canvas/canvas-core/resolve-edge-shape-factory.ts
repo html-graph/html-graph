@@ -6,6 +6,7 @@ import {
   createVerticalEdgeShapeFactory,
 } from "@/edges";
 import { EdgeShape } from "../canvas/edge-options";
+import { defaultConstants } from "./default-constants";
 
 export const resolveEdgeShapeFactory: (
   options: EdgeShape,
@@ -15,59 +16,76 @@ export const resolveEdgeShapeFactory: (
       return options.factory;
     case "straight":
       return createStraightEdgeShareFactory({
-        color: options.color ?? "#5c5c5c",
-        width: options.width ?? 1,
-        arrowLength: options.arrowLength ?? 15,
-        arrowWidth: options.arrowWidth ?? 4,
-        arrowOffset: options.arrowOffset ?? 15,
-        hasSourceArrow: options.hasSourceArrow ?? false,
-        hasTargetArrow: options.hasTargetArrow ?? false,
-        cycleSquareSide: options.cycleSquareSide ?? 30,
-        roundness: options.roundness ?? 10,
-        detourDistance: options.detourDistance ?? 100,
-        detourDirection: options.detourDirection ?? -Math.PI / 2,
+        color: options.color ?? defaultConstants.edgeColor,
+        width: options.width ?? defaultConstants.edgeWidth,
+        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
+        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
+        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
+        hasSourceArrow:
+          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
+        hasTargetArrow:
+          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
+        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
+        roundness: options.roundness ?? defaultConstants.roundness,
+        detourDistance:
+          options.detourDistance ?? defaultConstants.detourDistance,
+        detourDirection:
+          options.detourDirection ?? defaultConstants.detourDirection,
       });
     case "horizontal":
       return createHorizontalEdgeShapeFactory({
-        color: options.color ?? "#5c5c5c",
-        width: options.width ?? 1,
-        arrowLength: options.arrowLength ?? 15,
-        arrowWidth: options.arrowWidth ?? 4,
-        arrowOffset: options.arrowOffset ?? 15,
-        hasSourceArrow: options.hasSourceArrow ?? false,
-        hasTargetArrow: options.hasTargetArrow ?? false,
-        cycleSquareSide: options.cycleSquareSide ?? 30,
-        roundness: options.roundness ?? 10,
-        detourDistance: options.detourDistance ?? 100,
-        detourDirection: options.detourDirection ?? -Math.PI / 2,
+        color: options.color ?? defaultConstants.edgeColor,
+        width: options.width ?? defaultConstants.edgeWidth,
+        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
+        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
+        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
+        hasSourceArrow:
+          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
+        hasTargetArrow:
+          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
+        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
+        roundness: options.roundness ?? defaultConstants.roundness,
+        detourDistance:
+          options.detourDistance ?? defaultConstants.detourDistance,
+        detourDirection:
+          options.detourDirection ?? defaultConstants.detourDirection,
       });
     case "vertical":
       return createVerticalEdgeShapeFactory({
-        color: options.color ?? "#5c5c5c",
-        width: options.width ?? 1,
-        arrowLength: options.arrowLength ?? 15,
-        arrowWidth: options.arrowWidth ?? 4,
-        arrowOffset: options.arrowOffset ?? 15,
-        hasSourceArrow: options.hasSourceArrow ?? false,
-        hasTargetArrow: options.hasTargetArrow ?? false,
-        cycleSquareSide: options.cycleSquareSide ?? 30,
-        roundness: options.roundness ?? 10,
-        detourDistance: options.detourDistance ?? 100,
-        detourDirection: options.detourDirection ?? -Math.PI / 2,
+        color: options.color ?? defaultConstants.edgeColor,
+        width: options.width ?? defaultConstants.edgeWidth,
+        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
+        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
+        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
+        hasSourceArrow:
+          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
+        hasTargetArrow:
+          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
+        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
+        roundness: options.roundness ?? defaultConstants.roundness,
+        detourDistance:
+          options.detourDistance ?? defaultConstants.detourDistance,
+        detourDirection:
+          options.detourDirection ?? defaultConstants.detourDirection,
       });
     default:
       return createBezierEdgeShapeFactory({
-        color: options.color ?? "#5c5c5c",
-        width: options.width ?? 1,
-        curvature: options.curvature ?? 90,
-        arrowLength: options.arrowLength ?? 15,
-        arrowWidth: options.arrowWidth ?? 4,
-        hasSourceArrow: options.hasSourceArrow ?? false,
-        hasTargetArrow: options.hasTargetArrow ?? false,
-        cycleRadius: options.cycleRadius ?? 30,
-        smallCycleRadius: options.smallCycleRadius ?? 15,
-        detourDistance: options.detourDistance ?? 100,
-        detourDirection: options.detourDirection ?? -Math.PI / 2,
+        color: options.color ?? defaultConstants.edgeColor,
+        width: options.width ?? defaultConstants.edgeWidth,
+        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
+        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
+        hasSourceArrow:
+          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
+        hasTargetArrow:
+          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
+        cycleRadius: options.cycleRadius ?? defaultConstants.cycleSize,
+        detourDistance:
+          options.detourDistance ?? defaultConstants.detourDistance,
+        detourDirection:
+          options.detourDirection ?? defaultConstants.detourDirection,
+        smallCycleRadius:
+          options.smallCycleRadius ?? defaultConstants.smallCycleSize,
+        curvature: options.curvature ?? defaultConstants.curvature,
       });
   }
 };
