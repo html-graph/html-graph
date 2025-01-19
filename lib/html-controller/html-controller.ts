@@ -10,6 +10,7 @@ import {
   createHost,
   createNodeWrapper,
 } from "./utils";
+import { TwoWayMap } from "./utils";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -28,9 +29,10 @@ export class HtmlController {
 
   private readonly nodeElementToIdMap = new Map<HTMLElement, unknown>();
 
-  private readonly nodeWrapperElementToIdMap = new Map<HTMLElement, unknown>();
-
-  private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
+  private readonly nodeIdToWrapperElementMap = new TwoWayMap<
+    unknown,
+    HTMLElement
+  >();
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
@@ -109,7 +111,6 @@ export class HtmlController {
     this.container.appendChild(wrapper);
 
     this.nodeElementToIdMap.set(node!.element, nodeId);
-    this.nodeWrapperElementToIdMap.set(wrapper, nodeId);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
     this.updateNodeCoords(nodeId);
@@ -122,14 +123,13 @@ export class HtmlController {
   public detachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
 
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
     this.nodesResizeObserver.unobserve(wrapper);
     wrapper.removeChild(node!.element);
     this.container.removeChild(wrapper);
 
     this.nodeElementToIdMap.delete(node!.element);
-    this.nodeWrapperElementToIdMap.delete(wrapper);
-    this.nodeIdToWrapperElementMap.delete(nodeId);
+    this.nodeIdToWrapperElementMap.deleteByKey(nodeId);
   }
 
   public attachEdge(edgeId: unknown): void {
@@ -160,7 +160,7 @@ export class HtmlController {
 
   public updateNodePriority(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
 
     wrapper.style.zIndex = `${node!.priority}`;
   }
@@ -200,7 +200,7 @@ export class HtmlController {
     return new ResizeObserver((entries) => {
       entries.forEach((entry) => {
         const wrapper = entry.target as HTMLElement;
-        const nodeId = this.nodeWrapperElementToIdMap.get(wrapper)!;
+        const nodeId = this.nodeIdToWrapperElementMap.getByValue(wrapper)!;
 
         this.updateNodeCoords(nodeId);
 
@@ -221,7 +221,7 @@ export class HtmlController {
   }
 
   private updateNodeCoords(nodeId: unknown): void {
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
