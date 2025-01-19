@@ -54,7 +54,6 @@ export class HtmlController {
     this.host.appendChild(this.container);
 
     this.canvasResizeObserver = this.createHostResizeObserver();
-
     this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
@@ -103,14 +102,14 @@ export class HtmlController {
   }
 
   public attachNode(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId);
+    const node = this.graphStore.getNode(nodeId)!;
 
     const wrapper = createNodeWrapper();
-    wrapper.appendChild(node!.element);
+    wrapper.appendChild(node.element);
 
     this.container.appendChild(wrapper);
 
-    this.nodeElementToIdMap.set(node!.element, nodeId);
+    this.nodeElementToIdMap.set(node.element, nodeId);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
     this.updateNodeCoords(nodeId);
@@ -121,14 +120,14 @@ export class HtmlController {
   }
 
   public detachNode(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId);
+    const node = this.graphStore.getNode(nodeId)!;
 
     const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
     this.nodesResizeObserver.unobserve(wrapper);
-    wrapper.removeChild(node!.element);
+    wrapper.removeChild(node.element);
     this.container.removeChild(wrapper);
 
-    this.nodeElementToIdMap.delete(node!.element);
+    this.nodeElementToIdMap.delete(node.element);
     this.nodeIdToWrapperElementMap.deleteByKey(nodeId);
   }
 
@@ -173,6 +172,7 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
     this.updateEdgeCoords(edgeId);
+    this.updateEdgePriority(edgeId);
   }
 
   public updateEdgePriority(edgeId: unknown): void {
