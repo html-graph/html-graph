@@ -6,8 +6,10 @@ import { GraphStore } from "./graph-store";
 export class PublicGraphStore {
   public constructor(private readonly graphStore: GraphStore) {}
 
-  public getAllNodes(): readonly unknown[] {
-    return this.graphStore.getAllNodes();
+  public getAllNodes(): readonly GraphNode[] {
+    return this.graphStore
+      .getAllNodes()
+      .map((nodeId) => this.graphStore.getNode(nodeId)!);
   }
 
   public getAllPorts(): readonly unknown[] {
