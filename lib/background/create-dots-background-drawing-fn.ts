@@ -8,6 +8,7 @@ const dotsBackgroundDrawingFn: (
   gap: number,
   radius: number,
   color: string,
+  limit: number,
 ) => void = (
   ctx: CanvasRenderingContext2D,
   transformation: PublicViewportTransformer,
@@ -15,6 +16,7 @@ const dotsBackgroundDrawingFn: (
   gap: number,
   radius: number,
   color: string,
+  limit: number,
 ) => {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
@@ -24,35 +26,30 @@ const dotsBackgroundDrawingFn: (
   const matrixContent = transformation.getContentMatrix();
   const viewGap = gap * matrixContent.scale;
 
-  let iterationsHorizontal = 0;
-  let iterationsVertical = 0;
-  let adjustedViewGap = viewGap / 2;
+  const iterationsHorizontal = ctx.canvas.width / viewGap;
+  const iterationsVertical = ctx.canvas.height / viewGap;
 
-  do {
-    adjustedViewGap *= 2;
-    iterationsHorizontal = ctx.canvas.width / adjustedViewGap;
-    iterationsVertical = ctx.canvas.height / adjustedViewGap;
-  } while (iterationsHorizontal * iterationsVertical > 10000);
+  if (iterationsHorizontal * iterationsVertical > limit) {
+    return;
+  }
 
   const zeroOffsetX =
-    matrixContent.dx -
-    Math.floor(matrixContent.dx / adjustedViewGap) * adjustedViewGap;
+    matrixContent.dx - Math.floor(matrixContent.dx / viewGap) * viewGap;
   const zeroOffsetY =
-    matrixContent.dy -
-    Math.floor(matrixContent.dy / adjustedViewGap) * adjustedViewGap;
+    matrixContent.dy - Math.floor(matrixContent.dy / viewGap) * viewGap;
 
   const r = radius * matrixContent.scale;
   const pi2 = 2 * Math.PI;
 
-  const xFrom = zeroOffsetX - adjustedViewGap;
-  const yFrom = zeroOffsetY - adjustedViewGap;
+  const xFrom = zeroOffsetX - viewGap;
+  const yFrom = zeroOffsetY - viewGap;
   const xTo = ctx.canvas.width + zeroOffsetX;
   const yTo = ctx.canvas.height + zeroOffsetY;
 
   ctx.fillStyle = dotColor;
 
-  for (let x = xFrom; x <= xTo; x += adjustedViewGap) {
-    for (let y = yFrom; y <= yTo; y += adjustedViewGap) {
+  for (let x = xFrom; x <= xTo; x += viewGap) {
+    for (let y = yFrom; y <= yTo; y += viewGap) {
       ctx.beginPath();
       ctx.arc(x, y, r, 0, pi2);
       ctx.closePath();
@@ -67,11 +64,13 @@ export const createDotsBackgroundDrawingFn: (
   dotGap: number,
   dotRadius: number,
   color: string,
+  limit: number,
 ) => BackgroundDrawingFn = (
   dotColor: string,
   dotGap: number,
   dotRadius: number,
   color: string,
+  limit: number,
 ) => {
   return (
     ctx: CanvasRenderingContext2D,
@@ -84,6 +83,7 @@ export const createDotsBackgroundDrawingFn: (
       dotGap,
       dotRadius,
       color,
+      limit,
     );
   };
 };

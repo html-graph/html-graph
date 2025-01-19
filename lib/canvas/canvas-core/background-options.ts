@@ -10,6 +10,7 @@ export type BackgroundOptions =
       readonly dotGap?: number;
       readonly dotRadius?: number;
       readonly color?: string;
+      readonly limit?: number;
     }
   | {
       readonly type: "custom";

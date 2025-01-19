@@ -1,12 +1,12 @@
 # TODO
 
 - unit tests
+- refactor errors
 - virtual scroll
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
 - optimize memory draggable nodes
-- refactor errors
 - drag edge creation
 - layouts
 - limit node drag box

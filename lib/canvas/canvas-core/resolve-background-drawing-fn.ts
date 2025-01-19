@@ -17,6 +17,7 @@ export const resolveBackgroundDrawingFn: (
         options.dotGap ?? 25,
         options.dotRadius ?? 1.5,
         options.color ?? "#ffffff",
+        options.limit ?? 10000,
       );
     default:
       return createNoopBackgroundDrawingFn();
