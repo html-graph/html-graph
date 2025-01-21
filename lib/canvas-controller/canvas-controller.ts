@@ -101,7 +101,7 @@ export class CanvasController {
       throw new Error("failed to remove nonexisting node");
     }
 
-    (this.graphStore.getNodePorts(nodeId) ?? []).forEach((portId) => {
+    (this.graphStore.getNodePortIds(nodeId) ?? []).forEach((portId) => {
       this.unmarkPort(portId);
     });
 
@@ -159,7 +159,7 @@ export class CanvasController {
       throw new Error("failed to unset nonexisting port");
     }
 
-    this.graphStore.getPortAdjacentEdges(portId).forEach((edgeId) => {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
 
@@ -285,8 +285,8 @@ export class CanvasController {
       return EdgeType.PortCycle;
     }
 
-    const fromNodeId = this.graphStore.getPortNode(fromPortId);
-    const toNodeId = this.graphStore.getPortNode(toPortId);
+    const fromNodeId = this.graphStore.getPortNodeId(fromPortId);
+    const toNodeId = this.graphStore.getPortNodeId(toPortId);
 
     if (fromNodeId === toNodeId) {
       return EdgeType.NodeCycle;

@@ -148,7 +148,7 @@ export class HtmlController {
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
+    const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
     this.updateNodeCoords(nodeId);
 
@@ -182,7 +182,7 @@ export class HtmlController {
   }
 
   public updatePortEdges(portId: unknown): void {
-    const edges = this.graphStore.getPortAdjacentEdges(portId);
+    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
 
     edges.forEach((edge) => {
       this.updateEdgeCoords(edge);
@@ -204,7 +204,7 @@ export class HtmlController {
 
         this.updateNodeCoords(nodeId);
 
-        const edges = this.graphStore.getNodeAdjacentEdges(nodeId);
+        const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
         edges.forEach((edge) => {
           this.updateEdgeCoords(edge);

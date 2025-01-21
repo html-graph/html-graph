@@ -33,7 +33,7 @@ export class GraphStore {
     this.nodePorts.set(nodeId, new Map<string, HTMLElement>());
   }
 
-  public getAllNodes(): readonly unknown[] {
+  public getAllNodeIds(): readonly unknown[] {
     return Array.from(this.nodes.keys());
   }
 
@@ -41,7 +41,7 @@ export class GraphStore {
     return this.nodes.get(nodeId);
   }
 
-  public getNodePorts(nodeId: unknown): readonly unknown[] | undefined {
+  public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
     const ports = this.nodePorts.get(nodeId);
 
     if (ports !== undefined) {
@@ -73,7 +73,7 @@ export class GraphStore {
     this.nodePorts.get(nodeId)!.set(portId, element);
   }
 
-  public getAllPorts(): readonly unknown[] {
+  public getAllPortIds(): readonly unknown[] {
     return Array.from(this.ports.keys());
   }
 
@@ -81,7 +81,7 @@ export class GraphStore {
     return this.ports.get(portId);
   }
 
-  public getPortNode(portId: unknown): unknown | undefined {
+  public getPortNodeId(portId: unknown): unknown | undefined {
     return this.portNodeId.get(portId);
   }
 
@@ -117,7 +117,7 @@ export class GraphStore {
     }
   }
 
-  public getAllEdges(): readonly unknown[] {
+  public getAllEdgeIds(): readonly unknown[] {
     return Array.from(this.edges.keys());
   }
 
@@ -140,19 +140,19 @@ export class GraphStore {
     this.edges.delete(edgeId);
   }
 
-  public getPortAdjacentEdges(portId: unknown): readonly unknown[] {
+  public getPortAdjacentEdgeIds(portId: unknown): readonly unknown[] {
     return [
-      ...this.getPortIncomingEdges(portId),
-      ...this.getPortOutcomingEdges(portId),
-      ...this.getPortCycleEdges(portId),
+      ...this.getPortIncomingEdgeIds(portId),
+      ...this.getPortOutcomingEdgeIds(portId),
+      ...this.getPortCycleEdgeIds(portId),
     ];
   }
 
-  public getNodeAdjacentEdges(nodeId: unknown): readonly unknown[] {
+  public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] {
     return [
-      ...this.getNodeIncomingEdges(nodeId),
-      ...this.getNodeOutcomingEdges(nodeId),
-      ...this.getNodeCycleEdges(nodeId),
+      ...this.getNodeIncomingEdgeIds(nodeId),
+      ...this.getNodeOutcomingEdgeIds(nodeId),
+      ...this.getNodeCycleEdgeIds(nodeId),
     ];
   }
 
@@ -167,46 +167,46 @@ export class GraphStore {
     this.cycleEdges.clear();
   }
 
-  public getPortIncomingEdges(portId: unknown): readonly unknown[] {
+  public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] {
     return Array.from(this.incommingEdges.get(portId)!);
   }
 
-  public getPortOutcomingEdges(portId: unknown): readonly unknown[] {
+  public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] {
     return Array.from(this.outcommingEdges.get(portId)!);
   }
 
-  public getPortCycleEdges(portId: unknown): readonly unknown[] {
+  public getPortCycleEdgeIds(portId: unknown): readonly unknown[] {
     return Array.from(this.cycleEdges.get(portId)!);
   }
 
-  public getNodeIncomingEdges(nodeId: unknown): readonly unknown[] {
+  public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] {
     const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortIncomingEdges(portId)];
+      res = [...res, ...this.getPortIncomingEdgeIds(portId)];
     });
 
     return res;
   }
 
-  public getNodeOutcomingEdges(nodeId: unknown): readonly unknown[] {
+  public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] {
     const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortOutcomingEdges(portId)];
+      res = [...res, ...this.getPortOutcomingEdgeIds(portId)];
     });
 
     return res;
   }
 
-  public getNodeCycleEdges(nodeId: unknown): readonly unknown[] {
+  public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] {
     const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortCycleEdges(portId)];
+      res = [...res, ...this.getPortCycleEdgeIds(portId)];
     });
 
     return res;

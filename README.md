@@ -48,13 +48,13 @@ const canvas = new HtmlGraphBuilder()
   .setUserTransformableCanvas()
   .build();
 
-function createNode(
-  name: string,
-  x: number,
-  y: number,
-  frontPortId: string,
-  backPortId: string,
-): AddNodeRequest {
+function createNode(params: {
+  name: string;
+  x: number;
+  y: number;
+  frontPortId: string;
+  backPortId: string;
+}): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
 
@@ -63,7 +63,7 @@ function createNode(
   node.appendChild(frontPort);
 
   const text = document.createElement("div");
-  text.innerText = name;
+  text.innerText = params.name;
   node.appendChild(text);
 
   const backPort = document.createElement("div");
@@ -72,17 +72,30 @@ function createNode(
 
   return {
     element: node,
-    x: x,
-    y: y,
+    x: params.x,
+    y: params.y,
     ports: [
-      { id: frontPortId, element: frontPort },
-      { id: backPortId, element: backPort },
+      { id: params.frontPortId, element: frontPort },
+      { id: params.backPortId, element: backPort },
     ],
   };
 }
 
-const node1 = createNode("Node 1", 200, 400, "port-1-1", "port-1-2");
-const node2 = createNode("Node 2", 600, 500, "port-2-1", "port-2-2");
+const node1 = createNode({
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "port-1-1",
+  backPortId: "port-1-2",
+});
+
+const node2 = createNode({
+  name: "Node 2",
+  x: 600,
+  y: 500,
+  frontPortId: "port-2-1",
+  backPortId: "port-2-2",
+});
 
 const canvasElement = document.getElementById("canvas")!;
 

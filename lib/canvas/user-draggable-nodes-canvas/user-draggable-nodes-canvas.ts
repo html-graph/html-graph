@@ -398,7 +398,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     const edgePriority = this.maxNodePriority - 1;
 
-    const edges = this.model.getNodeAdjacentEdges(nodeId);
+    const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
 
     edges.forEach((edgeId) => {
       this.updateEdge(edgeId, { priority: edgePriority });

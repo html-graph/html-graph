@@ -59,8 +59,8 @@ canvas
   .addEdge({ from: "port-3-2", to: "port-2-1" })
   .addEdge({ from: "port-2-2", to: "port-4-1" });
 
-console.log(canvas.model.getNodeAdjacentEdges("node-2"));
-console.log(canvas.model.getNodePorts("node-2"));
-console.log(canvas.model.getAllNodes());
-console.log(canvas.model.getAllPorts());
-console.log(canvas.model.getAllEdges());
+console.log(canvas.model.getNodeAdjacentEdgeIds("node-2"));
+console.log(canvas.model.getNodePortIds("node-2"));
+console.log(canvas.model.getAllNodeIds());
+console.log(canvas.model.getAllPortIds());
+console.log(canvas.model.getAllEdgeIds());

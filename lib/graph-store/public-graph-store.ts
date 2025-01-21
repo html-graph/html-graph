@@ -6,14 +6,12 @@ import { GraphStore } from "./graph-store";
 export class PublicGraphStore {
   public constructor(private readonly graphStore: GraphStore) {}
 
-  public getAllNodes(): readonly GraphNode[] {
-    return this.graphStore
-      .getAllNodes()
-      .map((nodeId) => this.graphStore.getNode(nodeId)!);
+  public getAllNodeIds(): readonly unknown[] {
+    return this.graphStore.getAllNodeIds();
   }
 
-  public getAllPorts(): readonly unknown[] {
-    return this.graphStore.getAllPorts();
+  public getAllPortIds(): readonly unknown[] {
+    return this.graphStore.getAllPortIds();
   }
 
   public getNode(nodeId: unknown): GraphNode | null {
@@ -32,8 +30,8 @@ export class PublicGraphStore {
     };
   }
 
-  public getNodePorts(nodeId: unknown): readonly unknown[] | undefined {
-    return this.graphStore.getNodePorts(nodeId);
+  public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
+    return this.graphStore.getNodePortIds(nodeId);
   }
 
   public getPort(portId: unknown): GraphPort | null {
@@ -50,12 +48,12 @@ export class PublicGraphStore {
     };
   }
 
-  public getPortNode(portId: string): unknown | null {
-    return this.graphStore.getPortNode(portId) ?? null;
+  public getPortNodeId(portId: string): unknown | null {
+    return this.graphStore.getPortNodeId(portId) ?? null;
   }
 
-  public getAllEdges(): readonly unknown[] {
-    return this.graphStore.getAllEdges();
+  public getAllEdgeIds(): readonly unknown[] {
+    return this.graphStore.getAllEdgeIds();
   }
 
   public getEdge(edgeId: unknown): GraphEdge | null {
@@ -68,35 +66,35 @@ export class PublicGraphStore {
     return { from: edge.from, to: edge.to, priority: edge.priority };
   }
 
-  public getPortAdjacentEdges(portId: string): readonly unknown[] {
-    return this.graphStore.getPortAdjacentEdges(portId);
+  public getPortAdjacentEdgeIds(portId: string): readonly unknown[] {
+    return this.graphStore.getPortAdjacentEdgeIds(portId);
   }
 
-  public getNodeAdjacentEdges(nodeId: unknown): readonly unknown[] {
-    return this.graphStore.getNodeAdjacentEdges(nodeId);
+  public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeAdjacentEdgeIds(nodeId);
   }
 
-  public getPortIncomingEdges(portId: unknown): readonly unknown[] {
-    return this.graphStore.getPortIncomingEdges(portId);
+  public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortIncomingEdgeIds(portId);
   }
 
-  public getPortOutcomingEdges(portId: unknown): readonly unknown[] {
-    return this.graphStore.getPortOutcomingEdges(portId);
+  public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortOutcomingEdgeIds(portId);
   }
 
-  public getPortCycleEdges(portId: unknown): readonly unknown[] {
-    return this.graphStore.getPortCycleEdges(portId);
+  public getPortCycleEdgeIds(portId: unknown): readonly unknown[] {
+    return this.graphStore.getPortCycleEdgeIds(portId);
   }
 
-  public getNodeIncomingEdges(nodeId: unknown): readonly unknown[] {
-    return this.graphStore.getNodeIncomingEdges(nodeId);
+  public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeIncomingEdgeIds(nodeId);
   }
 
-  public getNodeOutcomingEdges(nodeId: unknown): readonly unknown[] {
-    return this.graphStore.getNodeOutcomingEdges(nodeId);
+  public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeOutcomingEdgeIds(nodeId);
   }
 
-  public getNodeCycleEdges(nodeId: unknown): readonly unknown[] {
-    return this.graphStore.getNodeCycleEdges(nodeId);
+  public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] {
+    return this.graphStore.getNodeCycleEdgeIds(nodeId);
   }
 }
