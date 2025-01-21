@@ -11,6 +11,7 @@ import {
   createNodeWrapper,
 } from "./utils";
 import { TwoWayMap } from "./utils";
+import { HtmlGraphError } from "@/error";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -45,7 +46,7 @@ export class HtmlController {
     const context = this.canvas.getContext("2d");
 
     if (context === null) {
-      throw new Error("unable to get canvas context");
+      throw new HtmlGraphError("unable to get canvas context");
     }
 
     this.canvasCtx = context;

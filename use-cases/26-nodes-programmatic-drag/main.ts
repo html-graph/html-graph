@@ -1,4 +1,8 @@
-import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
+import {
+  HtmlGraphBuilder,
+  AddNodePorts,
+  HtmlGraphError,
+} from "@html-graph/html-graph";
 
 class NodesDragHandler {
   private readonly nodes = new Map<
@@ -102,7 +106,7 @@ class NodesDragHandler {
         const node = this.nodes.get(this.grabbedNode);
 
         if (node === undefined) {
-          throw new Error("failed to drag nonexisting node");
+          throw new HtmlGraphError("failed to drag nonexisting node");
         }
 
         const matrixContent = canvas.transformation.getContentMatrix();

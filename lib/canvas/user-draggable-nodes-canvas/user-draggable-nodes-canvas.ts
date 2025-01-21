@@ -14,6 +14,7 @@ import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
 import { isOnCanvas, isOnWindow, setCursor } from "../utils";
+import { HtmlGraphError } from "@/error";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -359,7 +360,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     const node = this.model.getNode(nodeId);
 
     if (node === null) {
-      throw new Error("failed to drag nonexisting node");
+      throw new HtmlGraphError("failed to drag nonexisting node");
     }
 
     const matrixContent = this.canvas.transformation.getContentMatrix();

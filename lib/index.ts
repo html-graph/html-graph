@@ -50,3 +50,5 @@ export type { BackgroundDrawingFn } from "./background";
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";
+
+export { HtmlGraphError } from "./error";

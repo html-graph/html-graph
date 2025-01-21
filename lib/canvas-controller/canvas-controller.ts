@@ -6,6 +6,7 @@ import { HtmlController } from "@/html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 import { PriorityFn } from "@/priority";
+import { HtmlGraphError } from "@/error";
 
 export class CanvasController {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -43,7 +44,7 @@ export class CanvasController {
     nodeId = this.nodeIdGenerator.create(nodeId);
 
     if (this.graphStore.getNode(nodeId) !== undefined) {
-      throw new Error("failed to add node with existing id");
+      throw new HtmlGraphError("failed to add node with existing id");
     }
 
     this.graphStore.addNode(
@@ -79,7 +80,7 @@ export class CanvasController {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
-      throw new Error("failed to update nonexisting node");
+      throw new HtmlGraphError("failed to update nonexisting node");
     }
 
     node.x = x ?? node.x;
@@ -98,7 +99,7 @@ export class CanvasController {
 
   public removeNode(nodeId: unknown): void {
     if (this.graphStore.getNode(nodeId) === undefined) {
-      throw new Error("failed to remove nonexisting node");
+      throw new HtmlGraphError("failed to remove nonexisting node");
     }
 
     (this.graphStore.getNodePortIds(nodeId) ?? []).forEach((portId) => {
@@ -120,11 +121,11 @@ export class CanvasController {
     portId = this.portIdGenerator.create(portId);
 
     if (this.graphStore.getNode(nodeId) === undefined) {
-      throw new Error("failed to set port on nonexisting node");
+      throw new HtmlGraphError("failed to set port on nonexisting node");
     }
 
     if (this.graphStore.getPort(portId) !== undefined) {
-      throw new Error("failed to add port with existing id");
+      throw new HtmlGraphError("failed to add port with existing id");
     }
 
     this.graphStore.addPort(
@@ -144,7 +145,7 @@ export class CanvasController {
     const port = this.graphStore.getPort(portId);
 
     if (port === undefined) {
-      throw new Error("failed to unset nonexisting port");
+      throw new HtmlGraphError("failed to unset nonexisting port");
     }
 
     port.direction = direction ?? port.direction;
@@ -156,7 +157,7 @@ export class CanvasController {
 
   public unmarkPort(portId: unknown): void {
     if (this.graphStore.getPort(portId) === undefined) {
-      throw new Error("failed to unset nonexisting port");
+      throw new HtmlGraphError("failed to unset nonexisting port");
     }
 
     this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
@@ -176,15 +177,15 @@ export class CanvasController {
     edgeId = this.edgeIdGenerator.create(edgeId);
 
     if (this.graphStore.getPort(fromPortId) === undefined) {
-      throw new Error("failed to add edge from nonexisting port");
+      throw new HtmlGraphError("failed to add edge from nonexisting port");
     }
 
     if (this.graphStore.getPort(toPortId) === undefined) {
-      throw new Error("failed to add edge to nonexisting port");
+      throw new HtmlGraphError("failed to add edge to nonexisting port");
     }
 
     if (this.graphStore.getEdge(edgeId) !== undefined) {
-      throw new Error("failed to add edge with existing id");
+      throw new HtmlGraphError("failed to add edge with existing id");
     }
 
     const edgeType = this.resolveEdgeType(fromPortId, toPortId);
@@ -209,7 +210,7 @@ export class CanvasController {
     const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {
-      throw new Error("failed to update nonexisting edge");
+      throw new HtmlGraphError("failed to update nonexisting edge");
     }
 
     if (shape !== undefined) {
@@ -229,7 +230,7 @@ export class CanvasController {
 
   public removeEdge(edgeId: unknown): void {
     if (this.graphStore.getEdge(edgeId) === undefined) {
-      throw new Error("failed to remove nonexisting edge");
+      throw new HtmlGraphError("failed to remove nonexisting edge");
     }
 
     // virtual scroll check

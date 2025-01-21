@@ -20,7 +20,7 @@ Port is an entity of a node to which edge can be attached to.
 - easy nodes customization using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas with draggable nodes
-- exhaustive set of examples
+- exhaustive set of use cases
 - typescript support
 - mobile devices support
 
@@ -30,8 +30,8 @@ Port is an entity of a node to which edge can be attached to.
 npm i @html-graph/html-graph
 ```
 
-```typescript
-import { HtmlGraphBuilder, AddNodeRequest } from "@html-graph/html-graph";
+```javascript
+import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -48,35 +48,28 @@ const canvas = new HtmlGraphBuilder()
   .setUserTransformableCanvas()
   .build();
 
-function createNode(params: {
-  name: string;
-  x: number;
-  y: number;
-  frontPortId: string;
-  backPortId: string;
-}): AddNodeRequest {
+function createNode({ name, x, y, frontPortId, backPortId }) {
   const node = document.createElement("div");
-  node.classList.add("node");
-
-  const frontPort = document.createElement("div");
-  frontPort.classList.add("port");
-  node.appendChild(frontPort);
-
   const text = document.createElement("div");
-  text.innerText = params.name;
-  node.appendChild(text);
-
+  const frontPort = document.createElement("div");
   const backPort = document.createElement("div");
+
+  node.classList.add("node");
+  frontPort.classList.add("port");
   backPort.classList.add("port");
+  text.innerText = name;
+
   node.appendChild(backPort);
+  node.appendChild(text);
+  node.appendChild(frontPort);
 
   return {
     element: node,
-    x: params.x,
-    y: params.y,
+    x: x,
+    y: y,
     ports: [
-      { id: params.frontPortId, element: frontPort },
-      { id: params.backPortId, element: backPort },
+      { id: frontPortId, element: frontPort },
+      { id: backPortId, element: backPort },
     ],
   };
 }
@@ -97,7 +90,7 @@ const node2 = createNode({
   backPortId: "port-2-2",
 });
 
-const canvasElement = document.getElementById("canvas")!;
+const canvasElement = document.getElementById("canvas");
 
 canvas
   .attach(canvasElement)
