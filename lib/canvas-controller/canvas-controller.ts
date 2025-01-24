@@ -129,7 +129,7 @@ export class CanvasController {
       element,
       nodeId,
       centerFn ?? this.defaultPortsCenterFn,
-      dir ?? 0,
+      dir ?? this.defaultPortsDirection,
     );
   }
 

@@ -238,8 +238,8 @@ export class HtmlController {
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
 
-    const rectFrom = portFrom!.element.getBoundingClientRect();
-    const rectTo = portTo!.element.getBoundingClientRect();
+    const rectFrom = portFrom.element.getBoundingClientRect();
+    const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 

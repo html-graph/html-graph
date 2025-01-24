@@ -1,4 +1,4 @@
-import { TransformState } from "./transform-state";
+import { TransformState } from "../transform-state";
 
 export const initialMatrix: TransformState = {
   scale: 1,
