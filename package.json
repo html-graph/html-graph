@@ -39,7 +39,8 @@
     "release-next-version": "tsx ./scripts/release-next-version.ts",
     "make-deps-graph": "npx depcruise lib --include-only \"^lib\" --output-type dot > ./deps-graph/deps-graph.dot",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:ci": "jest --config=./jest-ci.config.ts"
   },
   "engines": {
     "npm": ">=7.0.0",
