@@ -56,7 +56,6 @@ export class CanvasController {
       priority ?? this.defaultNodesPriorityFn(),
     );
 
-    // virtual scroll check
     this.htmlController.attachNode(nodeId);
 
     Array.from(ports ?? []).forEach((port) => {
@@ -87,12 +86,10 @@ export class CanvasController {
     node.y = y ?? node.y;
     node.centerFn = centerFn ?? node.centerFn;
 
-    // virtual scroll check
     this.htmlController.updateNodeCoordinates(nodeId);
 
     if (priority !== undefined) {
       node.priority = priority;
-      // virtual scroll check
       this.htmlController.updateNodePriority(nodeId);
     }
   }
@@ -106,7 +103,6 @@ export class CanvasController {
       this.unmarkPort(portId);
     });
 
-    // virtual scroll check
     this.htmlController.detachNode(nodeId);
     this.graphStore.removeNode(nodeId);
   }
@@ -151,7 +147,6 @@ export class CanvasController {
     port.direction = direction ?? port.direction;
     port.centerFn = centerFn ?? port.centerFn;
 
-    // virtual scroll check
     this.htmlController.updatePortEdges(portId);
   }
 
@@ -198,7 +193,6 @@ export class CanvasController {
       priority ?? this.defaultEdgesPriorityFn(),
     );
 
-    // virtual scroll check
     this.htmlController.attachEdge(edgeId);
   }
 
@@ -217,13 +211,11 @@ export class CanvasController {
       const edgeType = this.resolveEdgeType(edge.from, edge.to);
 
       edge.shape = shape(edgeType);
-      // virtual scroll check
       this.htmlController.updateEdgeShape(edgeId);
     }
 
     if (priority !== undefined) {
       edge.priority = priority;
-      // virtual scroll check
       this.htmlController.updateEdgePriority(edgeId);
     }
   }
@@ -233,7 +225,6 @@ export class CanvasController {
       throw new HtmlGraphError("failed to remove nonexisting edge");
     }
 
-    // virtual scroll check
     this.htmlController.detachEdge(edgeId);
     this.graphStore.removeEdge(edgeId);
   }
@@ -244,7 +235,6 @@ export class CanvasController {
     dy: number | null,
   ): void {
     this.viewportTransformer.patchViewportMatrix(scale, dx, dy);
-    // virtual scroll check
     this.htmlController.applyTransform();
   }
 
@@ -254,22 +244,18 @@ export class CanvasController {
     dy: number | null,
   ): void {
     this.viewportTransformer.patchContentMatrix(scale, dx, dy);
-    // virtual scroll check
     this.htmlController.applyTransform();
   }
 
   public attach(element: HTMLElement): void {
-    // virtual scroll check
     this.htmlController.attach(element);
   }
 
   public detach(): void {
-    // virtual scroll check
     this.htmlController.detach();
   }
 
   public clear(): void {
-    // virtual scroll check
     this.htmlController.clear();
     this.graphStore.clear();
     this.nodeIdGenerator.reset();
