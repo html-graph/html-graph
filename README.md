@@ -6,11 +6,11 @@
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
-<a target="_blank" href="https://html-graph.github.io/">
+<a target="_blank" href="https://html-graph.github.io/use-cases/20-advanced-demo/index.html">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
 
-Visit <a target="_blank" href="https://html-graph.github.io">live demo</a>.
+Visit <a target="_blank" href="https://html-graph.github.io">use cases</a> and [use cases implementation](use-cases).
 
 Instead of connecting nodes directly this library uses concept of ports, which provide greater fexibility at managing edges.
 Port is an entity of a node to which edge can be attached to.
@@ -98,8 +98,6 @@ canvas
   .addNode(node2)
   .addEdge({ from: "port-1-2", to: "port-2-1" });
 ```
-
-Refer to [Use cases](use-cases) for more.
 
 ## Run use cases
 
