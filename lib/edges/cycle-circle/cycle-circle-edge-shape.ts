@@ -9,7 +9,7 @@ import {
   createRotatedPoint,
   createEdgeLine,
 } from "../utils";
-import { from } from "../from";
+import { zero } from "../zero";
 
 export class CycleCircleEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -41,12 +41,29 @@ export class CycleCircleEdgeShape implements EdgeShape {
 
   public update(
     _to: Point,
-    _flipX: number,
-    _flipY: number,
+    flipX: number,
+    flipY: number,
     fromDir: number,
   ): void {
-    const fromVect = createFlipDirectionVector(fromDir, 1, 1);
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
 
+    const linePath = this.createLinePath(fromVect);
+
+    this.line.setAttribute("d", linePath);
+
+    if (this.arrow) {
+      const arrowPath = createArrowPath(
+        fromVect,
+        zero,
+        this.arrowLength,
+        this.arrowWidth,
+      );
+
+      this.arrow.setAttribute("d", arrowPath);
+    }
+  }
+
+  private createLinePath(fromVect: Point): string {
     const r = this.smallRadius;
     const R = this.radius;
     const len = Math.sqrt(r * r + R * R);
@@ -55,12 +72,12 @@ export class CycleCircleEdgeShape implements EdgeShape {
     const py = (r * R) / g;
 
     const points: Point[] = [
-      { x: this.arrowLength, y: 0 },
+      { x: this.arrowLength, y: zero.y },
       { x: px, y: py },
       { x: px, y: -py },
     ];
 
-    const rp = points.map((p) => createRotatedPoint(p, fromVect, from));
+    const rp = points.map((p) => createRotatedPoint(p, fromVect, zero));
 
     const c = [
       `M ${rp[0].x} ${rp[0].y}`,
@@ -70,19 +87,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
     ].join(" ");
 
     const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
-    const linePath = `${this.arrow !== null ? "" : preLine}${c}`;
 
-    this.line.setAttribute("d", linePath);
-
-    if (this.arrow) {
-      const arrowPath = createArrowPath(
-        fromVect,
-        from,
-        this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.arrow.setAttribute("d", arrowPath);
-    }
+    return `${this.arrow !== null ? "" : preLine}${c}`;
   }
 }

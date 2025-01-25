@@ -1,5 +1,6 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
+import { zero } from "../../zero";
 
 export const createArrowPath: (
   vect: Point,
@@ -13,13 +14,13 @@ export const createArrowPath: (
   arrowWidth: number,
 ) => {
   const arrowPoints: Point[] = [
-    { x: 0, y: 0 },
+    zero,
     { x: arrowLength, y: arrowWidth },
     { x: arrowLength, y: -arrowWidth },
   ];
 
   const p: readonly Point[] = arrowPoints
-    .map((p) => createRotatedPoint(p, vect, { x: 0, y: 0 }))
+    .map((p) => createRotatedPoint(p, vect, zero))
     .map((p) => ({ x: p.x + shift.x, y: p.y + shift.y }));
 
   const amove = `M ${p[0].x} ${p[0].y}`;

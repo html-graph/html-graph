@@ -1,5 +1,5 @@
 import { EdgeShape } from "../edge-shape";
-import { from } from "../from";
+import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -67,9 +67,43 @@ export class DetourBezierEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
+    const linePath = this.createLinePath(to, fromVect, toVect, flipX, flipY);
+
+    this.line.setAttribute("d", linePath);
+
+    if (this.sourceArrow) {
+      const arrowPath = createArrowPath(
+        fromVect,
+        zero,
+        this.arrowLength,
+        this.arrowWidth,
+      );
+
+      this.sourceArrow.setAttribute("d", arrowPath);
+    }
+
+    if (this.targetArrow) {
+      const arrowPath = createArrowPath(
+        toVect,
+        to,
+        -this.arrowLength,
+        this.arrowWidth,
+      );
+
+      this.targetArrow.setAttribute("d", arrowPath);
+    }
+  }
+
+  private createLinePath(
+    to: Point,
+    fromVect: Point,
+    toVect: Point,
+    flipX: number,
+    flipY: number,
+  ): string {
     const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, from)
-      : from;
+      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
+      : zero;
 
     const pea: Point = this.targetArrow
       ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
@@ -79,7 +113,11 @@ export class DetourBezierEdgeShape implements EdgeShape {
     const flipDetourX = this.detourX * flipX;
     const flipDetourY = this.detourY * flipY;
 
-    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, from);
+    const pbl1: Point = createRotatedPoint(
+      { x: gap1, y: zero.y },
+      fromVect,
+      zero,
+    );
     const pbl2: Point = {
       x: pbl1.x + flipDetourX,
       y: pbl1.y + flipDetourY,
@@ -113,36 +151,12 @@ export class DetourBezierEdgeShape implements EdgeShape {
       y: pel1.y + flipDetourY,
     };
 
-    const linePath = [
+    return [
       `M ${pba.x} ${pba.y}`,
       `L ${pbl1.x} ${pbl1.y}`,
       `C ${pbc1.x} ${pbc1.y} ${pbc2.x} ${pbc2.y} ${pm.x} ${pm.y}`,
       `C ${pec2.x} ${pec2.y} ${pec1.x} ${pec1.y} ${pel1.x} ${pel1.y}`,
       `L ${pea.x} ${pea.y}`,
     ].join(" ");
-
-    this.line.setAttribute("d", linePath);
-
-    if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
-        fromVect,
-        from,
-        this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.sourceArrow.setAttribute("d", arrowPath);
-    }
-
-    if (this.targetArrow) {
-      const arrowPath = createArrowPath(
-        toVect,
-        to,
-        -this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.targetArrow.setAttribute("d", arrowPath);
-    }
   }
 }

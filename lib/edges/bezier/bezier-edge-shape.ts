@@ -1,5 +1,5 @@
 import { EdgeShape } from "../edge-shape";
-import { from } from "../from";
+import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -64,7 +64,7 @@ export class BezierEdgeShape implements EdgeShape {
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        from,
+        zero,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -86,9 +86,9 @@ export class BezierEdgeShape implements EdgeShape {
 
   private createLinePath(to: Point, fromVect: Point, toVect: Point): string {
     const pb = createRotatedPoint(
-      { x: this.arrowLength, y: 0 },
+      { x: this.arrowLength, y: zero.y },
       fromVect,
-      from,
+      zero,
     );
 
     const pe = createRotatedPoint(
@@ -108,7 +108,9 @@ export class BezierEdgeShape implements EdgeShape {
     };
 
     const lcurve = `M ${pb.x} ${pb.y} C ${bpb.x} ${bpb.y}, ${bpe.x} ${bpe.y}, ${pe.x} ${pe.y}`;
-    const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb.x} ${pb.y} `;
+    const preLine = this.sourceArrow
+      ? ""
+      : `M ${zero.x} ${zero.y} L ${pb.x} ${pb.y} `;
     const postLine = this.targetArrow
       ? ""
       : ` M ${pe.x} ${pe.y} L ${to.x} ${to.y}`;

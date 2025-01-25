@@ -1,5 +1,5 @@
 import { EdgeShape } from "../edge-shape";
-import { from } from "../from";
+import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -69,39 +69,14 @@ export class DetourStraightEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, from)
-      : from;
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
-      : to;
-
-    const gap1 = this.arrowLength + this.arrowOffset;
-
-    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, from);
-
-    const flipDetourX = this.detourX * flipX;
-    const flipDetourY = this.detourY * flipY;
-
-    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
-    const pel1: Point = createRotatedPoint(
-      { x: to.x - gap1, y: to.y },
-      toVect,
-      to,
-    );
-    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
-
-    const linePath = createRoundedPath(
-      [pba, pbl1, pbl2, pel2, pel1, pea],
-      this.roundness,
-    );
+    const linePath = this.createLinePath(to, fromVect, toVect, flipX, flipY);
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        from,
+        zero,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -119,5 +94,44 @@ export class DetourStraightEdgeShape implements EdgeShape {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
+  }
+
+  private createLinePath(
+    to: Point,
+    fromVect: Point,
+    toVect: Point,
+    flipX: number,
+    flipY: number,
+  ): string {
+    const pba: Point = this.sourceArrow
+      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
+      : zero;
+    const pea: Point = this.targetArrow
+      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
+      : to;
+
+    const gap1 = this.arrowLength + this.arrowOffset;
+
+    const pbl1: Point = createRotatedPoint(
+      { x: gap1, y: zero.y },
+      fromVect,
+      zero,
+    );
+
+    const flipDetourX = this.detourX * flipX;
+    const flipDetourY = this.detourY * flipY;
+
+    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
+    const pel1: Point = createRotatedPoint(
+      { x: to.x - gap1, y: to.y },
+      toVect,
+      to,
+    );
+    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
+
+    return createRoundedPath(
+      [pba, pbl1, pbl2, pel2, pel1, pea],
+      this.roundness,
+    );
   }
 }

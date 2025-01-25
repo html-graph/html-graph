@@ -1,5 +1,5 @@
 import { EdgeShape } from "../edge-shape";
-import { from } from "../from";
+import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -60,40 +60,14 @@ export class VerticalEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, from)
-      : from;
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
-      : to;
-
-    const gap = this.arrowLength + this.arrowOffset;
-    const gapr = gap - this.roundness;
-
-    const pbl = createRotatedPoint({ x: gapr, y: 0 }, fromVect, from);
-    const pel = createRotatedPoint({ x: to.x - gapr, y: to.y }, toVect, to);
-
-    const halfH = Math.max((pbl.y + pel.y) / 2, gap);
-    const halfW = to.x / 2;
-    const pb1: Point = { x: pbl.x, y: flipY > 0 ? halfH : -gap };
-    const pb2: Point = { x: halfW, y: pb1.y };
-    const pe1: Point = {
-      x: pel.x,
-      y: flipY > 0 ? to.y - halfH : to.y + gap,
-    };
-    const pe2: Point = { x: halfW, y: pe1.y };
-
-    const linePath = createRoundedPath(
-      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
-      this.roundness,
-    );
+    const linePath = this.createLinePath(to, fromVect, toVect, flipY);
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        from,
+        zero,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -111,5 +85,40 @@ export class VerticalEdgeShape implements EdgeShape {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
+  }
+
+  private createLinePath(
+    to: Point,
+    fromVect: Point,
+    toVect: Point,
+    flipY: number,
+  ): string {
+    const pba: Point = this.sourceArrow
+      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
+      : zero;
+    const pea: Point = this.targetArrow
+      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
+      : to;
+
+    const gap = this.arrowLength + this.arrowOffset;
+    const gapr = gap - this.roundness;
+
+    const pbl = createRotatedPoint({ x: gapr, y: zero.y }, fromVect, zero);
+    const pel = createRotatedPoint({ x: to.x - gapr, y: to.y }, toVect, to);
+
+    const halfH = Math.max((pbl.y + pel.y) / 2, gap);
+    const halfW = to.x / 2;
+    const pb1: Point = { x: pbl.x, y: flipY > 0 ? halfH : -gap };
+    const pb2: Point = { x: halfW, y: pb1.y };
+    const pe1: Point = {
+      x: pel.x,
+      y: flipY > 0 ? to.y - halfH : to.y + gap,
+    };
+    const pe2: Point = { x: halfW, y: pe1.y };
+
+    return createRoundedPath(
+      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
+      this.roundness,
+    );
   }
 }

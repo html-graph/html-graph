@@ -10,7 +10,7 @@ import {
   createRoundedPath,
   createEdgeLine,
 } from "../utils";
-import { from } from "../from";
+import { zero } from "../zero";
 
 export class CycleSquareEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -52,43 +52,48 @@ export class CycleSquareEdgeShape implements EdgeShape {
     const x2 = x1 + 2 * s;
 
     this.linePoints = [
-      { x: this.arrowLength, y: 0 },
-      { x: x1, y: 0 },
+      { x: this.arrowLength, y: zero.y },
+      { x: x1, y: zero.y },
       { x: x1, y: this.side },
       { x: x2, y: this.side },
       { x: x2, y: -this.side },
       { x: x1, y: -this.side },
-      { x: x1, y: 0 },
-      { x: this.arrowLength, y: 0 },
+      { x: x1, y: zero.y },
+      { x: this.arrowLength, y: zero.y },
     ];
   }
 
   public update(
     _to: Point,
-    _flipX: number,
-    _flipY: number,
+    flipX: number,
+    flipY: number,
     fromDir: number,
   ): void {
-    const fromVect = createFlipDirectionVector(fromDir, 1, 1);
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
 
-    const rp = this.linePoints.map((p) =>
-      createRotatedPoint(p, fromVect, from),
-    );
-
-    const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
-    const linePath = `${this.arrow ? "" : preLine}${createRoundedPath(rp, this.roundness)}`;
+    const linePath = this.createLinePath(fromVect);
 
     this.line.setAttribute("d", linePath);
 
     if (this.arrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        from,
+        zero,
         this.arrowLength,
         this.arrowWidth,
       );
 
       this.arrow.setAttribute("d", arrowPath);
     }
+  }
+
+  private createLinePath(fromVect: Point): string {
+    const rp = this.linePoints.map((p) =>
+      createRotatedPoint(p, fromVect, zero),
+    );
+
+    const preLine = `M ${zero.x} ${zero.y} L ${rp[0].x} ${rp[0].y} `;
+
+    return `${this.arrow ? "" : preLine}${createRoundedPath(rp, this.roundness)}`;
   }
 }
