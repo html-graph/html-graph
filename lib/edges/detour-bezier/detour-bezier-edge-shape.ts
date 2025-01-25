@@ -7,7 +7,6 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
-  createDirectionVector,
 } from "../utils";
 import { Point } from "@/point";
 
@@ -65,16 +64,8 @@ export class DetourBezierEdgeShape implements EdgeShape {
   ): void {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(
-      createDirectionVector(fromDir),
-      flipX,
-      flipY,
-    );
-    const toVect = createFlipDirectionVector(
-      createDirectionVector(toDir),
-      flipX,
-      flipY,
-    );
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
+    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
     const zero: Point = {
       x: 0,

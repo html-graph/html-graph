@@ -7,7 +7,6 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
-  createDirectionVector,
 } from "../utils";
 import { createRoundedPath } from "../utils";
 import { Point } from "@/point";
@@ -58,16 +57,8 @@ export class HorizontalEdgeShape implements EdgeShape {
   ): void {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(
-      createDirectionVector(fromDir),
-      flipX,
-      flipY,
-    );
-    const toVect = createFlipDirectionVector(
-      createDirectionVector(toDir),
-      flipX,
-      flipY,
-    );
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
+    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
     const pba: Point = this.sourceArrow
       ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {

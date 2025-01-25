@@ -8,7 +8,6 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
-  createDirectionVector,
 } from "../utils";
 
 export class CycleCircleEdgeShape implements EdgeShape {
@@ -49,11 +48,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
     _flipY: number,
     fromDir: number,
   ): void {
-    const fromVect = createFlipDirectionVector(
-      createDirectionVector(fromDir),
-      1,
-      1,
-    );
+    const fromVect = createFlipDirectionVector(fromDir, 1, 1);
 
     const r = this.smallRadius;
     const R = this.radius;
