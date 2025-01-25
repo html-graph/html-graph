@@ -7,6 +7,7 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
+  createDirectionVector,
 } from "../utils";
 import { createRoundedPath } from "../utils";
 import { Point } from "@/point";
@@ -66,8 +67,16 @@ export class DetourStraightEdgeShape implements EdgeShape {
   ): void {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
-    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
+    const fromVect = createFlipDirectionVector(
+      createDirectionVector(fromDir),
+      flipX,
+      flipY,
+    );
+    const toVect = createFlipDirectionVector(
+      createDirectionVector(toDir),
+      flipX,
+      flipY,
+    );
 
     const pba: Point = this.sourceArrow
       ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
@@ -88,7 +97,11 @@ export class DetourStraightEdgeShape implements EdgeShape {
       x: 0,
       y: 0,
     });
-    const pbl2: Point = { x: pbl1.x + this.detourX, y: pbl1.y + this.detourY };
+
+    const flipDetourX = this.detourX * flipX;
+    const flipDetourY = this.detourY * flipY;
+
+    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
     const pel1: Point = createRotatedPoint(
       { x: width - gap1, y: height },
       toVect,
@@ -97,7 +110,7 @@ export class DetourStraightEdgeShape implements EdgeShape {
         y: height,
       },
     );
-    const pel2: Point = { x: pel1.x + this.detourX, y: pel1.y + this.detourY };
+    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
 
     const linePath = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],

@@ -7,6 +7,7 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
+  createDirectionVector,
 } from "../utils";
 import { Point } from "@/point";
 
@@ -64,51 +65,76 @@ export class DetourBezierEdgeShape implements EdgeShape {
   ): void {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
-    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
+    const fromVect = createFlipDirectionVector(
+      createDirectionVector(fromDir),
+      flipX,
+      flipY,
+    );
+    const toVect = createFlipDirectionVector(
+      createDirectionVector(toDir),
+      flipX,
+      flipY,
+    );
 
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
-          x: 0,
-          y: 0,
-        })
-      : { x: 0, y: 0 };
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: width - this.arrowLength, y: height }, toVect, {
-          x: width,
-          y: height,
-        })
-      : { x: width, y: height };
-
-    const gap1 = this.arrowLength;
-
-    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, {
+    const zero: Point = {
       x: 0,
       y: 0,
-    });
-    const pbl2: Point = { x: pbl1.x + this.detourX, y: pbl1.y + this.detourY };
+    };
+
+    const one: Point = {
+      x: width,
+      y: height,
+    };
+
+    const pba: Point = this.sourceArrow
+      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, zero)
+      : zero;
+
+    const pea: Point = this.targetArrow
+      ? createRotatedPoint(
+          { x: width - this.arrowLength, y: height },
+          toVect,
+          one,
+        )
+      : one;
+
+    const gap1 = this.arrowLength;
+    const flipDetourX = this.detourX * flipX;
+    const flipDetourY = this.detourY * flipY;
+
+    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, zero);
+    const pbl2: Point = {
+      x: pbl1.x + flipDetourX,
+      y: pbl1.y + flipDetourY,
+    };
     const pel1: Point = createRotatedPoint(
       { x: width - gap1, y: height },
       toVect,
-      {
-        x: width,
-        y: height,
-      },
+      one,
     );
-    const pel2: Point = { x: pel1.x + this.detourX, y: pel1.y + this.detourY };
+    const pel2: Point = {
+      x: pel1.x + flipDetourX,
+      y: pel1.y + flipDetourY,
+    };
     const pm: Point = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
     const pbc1: Point = {
-      x: pbl1.x - this.curvature * Math.cos(fromDir),
-      y: pbl1.y - this.curvature * Math.sin(fromDir),
+      x: pbl1.x + this.curvature * fromVect.x,
+      y: pbl1.y + this.curvature * fromVect.y,
     };
 
     const pec1: Point = {
-      x: pel1.x + this.curvature * Math.cos(toDir),
-      y: pel1.y + this.curvature * Math.sin(toDir),
+      x: pel1.x - this.curvature * toVect.x,
+      y: pel1.y - this.curvature * toVect.y,
     };
 
-    const pbc2: Point = { x: pbl1.x + this.detourX, y: pbl1.y + this.detourY };
-    const pec2: Point = { x: pel1.x + this.detourX, y: pel1.y + this.detourY };
+    const pbc2: Point = {
+      x: pbl1.x + flipDetourX,
+      y: pbl1.y + flipDetourY,
+    };
+    const pec2: Point = {
+      x: pel1.x + flipDetourX,
+      y: pel1.y + flipDetourY,
+    };
 
     const linePath = [
       `M ${pba.x} ${pba.y}`,

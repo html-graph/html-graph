@@ -9,6 +9,7 @@ import {
   createRotatedPoint,
   createRoundedPath,
   createEdgeLine,
+  createDirectionVector,
 } from "../utils";
 
 export class CycleSquareEdgeShape implements EdgeShape {
@@ -75,7 +76,11 @@ export class CycleSquareEdgeShape implements EdgeShape {
     _flipY: number,
     fromDir: number,
   ): void {
-    const fromVect = createFlipDirectionVector(fromDir, 1, 1);
+    const fromVect = createFlipDirectionVector(
+      createDirectionVector(fromDir),
+      1,
+      1,
+    );
 
     const rp = this.linePoints.map((p) =>
       createRotatedPoint(p, fromVect, { x: 0, y: 0 }),
