@@ -1,4 +1,5 @@
 import {
+  AbstractViewportTransformer,
   PublicViewportTransformer,
   ViewportTransformer,
 } from "@/viewport-transformer";
@@ -25,7 +26,8 @@ export class DiContainer {
     nodesPriorityFn: PriorityFn,
     edgesPriorityFn: PriorityFn,
   ) {
-    const viewportTransformer = new ViewportTransformer();
+    const viewportTransformer: AbstractViewportTransformer =
+      new ViewportTransformer();
     const graphStore = new GraphStore();
 
     this.publicGraphStore = new PublicGraphStore(graphStore);

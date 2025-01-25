@@ -1,7 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import {
+  AbstractViewportTransformer,
   PublicViewportTransformer,
-  ViewportTransformer,
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
 import {
@@ -39,7 +39,7 @@ export class HtmlController {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: ViewportTransformer,
+    private readonly viewportTransformer: AbstractViewportTransformer,
     private readonly publicViewportTransformer: PublicViewportTransformer,
     private readonly backgroundDrawingFn: BackgroundDrawingFn,
   ) {
