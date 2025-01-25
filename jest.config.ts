@@ -7,6 +7,7 @@ import { compilerOptions } from "./tsconfig.json";
 const config: Config = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
+  setupFiles: ["./setup-jest.ts"],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   coveragePathIgnorePatterns: ["/node_modules/", "/lib/.*\\.mock\\.ts$"],
