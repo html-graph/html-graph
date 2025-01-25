@@ -1,4 +1,5 @@
 import { EdgeShape } from "../edge-shape";
+import { from } from "../from";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -55,8 +56,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
   }
 
   public update(
-    width: number,
-    height: number,
+    to: Point,
     flipX: number,
     flipY: number,
     fromDir: number,
@@ -67,41 +67,27 @@ export class DetourBezierEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
-    const zero: Point = {
-      x: 0,
-      y: 0,
-    };
-
-    const one: Point = {
-      x: width,
-      y: height,
-    };
-
     const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, zero)
-      : zero;
+      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, from)
+      : from;
 
     const pea: Point = this.targetArrow
-      ? createRotatedPoint(
-          { x: width - this.arrowLength, y: height },
-          toVect,
-          one,
-        )
-      : one;
+      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
+      : to;
 
     const gap1 = this.arrowLength;
     const flipDetourX = this.detourX * flipX;
     const flipDetourY = this.detourY * flipY;
 
-    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, zero);
+    const pbl1: Point = createRotatedPoint({ x: gap1, y: 0 }, fromVect, from);
     const pbl2: Point = {
       x: pbl1.x + flipDetourX,
       y: pbl1.y + flipDetourY,
     };
     const pel1: Point = createRotatedPoint(
-      { x: width - gap1, y: height },
+      { x: to.x - gap1, y: to.y },
       toVect,
-      one,
+      to,
     );
     const pel2: Point = {
       x: pel1.x + flipDetourX,
@@ -140,8 +126,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        0,
-        0,
+        from,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -152,8 +137,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        width,
-        height,
+        to,
         -this.arrowLength,
         this.arrowWidth,
       );

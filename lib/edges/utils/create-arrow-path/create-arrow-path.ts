@@ -3,14 +3,12 @@ import { createRotatedPoint } from "../create-rotated-point";
 
 export const createArrowPath: (
   vect: Point,
-  shiftX: number,
-  shiftY: number,
+  shift: Point,
   arrowLength: number,
   arrowWidth: number,
 ) => string = (
   vect: Point,
-  shiftX: number,
-  shiftY: number,
+  shift: Point,
   arrowLength: number,
   arrowWidth: number,
 ) => {
@@ -22,7 +20,7 @@ export const createArrowPath: (
 
   const p: readonly Point[] = arrowPoints
     .map((p) => createRotatedPoint(p, vect, { x: 0, y: 0 }))
-    .map((p) => ({ x: p.x + shiftX, y: p.y + shiftY }));
+    .map((p) => ({ x: p.x + shift.x, y: p.y + shift.y }));
 
   const amove = `M ${p[0].x} ${p[0].y}`;
   const aline1 = `L ${p[1].x} ${p[1].y}`;

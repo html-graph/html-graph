@@ -1,9 +1,10 @@
+import { Point } from "@/point";
+
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
 
   update(
-    width: number,
-    height: number,
+    to: Point,
     flipX: number,
     flipY: number,
     fromDir: number,

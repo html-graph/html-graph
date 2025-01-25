@@ -9,6 +9,7 @@ import {
   createRotatedPoint,
   createEdgeLine,
 } from "../utils";
+import { from } from "../from";
 
 export class CycleCircleEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -36,14 +37,10 @@ export class CycleCircleEdgeShape implements EdgeShape {
       this.arrow = createEdgeArrow(color);
       this.group.appendChild(this.arrow);
     }
-
-    this.svg.style.width = `0px`;
-    this.svg.style.height = `0px`;
   }
 
   public update(
-    _width: number,
-    _height: number,
+    _to: Point,
     _flipX: number,
     _flipY: number,
     fromDir: number,
@@ -63,9 +60,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
       { x: px, y: -py },
     ];
 
-    const rp = points.map((p) =>
-      createRotatedPoint(p, fromVect, { x: 0, y: 0 }),
-    );
+    const rp = points.map((p) => createRotatedPoint(p, fromVect, from));
 
     const c = [
       `M ${rp[0].x} ${rp[0].y}`,
@@ -82,8 +77,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
     if (this.arrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        0,
-        0,
+        from,
         this.arrowLength,
         this.arrowWidth,
       );

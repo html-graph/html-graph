@@ -1,4 +1,5 @@
 import { EdgeShape } from "../edge-shape";
+import { from } from "../from";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -48,8 +49,7 @@ export class VerticalEdgeShape implements EdgeShape {
   }
 
   public update(
-    width: number,
-    height: number,
+    to: Point,
     flipX: number,
     flipY: number,
     fromDir: number,
@@ -61,34 +61,25 @@ export class VerticalEdgeShape implements EdgeShape {
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
     const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
-          x: 0,
-          y: 0,
-        })
-      : { x: 0, y: 0 };
+      ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, from)
+      : from;
     const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: width - this.arrowLength, y: height }, toVect, {
-          x: width,
-          y: height,
-        })
-      : { x: width, y: height };
+      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
+      : to;
 
     const gap = this.arrowLength + this.arrowOffset;
     const gapr = gap - this.roundness;
 
-    const pbl = createRotatedPoint({ x: gapr, y: 0 }, fromVect, { x: 0, y: 0 });
-    const pel = createRotatedPoint({ x: width - gapr, y: height }, toVect, {
-      x: width,
-      y: height,
-    });
+    const pbl = createRotatedPoint({ x: gapr, y: 0 }, fromVect, from);
+    const pel = createRotatedPoint({ x: to.x - gapr, y: to.y }, toVect, to);
 
     const halfH = Math.max((pbl.y + pel.y) / 2, gap);
-    const halfW = width / 2;
+    const halfW = to.x / 2;
     const pb1: Point = { x: pbl.x, y: flipY > 0 ? halfH : -gap };
     const pb2: Point = { x: halfW, y: pb1.y };
     const pe1: Point = {
       x: pel.x,
-      y: flipY > 0 ? height - halfH : height + gap,
+      y: flipY > 0 ? to.y - halfH : to.y + gap,
     };
     const pe2: Point = { x: halfW, y: pe1.y };
 
@@ -102,8 +93,7 @@ export class VerticalEdgeShape implements EdgeShape {
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        0,
-        0,
+        from,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -114,8 +104,7 @@ export class VerticalEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        width,
-        height,
+        to,
         -this.arrowLength,
         this.arrowWidth,
       );

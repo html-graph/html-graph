@@ -10,6 +10,7 @@ import {
   createRoundedPath,
   createEdgeLine,
 } from "../utils";
+import { from } from "../from";
 
 export class CycleSquareEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -45,16 +46,10 @@ export class CycleSquareEdgeShape implements EdgeShape {
       this.group.appendChild(this.arrow);
     }
 
-    this.svg.style.width = `0px`;
-    this.svg.style.height = `0px`;
-
     const g = this.minPortOffset;
     const s = this.side;
     const x1 = this.arrowLength + g;
-    const r = this.roundness;
     const x2 = x1 + 2 * s;
-
-    console.log(r);
 
     this.linePoints = [
       { x: this.arrowLength, y: 0 },
@@ -69,8 +64,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
   }
 
   public update(
-    _width: number,
-    _height: number,
+    _to: Point,
     _flipX: number,
     _flipY: number,
     fromDir: number,
@@ -78,7 +72,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, 1, 1);
 
     const rp = this.linePoints.map((p) =>
-      createRotatedPoint(p, fromVect, { x: 0, y: 0 }),
+      createRotatedPoint(p, fromVect, from),
     );
 
     const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
@@ -89,8 +83,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     if (this.arrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        0,
-        0,
+        from,
         this.arrowLength,
         this.arrowWidth,
       );

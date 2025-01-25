@@ -287,8 +287,7 @@ export class HtmlController {
     const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
 
     edge.shape.update(
-      width,
-      height,
+      { x: width, y: height },
       flipX,
       flipY,
       portFrom.direction,

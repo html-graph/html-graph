@@ -1,4 +1,5 @@
 import { EdgeShape } from "../edge-shape";
+import { from } from "../from";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -46,8 +47,7 @@ export class BezierEdgeShape implements EdgeShape {
   }
 
   public update(
-    width: number,
-    height: number,
+    to: Point,
     flipX: number,
     flipY: number,
     fromDir: number,
@@ -58,14 +58,13 @@ export class BezierEdgeShape implements EdgeShape {
     const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
     const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
-    const linePath = this.createLinePath(fromVect, toVect, width, height);
+    const linePath = this.createLinePath(to, fromVect, toVect);
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
         fromVect,
-        0,
-        0,
+        from,
         this.arrowLength,
         this.arrowWidth,
       );
@@ -76,8 +75,7 @@ export class BezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        width,
-        height,
+        to,
         -this.arrowLength,
         this.arrowWidth,
       );
@@ -86,24 +84,17 @@ export class BezierEdgeShape implements EdgeShape {
     }
   }
 
-  private createLinePath(
-    fromVect: Point,
-    toVect: Point,
-    width: number,
-    height: number,
-  ): string {
-    const pb = createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
-      x: 0,
-      y: 0,
-    });
+  private createLinePath(to: Point, fromVect: Point, toVect: Point): string {
+    const pb = createRotatedPoint(
+      { x: this.arrowLength, y: 0 },
+      fromVect,
+      from,
+    );
 
     const pe = createRotatedPoint(
-      { x: width - this.arrowLength, y: height },
+      { x: to.x - this.arrowLength, y: to.y },
       toVect,
-      {
-        x: width,
-        y: height,
-      },
+      to,
     );
 
     const bpb: Point = {
@@ -120,7 +111,7 @@ export class BezierEdgeShape implements EdgeShape {
     const preLine = this.sourceArrow ? "" : `M ${0} ${0} L ${pb.x} ${pb.y} `;
     const postLine = this.targetArrow
       ? ""
-      : ` M ${pe.x} ${pe.y} L ${width} ${height}`;
+      : ` M ${pe.x} ${pe.y} L ${to.x} ${to.y}`;
 
     return `${preLine}${lcurve}${postLine}`;
   }
