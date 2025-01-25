@@ -3,3 +3,5 @@ export * from "./create-rotated-point";
 export * from "./create-direction-vector";
 export * from "./create-arrow-path";
 export * from "./create-rounded-path";
+export * from "./create-edge-svg";
+export * from "./create-edge-group";

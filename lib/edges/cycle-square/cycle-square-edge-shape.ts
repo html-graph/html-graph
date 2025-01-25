@@ -4,14 +4,16 @@ import { Point } from "@/point";
 import {
   createArrowPath,
   createDirectionVector,
+  createEdgeGroup,
+  createEdgeSvg,
   createRotatedPoint,
+  createRoundedPath,
 } from "../utils";
-import { createRoundedPath } from "../utils";
 
 export class CycleSquareEdgeShape implements EdgeShape {
-  public readonly svg: SVGSVGElement;
+  public readonly svg = createEdgeSvg();
 
-  private readonly group: SVGGElement;
+  private readonly group = createEdgeGroup();
 
   private readonly line: SVGPathElement;
 
@@ -32,13 +34,7 @@ export class CycleSquareEdgeShape implements EdgeShape {
     roundness: number,
   ) {
     this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
-    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    this.svg.style.pointerEvents = "none";
-    this.svg.style.position = "absolute";
-    this.svg.style.top = "0";
-    this.svg.style.left = "0";
 
-    this.group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     this.svg.appendChild(this.group);
 
     this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -46,7 +42,6 @@ export class CycleSquareEdgeShape implements EdgeShape {
     this.line.setAttribute("stroke-width", `${this.width}`);
     this.line.setAttribute("fill", "none");
     this.group.appendChild(this.line);
-    this.group.style.transformOrigin = `50% 50%`;
 
     if (hasArrow) {
       this.arrow = document.createElementNS(
@@ -58,7 +53,6 @@ export class CycleSquareEdgeShape implements EdgeShape {
       this.group.appendChild(this.arrow);
     }
 
-    this.svg.style.overflow = "visible";
     this.svg.style.width = `0px`;
     this.svg.style.height = `0px`;
 
