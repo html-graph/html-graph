@@ -1,7 +1,14 @@
 import type { Config } from "jest";
+import { pathsToModuleNameMapper } from "ts-jest";
+// In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
+// which contains the path mapping (ie the `compilerOptions.paths` option):
+import { compilerOptions } from "./tsconfig.json";
 
 const config: Config = {
   preset: "ts-jest",
+  testEnvironment: "jsdom",
+  modulePaths: [compilerOptions.baseUrl],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   coveragePathIgnorePatterns: ["/node_modules/", "/lib/.*\\.mock\\.ts$"],
   coverageThreshold: {
     global: {
