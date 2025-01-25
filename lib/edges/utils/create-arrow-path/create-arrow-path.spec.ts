@@ -26,7 +26,7 @@ describe("createArrowPath", () => {
 
   it("should create shifted arrow path", () => {
     const vector: Point = { x: 1, y: 0 };
-    const shift: Point = { x: 0, y: 0 };
+    const shift: Point = { x: 5, y: 10 };
     const arrowLength = 10;
     const arrowWidth = 5;
 
