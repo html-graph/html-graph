@@ -1,7 +1,7 @@
 import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
-import { GraphStore } from "./graph-store";
+import { GraphStore } from "../graph-store";
 
 export class PublicGraphStore {
   public constructor(private readonly graphStore: GraphStore) {}
