@@ -1,5 +1,5 @@
 import type { Config } from "jest";
-import { default as parentConfig } from "./jest.config";
+import parentConfig from "./jest.config";
 
 const config: Config = {
   ...parentConfig,

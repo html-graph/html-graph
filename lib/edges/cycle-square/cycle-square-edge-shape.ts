@@ -1,9 +1,8 @@
-import { GraphPort } from "@/graph-store";
 import { EdgeShape } from "../edge-shape";
 import { Point } from "@/point";
 import {
   createArrowPath,
-  createDirectionVector,
+  createFlipDirectionVector,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
@@ -70,15 +69,13 @@ export class CycleSquareEdgeShape implements EdgeShape {
   }
 
   public update(
-    x: number,
-    y: number,
     _width: number,
     _height: number,
-    from: GraphPort,
+    _flipX: number,
+    _flipY: number,
+    fromDir: number,
   ): void {
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const fromVect = createDirectionVector(from.direction, 1, 1);
+    const fromVect = createFlipDirectionVector(fromDir, 1, 1);
 
     const rp = this.linePoints.map((p) =>
       createRotatedPoint(p, fromVect, { x: 0, y: 0 }),

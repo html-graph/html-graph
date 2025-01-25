@@ -1,12 +1,10 @@
-import { GraphPort } from "@/graph-store";
 import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
-  createDirectionVector,
+  createFlipDirectionVector,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createPortCenter,
   createRotatedPoint,
   createEdgeLine,
 } from "../utils";
@@ -57,26 +55,17 @@ export class DetourBezierEdgeShape implements EdgeShape {
   }
 
   public update(
-    x: number,
-    y: number,
     width: number,
     height: number,
-    from: GraphPort,
-    to: GraphPort,
+    flipX: number,
+    flipY: number,
+    fromDir: number,
+    toDir: number,
   ): void {
-    this.svg.style.width = `${width}px`;
-    this.svg.style.height = `${height}px`;
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const fromCenter = createPortCenter(from);
-    const toCenter = createPortCenter(to);
-    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
-    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
-
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createDirectionVector(from.direction, flipX, flipY);
-    const toVect = createDirectionVector(to.direction, flipX, flipY);
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
+    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
     const pba: Point = this.sourceArrow
       ? createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
@@ -109,13 +98,13 @@ export class DetourBezierEdgeShape implements EdgeShape {
     const pel2: Point = { x: pel1.x + this.detourX, y: pel1.y + this.detourY };
     const pm: Point = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
     const pbc1: Point = {
-      x: pbl1.x - this.curvature * Math.cos(from.direction),
-      y: pbl1.y - this.curvature * Math.sin(from.direction),
+      x: pbl1.x - this.curvature * Math.cos(fromDir),
+      y: pbl1.y - this.curvature * Math.sin(fromDir),
     };
 
     const pec1: Point = {
-      x: pel1.x + this.curvature * Math.cos(to.direction),
-      y: pel1.y + this.curvature * Math.sin(to.direction),
+      x: pel1.x + this.curvature * Math.cos(toDir),
+      y: pel1.y + this.curvature * Math.sin(toDir),
     };
 
     const pbc2: Point = { x: pbl1.x + this.detourX, y: pbl1.y + this.detourY };

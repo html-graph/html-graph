@@ -12,6 +12,7 @@ import {
 } from "./utils";
 import { TwoWayMap } from "./utils";
 import { HtmlGraphError } from "@/error";
+import { Point } from "@/point";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -243,35 +244,55 @@ export class HtmlController {
     const rect = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 
-    const fromX =
-      viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.dx;
-    const fromY =
-      viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.dy;
-    const toX =
-      viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.dx;
-    const toY =
-      viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy;
+    const from: Point = {
+      x: viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.dx,
+      y: viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.dy,
+    };
 
-    const { x: deltaCenterFromX, y: deltaCenterFromY } = portFrom.centerFn(
+    const to: Point = {
+      x: viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.dx,
+      y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy,
+    };
+
+    const deltaCenterFrom = portFrom.centerFn(
       rectFrom.width * viewportMatrix.scale,
       rectFrom.height * viewportMatrix.scale,
     );
 
-    const { x: deltaCenterToX, y: deltaCenterToY } = portTo.centerFn(
+    const deltaCenterTo = portTo.centerFn(
       rectTo.width * viewportMatrix.scale,
       rectTo.height * viewportMatrix.scale,
     );
 
-    const centerFromX = deltaCenterFromX + fromX;
-    const centerFromY = deltaCenterFromY + fromY;
-    const centerToX = deltaCenterToX + toX;
-    const centerToY = deltaCenterToY + toY;
+    const centerFrom: Point = {
+      x: from.x + deltaCenterFrom.x,
+      y: from.y + deltaCenterFrom.y,
+    };
 
-    const x = Math.min(centerFromX, centerToX);
-    const y = Math.min(centerFromY, centerToY);
-    const width = Math.abs(centerToX - centerFromX);
-    const height = Math.abs(centerToY - centerFromY);
+    const centerTo: Point = {
+      x: to.x + deltaCenterTo.x,
+      y: to.y + deltaCenterTo.y,
+    };
 
-    edge.shape.update(x, y, width, height, portFrom, portTo);
+    const x = Math.min(centerFrom.x, centerTo.x);
+    const y = Math.min(centerFrom.y, centerTo.y);
+    const width = Math.abs(centerTo.x - centerFrom.x);
+    const height = Math.abs(centerTo.y - centerFrom.y);
+
+    edge.shape.svg.style.width = `${width}px`;
+    edge.shape.svg.style.height = `${height}px`;
+    edge.shape.svg.style.transform = `translate(${x}px, ${y}px)`;
+
+    const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
+    const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
+
+    edge.shape.update(
+      width,
+      height,
+      flipX,
+      flipY,
+      portFrom.direction,
+      portTo.direction,
+    );
   }
 }

@@ -1,12 +1,10 @@
-import { GraphPort } from "@/graph-store";
 import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
-  createDirectionVector,
+  createFlipDirectionVector,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createPortCenter,
   createRotatedPoint,
   createEdgeLine,
 } from "../utils";
@@ -48,27 +46,52 @@ export class BezierEdgeShape implements EdgeShape {
   }
 
   public update(
-    x: number,
-    y: number,
     width: number,
     height: number,
-    from: GraphPort,
-    to: GraphPort,
+    flipX: number,
+    flipY: number,
+    fromDir: number,
+    toDir: number,
   ): void {
-    this.svg.style.width = `${width}px`;
-    this.svg.style.height = `${height}px`;
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const fromCenter = createPortCenter(from);
-    const toCenter = createPortCenter(to);
-    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
-    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
-
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createDirectionVector(from.direction, flipX, flipY);
-    const toVect = createDirectionVector(to.direction, flipX, flipY);
+    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
+    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
 
+    const linePath = this.createLinePath(fromVect, toVect, width, height);
+    this.line.setAttribute("d", linePath);
+
+    if (this.sourceArrow) {
+      const arrowPath = createArrowPath(
+        fromVect,
+        0,
+        0,
+        this.arrowLength,
+        this.arrowWidth,
+      );
+
+      this.sourceArrow.setAttribute("d", arrowPath);
+    }
+
+    if (this.targetArrow) {
+      const arrowPath = createArrowPath(
+        toVect,
+        width,
+        height,
+        -this.arrowLength,
+        this.arrowWidth,
+      );
+
+      this.targetArrow.setAttribute("d", arrowPath);
+    }
+  }
+
+  private createLinePath(
+    fromVect: Point,
+    toVect: Point,
+    width: number,
+    height: number,
+  ): string {
     const pb = createRotatedPoint({ x: this.arrowLength, y: 0 }, fromVect, {
       x: 0,
       y: 0,
@@ -98,32 +121,7 @@ export class BezierEdgeShape implements EdgeShape {
     const postLine = this.targetArrow
       ? ""
       : ` M ${pe.x} ${pe.y} L ${width} ${height}`;
-    const linePath = `${preLine}${lcurve}${postLine}`;
 
-    this.line.setAttribute("d", linePath);
-
-    if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
-        fromVect,
-        0,
-        0,
-        this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.sourceArrow.setAttribute("d", arrowPath);
-    }
-
-    if (this.targetArrow) {
-      const arrowPath = createArrowPath(
-        toVect,
-        width,
-        height,
-        -this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.targetArrow.setAttribute("d", arrowPath);
-    }
+    return `${preLine}${lcurve}${postLine}`;
   }
 }

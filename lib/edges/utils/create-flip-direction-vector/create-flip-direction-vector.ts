@@ -1,6 +1,6 @@
 import { Point } from "@/point";
 
-export const createDirectionVector: (
+export const createFlipDirectionVector: (
   direction: number,
   flipX: number,
   flipY: number,

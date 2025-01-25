@@ -1,8 +1,7 @@
-import { EdgeShape, Point, GraphPort } from "@html-graph/html-graph";
+import { EdgeShape, Point } from "@html-graph/html-graph";
 import {
   createArrowPath,
   createDirectionVector,
-  createPortCenter,
   createRotatedPoint,
 } from "../shared/edge-utils";
 
@@ -65,26 +64,17 @@ export class EdgeWithLabelShape implements EdgeShape {
   }
 
   public update(
-    x: number,
-    y: number,
     width: number,
     height: number,
-    from: GraphPort,
-    to: GraphPort,
+    flipX: number,
+    flipY: number,
+    fromDir: number,
+    toDir: number,
   ): void {
-    this.svg.style.width = `${width}px`;
-    this.svg.style.height = `${height}px`;
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const fromCenter = createPortCenter(from);
-    const toCenter = createPortCenter(to);
-    const flipX = fromCenter.x <= toCenter.x ? 1 : -1;
-    const flipY = fromCenter.y <= toCenter.y ? 1 : -1;
-
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createDirectionVector(from.direction, flipX, flipY);
-    const toVect = createDirectionVector(to.direction, flipX, flipY);
+    const fromVect = createDirectionVector(fromDir, flipX, flipY);
+    const toVect = createDirectionVector(toDir, flipX, flipY);
 
     const fromRectVect: Point = { x: -1 * flipX, y: 0 };
     const toRectVect: Point = { x: 1 * flipX, y: 0 };
@@ -121,22 +111,22 @@ export class EdgeWithLabelShape implements EdgeShape {
     const rectH = halfRectH * 2;
 
     const pbr: Point = {
-      x: halfW - halfRectW * flipX,
+      x: halfW - halfRectW,
       y: halfH,
     };
 
     const per: Point = {
-      x: halfW + halfRectW * flipX,
+      x: halfW + halfRectW,
       y: halfH,
     };
 
     const pbrb: Point = {
-      x: pbr.x + this.rectCurvature * fromRectVect.x,
+      x: pbr.x + this.rectCurvature * fromRectVect.x * flipX,
       y: pbr.y + this.rectCurvature * fromRectVect.y,
     };
 
     const perb: Point = {
-      x: per.x + this.rectCurvature * toRectVect.x,
+      x: per.x + this.rectCurvature * toRectVect.x * flipX,
       y: per.y + this.rectCurvature * toRectVect.y,
     };
 

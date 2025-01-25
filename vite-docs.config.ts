@@ -8,14 +8,10 @@ import { fileURLToPath } from "node:url";
 const inputs = Object.fromEntries(
   globSync("use-cases/**/*.html").map((file) => {
     return [
-      // This remove `src/` as well as the file extension from each
-      // file, so e.g. src/nested/foo.js becomes nested/foo
       path.relative(
         "use-cases",
         file.slice(0, file.length - path.extname(file).length),
       ),
-      // This expands the relative paths to absolute paths, so e.g.
-      // src/nested/foo becomes /project/src/nested/foo.js
       fileURLToPath(new URL(file, import.meta.url)),
     ];
   }),
