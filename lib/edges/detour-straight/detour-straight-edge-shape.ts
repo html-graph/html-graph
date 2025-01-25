@@ -3,10 +3,12 @@ import { EdgeShape } from "../edge-shape";
 import {
   createArrowPath,
   createDirectionVector,
+  createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
   createPortCenter,
   createRotatedPoint,
+  createEdgeLine,
 } from "../utils";
 import { createRoundedPath } from "../utils";
 import { Point } from "@/point";
@@ -27,8 +29,8 @@ export class DetourStraightEdgeShape implements EdgeShape {
   private readonly detourY: number;
 
   public constructor(
-    private readonly color: string,
-    private readonly width: number,
+    color: string,
+    width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     private readonly arrowOffset: number,
@@ -42,30 +44,16 @@ export class DetourStraightEdgeShape implements EdgeShape {
     this.detourY = Math.sin(detourDirection) * detourDistance;
 
     this.svg.appendChild(this.group);
-
-    this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    this.line.setAttribute("stroke", this.color);
-    this.line.setAttribute("stroke-width", `${this.width}`);
-    this.line.setAttribute("fill", "none");
+    this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
     if (hasSourceArrow) {
-      this.sourceArrow = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-
-      this.sourceArrow.setAttribute("fill", this.color);
+      this.sourceArrow = createEdgeArrow(color);
       this.group.appendChild(this.sourceArrow);
     }
 
     if (hasTargetArrow) {
-      this.targetArrow = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-
-      this.targetArrow.setAttribute("fill", this.color);
+      this.targetArrow = createEdgeArrow(color);
       this.group.appendChild(this.targetArrow);
     }
   }

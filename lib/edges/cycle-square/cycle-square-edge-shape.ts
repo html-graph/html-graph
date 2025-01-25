@@ -4,10 +4,12 @@ import { Point } from "@/point";
 import {
   createArrowPath,
   createDirectionVector,
+  createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
   createRotatedPoint,
   createRoundedPath,
+  createEdgeLine,
 } from "../utils";
 
 export class CycleSquareEdgeShape implements EdgeShape {
@@ -24,8 +26,8 @@ export class CycleSquareEdgeShape implements EdgeShape {
   private readonly linePoints: readonly Point[];
 
   public constructor(
-    private readonly color: string,
-    private readonly width: number,
+    color: string,
+    width: number,
     private readonly arrowLength: number,
     private readonly arrowWidth: number,
     hasArrow: boolean,
@@ -36,20 +38,11 @@ export class CycleSquareEdgeShape implements EdgeShape {
     this.roundness = Math.min(roundness, this.minPortOffset, this.side / 2);
 
     this.svg.appendChild(this.group);
-
-    this.line = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    this.line.setAttribute("stroke", this.color);
-    this.line.setAttribute("stroke-width", `${this.width}`);
-    this.line.setAttribute("fill", "none");
+    this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
     if (hasArrow) {
-      this.arrow = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-
-      this.arrow.setAttribute("fill", this.color);
+      this.arrow = createEdgeArrow(color);
       this.group.appendChild(this.arrow);
     }
 
