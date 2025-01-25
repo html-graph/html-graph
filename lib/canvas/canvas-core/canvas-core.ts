@@ -91,11 +91,11 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updatePort(portId: string, request: UpdatePortRequest): CanvasCore {
+  public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
     this.di.canvasController.updatePort(
       portId,
-      request.direction,
-      request.centerFn,
+      request?.direction,
+      request?.centerFn,
     );
 
     return this;
