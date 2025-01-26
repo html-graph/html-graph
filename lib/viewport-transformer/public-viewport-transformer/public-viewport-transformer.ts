@@ -1,7 +1,10 @@
 import { TransformState } from "../transform-state";
 import { AbstractViewportTransformer } from "../viewport-transformer";
+import { AbstractPublicViewportTransformer } from "./abstract-public-viewport-transformer";
 
-export class PublicViewportTransformer {
+export class PublicViewportTransformer
+  implements AbstractPublicViewportTransformer
+{
   public constructor(
     private readonly transformer: AbstractViewportTransformer,
   ) {}

@@ -8,7 +8,7 @@ import {
   UpdateNodeRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { AbstractPublicGraphStore } from "@/graph-store";
@@ -24,7 +24,7 @@ import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 export class UserTransformableCanvas implements Canvas {
   public readonly model: AbstractPublicGraphStore;
 
-  public readonly transformation: PublicViewportTransformer;
+  public readonly transformation: AbstractPublicViewportTransformer;
 
   private element: HTMLElement | null = null;
 

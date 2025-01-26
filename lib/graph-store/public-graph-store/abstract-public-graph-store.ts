@@ -13,7 +13,7 @@ export interface AbstractPublicGraphStore {
 
   getPort(portId: unknown): GraphPort | null;
 
-  getPortNodeId(portId: string): unknown | null;
+  getPortNodeId(portId: unknown): unknown | null;
 
   getAllEdgeIds(): readonly unknown[];
 

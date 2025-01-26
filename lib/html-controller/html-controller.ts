@@ -1,7 +1,7 @@
 import { AbstractGraphStore } from "@/graph-store";
 import {
   AbstractViewportTransformer,
-  PublicViewportTransformer,
+  AbstractPublicViewportTransformer,
 } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "@/background";
 import {
@@ -41,7 +41,7 @@ export class HtmlController {
   public constructor(
     private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
-    private readonly publicViewportTransformer: PublicViewportTransformer,
+    private readonly publicViewportTransformer: AbstractPublicViewportTransformer,
     private readonly backgroundDrawingFn: BackgroundDrawingFn,
   ) {
     const context = this.canvas.getContext("2d");

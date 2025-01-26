@@ -1,4 +1,5 @@
 import {
+  AbstractPublicViewportTransformer,
   AbstractViewportTransformer,
   PublicViewportTransformer,
   ViewportTransformer,
@@ -16,7 +17,7 @@ import { PriorityFn } from "@/priority";
 import { HtmlController } from "@/html-controller";
 
 export class DiContainer {
-  public readonly publicViewportTransformer: PublicViewportTransformer;
+  public readonly publicViewportTransformer: AbstractPublicViewportTransformer;
 
   public readonly publicGraphStore: AbstractPublicGraphStore;
 

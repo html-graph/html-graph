@@ -8,7 +8,7 @@ import {
   UpdateEdgeRequest,
   UpdateNodeRequest,
 } from "../canvas";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
@@ -21,7 +21,7 @@ import { AbstractPublicGraphStore } from "@/graph-store";
  * Provides low level API for acting on graph
  */
 export class CanvasCore implements Canvas {
-  public readonly transformation: PublicViewportTransformer;
+  public readonly transformation: AbstractPublicViewportTransformer;
 
   public readonly model: AbstractPublicGraphStore;
 

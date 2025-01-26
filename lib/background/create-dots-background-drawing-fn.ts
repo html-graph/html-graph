@@ -1,9 +1,9 @@
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { BackgroundDrawingFn } from "./background-drawing-fn";
 
 const dotsBackgroundDrawingFn: (
   ctx: CanvasRenderingContext2D,
-  transformation: PublicViewportTransformer,
+  transformation: AbstractPublicViewportTransformer,
   dotColor: string,
   gap: number,
   radius: number,
@@ -11,7 +11,7 @@ const dotsBackgroundDrawingFn: (
   limit: number,
 ) => void = (
   ctx: CanvasRenderingContext2D,
-  transformation: PublicViewportTransformer,
+  transformation: AbstractPublicViewportTransformer,
   dotColor: string,
   gap: number,
   radius: number,
@@ -74,7 +74,7 @@ export const createDotsBackgroundDrawingFn: (
 ) => {
   return (
     ctx: CanvasRenderingContext2D,
-    transformer: PublicViewportTransformer,
+    transformer: AbstractPublicViewportTransformer,
   ) => {
     dotsBackgroundDrawingFn(
       ctx,

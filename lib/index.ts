@@ -49,7 +49,7 @@ export type {
   AbstractPublicGraphStore as PublicGraphStore,
 } from "./graph-store";
 
-export type { PublicViewportTransformer } from "./viewport-transformer";
+export type { AbstractPublicViewportTransformer as PublicViewportTransformer } from "./viewport-transformer";
 
 export type { BackgroundDrawingFn } from "./background";
 

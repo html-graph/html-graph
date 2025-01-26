@@ -1,13 +1,13 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeShapeFactory } from "@/edges";
 import { PriorityFn } from "@/priority";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 
 export interface Options {
   readonly background: {
     readonly drawingFn: (
       ctx: CanvasRenderingContext2D,
-      transformer: PublicViewportTransformer,
+      transformer: AbstractPublicViewportTransformer,
     ) => void;
   };
   readonly nodes: {
