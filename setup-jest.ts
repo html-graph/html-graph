@@ -28,4 +28,14 @@ class CustomDOMRect {
   }
 }
 
+class CustomResizeObserver {
+  public disconnect(): void {}
+
+  public observe(): void {}
+
+  public unobserve(): void {}
+}
+
+global.ResizeObserver = CustomResizeObserver;
+
 global.DOMRect = CustomDOMRect;

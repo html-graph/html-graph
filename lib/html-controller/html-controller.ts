@@ -59,16 +59,6 @@ export class HtmlController {
     this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
-  public clear(): void {
-    this.edgeIdToElementMap.forEach((_element, edgeId) => {
-      this.detachEdge(edgeId);
-    });
-
-    this.nodeIdToWrapperElementMap.forEach((_element, nodeId) => {
-      this.detachNode(nodeId);
-    });
-  }
-
   public attach(canvasWrapper: HTMLElement): void {
     this.detach();
 
@@ -83,16 +73,6 @@ export class HtmlController {
       this.canvasWrapper.removeChild(this.host);
       this.canvasWrapper = null;
     }
-  }
-
-  public destroy(): void {
-    this.canvasResizeObserver.disconnect();
-    this.nodesResizeObserver.disconnect();
-    this.host.removeChild(this.canvas);
-    this.host.removeChild(this.container);
-
-    this.clear();
-    this.detach();
   }
 
   public applyTransform(): void {
@@ -114,7 +94,7 @@ export class HtmlController {
     this.nodeElementToIdMap.set(node.element, nodeId);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
-    this.updateNodeCoords(nodeId);
+    this.updateNodeCoordinatesInternal(nodeId);
     this.updateNodePriority(nodeId);
     this.nodesResizeObserver.observe(wrapper);
 
@@ -138,7 +118,7 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
 
-    this.updateEdgeCoords(edgeId);
+    this.updateEdgeCoordinates(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
@@ -149,13 +129,33 @@ export class HtmlController {
     this.edgeIdToElementMap.delete(edgeId);
   }
 
+  public clear(): void {
+    this.edgeIdToElementMap.forEach((_element, edgeId) => {
+      this.detachEdge(edgeId);
+    });
+
+    this.nodeIdToWrapperElementMap.forEach((_element, nodeId) => {
+      this.detachNode(nodeId);
+    });
+  }
+
+  public destroy(): void {
+    this.canvasResizeObserver.disconnect();
+    this.nodesResizeObserver.disconnect();
+    this.host.removeChild(this.canvas);
+    this.host.removeChild(this.container);
+
+    this.clear();
+    this.detach();
+  }
+
   public updateNodeCoordinates(nodeId: unknown): void {
     const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
-    this.updateNodeCoords(nodeId);
+    this.updateNodeCoordinatesInternal(nodeId);
 
     edges.forEach((edge) => {
-      this.updateEdgeCoords(edge);
+      this.updateEdgeCoordinates(edge);
     });
   }
 
@@ -173,7 +173,7 @@ export class HtmlController {
     const edge = this.graphStore.getEdge(edgeId)!;
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
-    this.updateEdgeCoords(edgeId);
+    this.updateEdgeCoordinates(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
@@ -187,7 +187,7 @@ export class HtmlController {
     const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
 
     edges.forEach((edge) => {
-      this.updateEdgeCoords(edge);
+      this.updateEdgeCoordinates(edge);
     });
   }
 
@@ -204,12 +204,12 @@ export class HtmlController {
         const wrapper = entry.target as HTMLElement;
         const nodeId = this.nodeIdToWrapperElementMap.getByValue(wrapper)!;
 
-        this.updateNodeCoords(nodeId);
+        this.updateNodeCoordinatesInternal(nodeId);
 
         const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
         edges.forEach((edge) => {
-          this.updateEdgeCoords(edge);
+          this.updateEdgeCoordinates(edge);
         });
       });
     });
@@ -222,7 +222,7 @@ export class HtmlController {
     this.canvas.height = height;
   }
 
-  private updateNodeCoords(nodeId: unknown): void {
+  private updateNodeCoordinatesInternal(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
     const { width, height } = wrapper.getBoundingClientRect();
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
@@ -234,7 +234,7 @@ export class HtmlController {
     wrapper.style.transform = `matrix(1, 0, 0, 1, ${x}, ${y})`;
   }
 
-  private updateEdgeCoords(edgeId: unknown): void {
+  private updateEdgeCoordinates(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
