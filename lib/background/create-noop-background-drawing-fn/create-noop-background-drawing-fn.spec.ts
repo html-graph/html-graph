@@ -6,7 +6,9 @@ describe("createNoopBackgroundDrawingFn", () => {
   it("should create function that does not reference canvas ctx", () => {
     const fn: BackgroundDrawingFn = createNoopBackgroundDrawingFn();
 
-    const ctx = new CanvasRenderingContext2D();
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+
     const transformer = new PublicViewportTransformerMock();
 
     let referenced = false;
@@ -27,7 +29,9 @@ describe("createNoopBackgroundDrawingFn", () => {
   it("should create function that does not reference transformer", () => {
     const fn: BackgroundDrawingFn = createNoopBackgroundDrawingFn();
 
-    const ctx = new CanvasRenderingContext2D();
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d")!;
+
     const transformer = new PublicViewportTransformerMock();
 
     let referenced = false;
