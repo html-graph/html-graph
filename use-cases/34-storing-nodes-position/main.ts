@@ -24,8 +24,11 @@ const nodes = new Map<
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: { type: "dots" },
-    edges: { shape: { hasTargetArrow: true } },
+    edges: {
+      shape: {
+        hasTargetArrow: true,
+      },
+    },
   })
   .setUserDraggableNodes({
     events: {

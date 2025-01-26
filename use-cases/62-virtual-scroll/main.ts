@@ -3,9 +3,6 @@ import { createBasicNode } from "../shared/create-basic-node";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: {
-      type: "dots",
-    },
     edges: {
       shape: {
         type: "horizontal",

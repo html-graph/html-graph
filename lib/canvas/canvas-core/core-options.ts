@@ -1,13 +1,8 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeShape } from "../canvas/edge-options";
-import { BackgroundOptions } from "./background-options";
 import { Priority } from "./priority";
 
 export interface CoreOptions {
-  /**
-   * canvas background settings
-   */
-  readonly background?: BackgroundOptions;
   /**
    * nodes related behavior
    */

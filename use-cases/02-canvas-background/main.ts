@@ -1,10 +1,25 @@
 import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
+import { backgroundDrawingFn } from "./background-drawing-fn";
+
+const canvasElement = document.getElementById("canvas")!;
+
+const backgroundElement = document.getElementById(
+  "background",
+)! as HTMLCanvasElement;
+
+const ctx = backgroundElement.getContext("2d")!;
+
+new ResizeObserver(() => {
+  const { width, height } = canvasElement.getBoundingClientRect();
+
+  ctx.canvas.width = width;
+  ctx.canvas.height = height;
+
+  backgroundDrawingFn(ctx, canvas.transformation);
+}).observe(backgroundElement);
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: {
-      type: "dots",
-    },
     edges: {
       shape: {
         hasTargetArrow: true,
@@ -12,7 +27,13 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserDraggableNodes()
-  .setUserTransformableCanvas()
+  .setUserTransformableCanvas({
+    events: {
+      onTransformFinished: () => {
+        backgroundDrawingFn(ctx, canvas.transformation);
+      },
+    },
+  })
   .build();
 
 function createNode(
@@ -46,8 +67,6 @@ const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
 const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
 const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
 const [node4, ports4] = createNode("Node 4", "port-4-1", "port-4-2");
-
-const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)

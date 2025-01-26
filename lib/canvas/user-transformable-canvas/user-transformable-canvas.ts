@@ -171,7 +171,7 @@ export class UserTransformableCanvas implements Canvas {
         height,
       );
       this.canvas.patchViewportMatrix(transform);
-      this.onTransformFinished(transform);
+      this.onTransformFinished();
     }
   });
 
@@ -399,7 +399,7 @@ export class UserTransformableCanvas implements Canvas {
       );
 
       this.canvas.patchViewportMatrix(transform);
-      this.onTransformFinished(transform);
+      this.onTransformFinished();
     }
   }
 
@@ -437,7 +437,7 @@ export class UserTransformableCanvas implements Canvas {
     );
 
     this.canvas.patchViewportMatrix(transform);
-    this.onTransformFinished(transform);
+    this.onTransformFinished();
   }
 
   private stopMouseDrag(): void {

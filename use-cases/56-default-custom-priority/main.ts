@@ -26,9 +26,6 @@ const customEdgePriority: PriorityFn = () => {
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
-    background: {
-      type: "dots",
-    },
     nodes: {
       priority: customNodePriority,
     },

@@ -1,7 +1,6 @@
 import { standardCenterFn } from "@/center-fn";
 import { CoreOptions } from "./core-options";
 import { Options } from "./options";
-import { resolveBackgroundDrawingFn } from "./resolve-background-drawing-fn";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { resolvePriority } from "./resolve-priority";
 
@@ -14,11 +13,6 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
   );
 
   return {
-    background: {
-      drawingFn: resolveBackgroundDrawingFn(
-        apiOptions.background ?? { type: "none" },
-      ),
-    },
     nodes: {
       centerFn: apiOptions.nodes?.centerFn ?? standardCenterFn,
       priorityFn: nodesPriority,

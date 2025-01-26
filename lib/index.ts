@@ -51,8 +51,6 @@ export type {
 
 export type { AbstractPublicViewportTransformer as PublicViewportTransformer } from "./viewport-transformer";
 
-export type { BackgroundDrawingFn } from "./background";
-
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";

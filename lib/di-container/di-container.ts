@@ -10,7 +10,6 @@ import {
   AbstractGraphStore,
 } from "@/graph-store";
 import { CanvasController } from "@/canvas-controller";
-import { BackgroundDrawingFn } from "@/background";
 import { CenterFn } from "@/center-fn";
 import { PublicGraphStore } from "@/graph-store";
 import { PriorityFn } from "@/priority";
@@ -24,7 +23,6 @@ export class DiContainer {
   public readonly canvasController: CanvasController;
 
   public constructor(
-    backgroundDrawingFn: BackgroundDrawingFn,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,
@@ -41,12 +39,7 @@ export class DiContainer {
       viewportTransformer,
     );
 
-    const htmlController = new HtmlController(
-      graphStore,
-      viewportTransformer,
-      this.publicViewportTransformer,
-      backgroundDrawingFn,
-    );
+    const htmlController = new HtmlController(graphStore, viewportTransformer);
 
     this.canvasController = new CanvasController(
       graphStore,

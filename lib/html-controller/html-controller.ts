@@ -1,17 +1,7 @@
 import { AbstractGraphStore } from "@/graph-store";
-import {
-  AbstractViewportTransformer,
-  AbstractPublicViewportTransformer,
-} from "@/viewport-transformer";
-import { BackgroundDrawingFn } from "@/background";
-import {
-  createCanvas,
-  createContainer,
-  createHost,
-  createNodeWrapper,
-} from "./utils";
+import { AbstractViewportTransformer } from "@/viewport-transformer";
+import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { TwoWayMap } from "./utils";
-import { HtmlGraphError } from "@/error";
 import { Point } from "@/point";
 
 export class HtmlController {
@@ -19,13 +9,7 @@ export class HtmlController {
 
   private readonly host = createHost();
 
-  private readonly canvas = createCanvas();
-
   private readonly container = createContainer();
-
-  private readonly canvasCtx: CanvasRenderingContext2D;
-
-  private readonly canvasResizeObserver: ResizeObserver;
 
   private readonly nodesResizeObserver: ResizeObserver;
 
@@ -41,21 +25,9 @@ export class HtmlController {
   public constructor(
     private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
-    private readonly publicViewportTransformer: AbstractPublicViewportTransformer,
-    private readonly backgroundDrawingFn: BackgroundDrawingFn,
   ) {
-    const context = this.canvas.getContext("2d");
-
-    if (context === null) {
-      throw new HtmlGraphError("unable to get canvas context");
-    }
-
-    this.canvasCtx = context;
-
-    this.host.appendChild(this.canvas);
     this.host.appendChild(this.container);
 
-    this.canvasResizeObserver = this.createHostResizeObserver();
     this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
@@ -64,20 +36,16 @@ export class HtmlController {
 
     this.canvasWrapper = canvasWrapper;
     this.canvasWrapper.appendChild(this.host);
-    this.canvasResizeObserver.observe(this.canvasWrapper);
   }
 
   public detach(): void {
     if (this.canvasWrapper !== null) {
-      this.canvasResizeObserver.unobserve(this.canvasWrapper);
       this.canvasWrapper.removeChild(this.host);
       this.canvasWrapper = null;
     }
   }
 
   public applyTransform(): void {
-    this.backgroundDrawingFn(this.canvasCtx, this.publicViewportTransformer);
-
     const m = this.viewportTransformer.getContentMatrix();
 
     this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.dx}, ${m.dy})`;
@@ -140,9 +108,7 @@ export class HtmlController {
   }
 
   public destroy(): void {
-    this.canvasResizeObserver.disconnect();
     this.nodesResizeObserver.disconnect();
-    this.host.removeChild(this.canvas);
     this.host.removeChild(this.container);
 
     this.clear();
@@ -191,13 +157,6 @@ export class HtmlController {
     });
   }
 
-  private createHostResizeObserver(): ResizeObserver {
-    return new ResizeObserver(() => {
-      this.updateCanvasDimensions();
-      this.applyTransform();
-    });
-  }
-
   private createNodesResizeObserver(): ResizeObserver {
     return new ResizeObserver((entries) => {
       entries.forEach((entry) => {
@@ -213,13 +172,6 @@ export class HtmlController {
         });
       });
     });
-  }
-
-  private updateCanvasDimensions(): void {
-    const { width, height } = this.host.getBoundingClientRect();
-
-    this.canvas.width = width;
-    this.canvas.height = height;
   }
 
   private updateNodeCoordinatesInternal(nodeId: unknown): void {

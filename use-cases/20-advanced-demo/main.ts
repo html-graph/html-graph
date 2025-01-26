@@ -12,9 +12,6 @@ const canvas = new HtmlGraphBuilder()
         hasTargetArrow: true,
       },
     },
-    background: {
-      type: "dots",
-    },
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()

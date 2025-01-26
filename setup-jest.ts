@@ -1,4 +1,49 @@
-class CustomDOMRect {
+global.resizeStore = class {
+  public setElementBox(element: HTMLElement, rect: DOMRect): void {
+    element.getBoundingClientRect = (): DOMRect => {
+      return rect;
+    };
+  }
+
+  public resize(element: HTMLElement, rect: DOMRect): void {
+    element.getBoundingClientRect = (): DOMRect => {
+      return rect;
+    };
+  }
+};
+
+global.ResizeObserver = class {
+  private readonly elements = new Set<HTMLElement>();
+
+  public constructor(private readonly callback: ResizeObserverCallback) {}
+
+  public disconnect(): void {
+    this.elements.clear();
+  }
+
+  public observe(element: HTMLElement): void {
+    this.elements.add(element);
+
+    this.callback(
+      [
+        {
+          borderBoxSize: [],
+          contentBoxSize: [],
+          contentRect: element.getBoundingClientRect(),
+          devicePixelContentBoxSize: [],
+          target: element,
+        },
+      ],
+      this,
+    );
+  }
+
+  public unobserve(element: HTMLElement): void {
+    this.elements.delete(element);
+  }
+};
+
+global.DOMRect = class {
   public bottom: number = 0;
 
   public left: number = 0;
@@ -26,16 +71,4 @@ class CustomDOMRect {
   public toJSON(): string {
     return JSON.stringify(this);
   }
-}
-
-class CustomResizeObserver {
-  public disconnect(): void {}
-
-  public observe(): void {}
-
-  public unobserve(): void {}
-}
-
-global.ResizeObserver = CustomResizeObserver;
-
-global.DOMRect = CustomDOMRect;
+};

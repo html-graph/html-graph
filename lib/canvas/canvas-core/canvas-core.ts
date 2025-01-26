@@ -33,7 +33,6 @@ export class CanvasCore implements Canvas {
     const options: Options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(
-      options.background.drawingFn,
       options.nodes.centerFn,
       options.ports.centerFn,
       options.ports.direction,

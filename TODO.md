@@ -1,5 +1,8 @@
 # TODO
 
+- fix touch drag
+- move drawing background outside
+- example port same as node
 - unit tests
 - virtual scroll
   - refactor update edge shape
