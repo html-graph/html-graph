@@ -1,12 +1,12 @@
 import {
   CycleSquareEdgeShape,
   DetourStraightEdgeShape,
-  StraightEdgeShape,
-} from "../shapes";
-import { EdgeShapeFactory } from "./edge-shape-factory";
-import { EdgeType } from "./edge-type";
+  HorizontalEdgeShape,
+} from "../../shapes";
+import { EdgeShapeFactory } from "../edge-shape-factory";
+import { EdgeType } from "../edge-type";
 
-export const createStraightEdgeShareFactory: (options: {
+export const createHorizontalEdgeShapeFactory: (options: {
   color: string;
   width: number;
   arrowLength: number;
@@ -47,7 +47,7 @@ export const createStraightEdgeShareFactory: (options: {
     );
   }
 
-  return new StraightEdgeShape(
+  return new HorizontalEdgeShape(
     options.color,
     options.width,
     options.arrowLength,
