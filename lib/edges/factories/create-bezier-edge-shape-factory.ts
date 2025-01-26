@@ -1,8 +1,10 @@
-import { BezierEdgeShape } from "./bezier";
+import {
+  BezierEdgeShape,
+  CycleCircleEdgeShape,
+  DetourBezierEdgeShape,
+} from "../shapes";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { EdgeType } from "./edge-type";
-import { CycleCircleEdgeShape } from "./cycle-circle";
-import { DetourBezierEdgeShape } from "./detour-bezier";
 
 export const createBezierEdgeShapeFactory: (options: {
   color: string;

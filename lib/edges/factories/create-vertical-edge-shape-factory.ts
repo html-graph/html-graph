@@ -1,8 +1,10 @@
+import {
+  CycleSquareEdgeShape,
+  DetourStraightEdgeShape,
+  VerticalEdgeShape,
+} from "../shapes";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { EdgeType } from "./edge-type";
-import { CycleSquareEdgeShape } from "./cycle-square";
-import { DetourStraightEdgeShape } from "./detour-straight";
-import { VerticalEdgeShape } from "./vertical";
 
 export const createVerticalEdgeShapeFactory: (options: {
   color: string;
