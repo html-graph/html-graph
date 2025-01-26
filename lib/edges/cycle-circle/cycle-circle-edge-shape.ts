@@ -4,7 +4,6 @@ import {
   createArrowPath,
   createFlipDirectionVector,
   createEdgeArrow,
-  createEdgeGroup,
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
@@ -13,8 +12,6 @@ import { zero } from "../zero";
 
 export class CycleCircleEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
-
-  private readonly group = createEdgeGroup();
 
   private readonly line: SVGPathElement;
 
@@ -29,13 +26,12 @@ export class CycleCircleEdgeShape implements EdgeShape {
     private readonly radius: number,
     private readonly smallRadius: number,
   ) {
-    this.svg.appendChild(this.group);
     this.line = createEdgeLine(color, width);
-    this.group.appendChild(this.line);
+    this.svg.appendChild(this.line);
 
     if (hasArrow) {
       this.arrow = createEdgeArrow(color);
-      this.group.appendChild(this.arrow);
+      this.svg.appendChild(this.arrow);
     }
   }
 

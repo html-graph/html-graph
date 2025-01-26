@@ -1,16 +1,16 @@
 import { EdgeShape } from "../edge-shape";
 import { BezierEdgeShape } from "./bezier-edge-shape";
 
+const color = "#FFFFFF";
+const width = 2;
+const curvature = 40;
+const arrowLength = 10;
+const arrowWidth = 3;
+
 const createBezierEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  const color: string = "#FFFFFF";
-  const width: number = 2;
-  const curvature: number = 40;
-  const arrowLength: number = 10;
-  const arrowWidth: number = 3;
-
   return new BezierEdgeShape(
     color,
     width,
