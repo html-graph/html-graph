@@ -42,7 +42,12 @@ export type { EdgeShape } from "./edges";
 
 export type { Point } from "./point";
 
-export type { GraphNode, GraphPort, GraphEdge } from "./graph-store";
+export type {
+  GraphNode,
+  GraphPort,
+  GraphEdge,
+  AbstractPublicGraphStore as PublicGraphStore,
+} from "./graph-store";
 
 export type { PublicViewportTransformer } from "./viewport-transformer";
 

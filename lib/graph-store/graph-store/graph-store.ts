@@ -3,8 +3,9 @@ import { EdgeShape } from "@/edges";
 import { EdgePayload } from "./edge-payload";
 import { NodePayload } from "./node-payload";
 import { PortPayload } from "./port-payload";
+import { AbstractGraphStore } from "./abstract-graph-store";
 
-export class GraphStore {
+export class GraphStore implements AbstractGraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
 
   private readonly ports = new Map<unknown, PortPayload>();

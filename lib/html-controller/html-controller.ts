@@ -1,4 +1,4 @@
-import { GraphStore } from "@/graph-store";
+import { AbstractGraphStore } from "@/graph-store";
 import {
   AbstractViewportTransformer,
   PublicViewportTransformer,
@@ -39,7 +39,7 @@ export class HtmlController {
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
-    private readonly graphStore: GraphStore,
+    private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
     private readonly publicViewportTransformer: PublicViewportTransformer,
     private readonly backgroundDrawingFn: BackgroundDrawingFn,

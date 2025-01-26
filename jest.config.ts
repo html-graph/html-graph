@@ -11,6 +11,7 @@ const config: Config = {
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   coveragePathIgnorePatterns: ["/node_modules/", "/lib/.*\\.mock\\.ts$"],
+  // collectCoverageFrom: ["./lib/**/*.ts"],
   coverageThreshold: {
     global: {
       branches: 100,
