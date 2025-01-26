@@ -7,7 +7,7 @@ import { compilerOptions } from "./tsconfig.json";
 const config: Config = {
   preset: "ts-jest",
   testEnvironment: "jsdom",
-  setupFiles: ["./setup-jest.ts"],
+  setupFiles: ["./setup-jest.ts", "jest-canvas-mock"],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   coveragePathIgnorePatterns: ["/node_modules/", "/lib/.*\\.mock\\.ts$"],

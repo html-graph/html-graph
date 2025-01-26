@@ -1,4 +1,4 @@
-import { BackgroundDrawingFn } from "./background-drawing-fn";
+import { BackgroundDrawingFn } from "../background-drawing-fn";
 
 export const createNoopBackgroundDrawingFn: () => BackgroundDrawingFn = () => {
   return () => {

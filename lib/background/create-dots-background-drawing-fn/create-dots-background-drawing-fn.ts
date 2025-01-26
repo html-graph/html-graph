@@ -1,5 +1,5 @@
 import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
-import { BackgroundDrawingFn } from "./background-drawing-fn";
+import { BackgroundDrawingFn } from "../background-drawing-fn";
 
 const dotsBackgroundDrawingFn: (
   ctx: CanvasRenderingContext2D,
