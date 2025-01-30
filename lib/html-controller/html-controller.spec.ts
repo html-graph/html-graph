@@ -65,7 +65,7 @@ const createController = (params?: {
   nodeResizeObserverFactory?: (
     callback: ResizeObserverCallback,
   ) => ResizeObserver;
-  getBoundingClientRect?: () => DOMRect;
+  getBoundingClientRect?: (element: HTMLElement) => DOMRect;
   transformer?: AbstractViewportTransformer;
   store?: AbstractGraphStore;
 }): HtmlController => {
@@ -73,7 +73,8 @@ const createController = (params?: {
     params?.nodeResizeObserverFactory
       ? params.nodeResizeObserverFactory
       : (callback): ResizeObserver => new ResizeObserverMock(callback),
-    params?.getBoundingClientRect ?? Element.prototype.getBoundingClientRect,
+    params?.getBoundingClientRect ??
+      ((element): DOMRect => element.getBoundingClientRect()),
     params?.store ?? new GraphStoreMock(),
     params?.transformer ?? new ViewportTransformerMock(),
   );
@@ -672,12 +673,12 @@ describe("HtmlController", () => {
       return edge;
     });
 
-    const getBoundingClientRect = function (this: HTMLElement): DOMRect {
-      if (this === ports.get(1)?.element) {
+    const getBoundingClientRect = (element: HTMLElement): DOMRect => {
+      if (element === ports.get(1)?.element) {
         return new DOMRect(100, 100, 100, 100);
       }
 
-      if (this === ports.get(2)?.element) {
+      if (element === ports.get(2)?.element) {
         return new DOMRect(0, 0, 100, 100);
       }
 

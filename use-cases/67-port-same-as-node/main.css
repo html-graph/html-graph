@@ -1,0 +1,28 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#canvas {
+  flex-grow: 1;
+}
+
+.node {
+  width: 100px;
+  height: 100px;
+  background: #ffdbab;
+  border: 1px solid #bababa;
+  border-radius: 1000px;
+  white-space: nowrap;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

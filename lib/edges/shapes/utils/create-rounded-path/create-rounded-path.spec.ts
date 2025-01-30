@@ -60,4 +60,16 @@ describe("createRoundedPath", () => {
 
     expect(res).toEqual("M 0 0 L 0 0 C 30 0 30 0 30 30 L 30 30");
   });
+
+  it("should return correct result if points overlap", () => {
+    const path: Point[] = [
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+    ];
+
+    const res = createRoundedPath(path, 0);
+
+    expect(res).toEqual("M 0 0 L 0 0 C 0 0 0 0 0 0 L 0 0");
+  });
 });

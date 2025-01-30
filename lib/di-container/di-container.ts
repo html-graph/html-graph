@@ -26,7 +26,7 @@ export class DiContainer {
     nodeResizeObserverFactory: (
       callback: ResizeObserverCallback,
     ) => ResizeObserver,
-    getBoundingClientRect: () => DOMRect,
+    getBoundingClientRect: (element: HTMLElement) => DOMRect,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,

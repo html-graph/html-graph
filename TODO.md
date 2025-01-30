@@ -1,7 +1,7 @@
 # TODO
 
-- fix touch drag advanced demo
 - example port same as node
+- improve port id naming
 - unit tests
 - virtual scroll
   - refactor update edge shape

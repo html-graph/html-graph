@@ -43,13 +43,19 @@ export const createRoundedPath: (
       }
 
       const rNext = isMediate ? roundness : 0;
-      const ratioNext = Math.min(rNext / distanceNext, i < last - 1 ? 0.5 : 1);
+      const ratioNext =
+        distanceNext !== 0
+          ? Math.min(rNext / distanceNext, i < last - 1 ? 0.5 : 1)
+          : 0;
       const njp: Point = isMediate
         ? { x: point.x + dxNext * ratioNext, y: point.y + dyNext * ratioNext }
         : point;
 
       const rPrev = isMediate ? roundness : 0;
-      const ratioPrev = Math.min(rPrev / distancePrev, i > 1 ? 0.5 : 1);
+      const ratioPrev =
+        distancePrev !== 0
+          ? Math.min(rPrev / distancePrev, i > 1 ? 0.5 : 1)
+          : 0;
       const pjp: Point = isMediate
         ? { x: point.x + dxPrev * ratioPrev, y: point.y + dyPrev * ratioPrev }
         : point;
