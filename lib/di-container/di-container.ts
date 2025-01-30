@@ -24,6 +24,7 @@ export class DiContainer {
 
   public constructor(
     resizeObserverConstructor: typeof ResizeObserver,
+    getBoundingClientRect: () => DOMRect,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,
@@ -42,6 +43,7 @@ export class DiContainer {
 
     const htmlController = new HtmlController(
       resizeObserverConstructor,
+      getBoundingClientRect,
       graphStore,
       viewportTransformer,
     );

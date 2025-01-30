@@ -24,6 +24,7 @@ const createController = (params?: {
 }): HtmlController => {
   return new HtmlController(
     window.ResizeObserver,
+    Element.prototype.getBoundingClientRect,
     params?.store ?? new GraphStoreMock(),
     params?.transformer ?? new ViewportTransformerMock(),
   );

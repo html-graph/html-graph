@@ -34,6 +34,7 @@ export class CanvasCore implements Canvas {
 
     this.di = new DiContainer(
       window.ResizeObserver,
+      Element.prototype.getBoundingClientRect,
       options.nodes.centerFn,
       options.ports.centerFn,
       options.ports.direction,

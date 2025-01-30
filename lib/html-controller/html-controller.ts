@@ -24,6 +24,7 @@ export class HtmlController {
 
   public constructor(
     private readonly resizeObserverConstructor: typeof ResizeObserver,
+    private readonly getBoundingClientRect: () => DOMRect,
     private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
   ) {
@@ -177,7 +178,7 @@ export class HtmlController {
 
   private updateNodeCoordinatesInternal(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
-    const { width, height } = wrapper.getBoundingClientRect();
+    const { width, height } = this.getBoundingClientRect.call(wrapper);
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
     const { x: centerX, y: centerY } = node.centerFn(width, height);
@@ -192,9 +193,9 @@ export class HtmlController {
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
 
-    const rectFrom = portFrom.element.getBoundingClientRect();
-    const rectTo = portTo.element.getBoundingClientRect();
-    const rect = this.host.getBoundingClientRect();
+    const rectFrom = this.getBoundingClientRect.call(portFrom.element);
+    const rectTo = this.getBoundingClientRect.call(portTo.element);
+    const rect = this.getBoundingClientRect.call(this.host);
     const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 
     const from: Point = {
