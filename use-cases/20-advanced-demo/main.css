@@ -13,8 +13,15 @@ body {
   --color-7: #02020a;
 }
 
-#canvas {
+.canvas-wrapper {
   flex-grow: 1;
+  position: relative;
+}
+
+#canvas,
+#background {
+  position: absolute;
+  inset: 0;
 }
 
 .node {

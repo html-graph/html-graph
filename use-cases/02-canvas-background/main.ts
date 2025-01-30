@@ -1,5 +1,5 @@
 import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
-import { backgroundDrawingFn } from "./background-drawing-fn";
+import { backgroundDrawingFn } from "../shared/background-drawing-fn";
 
 const canvasElement = document.getElementById("canvas")!;
 

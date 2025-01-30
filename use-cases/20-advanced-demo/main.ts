@@ -1,5 +1,23 @@
 import { HtmlGraphBuilder } from "@html-graph/html-graph";
 import { GraphHtmlHelper } from "./graph-html-helper";
+import { backgroundDrawingFn } from "../shared/background-drawing-fn";
+
+const canvasElement = document.getElementById("canvas")!;
+
+const backgroundElement = document.getElementById(
+  "background",
+)! as HTMLCanvasElement;
+
+const ctx = backgroundElement.getContext("2d")!;
+
+new ResizeObserver(() => {
+  const { width, height } = canvasElement.getBoundingClientRect();
+
+  ctx.canvas.width = width;
+  ctx.canvas.height = height;
+
+  backgroundDrawingFn(ctx, canvas.transformation);
+}).observe(backgroundElement);
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -14,7 +32,13 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserDraggableNodes()
-  .setUserTransformableCanvas()
+  .setUserTransformableCanvas({
+    events: {
+      onTransformFinished: () => {
+        backgroundDrawingFn(ctx, canvas.transformation);
+      },
+    },
+  })
   .build();
 
 const helper = new GraphHtmlHelper();
@@ -49,8 +73,6 @@ const [node5, ports5] = helper.createNodeElement("Node 5", "input-5", {
   "output-5-1": "Port 1",
   "output-5-2": "Port 2",
 });
-
-const canvasElement = document.getElementById("canvas")!;
 
 canvas
   .attach(canvasElement)
