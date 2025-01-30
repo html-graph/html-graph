@@ -23,6 +23,7 @@ export class DiContainer {
   public readonly canvasController: CanvasController;
 
   public constructor(
+    resizeObserverConstructor: typeof ResizeObserver,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,
@@ -39,7 +40,11 @@ export class DiContainer {
       viewportTransformer,
     );
 
-    const htmlController = new HtmlController(graphStore, viewportTransformer);
+    const htmlController = new HtmlController(
+      resizeObserverConstructor,
+      graphStore,
+      viewportTransformer,
+    );
 
     this.canvasController = new CanvasController(
       graphStore,

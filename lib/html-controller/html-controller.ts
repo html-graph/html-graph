@@ -23,6 +23,7 @@ export class HtmlController {
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
+    private readonly resizeObserverConstructor: typeof ResizeObserver,
     private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
   ) {
@@ -158,7 +159,7 @@ export class HtmlController {
   }
 
   private createNodesResizeObserver(): ResizeObserver {
-    return new ResizeObserver((entries) => {
+    return new this.resizeObserverConstructor((entries) => {
       entries.forEach((entry) => {
         const wrapper = entry.target as HTMLElement;
         const nodeId = this.nodeIdToWrapperElementMap.getByValue(wrapper)!;
@@ -183,7 +184,7 @@ export class HtmlController {
 
     const x = node.x - scaleViewport * centerX;
     const y = node.y - scaleViewport * centerY;
-    wrapper.style.transform = `matrix(1, 0, 0, 1, ${x}, ${y})`;
+    wrapper.style.transform = `translate(${x}px, ${y}px)`;
   }
 
   private updateEdgeCoordinates(edgeId: unknown): void {

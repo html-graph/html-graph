@@ -23,6 +23,7 @@ const createController = (params?: {
   store?: AbstractGraphStore;
 }): HtmlController => {
   return new HtmlController(
+    window.ResizeObserver,
     params?.store ?? new GraphStoreMock(),
     params?.transformer ?? new ViewportTransformerMock(),
   );
