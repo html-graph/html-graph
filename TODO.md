@@ -1,7 +1,6 @@
 # TODO
 
-- fix touch drag
-- move drawing background outside
+- fix touch drag advanced demo
 - example port same as node
 - unit tests
 - virtual scroll

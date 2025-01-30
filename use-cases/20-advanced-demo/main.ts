@@ -17,7 +17,7 @@ new ResizeObserver(() => {
   ctx.canvas.height = height;
 
   backgroundDrawingFn(ctx, canvas.transformation);
-}).observe(backgroundElement);
+}).observe(canvasElement);
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
