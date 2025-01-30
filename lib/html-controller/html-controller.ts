@@ -11,7 +11,7 @@ export class HtmlController {
 
   private readonly container = createContainer();
 
-  private readonly nodesResizeObserver: ResizeObserver;
+  private readonly nodeWrappersResizeObserver: ResizeObserver;
 
   private readonly nodeElementToIdMap = new Map<HTMLElement, unknown>();
 
@@ -23,14 +23,16 @@ export class HtmlController {
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
-    private readonly resizeObserverConstructor: typeof ResizeObserver,
+    private readonly nodeResizeObserverFactory: (
+      callback: ResizeObserverCallback,
+    ) => ResizeObserver,
     private readonly getBoundingClientRect: () => DOMRect,
     private readonly graphStore: AbstractGraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
   ) {
     this.host.appendChild(this.container);
 
-    this.nodesResizeObserver = this.createNodesResizeObserver();
+    this.nodeWrappersResizeObserver = this.createNodesResizeObserver();
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -66,7 +68,7 @@ export class HtmlController {
 
     this.updateNodeCoordinatesInternal(nodeId);
     this.updateNodePriority(nodeId);
-    this.nodesResizeObserver.observe(wrapper);
+    this.nodeWrappersResizeObserver.observe(wrapper);
 
     wrapper.style.visibility = "visible";
   }
@@ -75,7 +77,7 @@ export class HtmlController {
     const node = this.graphStore.getNode(nodeId)!;
 
     const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
-    this.nodesResizeObserver.unobserve(wrapper);
+    this.nodeWrappersResizeObserver.unobserve(wrapper);
     wrapper.removeChild(node.element);
     this.container.removeChild(wrapper);
 
@@ -110,7 +112,7 @@ export class HtmlController {
   }
 
   public destroy(): void {
-    this.nodesResizeObserver.disconnect();
+    this.nodeWrappersResizeObserver.disconnect();
     this.host.removeChild(this.container);
 
     this.clear();
@@ -160,7 +162,7 @@ export class HtmlController {
   }
 
   private createNodesResizeObserver(): ResizeObserver {
-    return new this.resizeObserverConstructor((entries) => {
+    return this.nodeResizeObserverFactory((entries) => {
       entries.forEach((entry) => {
         const wrapper = entry.target as HTMLElement;
         const nodeId = this.nodeIdToWrapperElementMap.getByValue(wrapper)!;

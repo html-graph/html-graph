@@ -29,11 +29,15 @@ export class CanvasCore implements Canvas {
 
   private readonly edgeShapeFactory: EdgeShapeFactory;
 
+  private readonly nodeResizeObserverFactory = (
+    callback: ResizeObserverCallback,
+  ): ResizeObserver => new window.ResizeObserver(callback);
+
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
 
     this.di = new DiContainer(
-      window.ResizeObserver,
+      this.nodeResizeObserverFactory,
       Element.prototype.getBoundingClientRect,
       options.nodes.centerFn,
       options.ports.centerFn,

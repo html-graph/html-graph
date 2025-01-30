@@ -10,21 +10,70 @@ import {
   AbstractViewportTransformer,
   ViewportTransformerMock,
 } from "@/viewport-transformer";
-import { HtmlGraphError } from "@/error";
 import { EdgeShapeMock } from "@/edges";
 import { Point } from "@/point";
 
-let getContext = null;
+class ResizeObserverMock implements ResizeObserver {
+  private readonly elements = new Set<HTMLElement>();
 
-let getBoundingRect = null;
+  public constructor(private readonly callback: ResizeObserverCallback) {}
+
+  public disconnect(): void {
+    this.elements.clear();
+  }
+
+  public observe(element: HTMLElement): void {
+    this.elements.add(element);
+
+    this.callback(
+      [
+        {
+          borderBoxSize: [],
+          contentBoxSize: [],
+          contentRect: element.getBoundingClientRect(),
+          devicePixelContentBoxSize: [],
+          target: element,
+        },
+      ],
+      this,
+    );
+  }
+
+  public unobserve(element: HTMLElement): void {
+    this.elements.delete(element);
+  }
+
+  public triggerResizeFor(element: HTMLElement): void {
+    if (this.elements.has(element)) {
+      this.callback(
+        [
+          {
+            borderBoxSize: [],
+            contentBoxSize: [],
+            contentRect: element.getBoundingClientRect(),
+            devicePixelContentBoxSize: [],
+            target: element,
+          },
+        ],
+        this,
+      );
+    }
+  }
+}
 
 const createController = (params?: {
+  nodeResizeObserverFactory?: (
+    callback: ResizeObserverCallback,
+  ) => ResizeObserver;
+  getBoundingClientRect?: () => DOMRect;
   transformer?: AbstractViewportTransformer;
   store?: AbstractGraphStore;
 }): HtmlController => {
   return new HtmlController(
-    window.ResizeObserver,
-    Element.prototype.getBoundingClientRect,
+    params?.nodeResizeObserverFactory
+      ? params.nodeResizeObserverFactory
+      : (callback): ResizeObserver => new ResizeObserverMock(callback),
+    params?.getBoundingClientRect ?? Element.prototype.getBoundingClientRect,
     params?.store ?? new GraphStoreMock(),
     params?.transformer ?? new ViewportTransformerMock(),
   );
@@ -60,16 +109,6 @@ const createEdge = (): EdgePayload => {
 };
 
 describe("HtmlController", () => {
-  it("should throw error when unable to get canvas content", () => {
-    getContext = HTMLCanvasElement.prototype.getContext;
-
-    HTMLCanvasElement.prototype.getContext = jest.fn().mockReturnValue(null);
-
-    expect(createController).toThrow(HtmlGraphError);
-
-    HTMLCanvasElement.prototype.getContext = getContext;
-  });
-
   it("should attach host to wrapper element", () => {
     const controller = createController();
 
@@ -115,7 +154,7 @@ describe("HtmlController", () => {
 
     controller.applyTransform();
 
-    const container = div.children[0].children[1] as HTMLDivElement;
+    const container = div.children[0].children[0] as HTMLDivElement;
 
     expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
   });
@@ -132,7 +171,7 @@ describe("HtmlController", () => {
 
     controller.attachNode(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children[0] instanceof HTMLDivElement).toBe(true);
   });
@@ -150,7 +189,7 @@ describe("HtmlController", () => {
     controller.attachNode(1);
     controller.detachNode(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children[0]).toBe(undefined);
   });
@@ -195,7 +234,7 @@ describe("HtmlController", () => {
     controller.attachNode(2);
     controller.attachEdge(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children[2]).toBe(edge.shape.svg);
   });
@@ -241,7 +280,7 @@ describe("HtmlController", () => {
     controller.attachEdge(1);
     controller.detachEdge(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children[2]).toBe(undefined);
   });
@@ -287,7 +326,7 @@ describe("HtmlController", () => {
     controller.attachEdge(1);
     controller.clear();
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children.length).toBe(0);
   });
@@ -333,7 +372,7 @@ describe("HtmlController", () => {
     controller.attachEdge(1);
     controller.detachEdge(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
 
     expect(container.children[2]).toBe(undefined);
   });
@@ -385,10 +424,10 @@ describe("HtmlController", () => {
     node.y = 100;
     controller.updateNodeCoordinates(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
-    expect(nodeWrapper.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+    expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
   it("should update adjacent edges coordinates when updating node coordinates", () => {
@@ -458,7 +497,7 @@ describe("HtmlController", () => {
 
     controller.attachNode(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
     node.priority = 10;
@@ -549,7 +588,7 @@ describe("HtmlController", () => {
     edge.priority = 10;
     controller.updateEdgePriority(1);
 
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
 
     expect(edgeSvg.style.zIndex).toBe("10");
@@ -601,57 +640,7 @@ describe("HtmlController", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should update canvas dimensions", () => {
-    getBoundingRect = HTMLElement.prototype.getBoundingClientRect;
-
-    window.ResizeObserver = class {
-      public constructor(private readonly callback: ResizeObserverCallback) {}
-
-      public disconnect(): void {}
-
-      public observe(element: HTMLElement): void {
-        this.callback(
-          [
-            {
-              borderBoxSize: [],
-              contentBoxSize: [],
-              contentRect: new DOMRect(),
-              devicePixelContentBoxSize: [],
-              target: element,
-            },
-          ],
-          this,
-        );
-      }
-
-      public unobserve(): void {}
-    };
-
-    HTMLElement.prototype.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(0, 0, 1000, 1000);
-    };
-
-    const controller = createController();
-    const div = document.createElement("div");
-    controller.attach(div);
-
-    const canvas = div.children[0].children[0] as HTMLCanvasElement;
-
-    expect({ width: canvas.width, height: canvas.height }).toStrictEqual({
-      width: 1000,
-      height: 1000,
-    });
-
-    HTMLElement.prototype.getBoundingClientRect = getBoundingRect;
-  });
-
   it("should update adjacent edges on node resize", () => {
-    getBoundingRect = HTMLElement.prototype.getBoundingClientRect;
-
-    HTMLElement.prototype.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(0, 0, 100, 100);
-    };
-
     const transformer = new ViewportTransformerMock();
     const store: AbstractGraphStore = new GraphStoreMock();
 
@@ -675,7 +664,7 @@ describe("HtmlController", () => {
       return ports.get(portId);
     });
 
-    jest.spyOn(store, "getPortAdjacentEdgeIds").mockImplementation(() => {
+    jest.spyOn(store, "getNodeAdjacentEdgeIds").mockImplementation(() => {
       return [1];
     });
 
@@ -683,7 +672,33 @@ describe("HtmlController", () => {
       return edge;
     });
 
-    const controller = createController({ transformer, store });
+    const getBoundingClientRect = function (this: HTMLElement): DOMRect {
+      if (this === ports.get(1)?.element) {
+        return new DOMRect(100, 100, 100, 100);
+      }
+
+      if (this === ports.get(2)?.element) {
+        return new DOMRect(0, 0, 100, 100);
+      }
+
+      return new DOMRect(0, 0, 100, 100);
+    };
+
+    let observer: ResizeObserverMock | null = null;
+
+    const controller = createController({
+      nodeResizeObserverFactory: (callback) => {
+        if (observer === null) {
+          observer = new ResizeObserverMock(callback);
+        }
+
+        return observer;
+      },
+      getBoundingClientRect,
+      transformer,
+      store,
+    });
+
     const div = document.createElement("div");
     controller.attach(div);
 
@@ -692,13 +707,11 @@ describe("HtmlController", () => {
     controller.attachEdge(1);
 
     const spy = jest.spyOn(edge.shape, "update");
-    const container = div.children[0].children[1];
+    const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
-    // trigger resize here
-    nodeWrapper.dispatchEvent(new CustomEvent("custom_resize"));
+    observer!.triggerResizeFor(nodeWrapper);
 
-    expect(spy).toHaveBeenCalled();
-    HTMLElement.prototype.getBoundingClientRect = getBoundingRect;
+    expect(spy).toHaveBeenCalledWith({ x: 100, y: 100 }, -1, -1, 0, 0);
   });
 });
