@@ -1,24 +1,18 @@
 import {
   AbstractPublicViewportTransformer,
-  AbstractViewportTransformer,
   PublicViewportTransformer,
   ViewportTransformer,
 } from "@/viewport-transformer";
-import {
-  AbstractPublicGraphStore,
-  GraphStore,
-  AbstractGraphStore,
-} from "@/graph-store";
+import { PublicGraphStore, GraphStore } from "@/graph-store";
 import { CanvasController } from "@/canvas-controller";
 import { CenterFn } from "@/center-fn";
-import { PublicGraphStore } from "@/graph-store";
 import { PriorityFn } from "@/priority";
 import { HtmlController } from "@/html-controller";
 
 export class DiContainer {
   public readonly publicViewportTransformer: AbstractPublicViewportTransformer;
 
-  public readonly publicGraphStore: AbstractPublicGraphStore;
+  public readonly publicGraphStore: PublicGraphStore;
 
   public readonly canvasController: CanvasController;
 
@@ -33,9 +27,8 @@ export class DiContainer {
     nodesPriorityFn: PriorityFn,
     edgesPriorityFn: PriorityFn,
   ) {
-    const viewportTransformer: AbstractViewportTransformer =
-      new ViewportTransformer();
-    const graphStore: AbstractGraphStore = new GraphStore();
+    const viewportTransformer = new ViewportTransformer();
+    const graphStore = new GraphStore();
 
     this.publicGraphStore = new PublicGraphStore(graphStore);
 

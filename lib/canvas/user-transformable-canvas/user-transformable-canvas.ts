@@ -11,7 +11,6 @@ import { TransformOptions } from "./transform-options";
 import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { AbstractPublicGraphStore } from "@/graph-store";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { TransformFinishedFn } from "./transform-finished-fn";
 import { transformFinishedDefault } from "./transform-finished-default-fn";
@@ -20,9 +19,10 @@ import { TransformPayload } from "./transform-payload";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
 import { isOnCanvas, isOnWindow, setCursor } from "../utils";
+import { PublicGraphStore } from "@/graph-store";
 
 export class UserTransformableCanvas implements Canvas {
-  public readonly model: AbstractPublicGraphStore;
+  public readonly model: PublicGraphStore;
 
   public readonly transformation: AbstractPublicViewportTransformer;
 

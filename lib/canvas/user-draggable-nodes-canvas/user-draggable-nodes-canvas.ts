@@ -12,12 +12,12 @@ import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { AbstractPublicGraphStore } from "@/graph-store";
 import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 import { HtmlGraphError } from "@/error";
+import { PublicGraphStore } from "@/graph-store";
 
 export class UserDraggableNodesCanvas implements Canvas {
-  public readonly model: AbstractPublicGraphStore;
+  public readonly model: PublicGraphStore;
 
   public readonly transformation: AbstractPublicViewportTransformer;
 

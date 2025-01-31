@@ -1,12 +1,12 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeShapeFactory, EdgeType } from "@/edges";
 import { AddNodePorts } from "@/canvas/canvas";
-import { AbstractGraphStore } from "@/graph-store";
-import { HtmlController } from "@/html-controller";
 import { AbstractViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 import { PriorityFn } from "@/priority";
 import { HtmlGraphError } from "@/error";
+import { HtmlController } from "@/html-controller";
+import { GraphStore } from "@/graph-store";
 
 export class CanvasController {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -22,7 +22,7 @@ export class CanvasController {
   );
 
   public constructor(
-    private readonly graphStore: AbstractGraphStore,
+    private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
     private readonly viewportTransformer: AbstractViewportTransformer,
     private readonly defaultNodesCenterFn: CenterFn,
@@ -47,14 +47,14 @@ export class CanvasController {
       throw new HtmlGraphError("failed to add node with existing id");
     }
 
-    this.graphStore.addNode(
+    this.graphStore.addNode({
       nodeId,
       element,
       x,
       y,
-      centerFn ?? this.defaultNodesCenterFn,
-      priority ?? this.defaultNodesPriorityFn(),
-    );
+      centerFn: centerFn ?? this.defaultNodesCenterFn,
+      priority: priority ?? this.defaultNodesPriorityFn(),
+    });
 
     this.htmlController.attachNode(nodeId);
 
@@ -112,7 +112,7 @@ export class CanvasController {
     element: HTMLElement,
     nodeId: unknown,
     centerFn: CenterFn | undefined,
-    dir: number | undefined,
+    direction: number | undefined,
   ): void {
     portId = this.portIdGenerator.create(portId);
 
@@ -124,13 +124,13 @@ export class CanvasController {
       throw new HtmlGraphError("failed to add port with existing id");
     }
 
-    this.graphStore.addPort(
+    this.graphStore.addPort({
       portId,
       element,
       nodeId,
-      centerFn ?? this.defaultPortsCenterFn,
-      dir ?? this.defaultPortsDirection,
-    );
+      centerFn: centerFn ?? this.defaultPortsCenterFn,
+      direction: direction ?? this.defaultPortsDirection,
+    });
   }
 
   public updatePort(
@@ -185,13 +185,13 @@ export class CanvasController {
 
     const edgeType = this.resolveEdgeType(fromPortId, toPortId);
 
-    this.graphStore.addEdge(
+    this.graphStore.addEdge({
       edgeId,
-      fromPortId,
-      toPortId,
-      shapeFactory(edgeType),
-      priority ?? this.defaultEdgesPriorityFn(),
-    );
+      from: fromPortId,
+      to: toPortId,
+      shape: shapeFactory(edgeType),
+      priority: priority ?? this.defaultEdgesPriorityFn(),
+    });
 
     this.htmlController.attachEdge(edgeId);
   }

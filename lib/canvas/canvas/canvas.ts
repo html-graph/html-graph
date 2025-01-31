@@ -6,13 +6,13 @@ import { PatchMatrixRequest } from "./patch-transform-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { AbstractPublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 export interface Canvas {
   /**
    * provides api for accessing graph model
    */
-  readonly model: AbstractPublicGraphStore;
+  readonly model: PublicGraphStore;
 
   /**
    * provides api for canvas transformation

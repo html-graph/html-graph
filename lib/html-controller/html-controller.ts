@@ -1,8 +1,8 @@
-import { AbstractGraphStore } from "@/graph-store";
 import { AbstractViewportTransformer } from "@/viewport-transformer";
 import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { TwoWayMap } from "./utils";
 import { Point } from "@/point";
+import { GraphStore } from "@/graph-store";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -27,7 +27,7 @@ export class HtmlController {
       callback: ResizeObserverCallback,
     ) => ResizeObserver,
     private readonly getBoundingClientRectFn: (element: HTMLElement) => DOMRect,
-    private readonly graphStore: AbstractGraphStore,
+    private readonly graphStore: GraphStore,
     private readonly viewportTransformer: AbstractViewportTransformer,
   ) {
     this.host.appendChild(this.container);

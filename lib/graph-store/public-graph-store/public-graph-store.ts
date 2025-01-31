@@ -1,11 +1,10 @@
+import { GraphStore } from "../graph-store";
 import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
-import { AbstractGraphStore } from "../graph-store";
-import { AbstractPublicGraphStore } from "./abstract-public-graph-store";
 
-export class PublicGraphStore implements AbstractPublicGraphStore {
-  public constructor(private readonly graphStore: AbstractGraphStore) {}
+export class PublicGraphStore {
+  public constructor(private readonly graphStore: GraphStore) {}
 
   public getNode(nodeId: unknown): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);

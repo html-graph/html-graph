@@ -1,7 +1,5 @@
 # TODO
 
-- example port same as node
-- improve port id naming
 - unit tests
 - virtual scroll
   - refactor update edge shape

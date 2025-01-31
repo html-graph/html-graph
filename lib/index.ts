@@ -46,7 +46,7 @@ export type {
   GraphNode,
   GraphPort,
   GraphEdge,
-  AbstractPublicGraphStore as PublicGraphStore,
+  PublicGraphStore,
 } from "./graph-store";
 
 export type { AbstractPublicViewportTransformer as PublicViewportTransformer } from "./viewport-transformer";

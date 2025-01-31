@@ -1,11 +1,11 @@
-import { CenterFn } from "@/center-fn";
-import { EdgeShape } from "@/edges";
 import { EdgePayload } from "./edge-payload";
 import { NodePayload } from "./node-payload";
 import { PortPayload } from "./port-payload";
-import { AbstractGraphStore } from "./abstract-graph-store";
+import { AddNodeRequest } from "./add-node-request";
+import { AddPortRequest } from "./add-port-request";
+import { AddEdgeRequest } from "./add-edge-request";
 
-export class GraphStore implements AbstractGraphStore {
+export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
 
   private readonly ports = new Map<unknown, PortPayload>();
@@ -22,16 +22,16 @@ export class GraphStore implements AbstractGraphStore {
 
   private readonly cycleEdges = new Map<unknown, Set<unknown>>();
 
-  public addNode(
-    nodeId: unknown,
-    element: HTMLElement,
-    x: number,
-    y: number,
-    centerFn: CenterFn,
-    priority: number,
-  ): void {
-    this.nodes.set(nodeId, { element, x, y, centerFn, priority });
-    this.nodePorts.set(nodeId, new Map<string, HTMLElement>());
+  public addNode(request: AddNodeRequest): void {
+    this.nodes.set(request.nodeId, {
+      element: request.element,
+      x: request.x,
+      y: request.y,
+      centerFn: request.centerFn,
+      priority: request.priority,
+    });
+
+    this.nodePorts.set(request.nodeId, new Map<string, HTMLElement>());
   }
 
   public getAllNodeIds(): readonly unknown[] {
@@ -48,20 +48,19 @@ export class GraphStore implements AbstractGraphStore {
     this.nodePorts.delete(nodeId);
   }
 
-  public addPort(
-    portId: unknown,
-    element: HTMLElement,
-    nodeId: unknown,
-    centerFn: CenterFn,
-    dir: number,
-  ): void {
-    this.ports.set(portId, { element, centerFn, direction: dir });
-    this.cycleEdges.set(portId, new Set());
-    this.incommingEdges.set(portId, new Set());
-    this.outcommingEdges.set(portId, new Set());
-    this.portNodeId.set(portId, nodeId);
+  public addPort(request: AddPortRequest): void {
+    this.ports.set(request.portId, {
+      element: request.element,
+      centerFn: request.centerFn,
+      direction: request.direction,
+    });
 
-    this.nodePorts.get(nodeId)!.set(portId, element);
+    this.cycleEdges.set(request.portId, new Set());
+    this.incommingEdges.set(request.portId, new Set());
+    this.outcommingEdges.set(request.portId, new Set());
+    this.portNodeId.set(request.portId, request.nodeId);
+
+    this.nodePorts.get(request.nodeId)!.set(request.portId, request.element);
   }
 
   public getPort(portId: unknown): PortPayload | undefined {
@@ -96,25 +95,19 @@ export class GraphStore implements AbstractGraphStore {
     this.ports.delete(portId);
   }
 
-  public addEdge(
-    edgeId: unknown,
-    fromPortId: unknown,
-    toPortId: unknown,
-    shape: EdgeShape,
-    priority: number,
-  ): void {
-    this.edges.set(edgeId, {
-      from: fromPortId,
-      to: toPortId,
-      shape,
-      priority,
+  public addEdge(request: AddEdgeRequest): void {
+    this.edges.set(request.edgeId, {
+      from: request.from,
+      to: request.to,
+      shape: request.shape,
+      priority: request.priority,
     });
 
-    if (fromPortId !== toPortId) {
-      this.outcommingEdges.get(fromPortId)!.add(edgeId);
-      this.incommingEdges.get(toPortId)!.add(edgeId);
+    if (request.from !== request.to) {
+      this.outcommingEdges.get(request.from)!.add(request.edgeId);
+      this.incommingEdges.get(request.to)!.add(request.edgeId);
     } else {
-      this.cycleEdges.get(fromPortId)!.add(edgeId);
+      this.cycleEdges.get(request.from)!.add(request.edgeId);
     }
   }
 

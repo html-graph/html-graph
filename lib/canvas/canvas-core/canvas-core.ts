@@ -15,7 +15,7 @@ import { createOptions } from "./create-options";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { AbstractPublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/graph-store";
 
 /**
  * Provides low level API for acting on graph
@@ -23,7 +23,7 @@ import { AbstractPublicGraphStore } from "@/graph-store";
 export class CanvasCore implements Canvas {
   public readonly transformation: AbstractPublicViewportTransformer;
 
-  public readonly model: AbstractPublicGraphStore;
+  public readonly model: PublicGraphStore;
 
   private readonly di: DiContainer;
 
