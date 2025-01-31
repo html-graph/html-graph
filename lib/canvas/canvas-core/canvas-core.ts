@@ -36,7 +36,7 @@ export class CanvasCore implements Canvas {
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
 
-    const getBoundingClientRect = (element: HTMLElement) => {
+    const getBoundingClientRect = (element: HTMLElement): DOMRect => {
       return element.getBoundingClientRect();
     };
 

@@ -9,10 +9,10 @@ const canvas = new HtmlGraphBuilder()
         roundness: 0,
         arrowLength: 0,
       },
-      priority: 1,
+      priority: 0,
     },
     nodes: {
-      priority: 0,
+      priority: 1,
     },
   })
   .setUserDraggableNodes({
