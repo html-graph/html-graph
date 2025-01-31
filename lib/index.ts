@@ -49,7 +49,7 @@ export type {
   PublicGraphStore,
 } from "./graph-store";
 
-export type { AbstractPublicViewportTransformer as PublicViewportTransformer } from "./viewport-transformer";
+export type { PublicViewportTransformer } from "./viewport-transformer";
 
 export type { CenterFn } from "./center-fn";
 

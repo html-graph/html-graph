@@ -1,12 +1,12 @@
 import { CenterFn } from "@/center-fn";
 import { EdgeShapeFactory, EdgeType } from "@/edges";
 import { AddNodePorts } from "@/canvas/canvas";
-import { AbstractViewportTransformer } from "@/viewport-transformer";
 import { IdGenerator } from "@/id-generator";
 import { PriorityFn } from "@/priority";
 import { HtmlGraphError } from "@/error";
 import { HtmlController } from "@/html-controller";
 import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
 
 export class CanvasController {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -24,7 +24,7 @@ export class CanvasController {
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
-    private readonly viewportTransformer: AbstractViewportTransformer,
+    private readonly viewportTransformer: ViewportTransformer,
     private readonly defaultNodesCenterFn: CenterFn,
     private readonly defaultPortsCenterFn: CenterFn,
     private readonly defaultPortsDirection: number,

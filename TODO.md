@@ -1,5 +1,6 @@
 # TODO
 
+- reactiveness node and port strategy
 - unit tests
 - virtual scroll
   - refactor update edge shape

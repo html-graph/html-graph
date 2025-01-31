@@ -8,7 +8,6 @@ import {
   UpdateNodeRequest,
 } from "../canvas";
 import { TransformOptions } from "./transform-options";
-import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { TouchState } from "./touch-state";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
@@ -20,11 +19,12 @@ import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
 import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
-  public readonly transformation: AbstractPublicViewportTransformer;
+  public readonly transformation: PublicViewportTransformer;
 
   private element: HTMLElement | null = null;
 

@@ -1,4 +1,4 @@
-import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
@@ -17,7 +17,7 @@ export interface Canvas {
   /**
    * provides api for canvas transformation
    */
-  readonly transformation: AbstractPublicViewportTransformer;
+  readonly transformation: PublicViewportTransformer;
 
   /**
    * adds node to graph

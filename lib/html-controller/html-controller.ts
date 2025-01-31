@@ -1,8 +1,8 @@
-import { AbstractViewportTransformer } from "@/viewport-transformer";
 import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { TwoWayMap } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -11,14 +11,11 @@ export class HtmlController {
 
   private readonly container = createContainer();
 
-  private readonly nodeWrappersResizeObserver: ResizeObserver;
+  private readonly nodesResizeObserver: ResizeObserver;
 
-  private readonly nodeElementToIdMap = new Map<HTMLElement, unknown>();
+  private readonly nodeIdToElementMap = new TwoWayMap<unknown, HTMLElement>();
 
-  private readonly nodeIdToWrapperElementMap = new TwoWayMap<
-    unknown,
-    HTMLElement
-  >();
+  private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
@@ -28,11 +25,11 @@ export class HtmlController {
     ) => ResizeObserver,
     private readonly getBoundingClientRectFn: (element: HTMLElement) => DOMRect,
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: AbstractViewportTransformer,
+    private readonly viewportTransformer: ViewportTransformer,
   ) {
     this.host.appendChild(this.container);
 
-    this.nodeWrappersResizeObserver = this.createNodesResizeObserver();
+    this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -63,12 +60,12 @@ export class HtmlController {
 
     this.container.appendChild(wrapper);
 
-    this.nodeElementToIdMap.set(node.element, nodeId);
+    this.nodeIdToElementMap.set(nodeId, node.element);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
     this.updateNodeCoordinatesInternal(nodeId);
     this.updateNodePriority(nodeId);
-    this.nodeWrappersResizeObserver.observe(wrapper);
+    this.nodesResizeObserver.observe(node.element);
 
     wrapper.style.visibility = "visible";
   }
@@ -76,13 +73,13 @@ export class HtmlController {
   public detachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId)!;
 
-    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
-    this.nodeWrappersResizeObserver.unobserve(wrapper);
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    this.nodesResizeObserver.unobserve(node.element);
     wrapper.removeChild(node.element);
     this.container.removeChild(wrapper);
 
-    this.nodeElementToIdMap.delete(node.element);
-    this.nodeIdToWrapperElementMap.deleteByKey(nodeId);
+    this.nodeIdToElementMap.deleteByKey(nodeId);
+    this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
   public attachEdge(edgeId: unknown): void {
@@ -112,7 +109,7 @@ export class HtmlController {
   }
 
   public destroy(): void {
-    this.nodeWrappersResizeObserver.disconnect();
+    this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.container);
 
     this.clear();
@@ -131,7 +128,7 @@ export class HtmlController {
 
   public updateNodePriority(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId);
-    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
 
     wrapper.style.zIndex = `${node!.priority}`;
   }
@@ -164,8 +161,8 @@ export class HtmlController {
   private createNodesResizeObserver(): ResizeObserver {
     return this.nodeResizeObserverFactory((entries) => {
       entries.forEach((entry) => {
-        const wrapper = entry.target as HTMLElement;
-        const nodeId = this.nodeIdToWrapperElementMap.getByValue(wrapper)!;
+        const element = entry.target as HTMLElement;
+        const nodeId = this.nodeIdToElementMap.getByValue(element)!;
 
         this.updateNodeCoordinatesInternal(nodeId);
 
@@ -179,7 +176,7 @@ export class HtmlController {
   }
 
   private updateNodeCoordinatesInternal(nodeId: unknown): void {
-    const wrapper = this.nodeIdToWrapperElementMap.getByKey(nodeId)!;
+    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const { width, height } = this.getBoundingClientRectFn(wrapper);
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;

@@ -8,7 +8,6 @@ import {
   UpdateEdgeRequest,
   UpdateNodeRequest,
 } from "../canvas";
-import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
@@ -16,12 +15,13 @@ import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 
 /**
  * Provides low level API for acting on graph
  */
 export class CanvasCore implements Canvas {
-  public readonly transformation: AbstractPublicViewportTransformer;
+  public readonly transformation: PublicViewportTransformer;
 
   public readonly model: PublicGraphStore;
 

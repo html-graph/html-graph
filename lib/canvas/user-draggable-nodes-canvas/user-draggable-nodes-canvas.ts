@@ -8,18 +8,18 @@ import {
   UpdateEdgeRequest,
   UpdateNodeRequest,
 } from "../canvas";
-import { AbstractPublicViewportTransformer } from "@/viewport-transformer";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { isOnCanvas, isOnWindow, setCursor } from "../utils";
 import { HtmlGraphError } from "@/error";
 import { PublicGraphStore } from "@/graph-store";
+import { PublicViewportTransformer } from "@/viewport-transformer";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
-  public readonly transformation: AbstractPublicViewportTransformer;
+  public readonly transformation: PublicViewportTransformer;
 
   private maxNodePriority = 0;
 

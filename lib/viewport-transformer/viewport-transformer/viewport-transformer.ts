@@ -1,9 +1,8 @@
 import { calculateReverseMatrix } from "../calculate-reverse-matrix";
 import { initialMatrix } from "../initial-matrix";
 import { TransformState } from "../transform-state";
-import { AbstractViewportTransformer } from "./abstract-viewport-transformer";
 
-export class ViewportTransformer implements AbstractViewportTransformer {
+export class ViewportTransformer {
   private viewportMatrix: TransformState = initialMatrix;
 
   private contentMatrix: TransformState = initialMatrix;
