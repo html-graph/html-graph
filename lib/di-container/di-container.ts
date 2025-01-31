@@ -16,7 +16,6 @@ export class DiContainer {
   public readonly canvasController: CanvasController;
 
   public constructor(
-    getBoundingClientRect: (element: HTMLElement) => DOMRect,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
     portsDirection: number,
@@ -32,11 +31,7 @@ export class DiContainer {
       viewportTransformer,
     );
 
-    const htmlController = new HtmlController(
-      getBoundingClientRect,
-      graphStore,
-      viewportTransformer,
-    );
+    const htmlController = new HtmlController(graphStore, viewportTransformer);
 
     this.canvasController = new CanvasController(
       graphStore,

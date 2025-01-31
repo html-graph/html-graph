@@ -2,7 +2,6 @@ import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
-import { TwoWayMap } from "@/two-way-map";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -11,14 +10,11 @@ export class HtmlController {
 
   private readonly container = createContainer();
 
-  private readonly nodeIdToElementMap = new TwoWayMap<unknown, Element>();
-
   private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
-    private readonly getBoundingClientRectFn: (element: HTMLElement) => DOMRect,
     private readonly graphStore: GraphStore,
     private readonly viewportTransformer: ViewportTransformer,
   ) {
@@ -53,7 +49,6 @@ export class HtmlController {
 
     this.container.appendChild(wrapper);
 
-    this.nodeIdToElementMap.set(nodeId, node.element);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
     this.updateNodeCoordinatesInternal(nodeId);
@@ -69,7 +64,6 @@ export class HtmlController {
     wrapper.removeChild(node.element);
     this.container.removeChild(wrapper);
 
-    this.nodeIdToElementMap.deleteByKey(nodeId);
     this.nodeIdToWrapperElementMap.delete(nodeId);
   }
 
@@ -149,7 +143,7 @@ export class HtmlController {
 
   private updateNodeCoordinatesInternal(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    const { width, height } = this.getBoundingClientRectFn(wrapper);
+    const { width, height } = wrapper.getBoundingClientRect();
     const scaleViewport = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
     const { x: centerX, y: centerY } = node.centerFn(width, height);
@@ -164,9 +158,9 @@ export class HtmlController {
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
 
-    const rectFrom = this.getBoundingClientRectFn(portFrom.element);
-    const rectTo = this.getBoundingClientRectFn(portTo.element);
-    const rect = this.getBoundingClientRectFn(this.host);
+    const rectFrom = portFrom.element.getBoundingClientRect();
+    const rectTo = portTo.element.getBoundingClientRect();
+    const rect = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 
     const from: Point = {

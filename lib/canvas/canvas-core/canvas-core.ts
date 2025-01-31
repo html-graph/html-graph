@@ -41,16 +41,24 @@ export class CanvasCore implements Canvas {
   private readonly nodesResizeObserver: ResizeObserver;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
-    this.nodesResizeObserver = this.createNodesResizeObserver();
+    this.nodesResizeObserver = new window.ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const element = entry.target;
+        const nodeId = this.nodes.getByValue(element)!;
+
+        this.updateNode(nodeId);
+
+        const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
+
+        edges.forEach((edge) => {
+          this.updateEdge(edge);
+        });
+      });
+    });
 
     const options: Options = createOptions(this.apiOptions ?? {});
 
-    const getBoundingClientRect = (element: HTMLElement): DOMRect => {
-      return element.getBoundingClientRect();
-    };
-
     this.di = new DiContainer(
-      getBoundingClientRect,
       options.nodes.centerFn,
       options.ports.centerFn,
       options.ports.direction,
@@ -100,13 +108,13 @@ export class CanvasCore implements Canvas {
 
     const element = this.nodes.getByKey(nodeId);
 
+    this.nodes.deleteByKey(nodeId);
+
     if (element === undefined) {
       throw new HtmlGraphError("failed to remove non existing node");
     }
 
     this.nodesResizeObserver.unobserve(element);
-
-    this.nodes.deleteByKey(nodeId);
 
     return this;
   }
@@ -220,22 +228,5 @@ export class CanvasCore implements Canvas {
     this.clear();
     this.di.canvasController.destroy();
     this.nodesResizeObserver.disconnect();
-  }
-
-  private createNodesResizeObserver(): ResizeObserver {
-    return new window.ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target;
-        const nodeId = this.nodes.getByValue(element)!;
-
-        this.updateNode(nodeId);
-
-        const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
-
-        edges.forEach((edge) => {
-          this.updateEdge(edge);
-        });
-      });
-    });
   }
 }
