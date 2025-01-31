@@ -8,6 +8,14 @@ export class TwoWayMap<A, B> {
     this.valueMap.set(value, key);
   }
 
+  public hasKey(key: A): boolean {
+    return this.keyMap.has(key);
+  }
+
+  public hasValue(value: B): boolean {
+    return this.valueMap.has(value);
+  }
+
   public getByKey(key: A): B | undefined {
     return this.keyMap.get(key);
   }

@@ -1,5 +1,6 @@
 # TODO
 
+- extend update methods
 - reactiveness node and port strategy
 - unit tests
 - virtual scroll

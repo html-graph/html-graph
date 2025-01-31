@@ -16,9 +16,6 @@ export class DiContainer {
   public readonly canvasController: CanvasController;
 
   public constructor(
-    nodeResizeObserverFactory: (
-      callback: ResizeObserverCallback,
-    ) => ResizeObserver,
     getBoundingClientRect: (element: HTMLElement) => DOMRect,
     nodesCenterFn: CenterFn,
     portsCenterFn: CenterFn,
@@ -36,7 +33,6 @@ export class DiContainer {
     );
 
     const htmlController = new HtmlController(
-      nodeResizeObserverFactory,
       getBoundingClientRect,
       graphStore,
       viewportTransformer,

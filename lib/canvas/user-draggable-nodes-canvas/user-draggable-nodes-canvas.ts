@@ -224,7 +224,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public updateNode(
     nodeId: unknown,
-    request: UpdateNodeRequest,
+    request?: UpdateNodeRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.updateNode(nodeId, request);
 
@@ -276,7 +276,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public updateEdge(
     edgeId: unknown,
-    request: UpdateEdgeRequest,
+    request?: UpdateEdgeRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.updateEdge(edgeId, request);
 

@@ -211,8 +211,9 @@ export class CanvasController {
       const edgeType = this.resolveEdgeType(edge.from, edge.to);
 
       edge.shape = shape(edgeType);
-      this.htmlController.updateEdgeShape(edgeId);
     }
+
+    this.htmlController.updateEdgeShape(edgeId);
 
     if (priority !== undefined) {
       edge.priority = priority;

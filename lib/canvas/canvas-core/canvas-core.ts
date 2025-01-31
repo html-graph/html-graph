@@ -16,6 +16,9 @@ import { EdgeShapeFactory } from "@/edges";
 import { UpdatePortRequest } from "../canvas/update-port-request";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
+import { IdGenerator } from "@/id-generator";
+import { TwoWayMap } from "@/two-way-map";
+import { HtmlGraphError } from "@/error";
 
 /**
  * Provides low level API for acting on graph
@@ -29,11 +32,17 @@ export class CanvasCore implements Canvas {
 
   private readonly edgeShapeFactory: EdgeShapeFactory;
 
-  private readonly nodeResizeObserverFactory = (
-    callback: ResizeObserverCallback,
-  ): ResizeObserver => new window.ResizeObserver(callback);
+  private readonly nodes = new TwoWayMap<unknown, Element>();
+
+  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
+    this.nodes.hasKey(nodeId),
+  );
+
+  private readonly nodesResizeObserver: ResizeObserver;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
+    this.nodesResizeObserver = this.createNodesResizeObserver();
+
     const options: Options = createOptions(this.apiOptions ?? {});
 
     const getBoundingClientRect = (element: HTMLElement): DOMRect => {
@@ -41,7 +50,6 @@ export class CanvasCore implements Canvas {
     };
 
     this.di = new DiContainer(
-      this.nodeResizeObserverFactory,
       getBoundingClientRect,
       options.nodes.centerFn,
       options.ports.centerFn,
@@ -56,27 +64,32 @@ export class CanvasCore implements Canvas {
     this.edgeShapeFactory = options.edges.shapeFactory;
   }
 
-  public addNode(node: AddNodeRequest): CanvasCore {
+  public addNode(request: AddNodeRequest): CanvasCore {
+    const nodeId = this.nodeIdGenerator.create(request.id);
+
     this.di.canvasController.addNode(
-      node.id,
-      node.element,
-      node.x,
-      node.y,
-      node.ports,
-      node.centerFn,
-      node.priority,
+      nodeId,
+      request.element,
+      request.x,
+      request.y,
+      request.ports,
+      request.centerFn,
+      request.priority,
     );
+
+    this.nodes.set(nodeId, request.element);
+    this.nodesResizeObserver.observe(request.element);
 
     return this;
   }
 
-  public updateNode(nodeId: unknown, request: UpdateNodeRequest): CanvasCore {
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
     this.di.canvasController.updateNode(
       nodeId,
-      request.x,
-      request.y,
-      request.priority,
-      request.centerFn,
+      request?.x,
+      request?.y,
+      request?.priority,
+      request?.centerFn,
     );
 
     return this;
@@ -84,6 +97,16 @@ export class CanvasCore implements Canvas {
 
   public removeNode(nodeId: unknown): CanvasCore {
     this.di.canvasController.removeNode(nodeId);
+
+    const element = this.nodes.getByKey(nodeId);
+
+    if (element === undefined) {
+      throw new HtmlGraphError("failed to remove non existing node");
+    }
+
+    this.nodesResizeObserver.unobserve(element);
+
+    this.nodes.deleteByKey(nodeId);
 
     return this;
   }
@@ -133,13 +156,17 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): CanvasCore {
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasCore {
     const shapeFactory =
-      request.shape !== undefined
+      request?.shape !== undefined
         ? resolveEdgeShapeFactory(request.shape)
         : undefined;
 
-    this.di.canvasController.updateEdge(edgeId, shapeFactory, request.priority);
+    this.di.canvasController.updateEdge(
+      edgeId,
+      shapeFactory,
+      request?.priority,
+    );
 
     return this;
   }
@@ -172,6 +199,7 @@ export class CanvasCore implements Canvas {
 
   public clear(): CanvasCore {
     this.di.canvasController.clear();
+    this.nodes.clear();
 
     return this;
   }
@@ -189,6 +217,25 @@ export class CanvasCore implements Canvas {
   }
 
   public destroy(): void {
+    this.clear();
     this.di.canvasController.destroy();
+    this.nodesResizeObserver.disconnect();
+  }
+
+  private createNodesResizeObserver(): ResizeObserver {
+    return new window.ResizeObserver((entries) => {
+      entries.forEach((entry) => {
+        const element = entry.target;
+        const nodeId = this.nodes.getByValue(element)!;
+
+        this.updateNode(nodeId);
+
+        const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
+
+        edges.forEach((edge) => {
+          this.updateEdge(edge);
+        });
+      });
+    });
   }
 }

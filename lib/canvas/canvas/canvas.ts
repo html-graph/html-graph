@@ -27,7 +27,7 @@ export interface Canvas {
   /**
    * updates node absolute coordinates
    */
-  updateNode(nodeId: unknown, request: UpdateNodeRequest): Canvas;
+  updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas;
 
   /**
    * removes node from graph
@@ -60,7 +60,7 @@ export interface Canvas {
   /**
    * updates edge
    */
-  updateEdge(edgeId: unknown, request: UpdateEdgeRequest): Canvas;
+  updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas;
 
   /**
    * removes edge from graph

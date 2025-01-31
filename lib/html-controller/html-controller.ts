@@ -1,8 +1,8 @@
 import { createContainer, createHost, createNodeWrapper } from "./utils";
-import { TwoWayMap } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
+import { TwoWayMap } from "@/two-way-map";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -11,25 +11,18 @@ export class HtmlController {
 
   private readonly container = createContainer();
 
-  private readonly nodesResizeObserver: ResizeObserver;
-
-  private readonly nodeIdToElementMap = new TwoWayMap<unknown, HTMLElement>();
+  private readonly nodeIdToElementMap = new TwoWayMap<unknown, Element>();
 
   private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   public constructor(
-    private readonly nodeResizeObserverFactory: (
-      callback: ResizeObserverCallback,
-    ) => ResizeObserver,
     private readonly getBoundingClientRectFn: (element: HTMLElement) => DOMRect,
     private readonly graphStore: GraphStore,
     private readonly viewportTransformer: ViewportTransformer,
   ) {
     this.host.appendChild(this.container);
-
-    this.nodesResizeObserver = this.createNodesResizeObserver();
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -65,7 +58,6 @@ export class HtmlController {
 
     this.updateNodeCoordinatesInternal(nodeId);
     this.updateNodePriority(nodeId);
-    this.nodesResizeObserver.observe(node.element);
 
     wrapper.style.visibility = "visible";
   }
@@ -74,7 +66,6 @@ export class HtmlController {
     const node = this.graphStore.getNode(nodeId)!;
 
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    this.nodesResizeObserver.unobserve(node.element);
     wrapper.removeChild(node.element);
     this.container.removeChild(wrapper);
 
@@ -109,7 +100,6 @@ export class HtmlController {
   }
 
   public destroy(): void {
-    this.nodesResizeObserver.disconnect();
     this.host.removeChild(this.container);
 
     this.clear();
@@ -141,7 +131,6 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
     this.updateEdgeCoordinates(edgeId);
-    this.updateEdgePriority(edgeId);
   }
 
   public updateEdgePriority(edgeId: unknown): void {
@@ -155,23 +144,6 @@ export class HtmlController {
 
     edges.forEach((edge) => {
       this.updateEdgeCoordinates(edge);
-    });
-  }
-
-  private createNodesResizeObserver(): ResizeObserver {
-    return this.nodeResizeObserverFactory((entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target as HTMLElement;
-        const nodeId = this.nodeIdToElementMap.getByValue(element)!;
-
-        this.updateNodeCoordinatesInternal(nodeId);
-
-        const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-        edges.forEach((edge) => {
-          this.updateEdgeCoordinates(edge);
-        });
-      });
     });
   }
 

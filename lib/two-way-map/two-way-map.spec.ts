@@ -14,6 +14,20 @@ describe("TwoWayMap", () => {
     expect(map.getByKey(1)).toBe("2");
   });
 
+  it("should return true for existing value", () => {
+    const map = new TwoWayMap<number, string>();
+    map.set(1, "2");
+
+    expect(map.hasKey(1)).toBe(true);
+  });
+
+  it("should return true for existing key", () => {
+    const map = new TwoWayMap<number, string>();
+    map.set(1, "2");
+
+    expect(map.hasValue("2")).toBe(true);
+  });
+
   it("should return specified key by value", () => {
     const map = new TwoWayMap<number, string>();
     map.set(1, "2");

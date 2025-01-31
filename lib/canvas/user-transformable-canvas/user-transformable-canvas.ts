@@ -222,7 +222,7 @@ export class UserTransformableCanvas implements Canvas {
 
   public updateNode(
     nodeId: unknown,
-    request: UpdateNodeRequest,
+    request?: UpdateNodeRequest,
   ): UserTransformableCanvas {
     this.canvas.updateNode(nodeId, request);
 
@@ -243,7 +243,7 @@ export class UserTransformableCanvas implements Canvas {
 
   public updatePort(
     portId: string,
-    request: UpdatePortRequest,
+    request?: UpdatePortRequest,
   ): UserTransformableCanvas {
     this.canvas.updatePort(portId, request);
 
@@ -264,7 +264,7 @@ export class UserTransformableCanvas implements Canvas {
 
   public updateEdge(
     edgeId: unknown,
-    request: UpdateEdgeRequest,
+    request?: UpdateEdgeRequest,
   ): UserTransformableCanvas {
     this.canvas.updateEdge(edgeId, request);
 
