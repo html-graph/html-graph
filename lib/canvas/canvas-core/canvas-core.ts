@@ -58,13 +58,13 @@ export class CanvasCore implements Canvas {
 
     const options: Options = createOptions(this.apiOptions ?? {});
 
-    this.di = new DiContainer(
-      options.nodes.centerFn,
-      options.ports.centerFn,
-      options.ports.direction,
-      options.nodes.priorityFn,
-      options.edges.priorityFn,
-    );
+    this.di = new DiContainer({
+      nodesCenterFn: options.nodes.centerFn,
+      nodesPriorityFn: options.nodes.priorityFn,
+      portsCenterFn: options.ports.centerFn,
+      portsDirection: options.ports.direction,
+      edgesPriorityFn: options.edges.priorityFn,
+    });
 
     this.transformation = this.di.publicViewportTransformer;
     this.model = this.di.publicGraphStore;
@@ -75,15 +75,15 @@ export class CanvasCore implements Canvas {
   public addNode(request: AddNodeRequest): CanvasCore {
     const nodeId = this.nodeIdGenerator.create(request.id);
 
-    this.di.canvasController.addNode(
+    this.di.canvasController.addNode({
       nodeId,
-      request.element,
-      request.x,
-      request.y,
-      request.ports,
-      request.centerFn,
-      request.priority,
-    );
+      element: request.element,
+      x: request.x,
+      y: request.y,
+      ports: request.ports,
+      centerFn: request.centerFn,
+      priority: request.priority,
+    });
 
     this.nodes.set(nodeId, request.element);
     this.nodesResizeObserver.observe(request.element);
@@ -92,13 +92,12 @@ export class CanvasCore implements Canvas {
   }
 
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
-    this.di.canvasController.updateNode(
-      nodeId,
-      request?.x,
-      request?.y,
-      request?.priority,
-      request?.centerFn,
-    );
+    this.di.canvasController.updateNode(nodeId, {
+      x: request?.x,
+      y: request?.y,
+      priority: request?.priority,
+      centerFn: request?.centerFn,
+    });
 
     return this;
   }
@@ -120,23 +119,22 @@ export class CanvasCore implements Canvas {
   }
 
   public markPort(port: MarkPortRequest): CanvasCore {
-    this.di.canvasController.markPort(
-      port.id,
-      port.element,
-      port.nodeId,
-      port.centerFn,
-      port.direction,
-    );
+    this.di.canvasController.markPort({
+      portId: port.id,
+      element: port.element,
+      nodeId: port.nodeId,
+      centerFn: port.centerFn,
+      direction: port.direction,
+    });
 
     return this;
   }
 
   public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
-    this.di.canvasController.updatePort(
-      portId,
-      request?.direction,
-      request?.centerFn,
-    );
+    this.di.canvasController.updatePort(portId, {
+      direction: request?.direction,
+      centerFn: request?.centerFn,
+    });
 
     return this;
   }
@@ -153,13 +151,13 @@ export class CanvasCore implements Canvas {
         ? resolveEdgeShapeFactory(edge.shape)
         : this.edgeShapeFactory;
 
-    this.di.canvasController.addEdge(
-      edge.id,
-      edge.from,
-      edge.to,
+    this.di.canvasController.addEdge({
+      edgeId: edge.id,
+      fromPortId: edge.from,
+      toPortId: edge.to,
       shapeFactory,
-      edge.priority,
-    );
+      priority: edge.priority,
+    });
 
     return this;
   }
@@ -170,11 +168,11 @@ export class CanvasCore implements Canvas {
         ? resolveEdgeShapeFactory(request.shape)
         : undefined;
 
-    this.di.canvasController.updateEdge(
+    this.di.canvasController.updateEdge({
       edgeId,
-      shapeFactory,
-      request?.priority,
-    );
+      shape: shapeFactory,
+      priority: request?.priority,
+    });
 
     return this;
   }
@@ -186,21 +184,13 @@ export class CanvasCore implements Canvas {
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.di.canvasController.patchViewportMatrix(
-      request.scale ?? null,
-      request.dx ?? null,
-      request.dy ?? null,
-    );
+    this.di.canvasController.patchViewportMatrix(request);
 
     return this;
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.di.canvasController.patchContentMatrix(
-      request.scale ?? null,
-      request.dx ?? null,
-      request.dy ?? null,
-    );
+    this.di.canvasController.patchContentMatrix(request);
 
     return this;
   }

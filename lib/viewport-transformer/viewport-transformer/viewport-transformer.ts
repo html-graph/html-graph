@@ -1,6 +1,7 @@
 import { calculateReverseMatrix } from "../calculate-reverse-matrix";
 import { initialMatrix } from "../initial-matrix";
 import { TransformState } from "../transform-state";
+import { PatchTransformRequest } from "./patch-transform-request";
 
 export class ViewportTransformer {
   private viewportMatrix: TransformState = initialMatrix;
@@ -15,29 +16,21 @@ export class ViewportTransformer {
     return this.contentMatrix;
   }
 
-  public patchViewportMatrix(
-    scale: number | null,
-    x: number | null,
-    y: number | null,
-  ): void {
+  public patchViewportMatrix(matrix: PatchTransformRequest): void {
     this.viewportMatrix = {
-      scale: scale ?? this.viewportMatrix.scale,
-      dx: x ?? this.viewportMatrix.dx,
-      dy: y ?? this.viewportMatrix.dy,
+      scale: matrix.scale ?? this.viewportMatrix.scale,
+      dx: matrix.dx ?? this.viewportMatrix.dx,
+      dy: matrix.dy ?? this.viewportMatrix.dy,
     };
 
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
   }
 
-  public patchContentMatrix(
-    scale: number | null,
-    dx: number | null,
-    dy: number | null,
-  ): void {
+  public patchContentMatrix(matrix: PatchTransformRequest): void {
     this.contentMatrix = {
-      scale: scale ?? this.contentMatrix.scale,
-      dx: dx ?? this.contentMatrix.dx,
-      dy: dy ?? this.contentMatrix.dy,
+      scale: matrix.scale ?? this.contentMatrix.scale,
+      dx: matrix.dx ?? this.contentMatrix.dx,
+      dy: matrix.dy ?? this.contentMatrix.dy,
     };
 
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);

@@ -21,7 +21,7 @@ describe("ViewportTransformer", () => {
   it("should patch viewport matrix scale", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchViewportMatrix(2, null, null);
+    transformer.patchViewportMatrix({ scale: 2 });
 
     const viewportMatrix: TransformState = transformer.getViewportMatrix();
 
@@ -31,7 +31,7 @@ describe("ViewportTransformer", () => {
   it("should patch viewport matrix dx", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchViewportMatrix(null, 1, null);
+    transformer.patchViewportMatrix({ dx: 1 });
 
     const viewportMatrix: TransformState = transformer.getViewportMatrix();
 
@@ -41,7 +41,7 @@ describe("ViewportTransformer", () => {
   it("should patch viewport matrix dy", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchViewportMatrix(null, null, 1);
+    transformer.patchViewportMatrix({ dy: 1 });
 
     const viewportMatrix: TransformState = transformer.getViewportMatrix();
 
@@ -51,7 +51,7 @@ describe("ViewportTransformer", () => {
   it("should patch content matrix scale", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchContentMatrix(2, null, null);
+    transformer.patchContentMatrix({ scale: 2 });
 
     const contentMatrix: TransformState = transformer.getContentMatrix();
 
@@ -61,7 +61,7 @@ describe("ViewportTransformer", () => {
   it("should patch content matrix dx", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchContentMatrix(null, 1, null);
+    transformer.patchContentMatrix({ dx: 1 });
 
     const contentMatrix: TransformState = transformer.getContentMatrix();
 
@@ -71,7 +71,7 @@ describe("ViewportTransformer", () => {
   it("should patch content matrix dy", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchContentMatrix(null, null, 1);
+    transformer.patchContentMatrix({ dy: 1 });
 
     const contentMatrix: TransformState = transformer.getContentMatrix();
 
@@ -81,7 +81,7 @@ describe("ViewportTransformer", () => {
   it("should calculate content matrix when patching viewport matrix", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchViewportMatrix(2, 2, 2);
+    transformer.patchViewportMatrix({ scale: 2, dx: 2, dy: 2 });
 
     const contentMatrix: TransformState = transformer.getContentMatrix();
 
@@ -91,7 +91,7 @@ describe("ViewportTransformer", () => {
   it("should calculate viewport matrix when patching content matrix", () => {
     const transformer = new ViewportTransformer();
 
-    transformer.patchContentMatrix(2, 2, 2);
+    transformer.patchContentMatrix({ scale: 2, dx: 2, dy: 2 });
 
     const contentMatrix: TransformState = transformer.getViewportMatrix();
 

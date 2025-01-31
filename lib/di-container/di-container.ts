@@ -4,9 +4,8 @@ import {
 } from "@/viewport-transformer";
 import { PublicGraphStore, GraphStore } from "@/graph-store";
 import { CanvasController } from "@/canvas-controller";
-import { CenterFn } from "@/center-fn";
-import { PriorityFn } from "@/priority";
 import { HtmlController } from "@/html-controller";
+import { DiOptions } from "./di-options";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -15,13 +14,7 @@ export class DiContainer {
 
   public readonly canvasController: CanvasController;
 
-  public constructor(
-    nodesCenterFn: CenterFn,
-    portsCenterFn: CenterFn,
-    portsDirection: number,
-    nodesPriorityFn: PriorityFn,
-    edgesPriorityFn: PriorityFn,
-  ) {
+  public constructor(options: DiOptions) {
     const viewportTransformer = new ViewportTransformer();
     const graphStore = new GraphStore();
 
@@ -37,11 +30,11 @@ export class DiContainer {
       graphStore,
       htmlController,
       viewportTransformer,
-      nodesCenterFn,
-      portsCenterFn,
-      portsDirection,
-      nodesPriorityFn,
-      edgesPriorityFn,
+      options.nodesCenterFn,
+      options.portsCenterFn,
+      options.portsDirection,
+      options.nodesPriorityFn,
+      options.edgesPriorityFn,
     );
   }
 }

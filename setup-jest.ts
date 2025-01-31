@@ -1,3 +1,53 @@
+class ResizeObserverMock implements ResizeObserver {
+  private readonly elements = new Set<HTMLElement>();
+
+  public constructor(private readonly callback: ResizeObserverCallback) {}
+
+  public disconnect(): void {
+    this.elements.clear();
+  }
+
+  public observe(element: HTMLElement): void {
+    this.elements.add(element);
+
+    this.callback(
+      [
+        {
+          borderBoxSize: [],
+          contentBoxSize: [],
+          contentRect: element.getBoundingClientRect(),
+          devicePixelContentBoxSize: [],
+          target: element,
+        },
+      ],
+      this,
+    );
+  }
+
+  public unobserve(element: HTMLElement): void {
+    this.elements.delete(element);
+  }
+
+  public triggerResizeFor(element: HTMLElement): void {
+    if (this.elements.has(element)) {
+      this.callback(
+        [
+          {
+            borderBoxSize: [],
+            contentBoxSize: [],
+            contentRect: element.getBoundingClientRect(),
+            devicePixelContentBoxSize: [],
+            target: element,
+          },
+        ],
+        this,
+      );
+    }
+  }
+}
+
+global.ResizeObserver = ResizeObserverMock;
+
 global.DOMRect = class {
   public bottom: number = 0;
 
