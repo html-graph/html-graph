@@ -1,7 +1,5 @@
 # TODO
 
-- extend update methods
-- refactor canvas controller
 - reactiveness node and port strategy
 - unit tests
 - virtual scroll

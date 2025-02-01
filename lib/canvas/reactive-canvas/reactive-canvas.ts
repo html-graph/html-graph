@@ -12,6 +12,7 @@ import { UpdatePortRequest } from "../canvas/update-port-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
 import { PublicGraphStore } from "@/graph-store";
+import { ReactiveOptions } from "./reactive-options";
 
 export class ReactiveCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
@@ -20,30 +21,32 @@ export class ReactiveCanvas implements Canvas {
 
   private readonly nodes = new TwoWayMap<unknown, Element>();
 
+  private readonly ports = new TwoWayMap<unknown, Element>();
+
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
     this.nodes.hasKey(nodeId),
   );
 
   private readonly nodesResizeObserver: ResizeObserver;
 
-  public constructor(private readonly canvas: Canvas) {
+  private readonly isNodeResizable: boolean;
+
+  public constructor(
+    private readonly canvas: Canvas,
+    options?: ReactiveOptions,
+  ) {
     this.nodesResizeObserver = new window.ResizeObserver((entries) => {
       entries.forEach((entry) => {
-        const element = entry.target;
-        const nodeId = this.nodes.getByValue(element)!;
+        const element = entry.target as HTMLElement;
 
-        this.canvas.updateNode(nodeId);
-
-        const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
-
-        edges.forEach((edge) => {
-          this.canvas.updateEdge(edge);
-        });
+        this.reactNodeChange(element);
       });
     });
 
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
+
+    this.isNodeResizable = options?.nodeReactiveStrategy === "resize";
   }
 
   public addNode(request: AddNodeRequest): ReactiveCanvas {
@@ -56,7 +59,9 @@ export class ReactiveCanvas implements Canvas {
 
     this.nodes.set(id, request.element);
 
-    this.nodesResizeObserver.observe(request.element);
+    if (this.isNodeResizable) {
+      this.nodesResizeObserver.observe(request.element);
+    }
 
     return this;
   }
@@ -77,7 +82,10 @@ export class ReactiveCanvas implements Canvas {
 
     this.nodes.deleteByKey(nodeId);
 
-    this.nodesResizeObserver.unobserve(element!);
+    if (this.isNodeResizable) {
+      this.nodesResizeObserver.unobserve(element!);
+      this.nodes.deleteByKey(nodeId);
+    }
 
     return this;
   }
@@ -138,6 +146,8 @@ export class ReactiveCanvas implements Canvas {
 
   public clear(): ReactiveCanvas {
     this.canvas.clear();
+    this.nodes.clear();
+    this.ports.clear();
 
     return this;
   }
@@ -156,5 +166,21 @@ export class ReactiveCanvas implements Canvas {
 
   public destroy(): void {
     this.canvas.destroy();
+
+    if (this.nodesResizeObserver !== null) {
+      this.nodesResizeObserver.disconnect();
+    }
+  }
+
+  private reactNodeChange(element: HTMLElement): void {
+    const nodeId = this.nodes.getByValue(element)!;
+
+    this.canvas.updateNode(nodeId);
+
+    const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
+
+    edges.forEach((edge) => {
+      this.canvas.updateEdge(edge);
+    });
   }
 }

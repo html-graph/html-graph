@@ -44,13 +44,13 @@ export interface Canvas {
   /**
    * updates port and attached edges
    */
-  updatePort(portId: string, request?: UpdatePortRequest): Canvas;
+  updatePort(portId: unknown, request?: UpdatePortRequest): Canvas;
 
   /**
    * ummarks element as port of node
    * all the edges adjacent to port get removed
    */
-  unmarkPort(portId: string): Canvas;
+  unmarkPort(portId: unknown): Canvas;
 
   /**
    * adds edge to graph

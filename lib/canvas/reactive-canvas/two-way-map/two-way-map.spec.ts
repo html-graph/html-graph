@@ -88,7 +88,7 @@ describe("TwoWayMap", () => {
     map.set(1, "2");
 
     const callback: (value: string, key: number) => void = () => {
-      //
+      // thsi mock callback is intended to be empty
     };
 
     const spy = jest.fn(callback);
