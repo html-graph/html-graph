@@ -1,8 +1,8 @@
 import { CenterFn } from "@/center-fn";
 
 export type MarkNodePortRequest = {
-  readonly id?: unknown;
+  readonly id: unknown | undefined;
   readonly element: HTMLElement;
-  readonly centerFn?: CenterFn;
-  readonly direction?: number;
+  readonly centerFn: CenterFn | undefined;
+  readonly direction: number | undefined;
 };

@@ -12,7 +12,7 @@ class DeployDocs {
       "rm -rdf ./**",
       "cp -r ../html-graph/dist-docs/** .",
       "git add -A",
-      'git commit -m "docs deploy"',
+      'git commit -m "docs deploy" || true',
       "git push",
     ];
 
