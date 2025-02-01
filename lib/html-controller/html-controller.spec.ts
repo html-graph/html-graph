@@ -295,6 +295,34 @@ describe("HtmlController", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
+  it("should update edge shape", () => {
+    const store: GraphStore = new GraphStore();
+    const htmlController = createHtmlController({ store });
+    const div = document.createElement("div");
+    htmlController.attach(div);
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    htmlController.attachNode(addNodeRequest1.nodeId);
+    htmlController.attachNode(addNodeRequest2.nodeId);
+    htmlController.attachEdge(addEdgeRequest12.edgeId);
+
+    const edge = store.getEdge(addEdgeRequest12.edgeId)!;
+
+    const newShape = new EdgeShapeMock();
+    edge.shape = newShape;
+
+    htmlController.updateEdgeShape(addEdgeRequest12.edgeId);
+
+    const container = div.children[0].children[0];
+
+    expect(container.children[2]).toBe(newShape.svg);
+  });
+
   it("should update edge coordinates", () => {
     const store: GraphStore = new GraphStore();
     const htmlController = createHtmlController({ store });
@@ -313,7 +341,7 @@ describe("HtmlController", () => {
 
     const spy = jest.spyOn(addEdgeRequest12.shape, "update");
 
-    htmlController.updateEdgeShape(addEdgeRequest12.edgeId);
+    htmlController.updateEdgeCoordinates(addEdgeRequest12.edgeId);
 
     expect(spy).toHaveBeenCalledWith(
       { x: 100, y: 100 },
@@ -368,7 +396,7 @@ describe("HtmlController", () => {
 
     const spy = jest.spyOn(addEdgeRequest21.shape, "update");
 
-    htmlController.updateEdgeShape(addEdgeRequest21.edgeId);
+    htmlController.updateEdgeCoordinates(addEdgeRequest21.edgeId);
 
     expect(spy).toHaveBeenCalledWith(
       { x: 100, y: 100 },

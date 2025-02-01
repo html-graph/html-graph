@@ -159,11 +159,11 @@ export class CanvasController {
   public addEdge(request: AddEdgeRequest): void {
     const edgeId = this.edgeIdGenerator.create(request.edgeId);
 
-    if (this.graphStore.getPort(request.fromPortId) === undefined) {
+    if (this.graphStore.getPort(request.from) === undefined) {
       throw new HtmlGraphError("failed to add edge from nonexisting port");
     }
 
-    if (this.graphStore.getPort(request.toPortId) === undefined) {
+    if (this.graphStore.getPort(request.to) === undefined) {
       throw new HtmlGraphError("failed to add edge to nonexisting port");
     }
 
@@ -171,12 +171,12 @@ export class CanvasController {
       throw new HtmlGraphError("failed to add edge with existing id");
     }
 
-    const edgeType = this.resolveEdgeType(request.fromPortId, request.toPortId);
+    const edgeType = this.resolveEdgeType(request.from, request.to);
 
     this.graphStore.addEdge({
       edgeId,
-      from: request.fromPortId,
-      to: request.toPortId,
+      from: request.from,
+      to: request.to,
       shape: request.shapeFactory(edgeType),
       priority: request.priority ?? this.defaultEdgesPriorityFn(),
     });
@@ -196,14 +196,14 @@ export class CanvasController {
 
       edge.shape = request.shape(edgeType);
       this.htmlController.updateEdgeShape(request.edgeId);
-    } else {
-      this.htmlController.updateEdgeCoordinates(request.edgeId);
     }
 
     if (request.priority !== undefined) {
       edge.priority = request.priority;
       this.htmlController.updateEdgePriority(request.edgeId);
     }
+
+    this.htmlController.updateEdgeCoordinates(request.edgeId);
   }
 
   public removeEdge(edgeId: unknown): void {

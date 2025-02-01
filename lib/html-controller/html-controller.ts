@@ -130,8 +130,6 @@ export class HtmlController {
 
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
-
-    this.updateEdgeCoordinates(edgeId);
   }
 
   public updateEdgeCoordinates(edgeId: unknown): void {

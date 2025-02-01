@@ -153,8 +153,8 @@ export class CanvasCore implements Canvas {
 
     this.di.canvasController.addEdge({
       edgeId: edge.id,
-      fromPortId: edge.from,
-      toPortId: edge.to,
+      from: edge.from,
+      to: edge.to,
       shapeFactory,
       priority: edge.priority,
     });
