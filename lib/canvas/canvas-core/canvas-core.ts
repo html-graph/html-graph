@@ -80,7 +80,12 @@ export class CanvasCore implements Canvas {
       element: request.element,
       x: request.x,
       y: request.y,
-      ports: request.ports,
+      ports: Array.from(request.ports ?? []).map((port) => ({
+        id: port.id,
+        element: port.element,
+        centerFn: port.centerFn,
+        direction: port.direction,
+      })),
       centerFn: request.centerFn,
       priority: request.priority,
     });
