@@ -17,7 +17,7 @@ import { transformPreprocessorDefault } from "./transform-preprocessor-default-f
 import { TransformPayload } from "./transform-payload";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
-import { isOnCanvas, isOnWindow, setCursor } from "../utils";
+import { isOnElement, isOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 
@@ -60,7 +60,7 @@ export class UserTransformableCanvas implements Canvas {
     }
 
     if (
-      !isOnCanvas(this.element, event.clientX, event.clientY) ||
+      !isOnElement(this.element, event.clientX, event.clientY) ||
       !isOnWindow(this.window, event.clientX, event.clientY)
     ) {
       this.stopMouseDrag();
@@ -120,7 +120,7 @@ export class UserTransformableCanvas implements Canvas {
 
     const isEvery = currentTouches.touches.every(
       (t) =>
-        isOnCanvas(this.element!, t[0], t[1]) &&
+        isOnElement(this.element!, t[0], t[1]) &&
         isOnWindow(this.window, t[0], t[1]),
     );
 

@@ -8,12 +8,16 @@ const nodesCenterFn: CenterFn = (width, height): Point => ({
   x: width / 2,
   y: height / 2,
 });
+
 const nodesPriorityFn = (): number => 10;
+
 const portsCenterFn: CenterFn = (width, height): Point => ({
   x: width / 2,
   y: height / 2,
 });
+
 const portsDirection = Math.PI;
+
 const edgesPriorityFn = (): number => 20;
 
 const createElement = (params?: {

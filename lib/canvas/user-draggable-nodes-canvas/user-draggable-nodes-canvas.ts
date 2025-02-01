@@ -11,7 +11,7 @@ import {
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { UpdatePortRequest } from "../canvas/update-port-request";
-import { isOnCanvas, isOnWindow, setCursor } from "../utils";
+import { isOnElement, isOnWindow, setCursor } from "../utils";
 import { HtmlGraphError } from "@/error";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
@@ -53,7 +53,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   ) => {
     if (
       this.element !== null &&
-      (!isOnCanvas(this.element, event.clientX, event.clientY) ||
+      (!isOnElement(this.element, event.clientX, event.clientY) ||
         !isOnWindow(this.window, event.clientX, event.clientY))
     ) {
       this.cancelMouseDrag();
@@ -82,7 +82,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       if (
         this.element !== null &&
-        (!isOnCanvas(this.element, t.clientX, t.clientY) ||
+        (!isOnElement(this.element, t.clientX, t.clientY) ||
           !isOnWindow(this.window, t.clientX, t.clientY))
       ) {
         this.cancelTouchDrag();

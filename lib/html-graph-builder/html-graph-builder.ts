@@ -6,6 +6,7 @@ import {
   DragOptions,
   UserTransformableCanvas,
   TransformOptions,
+  ReactiveCanvas,
 } from "@/canvas";
 
 export class HtmlGraphBuilder {
@@ -43,6 +44,7 @@ export class HtmlGraphBuilder {
 
   public build(): Canvas {
     let res: Canvas = new CanvasCore(this.coreOptions);
+    res = new ReactiveCanvas(res);
 
     if (this.isDraggable) {
       res = new UserDraggableNodesCanvas(res, this.dragOptions);

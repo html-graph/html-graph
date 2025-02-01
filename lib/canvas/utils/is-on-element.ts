@@ -1,4 +1,4 @@
-export const isOnCanvas: (
+export const isOnElement: (
   element: HTMLElement,
   px: number,
   py: number,
