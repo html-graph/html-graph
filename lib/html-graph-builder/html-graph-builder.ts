@@ -6,8 +6,7 @@ import {
   DragOptions,
   UserTransformableCanvas,
   TransformOptions,
-  ReactiveCanvas,
-  ReactiveOptions,
+  ResizableNodesCanvas,
 } from "@/canvas";
 
 export class HtmlGraphBuilder {
@@ -21,9 +20,7 @@ export class HtmlGraphBuilder {
 
   private isTransformable = false;
 
-  private reactiveOptions: ReactiveOptions | undefined = {
-    nodeReactiveStrategy: "resize",
-  };
+  private hasResizableNodes = false;
 
   public setOptions(options: CoreOptions): HtmlGraphBuilder {
     this.coreOptions = options;
@@ -47,8 +44,8 @@ export class HtmlGraphBuilder {
     return this;
   }
 
-  public setReactiveOptions(options?: ReactiveOptions): HtmlGraphBuilder {
-    this.reactiveOptions = options;
+  public setResizableNodes(): HtmlGraphBuilder {
+    this.hasResizableNodes = true;
 
     return this;
   }
@@ -56,8 +53,8 @@ export class HtmlGraphBuilder {
   public build(): Canvas {
     let res: Canvas = new CanvasCore(this.coreOptions);
 
-    if (this.reactiveOptions?.nodeReactiveStrategy === "resize") {
-      res = new ReactiveCanvas(res, this.reactiveOptions);
+    if (this.hasResizableNodes) {
+      res = new ResizableNodesCanvas(res);
     }
 
     if (this.isDraggable) {

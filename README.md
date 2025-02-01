@@ -43,6 +43,7 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
+  .setResizableNodes()
   .build();
 
 function createNode({ name, x, y, frontPortId, backPortId }) {

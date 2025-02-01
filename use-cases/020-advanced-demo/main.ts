@@ -39,6 +39,7 @@ const canvas = new HtmlGraphBuilder()
       },
     },
   })
+  .setResizableNodes()
   .build();
 
 const helper = new GraphHtmlHelper();

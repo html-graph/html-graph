@@ -10,9 +10,6 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
-  .setReactiveOptions({
-    nodeReactiveStrategy: "none",
-  })
   .build();
 
 const node1 = document.createElement("div");
