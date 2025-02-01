@@ -1,13 +1,13 @@
 import { standardCenterFn } from "@/center-fn";
-import { CoreOptions } from "./core-options";
-import { Options } from "./options";
-import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
-import { resolvePriority } from "./resolve-priority";
+import { CoreOptions } from "../core-options";
+import { Options } from "../options";
+import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
+import { resolvePriority } from "../resolve-priority";
 
 export const createOptions: (apiOptions: CoreOptions) => Options = (
   apiOptions: CoreOptions,
 ) => {
-  const [nodesPriority, edgesPriority] = resolvePriority(
+  const priorities = resolvePriority(
     apiOptions.nodes?.priority,
     apiOptions.edges?.priority,
   );
@@ -15,7 +15,7 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
   return {
     nodes: {
       centerFn: apiOptions.nodes?.centerFn ?? standardCenterFn,
-      priorityFn: nodesPriority,
+      priorityFn: priorities.nodesPriorityFn,
     },
     ports: {
       centerFn: apiOptions.ports?.centerFn ?? standardCenterFn,
@@ -23,7 +23,7 @@ export const createOptions: (apiOptions: CoreOptions) => Options = (
     },
     edges: {
       shapeFactory: resolveEdgeShapeFactory(apiOptions.edges?.shape ?? {}),
-      priorityFn: edgesPriority,
+      priorityFn: priorities.edgesPriorityFn,
     },
   };
 };

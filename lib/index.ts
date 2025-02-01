@@ -4,7 +4,7 @@ export {
   CanvasCore,
   UserDraggableNodesCanvas,
   UserTransformableCanvas,
-  ResizableNodesCanvas,
+  ResizeReactiveNodesCanvas,
 } from "./canvas";
 export type {
   Canvas,

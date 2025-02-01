@@ -5,7 +5,7 @@ import {
   createStraightEdgeShareFactory,
   createVerticalEdgeShapeFactory,
 } from "@/edges";
-import { EdgeShape } from "../canvas/edge-options";
+import { EdgeShape } from "../../canvas/edge-options";
 import { defaultConstants } from "./default-constants";
 
 export const resolveEdgeShapeFactory: (

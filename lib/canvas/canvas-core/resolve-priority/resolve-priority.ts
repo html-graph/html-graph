@@ -4,53 +4,55 @@ import {
   PriorityFn,
   standardPriorityFn,
 } from "@/priority";
-import { Priority } from "./priority";
+import { Priority } from "../priority";
+import { Priorities } from "./priorities";
 
 export const resolvePriority: (
   nodesPriority: Priority | undefined,
   edgesPriority: Priority | undefined,
-) => [PriorityFn, PriorityFn] = (
+) => Priorities = (
   nodesPriority: Priority | undefined,
   edgesPriority: Priority | undefined,
 ) => {
-  const res: [PriorityFn, PriorityFn] = [
-    standardPriorityFn,
-    standardPriorityFn,
-  ];
+  let nodesPriorityFn: PriorityFn = standardPriorityFn;
+  let edgesPriorityFn: PriorityFn = standardPriorityFn;
 
   if (nodesPriority === "incremental") {
-    res[0] = createIncrementalPriorityFn();
+    nodesPriorityFn = createIncrementalPriorityFn();
   }
 
   if (edgesPriority === "incremental") {
-    res[1] = createIncrementalPriorityFn();
+    edgesPriorityFn = createIncrementalPriorityFn();
   }
 
   const sharedFn = createIncrementalPriorityFn();
 
   if (nodesPriority === "shared-incremental") {
-    res[0] = sharedFn;
+    nodesPriorityFn = sharedFn;
   }
 
   if (edgesPriority === "shared-incremental") {
-    res[1] = sharedFn;
+    edgesPriorityFn = sharedFn;
   }
 
   if (typeof nodesPriority === "number") {
-    res[0] = createConstantPriorityFn(nodesPriority);
+    nodesPriorityFn = createConstantPriorityFn(nodesPriority);
   }
 
   if (typeof edgesPriority === "number") {
-    res[1] = createConstantPriorityFn(edgesPriority);
+    edgesPriorityFn = createConstantPriorityFn(edgesPriority);
   }
 
   if (typeof nodesPriority === "function") {
-    res[0] = nodesPriority;
+    nodesPriorityFn = nodesPriority;
   }
 
   if (typeof edgesPriority === "function") {
-    res[1] = edgesPriority;
+    edgesPriorityFn = edgesPriority;
   }
 
-  return res;
+  return {
+    nodesPriorityFn,
+    edgesPriorityFn,
+  };
 };

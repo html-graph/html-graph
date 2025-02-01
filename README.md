@@ -19,7 +19,8 @@ Visit <a target="_blank" href="https://html-graph.github.io/use-cases">use cases
 
 - easy nodes customization using HTML
 - wide configuration options out of the box
-- draggable and scalable canvas with draggable nodes
+- draggable and scalable canvas
+- draggable and resizable nodes
 - exhaustive set of use cases
 - typescript support
 - mobile devices support
@@ -43,7 +44,7 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserDraggableNodes()
   .setUserTransformableCanvas()
-  .setResizableNodes()
+  .setResizeReactiveNodes()
   .build();
 
 function createNode({ name, x, y, frontPortId, backPortId }) {
