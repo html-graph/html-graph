@@ -73,7 +73,7 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
 
-    this.updateEdgeCoordinates(edgeId);
+    this.updateEdge(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
@@ -103,9 +103,9 @@ export class HtmlController {
 
   public updateNodeCoordinates(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
-    const { width, height } = wrapper.getBoundingClientRect();
-    const viewportScale = this.viewportTransformer.getViewportMatrix().scale;
     const node = this.graphStore.getNode(nodeId)!;
+    const { width, height } = node.element.getBoundingClientRect();
+    const viewportScale = this.viewportTransformer.getViewportMatrix().scale;
     const center = node.centerFn(width, height);
 
     const x = node.x - viewportScale * center.x;
@@ -132,7 +132,7 @@ export class HtmlController {
     this.container.appendChild(edge.shape.svg);
   }
 
-  public updateEdgeCoordinates(edgeId: unknown): void {
+  public updateEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;

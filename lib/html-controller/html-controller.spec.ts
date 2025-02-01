@@ -341,7 +341,7 @@ describe("HtmlController", () => {
 
     const spy = jest.spyOn(addEdgeRequest12.shape, "update");
 
-    htmlController.updateEdgeCoordinates(addEdgeRequest12.edgeId);
+    htmlController.updateEdge(addEdgeRequest12.edgeId);
 
     expect(spy).toHaveBeenCalledWith(
       { x: 100, y: 100 },
@@ -396,7 +396,7 @@ describe("HtmlController", () => {
 
     const spy = jest.spyOn(addEdgeRequest21.shape, "update");
 
-    htmlController.updateEdgeCoordinates(addEdgeRequest21.edgeId);
+    htmlController.updateEdge(addEdgeRequest21.edgeId);
 
     expect(spy).toHaveBeenCalledWith(
       { x: 100, y: 100 },
