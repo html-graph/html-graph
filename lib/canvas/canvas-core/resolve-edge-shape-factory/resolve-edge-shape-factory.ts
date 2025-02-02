@@ -79,13 +79,13 @@ export const resolveEdgeShapeFactory: (
         hasTargetArrow:
           options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
         cycleRadius: options.cycleRadius ?? defaultConstants.cycleSize,
+        smallCycleRadius:
+          options.smallCycleRadius ?? defaultConstants.smallCycleSize,
+        curvature: options.curvature ?? defaultConstants.curvature,
         detourDistance:
           options.detourDistance ?? defaultConstants.detourDistance,
         detourDirection:
           options.detourDirection ?? defaultConstants.detourDirection,
-        smallCycleRadius:
-          options.smallCycleRadius ?? defaultConstants.smallCycleSize,
-        curvature: options.curvature ?? defaultConstants.curvature,
       });
   }
 };

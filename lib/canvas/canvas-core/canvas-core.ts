@@ -46,18 +46,25 @@ export class CanvasCore implements Canvas {
     this.edgeShapeFactory = options.edges.shapeFactory;
   }
 
+  public attach(element: HTMLElement): CanvasCore {
+    this.di.canvasController.attach(element);
+
+    return this;
+  }
+
+  public detach(): CanvasCore {
+    this.di.canvasController.detach();
+
+    return this;
+  }
+
   public addNode(request: AddNodeRequest): CanvasCore {
     this.di.canvasController.addNode({
       nodeId: request.id,
       element: request.element,
       x: request.x,
       y: request.y,
-      ports: Array.from(request.ports ?? []).map((port) => ({
-        id: port.id,
-        element: port.element,
-        centerFn: port.centerFn,
-        direction: port.direction,
-      })),
+      ports: request.ports,
       centerFn: request.centerFn,
       priority: request.priority,
     });
@@ -78,33 +85,6 @@ export class CanvasCore implements Canvas {
 
   public removeNode(nodeId: unknown): CanvasCore {
     this.di.canvasController.removeNode(nodeId);
-
-    return this;
-  }
-
-  public markPort(port: MarkPortRequest): CanvasCore {
-    this.di.canvasController.markPort({
-      portId: port.id,
-      element: port.element,
-      nodeId: port.nodeId,
-      centerFn: port.centerFn,
-      direction: port.direction,
-    });
-
-    return this;
-  }
-
-  public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
-    this.di.canvasController.updatePort(portId, {
-      direction: request?.direction,
-      centerFn: request?.centerFn,
-    });
-
-    return this;
-  }
-
-  public unmarkPort(portId: string): CanvasCore {
-    this.di.canvasController.unmarkPort(portId);
 
     return this;
   }
@@ -147,6 +127,33 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
+  public markPort(port: MarkPortRequest): CanvasCore {
+    this.di.canvasController.markPort({
+      portId: port.id,
+      element: port.element,
+      nodeId: port.nodeId,
+      centerFn: port.centerFn,
+      direction: port.direction,
+    });
+
+    return this;
+  }
+
+  public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
+    this.di.canvasController.updatePort(portId, {
+      direction: request?.direction,
+      centerFn: request?.centerFn,
+    });
+
+    return this;
+  }
+
+  public unmarkPort(portId: string): CanvasCore {
+    this.di.canvasController.unmarkPort(portId);
+
+    return this;
+  }
+
   public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
     this.di.canvasController.patchViewportMatrix(request);
 
@@ -161,18 +168,6 @@ export class CanvasCore implements Canvas {
 
   public clear(): CanvasCore {
     this.di.canvasController.clear();
-
-    return this;
-  }
-
-  public attach(element: HTMLElement): CanvasCore {
-    this.di.canvasController.attach(element);
-
-    return this;
-  }
-
-  public detach(): CanvasCore {
-    this.di.canvasController.detach();
 
     return this;
   }

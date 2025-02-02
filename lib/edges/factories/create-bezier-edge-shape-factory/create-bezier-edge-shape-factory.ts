@@ -7,17 +7,17 @@ import { EdgeShapeFactory } from "../edge-shape-factory";
 import { EdgeType } from "../edge-type";
 
 export const createBezierEdgeShapeFactory: (options: {
-  color: string;
-  width: number;
-  arrowLength: number;
-  arrowWidth: number;
-  curvature: number;
-  hasSourceArrow: boolean;
-  hasTargetArrow: boolean;
-  cycleRadius: number;
-  smallCycleRadius: number;
-  detourDistance: number;
-  detourDirection: number;
+  readonly color: string;
+  readonly width: number;
+  readonly arrowLength: number;
+  readonly arrowWidth: number;
+  readonly curvature: number;
+  readonly hasSourceArrow: boolean;
+  readonly hasTargetArrow: boolean;
+  readonly cycleRadius: number;
+  readonly smallCycleRadius: number;
+  readonly detourDistance: number;
+  readonly detourDirection: number;
 }) => EdgeShapeFactory = (options) => (edgeType: EdgeType) => {
   if (edgeType === EdgeType.PortCycle) {
     return new CycleCircleEdgeShape(

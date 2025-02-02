@@ -7,17 +7,17 @@ import { EdgeShapeFactory } from "../edge-shape-factory";
 import { EdgeType } from "../edge-type";
 
 export const createHorizontalEdgeShapeFactory: (options: {
-  color: string;
-  width: number;
-  arrowLength: number;
-  arrowWidth: number;
-  arrowOffset: number;
-  hasSourceArrow: boolean;
-  hasTargetArrow: boolean;
-  cycleSquareSide: number;
-  roundness: number;
-  detourDistance: number;
-  detourDirection: number;
+  readonly color: string;
+  readonly width: number;
+  readonly arrowLength: number;
+  readonly arrowWidth: number;
+  readonly arrowOffset: number;
+  readonly hasSourceArrow: boolean;
+  readonly hasTargetArrow: boolean;
+  readonly cycleSquareSide: number;
+  readonly roundness: number;
+  readonly detourDistance: number;
+  readonly detourDirection: number;
 }) => EdgeShapeFactory = (options) => (edgeType: EdgeType) => {
   if (edgeType === EdgeType.PortCycle) {
     return new CycleSquareEdgeShape(
