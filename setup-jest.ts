@@ -1,3 +1,5 @@
+const observers: Array<[HTMLElement, ResizeObserverMock]> = [];
+
 class ResizeObserverMock implements ResizeObserver {
   private readonly elements = new Set<HTMLElement>();
 
@@ -9,23 +11,18 @@ class ResizeObserverMock implements ResizeObserver {
 
   public observe(element: HTMLElement): void {
     this.elements.add(element);
+    observers.push([element, this]);
 
-    this.callback(
-      [
-        {
-          borderBoxSize: [],
-          contentBoxSize: [],
-          contentRect: element.getBoundingClientRect(),
-          devicePixelContentBoxSize: [],
-          target: element,
-        },
-      ],
-      this,
-    );
+    this.triggerResizeFor(element);
   }
 
   public unobserve(element: HTMLElement): void {
     this.elements.delete(element);
+    observers.forEach((e, index) => {
+      if (e[0] === element) {
+        observers.splice(index, 1);
+      }
+    });
   }
 
   public triggerResizeFor(element: HTMLElement): void {
@@ -45,6 +42,15 @@ class ResizeObserverMock implements ResizeObserver {
     }
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(global as any).triggerResizeFor = (element: HTMLElement): void => {
+  const obs = observers.filter((e) => e[0] === element);
+
+  obs.forEach((e) => {
+    e[1].triggerResizeFor(e[0]);
+  });
+};
 
 global.ResizeObserver = ResizeObserverMock;
 

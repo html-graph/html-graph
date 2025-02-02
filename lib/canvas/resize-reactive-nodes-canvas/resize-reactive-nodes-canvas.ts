@@ -39,6 +39,18 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     this.model = this.canvas.model;
   }
 
+  public attach(element: HTMLElement): ResizeReactiveNodesCanvas {
+    this.canvas.attach(element);
+
+    return this;
+  }
+
+  public detach(): ResizeReactiveNodesCanvas {
+    this.canvas.detach();
+
+    return this;
+  }
+
   public addNode(request: AddNodeRequest): ResizeReactiveNodesCanvas {
     const id = this.nodeIdGenerator.create(request.id);
 
@@ -66,11 +78,9 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     this.canvas.removeNode(nodeId);
 
     const element = this.nodes.getByKey(nodeId);
-
     this.nodes.deleteByKey(nodeId);
 
     this.nodesResizeObserver.unobserve(element!);
-    this.nodes.deleteByKey(nodeId);
 
     return this;
   }
@@ -135,29 +145,16 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
   public clear(): ResizeReactiveNodesCanvas {
     this.canvas.clear();
+
+    this.nodesResizeObserver.disconnect();
     this.nodes.clear();
 
     return this;
   }
 
-  public attach(element: HTMLElement): ResizeReactiveNodesCanvas {
-    this.canvas.attach(element);
-
-    return this;
-  }
-
-  public detach(): ResizeReactiveNodesCanvas {
-    this.canvas.detach();
-
-    return this;
-  }
-
   public destroy(): void {
+    this.clear();
     this.canvas.destroy();
-
-    if (this.nodesResizeObserver !== null) {
-      this.nodesResizeObserver.disconnect();
-    }
   }
 
   private reactNodeChange(element: HTMLElement): void {
