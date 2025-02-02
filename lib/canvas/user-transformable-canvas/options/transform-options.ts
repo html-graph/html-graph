@@ -1,4 +1,4 @@
-import { TransformFinishedFn } from "./transform-finished-fn";
+import { TransformFinishedFn } from "../transform-finished";
 import { TransformPreprocessorOption } from "./transform-preprocessor-option";
 
 export interface TransformOptions {

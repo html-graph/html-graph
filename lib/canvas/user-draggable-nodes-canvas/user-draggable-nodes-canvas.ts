@@ -13,6 +13,7 @@ import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { UpdatePortRequest } from "../update-port-request";
+import { NodeState } from "./node-state";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -21,14 +22,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private maxNodePriority = 0;
 
-  private readonly nodes = new Map<
-    unknown,
-    {
-      readonly element: HTMLElement;
-      readonly onMouseDown: (event: MouseEvent) => void;
-      readonly onTouchStart: (event: TouchEvent) => void;
-    }
-  >();
+  private readonly nodes = new Map<unknown, NodeState>();
 
   private grabbedNodeId: unknown | null = null;
 

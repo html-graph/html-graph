@@ -1,5 +1,5 @@
-import { TransformPayload } from "./transform-payload";
-import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
+import { TransformPayload } from "../transform-payload";
+import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
 
 export const createCombinedTransformPreprocessor: (
   preprocessors: readonly TransformPreprocessorFn[],

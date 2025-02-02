@@ -5,15 +5,19 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
-import { TransformOptions } from "./transform-options";
+import { TransformOptions } from "./options";
 import { TouchState } from "./touch-state";
-import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
-import { TransformFinishedFn } from "./transform-finished-fn";
-import { transformFinishedDefault } from "./transform-finished-default-fn";
-import { transformPreprocessorDefault } from "./transform-preprocessor-default-fn";
-import { TransformPayload } from "./transform-payload";
-import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
-import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
+import {
+  createCombinedTransformPreprocessor,
+  resolveTransformPreprocessor,
+  TransformPayload,
+  transformPreprocessorDefault,
+  TransformPreprocessorFn,
+} from "./preprocessors";
+import {
+  transformFinishedDefault,
+  TransformFinishedFn,
+} from "./transform-finished";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";

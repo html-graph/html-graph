@@ -1,4 +1,4 @@
-import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
+import { TransformPreprocessorFn } from "../preprocessors";
 
 export type TransformPreprocessorOption =
   | {
