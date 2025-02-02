@@ -1,5 +1,4 @@
 import { EdgeShape } from "../edge-shape";
-import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -10,7 +9,7 @@ import {
   createEdgeLine,
 } from "../utils";
 import { createRoundedPath } from "../utils";
-import { Point } from "@/point";
+import { Point, zero } from "@/point";
 
 export class DetourStraightEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();

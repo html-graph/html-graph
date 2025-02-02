@@ -1,20 +1,18 @@
 import { IdGenerator } from "@/id-generator";
-import {
-  AddEdgeRequest,
-  AddNodeRequest,
-  MarkPortRequest,
-  PatchMatrixRequest,
-  Canvas,
-  UpdateEdgeRequest,
-  UpdateNodeRequest,
-} from "../canvas";
+import { AddNodeRequest } from "../add-node-request";
+import { UpdateNodeRequest } from "../update-node-request";
+import { AddEdgeRequest } from "../add-edge-request";
+import { UpdateEdgeRequest } from "../update-edge-request";
+import { MarkPortRequest } from "../mark-port-request";
+import { PatchMatrixRequest } from "../patch-transform-request";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
-import { UpdatePortRequest } from "../canvas/update-port-request";
-import { isOnElement, isOnWindow, setCursor } from "../utils";
+import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { HtmlGraphError } from "@/error";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Canvas } from "../canvas";
+import { UpdatePortRequest } from "../update-port-request";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -53,8 +51,8 @@ export class UserDraggableNodesCanvas implements Canvas {
   ) => {
     if (
       this.element !== null &&
-      (!isOnElement(this.element, event.clientX, event.clientY) ||
-        !isOnWindow(this.window, event.clientX, event.clientY))
+      (!isPointOnElement(this.element, event.clientX, event.clientY) ||
+        !isPointOnWindow(this.window, event.clientX, event.clientY))
     ) {
       this.cancelMouseDrag();
       return;
@@ -82,8 +80,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       if (
         this.element !== null &&
-        (!isOnElement(this.element, t.clientX, t.clientY) ||
-          !isOnWindow(this.window, t.clientX, t.clientY))
+        (!isPointOnElement(this.element, t.clientX, t.clientY) ||
+          !isPointOnWindow(this.window, t.clientX, t.clientY))
       ) {
         this.cancelTouchDrag();
         return;

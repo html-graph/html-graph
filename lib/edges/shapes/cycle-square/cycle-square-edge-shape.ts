@@ -1,5 +1,4 @@
 import { EdgeShape } from "../edge-shape";
-import { Point } from "@/point";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -9,7 +8,7 @@ import {
   createRoundedPath,
   createEdgeLine,
 } from "../utils";
-import { zero } from "../zero";
+import { Point, zero } from "@/point";
 
 export class CycleSquareEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();

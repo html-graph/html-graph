@@ -1,4 +1,4 @@
-export const isOnElement: (
+export const isPointOnElement: (
   element: HTMLElement,
   px: number,
   py: number,

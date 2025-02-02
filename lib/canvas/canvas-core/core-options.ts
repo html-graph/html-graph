@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeShape } from "../canvas/edge-options";
+import { EdgeShape } from "../edge-options";
 import { Priority } from "./priority";
 
 export interface CoreOptions {

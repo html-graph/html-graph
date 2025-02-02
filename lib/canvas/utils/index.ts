@@ -1,3 +1,3 @@
-export * from "./is-on-element";
-export * from "./is-on-window";
+export * from "./is-point-on-element";
+export * from "./is-point-on-window";
 export * from "./set-cursor";

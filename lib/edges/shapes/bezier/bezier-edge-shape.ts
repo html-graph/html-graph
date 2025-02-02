@@ -1,5 +1,4 @@
 import { EdgeShape } from "../edge-shape";
-import { zero } from "../zero";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -9,7 +8,7 @@ import {
   createRotatedPoint,
   createEdgeLine,
 } from "../utils";
-import { Point } from "@/point";
+import { Point, zero } from "@/point";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();

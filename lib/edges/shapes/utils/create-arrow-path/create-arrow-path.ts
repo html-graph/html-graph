@@ -1,6 +1,5 @@
-import { Point } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
-import { zero } from "../../zero";
+import { Point, zero } from "@/point";
 
 export const createArrowPath: (
   vect: Point,

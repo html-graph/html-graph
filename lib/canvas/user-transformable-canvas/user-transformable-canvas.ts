@@ -1,15 +1,12 @@
-import {
-  AddEdgeRequest,
-  AddNodeRequest,
-  MarkPortRequest,
-  PatchMatrixRequest,
-  Canvas,
-  UpdateEdgeRequest,
-  UpdateNodeRequest,
-} from "../canvas";
+import { AddNodeRequest } from "../add-node-request";
+import { UpdateNodeRequest } from "../update-node-request";
+import { AddEdgeRequest } from "../add-edge-request";
+import { UpdateEdgeRequest } from "../update-edge-request";
+import { MarkPortRequest } from "../mark-port-request";
+import { UpdatePortRequest } from "../update-port-request";
+import { PatchMatrixRequest } from "../patch-transform-request";
 import { TransformOptions } from "./transform-options";
 import { TouchState } from "./touch-state";
-import { UpdatePortRequest } from "../canvas/update-port-request";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { TransformFinishedFn } from "./transform-finished-fn";
 import { transformFinishedDefault } from "./transform-finished-default-fn";
@@ -17,9 +14,10 @@ import { transformPreprocessorDefault } from "./transform-preprocessor-default-f
 import { TransformPayload } from "./transform-payload";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
-import { isOnElement, isOnWindow, setCursor } from "../utils";
+import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Canvas } from "../canvas";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -60,8 +58,8 @@ export class UserTransformableCanvas implements Canvas {
     }
 
     if (
-      !isOnElement(this.element, event.clientX, event.clientY) ||
-      !isOnWindow(this.window, event.clientX, event.clientY)
+      !isPointOnElement(this.element, event.clientX, event.clientY) ||
+      !isPointOnWindow(this.window, event.clientX, event.clientY)
     ) {
       this.stopMouseDrag();
       return;
@@ -120,8 +118,8 @@ export class UserTransformableCanvas implements Canvas {
 
     const isEvery = currentTouches.touches.every(
       (t) =>
-        isOnElement(this.element!, t[0], t[1]) &&
-        isOnWindow(this.window, t[0], t[1]),
+        isPointOnElement(this.element!, t[0], t[1]) &&
+        isPointOnWindow(this.window, t[0], t[1]),
     );
 
     if (!isEvery) {

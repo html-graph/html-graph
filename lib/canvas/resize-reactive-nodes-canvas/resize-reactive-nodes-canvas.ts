@@ -1,17 +1,15 @@
 import { PublicViewportTransformer } from "@/viewport-transformer";
-import {
-  AddEdgeRequest,
-  AddNodeRequest,
-  MarkPortRequest,
-  PatchMatrixRequest,
-  Canvas,
-  UpdateEdgeRequest,
-  UpdateNodeRequest,
-} from "../canvas";
-import { UpdatePortRequest } from "../canvas/update-port-request";
+import { AddNodeRequest } from "../add-node-request";
+import { UpdateNodeRequest } from "../update-node-request";
+import { AddEdgeRequest } from "../add-edge-request";
+import { UpdateEdgeRequest } from "../update-edge-request";
+import { MarkPortRequest } from "../mark-port-request";
+import { UpdatePortRequest } from "../update-port-request";
+import { PatchMatrixRequest } from "../patch-transform-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
 import { PublicGraphStore } from "@/graph-store";
+import { Canvas } from "../canvas";
 
 export class ResizeReactiveNodesCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;

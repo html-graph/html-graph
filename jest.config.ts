@@ -10,7 +10,11 @@ const config: Config = {
   setupFiles: ["./setup-jest.ts"],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
-  coveragePathIgnorePatterns: ["/node_modules/", "/lib/.*\\.mock\\.ts$"],
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/lib/.*\\.mock\\.ts$",
+    "/lib/index\\.ts$",
+  ],
   // collectCoverageFrom: ["./lib/**/*.ts"],
   coverageThreshold: {
     global: {
