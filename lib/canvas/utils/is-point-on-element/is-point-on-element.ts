@@ -5,5 +5,5 @@ export const isPointOnElement: (
 ) => boolean = (element: HTMLElement, px: number, py: number) => {
   const { x, y, width, height } = element.getBoundingClientRect();
 
-  return px >= x && px < x + width && py >= y && py <= y + height;
+  return px >= x && px <= x + width && py >= y && py <= y + height;
 };
