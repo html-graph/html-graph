@@ -1,13 +1,4 @@
-html,
 body {
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
   --color-1: #66666e;
   --color-2: #daedbd;
   --color-7: #02020a;

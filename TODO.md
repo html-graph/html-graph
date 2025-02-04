@@ -1,11 +1,13 @@
 # TODO
 
+- refactor examples
+- improve reexport
 - unit tests
+- optimize background drawing
 - virtual scroll
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
-- optimize background drawing
 - update edge ports
 - customize grab trigger
 - optimize memory draggable nodes

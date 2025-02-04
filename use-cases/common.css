@@ -1,0 +1,19 @@
+:root {
+  --color-edge: #5c5c5c;
+  --color-node-border: #66666e;
+  --color-node-background: #daedbd;
+  --color-text: #02020a;
+}
+
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+}
