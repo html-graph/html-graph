@@ -1,14 +1,3 @@
-.canvas-wrapper {
-  flex-grow: 1;
-  position: relative;
-}
-
-#canvas,
-#background {
-  position: absolute;
-  inset: 0;
-}
-
 .node {
   width: 150px;
   max-width: 150px;

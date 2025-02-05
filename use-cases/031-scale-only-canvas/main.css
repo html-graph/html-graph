@@ -1,7 +1,3 @@
-#canvas {
-  flex-grow: 1;
-}
-
 .node {
   width: 150px;
   max-width: 150px;

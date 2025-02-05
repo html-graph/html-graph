@@ -13,7 +13,13 @@ body {
 }
 
 body {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   color: var(--color-text);
+}
+
+.canvas,
+.canvas-wrapper,
+.background {
+  position: absolute;
+  inset: 0;
 }
