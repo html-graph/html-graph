@@ -26,7 +26,7 @@ const canvas = new HtmlGraphBuilder()
     },
     edges: {
       shape: {
-        color: "var(--color-1)",
+        color: "var(--color-node-border)",
         hasTargetArrow: true,
       },
     },

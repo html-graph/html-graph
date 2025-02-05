@@ -1,18 +1,11 @@
-body {
-  --color-1: #66666e;
-  --color-2: #daedbd;
-  --color-7: #02020a;
-}
-
 .node {
   min-width: 15rem;
   position: relative;
   border-radius: 0.5rem;
-  background: var(--color-2);
-  color: var(--color-7);
-  border: 1px solid var(--color-1);
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
   user-select: none;
-  box-shadow: 0 0 5px var(--color-1);
+  box-shadow: 0 0 5px var(--color-node-border);
 }
 
 .node-header {
@@ -43,7 +36,7 @@ body {
   left: -3px;
   width: 5px;
   height: 5px;
-  background: var(--color-1);
+  background: var(--color-node-border);
   border-radius: 2.5px;
   border: none;
 }
@@ -81,7 +74,7 @@ body {
   left: -3px;
   width: 5px;
   height: 5px;
-  background: var(--color-1);
+  background: var(--color-node-border);
   border-radius: 2.5px;
   border: none;
 }

@@ -11,6 +11,7 @@ export function createBasicNode(params: {
   node.classList.add("node");
 
   const frontPort = document.createElement("div");
+  frontPort.classList.add("node-port");
   node.appendChild(frontPort);
 
   const text = document.createElement("div");
@@ -18,6 +19,7 @@ export function createBasicNode(params: {
   node.appendChild(text);
 
   const backPort = document.createElement("div");
+  backPort.classList.add("node-port");
   node.appendChild(backPort);
 
   return {

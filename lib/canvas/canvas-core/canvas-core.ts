@@ -1,11 +1,13 @@
-import { DiContainer } from "@/di-container";
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/edges";
-import { PublicGraphStore } from "@/graph-store";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { GraphStore, PublicGraphStore } from "@/graph-store";
+import {
+  PublicViewportTransformer,
+  ViewportTransformer,
+} from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
@@ -14,6 +16,8 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
+import { HtmlController } from "@/html-controller";
+import { CanvasController } from "@/canvas-controller";
 
 /**
  * Provides low level API for acting on graph
@@ -23,41 +27,50 @@ export class CanvasCore implements Canvas {
 
   public readonly model: PublicGraphStore;
 
-  private readonly di: DiContainer;
+  private readonly canvasController: CanvasController;
 
   private readonly edgeShapeFactory: EdgeShapeFactory;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions ?? {});
 
-    this.di = new DiContainer({
-      nodesCenterFn: options.nodes.centerFn,
-      nodesPriorityFn: options.nodes.priorityFn,
-      portsCenterFn: options.ports.centerFn,
-      portsDirection: options.ports.direction,
-      edgesPriorityFn: options.edges.priorityFn,
-    });
+    const viewportTransformer = new ViewportTransformer();
+    const graphStore = new GraphStore();
 
-    this.transformation = this.di.publicViewportTransformer;
-    this.model = this.di.publicGraphStore;
+    this.model = new PublicGraphStore(graphStore);
+
+    this.transformation = new PublicViewportTransformer(viewportTransformer);
+
+    const htmlController = new HtmlController(graphStore, viewportTransformer);
+
+    this.canvasController = new CanvasController(
+      graphStore,
+      htmlController,
+      viewportTransformer,
+      options.nodes.centerFn,
+      options.ports.centerFn,
+      options.ports.direction,
+      options.nodes.priorityFn,
+      options.edges.priorityFn,
+    );
 
     this.edgeShapeFactory = options.edges.shapeFactory;
   }
 
   public attach(element: HTMLElement): CanvasCore {
-    this.di.canvasController.attach(element);
+    this.canvasController.attach(element);
 
     return this;
   }
 
   public detach(): CanvasCore {
-    this.di.canvasController.detach();
+    this.canvasController.detach();
 
     return this;
   }
 
   public addNode(request: AddNodeRequest): CanvasCore {
-    this.di.canvasController.addNode({
+    this.canvasController.addNode({
       nodeId: request.id,
       element: request.element,
       x: request.x,
@@ -71,7 +84,7 @@ export class CanvasCore implements Canvas {
   }
 
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
-    this.di.canvasController.updateNode(nodeId, {
+    this.canvasController.updateNode(nodeId, {
       x: request?.x,
       y: request?.y,
       priority: request?.priority,
@@ -82,7 +95,7 @@ export class CanvasCore implements Canvas {
   }
 
   public removeNode(nodeId: unknown): CanvasCore {
-    this.di.canvasController.removeNode(nodeId);
+    this.canvasController.removeNode(nodeId);
 
     return this;
   }
@@ -93,7 +106,7 @@ export class CanvasCore implements Canvas {
         ? resolveEdgeShapeFactory(edge.shape)
         : this.edgeShapeFactory;
 
-    this.di.canvasController.addEdge({
+    this.canvasController.addEdge({
       edgeId: edge.id,
       from: edge.from,
       to: edge.to,
@@ -110,7 +123,7 @@ export class CanvasCore implements Canvas {
         ? resolveEdgeShapeFactory(request.shape)
         : undefined;
 
-    this.di.canvasController.updateEdge({
+    this.canvasController.updateEdge({
       edgeId,
       shape: shapeFactory,
       priority: request?.priority,
@@ -120,13 +133,13 @@ export class CanvasCore implements Canvas {
   }
 
   public removeEdge(edgeId: unknown): CanvasCore {
-    this.di.canvasController.removeEdge(edgeId);
+    this.canvasController.removeEdge(edgeId);
 
     return this;
   }
 
   public markPort(port: MarkPortRequest): CanvasCore {
-    this.di.canvasController.markPort({
+    this.canvasController.markPort({
       portId: port.id,
       element: port.element,
       nodeId: port.nodeId,
@@ -138,7 +151,7 @@ export class CanvasCore implements Canvas {
   }
 
   public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
-    this.di.canvasController.updatePort(portId, {
+    this.canvasController.updatePort(portId, {
       direction: request?.direction,
       centerFn: request?.centerFn,
     });
@@ -147,31 +160,31 @@ export class CanvasCore implements Canvas {
   }
 
   public unmarkPort(portId: string): CanvasCore {
-    this.di.canvasController.unmarkPort(portId);
+    this.canvasController.unmarkPort(portId);
 
     return this;
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.di.canvasController.patchViewportMatrix(request);
+    this.canvasController.patchViewportMatrix(request);
 
     return this;
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.di.canvasController.patchContentMatrix(request);
+    this.canvasController.patchContentMatrix(request);
 
     return this;
   }
 
   public clear(): CanvasCore {
-    this.di.canvasController.clear();
+    this.canvasController.clear();
 
     return this;
   }
 
   public destroy(): void {
     this.clear();
-    this.di.canvasController.destroy();
+    this.canvasController.destroy();
   }
 }
