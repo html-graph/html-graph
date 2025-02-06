@@ -22,6 +22,7 @@ export type {
   AddNodePorts,
   TransformPreprocessorFn,
   TransformFinishedFn,
+  BeforeTransformStartedFn,
 } from "./canvas";
 
 export {

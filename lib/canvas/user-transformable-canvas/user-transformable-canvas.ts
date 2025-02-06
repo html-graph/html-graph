@@ -22,6 +22,10 @@ import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
+import {
+  beforeTransformStartedDefault,
+  BeforeTransformStartedFn,
+} from "./before-transform-started";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -31,6 +35,8 @@ export class UserTransformableCanvas implements Canvas {
   private element: HTMLElement | null = null;
 
   private prevTouches: TouchState | null = null;
+
+  private readonly onBeforeTransformStarted: BeforeTransformStartedFn;
 
   private readonly onTransformFinished: TransformFinishedFn;
 
@@ -191,6 +197,10 @@ export class UserTransformableCanvas implements Canvas {
 
     const wheelVelocity = this.options?.scale?.wheelSensitivity;
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
+
+    this.onBeforeTransformStarted =
+      options?.events?.onBeforeTransformStarted ??
+      beforeTransformStartedDefault;
 
     this.onTransformFinished =
       options?.events?.onTransformFinished ?? transformFinishedDefault;
@@ -371,6 +381,8 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private moveViewport(dx: number, dy: number): void {
+    this.onBeforeTransformStarted();
+
     /**
      * dx2 - traslate x
      * dy2 - traslate y
@@ -409,6 +421,8 @@ export class UserTransformableCanvas implements Canvas {
     if (this.element === null) {
       return;
     }
+
+    this.onBeforeTransformStarted();
 
     const prevTransform = this.canvas.transformation.getViewportMatrix();
 

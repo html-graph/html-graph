@@ -14,6 +14,7 @@ export interface TransformOptions {
     | TransformPreprocessorOption
     | TransformPreprocessorOption[];
   readonly events?: {
+    readonly onBeforeTransformStarted?: TransformFinishedFn;
     readonly onTransformFinished?: TransformFinishedFn;
   };
 }

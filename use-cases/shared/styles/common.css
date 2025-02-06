@@ -3,6 +3,7 @@
   --color-node-border: #66666e;
   --color-node-background: #daedbd;
   --color-text: #02020a;
+  --color-background-2: #ededed;
 }
 
 html,
@@ -22,4 +23,15 @@ body {
 .background {
   position: absolute;
   inset: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: var(--color-background-2);
+  z-index: 1;
 }

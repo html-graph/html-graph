@@ -1,16 +1,14 @@
 .node {
-  width: 200px;
-  max-width: 200px;
+  position: relative;
+  width: 150px;
   height: 70px;
-  max-height: 70px;
-  background: #ffdbab;
-  border: 1px solid #bababa;
-  border-radius: 8px;
-  white-space: nowrap;
-  user-select: none;
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
+  border-radius: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 
   button {
     padding: 8px;

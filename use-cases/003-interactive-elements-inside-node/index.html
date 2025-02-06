@@ -7,11 +7,16 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
     <title>HTMLGraph | Interactive elements inside nodes</title>
-    <link rel="stylesheet" href="../shared/normalize.css" />
-    <link rel="stylesheet" href="../shared/common.css" />
+    <link rel="stylesheet" href="../shared/styles/normalize.css" />
+    <link rel="stylesheet" href="../shared/styles/common.css" />
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
+    <div class="overlay">
+      This use case creates draggable canvas and nodes with interactive button
+      inside it. It demonstrates that nodes can contain any HTML elements. Also
+      button prevents click if canvas is in the process of dragging.
+    </div>
     <div id="canvas" class="canvas"></div>
     <script type="module" src="main.ts"></script>
   </body>

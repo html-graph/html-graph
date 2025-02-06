@@ -1,20 +1,38 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddNodeRequest,
+  BeforeTransformStartedFn,
+  Canvas,
+  HtmlGraphBuilder,
+  TransformOptions,
+} from "@html-graph/html-graph";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
+let dragging: boolean = false;
+
+const onBeforeTransformStarted: BeforeTransformStartedFn = () => {
+  dragging = true;
+};
+
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+
+const transformOptions: TransformOptions = {
+  events: {
+    onBeforeTransformStarted,
+  },
+};
+
+const canvas: Canvas = builder
+  .setUserTransformableCanvas(transformOptions)
   .build();
 
 let angle = 0;
 
-const canvasElement = document.getElementById("canvas")!;
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+
+canvasElement.addEventListener("mouseup", () => {
+  setTimeout(() => {
+    dragging = false;
+  });
+});
 
 canvas.attach(canvasElement);
 
@@ -25,16 +43,20 @@ const createNode: () => void = () => {
   const btn = document.createElement("button");
   btn.innerText = "Add Node";
   btn.addEventListener("click", () => {
-    createNode();
+    if (!dragging) {
+      createNode();
+    }
   });
 
   node.appendChild(btn);
 
-  canvas.addNode({
+  const addNodeRequest: AddNodeRequest = {
     element: node,
     x: Math.cos(angle) * (300 + 300 * Math.floor(angle / (2 * Math.PI))) + 400,
     y: Math.sin(angle) * (300 + 300 * Math.floor(angle / (2 * Math.PI))) + 400,
-  });
+  };
+
+  canvas.addNode(addNodeRequest);
 
   angle += Math.PI / 6;
 };
