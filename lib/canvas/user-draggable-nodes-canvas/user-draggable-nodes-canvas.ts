@@ -36,7 +36,13 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private element: HTMLElement | null = null;
 
-  private readonly onCanvasMouseUp: () => void = () => {
+  private readonly onCanvasMouseUp: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+
     this.cancelMouseDrag();
   };
 
@@ -152,7 +158,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.updateMaxNodePriority(nodeId);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
-      if (this.element === null) {
+      if (this.element === null || event.button !== 0) {
         return;
       }
 

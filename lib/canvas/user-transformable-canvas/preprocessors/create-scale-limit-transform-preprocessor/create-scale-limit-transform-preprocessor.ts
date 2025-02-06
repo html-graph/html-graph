@@ -1,33 +1,38 @@
-import { TransformPayload } from "../transform-payload";
 import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
+import { TransformPreprocessorParams } from "../transform-preprocessor-params";
+import { ScaleLimitPreprocessorParams } from "./scale-limit-preprocessor-params";
 
 export const createScaleLimitTransformPreprocessor: (
-  minContentScale: number | null,
-  maxContentScale: number | null,
+  preprocessorParams: ScaleLimitPreprocessorParams,
 ) => TransformPreprocessorFn = (
-  minContentScale: number | null,
-  maxContentScale: number | null,
+  preprocessorParams: ScaleLimitPreprocessorParams,
 ) => {
-  const minViewScale = maxContentScale !== null ? 1 / maxContentScale : null;
-  const maxViewScale = minContentScale !== null ? 1 / minContentScale : null;
+  const minViewScale =
+    preprocessorParams.maxContentScale !== null
+      ? 1 / preprocessorParams.maxContentScale
+      : null;
+  const maxViewScale =
+    preprocessorParams.minContentScale !== null
+      ? 1 / preprocessorParams.minContentScale
+      : null;
 
-  return (prevTransform: TransformPayload, nextTransform: TransformPayload) => {
+  return (params: TransformPreprocessorParams) => {
     if (
       maxViewScale !== null &&
-      nextTransform.scale > maxViewScale &&
-      nextTransform.scale > prevTransform.scale
+      params.nextTransform.scale > maxViewScale &&
+      params.nextTransform.scale > params.prevTransform.scale
     ) {
-      return prevTransform;
+      return params.prevTransform;
     }
 
     if (
       minViewScale !== null &&
-      nextTransform.scale < minViewScale &&
-      nextTransform.scale < prevTransform.scale
+      params.nextTransform.scale < minViewScale &&
+      params.nextTransform.scale < params.prevTransform.scale
     ) {
-      return prevTransform;
+      return params.prevTransform;
     }
 
-    return nextTransform;
+    return params.nextTransform;
   };
 };

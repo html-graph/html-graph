@@ -12,15 +12,15 @@ const canvas = new HtmlGraphBuilder()
   .setUserTransformableCanvas({
     transformPreprocessor: {
       type: "custom",
-      preprocessorFn: (prevTransform, nextTransform) => {
-        if (nextTransform.scale > 1) {
-          return prevTransform;
+      preprocessorFn: (params) => {
+        if (params.nextTransform.scale > 1) {
+          return params.prevTransform;
         }
 
         return {
-          scale: nextTransform.scale,
-          dx: Math.max(nextTransform.dx, -500),
-          dy: nextTransform.dy,
+          scale: params.nextTransform.scale,
+          dx: Math.max(params.nextTransform.dx, -500),
+          dy: params.nextTransform.dy,
         };
       },
     },

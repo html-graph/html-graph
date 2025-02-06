@@ -8,17 +8,17 @@ export const resolveTransformPreprocessor: (
 ) => TransformPreprocessorFn = (option: TransformPreprocessorOption) => {
   switch (option.type) {
     case "scale-limit":
-      return createScaleLimitTransformPreprocessor(
-        option.minContentScale ?? null,
-        option.maxContentScale ?? null,
-      );
+      return createScaleLimitTransformPreprocessor({
+        minContentScale: option.minContentScale ?? null,
+        maxContentScale: option.maxContentScale ?? null,
+      });
     case "shift-limit":
-      return createShiftLimitTransformPreprocessor(
-        option.minX ?? null,
-        option.maxX ?? null,
-        option.minY ?? null,
-        option.maxY ?? null,
-      );
+      return createShiftLimitTransformPreprocessor({
+        minX: option.minX ?? null,
+        minY: option.minY ?? null,
+        maxX: option.maxX ?? null,
+        maxY: option.maxY ?? null,
+      });
     default:
       return option.preprocessorFn;
   }

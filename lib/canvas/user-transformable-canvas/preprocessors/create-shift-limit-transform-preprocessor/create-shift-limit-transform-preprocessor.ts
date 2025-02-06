@@ -1,46 +1,52 @@
-import { TransformPayload } from "../transform-payload";
 import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
+import { TransformPreprocessorParams } from "../transform-preprocessor-params";
+import { ShiftLimitPreprocessorParams } from "./shift-limit-preprocessor-params";
 
 export const createShiftLimitTransformPreprocessor: (
-  minX: number | null,
-  maxX: number | null,
-  minY: number | null,
-  maxY: number | null,
+  preprocessorParams: ShiftLimitPreprocessorParams,
 ) => TransformPreprocessorFn = (
-  minX: number | null,
-  maxX: number | null,
-  minY: number | null,
-  maxY: number | null,
+  preprocessorParams: ShiftLimitPreprocessorParams,
 ) => {
-  return (
-    prevTransform: TransformPayload,
-    nextTransform: TransformPayload,
-    canvasWidth: number,
-    canvasHeight: number,
-  ) => {
-    let dx = nextTransform.dx;
-    let dy = nextTransform.dy;
+  return (params: TransformPreprocessorParams) => {
+    let dx = params.nextTransform.dx;
+    let dy = params.nextTransform.dy;
 
-    if (minX !== null && dx < minX && dx < prevTransform.dx) {
-      dx = prevTransform.dx;
+    if (
+      preprocessorParams.minX !== null &&
+      dx < preprocessorParams.minX &&
+      dx < params.prevTransform.dx
+    ) {
+      dx = Math.min(params.prevTransform.dx, preprocessorParams.minX);
     }
 
-    const w = canvasWidth * prevTransform.scale;
+    const w = params.canvasWidth * params.prevTransform.scale;
 
-    if (maxX !== null && dx > maxX - w && dx > prevTransform.dx) {
-      dx = prevTransform.dx;
+    if (
+      preprocessorParams.maxX !== null &&
+      dx > preprocessorParams.maxX - w &&
+      dx > params.prevTransform.dx
+    ) {
+      dx = Math.max(params.prevTransform.dx, preprocessorParams.maxX - w);
     }
 
-    if (minY !== null && dy < minY && dy < prevTransform.dy) {
-      dy = prevTransform.dy;
+    if (
+      preprocessorParams.minY !== null &&
+      dy < preprocessorParams.minY &&
+      dy < params.prevTransform.dy
+    ) {
+      dy = Math.min(params.prevTransform.dy, preprocessorParams.minY);
     }
 
-    const h = canvasHeight * prevTransform.scale;
+    const h = params.canvasHeight * params.prevTransform.scale;
 
-    if (maxY !== null && dy > maxY - h && dy > prevTransform.dy) {
-      dy = prevTransform.dy;
+    if (
+      preprocessorParams.maxY !== null &&
+      dy > preprocessorParams.maxY - h &&
+      dy > params.prevTransform.dy
+    ) {
+      dy = Math.max(params.prevTransform.dy, preprocessorParams.maxY - h);
     }
 
-    return { scale: nextTransform.scale, dx, dy };
+    return { scale: params.nextTransform.scale, dx, dy };
   };
 };

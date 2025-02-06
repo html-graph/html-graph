@@ -1,8 +1,6 @@
 import { TransformPayload } from "./transform-payload";
+import { TransformPreprocessorParams } from "./transform-preprocessor-params";
 
 export type TransformPreprocessorFn = (
-  prevTransform: TransformPayload,
-  nextTransform: TransformPayload,
-  canvasWidth: number,
-  canvasHeight: number,
+  params: TransformPreprocessorParams,
 ) => TransformPayload;

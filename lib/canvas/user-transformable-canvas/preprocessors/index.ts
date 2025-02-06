@@ -7,3 +7,4 @@ export * from "./create-combined-transform-preprocessor";
 export * from "./transform-preprocessor-fn";
 export * from "./transform-preprocessor-default-fn";
 export * from "./transform-payload";
+export * from "./transform-preprocessor-params";

@@ -5,7 +5,11 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
-import { TransformOptions } from "./options";
+import {
+  BeforeTransformStartedFn,
+  TransformFinishedFn,
+  TransformOptions,
+} from "./options";
 import { TouchState } from "./touch-state";
 import {
   createCombinedTransformPreprocessor,
@@ -14,18 +18,10 @@ import {
   transformPreprocessorDefault,
   TransformPreprocessorFn,
 } from "./preprocessors";
-import {
-  transformFinishedDefault,
-  TransformFinishedFn,
-} from "./transform-finished";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
-import {
-  beforeTransformStartedDefault,
-  BeforeTransformStartedFn,
-} from "./before-transform-started";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -50,8 +46,10 @@ export class UserTransformableCanvas implements Canvas {
 
   private window = window;
 
-  private readonly onMouseDown: () => void = () => {
-    if (this.element === null) {
+  private readonly onMouseDown: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
+    if (this.element === null || event.button !== 0) {
       return;
     }
 
@@ -81,7 +79,13 @@ export class UserTransformableCanvas implements Canvas {
     this.moveViewport(deltaViewX, deltaViewY);
   };
 
-  private readonly onMouseUp: () => void = () => {
+  private readonly onMouseUp: (event: MouseEvent) => void = (
+    event: MouseEvent,
+  ) => {
+    if (event.button !== 0) {
+      return;
+    }
+
     this.stopMouseDrag();
   };
 
@@ -172,12 +176,12 @@ export class UserTransformableCanvas implements Canvas {
       const prevTransform = this.canvas.transformation.getViewportMatrix();
 
       const { width, height } = this.element.getBoundingClientRect();
-      const transform = this.transformPreprocessor(
+      const transform = this.transformPreprocessor({
         prevTransform,
-        prevTransform,
-        width,
-        height,
-      );
+        nextTransform: prevTransform,
+        canvasWidth: width,
+        canvasHeight: height,
+      });
       this.canvas.patchViewportMatrix(transform);
       this.onTransformFinished();
     }
@@ -199,11 +203,10 @@ export class UserTransformableCanvas implements Canvas {
     this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
 
     this.onBeforeTransformStarted =
-      options?.events?.onBeforeTransformStarted ??
-      beforeTransformStartedDefault;
+      options?.events?.onBeforeTransformStarted ?? ((): void => {});
 
     this.onTransformFinished =
-      options?.events?.onTransformFinished ?? transformFinishedDefault;
+      options?.events?.onTransformFinished ?? ((): void => {});
 
     const preprocessors = options?.transformPreprocessor;
 
@@ -405,12 +408,12 @@ export class UserTransformableCanvas implements Canvas {
     if (this.element !== null) {
       const { width, height } = this.element.getBoundingClientRect();
 
-      const transform = this.transformPreprocessor(
+      const transform = this.transformPreprocessor({
         prevTransform,
         nextTransform,
-        width,
-        height,
-      );
+        canvasWidth: width,
+        canvasHeight: height,
+      });
 
       this.canvas.patchViewportMatrix(transform);
       this.onTransformFinished();
@@ -445,12 +448,12 @@ export class UserTransformableCanvas implements Canvas {
 
     const { width, height } = this.element.getBoundingClientRect();
 
-    const transform = this.transformPreprocessor(
+    const transform = this.transformPreprocessor({
       prevTransform,
       nextTransform,
-      width,
-      height,
-    );
+      canvasWidth: width,
+      canvasHeight: height,
+    });
 
     this.canvas.patchViewportMatrix(transform);
     this.onTransformFinished();

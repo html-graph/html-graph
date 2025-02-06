@@ -6,14 +6,14 @@
 
 ![CI](https://github.com/html-graph/html-graph/actions/workflows/ci.yml/badge.svg?branch=master)
 
-<a target="_blank" href="https://html-graph.github.io/use-cases/020-advanced-demo/index.html">
+<a target="_blank" href="https://html-graph.github.io/use-cases/020-advanced-demo/">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
 
 Instead of connecting nodes directly this library uses concept of ports, which provide greater fexibility at managing edges.
 Port is an entity of a node to which edge can be attached to.
 
-Visit <a target="_blank" href="https://html-graph.github.io/use-cases">use cases</a> and [use cases implementation](use-cases).
+Visit <a target="_blank" href="https://html-graph.github.io/use-cases/">use cases</a> and [use cases implementation](use-cases).
 
 ## Features:
 

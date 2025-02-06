@@ -1,4 +1,5 @@
-import { TransformFinishedFn } from "../transform-finished";
+import { BeforeTransformStartedFn } from "./before-transform-started-fn";
+import { TransformFinishedFn } from "./transform-finished-fn";
 import { TransformPreprocessorOption } from "./transform-preprocessor-option";
 
 export interface TransformOptions {
@@ -14,7 +15,7 @@ export interface TransformOptions {
     | TransformPreprocessorOption
     | TransformPreprocessorOption[];
   readonly events?: {
-    readonly onBeforeTransformStarted?: TransformFinishedFn;
+    readonly onBeforeTransformStarted?: BeforeTransformStartedFn;
     readonly onTransformFinished?: TransformFinishedFn;
   };
 }

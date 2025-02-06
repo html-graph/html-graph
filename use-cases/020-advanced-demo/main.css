@@ -60,25 +60,6 @@
   line-height: 12px;
 }
 
-.node-port {
-  position: absolute;
-  width: 0;
-  height: 0;
-}
-
-.node-port::after {
-  display: block;
-  content: "";
-  position: relative;
-  top: -2.5px;
-  left: -3px;
-  width: 5px;
-  height: 5px;
-  background: var(--color-node-border);
-  border-radius: 2.5px;
-  border: none;
-}
-
 .node-port-input {
   top: 50%;
 }
