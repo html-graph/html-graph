@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 
 class DeployDocs {
   public static do(): void {
-    const cmdsBeforePublish = [
+    const cmds = [
       "npm install",
       "npm run build-docs",
       "cd ..",
@@ -16,7 +16,7 @@ class DeployDocs {
       "git push",
     ];
 
-    this.execute(cmdsBeforePublish.join(" && "));
+    this.execute(cmds.join(" && "));
   }
 
   private static execute(cmd: string): Promise<void> {

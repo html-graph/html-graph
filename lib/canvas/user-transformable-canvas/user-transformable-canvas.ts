@@ -5,23 +5,15 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
-import {
-  BeforeTransformStartedFn,
-  TransformFinishedFn,
-  TransformOptions,
-} from "./options";
-import { TouchState } from "./touch-state";
-import {
-  createCombinedTransformPreprocessor,
-  resolveTransformPreprocessor,
-  TransformPayload,
-  transformPreprocessorDefault,
-  TransformPreprocessorFn,
-} from "./preprocessors";
+import { TransformOptions } from "./options";
+import { TransformPayload } from "./preprocessors";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
+import { createOptions } from "./options/create-options";
+import { Options } from "./options/options";
+import { processTouch, TouchState } from "./process-touch";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -32,18 +24,6 @@ export class UserTransformableCanvas implements Canvas {
 
   private prevTouches: TouchState | null = null;
 
-  private readonly onBeforeTransformStarted: BeforeTransformStartedFn;
-
-  private readonly onTransformFinished: TransformFinishedFn;
-
-  private readonly transformPreprocessor: TransformPreprocessorFn;
-
-  private readonly isScalable: boolean;
-
-  private readonly isShiftable: boolean;
-
-  private readonly wheelSensitivity: number;
-
   private window = window;
 
   private readonly onMouseDown: (event: MouseEvent) => void = (
@@ -53,7 +33,7 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    setCursor(this.element, this.shiftCursor);
+    setCursor(this.element, this.options.shiftCursor);
     this.window.addEventListener("mousemove", this.onMouseMove);
     this.window.addEventListener("mouseup", this.onMouseUp);
   };
@@ -61,7 +41,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (!this.isShiftable || this.element === null) {
+    if (this.element === null) {
       return;
     }
 
@@ -92,7 +72,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onWheelScroll: (event: WheelEvent) => void = (
     event: WheelEvent,
   ) => {
-    if (this.element === null || this.isScalable === false) {
+    if (this.element === null) {
       return;
     }
 
@@ -102,7 +82,9 @@ export class UserTransformableCanvas implements Canvas {
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
     const deltaScale =
-      event.deltaY < 0 ? this.wheelSensitivity : 1 / this.wheelSensitivity;
+      event.deltaY < 0
+        ? this.options.wheelSensitivity
+        : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
     this.scaleViewport(deltaViewScale, centerX, centerY);
@@ -111,7 +93,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onTouchStart: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    this.prevTouches = this.getAverageTouch(event);
+    this.prevTouches = processTouch(event);
     this.window.addEventListener("touchmove", this.onTouchMove);
     this.window.addEventListener("touchend", this.onTouchEnd);
     this.window.addEventListener("touchcancel", this.onTouchEnd);
@@ -120,15 +102,11 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    if (
-      this.prevTouches === null ||
-      !this.isShiftable ||
-      this.element === null
-    ) {
+    if (this.prevTouches === null || this.element === null) {
       return;
     }
 
-    const currentTouches = this.getAverageTouch(event);
+    const currentTouches = processTouch(event);
 
     const isEvery = currentTouches.touches.every(
       (t) =>
@@ -148,7 +126,7 @@ export class UserTransformableCanvas implements Canvas {
       );
     }
 
-    if (currentTouches.touchesCnt === 2 && this.isScalable) {
+    if (currentTouches.touchesCnt === 2) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches.x - left;
       const y = this.prevTouches.y - top;
@@ -165,7 +143,7 @@ export class UserTransformableCanvas implements Canvas {
     event: TouchEvent,
   ) => {
     if (event.touches.length > 0) {
-      this.prevTouches = this.getAverageTouch(event);
+      this.prevTouches = processTouch(event);
     } else {
       this.stopTouchDrag();
     }
@@ -176,57 +154,27 @@ export class UserTransformableCanvas implements Canvas {
       const prevTransform = this.canvas.transformation.getViewportMatrix();
 
       const { width, height } = this.element.getBoundingClientRect();
-      const transform = this.transformPreprocessor({
+      const transform = this.options.transformPreprocessor({
         prevTransform,
         nextTransform: prevTransform,
         canvasWidth: width,
         canvasHeight: height,
       });
       this.canvas.patchViewportMatrix(transform);
-      this.onTransformFinished();
+      this.options.onTransformFinished();
     }
   });
 
-  private readonly shiftCursor: string | null;
+  private readonly options: Options;
 
   public constructor(
     private readonly canvas: Canvas,
-    private readonly options?: TransformOptions,
+    transformOptions?: TransformOptions,
   ) {
+    this.options = createOptions(transformOptions ?? {});
+
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
-
-    this.isScalable = this.options?.scale?.enabled !== false;
-    this.isShiftable = this.options?.shift?.enabled !== false;
-
-    const wheelVelocity = this.options?.scale?.wheelSensitivity;
-    this.wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
-
-    this.onBeforeTransformStarted =
-      options?.events?.onBeforeTransformStarted ?? ((): void => {});
-
-    this.onTransformFinished =
-      options?.events?.onTransformFinished ?? ((): void => {});
-
-    const preprocessors = options?.transformPreprocessor;
-
-    if (preprocessors !== undefined) {
-      if (Array.isArray(preprocessors)) {
-        this.transformPreprocessor = createCombinedTransformPreprocessor(
-          preprocessors.map((preprocessor) =>
-            resolveTransformPreprocessor(preprocessor),
-          ),
-        );
-      } else {
-        this.transformPreprocessor =
-          resolveTransformPreprocessor(preprocessors);
-      }
-    } else {
-      this.transformPreprocessor = transformPreprocessorDefault;
-    }
-
-    this.shiftCursor =
-      options?.shift?.cursor !== undefined ? options.shift.cursor : "grab";
   }
 
   public addNode(node: AddNodeRequest): UserTransformableCanvas {
@@ -351,40 +299,8 @@ export class UserTransformableCanvas implements Canvas {
     this.canvas.destroy();
   }
 
-  private getAverageTouch(event: TouchEvent): TouchState {
-    const touches: [number, number][] = [];
-
-    const cnt = event.touches.length;
-
-    for (let i = 0; i < cnt; i++) {
-      touches.push([event.touches[i].clientX, event.touches[i].clientY]);
-    }
-
-    const sum: [number, number] = touches.reduce(
-      (acc, cur) => [acc[0] + cur[0], acc[1] + cur[1]],
-      [0, 0],
-    );
-
-    const avg = [sum[0] / cnt, sum[1] / cnt];
-
-    const distances = touches.map((cur) => [cur[0] - avg[0], cur[1] - avg[1]]);
-
-    const distance = distances.reduce(
-      (acc, cur) => acc + Math.sqrt(cur[0] * cur[0] + cur[1] * cur[1]),
-      0,
-    );
-
-    return {
-      x: avg[0],
-      y: avg[1],
-      scale: distance / cnt,
-      touchesCnt: cnt,
-      touches,
-    };
-  }
-
   private moveViewport(dx: number, dy: number): void {
-    this.onBeforeTransformStarted();
+    this.options.onBeforeTransformStarted();
 
     /**
      * dx2 - traslate x
@@ -408,7 +324,7 @@ export class UserTransformableCanvas implements Canvas {
     if (this.element !== null) {
       const { width, height } = this.element.getBoundingClientRect();
 
-      const transform = this.transformPreprocessor({
+      const transform = this.options.transformPreprocessor({
         prevTransform,
         nextTransform,
         canvasWidth: width,
@@ -416,7 +332,7 @@ export class UserTransformableCanvas implements Canvas {
       });
 
       this.canvas.patchViewportMatrix(transform);
-      this.onTransformFinished();
+      this.options.onTransformFinished();
     }
   }
 
@@ -425,7 +341,7 @@ export class UserTransformableCanvas implements Canvas {
       return;
     }
 
-    this.onBeforeTransformStarted();
+    this.options.onBeforeTransformStarted();
 
     const prevTransform = this.canvas.transformation.getViewportMatrix();
 
@@ -448,7 +364,7 @@ export class UserTransformableCanvas implements Canvas {
 
     const { width, height } = this.element.getBoundingClientRect();
 
-    const transform = this.transformPreprocessor({
+    const transform = this.options.transformPreprocessor({
       prevTransform,
       nextTransform,
       canvasWidth: width,
@@ -456,7 +372,7 @@ export class UserTransformableCanvas implements Canvas {
     });
 
     this.canvas.patchViewportMatrix(transform);
-    this.onTransformFinished();
+    this.options.onTransformFinished();
   }
 
   private stopMouseDrag(): void {

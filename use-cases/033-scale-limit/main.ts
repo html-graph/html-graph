@@ -9,9 +9,6 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserTransformableCanvas({
-    scale: {
-      enabled: true,
-    },
     transformPreprocessor: {
       type: "scale-limit",
       minContentScale: 0.5,

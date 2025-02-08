@@ -10,7 +10,6 @@ const canvas = new HtmlGraphBuilder()
   })
   .setUserTransformableCanvas({
     scale: {
-      enabled: true,
       wheelSensitivity: 1.5,
     },
   })

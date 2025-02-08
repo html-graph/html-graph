@@ -25,6 +25,7 @@ export type {
   BeforeTransformStartedFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
+  TransformPreprocessorParams,
 } from "./canvas";
 
 export {

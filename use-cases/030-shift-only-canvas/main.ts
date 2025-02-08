@@ -1,4 +1,8 @@
-import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
+import {
+  HtmlGraphBuilder,
+  AddNodePorts,
+  TransformPreprocessorParams,
+} from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -9,8 +13,15 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserTransformableCanvas({
-    scale: {
-      enabled: false,
+    transformPreprocessor: {
+      type: "custom",
+      preprocessorFn: (params: TransformPreprocessorParams) => {
+        return {
+          scale: params.prevTransform.scale,
+          dx: params.nextTransform.dx,
+          dy: params.nextTransform.dy,
+        };
+      },
     },
   })
   .build();
