@@ -95,7 +95,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    if (this.prevTouches === null || this.element === null) {
+    if (this.element === null) {
       return;
     }
 
@@ -115,16 +115,16 @@ export class UserTransformableCanvas implements Canvas {
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
         this.element,
-        -(currentTouches.x - this.prevTouches.x),
-        -(currentTouches.y - this.prevTouches.y),
+        -(currentTouches.x - this.prevTouches!.x),
+        -(currentTouches.y - this.prevTouches!.y),
       );
     }
 
     if (currentTouches.touchesCnt === 2) {
       const { left, top } = this.element.getBoundingClientRect();
-      const x = this.prevTouches.x - left;
-      const y = this.prevTouches.y - top;
-      const deltaScale = currentTouches.scale / this.prevTouches.scale;
+      const x = this.prevTouches!.x - left;
+      const y = this.prevTouches!.y - top;
+      const deltaScale = currentTouches.scale / this.prevTouches!.scale;
       const deltaViewScale = 1 / deltaScale;
 
       this.scaleViewport(this.element, deltaViewScale, x, y);

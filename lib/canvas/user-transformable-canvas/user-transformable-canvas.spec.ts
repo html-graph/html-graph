@@ -66,6 +66,23 @@ const createMouseWheelEvent = (params: {
   return wheelEvent;
 };
 
+const createTouch = (params: { clientX: number; clientY: number }): Touch => {
+  return {
+    clientX: params.clientX,
+    clientY: params.clientY,
+    force: 0,
+    identifier: 0,
+    pageX: 0,
+    pageY: 0,
+    radiusX: 0,
+    radiusY: 0,
+    rotationAngle: 0,
+    screenX: 0,
+    screenY: 0,
+    target: document.createElement("div"),
+  };
+};
+
 let innerWidth: number;
 let innerHeight: number;
 
@@ -602,5 +619,117 @@ describe("UserTransformableCanvas", () => {
     element.dispatchEvent(wheelEvent);
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("should move canvas with touch", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+  });
+
+  it("should stop movement on touchend", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+  });
+
+  it("should stop movement on touchcancel", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchcancel"));
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+  });
+
+  it("should handle touch gracefully if element gets detached in the process", async () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    canvas.detach();
+
+    expect(() => {
+      window.dispatchEvent(
+        new TouchEvent("touchmove", {
+          touches: [createTouch({ clientX: 100, clientY: 100 })],
+        }),
+      );
+    }).not.toThrow();
   });
 });
