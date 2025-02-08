@@ -38,6 +38,7 @@ const config: Config = {
       statements: 0,
     },
   },
+  coverageReporters: ["lcov", "text", "text-summary"],
 };
 
 export default config;
