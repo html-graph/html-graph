@@ -11,8 +11,9 @@ import { TransformOptions } from "./transform-options";
 export const createOptions = (
   transformOptions: TransformOptions | undefined,
 ): Options => {
-  const wheelVelocity = transformOptions?.scale?.wheelSensitivity;
-  const wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
+  const optionsWheelSensitivity = transformOptions?.scale?.wheelSensitivity;
+  const wheelSensitivity =
+    optionsWheelSensitivity !== undefined ? optionsWheelSensitivity : 1.2;
 
   const preprocessors = transformOptions?.transformPreprocessor;
 
@@ -41,12 +42,16 @@ export const createOptions = (
       ? transformOptions.shift.cursor
       : "grab";
 
+  const onBeforeTransformStarted =
+    transformOptions?.events?.onBeforeTransformStarted ?? ((): void => {});
+
+  const onTransformFinished =
+    transformOptions?.events?.onTransformFinished ?? ((): void => {});
+
   return {
-    wheelSensitivity,
-    onBeforeTransformStarted:
-      transformOptions?.events?.onBeforeTransformStarted ?? ((): void => {}),
-    onTransformFinished:
-      transformOptions?.events?.onTransformFinished ?? ((): void => {}),
+    wheelSensitivity: wheelSensitivity,
+    onBeforeTransformStarted,
+    onTransformFinished,
     transformPreprocessor,
     shiftCursor,
   };
