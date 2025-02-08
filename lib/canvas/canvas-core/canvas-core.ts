@@ -32,7 +32,7 @@ export class CanvasCore implements Canvas {
   private readonly edgeShapeFactory: EdgeShapeFactory;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
-    const options: Options = createOptions(this.apiOptions ?? {});
+    const options: Options = createOptions(this.apiOptions);
 
     const viewportTransformer = new ViewportTransformer();
     const graphStore = new GraphStore();

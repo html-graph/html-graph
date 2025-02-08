@@ -8,7 +8,9 @@ import {
 import { Options } from "./options";
 import { TransformOptions } from "./transform-options";
 
-export const createOptions = (transformOptions: TransformOptions): Options => {
+export const createOptions = (
+  transformOptions: TransformOptions | undefined,
+): Options => {
   const wheelVelocity = transformOptions?.scale?.wheelSensitivity;
   const wheelSensitivity = wheelVelocity !== undefined ? wheelVelocity : 1.2;
 

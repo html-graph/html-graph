@@ -171,7 +171,7 @@ export class UserTransformableCanvas implements Canvas {
     private readonly canvas: Canvas,
     transformOptions?: TransformOptions,
   ) {
-    this.options = createOptions(transformOptions ?? {});
+    this.options = createOptions(transformOptions);
 
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;

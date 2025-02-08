@@ -13,7 +13,4 @@ export type TransformPreprocessorOption =
       readonly minY?: number;
       readonly maxY?: number;
     }
-  | {
-      readonly type: "custom";
-      readonly preprocessorFn: TransformPreprocessorFn;
-    };
+  | TransformPreprocessorFn;

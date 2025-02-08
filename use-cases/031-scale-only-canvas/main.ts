@@ -13,15 +13,12 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserTransformableCanvas({
-    transformPreprocessor: {
-      type: "custom",
-      preprocessorFn: (params: TransformPreprocessorParams) => {
-        if (params.prevTransform.scale !== params.nextTransform.scale) {
-          return params.nextTransform;
-        }
+    transformPreprocessor: (params: TransformPreprocessorParams) => {
+      if (params.prevTransform.scale !== params.nextTransform.scale) {
+        return params.nextTransform;
+      }
 
-        return params.prevTransform;
-      },
+      return params.prevTransform;
     },
   })
   .build();
