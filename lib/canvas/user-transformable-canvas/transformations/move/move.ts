@@ -1,4 +1,4 @@
-import { TransformPayload } from "../preprocessors";
+import { TransformPayload } from "../../preprocessors";
 
 export const move = (
   prevTransform: TransformPayload,
