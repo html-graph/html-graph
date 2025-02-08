@@ -37,7 +37,7 @@ describe("createShiftLimitTransformPreprocessor", () => {
     expect(res).toStrictEqual({ scale: 1, dx: -100, dy: 0 });
   });
 
-  it("should not transform horizontally to less when limit passed", () => {
+  it("should not transform horizontally to less when limit bypassed", () => {
     const preprocessor = createShiftLimitTransformPreprocessor({
       minX: -100,
       maxX: null,
@@ -73,7 +73,7 @@ describe("createShiftLimitTransformPreprocessor", () => {
     expect(res).toStrictEqual({ scale: 1, dx: 100, dy: 0 });
   });
 
-  it("should not transform horizontally to more when limit passed", () => {
+  it("should not transform horizontally to more when limit bypassed", () => {
     const preprocessor = createShiftLimitTransformPreprocessor({
       minX: null,
       maxX: 600,
@@ -109,7 +109,7 @@ describe("createShiftLimitTransformPreprocessor", () => {
     expect(res).toStrictEqual({ scale: 1, dx: 0, dy: -100 });
   });
 
-  it("should not transform vertically to less when limit passed", () => {
+  it("should not transform vertically to less when limit bypassed", () => {
     const preprocessor = createShiftLimitTransformPreprocessor({
       minX: null,
       maxX: null,
@@ -145,7 +145,7 @@ describe("createShiftLimitTransformPreprocessor", () => {
     expect(res).toStrictEqual({ scale: 1, dx: 0, dy: 100 });
   });
 
-  it("should not transform vertically to more when limit passed", () => {
+  it("should not transform vertically to more when limit bypassed", () => {
     const preprocessor = createShiftLimitTransformPreprocessor({
       minX: null,
       maxX: null,

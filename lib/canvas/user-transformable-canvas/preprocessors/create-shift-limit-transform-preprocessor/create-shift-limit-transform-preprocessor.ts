@@ -7,44 +7,37 @@ export const createShiftLimitTransformPreprocessor: (
 ) => TransformPreprocessorFn = (
   preprocessorParams: ShiftLimitPreprocessorParams,
 ) => {
+  const minX =
+    preprocessorParams.minX !== null ? preprocessorParams.minX : -Infinity;
+  const maxX =
+    preprocessorParams.maxX !== null ? preprocessorParams.maxX : Infinity;
+  const minY =
+    preprocessorParams.minY !== null ? preprocessorParams.minY : -Infinity;
+  const maxY =
+    preprocessorParams.maxY !== null ? preprocessorParams.maxY : Infinity;
+
   return (params: TransformPreprocessorParams) => {
     let dx = params.nextTransform.dx;
     let dy = params.nextTransform.dy;
 
-    if (
-      preprocessorParams.minX !== null &&
-      dx < preprocessorParams.minX &&
-      dx < params.prevTransform.dx
-    ) {
-      dx = Math.min(params.prevTransform.dx, preprocessorParams.minX);
+    if (dx < minX && dx < params.prevTransform.dx) {
+      dx = Math.min(params.prevTransform.dx, minX);
     }
 
     const w = params.canvasWidth * params.prevTransform.scale;
 
-    if (
-      preprocessorParams.maxX !== null &&
-      dx > preprocessorParams.maxX - w &&
-      dx > params.prevTransform.dx
-    ) {
-      dx = Math.max(params.prevTransform.dx, preprocessorParams.maxX - w);
+    if (dx > maxX - w && dx > params.prevTransform.dx) {
+      dx = Math.max(params.prevTransform.dx, maxX - w);
     }
 
-    if (
-      preprocessorParams.minY !== null &&
-      dy < preprocessorParams.minY &&
-      dy < params.prevTransform.dy
-    ) {
-      dy = Math.min(params.prevTransform.dy, preprocessorParams.minY);
+    if (dy < minY && dy < params.prevTransform.dy) {
+      dy = Math.min(params.prevTransform.dy, minY);
     }
 
     const h = params.canvasHeight * params.prevTransform.scale;
 
-    if (
-      preprocessorParams.maxY !== null &&
-      dy > preprocessorParams.maxY - h &&
-      dy > params.prevTransform.dy
-    ) {
-      dy = Math.max(params.prevTransform.dy, preprocessorParams.maxY - h);
+    if (dy > maxY - h && dy > params.prevTransform.dy) {
+      dy = Math.max(params.prevTransform.dy, maxY - h);
     }
 
     return { scale: params.nextTransform.scale, dx, dy };

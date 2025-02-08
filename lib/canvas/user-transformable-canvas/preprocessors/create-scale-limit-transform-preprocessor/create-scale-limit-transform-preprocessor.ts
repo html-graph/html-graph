@@ -7,32 +7,40 @@ export const createScaleLimitTransformPreprocessor: (
 ) => TransformPreprocessorFn = (
   preprocessorParams: ScaleLimitPreprocessorParams,
 ) => {
-  const minViewScale =
-    preprocessorParams.maxContentScale !== null
-      ? 1 / preprocessorParams.maxContentScale
-      : null;
+  const maxContentScale = preprocessorParams.maxContentScale;
+  const minContentScale = preprocessorParams.minContentScale;
+
+  const minViewScale = maxContentScale !== null ? 1 / maxContentScale : 0;
   const maxViewScale =
-    preprocessorParams.minContentScale !== null
-      ? 1 / preprocessorParams.minContentScale
-      : null;
+    minContentScale !== null ? 1 / minContentScale : Infinity;
 
   return (params: TransformPreprocessorParams) => {
+    let nextScale = params.nextTransform.scale;
+    let nextDx = params.nextTransform.dx;
+    let nextDy = params.nextTransform.dy;
+
     if (
-      maxViewScale !== null &&
       params.nextTransform.scale > maxViewScale &&
       params.nextTransform.scale > params.prevTransform.scale
     ) {
-      return params.prevTransform;
+      nextScale = Math.max(params.prevTransform.scale, maxViewScale);
+      nextDx = params.prevTransform.dx;
+      nextDy = params.prevTransform.dy;
     }
 
     if (
-      minViewScale !== null &&
       params.nextTransform.scale < minViewScale &&
       params.nextTransform.scale < params.prevTransform.scale
     ) {
-      return params.prevTransform;
+      nextScale = Math.min(params.prevTransform.scale, minViewScale);
+      nextDx = params.prevTransform.dx;
+      nextDy = params.prevTransform.dy;
     }
 
-    return params.nextTransform;
+    return {
+      scale: nextScale,
+      dx: nextDx,
+      dy: nextDy,
+    };
   };
 };
