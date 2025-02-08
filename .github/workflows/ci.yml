@@ -21,17 +21,8 @@ jobs:
         run: npm run build
       - name: Build badges
         run: npm install --global jest-coverage-badges && jest-coverage-badges --output ./badges
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: ci
-    steps:
-      - name: Deploy badges to GitHub Pages
+      - name: Upload badges as artifacts
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
         with:
-          name: "Badges"
-          path: "badges/"
+          path: badges/
