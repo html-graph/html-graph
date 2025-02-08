@@ -150,6 +150,27 @@ export class UserDraggableNodesCanvas implements Canvas {
       dragOptions?.dragCursor !== undefined ? dragOptions.dragCursor : "grab";
   }
 
+  public attach(element: HTMLElement): UserDraggableNodesCanvas {
+    this.detach();
+    this.element = element;
+
+    this.element.addEventListener("touchstart", this.onCanvasTouchStart);
+    this.canvas.attach(this.element);
+
+    return this;
+  }
+
+  public detach(): UserDraggableNodesCanvas {
+    this.canvas.detach();
+
+    if (this.element !== null) {
+      this.element.removeEventListener("touchstart", this.onCanvasTouchStart);
+      this.element = null;
+    }
+
+    return this;
+  }
+
   public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
     const nodeId = this.nodeIdGenerator.create(request.id);
 
@@ -317,39 +338,12 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public attach(element: HTMLElement): UserDraggableNodesCanvas {
-    this.detach();
-    this.element = element;
-
-    this.element.addEventListener("touchstart", this.onCanvasTouchStart);
-    this.canvas.attach(this.element);
-
-    return this;
-  }
-
-  public detach(): UserDraggableNodesCanvas {
-    this.canvas.detach();
-
-    if (this.element !== null) {
-      this.element.removeEventListener("touchstart", this.onCanvasTouchStart);
-      this.element = null;
-    }
-
-    return this;
-  }
-
   public destroy(): void {
     this.detach();
+    this.clear();
 
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
-
-    this.nodes.forEach((value) => {
-      value.element.removeEventListener("mousedown", value.onMouseDown);
-      value.element.removeEventListener("touchstart", value.onTouchStart);
-    });
-
-    this.nodes.clear();
 
     this.canvas.destroy();
   }
