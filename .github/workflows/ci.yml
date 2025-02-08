@@ -19,3 +19,5 @@ jobs:
         run: npm run test:ci
       - name: Build production bundle
         run: npm run build
+      - name: Build badges
+        run: npm install --global jest-coverage-badges && jest-coverage-badges

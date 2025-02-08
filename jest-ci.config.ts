@@ -4,7 +4,7 @@ import parentConfig from "./jest.config";
 const config: Config = {
   ...parentConfig,
   collectCoverage: true,
-  coverageReporters: ["text", "text-summary", "json"],
+  coverageReporters: ["json-summary", "text", "text-summary"],
 };
 
 export default config;
