@@ -59,7 +59,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (event.button !== 0) {
+    if (this.element === null || event.button !== 0) {
       return;
     }
 
@@ -69,13 +69,9 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onWheelScroll: (event: WheelEvent) => void = (
     event: WheelEvent,
   ) => {
-    if (this.element === null) {
-      return;
-    }
-
     event.preventDefault();
 
-    const { left, top } = this.element.getBoundingClientRect();
+    const { left, top } = this.element!.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
     const deltaScale =
@@ -84,7 +80,7 @@ export class UserTransformableCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
-    this.scaleViewport(this.element, deltaViewScale, centerX, centerY);
+    this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
