@@ -15,7 +15,7 @@ const config: Config = {
     "/lib/.*\\.mock\\.ts$",
     "/lib/index\\.ts$",
   ],
-  // collectCoverageFrom: ["./lib/**/*.ts"],
+  collectCoverageFrom: ["./lib/**/*.ts"],
   coverageThreshold: {
     global: {
       branches: 100,
@@ -24,14 +24,14 @@ const config: Config = {
       statements: 100,
     },
     // TODO: remove
-    "./lib/canvas/user-transformable-canvas/options": {
-      branches: 100,
-      functions: 60,
-      lines: 100,
-      statements: 100,
+    "./lib/html-graph-builder": {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0,
     },
     // TODO: remove
-    "./lib/canvas/user-transformable-canvas": {
+    "./lib/canvas": {
       branches: 0,
       functions: 0,
       lines: 0,

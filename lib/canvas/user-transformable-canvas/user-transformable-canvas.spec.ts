@@ -732,4 +732,115 @@ describe("UserTransformableCanvas", () => {
       );
     }).not.toThrow();
   });
+
+  it("should not move canvas if touch is outside of window", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: -100, clientY: 0 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
+  });
+
+  it("should not move canvas if touch is outside of canvas", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 1600, clientY: 0 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
+  });
+
+  it("should move and scale canvas with two touches", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 100, clientY: 0 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 0 }),
+        ],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 50, 0)");
+  });
+
+  it("should keep moving canvas after move touches ended", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 100, clientY: 0 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchend", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 200, clientY: 0 })],
+      }),
+    );
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 200, 0)");
+  });
 });

@@ -95,7 +95,9 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    if (this.element === null) {
+    const element = this.element;
+
+    if (element === null) {
       return;
     }
 
@@ -103,7 +105,7 @@ export class UserTransformableCanvas implements Canvas {
 
     const isEvery = currentTouches.touches.every(
       (t) =>
-        isPointOnElement(this.element!, t[0], t[1]) &&
+        isPointOnElement(element, t[0], t[1]) &&
         isPointOnWindow(this.window, t[0], t[1]),
     );
 
@@ -114,20 +116,20 @@ export class UserTransformableCanvas implements Canvas {
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
-        this.element,
+        element,
         -(currentTouches.x - this.prevTouches!.x),
         -(currentTouches.y - this.prevTouches!.y),
       );
     }
 
     if (currentTouches.touchesCnt === 2) {
-      const { left, top } = this.element.getBoundingClientRect();
+      const { left, top } = element.getBoundingClientRect();
       const x = this.prevTouches!.x - left;
       const y = this.prevTouches!.y - top;
       const deltaScale = currentTouches.scale / this.prevTouches!.scale;
       const deltaViewScale = 1 / deltaScale;
 
-      this.scaleViewport(this.element, deltaViewScale, x, y);
+      this.scaleViewport(element, deltaViewScale, x, y);
     }
 
     this.prevTouches = currentTouches;
@@ -144,13 +146,9 @@ export class UserTransformableCanvas implements Canvas {
   };
 
   private readonly observer = new ResizeObserver(() => {
-    if (this.element === null) {
-      return;
-    }
-
     const prevTransform = this.canvas.transformation.getViewportMatrix();
 
-    const { width, height } = this.element.getBoundingClientRect();
+    const { width, height } = this.element!.getBoundingClientRect();
     const transform = this.options.transformPreprocessor({
       prevTransform,
       nextTransform: prevTransform,
