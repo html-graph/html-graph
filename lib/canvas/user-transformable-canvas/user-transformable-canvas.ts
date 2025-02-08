@@ -6,7 +6,6 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { TransformOptions } from "./options";
-import { TransformPayload } from "./preprocessors";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
@@ -14,6 +13,7 @@ import { Canvas } from "../canvas";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
 import { processTouch, TouchState } from "./process-touch";
+import { move, scale } from "./transformations";
 
 export class UserTransformableCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -41,11 +41,8 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null) {
-      return;
-    }
-
     if (
+      this.element === null ||
       !isPointOnElement(this.element, event.clientX, event.clientY) ||
       !isPointOnWindow(this.window, event.clientX, event.clientY)
     ) {
@@ -56,7 +53,7 @@ export class UserTransformableCanvas implements Canvas {
     const deltaViewX = -event.movementX;
     const deltaViewY = -event.movementY;
 
-    this.moveViewport(deltaViewX, deltaViewY);
+    this.moveViewport(this.element, deltaViewX, deltaViewY);
   };
 
   private readonly onMouseUp: (event: MouseEvent) => void = (
@@ -87,7 +84,7 @@ export class UserTransformableCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
-    this.scaleViewport(deltaViewScale, centerX, centerY);
+    this.scaleViewport(this.element, deltaViewScale, centerX, centerY);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -121,6 +118,7 @@ export class UserTransformableCanvas implements Canvas {
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
+        this.element,
         -(currentTouches.x - this.prevTouches.x),
         -(currentTouches.y - this.prevTouches.y),
       );
@@ -133,7 +131,7 @@ export class UserTransformableCanvas implements Canvas {
       const deltaScale = currentTouches.scale / this.prevTouches.scale;
       const deltaViewScale = 1 / deltaScale;
 
-      this.scaleViewport(deltaViewScale, x, y);
+      this.scaleViewport(this.element, deltaViewScale, x, y);
     }
 
     this.prevTouches = currentTouches;
@@ -150,19 +148,22 @@ export class UserTransformableCanvas implements Canvas {
   };
 
   private readonly observer = new ResizeObserver(() => {
-    if (this.element !== null) {
-      const prevTransform = this.canvas.transformation.getViewportMatrix();
-
-      const { width, height } = this.element.getBoundingClientRect();
-      const transform = this.options.transformPreprocessor({
-        prevTransform,
-        nextTransform: prevTransform,
-        canvasWidth: width,
-        canvasHeight: height,
-      });
-      this.canvas.patchViewportMatrix(transform);
-      this.options.onTransformFinished();
+    if (this.element === null) {
+      return;
     }
+
+    const prevTransform = this.canvas.transformation.getViewportMatrix();
+
+    const { width, height } = this.element.getBoundingClientRect();
+    const transform = this.options.transformPreprocessor({
+      prevTransform,
+      nextTransform: prevTransform,
+      canvasWidth: width,
+      canvasHeight: height,
+    });
+
+    this.canvas.patchViewportMatrix(transform);
+    this.options.onTransformFinished();
   });
 
   private readonly options: Options;
@@ -175,6 +176,34 @@ export class UserTransformableCanvas implements Canvas {
 
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
+  }
+
+  public attach(element: HTMLElement): UserTransformableCanvas {
+    this.detach();
+    this.element = element;
+    this.observer.observe(this.element);
+    this.element.addEventListener("mousedown", this.onMouseDown);
+    this.element.addEventListener("wheel", this.onWheelScroll);
+    this.element.addEventListener("touchstart", this.onTouchStart);
+
+    this.canvas.attach(this.element);
+
+    return this;
+  }
+
+  public detach(): UserTransformableCanvas {
+    this.canvas.detach();
+
+    if (this.element !== null) {
+      this.observer.unobserve(this.element);
+      this.element.removeEventListener("mousedown", this.onMouseDown);
+      this.element.removeEventListener("wheel", this.onWheelScroll);
+      this.element.removeEventListener("touchstart", this.onTouchStart);
+
+      this.element = null;
+    }
+
+    return this;
   }
 
   public addNode(node: AddNodeRequest): UserTransformableCanvas {
@@ -262,34 +291,6 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public attach(element: HTMLElement): UserTransformableCanvas {
-    this.detach();
-    this.element = element;
-    this.observer.observe(this.element);
-    this.element.addEventListener("mousedown", this.onMouseDown);
-    this.element.addEventListener("wheel", this.onWheelScroll);
-    this.element.addEventListener("touchstart", this.onTouchStart);
-
-    this.canvas.attach(this.element);
-
-    return this;
-  }
-
-  public detach(): UserTransformableCanvas {
-    this.canvas.detach();
-
-    if (this.element !== null) {
-      this.observer.unobserve(this.element);
-      this.element.removeEventListener("mousedown", this.onMouseDown);
-      this.element.removeEventListener("wheel", this.onWheelScroll);
-      this.element.removeEventListener("touchstart", this.onTouchStart);
-
-      this.element = null;
-    }
-
-    return this;
-  }
-
   public destroy(): void {
     this.detach();
 
@@ -299,70 +300,35 @@ export class UserTransformableCanvas implements Canvas {
     this.canvas.destroy();
   }
 
-  private moveViewport(dx: number, dy: number): void {
+  private moveViewport(element: HTMLElement, dx: number, dy: number): void {
     this.options.onBeforeTransformStarted();
 
-    /**
-     * dx2 - traslate x
-     * dy2 - traslate y
-     *
-     * direct transform
-     *  s1  0   dx1     1   0   dx2
-     *  0   s1  dy1     0   1   dy2
-     *  0   0   1       0   0   1
-     *
-     * [s, dx, dy] = [s1, s * dx2 + dx1, s * dy2 + dy1]
-     */
     const prevTransform = this.transformation.getViewportMatrix();
+    const nextTransform = move(prevTransform, dx, dy);
+    const { width, height } = element.getBoundingClientRect();
 
-    const nextTransform: TransformPayload = {
-      scale: prevTransform.scale,
-      dx: prevTransform.dx + prevTransform.scale * dx,
-      dy: prevTransform.dy + prevTransform.scale * dy,
-    };
+    const transform = this.options.transformPreprocessor({
+      prevTransform,
+      nextTransform,
+      canvasWidth: width,
+      canvasHeight: height,
+    });
 
-    if (this.element !== null) {
-      const { width, height } = this.element.getBoundingClientRect();
-
-      const transform = this.options.transformPreprocessor({
-        prevTransform,
-        nextTransform,
-        canvasWidth: width,
-        canvasHeight: height,
-      });
-
-      this.canvas.patchViewportMatrix(transform);
-      this.options.onTransformFinished();
-    }
+    this.canvas.patchViewportMatrix(transform);
+    this.options.onTransformFinished();
   }
 
-  private scaleViewport(s2: number, cx: number, cy: number): void {
-    if (this.element === null) {
-      return;
-    }
-
+  private scaleViewport(
+    element: HTMLElement,
+    s2: number,
+    cx: number,
+    cy: number,
+  ): void {
     this.options.onBeforeTransformStarted();
 
     const prevTransform = this.canvas.transformation.getViewportMatrix();
-
-    /**
-     * s2 - scale
-     * cx - scale center x
-     * cy - scale center y
-     *
-     *  s1  0   dx1     s2  0   (1 - s2) * cx
-     *  0   s1  dy1     0   s2  (1 - s2) * cy
-     *  0   0   1       0   0   1
-     *
-     * [s, dx, dy] = [s1 * s2, s1 * (1 - s2) * cx + dx1, s1 * (1 - s2) * cy + dy1]
-     */
-    const nextTransform: TransformPayload = {
-      scale: prevTransform.scale * s2,
-      dx: prevTransform.scale * (1 - s2) * cx + prevTransform.dx,
-      dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
-    };
-
-    const { width, height } = this.element.getBoundingClientRect();
+    const nextTransform = scale(prevTransform, s2, cx, cy);
+    const { width, height } = element.getBoundingClientRect();
 
     const transform = this.options.transformPreprocessor({
       prevTransform,
