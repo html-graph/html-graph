@@ -1,5 +1,4 @@
 export * from "./transform-preprocessor-fn";
-export * from "./resolve-transform-preprocessor";
 export * from "./create-shift-limit-transform-preprocessor";
 export * from "./create-scale-limit-transform-preprocessor";
 export * from "./create-combined-transform-preprocessor";

@@ -1,10 +1,10 @@
 import {
   createCombinedTransformPreprocessor,
-  resolveTransformPreprocessor,
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
 } from "../preprocessors";
+import { resolveTransformPreprocessor } from "../resolve-transform-preprocessor";
 import { Options } from "./options";
 import { TransformOptions } from "./transform-options";
 
