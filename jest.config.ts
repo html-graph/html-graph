@@ -23,20 +23,6 @@ const config: Config = {
       lines: 100,
       statements: 100,
     },
-    // TODO: remove
-    "./lib/html-graph-builder": {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
-    },
-    // TODO: remove
-    "./lib/canvas": {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
-    },
   },
   coverageReporters: ["lcov", "text", "text-summary"],
 };
