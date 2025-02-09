@@ -1,7 +1,7 @@
 import { NodeDragPayload } from "./node-drag-payload";
 
 export interface DragOptions {
-  readonly grabPriorityStrategy?: "freeze" | "move-on-top";
+  readonly moveOnTop?: boolean;
   readonly dragCursor?: string | null;
   readonly events?: {
     readonly onNodeDrag?: (payload: NodeDragPayload) => void;

@@ -16,7 +16,7 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserDraggableNodes({
-    grabPriorityStrategy: "freeze",
+    moveOnTop: false,
   })
   .setUserTransformableCanvas()
   .build();

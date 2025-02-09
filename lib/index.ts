@@ -26,6 +26,7 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
+  UpdatePortMarkRequest,
 } from "./canvas";
 
 export {

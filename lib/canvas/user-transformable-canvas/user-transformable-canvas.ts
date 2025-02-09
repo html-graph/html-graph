@@ -3,7 +3,7 @@ import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
-import { UpdatePortRequest } from "../update-port-request";
+import { UpdatePortMarkRequest } from "../update-port-mark-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
@@ -34,11 +34,11 @@ export class UserTransformableCanvas implements Canvas {
     }
 
     setCursor(this.element, this.options.shiftCursor);
-    this.window.addEventListener("mousemove", this.onMouseMove);
-    this.window.addEventListener("mouseup", this.onMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("mouseup", this.onWindowMouseUp);
   };
 
-  private readonly onMouseMove: (event: MouseEvent) => void = (
+  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
     if (
@@ -56,7 +56,7 @@ export class UserTransformableCanvas implements Canvas {
     this.moveViewport(this.element, deltaViewX, deltaViewY);
   };
 
-  private readonly onMouseUp: (event: MouseEvent) => void = (
+  private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
     if (this.element === null || event.button !== 0) {
@@ -87,12 +87,12 @@ export class UserTransformableCanvas implements Canvas {
     event: TouchEvent,
   ) => {
     this.prevTouches = processTouch(event);
-    this.window.addEventListener("touchmove", this.onTouchMove);
-    this.window.addEventListener("touchend", this.onTouchEnd);
-    this.window.addEventListener("touchcancel", this.onTouchEnd);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove);
+    this.window.addEventListener("touchend", this.onWindowTouchFinish);
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
   };
 
-  private readonly onTouchMove: (event: TouchEvent) => void = (
+  private readonly onWindowTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
     const element = this.element;
@@ -135,7 +135,7 @@ export class UserTransformableCanvas implements Canvas {
     this.prevTouches = currentTouches;
   };
 
-  private readonly onTouchEnd: (event: TouchEvent) => void = (
+  private readonly onWindowTouchFinish: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
     if (event.touches.length > 0) {
@@ -227,11 +227,11 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public updatePort(
+  public updatePortMark(
     portId: string,
-    request?: UpdatePortRequest,
+    request?: UpdatePortMarkRequest,
   ): UserTransformableCanvas {
-    this.canvas.updatePort(portId, request);
+    this.canvas.updatePortMark(portId, request);
 
     return this;
   }
@@ -344,8 +344,8 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private removeMouseDragListeners(): void {
-    this.window.removeEventListener("mousemove", this.onMouseMove);
-    this.window.removeEventListener("mouseup", this.onMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
   }
 
   private stopTouchDrag(): void {
@@ -354,8 +354,8 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private removeTouchDragListeners(): void {
-    this.window.removeEventListener("touchmove", this.onTouchMove);
-    this.window.removeEventListener("touchend", this.onTouchEnd);
-    this.window.removeEventListener("touchcancel", this.onTouchEnd);
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 }

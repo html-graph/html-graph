@@ -8,12 +8,12 @@ import { PatchMatrixRequest } from "../patch-transform-request";
 import { DragOptions } from "./drag-options";
 import { NodeDragPayload } from "./node-drag-payload";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { HtmlGraphError } from "@/error";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
-import { UpdatePortRequest } from "../update-port-request";
+import { UpdatePortMarkRequest } from "../update-port-mark-request";
 import { NodeState } from "./node-state";
+import { Point } from "@/point";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -36,17 +36,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private element: HTMLElement | null = null;
 
-  private readonly onCanvasMouseUp: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
-    if (event.button !== 0) {
-      return;
-    }
-
-    this.cancelMouseDrag();
-  };
-
-  private readonly onCanvasMouseMove: (event: MouseEvent) => void = (
+  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
     if (
@@ -63,58 +53,60 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
   };
 
-  private readonly onCanvasTouchStart: (event: TouchEvent) => void = (
-    event: TouchEvent,
+  private readonly onWindowMouseUp: (event: MouseEvent) => void = (
+    event: MouseEvent,
   ) => {
-    this.previousTouchCoords = [
-      event.touches[0].clientX,
-      event.touches[0].clientY,
-    ];
+    if (event.button !== 0) {
+      return;
+    }
+
+    this.cancelMouseDrag();
   };
 
-  private readonly onCanvasTouchMove: (event: TouchEvent) => void = (
+  private readonly onWindowTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    if (event.touches.length === 1) {
-      const t = event.touches[0];
+    if (event.touches.length !== 1) {
+      return;
+    }
 
-      if (
-        this.element !== null &&
-        (!isPointOnElement(this.element, t.clientX, t.clientY) ||
-          !isPointOnWindow(this.window, t.clientX, t.clientY))
-      ) {
-        this.cancelTouchDrag();
-        return;
-      }
+    const t = event.touches[0];
 
-      if (this.grabbedNodeId !== null && this.previousTouchCoords !== null) {
-        event.stopImmediatePropagation();
-        const dx = t.clientX - this.previousTouchCoords[0];
-        const dy = t.clientY - this.previousTouchCoords[1];
+    if (
+      this.element !== null &&
+      (!isPointOnElement(this.element, t.clientX, t.clientY) ||
+        !isPointOnWindow(this.window, t.clientX, t.clientY))
+    ) {
+      this.cancelTouchDrag();
+      return;
+    }
 
-        this.dragNode(this.grabbedNodeId, dx, dy);
-        this.previousTouchCoords = [
-          event.touches[0].clientX,
-          event.touches[0].clientY,
-        ];
-      }
+    if (this.grabbedNodeId !== null && this.previousTouchCoords !== null) {
+      const dx = t.clientX - this.previousTouchCoords.x;
+      const dy = t.clientY - this.previousTouchCoords.y;
+
+      this.dragNode(this.grabbedNodeId, dx, dy);
+      this.previousTouchCoords = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
     }
   };
 
-  private readonly onCanvasTouchEnd: (event: TouchEvent) => void = (
+  private readonly onWindowTouchFinish: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
     if (event.touches.length > 0) {
-      this.previousTouchCoords = [
-        event.touches[0].clientX,
-        event.touches[0].clientY,
-      ];
+      this.previousTouchCoords = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
     } else {
       this.cancelTouchDrag();
     }
   };
 
-  private previousTouchCoords: [number, number] | null = null;
+  private previousTouchCoords: Point | null = null;
 
   private readonly freezePriority: boolean;
 
@@ -129,22 +121,12 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
 
-    const onNodeDragDefault: (payload: NodeDragPayload) => void = () => {
-      // no implementation by default
-    };
-
-    this.onNodeDrag = dragOptions?.events?.onNodeDrag ?? onNodeDragDefault;
-
-    const onBeforeNodeDragDefault: (
-      payload: NodeDragPayload,
-    ) => boolean = () => {
-      return true;
-    };
+    this.onNodeDrag = dragOptions?.events?.onNodeDrag ?? ((): void => {});
 
     this.onBeforeNodeDrag =
-      dragOptions?.events?.onBeforeNodeDrag ?? onBeforeNodeDragDefault;
+      dragOptions?.events?.onBeforeNodeDrag ?? ((): boolean => true);
 
-    this.freezePriority = dragOptions?.grabPriorityStrategy === "freeze";
+    this.freezePriority = dragOptions?.moveOnTop === false;
 
     this.dragCursor =
       dragOptions?.dragCursor !== undefined ? dragOptions.dragCursor : "grab";
@@ -154,7 +136,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.detach();
     this.element = element;
 
-    this.element.addEventListener("touchstart", this.onCanvasTouchStart);
     this.canvas.attach(this.element);
 
     return this;
@@ -164,7 +145,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {
-      this.element.removeEventListener("touchstart", this.onCanvasTouchStart);
       this.element = null;
     }
 
@@ -200,11 +180,18 @@ export class UserDraggableNodesCanvas implements Canvas {
       this.grabbedNodeId = nodeId;
       setCursor(this.element, this.dragCursor);
       this.moveNodeOnTop(nodeId);
-      this.window.addEventListener("mouseup", this.onCanvasMouseUp);
-      this.window.addEventListener("mousemove", this.onCanvasMouseMove);
+      this.window.addEventListener("mouseup", this.onWindowMouseUp);
+      this.window.addEventListener("mousemove", this.onWindowMouseMove);
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
+      event.stopImmediatePropagation();
+
+      this.previousTouchCoords = {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+
       const node = this.model.getNode(nodeId)!;
 
       const isDragAllowed = this.onBeforeNodeDrag({
@@ -224,9 +211,9 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       this.grabbedNodeId = nodeId;
       this.moveNodeOnTop(nodeId);
-      this.window.addEventListener("touchmove", this.onCanvasTouchMove);
-      this.window.addEventListener("touchend", this.onCanvasTouchEnd);
-      this.window.addEventListener("touchcancel", this.onCanvasTouchEnd);
+      this.window.addEventListener("touchmove", this.onWindowTouchMove);
+      this.window.addEventListener("touchend", this.onWindowTouchFinish);
+      this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
     };
 
     this.nodes.set(nodeId, {
@@ -260,8 +247,8 @@ export class UserDraggableNodesCanvas implements Canvas {
       node.element.removeEventListener("touchstart", node.onTouchStart);
     }
 
-    this.canvas.removeNode(nodeId);
     this.nodes.delete(nodeId);
+    this.canvas.removeNode(nodeId);
 
     return this;
   }
@@ -272,11 +259,11 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePort(
+  public updatePortMark(
     portId: string,
-    request?: UpdatePortRequest,
+    request?: UpdatePortMarkRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.updatePort(portId, request);
+    this.canvas.updatePortMark(portId, request);
 
     return this;
   }
@@ -349,10 +336,10 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
-    const node = this.model.getNode(nodeId);
+    const node = this.model.getNode(nodeId)!;
 
     if (node === null) {
-      throw new HtmlGraphError("failed to drag nonexisting node");
+      return;
     }
 
     const matrixContent = this.canvas.transformation.getContentMatrix();
@@ -409,8 +396,8 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private removeMouseDragListeners(): void {
-    this.window.removeEventListener("mouseup", this.onCanvasMouseUp);
-    this.window.removeEventListener("mousemove", this.onCanvasMouseMove);
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
   }
 
   private cancelTouchDrag(): void {
@@ -420,8 +407,8 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private removeTouchDragListeners(): void {
-    this.window.removeEventListener("touchmove", this.onCanvasTouchMove);
-    this.window.removeEventListener("touchend", this.onCanvasTouchEnd);
-    this.window.removeEventListener("touchcancel", this.onCanvasTouchEnd);
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 }

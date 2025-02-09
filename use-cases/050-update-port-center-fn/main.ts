@@ -13,7 +13,7 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserDraggableNodes({
-    grabPriorityStrategy: "freeze",
+    moveOnTop: false,
   })
   .setUserTransformableCanvas()
   .build();
@@ -60,9 +60,9 @@ let i = 0;
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updatePort("port-2", { centerFn: topLeftCenterFn });
+    canvas.updatePortMark("port-2", { centerFn: topLeftCenterFn });
   } else {
-    canvas.updatePort("port-2", { centerFn: bottomRightCenterFn });
+    canvas.updatePortMark("port-2", { centerFn: bottomRightCenterFn });
   }
 
   i++;

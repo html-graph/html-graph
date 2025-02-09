@@ -4,7 +4,7 @@ import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
-import { UpdatePortRequest } from "../update-port-request";
+import { UpdatePortMarkRequest } from "../update-port-mark-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
@@ -89,11 +89,11 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePort(
+  public updatePortMark(
     portId: string,
-    request?: UpdatePortRequest,
+    request?: UpdatePortMarkRequest,
   ): ResizeReactiveNodesCanvas {
-    this.canvas.updatePort(portId, request);
+    this.canvas.updatePortMark(portId, request);
 
     return this;
   }
