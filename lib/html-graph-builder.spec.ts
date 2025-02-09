@@ -44,7 +44,7 @@ describe("HtmlGraphBuilder", () => {
   it("should build resize reactive canvas", () => {
     const builder = new HtmlGraphBuilder();
 
-    const canvas = builder.setResizableReactiveNodes().build();
+    const canvas = builder.setResizeReactiveNodes().build();
 
     expect(canvas instanceof ResizeReactiveNodesCanvas).toBe(true);
   });

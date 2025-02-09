@@ -44,7 +44,7 @@ export class HtmlGraphBuilder {
     return this;
   }
 
-  public setResizableReactiveNodes(): HtmlGraphBuilder {
+  public setResizeReactiveNodes(): HtmlGraphBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;
