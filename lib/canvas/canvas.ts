@@ -5,7 +5,7 @@ import { MarkPortRequest } from "./mark-port-request";
 import { PatchMatrixRequest } from "./patch-transform-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
-import { UpdatePortMarkRequest } from "./update-port-mark-request";
+import { UpdatePortRequest } from "./update-port-request";
 import { PublicGraphStore } from "@/graph-store";
 
 export interface Canvas {
@@ -44,7 +44,7 @@ export interface Canvas {
   /**
    * updates port and attached edges
    */
-  updatePort(portId: unknown, request?: UpdatePortMarkRequest): Canvas;
+  updatePort(portId: unknown, request?: UpdatePortRequest): Canvas;
 
   /**
    * ummarks element as port of node

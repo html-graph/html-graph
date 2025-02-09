@@ -14,7 +14,7 @@ import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
-import { UpdatePortMarkRequest } from "../update-port-mark-request";
+import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { HtmlController } from "@/html-controller";
 import { CanvasController } from "@/canvas-controller";
@@ -152,7 +152,7 @@ export class CanvasCore implements Canvas {
 
   public updatePort(
     portId: string,
-    request?: UpdatePortMarkRequest,
+    request?: UpdatePortRequest,
   ): CanvasCore {
     this.canvasController.updatePort(portId, {
       direction: request?.direction,

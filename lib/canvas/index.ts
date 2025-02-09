@@ -6,7 +6,7 @@ export * from "./add-node-request";
 export * from "./mark-node-port-request";
 export * from "./update-edge-request";
 export * from "./update-node-request";
-export * from "./update-port-mark-request";
+export * from "./update-port-request";
 export * from "./add-node-ports";
 export * from "./canvas";
 export * from "./canvas-core";

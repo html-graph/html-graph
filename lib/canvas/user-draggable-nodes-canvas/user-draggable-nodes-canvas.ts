@@ -11,7 +11,7 @@ import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
-import { UpdatePortMarkRequest } from "../update-port-mark-request";
+import { UpdatePortRequest } from "../update-port-request";
 import { NodeState } from "./node-state";
 import { Point } from "@/point";
 
@@ -261,7 +261,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   public updatePort(
     portId: string,
-    request?: UpdatePortMarkRequest,
+    request?: UpdatePortRequest,
   ): UserDraggableNodesCanvas {
     this.canvas.updatePort(portId, request);
 
