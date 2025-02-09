@@ -89,11 +89,11 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePortMark(
+  public updatePort(
     portId: string,
     request?: UpdatePortMarkRequest,
   ): ResizeReactiveNodesCanvas {
-    this.canvas.updatePortMark(portId, request);
+    this.canvas.updatePort(portId, request);
 
     return this;
   }

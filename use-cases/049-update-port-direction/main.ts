@@ -54,7 +54,7 @@ canvas
 let i = 1;
 
 setInterval(() => {
-  canvas.updatePortMark("port-2", { direction: (Math.PI * i) / 12 });
+  canvas.updatePort("port-2", { direction: (Math.PI * i) / 12 });
 
   i++;
 }, 1000);

@@ -60,9 +60,9 @@ let i = 0;
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updatePortMark("port-2", { centerFn: topLeftCenterFn });
+    canvas.updatePort("port-2", { centerFn: topLeftCenterFn });
   } else {
-    canvas.updatePortMark("port-2", { centerFn: bottomRightCenterFn });
+    canvas.updatePort("port-2", { centerFn: bottomRightCenterFn });
   }
 
   i++;

@@ -214,9 +214,9 @@ describe("UserTransformableCanvas", () => {
       ],
     });
 
-    const spy = jest.spyOn(canvasCore, "updatePortMark");
+    const spy = jest.spyOn(canvasCore, "updatePort");
 
-    canvas.updatePortMark("port-1");
+    canvas.updatePort("port-1");
 
     expect(spy).toHaveBeenCalled();
   });

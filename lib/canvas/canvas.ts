@@ -44,7 +44,7 @@ export interface Canvas {
   /**
    * updates port and attached edges
    */
-  updatePortMark(portId: unknown, request?: UpdatePortMarkRequest): Canvas;
+  updatePort(portId: unknown, request?: UpdatePortMarkRequest): Canvas;
 
   /**
    * ummarks element as port of node

@@ -227,11 +227,11 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public updatePortMark(
+  public updatePort(
     portId: string,
     request?: UpdatePortMarkRequest,
   ): UserTransformableCanvas {
-    this.canvas.updatePortMark(portId, request);
+    this.canvas.updatePort(portId, request);
 
     return this;
   }

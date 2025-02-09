@@ -45,7 +45,7 @@ canvas
 
 setInterval(() => {
   port2.style.top = i % 2 ? "0" : "100%";
-  canvas.updatePortMark("port-2");
+  canvas.updatePort("port-2");
 
   i++;
 }, 1000);

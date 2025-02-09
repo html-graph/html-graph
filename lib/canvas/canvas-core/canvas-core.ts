@@ -150,7 +150,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updatePortMark(
+  public updatePort(
     portId: string,
     request?: UpdatePortMarkRequest,
   ): CanvasCore {

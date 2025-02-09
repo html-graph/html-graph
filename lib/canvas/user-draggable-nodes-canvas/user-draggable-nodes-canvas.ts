@@ -259,11 +259,11 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updatePortMark(
+  public updatePort(
     portId: string,
     request?: UpdatePortMarkRequest,
   ): UserDraggableNodesCanvas {
-    this.canvas.updatePortMark(portId, request);
+    this.canvas.updatePort(portId, request);
 
     return this;
   }

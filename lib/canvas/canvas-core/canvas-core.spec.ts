@@ -351,7 +351,7 @@ describe("CanvasCore", () => {
 
     const spy = jest.spyOn(shape, "update");
 
-    canvas.updatePortMark("port-1", { direction: Math.PI });
+    canvas.updatePort("port-1", { direction: Math.PI });
 
     expect(spy).toHaveBeenCalledWith({ x: 0, y: 0 }, 1, 1, Math.PI, Math.PI);
   });
@@ -394,7 +394,7 @@ describe("CanvasCore", () => {
 
     const spy = jest.spyOn(shape, "update");
 
-    canvas.updatePortMark("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
+    canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
     expect(spy).toHaveBeenCalledWith({ x: 100, y: 100 }, 1, 1, 0, 0);
   });
