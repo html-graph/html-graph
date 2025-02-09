@@ -1,6 +1,7 @@
 # TODO
 
 - double port mark example
+- set edge shape
 - refactor examples
 - before transform started example
 - improve reexport
