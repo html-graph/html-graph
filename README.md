@@ -97,18 +97,3 @@ canvas
   .addNode(node2)
   .addEdge({ from: "port-1-2", to: "port-2-1" });
 ```
-
-## Run use cases
-
-```
-npm install
-npm run start
-```
-
-or
-
-```
-docker compose up
-```
-
-Open `http://localhost:3100`

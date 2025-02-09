@@ -1,3 +1,18 @@
+## Development
+
+```
+npm install
+npm run start
+```
+
+or
+
+```
+docker compose up
+```
+
+Open `http://localhost:3100`
+
 ## Development with Docker
 
 1. [optional] Create `.env` file and set default variables:
