@@ -15,16 +15,6 @@ Port is an entity of a node to which edge can be attached to.
 
 Visit <a target="_blank" href="https://html-graph.github.io/use-cases/">use cases</a> and [use cases implementation](use-cases).
 
-## Features:
-
-- easy nodes customization using HTML
-- wide configuration options out of the box
-- draggable and scalable canvas
-- draggable and resizable nodes
-- exhaustive set of use cases
-- typescript support
-- mobile devices support
-
 ## Getting started:
 
 ```
@@ -97,3 +87,13 @@ canvas
   .addNode(node2)
   .addEdge({ from: "port-1-2", to: "port-2-1" });
 ```
+
+## Features:
+
+- easy nodes customization using HTML
+- wide configuration options out of the box
+- draggable and scalable canvas
+- draggable and resizable nodes
+- exhaustive set of use cases
+- typescript support
+- mobile devices support
