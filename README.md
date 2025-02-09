@@ -24,19 +24,6 @@ npm i @html-graph/html-graph
 ```javascript
 import { HtmlGraphBuilder } from "@html-graph/html-graph";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .setResizeReactiveNodes()
-  .build();
-
 function createNode({ name, x, y, frontPortId, backPortId }) {
   const node = document.createElement("div");
   const text = document.createElement("div");
@@ -62,6 +49,19 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
     ],
   };
 }
+
+const canvas = new HtmlGraphBuilder()
+  .setOptions({
+    edges: {
+      shape: {
+        hasTargetArrow: true,
+      },
+    },
+  })
+  .setUserDraggableNodes()
+  .setUserTransformableCanvas()
+  .setResizeReactiveNodes()
+  .build();
 
 const node1 = createNode({
   name: "Node 1",
@@ -93,7 +93,7 @@ canvas
 - easy nodes customization using HTML
 - wide configuration options out of the box
 - draggable and scalable canvas
-- draggable and resizable nodes
+- draggable and resize responsive nodes
 - exhaustive set of use cases
 - typescript support
 - mobile devices support
