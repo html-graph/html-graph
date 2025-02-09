@@ -1,7 +1,9 @@
-import { createScaleLimitTransformPreprocessor } from "../create-scale-limit-transform-preprocessor";
-import { createShiftLimitTransformPreprocessor } from "../create-shift-limit-transform-preprocessor";
-import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
-import { TransformPreprocessorOption } from "../../options";
+import { TransformPreprocessorOption } from "../options";
+import {
+  createScaleLimitTransformPreprocessor,
+  createShiftLimitTransformPreprocessor,
+  TransformPreprocessorFn,
+} from "../preprocessors";
 
 export const resolveTransformPreprocessor: (
   option: TransformPreprocessorOption,
