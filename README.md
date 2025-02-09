@@ -97,5 +97,3 @@ canvas
 - exhaustive set of use cases
 - typescript support
 - mobile devices support
-
-## [Development](DEVELOPMENT.md)
