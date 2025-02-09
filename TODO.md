@@ -1,7 +1,5 @@
 # TODO
 
-- unit tests
-- customize grab trigger
 - double port mark example
 - refactor examples
 - before transform started example
