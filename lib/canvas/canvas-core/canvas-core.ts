@@ -150,10 +150,7 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public updatePort(
-    portId: string,
-    request?: UpdatePortRequest,
-  ): CanvasCore {
+  public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
     this.canvasController.updatePort(portId, {
       direction: request?.direction,
       centerFn: request?.centerFn,
