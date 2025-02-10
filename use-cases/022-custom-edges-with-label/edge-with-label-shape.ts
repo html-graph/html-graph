@@ -63,7 +63,7 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.svg.appendChild(this.text);
   }
 
-  public update(
+  public render(
     to: Point,
     flipX: number,
     flipY: number,

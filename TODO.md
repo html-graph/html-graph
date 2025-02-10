@@ -1,7 +1,8 @@
 # TODO
 
-- double port mark example
+- move edge factory to edge render
 - set edge shape
+- double port mark example
 - refactor examples
 - before transform started example
 - improve reexport

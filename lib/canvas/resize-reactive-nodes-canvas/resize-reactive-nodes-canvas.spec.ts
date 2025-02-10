@@ -373,7 +373,7 @@ describe("ResizeReactiveNodesCanvas", () => {
       shape: { type: "custom", factory: () => shape },
     });
 
-    const spy = jest.spyOn(shape, "update");
+    const spy = jest.spyOn(shape, "render");
 
     triggerResizeFor(element);
 

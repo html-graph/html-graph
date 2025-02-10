@@ -3,7 +3,7 @@ import { Point } from "@/point";
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
 
-  update(
+  render(
     to: Point,
     flipX: number,
     flipY: number,

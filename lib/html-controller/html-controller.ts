@@ -184,7 +184,7 @@ export class HtmlController {
     const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
     const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
 
-    edge.shape.update(
+    edge.shape.render(
       { x: width, y: height },
       flipX,
       flipY,

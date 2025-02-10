@@ -54,7 +54,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     }
   }
 
-  public update(
+  public render(
     to: Point,
     flipX: number,
     flipY: number,

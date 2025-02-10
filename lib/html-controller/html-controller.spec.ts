@@ -339,7 +339,7 @@ describe("HtmlController", () => {
     htmlController.attachNode(addNodeRequest2.nodeId);
     htmlController.attachEdge(addEdgeRequest12.edgeId);
 
-    const spy = jest.spyOn(addEdgeRequest12.shape, "update");
+    const spy = jest.spyOn(addEdgeRequest12.shape, "render");
 
     htmlController.updateEdge(addEdgeRequest12.edgeId);
 
@@ -394,7 +394,7 @@ describe("HtmlController", () => {
     htmlController.attachNode(addNodeRequest2.nodeId);
     htmlController.attachEdge(addEdgeRequest21.edgeId);
 
-    const spy = jest.spyOn(addEdgeRequest21.shape, "update");
+    const spy = jest.spyOn(addEdgeRequest21.shape, "render");
 
     htmlController.updateEdge(addEdgeRequest21.edgeId);
 

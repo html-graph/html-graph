@@ -47,7 +47,7 @@ export class HorizontalEdgeShape implements EdgeShape {
     }
   }
 
-  public update(
+  public render(
     to: Point,
     flipX: number,
     flipY: number,

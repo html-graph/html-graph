@@ -349,7 +349,7 @@ describe("CanvasCore", () => {
       shape: { type: "custom", factory: () => shape },
     });
 
-    const spy = jest.spyOn(shape, "update");
+    const spy = jest.spyOn(shape, "render");
 
     canvas.updatePort("port-1", { direction: Math.PI });
 
@@ -392,7 +392,7 @@ describe("CanvasCore", () => {
       shape: { type: "custom", factory: () => shape },
     });
 
-    const spy = jest.spyOn(shape, "update");
+    const spy = jest.spyOn(shape, "render");
 
     canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
 

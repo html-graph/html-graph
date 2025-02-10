@@ -34,7 +34,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
     }
   }
 
-  public update(
+  public render(
     _to: Point,
     flipX: number,
     flipY: number,

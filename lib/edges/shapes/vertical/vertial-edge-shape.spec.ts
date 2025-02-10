@@ -52,7 +52,7 @@ describe("VerticalEdgeShape", () => {
   it("should apply specified mirroring to group", () => {
     const shape = createVerticalEdge(false, false);
 
-    shape.update({ x: 100, y: 100 }, 1, -1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, -1, 0, 0);
 
     const g = shape.svg.children[0] as SVGGElement;
 
@@ -62,7 +62,7 @@ describe("VerticalEdgeShape", () => {
   it("should create line path without arrows without flip y", () => {
     const shape = createVerticalEdge(false, false);
 
-    shape.update({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -75,7 +75,7 @@ describe("VerticalEdgeShape", () => {
   it("should create line path without arrows with flip y", () => {
     const shape = createVerticalEdge(false, false);
 
-    shape.update({ x: 100, y: 100 }, 1, -1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, -1, 0, 0);
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -88,7 +88,7 @@ describe("VerticalEdgeShape", () => {
   it("should create line path accounting for target arrow", () => {
     const shape = createVerticalEdge(false, true);
 
-    shape.update({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -101,7 +101,7 @@ describe("VerticalEdgeShape", () => {
   it("should create line path accounting for source arrow", () => {
     const shape = createVerticalEdge(true, false);
 
-    shape.update({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -114,7 +114,7 @@ describe("VerticalEdgeShape", () => {
   it("should create path for target arrow", () => {
     const shape = createVerticalEdge(false, true);
 
-    shape.update({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
 
     const g = shape.svg.children[0];
     const arrow = g.children[1];
@@ -125,7 +125,7 @@ describe("VerticalEdgeShape", () => {
   it("should create path for source arrow", () => {
     const shape = createVerticalEdge(true, false);
 
-    shape.update({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
 
     const g = shape.svg.children[0];
     const arrow = g.children[1];
