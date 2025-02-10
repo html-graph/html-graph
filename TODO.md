@@ -1,5 +1,6 @@
 # TODO
 
+- rid of port centerFn ?
 - move edge factory to edge render
 - set edge shape
 - double port mark example
