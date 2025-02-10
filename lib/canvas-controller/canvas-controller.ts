@@ -142,7 +142,7 @@ export class CanvasController {
       this.htmlController.updateEdgePriority(request.edgeId);
     }
 
-    this.htmlController.updateEdge(request.edgeId);
+    this.htmlController.renderEdge(request.edgeId);
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
@@ -158,7 +158,7 @@ export class CanvasController {
     const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
 
     edges.forEach((edge) => {
-      this.htmlController.updateEdge(edge);
+      this.htmlController.renderEdge(edge);
     });
   }
 
@@ -180,7 +180,7 @@ export class CanvasController {
     const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
     edges.forEach((edge) => {
-      this.htmlController.updateEdge(edge);
+      this.htmlController.renderEdge(edge);
     });
   }
 

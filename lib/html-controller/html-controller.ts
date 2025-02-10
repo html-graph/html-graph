@@ -73,7 +73,7 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
 
-    this.updateEdge(edgeId);
+    this.renderEdge(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
@@ -132,7 +132,7 @@ export class HtmlController {
     this.container.appendChild(edge.shape.svg);
   }
 
-  public updateEdge(edgeId: unknown): void {
+  public renderEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
