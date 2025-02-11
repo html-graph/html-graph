@@ -185,7 +185,7 @@ export class HtmlController {
     const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
 
     edge.shape.render({
-      target: { x: width, y: height },
+      to: { x: width, y: height },
       flipX,
       flipY,
       fromDir: portFrom.direction,

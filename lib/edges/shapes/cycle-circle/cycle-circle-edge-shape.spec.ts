@@ -41,7 +41,7 @@ describe("CycleCircleEdgeShape", () => {
     const shape = createCycleCircleEdge(false);
 
     shape.render({
-      target: { x: 0, y: 0 },
+      to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -59,7 +59,7 @@ describe("CycleCircleEdgeShape", () => {
     const shape = createCycleCircleEdge(true);
 
     shape.render({
-      target: { x: 0, y: 0 },
+      to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,

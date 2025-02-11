@@ -60,7 +60,7 @@ export class BezierEdgeShape implements EdgeShape {
       params.flipY,
     );
 
-    const linePath = this.createLinePath(params.target, fromVect, toVect);
+    const linePath = this.createLinePath(params.to, fromVect, toVect);
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
@@ -77,7 +77,7 @@ export class BezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.target,
+        params.to,
         -this.arrowLength,
         this.arrowWidth,
       );

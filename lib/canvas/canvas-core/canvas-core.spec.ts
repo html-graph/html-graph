@@ -354,7 +354,7 @@ describe("CanvasCore", () => {
     canvas.updatePort("port-1", { direction: Math.PI });
 
     const expected: RenderParams = {
-      target: { x: 0, y: 0 },
+      to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
       fromDir: Math.PI,
@@ -405,7 +405,7 @@ describe("CanvasCore", () => {
     canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
     const expected: RenderParams = {
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,

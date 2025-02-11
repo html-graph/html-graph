@@ -344,7 +344,7 @@ describe("HtmlController", () => {
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
     const expected: RenderParams = {
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: addPortRequest1.direction,
@@ -401,7 +401,7 @@ describe("HtmlController", () => {
     htmlController.renderEdge(addEdgeRequest21.edgeId);
 
     const expected: RenderParams = {
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: -1,
       flipY: -1,
       fromDir: addPortRequest1.direction,

@@ -57,7 +57,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(false, false);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: -1,
       fromDir: 0,
@@ -73,7 +73,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(false, false);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -92,7 +92,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(false, true);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -111,7 +111,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(true, false);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -130,7 +130,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(false, true);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -147,7 +147,7 @@ describe("DetourStraightEdgeShape", () => {
     const shape = createDetourStraightEdge(true, false);
 
     shape.render({
-      target: { x: 100, y: 100 },
+      to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,

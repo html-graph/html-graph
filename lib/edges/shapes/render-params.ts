@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 
 export interface RenderParams {
-  readonly target: Point;
+  readonly to: Point;
   readonly flipX: number;
   readonly flipY: number;
   readonly fromDir: number;
