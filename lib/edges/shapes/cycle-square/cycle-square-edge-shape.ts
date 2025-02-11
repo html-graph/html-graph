@@ -1,4 +1,5 @@
 import { EdgeShape } from "../edge-shape";
+import { RenderParams } from "../render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -58,13 +59,12 @@ export class CycleSquareEdgeShape implements EdgeShape {
     ];
   }
 
-  public render(
-    _to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-  ): void {
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
+  public render(params: RenderParams): void {
+    const fromVect = createFlipDirectionVector(
+      params.fromDir,
+      params.flipX,
+      params.flipY,
+    );
 
     const linePath = this.createLinePath(fromVect);
 

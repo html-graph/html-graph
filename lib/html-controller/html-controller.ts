@@ -184,13 +184,13 @@ export class HtmlController {
     const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
     const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
 
-    edge.shape.render(
-      { x: width, y: height },
+    edge.shape.render({
+      to: { x: width, y: height },
       flipX,
       flipY,
-      portFrom.direction,
-      portTo.direction,
-    );
+      fromDir: portFrom.direction,
+      toDir: portTo.direction,
+    });
   }
 
   public updateEdgePriority(edgeId: unknown): void {

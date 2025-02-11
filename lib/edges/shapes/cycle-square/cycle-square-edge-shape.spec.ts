@@ -42,7 +42,13 @@ describe("CycleSquareEdgeShape", () => {
   it("should create line path without arrows", () => {
     const shape = createCycleCircleEdge(false);
 
-    shape.render({ x: 0, y: 0 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 0, y: 0 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const line = shape.svg.children[0];
 
@@ -54,7 +60,13 @@ describe("CycleSquareEdgeShape", () => {
   it("should create line path accounting for arrow", () => {
     const shape = createCycleCircleEdge(true);
 
-    shape.render({ x: 0, y: 0 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 0, y: 0 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const line = shape.svg.children[1];
 

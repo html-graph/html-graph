@@ -4,6 +4,7 @@ import {
   createDirectionVector,
   createRotatedPoint,
 } from "../shared/edge-utils";
+import { RenderParams } from "@/edges";
 
 export class EdgeWithLabelShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
@@ -63,20 +64,22 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.svg.appendChild(this.text);
   }
 
-  public render(
-    to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-    toDir: number,
-  ): void {
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
+  public render(params: RenderParams): void {
+    this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
-    const fromVect = createDirectionVector(fromDir, flipX, flipY);
-    const toVect = createDirectionVector(toDir, flipX, flipY);
+    const fromVect = createDirectionVector(
+      params.fromDir,
+      params.flipX,
+      params.flipY,
+    );
+    const toVect = createDirectionVector(
+      params.toDir,
+      params.flipX,
+      params.flipY,
+    );
 
-    const fromRectVect: Point = { x: -1 * flipX, y: 0 };
-    const toRectVect: Point = { x: 1 * flipX, y: 0 };
+    const fromRectVect: Point = { x: -1 * params.flipX, y: 0 };
+    const toRectVect: Point = { x: 1 * params.flipX, y: 0 };
 
     const from: Point = { x: 0, y: 0 };
 
@@ -87,9 +90,9 @@ export class EdgeWithLabelShape implements EdgeShape {
     );
 
     const pel = createRotatedPoint(
-      { x: to.x - this.arrowLength, y: to.y },
+      { x: params.to.x - this.arrowLength, y: params.to.y },
       toVect,
-      to,
+      params.to,
     );
 
     const pbb: Point = {
@@ -103,8 +106,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     };
 
     const box = this.text.getBBox();
-    const halfW = to.x / 2;
-    const halfH = to.y / 2;
+    const halfW = params.to.x / 2;
+    const halfH = params.to.y / 2;
     const halfRectW = box.width / 2 + this.textRectRadius;
     const halfRectH = box.height / 2 + this.textRectRadius;
     const rectX = halfW - halfRectW;
@@ -123,12 +126,12 @@ export class EdgeWithLabelShape implements EdgeShape {
     };
 
     const pbrb: Point = {
-      x: pbr.x + this.rectCurvature * fromRectVect.x * flipX,
+      x: pbr.x + this.rectCurvature * fromRectVect.x * params.flipX,
       y: pbr.y + this.rectCurvature * fromRectVect.y,
     };
 
     const perb: Point = {
-      x: per.x + this.rectCurvature * toRectVect.x * flipX,
+      x: per.x + this.rectCurvature * toRectVect.x * params.flipX,
       y: per.y + this.rectCurvature * toRectVect.y,
     };
 
@@ -137,11 +140,11 @@ export class EdgeWithLabelShape implements EdgeShape {
       : `M ${from.x} ${from.y} L ${pbl.x} ${pbl.y} `;
 
     const bcurve = `M ${pbl.x} ${pbl.y} C ${pbb.x} ${pbb.y}, ${pbrb.x} ${pbrb.y}, ${pbr.x} ${pbr.y}`;
-    const ecurve = `M ${per.x} ${per.y} C ${perb.x} ${perb.y}, ${peb.x} ${peb.y}, ${to.x} ${to.y}`;
+    const ecurve = `M ${per.x} ${per.y} C ${perb.x} ${perb.y}, ${peb.x} ${peb.y}, ${params.to.x} ${params.to.y}`;
 
     const postLine = this.targetArrow
       ? ""
-      : ` M ${pel.x} ${pel.y} L ${to.x} ${to.y}`;
+      : ` M ${pel.x} ${pel.y} L ${params.to.x} ${params.to.y}`;
 
     const linePath = `${preLine}${bcurve}${ecurve}${postLine}`;
 
@@ -162,8 +165,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        to.x,
-        to.y,
+        params.to.x,
+        params.to.y,
         -this.arrowLength,
         this.arrowWidth,
       );

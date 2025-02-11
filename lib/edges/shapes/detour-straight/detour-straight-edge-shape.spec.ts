@@ -56,7 +56,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should apply specified mirroring to group", () => {
     const shape = createDetourStraightEdge(false, false);
 
-    shape.render({ x: 100, y: 100 }, 1, -1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: -1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0] as SVGGElement;
 
@@ -66,7 +72,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should create line path without arrows", () => {
     const shape = createDetourStraightEdge(false, false);
 
-    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -79,7 +91,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should create line path accounting for target arrow", () => {
     const shape = createDetourStraightEdge(false, true);
 
-    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -92,7 +110,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should create line path accounting for source arrow", () => {
     const shape = createDetourStraightEdge(true, false);
 
-    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0];
     const line = g.children[0];
@@ -105,7 +129,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should create path for target arrow", () => {
     const shape = createDetourStraightEdge(false, true);
 
-    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0];
     const arrow = g.children[1];
@@ -116,7 +146,13 @@ describe("DetourStraightEdgeShape", () => {
   it("should create path for source arrow", () => {
     const shape = createDetourStraightEdge(true, false);
 
-    shape.render({ x: 100, y: 100 }, 1, 1, 0, 0);
+    shape.render({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: 0,
+      toDir: 0,
+    });
 
     const g = shape.svg.children[0];
     const arrow = g.children[1];

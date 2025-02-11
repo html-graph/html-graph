@@ -1,4 +1,5 @@
 import { EdgeShape } from "../edge-shape";
+import { RenderParams } from "../render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -54,19 +55,27 @@ export class DetourBezierEdgeShape implements EdgeShape {
     }
   }
 
-  public render(
-    to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-    toDir: number,
-  ): void {
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
+  public render(params: RenderParams): void {
+    this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
-    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
+    const fromVect = createFlipDirectionVector(
+      params.fromDir,
+      params.flipX,
+      params.flipY,
+    );
+    const toVect = createFlipDirectionVector(
+      params.toDir,
+      params.flipX,
+      params.flipY,
+    );
 
-    const linePath = this.createLinePath(to, fromVect, toVect, flipX, flipY);
+    const linePath = this.createLinePath(
+      params.to,
+      fromVect,
+      toVect,
+      params.flipX,
+      params.flipY,
+    );
 
     this.line.setAttribute("d", linePath);
 
@@ -84,7 +93,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        to,
+        params.to,
         -this.arrowLength,
         this.arrowWidth,
       );

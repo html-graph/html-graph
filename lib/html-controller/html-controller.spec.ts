@@ -343,13 +343,13 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
-    expect(spy).toHaveBeenCalledWith(
-      { x: 100, y: 100 },
-      1,
-      1,
-      addPortRequest1.direction,
-      addPortRequest2.direction,
-    );
+    expect(spy).toHaveBeenCalledWith({
+      to: { x: 100, y: 100 },
+      flipX: 1,
+      flipY: 1,
+      fromDir: addPortRequest1.direction,
+      toDir: addPortRequest2.direction,
+    });
   });
 
   it("should update edge priority", () => {
@@ -398,12 +398,12 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest21.edgeId);
 
-    expect(spy).toHaveBeenCalledWith(
-      { x: 100, y: 100 },
-      -1,
-      -1,
-      addPortRequest2.direction,
-      addPortRequest1.direction,
-    );
+    expect(spy).toHaveBeenCalledWith({
+      to: { x: 100, y: 100 },
+      flipX: -1,
+      flipY: -1,
+      fromDir: addPortRequest1.direction,
+      toDir: addPortRequest2.direction,
+    });
   });
 });
