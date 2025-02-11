@@ -70,7 +70,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     );
 
     const linePath = this.createLinePath(
-      params.to,
+      params.target,
       fromVect,
       toVect,
       params.flipX,
@@ -93,7 +93,7 @@ export class DetourBezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.to,
+        params.target,
         -this.arrowLength,
         this.arrowWidth,
       );

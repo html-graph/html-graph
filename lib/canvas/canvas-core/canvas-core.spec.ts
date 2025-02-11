@@ -354,7 +354,7 @@ describe("CanvasCore", () => {
     canvas.updatePort("port-1", { direction: Math.PI });
 
     expect(spy).toHaveBeenCalledWith({
-      to: { x: 0, y: 0 },
+      target: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
       fromDir: Math.PI,
@@ -403,7 +403,7 @@ describe("CanvasCore", () => {
     canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
     expect(spy).toHaveBeenCalledWith({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,

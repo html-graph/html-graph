@@ -62,7 +62,7 @@ export class StraightEdgeShape implements EdgeShape {
       params.flipY,
     );
 
-    const linePath = this.createLinePath(params.to, fromVect, toVect);
+    const linePath = this.createLinePath(params.target, fromVect, toVect);
 
     this.line.setAttribute("d", linePath);
 
@@ -80,7 +80,7 @@ export class StraightEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.to,
+        params.target,
         -this.arrowLength,
         this.arrowWidth,
       );

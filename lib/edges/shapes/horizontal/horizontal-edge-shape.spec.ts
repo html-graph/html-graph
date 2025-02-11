@@ -53,7 +53,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: -1,
       fromDir: 0,
@@ -69,7 +69,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -88,7 +88,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: -1,
       flipY: 1,
       fromDir: 0,
@@ -107,7 +107,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -126,7 +126,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -145,7 +145,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,
@@ -162,7 +162,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: 0,

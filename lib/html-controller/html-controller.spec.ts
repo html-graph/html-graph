@@ -344,7 +344,7 @@ describe("HtmlController", () => {
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
     expect(spy).toHaveBeenCalledWith({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: addPortRequest1.direction,
@@ -399,7 +399,7 @@ describe("HtmlController", () => {
     htmlController.renderEdge(addEdgeRequest21.edgeId);
 
     expect(spy).toHaveBeenCalledWith({
-      to: { x: 100, y: 100 },
+      target: { x: 100, y: 100 },
       flipX: -1,
       flipY: -1,
       fromDir: addPortRequest1.direction,

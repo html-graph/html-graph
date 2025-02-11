@@ -63,7 +63,7 @@ export class VerticalEdgeShape implements EdgeShape {
     );
 
     const linePath = this.createLinePath(
-      params.to,
+      params.target,
       fromVect,
       toVect,
       params.flipY,
@@ -85,7 +85,7 @@ export class VerticalEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.to,
+        params.target,
         -this.arrowLength,
         this.arrowWidth,
       );

@@ -90,9 +90,9 @@ export class EdgeWithLabelShape implements EdgeShape {
     );
 
     const pel = createRotatedPoint(
-      { x: params.to.x - this.arrowLength, y: params.to.y },
+      { x: params.target.x - this.arrowLength, y: params.target.y },
       toVect,
-      params.to,
+      params.target,
     );
 
     const pbb: Point = {
@@ -106,8 +106,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     };
 
     const box = this.text.getBBox();
-    const halfW = params.to.x / 2;
-    const halfH = params.to.y / 2;
+    const halfW = params.target.x / 2;
+    const halfH = params.target.y / 2;
     const halfRectW = box.width / 2 + this.textRectRadius;
     const halfRectH = box.height / 2 + this.textRectRadius;
     const rectX = halfW - halfRectW;
@@ -140,11 +140,11 @@ export class EdgeWithLabelShape implements EdgeShape {
       : `M ${from.x} ${from.y} L ${pbl.x} ${pbl.y} `;
 
     const bcurve = `M ${pbl.x} ${pbl.y} C ${pbb.x} ${pbb.y}, ${pbrb.x} ${pbrb.y}, ${pbr.x} ${pbr.y}`;
-    const ecurve = `M ${per.x} ${per.y} C ${perb.x} ${perb.y}, ${peb.x} ${peb.y}, ${params.to.x} ${params.to.y}`;
+    const ecurve = `M ${per.x} ${per.y} C ${perb.x} ${perb.y}, ${peb.x} ${peb.y}, ${params.target.x} ${params.target.y}`;
 
     const postLine = this.targetArrow
       ? ""
-      : ` M ${pel.x} ${pel.y} L ${params.to.x} ${params.to.y}`;
+      : ` M ${pel.x} ${pel.y} L ${params.target.x} ${params.target.y}`;
 
     const linePath = `${preLine}${bcurve}${ecurve}${postLine}`;
 
@@ -165,8 +165,8 @@ export class EdgeWithLabelShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.to.x,
-        params.to.y,
+        params.target.x,
+        params.target.y,
         -this.arrowLength,
         this.arrowWidth,
       );
