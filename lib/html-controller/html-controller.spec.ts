@@ -365,8 +365,6 @@ describe("HtmlController", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: addPortRequest1.direction,
-      toDir: addPortRequest2.direction,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);
@@ -440,8 +438,6 @@ describe("HtmlController", () => {
       to: { x: 100, y: 100 },
       flipX: -1,
       flipY: -1,
-      fromDir: addPortRequest1.direction,
-      toDir: addPortRequest2.direction,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);

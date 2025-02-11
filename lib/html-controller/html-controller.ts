@@ -211,8 +211,6 @@ export class HtmlController {
       to: { x: width, y: height },
       flipX,
       flipY,
-      fromDir: portFrom.direction,
-      toDir: portTo.direction,
     });
   }
 

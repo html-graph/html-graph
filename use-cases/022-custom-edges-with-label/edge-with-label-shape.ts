@@ -67,12 +67,12 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
     const fromVect = createDirectionVector(
-      params.fromDir,
+      params.source.direction,
       params.flipX,
       params.flipY,
     );
     const toVect = createDirectionVector(
-      params.toDir,
+      params.target.direction,
       params.flipX,
       params.flipY,
     );

@@ -64,8 +64,6 @@ describe("CycleSquareEdgeShape", () => {
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const line = shape.svg.children[0];
@@ -100,8 +98,6 @@ describe("CycleSquareEdgeShape", () => {
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const line = shape.svg.children[1];

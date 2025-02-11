@@ -375,8 +375,6 @@ describe("CanvasCore", () => {
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
-      fromDir: Math.PI,
-      toDir: Math.PI,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);
@@ -446,8 +444,6 @@ describe("CanvasCore", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);

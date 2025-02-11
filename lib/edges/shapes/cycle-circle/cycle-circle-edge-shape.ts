@@ -37,7 +37,7 @@ export class CycleCircleEdgeShape implements EdgeShape {
 
   public render(params: EdgeRenderParams): void {
     const fromVect = createFlipDirectionVector(
-      params.fromDir,
+      params.source.direction,
       params.flipX,
       params.flipY,
     );

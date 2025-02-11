@@ -72,8 +72,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: -1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0] as SVGGElement;
@@ -106,8 +104,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0];
@@ -143,8 +139,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0];
@@ -180,8 +174,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0];
@@ -217,8 +209,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0];
@@ -252,8 +242,6 @@ describe("BezierEdgeShape", () => {
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
-      fromDir: 0,
-      toDir: 0,
     });
 
     const g = shape.svg.children[0];

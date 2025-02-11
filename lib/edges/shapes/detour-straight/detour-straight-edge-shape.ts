@@ -61,12 +61,12 @@ export class DetourStraightEdgeShape implements EdgeShape {
     this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
     const fromVect = createFlipDirectionVector(
-      params.fromDir,
+      params.source.direction,
       params.flipX,
       params.flipY,
     );
     const toVect = createFlipDirectionVector(
-      params.toDir,
+      params.target.direction,
       params.flipX,
       params.flipY,
     );
