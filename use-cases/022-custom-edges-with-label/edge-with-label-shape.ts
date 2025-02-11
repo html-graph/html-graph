@@ -1,10 +1,9 @@
-import { EdgeShape, Point } from "@html-graph/html-graph";
+import { EdgeShape, Point, RenderParams } from "@html-graph/html-graph";
 import {
   createArrowPath,
   createDirectionVector,
   createRotatedPoint,
 } from "../shared/edge-utils";
-import { RenderParams } from "@/edges";
 
 export class EdgeWithLabelShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
