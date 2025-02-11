@@ -1,4 +1,4 @@
-import { EdgeShape, Point, RenderParams } from "@html-graph/html-graph";
+import { EdgeRenderParams, EdgeShape, Point } from "@html-graph/html-graph";
 import {
   createArrowPath,
   createDirectionVector,
@@ -63,7 +63,7 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.svg.appendChild(this.text);
   }
 
-  public render(params: RenderParams): void {
+  public render(params: EdgeRenderParams): void {
     this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
     const fromVect = createDirectionVector(

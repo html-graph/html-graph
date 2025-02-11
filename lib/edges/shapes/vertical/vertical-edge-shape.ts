@@ -1,5 +1,6 @@
 import { EdgeShape } from "../edge-shape";
 import { Point, zero } from "@/point";
+import { EdgeRenderParams } from "../edge-render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -10,7 +11,6 @@ import {
   createRoundedPath,
   createEdgeLine,
 } from "../utils";
-import { RenderParams } from "../render-params";
 
 export class VerticalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -48,7 +48,7 @@ export class VerticalEdgeShape implements EdgeShape {
     }
   }
 
-  public render(params: RenderParams): void {
+  public render(params: EdgeRenderParams): void {
     this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
     const fromVect = createFlipDirectionVector(

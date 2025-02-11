@@ -1,4 +1,4 @@
-import { EdgeShapeMock, RenderParams } from "@/edges";
+import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 import { CanvasCore } from "./canvas-core";
 import { HtmlGraphError } from "@/error";
 
@@ -353,7 +353,25 @@ describe("CanvasCore", () => {
 
     canvas.updatePort("port-1", { direction: Math.PI });
 
-    const expected: RenderParams = {
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: Math.PI,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: Math.PI,
+      },
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
@@ -370,6 +388,7 @@ describe("CanvasCore", () => {
     canvas.attach(canvasElement);
 
     canvas.addNode({
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -382,6 +401,7 @@ describe("CanvasCore", () => {
     });
 
     canvas.addNode({
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -404,7 +424,25 @@ describe("CanvasCore", () => {
 
     canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
-    const expected: RenderParams = {
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 0,
+        y: 0,
+        width: 100,
+        height: 100,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-2",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,

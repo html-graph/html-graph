@@ -7,7 +7,7 @@ import {
 import { HtmlController } from "./html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { Point } from "@/point";
-import { EdgeShapeMock, RenderParams } from "@/edges";
+import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 
 const createHtmlController = (params?: {
   transformer?: ViewportTransformer;
@@ -343,7 +343,25 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
-    const expected: RenderParams = {
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest1.portId,
+        nodeId: addPortRequest1.nodeId,
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: addPortRequest2.portId,
+        nodeId: addPortRequest2.nodeId,
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
@@ -400,7 +418,25 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest21.edgeId);
 
-    const expected: RenderParams = {
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: addPortRequest2.portId,
+        nodeId: addPortRequest2.nodeId,
+        direction: 0,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest1.portId,
+        nodeId: addPortRequest1.nodeId,
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: -1,
       flipY: -1,

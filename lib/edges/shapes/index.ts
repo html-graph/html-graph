@@ -8,4 +8,5 @@ export * from "./detour-bezier";
 export * from "./detour-straight";
 export * from "./edge-shape";
 export * from "./edge-shape.mock";
-export * from "./render-params";
+export * from "./edge-render-params";
+export * from "./edge-render-port";

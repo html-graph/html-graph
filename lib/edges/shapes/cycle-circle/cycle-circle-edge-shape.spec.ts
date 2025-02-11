@@ -41,6 +41,24 @@ describe("CycleCircleEdgeShape", () => {
     const shape = createCycleCircleEdge(false);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,
@@ -59,6 +77,24 @@ describe("CycleCircleEdgeShape", () => {
     const shape = createCycleCircleEdge(true);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 0, y: 0 },
       flipX: 1,
       flipY: 1,

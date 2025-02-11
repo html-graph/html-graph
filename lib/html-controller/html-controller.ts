@@ -2,6 +2,7 @@ import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
+import { EdgeRenderPort } from "@/edges";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -184,7 +185,29 @@ export class HtmlController {
     const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
     const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
 
+    const source: EdgeRenderPort = {
+      x: from.x,
+      y: from.y,
+      width: rectFrom.width * viewportMatrix.scale,
+      height: rectFrom.height * viewportMatrix.scale,
+      direction: portFrom.direction,
+      portId: edge.from,
+      nodeId: this.graphStore.getPortNodeId(edge.from),
+    };
+
+    const target: EdgeRenderPort = {
+      x: to.x,
+      y: to.y,
+      width: rectTo.width * viewportMatrix.scale,
+      height: rectTo.height * viewportMatrix.scale,
+      direction: portTo.direction,
+      portId: edge.to,
+      nodeId: this.graphStore.getPortNodeId(edge.to),
+    };
+
     edge.shape.render({
+      source,
+      target,
       to: { x: width, y: height },
       flipX,
       flipY,

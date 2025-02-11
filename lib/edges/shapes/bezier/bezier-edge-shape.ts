@@ -1,5 +1,5 @@
 import { EdgeShape } from "../edge-shape";
-import { RenderParams } from "../render-params";
+import { EdgeRenderParams } from "../edge-render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
@@ -46,7 +46,7 @@ export class BezierEdgeShape implements EdgeShape {
     }
   }
 
-  public render(params: RenderParams): void {
+  public render(params: EdgeRenderParams): void {
     this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
 
     const fromVect = createFlipDirectionVector(

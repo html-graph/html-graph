@@ -55,6 +55,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(false, false);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: -1,
@@ -71,6 +89,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(false, false);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
@@ -90,6 +126,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(false, true);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
@@ -109,6 +163,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(true, false);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
@@ -128,6 +200,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(false, true);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
@@ -145,6 +235,24 @@ describe("DetourBezierEdgeShape", () => {
     const shape = createDetourBezierEdge(true, false);
 
     shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
       to: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,

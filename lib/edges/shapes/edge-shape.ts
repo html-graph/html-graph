@@ -1,7 +1,7 @@
-import { RenderParams } from "./render-params";
+import { EdgeRenderParams } from "./edge-render-params";
 
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
 
-  render(params: RenderParams): void;
+  render(params: EdgeRenderParams): void;
 }
