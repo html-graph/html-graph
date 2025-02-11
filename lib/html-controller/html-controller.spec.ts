@@ -7,7 +7,7 @@ import {
 import { HtmlController } from "./html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { Point } from "@/point";
-import { EdgeShapeMock } from "@/edges";
+import { EdgeShapeMock, RenderParams } from "@/edges";
 
 const createHtmlController = (params?: {
   transformer?: ViewportTransformer;
@@ -343,13 +343,15 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
-    expect(spy).toHaveBeenCalledWith({
+    const expected: RenderParams = {
       target: { x: 100, y: 100 },
       flipX: 1,
       flipY: 1,
       fromDir: addPortRequest1.direction,
       toDir: addPortRequest2.direction,
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should update edge priority", () => {
@@ -398,12 +400,14 @@ describe("HtmlController", () => {
 
     htmlController.renderEdge(addEdgeRequest21.edgeId);
 
-    expect(spy).toHaveBeenCalledWith({
+    const expected: RenderParams = {
       target: { x: 100, y: 100 },
       flipX: -1,
       flipY: -1,
       fromDir: addPortRequest1.direction,
       toDir: addPortRequest2.direction,
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 });
