@@ -45,13 +45,5 @@ export const createBezierEdgeShapeFactory: (options: {
     );
   }
 
-  return new BezierEdgeShape(
-    options.color,
-    options.width,
-    options.curvature,
-    options.arrowLength,
-    options.arrowWidth,
-    options.hasSourceArrow,
-    options.hasTargetArrow,
-  );
+  return new BezierEdgeShape(options);
 };

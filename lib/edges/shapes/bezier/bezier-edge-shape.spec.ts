@@ -11,7 +11,7 @@ const createBezierEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  return new BezierEdgeShape(
+  return new BezierEdgeShape({
     color,
     width,
     curvature,
@@ -19,7 +19,11 @@ const createBezierEdge = (
     arrowWidth,
     hasSourceArrow,
     hasTargetArrow,
-  );
+    cycleRadius: 30,
+    smallCycleRadius: 10,
+    detourDistance: 100,
+    detourDirection: -Math.PI / 2,
+  });
 };
 
 describe("BezierEdgeShape", () => {

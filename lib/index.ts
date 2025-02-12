@@ -44,7 +44,13 @@ export {
   createVerticalEdgeShapeFactory,
   EdgeType,
 } from "./edges";
-export type { EdgeShape, EdgeRenderParams, EdgeRenderPort } from "./edges";
+export type {
+  EdgeShape,
+  EdgeRenderParams,
+  EdgeRenderPort,
+  BezierEdgeParams,
+  HorizontalEdgeParams,
+} from "./edges";
 
 export type { Point } from "./point";
 

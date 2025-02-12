@@ -11,6 +11,7 @@ import {
   createEdgeRectangle,
 } from "../utils";
 import { Point, zero } from "@/point";
+import { BezierEdgeParams } from "./bezier-edge-params";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -23,26 +24,27 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(
-    color: string,
-    width: number,
-    private readonly curvature: number,
-    private readonly arrowLength: number,
-    private readonly arrowWidth: number,
-    hasSourceArrow: boolean,
-    hasTargetArrow: boolean,
-  ) {
+  private readonly arrowLength: number;
+
+  private readonly arrowWidth: number;
+
+  private readonly curvature: number;
+
+  public constructor(params: BezierEdgeParams) {
+    this.arrowLength = params.arrowLength;
+    this.arrowWidth = params.arrowWidth;
+    this.curvature = params.curvature;
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(color, width);
+    this.line = createEdgeLine(params.color, params.width);
     this.group.appendChild(this.line);
 
-    if (hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(color);
+    if (params.hasSourceArrow) {
+      this.sourceArrow = createEdgeArrow(params.color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(color);
+    if (params.hasTargetArrow) {
+      this.targetArrow = createEdgeArrow(params.color);
       this.group.appendChild(this.targetArrow);
     }
   }

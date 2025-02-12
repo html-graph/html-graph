@@ -47,14 +47,5 @@ export const createHorizontalEdgeShapeFactory: (options: {
     );
   }
 
-  return new HorizontalEdgeShape(
-    options.color,
-    options.width,
-    options.arrowLength,
-    options.arrowWidth,
-    options.arrowOffset,
-    options.hasSourceArrow,
-    options.hasTargetArrow,
-    options.roundness,
-  );
+  return new HorizontalEdgeShape(options);
 };

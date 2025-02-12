@@ -12,7 +12,7 @@ const createHorizontalEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  return new HorizontalEdgeShape(
+  return new HorizontalEdgeShape({
     color,
     width,
     arrowLength,
@@ -21,7 +21,10 @@ const createHorizontalEdge = (
     hasSourceArrow,
     hasTargetArrow,
     roundness,
-  );
+    cycleSquareSide: 50,
+    detourDistance: 100,
+    detourDirection: -Math.PI / 2,
+  });
 };
 
 describe("HorizontalEdgeShape", () => {

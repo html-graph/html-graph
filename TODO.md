@@ -1,6 +1,8 @@
 # TODO
 
-- rid of port centerFn ?
+- rid of edge factories
+- update port element
+- update node element
 - move edge factory to edge render
 - set edge shape
 - double port mark example
