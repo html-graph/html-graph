@@ -55,7 +55,7 @@ describe("VerticalEdgeShape", () => {
     shape.render({
       source: {
         x: 0,
-        y: 0,
+        y: 100,
         width: 0,
         height: 0,
         portId: "port-1",
@@ -64,16 +64,13 @@ describe("VerticalEdgeShape", () => {
       },
       target: {
         x: 100,
-        y: 100,
+        y: 0,
         width: 0,
         height: 0,
         portId: "port-2",
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: -1,
     });
 
     const g = shape.svg.children[0] as SVGGElement;
@@ -103,9 +100,6 @@ describe("VerticalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     });
 
     const g = shape.svg.children[0];
@@ -122,7 +116,7 @@ describe("VerticalEdgeShape", () => {
     shape.render({
       source: {
         x: 0,
-        y: 0,
+        y: 100,
         width: 0,
         height: 0,
         portId: "port-1",
@@ -131,16 +125,13 @@ describe("VerticalEdgeShape", () => {
       },
       target: {
         x: 100,
-        y: 100,
+        y: 0,
         width: 0,
         height: 0,
         portId: "port-2",
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: -1,
     });
 
     const g = shape.svg.children[0];
@@ -173,9 +164,6 @@ describe("VerticalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     });
 
     const g = shape.svg.children[0];
@@ -208,9 +196,6 @@ describe("VerticalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     });
 
     const g = shape.svg.children[0];
@@ -243,9 +228,6 @@ describe("VerticalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     });
 
     const g = shape.svg.children[0];
@@ -276,9 +258,6 @@ describe("VerticalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     });
 
     const g = shape.svg.children[0];

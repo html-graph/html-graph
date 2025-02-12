@@ -617,12 +617,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
+    const shape = new EdgeShapeMock();
+
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1-2",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shapeFactory: () => shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -631,16 +633,34 @@ describe("CanvasController", () => {
       return new DOMRect(-100, -100, 0, 0);
     };
 
+    const spy = jest.spyOn(shape, "render");
+
     canvasController.updateEdge({
       edgeId: addEdgeRequest12.edgeId,
       shape: undefined,
       priority: undefined,
     });
 
-    const container = div.children[0].children[0];
-    const edgeSvg = container.children[2] as SVGSVGElement;
-
-    expect(edgeSvg.style.transform).toBe("translate(-100px, -100px)");
+    expect(spy).toHaveBeenCalledWith({
+      source: {
+        x: -100,
+        y: -100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-2",
+        portId: "port-2",
+      },
+    });
   });
 
   it("should update edge shape if specified", () => {
@@ -900,12 +920,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
+    const shape = new EdgeShapeMock();
+
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1-2",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shapeFactory: () => shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -915,12 +937,29 @@ describe("CanvasController", () => {
       centerFn: (width, height) => ({ x: width, y: height }),
     };
 
+    const spy = jest.spyOn(shape, "render");
     canvasController.updatePort(markPortRequest1.id, updatePortRequest);
 
-    const container = div.children[0].children[0];
-    const edgeSvg = container.children[2] as SVGSVGElement;
-
-    expect(edgeSvg.style.transform).toBe("translate(50px, 50px)");
+    expect(spy).toHaveBeenCalledWith({
+      source: {
+        x: 0,
+        y: 0,
+        width: 50,
+        height: 50,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-2",
+        portId: "port-2",
+      },
+    });
   });
 
   it("should throw error when trying to update nonexisting port", () => {
@@ -1114,12 +1153,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
+    const shape = new EdgeShapeMock();
+
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1-2",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shapeFactory: () => shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1135,12 +1176,30 @@ describe("CanvasController", () => {
       return new DOMRect(50, 50, 0, 0);
     };
 
+    const spy = jest.spyOn(shape, "render");
+
     canvasController.updateNode(addNodeRequest1.nodeId, updateNodeRequest);
 
-    const container = div.children[0].children[0];
-    const edgeSvg = container.children[2] as SVGSVGElement;
-
-    expect(edgeSvg.style.transform).toBe("translate(50px, 50px)");
+    expect(spy).toHaveBeenCalledWith({
+      source: {
+        x: 50,
+        y: 50,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-2",
+        portId: "port-2",
+      },
+    });
   });
 
   it("should remove edge from store", () => {

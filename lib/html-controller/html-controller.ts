@@ -153,38 +153,6 @@ export class HtmlController {
       y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy,
     };
 
-    const deltaCenterFrom = portFrom.centerFn(
-      rectFrom.width * viewportMatrix.scale,
-      rectFrom.height * viewportMatrix.scale,
-    );
-
-    const deltaCenterTo = portTo.centerFn(
-      rectTo.width * viewportMatrix.scale,
-      rectTo.height * viewportMatrix.scale,
-    );
-
-    const centerFrom: Point = {
-      x: from.x + deltaCenterFrom.x,
-      y: from.y + deltaCenterFrom.y,
-    };
-
-    const centerTo: Point = {
-      x: to.x + deltaCenterTo.x,
-      y: to.y + deltaCenterTo.y,
-    };
-
-    const x = Math.min(centerFrom.x, centerTo.x);
-    const y = Math.min(centerFrom.y, centerTo.y);
-    const width = Math.abs(centerTo.x - centerFrom.x);
-    const height = Math.abs(centerTo.y - centerFrom.y);
-
-    edge.shape.svg.style.width = `${width}px`;
-    edge.shape.svg.style.height = `${height}px`;
-    edge.shape.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
-    const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
-
     const source: EdgeRenderPort = {
       x: from.x,
       y: from.y,
@@ -208,9 +176,6 @@ export class HtmlController {
     edge.shape.render({
       source,
       target,
-      to: { x: width, y: height },
-      flipX,
-      flipY,
     });
   }
 

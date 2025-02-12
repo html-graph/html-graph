@@ -372,9 +372,6 @@ describe("CanvasCore", () => {
         nodeId: "node-1",
         direction: Math.PI,
       },
-      to: { x: 0, y: 0 },
-      flipX: 1,
-      flipY: 1,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);
@@ -441,9 +438,6 @@ describe("CanvasCore", () => {
         nodeId: "node-2",
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);

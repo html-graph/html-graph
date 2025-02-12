@@ -8,6 +8,7 @@ import {
   createEdgeSvg,
   createRotatedPoint,
   createEdgeLine,
+  createEdgeRectangle,
 } from "../utils";
 import { Point, zero } from "@/point";
 
@@ -47,20 +48,33 @@ export class BezierEdgeShape implements EdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.group.style.transform = `scale(${params.flipX}, ${params.flipY})`;
+    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+      params.source,
+      params.target,
+    );
+
+    this.svg.style.width = `${width}px`;
+    this.svg.style.height = `${height}px`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+    this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createFlipDirectionVector(
       params.source.direction,
-      params.flipX,
-      params.flipY,
+      flipX,
+      flipY,
     );
     const toVect = createFlipDirectionVector(
       params.target.direction,
-      params.flipX,
-      params.flipY,
+      flipX,
+      flipY,
     );
 
-    const linePath = this.createLinePath(params.to, fromVect, toVect);
+    const to: Point = {
+      x: width,
+      y: height,
+    };
+
+    const linePath = this.createLinePath(to, fromVect, toVect);
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
@@ -77,7 +91,7 @@ export class BezierEdgeShape implements EdgeShape {
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
         toVect,
-        params.to,
+        to,
         -this.arrowLength,
         this.arrowWidth,
       );

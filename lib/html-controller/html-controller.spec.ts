@@ -71,14 +71,6 @@ const addEdgeRequest12: AddEdgeRequest = {
   priority: 0,
 };
 
-const addEdgeRequest21: AddEdgeRequest = {
-  edgeId: "edge-21",
-  from: "port-2",
-  to: "port-1",
-  shape: new EdgeShapeMock(),
-  priority: 0,
-};
-
 describe("HtmlController", () => {
   it("should attach host to wrapper element", () => {
     const htmlController = createHtmlController();
@@ -362,9 +354,6 @@ describe("HtmlController", () => {
         nodeId: addPortRequest2.nodeId,
         direction: 0,
       },
-      to: { x: 100, y: 100 },
-      flipX: 1,
-      flipY: 1,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);
@@ -394,52 +383,5 @@ describe("HtmlController", () => {
     const edgeSvg = container.children[2] as SVGSVGElement;
 
     expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should flip edge", () => {
-    const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
-    const div = document.createElement("div");
-    htmlController.attach(div);
-
-    store.addNode(addNodeRequest1);
-    store.addNode(addNodeRequest2);
-    store.addPort(addPortRequest1);
-    store.addPort(addPortRequest2);
-    store.addEdge(addEdgeRequest21);
-
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest21.edgeId);
-
-    const spy = jest.spyOn(addEdgeRequest21.shape, "render");
-
-    htmlController.renderEdge(addEdgeRequest21.edgeId);
-
-    const expected: EdgeRenderParams = {
-      source: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: addPortRequest2.portId,
-        nodeId: addPortRequest2.nodeId,
-        direction: 0,
-      },
-      target: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: addPortRequest1.portId,
-        nodeId: addPortRequest1.nodeId,
-        direction: 0,
-      },
-      to: { x: 100, y: 100 },
-      flipX: -1,
-      flipY: -1,
-    };
-
-    expect(spy).toHaveBeenCalledWith(expected);
   });
 });

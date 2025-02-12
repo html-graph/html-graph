@@ -10,3 +10,4 @@ export * from "./edge-shape";
 export * from "./edge-shape.mock";
 export * from "./edge-render-params";
 export * from "./edge-render-port";
+export * from "./utils";

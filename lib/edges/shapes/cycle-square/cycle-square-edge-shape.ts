@@ -8,6 +8,7 @@ import {
   createRotatedPoint,
   createRoundedPath,
   createEdgeLine,
+  createEdgeRectangle,
 } from "../utils";
 import { Point, zero } from "@/point";
 
@@ -60,10 +61,19 @@ export class CycleSquareEdgeShape implements EdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
+    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+      params.source,
+      params.target,
+    );
+
+    this.svg.style.width = `${width}px`;
+    this.svg.style.height = `${height}px`;
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+
     const fromVect = createFlipDirectionVector(
       params.source.direction,
-      params.flipX,
-      params.flipY,
+      flipX,
+      flipY,
     );
 
     const linePath = this.createLinePath(fromVect);
