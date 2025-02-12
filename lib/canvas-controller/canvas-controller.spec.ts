@@ -67,7 +67,6 @@ const createCanvasController = (params?: {
     htmlController,
     viewportTransformer,
     params?.nodesCenterFn ?? ((): Point => ({ x: 0, y: 0 })),
-    params?.portsCenterFn ?? ((): Point => ({ x: 0, y: 0 })),
     params?.portsDirection ?? 0,
     params?.nodesPriorityFn ?? ((): number => 0),
     params?.edgesPriorityFn ?? ((): number => 0),
@@ -200,7 +199,6 @@ describe("CanvasController", () => {
       portId: "port-1",
       nodeId: addNodeRequest.nodeId,
       element: document.createElement("div"),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -210,47 +208,8 @@ describe("CanvasController", () => {
 
     expect(port).toStrictEqual({
       element: markPortRequest.element,
-      centerFn: markPortRequest.centerFn,
       direction: markPortRequest.direction,
     });
-  });
-
-  it("should use default port center function if not specified", () => {
-    const portsCenterFn = (): Point => ({ x: 0, y: 0 });
-    const graphStore = new GraphStore();
-    const canvasController = createCanvasController({
-      graphStore,
-      portsCenterFn,
-    });
-
-    const div = document.createElement("div");
-    canvasController.attach(div);
-
-    const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: undefined,
-      centerFn: undefined,
-      priority: undefined,
-    };
-
-    canvasController.addNode(addNodeRequest);
-
-    const markPortRequest: MarkPortRequest = {
-      portId: "port-1",
-      nodeId: addNodeRequest.nodeId,
-      element: document.createElement("div"),
-      centerFn: undefined,
-      direction: 0,
-    };
-
-    canvasController.markPort(markPortRequest);
-
-    const port = graphStore.getPort(markPortRequest.portId)!;
-
-    expect(port.centerFn).toStrictEqual(portsCenterFn);
   });
 
   it("should use default port direction if not specified", () => {
@@ -280,7 +239,6 @@ describe("CanvasController", () => {
       portId: "port-1",
       nodeId: addNodeRequest.nodeId,
       element: document.createElement("div"),
-      centerFn: undefined,
       direction: undefined,
     };
 
@@ -314,7 +272,6 @@ describe("CanvasController", () => {
       portId: "port-1",
       nodeId: addNodeRequest.nodeId,
       element: document.createElement("div"),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -336,7 +293,6 @@ describe("CanvasController", () => {
       portId: "port-1",
       nodeId: "node-1",
       element: document.createElement("div"),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -376,7 +332,6 @@ describe("CanvasController", () => {
       portId: markPortRequest.id,
       element: markPortRequest.element,
       nodeId: addNodeRequest.nodeId,
-      centerFn: markPortRequest.centerFn,
       direction: markPortRequest.direction,
     });
   });
@@ -832,7 +787,6 @@ describe("CanvasController", () => {
 
     const updatePortRequest: UpdatePortRequest = {
       direction: Math.PI,
-      centerFn: undefined,
     };
 
     canvasController.updatePort(markPortRequest1.id, updatePortRequest);
@@ -840,41 +794,6 @@ describe("CanvasController", () => {
     const port = graphStore.getPort(markPortRequest1.id)!;
 
     expect(port.direction).toBe(updatePortRequest.direction);
-  });
-
-  it("should update port centerFn", () => {
-    const graphStore = new GraphStore();
-    const canvasController = createCanvasController({ graphStore });
-
-    const markPortRequest1: MarkNodePortRequest = {
-      id: "port-1",
-      element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
-      direction: 0,
-    };
-
-    const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      ports: [markPortRequest1],
-      priority: 0,
-    };
-
-    canvasController.addNode(addNodeRequest1);
-
-    const updatePortRequest: UpdatePortRequest = {
-      direction: undefined,
-      centerFn: () => ({ x: 0, y: 0 }),
-    };
-
-    canvasController.updatePort(markPortRequest1.id, updatePortRequest);
-
-    const port = graphStore.getPort(markPortRequest1.id)!;
-
-    expect(port.centerFn).toBe(updatePortRequest.centerFn);
   });
 
   it("should update edge adjacent to port", () => {
@@ -934,7 +853,6 @@ describe("CanvasController", () => {
 
     const updatePortRequest: UpdatePortRequest = {
       direction: undefined,
-      centerFn: (width, height) => ({ x: width, y: height }),
     };
 
     const spy = jest.spyOn(shape, "render");
@@ -967,7 +885,6 @@ describe("CanvasController", () => {
 
     expect(() => {
       canvasController.updatePort("port-1", {
-        centerFn: undefined,
         direction: undefined,
       });
     }).toThrow(HtmlGraphError);
@@ -1607,7 +1524,6 @@ describe("CanvasController", () => {
       portId: undefined,
       nodeId: addNodeRequest.nodeId,
       element: document.createElement("div"),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 

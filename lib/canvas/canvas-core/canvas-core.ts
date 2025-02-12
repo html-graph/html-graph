@@ -48,7 +48,6 @@ export class CanvasCore implements Canvas {
       htmlController,
       viewportTransformer,
       options.nodes.centerFn,
-      options.ports.centerFn,
       options.ports.direction,
       options.nodes.priorityFn,
       options.edges.priorityFn,
@@ -143,7 +142,6 @@ export class CanvasCore implements Canvas {
       portId: port.id,
       element: port.element,
       nodeId: port.nodeId,
-      centerFn: port.centerFn,
       direction: port.direction,
     });
 
@@ -153,7 +151,6 @@ export class CanvasCore implements Canvas {
   public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
     this.canvasController.updatePort(portId, {
       direction: request?.direction,
-      centerFn: request?.centerFn,
     });
 
     return this;

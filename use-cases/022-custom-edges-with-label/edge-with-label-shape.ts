@@ -1,5 +1,4 @@
 import {
-  EdgeRectangle,
   EdgeRenderParams,
   EdgeRenderPort,
   EdgeShape,
@@ -10,6 +9,15 @@ import {
   createDirectionVector,
   createRotatedPoint,
 } from "../shared/edge-utils";
+
+export interface EdgeRectangle {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly flipX: number;
+  readonly flipY: number;
+}
 
 export class EdgeWithLabelShape implements EdgeShape {
   public readonly svg: SVGSVGElement;

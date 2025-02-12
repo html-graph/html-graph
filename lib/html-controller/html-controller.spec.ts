@@ -43,7 +43,6 @@ const addPortRequest1: AddPortRequest = {
   portId: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
-  centerFn,
   direction: 0,
 };
 
@@ -55,7 +54,6 @@ const addPortRequest2: AddPortRequest = {
   portId: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
-  centerFn,
   direction: 0,
 };
 

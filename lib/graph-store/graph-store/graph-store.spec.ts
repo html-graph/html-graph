@@ -1,8 +1,10 @@
 import { Point } from "@/point";
 import { GraphStore } from "./graph-store";
 import { EdgeShapeMock } from "@/edges";
+import { AddNodeRequest } from "./add-node-request";
+import { AddPortRequest } from "./add-port-request";
 
-const node1Request = {
+const node1Request: AddNodeRequest = {
   nodeId: "node-1",
   element: document.createElement("div"),
   x: 0,
@@ -11,15 +13,14 @@ const node1Request = {
   priority: 0,
 };
 
-const port1Request = {
+const port1Request: AddPortRequest = {
   portId: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
-  centerFn: (): Point => ({ x: 0, y: 0 }),
   direction: 0,
 };
 
-const node2Request = {
+const node2Request: AddNodeRequest = {
   nodeId: "node-2",
   element: document.createElement("div"),
   x: 0,
@@ -28,11 +29,10 @@ const node2Request = {
   priority: 0,
 };
 
-const port2Request = {
+const port2Request: AddPortRequest = {
   portId: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
-  centerFn: (): Point => ({ x: 0, y: 0 }),
   direction: 0,
 };
 
@@ -104,7 +104,6 @@ describe("GraphStore", () => {
 
     expect(store.getPort(port1Request.portId)).toEqual({
       element: port1Request.element,
-      centerFn: port1Request.centerFn,
       direction: port1Request.direction,
     });
   });

@@ -32,7 +32,6 @@ export class CanvasController {
     private readonly htmlController: HtmlController,
     private readonly viewportTransformer: ViewportTransformer,
     private readonly defaultNodesCenterFn: CenterFn,
-    private readonly defaultPortsCenterFn: CenterFn,
     private readonly defaultPortsDirection: number,
     private readonly defaultNodesPriorityFn: PriorityFn,
     private readonly defaultEdgesPriorityFn: PriorityFn,
@@ -69,7 +68,6 @@ export class CanvasController {
         portId: port.id,
         element: port.element,
         nodeId,
-        centerFn: port.centerFn,
         direction: port.direction,
       });
     });
@@ -90,7 +88,6 @@ export class CanvasController {
       portId,
       element: request.element,
       nodeId: request.nodeId,
-      centerFn: request.centerFn ?? this.defaultPortsCenterFn,
       direction: request.direction ?? this.defaultPortsDirection,
     });
   }
@@ -153,7 +150,6 @@ export class CanvasController {
     }
 
     port.direction = request.direction ?? port.direction;
-    port.centerFn = request.centerFn ?? port.centerFn;
 
     const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
 

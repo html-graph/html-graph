@@ -41,24 +41,6 @@ describe("createOptions", () => {
     expect(options.nodes.priorityFn).toBe(fn);
   });
 
-  it("should return standard ports center fn", () => {
-    const options = createOptions({});
-
-    expect(options.ports.centerFn).toBe(standardCenterFn);
-  });
-
-  it("should return specified nodes center fn", () => {
-    const fn = (): Point => ({ x: 0, y: 0 });
-
-    const options = createOptions({
-      ports: {
-        centerFn: fn,
-      },
-    });
-
-    expect(options.ports.centerFn).toBe(fn);
-  });
-
   it("should return standard ports direction", () => {
     const options = createOptions({});
 

@@ -55,9 +55,9 @@ export class StraightEdgeShape implements EdgeShape {
       params.target,
     );
 
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.svg.style.width = `${width}px`;
     this.svg.style.height = `${height}px`;
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createFlipDirectionVector(
