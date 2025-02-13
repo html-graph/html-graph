@@ -1,5 +1,6 @@
 # TODO
 
+- unit tests for edge utils
 - rid of edge factories
 - update port element
 - update node element
