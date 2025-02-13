@@ -20,7 +20,7 @@ const createBezierEdge = (
     hasSourceArrow,
     hasTargetArrow,
     cycleRadius: 30,
-    smallCycleRadius: 10,
+    smallCycleRadius: 20,
     detourDistance: 100,
     detourDirection: -Math.PI / 2,
   });
@@ -234,5 +234,191 @@ describe("BezierEdgeShape", () => {
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
+  });
+
+  it("should create port cycle path without arrows", () => {
+    const shape = createBezierEdge(false, false);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const line = shape.svg.children[0].children[0];
+
+    expect(line.getAttribute("d")).toBe(
+      "M 0 0 L 10 0 M 10 0 A 20 20 0 0 1 24.42220510185596 12 A 30 30 0 1 0 24.42220510185596 -12 A 20 20 0 0 1 10 0",
+    );
+  });
+
+  it("should create port cycle path accounting for arrow", () => {
+    const shape = createBezierEdge(false, true);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const line = shape.svg.children[0].children[1];
+
+    expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
+  });
+
+  it("should create node cycle path without arrows", () => {
+    const shape = createBezierEdge(false, false);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const g = shape.svg.children[0];
+    const line = g.children[0];
+
+    expect(line.getAttribute("d")).toBe(
+      "M 0 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 100 100",
+    );
+  });
+
+  it("should create node cycle path accounting for target arrow", () => {
+    const shape = createBezierEdge(false, true);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const g = shape.svg.children[0];
+    const line = g.children[0];
+
+    expect(line.getAttribute("d")).toBe(
+      "M 0 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 90 100",
+    );
+  });
+
+  it("should create node cycle path accounting for source arrow", () => {
+    const shape = createBezierEdge(true, false);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const g = shape.svg.children[0];
+    const line = g.children[0];
+
+    expect(line.getAttribute("d")).toBe(
+      "M 10 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 100 100",
+    );
+  });
+
+  it("should create node cycle path for target arrow", () => {
+    const shape = createBezierEdge(false, true);
+
+    shape.render({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-1",
+        direction: 0,
+      },
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97");
   });
 });

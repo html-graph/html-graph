@@ -1,8 +1,4 @@
-import {
-  BezierEdgeShape,
-  CycleCircleEdgeShape,
-  DetourBezierEdgeShape,
-} from "@/edges/shapes";
+import { BezierEdgeShape } from "@/edges/shapes";
 import { EdgeType } from "../edge-type";
 import { createBezierEdgeShapeFactory } from "./create-bezier-edge-shape-factory";
 
@@ -21,18 +17,6 @@ const factory = createBezierEdgeShapeFactory({
 });
 
 describe("createBezierEdgeShapeFactory", () => {
-  it("should create bezier port cycle edge", () => {
-    const edge = factory(EdgeType.PortCycle);
-
-    expect(edge instanceof CycleCircleEdgeShape).toBe(true);
-  });
-
-  it("should create bezier node cycle edge", () => {
-    const edge = factory(EdgeType.NodeCycle);
-
-    expect(edge instanceof DetourBezierEdgeShape).toBe(true);
-  });
-
   it("should create bezier edge", () => {
     const edge = factory(EdgeType.Regular);
 
