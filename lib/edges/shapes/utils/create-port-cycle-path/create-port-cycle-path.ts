@@ -33,5 +33,5 @@ export const createPortCyclePath = (
 
   const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
 
-  return `${hasSourceArrow || hasTargetArrow !== null ? "" : preLine}${c}`;
+  return `${hasSourceArrow || hasTargetArrow ? "" : preLine}${c}`;
 };
