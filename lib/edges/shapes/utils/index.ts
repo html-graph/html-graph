@@ -7,3 +7,6 @@ export * from "./create-edge-group";
 export * from "./create-edge-line";
 export * from "./create-edge-arrow";
 export * from "./create-edge-rectangle";
+export * from "./create-bezier-line-path";
+export * from "./create-port-cycle-path";
+export * from "./create-node-cycle-path";
