@@ -12,6 +12,7 @@ import {
   createEdgeLine,
   createEdgeRectangle,
 } from "../utils";
+import { VerticalEdgeParams } from "./vertical-edge-params";
 
 export class VerticalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -24,27 +25,30 @@ export class VerticalEdgeShape implements EdgeShape {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(
-    color: string,
-    width: number,
-    private readonly arrowLength: number,
-    private readonly arrowWidth: number,
-    private readonly arrowOffset: number,
-    hasSourceArrow: boolean,
-    hasTargetArrow: boolean,
-    private readonly roundness: number,
-  ) {
+  private readonly arrowLength: number;
+
+  private readonly arrowWidth: number;
+
+  private readonly arrowOffset: number;
+
+  private readonly roundness: number;
+
+  public constructor(params: VerticalEdgeParams) {
+    this.arrowLength = params.arrowLength;
+    this.arrowWidth = params.arrowWidth;
+    this.arrowOffset = params.arrowOffset;
+    this.roundness = params.roundness;
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(color, width);
+    this.line = createEdgeLine(params.color, params.width);
     this.group.appendChild(this.line);
 
-    if (hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(color);
+    if (params.hasSourceArrow) {
+      this.sourceArrow = createEdgeArrow(params.color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(color);
+    if (params.hasTargetArrow) {
+      this.targetArrow = createEdgeArrow(params.color);
       this.group.appendChild(this.targetArrow);
     }
   }

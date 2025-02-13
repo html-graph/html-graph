@@ -47,14 +47,5 @@ export const createVerticalEdgeShapeFactory: (options: {
     );
   }
 
-  return new VerticalEdgeShape(
-    options.color,
-    options.width,
-    options.arrowLength,
-    options.arrowWidth,
-    options.arrowOffset,
-    options.hasSourceArrow,
-    options.hasTargetArrow,
-    options.roundness,
-  );
+  return new VerticalEdgeShape(options);
 };

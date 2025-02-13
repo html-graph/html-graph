@@ -50,6 +50,8 @@ export type {
   EdgeRenderPort,
   BezierEdgeParams,
   HorizontalEdgeParams,
+  VerticalEdgeParams,
+  StraightEdgeParams,
 } from "./edges";
 
 export type { Point } from "./point";

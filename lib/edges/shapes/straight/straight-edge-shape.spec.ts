@@ -12,7 +12,7 @@ const createStraightEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  return new StraightEdgeShape(
+  return new StraightEdgeShape({
     color,
     width,
     arrowLength,
@@ -21,7 +21,10 @@ const createStraightEdge = (
     hasSourceArrow,
     hasTargetArrow,
     roundness,
-  );
+    cycleSquareSide: 50,
+    detourDistance: 100,
+    detourDirection: -Math.PI / 2,
+  });
 };
 
 describe("StraightEdgeShape", () => {

@@ -12,7 +12,7 @@ const createVerticalEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  return new VerticalEdgeShape(
+  return new VerticalEdgeShape({
     color,
     width,
     arrowLength,
@@ -21,7 +21,10 @@ const createVerticalEdge = (
     hasSourceArrow,
     hasTargetArrow,
     roundness,
-  );
+    cycleSquareSide: 50,
+    detourDistance: 100,
+    detourDirection: -Math.PI / 2,
+  });
 };
 
 describe("VerticalEdgeShape", () => {
