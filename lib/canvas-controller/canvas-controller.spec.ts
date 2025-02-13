@@ -10,7 +10,7 @@ import { PriorityFn } from "@/priority";
 import { MarkNodePortRequest } from "./mark-node-port-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { EdgeShapeFactory, EdgeShapeMock, EdgeType } from "@/edges";
+import { EdgeShapeMock } from "@/edges";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateNodeRequest } from "./update-node-request";
 
@@ -1601,124 +1601,5 @@ describe("CanvasController", () => {
     expect(() => {
       canvasController.removeNode("node-1");
     }).toThrow(HtmlGraphError);
-  });
-
-  it("should attach edge with port cycle category when port from is the same as port to", () => {
-    const graphStore = new GraphStore();
-    const canvasController = createCanvasController({ graphStore });
-
-    const markPortRequest1: MarkNodePortRequest = {
-      id: "port-1",
-      element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
-      direction: 0,
-    };
-
-    const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      ports: [markPortRequest1],
-      priority: 0,
-    };
-
-    canvasController.addNode(addNodeRequest1);
-
-    const edgeShapeRegular = new EdgeShapeMock();
-
-    const edgeShapeNodeCycle = new EdgeShapeMock();
-
-    const edgeShapePortCycle = new EdgeShapeMock();
-
-    const shapeFactory: EdgeShapeFactory = (type: EdgeType) => {
-      if (type === EdgeType.PortCycle) {
-        return edgeShapePortCycle;
-      }
-
-      if (type === EdgeType.NodeCycle) {
-        return edgeShapeNodeCycle;
-      }
-
-      return edgeShapeRegular;
-    };
-
-    const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
-      from: "port-1",
-      to: "port-1",
-      priority: undefined,
-      shapeFactory,
-    };
-
-    canvasController.addEdge(addEdgeRequest12);
-
-    const edge = graphStore.getEdge(addEdgeRequest12.edgeId)!;
-
-    expect(edge.shape).toBe(edgeShapePortCycle);
-  });
-
-  it("should attach edge with node cycle category when node from is the same as node to", () => {
-    const graphStore = new GraphStore();
-    const canvasController = createCanvasController({ graphStore });
-
-    const markPortRequest1: MarkNodePortRequest = {
-      id: "port-1",
-      element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
-      direction: 0,
-    };
-
-    const markPortRequest2: MarkNodePortRequest = {
-      id: "port-2",
-      element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
-      direction: 0,
-    };
-
-    const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      ports: [markPortRequest1, markPortRequest2],
-      priority: 0,
-    };
-
-    canvasController.addNode(addNodeRequest1);
-
-    const edgeShapeRegular = new EdgeShapeMock();
-
-    const edgeShapeNodeCycle = new EdgeShapeMock();
-
-    const edgeShapePortCycle = new EdgeShapeMock();
-
-    const shapeFactory: EdgeShapeFactory = (type: EdgeType) => {
-      if (type === EdgeType.PortCycle) {
-        return edgeShapePortCycle;
-      }
-
-      if (type === EdgeType.NodeCycle) {
-        return edgeShapeNodeCycle;
-      }
-
-      return edgeShapeRegular;
-    };
-
-    const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
-      from: "port-1",
-      to: "port-2",
-      priority: undefined,
-      shapeFactory,
-    };
-
-    canvasController.addEdge(addEdgeRequest12);
-
-    const edge = graphStore.getEdge(addEdgeRequest12.edgeId)!;
-
-    expect(edge.shape).toBe(edgeShapeNodeCycle);
   });
 });

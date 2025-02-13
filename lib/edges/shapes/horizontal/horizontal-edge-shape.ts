@@ -6,13 +6,14 @@ import {
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createRotatedPoint,
   createEdgeLine,
   createEdgeRectangle,
 } from "../utils";
-import { createRoundedPath } from "../utils";
 import { Point, zero } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
+import { createHorizontalLinePath } from "../utils/create-horizontal-line-path";
+import { createCycleSquareLinePath } from "../utils/create-cycle-square-line-path";
+import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
 
 export class HorizontalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -33,11 +34,24 @@ export class HorizontalEdgeShape implements EdgeShape {
 
   private readonly roundness: number;
 
+  private readonly side: number;
+
+  private readonly detourX: number;
+
+  private readonly detourY: number;
+
   public constructor(params: HorizontalEdgeParams) {
     this.arrowLength = params.arrowLength;
     this.arrowWidth = params.arrowWidth;
     this.arrowOffset = params.arrowOffset;
-    this.roundness = params.roundness;
+    this.roundness = Math.min(
+      params.roundness,
+      params.arrowOffset,
+      params.cycleSquareSide / 2,
+    );
+    this.side = params.cycleSquareSide;
+    this.detourX = Math.cos(params.detourDirection) * params.detourDistance;
+    this.detourY = Math.sin(params.detourDirection) * params.detourDistance;
     this.svg.appendChild(this.group);
     this.line = createEdgeLine(params.color, params.width);
     this.group.appendChild(this.line);
@@ -80,7 +94,50 @@ export class HorizontalEdgeShape implements EdgeShape {
       y: height,
     };
 
-    const linePath = this.createLinePath(to, fromVect, toVect, flipX);
+    let linePath: string;
+    let targetVect = toVect;
+    let targetArrowLength = -this.arrowLength;
+
+    if (params.source.portId === params.target.portId) {
+      linePath = createCycleSquareLinePath(
+        fromVect,
+        this.arrowLength,
+        this.side,
+        this.arrowOffset,
+        this.roundness,
+        this.sourceArrow !== null,
+        this.targetArrow !== null,
+      );
+      targetVect = fromVect;
+      targetArrowLength = this.arrowLength;
+    } else if (params.source.nodeId === params.target.nodeId) {
+      linePath = createDetourStraightLinePath(
+        to,
+        fromVect,
+        toVect,
+        flipX,
+        flipY,
+        this.arrowLength,
+        this.arrowOffset,
+        this.roundness,
+        this.detourX,
+        this.detourY,
+        this.sourceArrow !== null,
+        this.targetArrow !== null,
+      );
+    } else {
+      linePath = createHorizontalLinePath(
+        to,
+        fromVect,
+        toVect,
+        flipX,
+        this.arrowLength,
+        this.arrowOffset,
+        this.roundness,
+        this.sourceArrow !== null,
+        this.targetArrow !== null,
+      );
+    }
 
     this.line.setAttribute("d", linePath);
 
@@ -97,44 +154,13 @@ export class HorizontalEdgeShape implements EdgeShape {
 
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
-        toVect,
+        targetVect,
         to,
-        -this.arrowLength,
+        targetArrowLength,
         this.arrowWidth,
       );
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createLinePath(
-    to: Point,
-    fromVect: Point,
-    toVect: Point,
-    flipX: number,
-  ): string {
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
-      : zero;
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
-      : to;
-
-    const gap = this.arrowLength + this.arrowOffset;
-    const gapr = gap - this.roundness;
-
-    const pbl = createRotatedPoint({ x: gapr, y: zero.y }, fromVect, zero);
-    const pel = createRotatedPoint({ x: to.x - gapr, y: to.y }, toVect, to);
-    const halfW = Math.max((pbl.x + pel.x) / 2, gap);
-    const halfH = to.y / 2;
-    const pb1: Point = { x: flipX > 0 ? halfW : -gap, y: pbl.y };
-    const pb2: Point = { x: pb1.x, y: halfH };
-    const pe1: Point = { x: flipX > 0 ? to.x - halfW : to.x + gap, y: pel.y };
-    const pe2: Point = { x: pe1.x, y: halfH };
-
-    return createRoundedPath(
-      [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
-      this.roundness,
-    );
   }
 }

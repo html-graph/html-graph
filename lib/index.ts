@@ -40,7 +40,6 @@ export {
   createStraightEdgeShareFactory,
   createHorizontalEdgeShapeFactory,
   createVerticalEdgeShapeFactory,
-  EdgeType,
 } from "./edges";
 export type {
   EdgeShape,

@@ -29,6 +29,10 @@ HOST_GROUP_ID=1000 # (1000 by default) host group id to fix file permissions iss
 
 ```
 npm install {some package}
+
+npm run test:watch
+
+npx jest --coverage
 ...
 ```
 

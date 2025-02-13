@@ -6,6 +6,7 @@
 - update node element
 - move edge factory to edge render
 - set edge shape
+- arrows customization
 - double port mark example
 - refactor examples
 - before transform started example

@@ -1,9 +1,4 @@
-import {
-  CycleSquareEdgeShape,
-  DetourStraightEdgeShape,
-  HorizontalEdgeShape,
-} from "@/edges/shapes";
-import { EdgeType } from "../edge-type";
+import { HorizontalEdgeShape } from "@/edges/shapes";
 import { createHorizontalEdgeShapeFactory } from "./create-horizontal-edge-shape-factory";
 
 const factory = createHorizontalEdgeShapeFactory({
@@ -21,20 +16,8 @@ const factory = createHorizontalEdgeShapeFactory({
 });
 
 describe("createHorizontalEdgeShapeFactory", () => {
-  it("should create square cycle port cycle edge", () => {
-    const edge = factory(EdgeType.PortCycle);
-
-    expect(edge instanceof CycleSquareEdgeShape).toBe(true);
-  });
-
-  it("should create detour straight node cycle edge", () => {
-    const edge = factory(EdgeType.NodeCycle);
-
-    expect(edge instanceof DetourStraightEdgeShape).toBe(true);
-  });
-
   it("should create horizontal edge", () => {
-    const edge = factory(EdgeType.Regular);
+    const edge = factory();
 
     expect(edge instanceof HorizontalEdgeShape).toBe(true);
   });

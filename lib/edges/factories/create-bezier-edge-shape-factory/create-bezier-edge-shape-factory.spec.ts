@@ -1,5 +1,4 @@
 import { BezierEdgeShape } from "@/edges/shapes";
-import { EdgeType } from "../edge-type";
 import { createBezierEdgeShapeFactory } from "./create-bezier-edge-shape-factory";
 
 const factory = createBezierEdgeShapeFactory({
@@ -18,7 +17,7 @@ const factory = createBezierEdgeShapeFactory({
 
 describe("createBezierEdgeShapeFactory", () => {
   it("should create bezier edge", () => {
-    const edge = factory(EdgeType.Regular);
+    const edge = factory();
 
     expect(edge instanceof BezierEdgeShape).toBe(true);
   });

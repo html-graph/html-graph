@@ -3,7 +3,6 @@ import {
   BezierEdgeShape,
   EdgeShape,
   EdgeShapeMock,
-  EdgeType,
   HorizontalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
@@ -13,7 +12,7 @@ describe("resolveEdgeShapeFactory", () => {
   it("should return bezier function by default", () => {
     const factory = resolveEdgeShapeFactory({});
 
-    const shape = factory(EdgeType.Regular);
+    const shape = factory();
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
@@ -32,7 +31,7 @@ describe("resolveEdgeShapeFactory", () => {
   it("should return straight function for straight type", () => {
     const factory = resolveEdgeShapeFactory({ type: "straight" });
 
-    const shape = factory(EdgeType.Regular);
+    const shape = factory();
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });
@@ -40,7 +39,7 @@ describe("resolveEdgeShapeFactory", () => {
   it("should return horizontal function for horizontal type", () => {
     const factory = resolveEdgeShapeFactory({ type: "horizontal" });
 
-    const shape = factory(EdgeType.Regular);
+    const shape = factory();
 
     expect(shape instanceof HorizontalEdgeShape).toBe(true);
   });
@@ -48,7 +47,7 @@ describe("resolveEdgeShapeFactory", () => {
   it("should return vertical function for vertical type", () => {
     const factory = resolveEdgeShapeFactory({ type: "vertical" });
 
-    const shape = factory(EdgeType.Regular);
+    const shape = factory();
 
     expect(shape instanceof VerticalEdgeShape).toBe(true);
   });

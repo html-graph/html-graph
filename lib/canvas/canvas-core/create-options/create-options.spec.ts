@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { createOptions } from "./create-options";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
-import { BezierEdgeShape, EdgeType, StraightEdgeShape } from "@/edges";
+import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
 
 describe("createOptions", () => {
   it("should return standard nodes center fn", () => {
@@ -77,7 +77,7 @@ describe("createOptions", () => {
 
   it("should return standard edges shape factory", () => {
     const options = createOptions({});
-    const shape = options.edges.shapeFactory(EdgeType.Regular);
+    const shape = options.edges.shapeFactory();
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
@@ -91,7 +91,7 @@ describe("createOptions", () => {
       },
     });
 
-    const shape = options.edges.shapeFactory(EdgeType.Regular);
+    const shape = options.edges.shapeFactory();
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });

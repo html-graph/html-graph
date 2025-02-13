@@ -1,5 +1,4 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeType } from "@/edges";
 import { IdGenerator } from "@/id-generator";
 import { PriorityFn } from "@/priority";
 import { HtmlGraphError } from "@/error";
@@ -107,13 +106,11 @@ export class CanvasController {
       throw new HtmlGraphError("failed to add edge to nonexisting port");
     }
 
-    const edgeType = this.resolveEdgeType(request.from, request.to);
-
     this.graphStore.addEdge({
       edgeId,
       from: request.from,
       to: request.to,
-      shape: request.shapeFactory(edgeType),
+      shape: request.shapeFactory(),
       priority: request.priority ?? this.defaultEdgesPriorityFn(),
     });
 
@@ -128,9 +125,7 @@ export class CanvasController {
     }
 
     if (request.shape !== undefined) {
-      const edgeType = this.resolveEdgeType(edge.from, edge.to);
-
-      edge.shape = request.shape(edgeType);
+      edge.shape = request.shape();
       this.htmlController.updateEdgeShape(request.edgeId);
     }
 
@@ -235,20 +230,5 @@ export class CanvasController {
   public destroy(): void {
     this.clear();
     this.htmlController.destroy();
-  }
-
-  private resolveEdgeType(fromPortId: unknown, toPortId: unknown): EdgeType {
-    if (fromPortId === toPortId) {
-      return EdgeType.PortCycle;
-    }
-
-    const fromNodeId = this.graphStore.getPortNodeId(fromPortId);
-    const toNodeId = this.graphStore.getPortNodeId(toPortId);
-
-    if (fromNodeId === toNodeId) {
-      return EdgeType.NodeCycle;
-    }
-
-    return EdgeType.Regular;
   }
 }

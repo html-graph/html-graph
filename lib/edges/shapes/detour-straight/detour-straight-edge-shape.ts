@@ -6,12 +6,11 @@ import {
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createRotatedPoint,
   createEdgeLine,
   createEdgeRectangle,
 } from "../utils";
-import { createRoundedPath } from "../utils";
 import { Point, zero } from "@/point";
+import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
 
 export class DetourStraightEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -85,7 +84,20 @@ export class DetourStraightEdgeShape implements EdgeShape {
       y: height,
     };
 
-    const linePath = this.createLinePath(to, fromVect, toVect, flipX, flipY);
+    const linePath = createDetourStraightLinePath(
+      to,
+      fromVect,
+      toVect,
+      flipX,
+      flipY,
+      this.arrowLength,
+      this.arrowOffset,
+      this.roundness,
+      this.detourX,
+      this.detourY,
+      this.sourceArrow !== null,
+      this.targetArrow !== null,
+    );
 
     this.line.setAttribute("d", linePath);
 
@@ -110,44 +122,5 @@ export class DetourStraightEdgeShape implements EdgeShape {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createLinePath(
-    to: Point,
-    fromVect: Point,
-    toVect: Point,
-    flipX: number,
-    flipY: number,
-  ): string {
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
-      : zero;
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
-      : to;
-
-    const gap1 = this.arrowLength + this.arrowOffset;
-
-    const pbl1: Point = createRotatedPoint(
-      { x: gap1, y: zero.y },
-      fromVect,
-      zero,
-    );
-
-    const flipDetourX = this.detourX * flipX;
-    const flipDetourY = this.detourY * flipY;
-
-    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
-    const pel1: Point = createRotatedPoint(
-      { x: to.x - gap1, y: to.y },
-      toVect,
-      to,
-    );
-    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
-
-    return createRoundedPath(
-      [pba, pbl1, pbl2, pel2, pel1, pea],
-      this.roundness,
-    );
   }
 }
