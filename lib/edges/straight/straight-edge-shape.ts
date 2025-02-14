@@ -14,6 +14,7 @@ import { StraightEdgeParams } from "./straight-edge-params";
 import { createStraightLinePath } from "../utils/create-straight-line-path";
 import { createCycleSquareLinePath } from "../utils/create-cycle-square-line-path";
 import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
+import { edgeConstants } from "../edge-constants";
 
 export class StraightEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -34,35 +35,62 @@ export class StraightEdgeShape implements EdgeShape {
 
   private readonly roundness: number;
 
-  private readonly side: number;
+  private readonly cycleSquareSide: number;
+
+  private readonly detourDirection: number;
+
+  private readonly detourDistance: number;
 
   private readonly detourX: number;
 
   private readonly detourY: number;
 
-  public constructor(params: StraightEdgeParams) {
-    this.arrowLength = params.arrowLength;
-    this.arrowWidth = params.arrowWidth;
-    this.arrowOffset = params.arrowOffset;
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  public constructor(params?: StraightEdgeParams) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+
     this.roundness = Math.min(
-      params.roundness,
-      params.arrowOffset,
-      params.cycleSquareSide / 2,
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
     );
-    this.side = params.cycleSquareSide;
-    this.detourX = Math.cos(params.detourDirection) * params.detourDistance;
-    this.detourY = Math.sin(params.detourDirection) * params.detourDistance;
+
+    this.detourDirection =
+      params?.detourDirection ?? edgeConstants.detourDirection;
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
+    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
+    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
+
+    const color = params?.color ?? edgeConstants.color;
+    const width = params?.width ?? edgeConstants.width;
+
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(params.color, params.width);
+    this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
-    if (params.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(params.color);
+    if (this.hasSourceArrow) {
+      this.sourceArrow = createEdgeArrow(color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (params.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(params.color);
+    if (this.hasTargetArrow) {
+      this.targetArrow = createEdgeArrow(color);
       this.group.appendChild(this.targetArrow);
     }
   }
@@ -102,7 +130,7 @@ export class StraightEdgeShape implements EdgeShape {
       linePath = createCycleSquareLinePath({
         fromVect,
         arrowLength: this.arrowLength,
-        side: this.side,
+        side: this.cycleSquareSide,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
         hasSourceArrow: this.sourceArrow !== null,

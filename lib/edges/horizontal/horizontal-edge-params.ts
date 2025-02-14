@@ -1,13 +1,13 @@
 export interface HorizontalEdgeParams {
-  readonly color: string;
-  readonly width: number;
-  readonly arrowLength: number;
-  readonly arrowWidth: number;
-  readonly arrowOffset: number;
-  readonly hasSourceArrow: boolean;
-  readonly hasTargetArrow: boolean;
-  readonly cycleSquareSide: number;
-  readonly roundness: number;
-  readonly detourDistance: number;
-  readonly detourDirection: number;
+  readonly color?: string | undefined;
+  readonly width?: number | undefined;
+  readonly arrowLength?: number | undefined;
+  readonly arrowWidth?: number | undefined;
+  readonly arrowOffset?: number | undefined;
+  readonly hasSourceArrow?: boolean | undefined;
+  readonly hasTargetArrow?: boolean | undefined;
+  readonly cycleSquareSide?: number | undefined;
+  readonly roundness?: number | undefined;
+  readonly detourDistance?: number | undefined;
+  readonly detourDirection?: number | undefined;
 }

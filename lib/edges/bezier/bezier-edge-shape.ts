@@ -14,6 +14,7 @@ import {
 } from "../utils";
 import { Point, zero } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
+import { edgeConstants } from "../edge-constants";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -40,26 +41,45 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly detourY: number;
 
-  public constructor(params: BezierEdgeParams) {
-    this.arrowLength = params.arrowLength;
-    this.arrowWidth = params.arrowWidth;
-    this.curvature = params.curvature;
-    this.portCycleRadius = params.cycleRadius;
-    this.portCycleSmallRadius = params.smallCycleRadius;
-    this.detourX = Math.cos(params.detourDirection) * params.detourDistance;
-    this.detourY = Math.sin(params.detourDirection) * params.detourDistance;
+  private readonly detourDirection: number;
+
+  private readonly detourDistance: number;
+
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  public constructor(params?: BezierEdgeParams) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowLength;
+    this.curvature = params?.curvature ?? edgeConstants.curvature;
+    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
+    this.portCycleSmallRadius =
+      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
+    this.detourDirection =
+      params?.detourDirection ?? edgeConstants.detourDirection;
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
+    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+    const color = params?.color ?? edgeConstants.color;
+    const width = params?.width ?? edgeConstants.width;
 
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(params.color, params.width);
+    this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
-    if (params.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(params.color);
+    if (this.hasSourceArrow) {
+      this.sourceArrow = createEdgeArrow(color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (params.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(params.color);
+    if (this.hasTargetArrow) {
+      this.targetArrow = createEdgeArrow(color);
       this.group.appendChild(this.targetArrow);
     }
   }
