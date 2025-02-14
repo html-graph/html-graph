@@ -34,10 +34,6 @@ export {
   StraightEdgeShape,
   HorizontalEdgeShape,
   VerticalEdgeShape,
-  createBezierEdgeShapeFactory,
-  createStraightEdgeShareFactory,
-  createHorizontalEdgeShapeFactory,
-  createVerticalEdgeShapeFactory,
 } from "./edges";
 export type {
   EdgeShape,
