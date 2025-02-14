@@ -99,43 +99,43 @@ export class StraightEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleSquareLinePath(
+      linePath = createCycleSquareLinePath({
         fromVect,
-        this.arrowLength,
-        this.side,
-        this.arrowOffset,
-        this.roundness,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        side: this.side,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.sourceArrow !== null,
+        hasTargetArrow: this.targetArrow !== null,
+      });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourStraightLinePath(
+      linePath = createDetourStraightLinePath({
         to,
         fromVect,
         toVect,
         flipX,
         flipY,
-        this.arrowLength,
-        this.arrowOffset,
-        this.roundness,
-        this.detourX,
-        this.detourY,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        detourX: this.detourX,
+        detourY: this.detourY,
+        hasSourceArrow: this.sourceArrow !== null,
+        hasTargetArrow: this.targetArrow !== null,
+      });
     } else {
-      linePath = createStraightLinePath(
+      linePath = createStraightLinePath({
         to,
         fromVect,
         toVect,
-        this.arrowLength,
-        this.arrowOffset,
-        this.roundness,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.sourceArrow !== null,
+        hasTargetArrow: this.targetArrow !== null,
+      });
     }
 
     this.line.setAttribute("d", linePath);

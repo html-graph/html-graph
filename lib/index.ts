@@ -34,8 +34,6 @@ export {
   StraightEdgeShape,
   HorizontalEdgeShape,
   VerticalEdgeShape,
-  CycleSquareEdgeShape,
-  DetourStraightEdgeShape,
   createBezierEdgeShapeFactory,
   createStraightEdgeShareFactory,
   createHorizontalEdgeShapeFactory,

@@ -2,27 +2,39 @@ import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
 import { createRoundedPath } from "../create-rounded-path";
 
-export const createStraightLinePath = (
-  to: Point,
-  fromVect: Point,
-  toVect: Point,
-  arrowLength: number,
-  arrowOffset: number,
-  roundness: number,
-  hasSourceArrow: boolean,
-  hasTargetArrow: boolean,
-): string => {
-  const pba: Point = hasSourceArrow
-    ? createRotatedPoint({ x: arrowLength, y: zero.y }, fromVect, zero)
+export const createStraightLinePath = (params: {
+  readonly to: Point;
+  readonly fromVect: Point;
+  readonly toVect: Point;
+  readonly arrowLength: number;
+  readonly arrowOffset: number;
+  readonly roundness: number;
+  readonly hasSourceArrow: boolean;
+  readonly hasTargetArrow: boolean;
+}): string => {
+  const pba: Point = params.hasSourceArrow
+    ? createRotatedPoint(
+        { x: params.arrowLength, y: zero.y },
+        params.fromVect,
+        zero,
+      )
     : zero;
-  const pea: Point = hasTargetArrow
-    ? createRotatedPoint({ x: to.x - arrowLength, y: to.y }, toVect, to)
-    : to;
+  const pea: Point = params.hasTargetArrow
+    ? createRotatedPoint(
+        { x: params.to.x - params.arrowLength, y: params.to.y },
+        params.toVect,
+        params.to,
+      )
+    : params.to;
 
-  const gap = arrowLength + arrowOffset;
+  const gap = params.arrowLength + params.arrowOffset;
 
-  const pbl = createRotatedPoint({ x: gap, y: zero.y }, fromVect, zero);
-  const pel = createRotatedPoint({ x: to.x - gap, y: to.y }, toVect, to);
+  const pbl = createRotatedPoint({ x: gap, y: zero.y }, params.fromVect, zero);
+  const pel = createRotatedPoint(
+    { x: params.to.x - gap, y: params.to.y },
+    params.toVect,
+    params.to,
+  );
 
-  return createRoundedPath([pba, pbl, pel, pea], roundness);
+  return createRoundedPath([pba, pbl, pel, pea], params.roundness);
 };

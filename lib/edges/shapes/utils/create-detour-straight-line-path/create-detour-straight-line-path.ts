@@ -2,45 +2,56 @@ import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
 import { createRoundedPath } from "../create-rounded-path";
 
-export const createDetourStraightLinePath = (
-  to: Point,
-  fromVect: Point,
-  toVect: Point,
-  flipX: number,
-  flipY: number,
-  arrowLength: number,
-  arrowOffset: number,
-  roundness: number,
-  detourX: number,
-  detourY: number,
-  hasSourceArrow: boolean,
-  hasTargetArrow: boolean,
-): string => {
-  const pba: Point = hasSourceArrow
-    ? createRotatedPoint({ x: arrowLength, y: zero.y }, fromVect, zero)
+export const createDetourStraightLinePath = (params: {
+  readonly to: Point;
+  readonly fromVect: Point;
+  readonly toVect: Point;
+  readonly flipX: number;
+  readonly flipY: number;
+  readonly arrowLength: number;
+  readonly arrowOffset: number;
+  readonly roundness: number;
+  readonly detourX: number;
+  readonly detourY: number;
+  readonly hasSourceArrow: boolean;
+  readonly hasTargetArrow: boolean;
+}): string => {
+  const pba: Point = params.hasSourceArrow
+    ? createRotatedPoint(
+        { x: params.arrowLength, y: zero.y },
+        params.fromVect,
+        zero,
+      )
     : zero;
-  const pea: Point = hasTargetArrow
-    ? createRotatedPoint({ x: to.x - arrowLength, y: to.y }, toVect, to)
-    : to;
+  const pea: Point = params.hasTargetArrow
+    ? createRotatedPoint(
+        { x: params.to.x - params.arrowLength, y: params.to.y },
+        params.toVect,
+        params.to,
+      )
+    : params.to;
 
-  const gap1 = arrowLength + arrowOffset;
+  const gap1 = params.arrowLength + params.arrowOffset;
 
   const pbl1: Point = createRotatedPoint(
     { x: gap1, y: zero.y },
-    fromVect,
+    params.fromVect,
     zero,
   );
 
-  const flipDetourX = detourX * flipX;
-  const flipDetourY = detourY * flipY;
+  const flipDetourX = params.detourX * params.flipX;
+  const flipDetourY = params.detourY * params.flipY;
 
   const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
   const pel1: Point = createRotatedPoint(
-    { x: to.x - gap1, y: to.y },
-    toVect,
-    to,
+    { x: params.to.x - gap1, y: params.to.y },
+    params.toVect,
+    params.to,
   );
   const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
 
-  return createRoundedPath([pba, pbl1, pbl2, pel2, pel1, pea], roundness);
+  return createRoundedPath(
+    [pba, pbl1, pbl2, pel2, pel1, pea],
+    params.roundness,
+  );
 };

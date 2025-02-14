@@ -2,8 +2,6 @@ export * from "./bezier";
 export * from "./straight";
 export * from "./horizontal";
 export * from "./vertical";
-export * from "./cycle-square";
-export * from "./detour-straight";
 export * from "./edge-shape";
 export * from "./edge-shape.mock";
 export * from "./edge-render-params";

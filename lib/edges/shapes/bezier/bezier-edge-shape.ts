@@ -121,15 +121,15 @@ export class BezierEdgeShape implements EdgeShape {
         this.targetArrow !== null,
       );
     } else {
-      linePath = createBezierLinePath(
+      linePath = createBezierLinePath({
         to,
         fromVect,
         toVect,
-        this.arrowLength,
-        this.curvature,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        curvature: this.curvature,
+        hasSourceArrow: this.sourceArrow !== null,
+        hasTargetArrow: this.targetArrow !== null,
+      });
     }
 
     this.line.setAttribute("d", linePath);
