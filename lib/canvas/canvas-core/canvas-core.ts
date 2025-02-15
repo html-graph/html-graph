@@ -115,6 +115,8 @@ export class CanvasCore implements Canvas {
       edgeId,
       shape: request?.shape,
       priority: request?.priority,
+      from: request?.from,
+      to: request?.to,
     });
 
     return this;

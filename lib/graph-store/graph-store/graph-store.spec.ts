@@ -409,4 +409,36 @@ describe("GraphStore", () => {
       edge1to1Request.edgeId,
     ]);
   });
+
+  it("should update edge from", () => {
+    const store = new GraphStore();
+
+    store.addNode(node1Request);
+    store.addNode(node2Request);
+    store.addPort(port1Request);
+    store.addPort(port2Request);
+    store.addEdge(edge1to1Request);
+
+    store.updateEdgeFrom(edge1to1Request.edgeId, port2Request.portId);
+
+    expect(store.getPortAdjacentEdgeIds(port2Request.portId)).toEqual([
+      edge1to1Request.edgeId,
+    ]);
+  });
+
+  it("should update edge to", () => {
+    const store = new GraphStore();
+
+    store.addNode(node1Request);
+    store.addNode(node2Request);
+    store.addPort(port1Request);
+    store.addPort(port2Request);
+    store.addEdge(edge1to1Request);
+
+    store.updateEdgeTo(edge1to1Request.edgeId, port2Request.portId);
+
+    expect(store.getPortAdjacentEdgeIds(port2Request.portId)).toEqual([
+      edge1to1Request.edgeId,
+    ]);
+  });
 });

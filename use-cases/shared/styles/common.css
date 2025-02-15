@@ -18,6 +18,10 @@ body {
   color: var(--color-text);
 }
 
+button {
+  cursor: pointer;
+}
+
 .canvas,
 .canvas-wrapper,
 .background {
@@ -34,4 +38,8 @@ body {
   padding: 1rem;
   background: var(--color-background-2);
   z-index: 1;
+}
+
+.mt-4 {
+  margin-top: 1rem;
 }

@@ -1,10 +1,7 @@
 # TODO
 
-- update port element
-- update node element
-- update edge fron and to
-- double port mark example
 - refactor examples
+- double port mark example
 - before transform started example
 - improve reexport
 - optimize background drawing

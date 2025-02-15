@@ -134,6 +134,14 @@ export class CanvasController {
       this.htmlController.updateEdgePriority(request.edgeId);
     }
 
+    if (request.from !== undefined) {
+      this.graphStore.updateEdgeFrom(request.edgeId, request.from);
+    }
+
+    if (request.to !== undefined) {
+      this.graphStore.updateEdgeTo(request.edgeId, request.to);
+    }
+
     this.htmlController.renderEdge(request.edgeId);
   }
 
