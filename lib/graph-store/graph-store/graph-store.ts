@@ -110,6 +110,32 @@ export class GraphStore {
     }
   }
 
+  public updateEdgeFrom(edgeId: unknown, from: unknown): void {
+    const edge = this.edges.get(edgeId)!;
+
+    this.removeEdge(edgeId);
+    this.addEdge({
+      edgeId,
+      from,
+      to: edge.to,
+      shape: edge.shape,
+      priority: edge.priority,
+    });
+  }
+
+  public updateEdgeTo(edgeId: unknown, to: unknown): void {
+    const edge = this.edges.get(edgeId)!;
+
+    this.removeEdge(edgeId);
+    this.addEdge({
+      edgeId,
+      from: edge.from,
+      to,
+      shape: edge.shape,
+      priority: edge.priority,
+    });
+  }
+
   public getAllEdgeIds(): readonly unknown[] {
     return Array.from(this.edges.keys());
   }

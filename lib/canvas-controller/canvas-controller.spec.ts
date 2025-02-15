@@ -310,7 +310,6 @@ describe("CanvasController", () => {
     const markPortRequest: MarkNodePortRequest = {
       id: "port-1",
       element: document.createElement("div"),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -344,7 +343,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -363,7 +361,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -403,7 +400,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -422,7 +418,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -461,7 +456,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -498,7 +492,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -537,7 +530,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -556,7 +548,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -594,6 +585,8 @@ describe("CanvasController", () => {
       edgeId: addEdgeRequest12.edgeId,
       shape: undefined,
       priority: undefined,
+      from: undefined,
+      to: undefined,
     });
 
     expect(spy).toHaveBeenCalledWith({
@@ -626,7 +619,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -645,7 +637,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -677,6 +668,8 @@ describe("CanvasController", () => {
       edgeId: addEdgeRequest12.edgeId,
       shape: newShape,
       priority: undefined,
+      from: undefined,
+      to: undefined,
     });
 
     const container = div.children[0].children[0];
@@ -693,7 +686,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -712,7 +704,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -742,6 +733,8 @@ describe("CanvasController", () => {
       edgeId: addEdgeRequest12.edgeId,
       shape: undefined,
       priority: 10,
+      from: undefined,
+      to: undefined,
     });
 
     const container = div.children[0].children[0];
@@ -758,6 +751,8 @@ describe("CanvasController", () => {
         edgeId: "edge-1",
         shape: undefined,
         priority: undefined,
+        from: undefined,
+        to: undefined,
       });
     }).toThrow(HtmlGraphError);
   });
@@ -769,7 +764,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -804,7 +798,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -823,7 +816,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1035,7 +1027,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1054,7 +1045,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1126,7 +1116,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1145,7 +1134,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1186,7 +1174,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1205,7 +1192,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1253,7 +1239,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1281,7 +1266,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1300,7 +1284,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1393,7 +1376,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0, width: 50, height: 50 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1543,7 +1525,6 @@ describe("CanvasController", () => {
     const markPortRequest1: MarkNodePortRequest = {
       id: "port-1",
       element: createElement({ x: 0, y: 0 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1562,7 +1543,6 @@ describe("CanvasController", () => {
     const markPortRequest2: MarkNodePortRequest = {
       id: "port-2",
       element: createElement({ x: 100, y: 100 }),
-      centerFn: () => ({ x: 0, y: 0 }),
       direction: 0,
     };
 
@@ -1601,5 +1581,149 @@ describe("CanvasController", () => {
     expect(() => {
       canvasController.removeNode("node-1");
     }).toThrow(HtmlGraphError);
+  });
+
+  it("should update edge source", () => {
+    const canvasController = createCanvasController();
+    const div = document.createElement("div");
+    canvasController.attach(div);
+
+    const addNodeRequest1: AddNodeRequest = {
+      nodeId: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      centerFn: () => ({ x: 0, y: 0 }),
+      ports: [
+        {
+          id: "port-1",
+          element: createElement({ x: 0, y: 0 }),
+          direction: 0,
+        },
+        {
+          id: "port-2",
+          element: createElement({ x: 100, y: 100 }),
+          direction: 0,
+        },
+      ],
+      priority: 0,
+    };
+
+    canvasController.addNode(addNodeRequest1);
+
+    const shape = new EdgeShapeMock();
+
+    const addEdgeRequest: AddEdgeRequest = {
+      edgeId: "con-1",
+      from: "port-2",
+      to: "port-2",
+      priority: undefined,
+      shape,
+    };
+
+    canvasController.addEdge(addEdgeRequest);
+
+    const spy = jest.spyOn(shape, "render");
+
+    canvasController.updateEdge({
+      edgeId: "con-1",
+      from: "port-1",
+      to: undefined,
+      shape: undefined,
+      priority: undefined,
+    });
+
+    expect(spy).toHaveBeenCalledWith({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-2",
+      },
+    });
+  });
+
+  it("should update edge target", () => {
+    const canvasController = createCanvasController();
+    const div = document.createElement("div");
+    canvasController.attach(div);
+
+    const addNodeRequest1: AddNodeRequest = {
+      nodeId: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      centerFn: () => ({ x: 0, y: 0 }),
+      ports: [
+        {
+          id: "port-1",
+          element: createElement({ x: 0, y: 0 }),
+          direction: 0,
+        },
+        {
+          id: "port-2",
+          element: createElement({ x: 100, y: 100 }),
+          direction: 0,
+        },
+      ],
+      priority: 0,
+    };
+
+    canvasController.addNode(addNodeRequest1);
+
+    const shape = new EdgeShapeMock();
+
+    const addEdgeRequest: AddEdgeRequest = {
+      edgeId: "con-1",
+      from: "port-1",
+      to: "port-1",
+      priority: undefined,
+      shape,
+    };
+
+    canvasController.addEdge(addEdgeRequest);
+
+    const spy = jest.spyOn(shape, "render");
+
+    canvasController.updateEdge({
+      edgeId: "con-1",
+      from: undefined,
+      to: "port-2",
+      shape: undefined,
+      priority: undefined,
+    });
+
+    expect(spy).toHaveBeenCalledWith({
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+        nodeId: "node-1",
+        portId: "port-2",
+      },
+    });
   });
 });
