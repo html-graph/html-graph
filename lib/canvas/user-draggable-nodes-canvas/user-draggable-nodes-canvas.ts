@@ -30,6 +30,8 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
 
+  private onNodeDragFinished: () => void;
+
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
     this.nodes.has(nodeId),
   );
@@ -125,6 +127,9 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     this.onBeforeNodeDrag =
       dragOptions?.events?.onBeforeNodeDrag ?? ((): boolean => true);
+
+    this.onNodeDragFinished =
+      dragOptions?.events?.onNodeDragFinished ?? ((): void => {});
 
     this.freezePriority = dragOptions?.moveOnTop === false;
 
@@ -393,6 +398,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
 
     this.removeMouseDragListeners();
+    this.onNodeDragFinished();
   }
 
   private removeMouseDragListeners(): void {
@@ -404,6 +410,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.previousTouchCoords = null;
     this.grabbedNodeId = null;
     this.removeTouchDragListeners();
+    this.onNodeDragFinished();
   }
 
   private removeTouchDragListeners(): void {

@@ -1,59 +1,57 @@
-import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-      priority: 0,
-    },
-    nodes: {
-      priority: 1,
-    },
-  })
-  .setUserDraggableNodes({
-    moveOnTop: false,
-  })
-  .setUserTransformableCanvas()
-  .build();
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
-function createNode(
-  name: string,
-  frontPortId: string,
-  backPortId: string,
-): [HTMLElement, AddNodePorts] {
-  const node = document.createElement("div");
-  node.classList.add("node");
+builder.setOptions({
+  edges: {
+    priority: 0,
+  },
+  nodes: {
+    priority: 1,
+  },
+});
 
-  const frontPort = document.createElement("div");
-  node.appendChild(frontPort);
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-  const text = document.createElement("div");
-  text.innerText = name;
-  node.appendChild(text);
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
 
-  const backPort = document.createElement("div");
-  node.appendChild(backPort);
+const addNode2Request: AddNodeRequest = createInOutNode({
+  name: "Node 2",
+  x: 500,
+  y: 500,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
 
-  return [
-    node,
-    [
-      { id: frontPortId, element: frontPort },
-      { id: backPortId, element: backPort },
-    ],
-  ];
-}
+const addNode3Request: AddNodeRequest = createInOutNode({
+  name: "Node 3",
+  x: 350,
+  y: 450,
+  frontPortId: "node-3-in",
+  backPortId: "node-3-out",
+});
 
-const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const [node2, ports2] = createNode("Node 2", "port-2-1", "port-2-2");
-const [node3, ports3] = createNode("Node 3", "port-3-1", "port-3-2");
-
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({ element: node1, x: 600, y: 400, ports: ports1 })
-  .addNode({ element: node2, x: 200, y: 500, ports: ports2 })
-  .addEdge({ from: "port-1-2", to: "port-2-1" })
-  .addNode({ element: node3, x: 400, y: 450, ports: ports3 });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest)
+  .addNode(addNode3Request);

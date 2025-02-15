@@ -1,31 +1,13 @@
 .node {
   position: relative;
-  width: 50px;
-  height: 50px;
-  background: #ffdbab;
+  width: 100px;
+  height: 100px;
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
+  box-shadow: 0 0 5px var(--color-node-border);
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.port {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.port::after {
-  display: block;
-  content: "";
-  position: relative;
-  top: -2.5px;
-  left: -2.5px;
-  width: 5px;
-  height: 5px;
-  background: #737373;
-  border-radius: 2.5px;
-  border: none;
+  user-select: none;
 }

@@ -1,41 +1,43 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
-import { EdgeWithLabelShape } from "./edge-with-label-shape";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
+import { EdgeWithLabelShape } from "./edge-with-label-shape";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+builder.setUserDraggableNodes().setUserTransformableCanvas();
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const node1 = createInOutNode({
+const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 400,
-  frontPortId: "port-1-1",
-  backPortId: "port-1-2",
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
 });
 
-const node2 = createInOutNode({
+const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
-  x: 800,
-  y: 600,
-  frontPortId: "port-2-1",
-  backPortId: "port-2-2",
+  x: 600,
+  y: 500,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
 });
 
-const shape = new EdgeWithLabelShape("Connection");
+const shape = new EdgeWithLabelShape("Connection 1");
 
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-2-in",
+  shape,
+};
 
 canvas
   .attach(canvasElement)
-  .addNode(node1)
-  .addNode(node2)
-  .addEdge({ id: "edge-1", from: "port-1-2", to: "port-2-1", shape });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest);

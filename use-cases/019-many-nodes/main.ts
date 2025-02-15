@@ -1,26 +1,53 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
 
-const canvas = new HtmlGraphBuilder()
+export function createNode(params: {
+  portId: unknown;
+  x: number;
+  y: number;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+  node.innerText = `Node ${params.portId}`;
+
+  return {
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [{ id: params.portId, element: node }],
+  };
+}
+
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+
+builder
   .setOptions({
     edges: {
+      priority: 0,
       shape: {
-        hasTargetArrow: true,
+        type: "bezier",
+        curvature: 200,
       },
+    },
+    nodes: {
+      priority: 1,
     },
   })
   .setUserDraggableNodes({
     moveOnTop: false,
   })
-  .setUserTransformableCanvas()
-  .build();
+  .setUserTransformableCanvas();
 
-let offset = 0;
+const canvas: Canvas = builder.build();
+const canvasElement = document.getElementById("canvas")!;
+canvas.attach(canvasElement);
+
+let offset = 300;
 const total = 1000;
 let prevPortId: string | null = null;
-
-const canvasElement = document.getElementById("canvas")!;
-
-canvas.attach(canvasElement);
 
 for (let i = 0; i < total; i++) {
   const node = document.createElement("div");
@@ -32,16 +59,16 @@ for (let i = 0; i < total; i++) {
 
   const newPortId = `${i}`;
 
-  canvas.addNode({
-    element: node,
+  const addNodeRequest: AddNodeRequest = createNode({
+    portId: newPortId,
     x: offset,
-    y: 300 + Math.random() * 200,
-    ports: [{ id: newPortId, element: port }],
-    priority: 0,
+    y: 300,
   });
 
+  canvas.addNode(addNodeRequest);
+
   if (prevPortId) {
-    canvas.addEdge({ from: prevPortId, to: newPortId, priority: 1 });
+    canvas.addEdge({ from: prevPortId, to: newPortId });
   }
 
   offset += 300;

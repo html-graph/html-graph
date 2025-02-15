@@ -1,30 +1,48 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
 
-const canvas = new HtmlGraphBuilder()
+export function createNode(params: {
+  portId: unknown;
+  x: number;
+  y: number;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+  node.innerText = `Node ${params.portId}`;
+
+  return {
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [{ id: params.portId, element: node }],
+  };
+}
+
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+
+builder
   .setOptions({
     edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-      priority: 1,
-    },
-    nodes: {
       priority: 0,
     },
+    nodes: {
+      priority: 1,
+    },
   })
-  .setUserDraggableNodes({
-    moveOnTop: false,
-  })
-  .setUserTransformableCanvas()
-  .build();
+  .setUserTransformableCanvas();
+
+const canvas: Canvas = builder.build();
+const canvasElement = document.getElementById("canvas")!;
+canvas.attach(canvasElement);
+canvas.patchViewportMatrix({ scale: 4, dx: -1000, dy: -1000 });
 
 let angle = 0;
 const total = 25;
 const portIds: string[] = [];
-
-const canvasElement = document.getElementById("canvas")!;
-
-canvas.attach(canvasElement);
 
 for (let i = 0; i < total; i++) {
   const node = document.createElement("div");
@@ -36,15 +54,21 @@ for (let i = 0; i < total; i++) {
 
   const newPortId = `${i}`;
 
-  canvas.addNode({
-    element: node,
+  const addNodeRequest: AddNodeRequest = createNode({
+    portId: newPortId,
     x: Math.cos(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
     y: Math.sin(angle) * (600 + Math.floor(angle / (2 * Math.PI))) + 400,
-    ports: [{ id: newPortId, element: port }],
   });
 
+  canvas.addNode(addNodeRequest);
+
   portIds.forEach((prevPortId) => {
-    canvas.addEdge({ from: prevPortId, to: newPortId });
+    const addEdgeRequest: AddEdgeRequest = {
+      from: prevPortId,
+      to: newPortId,
+    };
+
+    canvas.addEdge(addEdgeRequest);
   });
 
   angle += (2 * Math.PI) / total;
