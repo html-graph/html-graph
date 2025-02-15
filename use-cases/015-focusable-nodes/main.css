@@ -1,30 +1,22 @@
 .node {
   position: relative;
-  width: 50px;
+  width: 100px;
   height: 50px;
-  background: #ffdbab;
-  border-radius: 50%;
+  background: var(--color-node-background);
+  border: 2px inset var(--color-node-border);
+  box-shadow: 0 0 5px var(--color-node-border);
+  border-radius: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+  user-select: none;
 
-.port {
-  position: absolute;
-  top: 50%;
-  width: 0;
-  height: 0;
-}
+  &:hover {
+    background: var(--color-node-background-hover);
+  }
 
-.port::after {
-  display: block;
-  content: "";
-  position: relative;
-  top: -2.5px;
-  left: -2.5px;
-  width: 5px;
-  height: 5px;
-  background: #737373;
-  border-radius: 2.5px;
-  border: none;
+  &:focus {
+    background: var(--color-node-background-focus);
+    border-width: 3px;
+  }
 }

@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   HtmlGraphBuilder,
+  PatchMatrixRequest,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -42,7 +43,11 @@ const sliderScale: HTMLInputElement = document.getElementById(
 ) as HTMLInputElement;
 
 sliderScale.addEventListener("input", () => {
-  canvas.patchContentMatrix({ scale: parseFloat(sliderScale.value) });
+  const patchRequest: PatchMatrixRequest = {
+    scale: parseFloat(sliderScale.value),
+  };
+
+  canvas.patchContentMatrix(patchRequest);
 });
 
 const sliderDeltaX: HTMLInputElement = document.getElementById(
@@ -50,7 +55,11 @@ const sliderDeltaX: HTMLInputElement = document.getElementById(
 ) as HTMLInputElement;
 
 sliderDeltaX.addEventListener("input", () => {
-  canvas.patchContentMatrix({ dx: parseFloat(sliderDeltaX.value) });
+  const patchRequest: PatchMatrixRequest = {
+    dx: parseFloat(sliderDeltaX.value),
+  };
+
+  canvas.patchContentMatrix(patchRequest);
 });
 
 const sliderDeltaY: HTMLInputElement = document.getElementById(
@@ -58,5 +67,9 @@ const sliderDeltaY: HTMLInputElement = document.getElementById(
 ) as HTMLInputElement;
 
 sliderDeltaY.addEventListener("input", () => {
-  canvas.patchContentMatrix({ dy: parseFloat(sliderDeltaY.value) });
+  const patchRequest: PatchMatrixRequest = {
+    dy: parseFloat(sliderDeltaY.value),
+  };
+
+  canvas.patchContentMatrix(patchRequest);
 });
