@@ -7,6 +7,7 @@ export function createInOutNode(params: {
   y: number;
   frontPortId: string;
   backPortId: string;
+  priority?: number;
 }): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
@@ -23,20 +24,8 @@ export function createInOutNode(params: {
   backPort.classList.add("node-port");
   node.appendChild(backPort);
 
-  if (params.id !== undefined) {
-    return {
-      id: params.id,
-      element: node,
-      x: params.x,
-      y: params.y,
-      ports: [
-        { id: params.frontPortId, element: frontPort },
-        { id: params.backPortId, element: backPort },
-      ],
-    };
-  }
-
   return {
+    id: params.id,
     element: node,
     x: params.x,
     y: params.y,
@@ -44,5 +33,6 @@ export function createInOutNode(params: {
       { id: params.frontPortId, element: frontPort },
       { id: params.backPortId, element: backPort },
     ],
+    priority: params.priority,
   };
 }

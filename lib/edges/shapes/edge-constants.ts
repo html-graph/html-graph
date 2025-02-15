@@ -11,6 +11,7 @@ export const edgeConstants = Object.freeze({
   roundness: 10,
   detourDistance: 100,
   detourDirection: -Math.PI / 2,
+  detourDirectionVertical: 0,
   smallCycleRadius: 15,
   curvature: 90,
 });

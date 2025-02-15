@@ -62,7 +62,7 @@ export class VerticalEdgeShape implements EdgeShape {
     );
 
     this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
+      params?.detourDirection ?? edgeConstants.detourDirectionVertical;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
     this.hasSourceArrow =
