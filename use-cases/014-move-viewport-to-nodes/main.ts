@@ -15,8 +15,8 @@ const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 500,
-  frontPortId: "port-1-in",
-  backPortId: "port-1-out",
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
@@ -24,8 +24,8 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 1500,
   y: 500,
-  frontPortId: "port-2-in",
-  backPortId: "port-2-out",
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
 });
 
 const addNode3Request: AddNodeRequest = createInOutNode({
@@ -33,18 +33,18 @@ const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
   x: 1900,
   y: 500,
-  frontPortId: "port-3-in",
-  backPortId: "port-3-out",
+  frontPortId: "node-3-in",
+  backPortId: "node-3-out",
 });
 
 const addEdge1Request: AddEdgeRequest = {
-  from: "port-1-out",
-  to: "port-2-in",
+  from: "node-1-out",
+  to: "node-2-in",
 };
 
 const addEdge2Request: AddEdgeRequest = {
-  from: "port-2-out",
-  to: "port-3-in",
+  from: "node-2-out",
+  to: "node-3-in",
 };
 
 canvas

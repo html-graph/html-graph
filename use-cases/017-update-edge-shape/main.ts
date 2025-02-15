@@ -1,98 +1,82 @@
 import {
+  AddEdgeRequest,
+  AddNodeRequest,
   BezierEdgeParams,
   BezierEdgeShape,
+  Canvas,
   HtmlGraphBuilder,
+  UpdateEdgeRequest,
 } from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
-node1.innerText = "1";
+const addNode1Request: AddNodeRequest = createInOutNode({
+  id: "node-1",
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
-node2.innerText = "2";
+const addNode2Request: AddNodeRequest = createInOutNode({
+  id: "node-2",
+  name: "Node 2",
+  x: 500,
+  y: 500,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
-
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
-
-node1.appendChild(port1);
-node2.appendChild(port2);
-
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  id: "con-1",
+  from: "node-1-out",
+  to: "node-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({
-    element: node1,
-    x: 200,
-    y: 300,
-    ports: [{ id: "port-1", element: port1 }],
-  })
-  .addNode({
-    element: node2,
-    x: 600,
-    y: 500,
-    ports: [{ id: "port-2", element: port2 }],
-  })
-  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest);
+
+const updateBtn: HTMLElement = document.getElementById("update-edge-shape")!;
 
 let i = 0;
 
 const redParams: BezierEdgeParams = {
   color: "red",
-  width: 2,
-  arrowLength: 15,
-  arrowWidth: 4,
-  curvature: 90,
-  hasSourceArrow: true,
-  hasTargetArrow: false,
-  cycleRadius: 40,
-  smallCycleRadius: 20,
-  detourDistance: 100,
-  detourDirection: -Math.PI / 2,
+  width: 3,
+  hasTargetArrow: true,
 };
 
 const greenParams: BezierEdgeParams = {
   color: "green",
-  width: 2,
-  arrowLength: 15,
-  arrowWidth: 4,
-  curvature: 90,
-  hasSourceArrow: false,
-  hasTargetArrow: true,
-  cycleRadius: 40,
-  smallCycleRadius: 20,
-  detourDistance: 100,
-  detourDirection: -Math.PI / 2,
+  width: 3,
+  hasSourceArrow: true,
 };
 
 const redShape = new BezierEdgeShape(redParams);
 
 const greenShape = new BezierEdgeShape(greenParams);
 
-setInterval(() => {
+updateBtn.addEventListener("click", () => {
   if (i % 2) {
-    canvas.updateEdge("con-1", { shape: redShape });
+    const request: UpdateEdgeRequest = {
+      shape: redShape,
+    };
+
+    canvas.updateEdge("con-1", request);
   } else {
-    canvas.updateEdge("con-1", { shape: greenShape });
+    const request: UpdateEdgeRequest = {
+      shape: greenShape,
+    };
+
+    canvas.updateEdge("con-1", request);
   }
 
   i++;
-}, 1000);
+});

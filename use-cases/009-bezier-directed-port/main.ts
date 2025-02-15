@@ -62,8 +62,8 @@ const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",
   x: 200,
   y: 400,
-  frontPortId: "port-1-in",
-  backPortId: "port-1-out",
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
   portDirection: Math.PI / 4,
 });
 
@@ -71,14 +71,14 @@ const addNode2Request: AddNodeRequest = createNode({
   name: "Node 2",
   x: 500,
   y: 500,
-  frontPortId: "port-2-in",
-  backPortId: "port-2-out",
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
   portDirection: -Math.PI / 5,
 });
 
 const addEdgeRequest: AddEdgeRequest = {
-  from: "port-1-out",
-  to: "port-2-in",
+  from: "node-1-out",
+  to: "node-2-in",
 };
 
 canvas
