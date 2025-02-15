@@ -1,44 +1,57 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-      priority: 1,
-    },
-    nodes: {
-      priority: 0,
-    },
-  })
-  .setUserDraggableNodes({
-    moveOnTop: false,
-  })
-  .setUserTransformableCanvas()
-  .build();
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
+builder.setOptions({
+  edges: {
+    priority: 1,
+  },
+  nodes: {
+    priority: 0,
+  },
+});
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
 
-const port2 = document.createElement("div");
-port2.classList.add("port");
+const addNode2Request: AddNodeRequest = createInOutNode({
+  name: "Node 2",
+  x: 500,
+  y: 500,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
 
-node1.appendChild(port1);
-node2.appendChild(port2);
+const addNode3Request: AddNodeRequest = createInOutNode({
+  name: "Node 3",
+  x: 350,
+  y: 450,
+  frontPortId: "node-3-in",
+  backPortId: "node-3-out",
+});
 
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
-  .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest)
+  .addNode(addNode3Request);

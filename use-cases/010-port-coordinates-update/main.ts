@@ -1,51 +1,66 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+builder.setOptions({
+  edges: {
+    shape: {
+      hasTargetArrow: true,
     },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+  },
+});
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
-node1.innerText = "1";
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "port-1-in",
+  backPortId: "port-1-out",
+});
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
-node2.innerText = "2";
+const addNode2Request: AddNodeRequest = createInOutNode({
+  name: "Node 2",
+  x: 500,
+  y: 500,
+  frontPortId: "port-2-in",
+  backPortId: "port-2-out",
+});
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
-
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
-
-node1.appendChild(port1);
-node2.appendChild(port2);
-
-let i = 0;
-
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  from: "port-1-out",
+  to: "port-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({ id: "node-1", element: node1, x: 200, y: 300 })
-  .markPort({ nodeId: "node-1", element: port1, id: "port-1" })
-  .addNode({ id: "node-2", element: node2, x: 600, y: 500 })
-  .markPort({ nodeId: "node-2", element: port2, id: "port-2" })
-  .addEdge({ id: "con-1", from: "port-1", to: "port-2" });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest);
 
-setInterval(() => {
-  port2.style.top = i % 2 ? "0" : "100%";
-  canvas.updatePort("port-2");
+const updateBtn: HTMLElement = document.getElementById(
+  "update-port-coordinates",
+)!;
 
+let i = 0;
+
+updateBtn.addEventListener("click", () => {
+  const element = addNode2Request.element.children[0] as HTMLElement;
+
+  if (i % 2) {
+    element.style.marginTop = "0";
+    element.style.marginBottom = "auto";
+  } else {
+    element.style.marginBottom = "0";
+    element.style.marginTop = "auto";
+  }
+
+  canvas.updatePort("port-2-in");
   i++;
-}, 1000);
+});

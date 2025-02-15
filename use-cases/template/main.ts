@@ -7,14 +7,6 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
-builder.setOptions({
-  edges: {
-    shape: {
-      hasSourceArrow: true,
-      hasTargetArrow: true,
-    },
-  },
-});
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
