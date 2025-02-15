@@ -1,8 +1,7 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../create-rotated-point";
-import { createRoundedPath } from "../create-rounded-path";
+import { createRotatedPoint, createRoundedPath } from "../../utils";
 
-export const createDetourStraightLinePath = (params: {
+export const createDetourStraightPath = (params: {
   readonly to: Point;
   readonly fromVect: Point;
   readonly toVect: Point;
@@ -11,8 +10,8 @@ export const createDetourStraightLinePath = (params: {
   readonly arrowLength: number;
   readonly arrowOffset: number;
   readonly roundness: number;
-  readonly detourX: number;
-  readonly detourY: number;
+  readonly detourDirection: number;
+  readonly detourDistance: number;
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
 }): string => {
@@ -39,8 +38,11 @@ export const createDetourStraightLinePath = (params: {
     zero,
   );
 
-  const flipDetourX = params.detourX * params.flipX;
-  const flipDetourY = params.detourY * params.flipY;
+  const detourX = Math.cos(params.detourDirection) * params.detourDistance;
+  const detourY = Math.sin(params.detourDirection) * params.detourDistance;
+
+  const flipDetourX = detourX * params.flipX;
+  const flipDetourY = detourY * params.flipY;
 
   const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
   const pel1: Point = createRotatedPoint(

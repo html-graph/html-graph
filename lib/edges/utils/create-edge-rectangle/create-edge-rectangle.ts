@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { EdgeRenderPort } from "../../edge-render-port";
+import { EdgeRenderPort } from "../../shapes";
 import { EdgeRectangle } from "./edge-rectangle";
 
 export const createEdgeRectangle = (

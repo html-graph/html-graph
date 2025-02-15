@@ -1,6 +1,5 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../create-rotated-point";
-import { createRoundedPath } from "../create-rounded-path";
+import { createRotatedPoint, createRoundedPath } from "../../utils";
 
 export const createStraightLinePath = (params: {
   readonly to: Point;

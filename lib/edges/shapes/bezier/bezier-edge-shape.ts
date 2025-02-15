@@ -8,15 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../utils";
+} from "../../utils";
+import {
+  createBezierLinePath,
+  createDetourBezierPath,
+  createPortCyclePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
-import { VerticalEdgeParams } from "./vertical-edge-params";
-import { createVerticalLinePath } from "../utils/create-vertical-line-path";
-import { createCycleSquareLinePath } from "../utils/create-cycle-square-line-path";
-import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
+import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class VerticalEdgeShape implements EdgeShape {
+export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -31,15 +33,11 @@ export class VerticalEdgeShape implements EdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly arrowOffset: number;
+  private readonly curvature: number;
 
-  private readonly roundness: number;
+  private readonly portCycleRadius: number;
 
-  private readonly cycleSquareSide: number;
-
-  private readonly detourX: number;
-
-  private readonly detourY: number;
+  private readonly portCycleSmallRadius: number;
 
   private readonly detourDirection: number;
 
@@ -49,34 +47,21 @@ export class VerticalEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: VerticalEdgeParams) {
+  public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
+    this.curvature = params?.curvature ?? edgeConstants.curvature;
+    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
+    this.portCycleSmallRadius =
+      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
     this.detourDirection =
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
-
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
-
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
 
@@ -127,43 +112,39 @@ export class VerticalEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleSquareLinePath({
+      linePath = createPortCyclePath(
         fromVect,
-        arrowLength: this.arrowLength,
-        side: this.cycleSquareSide,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
-      });
+        this.portCycleRadius,
+        this.portCycleSmallRadius,
+        this.arrowLength,
+        this.hasSourceArrow,
+        this.hasTargetArrow,
+      );
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourStraightLinePath({
+      linePath = createDetourBezierPath({
         to,
         fromVect,
         toVect,
         flipX,
         flipY,
         arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        detourX: this.detourX,
-        detourY: this.detourY,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        curvature: this.curvature,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createVerticalLinePath({
+      linePath = createBezierLinePath({
         to,
         fromVect,
         toVect,
-        flipY,
         arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        curvature: this.curvature,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     }
 

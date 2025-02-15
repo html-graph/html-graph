@@ -8,15 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../utils";
+} from "../../utils";
+import {
+  createCycleSquarePath,
+  createDetourStraightPath,
+  createVerticalLinePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
-import { HorizontalEdgeParams } from "./horizontal-edge-params";
-import { createHorizontalLinePath } from "../utils/create-horizontal-line-path";
-import { createCycleSquareLinePath } from "../utils/create-cycle-square-line-path";
-import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
+import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class HorizontalEdgeShape implements EdgeShape {
+export class VerticalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -37,10 +39,6 @@ export class HorizontalEdgeShape implements EdgeShape {
 
   private readonly cycleSquareSide: number;
 
-  private readonly detourX: number;
-
-  private readonly detourY: number;
-
   private readonly detourDirection: number;
 
   private readonly detourDistance: number;
@@ -49,7 +47,7 @@ export class HorizontalEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: HorizontalEdgeParams) {
+  public constructor(params?: VerticalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
@@ -67,15 +65,10 @@ export class HorizontalEdgeShape implements EdgeShape {
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
-
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
 
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
@@ -127,19 +120,19 @@ export class HorizontalEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleSquareLinePath({
+      linePath = createCycleSquarePath({
         fromVect,
         arrowLength: this.arrowLength,
         side: this.cycleSquareSide,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourStraightLinePath({
+      linePath = createDetourStraightPath({
         to,
         fromVect,
         toVect,
@@ -148,22 +141,22 @@ export class HorizontalEdgeShape implements EdgeShape {
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        detourX: this.detourX,
-        detourY: this.detourY,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createHorizontalLinePath({
+      linePath = createVerticalLinePath({
         to,
         fromVect,
         toVect,
-        flipX,
+        flipY,
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     }
 

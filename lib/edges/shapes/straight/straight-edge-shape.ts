@@ -8,12 +8,14 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../utils";
+} from "../../utils";
+import {
+  createCycleSquarePath,
+  createDetourStraightPath,
+  createStraightLinePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
-import { createStraightLinePath } from "../utils/create-straight-line-path";
-import { createCycleSquareLinePath } from "../utils/create-cycle-square-line-path";
-import { createDetourStraightLinePath } from "../utils/create-detour-straight-line-path";
 import { edgeConstants } from "../edge-constants";
 
 export class StraightEdgeShape implements EdgeShape {
@@ -40,10 +42,6 @@ export class StraightEdgeShape implements EdgeShape {
   private readonly detourDirection: number;
 
   private readonly detourDistance: number;
-
-  private readonly detourX: number;
-
-  private readonly detourY: number;
 
   private readonly hasSourceArrow: boolean;
 
@@ -73,9 +71,6 @@ export class StraightEdgeShape implements EdgeShape {
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
-
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
 
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
@@ -127,19 +122,19 @@ export class StraightEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleSquareLinePath({
+      linePath = createCycleSquarePath({
         fromVect,
         arrowLength: this.arrowLength,
         side: this.cycleSquareSide,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourStraightLinePath({
+      linePath = createDetourStraightPath({
         to,
         fromVect,
         toVect,
@@ -148,10 +143,10 @@ export class StraightEdgeShape implements EdgeShape {
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        detourX: this.detourX,
-        detourY: this.detourY,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     } else {
       linePath = createStraightLinePath({
@@ -161,8 +156,8 @@ export class StraightEdgeShape implements EdgeShape {
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     }
 

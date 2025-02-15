@@ -8,15 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-  createPortCyclePath,
-  createBezierLinePath,
-  createNodeCyclePath,
-} from "../utils";
+} from "../../utils";
+import {
+  createCycleSquarePath,
+  createDetourStraightPath,
+  createHorizontalLinePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
-import { BezierEdgeParams } from "./bezier-edge-params";
+import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class BezierEdgeShape implements EdgeShape {
+export class HorizontalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -31,15 +33,11 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly curvature: number;
+  private readonly arrowOffset: number;
 
-  private readonly portCycleRadius: number;
+  private readonly roundness: number;
 
-  private readonly portCycleSmallRadius: number;
-
-  private readonly detourX: number;
-
-  private readonly detourY: number;
+  private readonly cycleSquareSide: number;
 
   private readonly detourDirection: number;
 
@@ -49,23 +47,29 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: BezierEdgeParams) {
+  public constructor(params?: HorizontalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowLength;
-    this.curvature = params?.curvature ?? edgeConstants.curvature;
-    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
-    this.portCycleSmallRadius =
-      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
+    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+    this.roundness = Math.min(
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
+    );
+
     this.detourDirection =
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-    this.detourX = Math.cos(this.detourDirection) * this.detourDistance;
-    this.detourY = Math.sin(this.detourDirection) * this.detourDistance;
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
 
@@ -116,39 +120,43 @@ export class BezierEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createPortCyclePath(
+      linePath = createCycleSquarePath({
         fromVect,
-        this.portCycleRadius,
-        this.portCycleSmallRadius,
-        this.arrowLength,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        side: this.cycleSquareSide,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createNodeCyclePath(
+      linePath = createDetourStraightPath({
         to,
         fromVect,
         toVect,
         flipX,
         flipY,
-        this.arrowLength,
-        this.detourX,
-        this.detourY,
-        this.curvature,
-        this.sourceArrow !== null,
-        this.targetArrow !== null,
-      );
+        arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
     } else {
-      linePath = createBezierLinePath({
+      linePath = createHorizontalLinePath({
         to,
         fromVect,
         toVect,
+        flipX,
         arrowLength: this.arrowLength,
-        curvature: this.curvature,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
       });
     }
 

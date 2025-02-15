@@ -1,4 +1,4 @@
-import { EdgeRenderPort } from "../../edge-render-port";
+import { EdgeRenderPort } from "../../shapes";
 import { createEdgeRectangle } from "./create-edge-rectangle";
 
 const source: EdgeRenderPort = {
