@@ -110,7 +110,7 @@ export class CanvasController {
       edgeId,
       from: request.from,
       to: request.to,
-      shape: request.shapeFactory(),
+      shape: request.shape,
       priority: request.priority ?? this.defaultEdgesPriorityFn(),
     });
 
@@ -125,7 +125,7 @@ export class CanvasController {
     }
 
     if (request.shape !== undefined) {
-      edge.shape = request.shape();
+      edge.shape = request.shape;
       this.htmlController.updateEdgeShape(request.edgeId);
     }
 

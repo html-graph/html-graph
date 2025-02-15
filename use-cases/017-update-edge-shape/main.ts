@@ -83,19 +83,15 @@ const greenParams: BezierEdgeParams = {
   detourDirection: -Math.PI / 2,
 };
 
-const redController = new BezierEdgeShape(redParams);
+const redShape = new BezierEdgeShape(redParams);
 
-const greenController = new BezierEdgeShape(greenParams);
+const greenShape = new BezierEdgeShape(greenParams);
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updateEdge("con-1", {
-      shape: { type: "custom", factory: () => redController },
-    });
+    canvas.updateEdge("con-1", { shape: redShape });
   } else {
-    canvas.updateEdge("con-1", {
-      shape: { type: "custom", factory: () => greenController },
-    });
+    canvas.updateEdge("con-1", { shape: greenShape });
   }
 
   i++;

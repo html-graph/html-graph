@@ -208,9 +208,7 @@ describe("CanvasCore", () => {
 
     const shape = new EdgeShapeMock();
 
-    canvas.updateEdge("edge-1", {
-      shape: { type: "custom", factory: () => shape },
-    });
+    canvas.updateEdge("edge-1", { shape });
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2];
@@ -343,11 +341,7 @@ describe("CanvasCore", () => {
     });
 
     const shape = new EdgeShapeMock();
-    canvas.addEdge({
-      from: "port-1",
-      to: "port-1",
-      shape: { type: "custom", factory: () => shape },
-    });
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
 
     const spy = jest.spyOn(shape, "render");
 

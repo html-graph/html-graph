@@ -4,11 +4,6 @@ import {
   EdgeShape,
   Point,
 } from "@html-graph/html-graph";
-import {
-  createArrowPath,
-  createDirectionVector,
-  createRotatedPoint,
-} from "../shared/edge-utils";
 
 export interface EdgeRectangle {
   readonly x: number;
@@ -88,25 +83,29 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createDirectionVector(
+    const fromVect = this.createDirectionVector(
       params.source.direction,
       flipX,
       flipY,
     );
-    const toVect = createDirectionVector(params.target.direction, flipX, flipY);
+    const toVect = this.createDirectionVector(
+      params.target.direction,
+      flipX,
+      flipY,
+    );
 
     const fromRectVect: Point = { x: -1 * flipX, y: 0 };
     const toRectVect: Point = { x: 1 * flipX, y: 0 };
 
     const from: Point = { x: 0, y: 0 };
 
-    const pbl = createRotatedPoint(
+    const pbl = this.createRotatedPoint(
       { x: this.arrowLength, y: 0 },
       fromVect,
       from,
     );
 
-    const pel = createRotatedPoint(
+    const pel = this.createRotatedPoint(
       { x: width - this.arrowLength, y: height },
       toVect,
       { x: width, y: height },
@@ -168,7 +167,7 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
+      const arrowPath = this.createArrowPath(
         fromVect,
         from.x,
         from.y,
@@ -180,7 +179,7 @@ export class EdgeWithLabelShape implements EdgeShape {
     }
 
     if (this.targetArrow) {
-      const arrowPath = createArrowPath(
+      const arrowPath = this.createArrowPath(
         toVect,
         width,
         height,
@@ -293,5 +292,75 @@ export class EdgeWithLabelShape implements EdgeShape {
       flipX,
       flipY,
     };
+  }
+
+  private createArrowPath(
+    vect: Point,
+    shiftX: number,
+    shiftY: number,
+    arrowLength: number,
+    arrowWidth: number,
+  ): string {
+    const arrowPoints: Point[] = [
+      { x: 0, y: 0 },
+      { x: arrowLength, y: arrowWidth },
+      { x: arrowLength, y: -arrowWidth },
+    ];
+
+    const p: readonly Point[] = arrowPoints
+      .map((p) => this.createRotatedPoint(p, vect, { x: 0, y: 0 }))
+      .map((p) => ({ x: p.x + shiftX, y: p.y + shiftY }));
+
+    const amove = `M ${p[0].x} ${p[0].y}`;
+    const aline1 = `L ${p[1].x} ${p[1].y}`;
+    const aline2 = `L ${p[2].x} ${p[2].y}`;
+
+    return `${amove} ${aline1} ${aline2}`;
+  }
+
+  private createRotatedPoint(
+    point: Point,
+    vector: Point,
+    center: Point,
+  ): Point {
+    /**
+     * translate to center
+     *  1  0  c1
+     *  0  1  c2
+     *  0  0  1
+     *
+     * rotate
+     *  v0 -v1  0
+     *  v1  v0  0
+     *  0   0   1
+     *
+     * translate back
+     *  1  0  -c1
+     *  0  1  -c2
+     *  0  0  1
+     *
+     *  v0 -v1 (1 - v0) * c1 + v1 * c2
+     *  v1  v0 (1 - v0) * c2 -v1 * c1
+     *  0   0  1
+     */
+
+    return {
+      x:
+        vector.x * point.x -
+        vector.y * point.y +
+        ((1 - vector.x) * center.x + vector.y * center.y),
+      y:
+        vector.y * point.x +
+        vector.x * point.y +
+        ((1 - vector.x) * center.y - vector.y * center.x),
+    };
+  }
+
+  private createDirectionVector(
+    direction: number,
+    flipX: number,
+    flipY: number,
+  ): Point {
+    return { x: flipX * Math.cos(direction), y: flipY * Math.sin(direction) };
   }
 }

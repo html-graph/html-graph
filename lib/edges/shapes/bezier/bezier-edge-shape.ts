@@ -12,7 +12,7 @@ import {
 import {
   createBezierLinePath,
   createDetourBezierPath,
-  createPortCyclePath,
+  createCycleCirclePath,
 } from "../../paths";
 import { Point, zero } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
@@ -112,14 +112,14 @@ export class BezierEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createPortCyclePath(
+      linePath = createCycleCirclePath({
         fromVect,
-        this.portCycleRadius,
-        this.portCycleSmallRadius,
-        this.arrowLength,
-        this.hasSourceArrow,
-        this.hasTargetArrow,
-      );
+        radius: this.portCycleRadius,
+        smallRadius: this.portCycleSmallRadius,
+        arrowLength: this.arrowLength,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {

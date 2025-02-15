@@ -379,14 +379,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
-    const edgeShape = new EdgeShapeMock();
+    const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => edgeShape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -394,7 +394,7 @@ describe("CanvasController", () => {
     const container = div.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
 
-    expect(edgeSvg).toBe(edgeShape.svg);
+    expect(edgeSvg).toBe(shape.svg);
   });
 
   it("should throw error when trying to add existing edge", () => {
@@ -438,14 +438,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
-    const edgeShape = new EdgeShapeMock();
+    const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => edgeShape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -477,14 +477,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest1);
 
-    const edgeShape = new EdgeShapeMock();
+    const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => edgeShape,
+      shape,
     };
 
     expect(() => {
@@ -514,14 +514,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
-    const edgeShape = new EdgeShapeMock();
+    const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: "edge-1",
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => edgeShape,
+      shape,
     };
 
     expect(() => {
@@ -579,7 +579,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => shape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -666,7 +666,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -675,7 +675,7 @@ describe("CanvasController", () => {
 
     canvasController.updateEdge({
       edgeId: addEdgeRequest12.edgeId,
-      shape: () => newShape,
+      shape: newShape,
       priority: undefined,
     });
 
@@ -733,7 +733,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -846,7 +846,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => shape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1077,7 +1077,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => shape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1166,7 +1166,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1226,7 +1226,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1321,7 +1321,7 @@ describe("CanvasController", () => {
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => new EdgeShapeMock(),
+      shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
@@ -1578,14 +1578,14 @@ describe("CanvasController", () => {
 
     canvasController.addNode(addNodeRequest2);
 
-    const edgeShape = new EdgeShapeMock();
+    const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
       edgeId: undefined,
       from: "port-1",
       to: "port-2",
       priority: undefined,
-      shapeFactory: () => edgeShape,
+      shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);

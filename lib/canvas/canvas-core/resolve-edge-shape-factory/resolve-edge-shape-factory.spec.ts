@@ -20,10 +20,7 @@ describe("resolveEdgeShapeFactory", () => {
   it("should set specified functions for custom type", () => {
     const factoryFn = (): EdgeShape => new EdgeShapeMock();
 
-    const factory = resolveEdgeShapeFactory({
-      type: "custom",
-      factory: factoryFn,
-    });
+    const factory = resolveEdgeShapeFactory(factoryFn);
 
     expect(factory).toBe(factoryFn);
   });

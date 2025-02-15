@@ -1,4 +1,4 @@
-export const edgeConstants = {
+export const edgeConstants = Object.freeze({
   color: "#5c5c5c",
   width: 1,
   arrowLength: 15,
@@ -13,4 +13,4 @@ export const edgeConstants = {
   detourDirection: -Math.PI / 2,
   smallCycleRadius: 15,
   curvature: 90,
-};
+});

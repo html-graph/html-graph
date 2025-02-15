@@ -30,7 +30,7 @@ const node2 = createBasicNode({
   backPortId: "port-2-2",
 });
 
-const edgeShape = new EdgeWithLabelShape("Connection");
+const shape = new EdgeWithLabelShape("Connection");
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -38,12 +38,4 @@ canvas
   .attach(canvasElement)
   .addNode(node1)
   .addNode(node2)
-  .addEdge({
-    id: "edge-1",
-    from: "port-1-2",
-    to: "port-2-1",
-    shape: {
-      type: "custom",
-      factory: () => edgeShape,
-    },
-  });
+  .addEdge({ id: "edge-1", from: "port-1-2", to: "port-2-1", shape });

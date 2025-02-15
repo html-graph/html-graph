@@ -10,9 +10,11 @@ import { EdgeShape } from "../../edge-options";
 export const resolveEdgeShapeFactory: (
   options: EdgeShape,
 ) => EdgeShapeFactory = (options: EdgeShape) => {
+  if (typeof options === "function") {
+    return options;
+  }
+
   switch (options?.type) {
-    case "custom":
-      return options.factory;
     case "straight":
       return () =>
         new StraightEdgeShape({

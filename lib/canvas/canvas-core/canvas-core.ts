@@ -1,7 +1,6 @@
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
-import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/edges";
 import { GraphStore, PublicGraphStore } from "@/graph-store";
 import {
@@ -100,16 +99,11 @@ export class CanvasCore implements Canvas {
   }
 
   public addEdge(edge: AddEdgeRequest): CanvasCore {
-    const shapeFactory =
-      edge.shape !== undefined
-        ? resolveEdgeShapeFactory(edge.shape)
-        : this.edgeShapeFactory;
-
     this.canvasController.addEdge({
       edgeId: edge.id,
       from: edge.from,
       to: edge.to,
-      shapeFactory,
+      shape: edge.shape ?? this.edgeShapeFactory(),
       priority: edge.priority,
     });
 
@@ -117,14 +111,9 @@ export class CanvasCore implements Canvas {
   }
 
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasCore {
-    const shapeFactory =
-      request?.shape !== undefined
-        ? resolveEdgeShapeFactory(request.shape)
-        : undefined;
-
     this.canvasController.updateEdge({
       edgeId,
-      shape: shapeFactory,
+      shape: request?.shape,
       priority: request?.priority,
     });
 
