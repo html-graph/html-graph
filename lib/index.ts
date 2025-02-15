@@ -27,6 +27,7 @@ export type {
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
   UpdatePortRequest,
+  UpdateNodeRequest,
 } from "./canvas";
 
 export {

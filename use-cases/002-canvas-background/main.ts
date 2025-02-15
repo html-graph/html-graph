@@ -1,6 +1,6 @@
 import { HtmlGraphBuilder, AddNodeRequest } from "@html-graph/html-graph";
 import { backgroundDrawingFn } from "../shared/background-drawing-fn";
-import { createBasicNode } from "../shared/create-basic-node";
+import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement = document.getElementById("canvas")!;
 
@@ -29,7 +29,7 @@ const canvas = new HtmlGraphBuilder()
   })
   .build();
 
-const addNode1Request: AddNodeRequest = createBasicNode({
+const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 400,
@@ -37,7 +37,7 @@ const addNode1Request: AddNodeRequest = createBasicNode({
   backPortId: "port-1-out",
 });
 
-const addNode2Request: AddNodeRequest = createBasicNode({
+const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 600,
   y: 500,
@@ -45,7 +45,7 @@ const addNode2Request: AddNodeRequest = createBasicNode({
   backPortId: "port-2-out",
 });
 
-const addNode3Request: AddNodeRequest = createBasicNode({
+const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
   x: 200,
   y: 700,
@@ -53,7 +53,7 @@ const addNode3Request: AddNodeRequest = createBasicNode({
   backPortId: "port-3-out",
 });
 
-const addNode4Request: AddNodeRequest = createBasicNode({
+const addNode4Request: AddNodeRequest = createInOutNode({
   name: "Node 4",
   x: 1000,
   y: 600,

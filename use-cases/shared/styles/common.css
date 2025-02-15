@@ -18,7 +18,8 @@ body {
   color: var(--color-text);
 }
 
-button {
+button,
+input[type="range"] {
   cursor: pointer;
 }
 

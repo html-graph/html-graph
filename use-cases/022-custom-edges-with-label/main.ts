@@ -1,6 +1,6 @@
 import { HtmlGraphBuilder } from "@html-graph/html-graph";
 import { EdgeWithLabelShape } from "./edge-with-label-shape";
-import { createBasicNode } from "../shared/create-basic-node";
+import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -14,7 +14,7 @@ const canvas = new HtmlGraphBuilder()
   .setUserTransformableCanvas()
   .build();
 
-const node1 = createBasicNode({
+const node1 = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 400,
@@ -22,7 +22,7 @@ const node1 = createBasicNode({
   backPortId: "port-1-2",
 });
 
-const node2 = createBasicNode({
+const node2 = createInOutNode({
   name: "Node 2",
   x: 800,
   y: 600,

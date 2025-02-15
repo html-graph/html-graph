@@ -1,68 +1,68 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  CenterFn,
+  HtmlGraphBuilder,
+  Point,
+  UpdateNodeRequest,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
+const addNode1Request: AddNodeRequest = createInOutNode({
+  id: "node-1",
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "port-1-in",
+  backPortId: "port-1-out",
+});
 
-const text1 = document.createElement("div");
-text1.classList.add("text");
-text1.innerText = "1";
-node1.appendChild(text1);
+const addNode2Request: AddNodeRequest = createInOutNode({
+  id: "node-2",
+  name: "Node 2",
+  x: 500,
+  y: 500,
+  frontPortId: "port-2-in",
+  backPortId: "port-2-out",
+});
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
-
-const text2 = document.createElement("div");
-text2.classList.add("text");
-text2.innerText = "2";
-node2.appendChild(text2);
-
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
-
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
-
-node1.appendChild(port1);
-node2.appendChild(port2);
-
-const canvasElement = document.getElementById("canvas")!;
+const addEdgeRequest: AddEdgeRequest = {
+  from: "port-1-out",
+  to: "port-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({
-    element: node1,
-    x: 200,
-    y: 300,
-    ports: [{ id: "port-1", element: port1 }],
-    centerFn: (w, h) => ({ x: w, y: h }),
-  })
-  .addNode({
-    element: node2,
-    x: 600,
-    y: 500,
-    ports: [{ id: "port-2", element: port2 }],
-    centerFn: () => ({ x: 0, y: 0 }),
-  })
-  .addEdge({ from: "port-1", to: "port-2" });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest);
 
-let i = 0;
+const topLeftBtn: HTMLElement = document.getElementById("top-left")!;
+const centerBtn: HTMLElement = document.getElementById("center")!;
+const bottomRightBtn: HTMLElement = document.getElementById("bottom-right")!;
 
-setInterval(() => {
-  text1.innerText = i % 2 ? "1" : "111111111111";
-  text2.innerText = i % 2 ? "222222222222" : "2";
-  i++;
-}, 1000);
+topLeftBtn.addEventListener("click", () => {
+  const centerFn: CenterFn = (): Point => ({ x: 0, y: 0 });
+  const updateRequest: UpdateNodeRequest = { centerFn };
+
+  canvas.updateNode("node-1", updateRequest);
+});
+
+centerBtn.addEventListener("click", () => {
+  const centerFn: CenterFn = (w, h): Point => ({ x: w / 2, y: h / 2 });
+  const updateRequest: UpdateNodeRequest = { centerFn };
+
+  canvas.updateNode("node-1", updateRequest);
+});
+
+bottomRightBtn.addEventListener("click", () => {
+  const centerFn: CenterFn = (w, h): Point => ({ x: w, y: h });
+  const updateRequest: UpdateNodeRequest = { centerFn };
+
+  canvas.updateNode("node-1", updateRequest);
+});

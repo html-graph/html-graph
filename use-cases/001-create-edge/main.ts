@@ -4,13 +4,13 @@ import {
   Canvas,
   HtmlGraphBuilder,
 } from "@html-graph/html-graph";
-import { createBasicNode } from "../shared/create-basic-node";
+import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const addNode1Request: AddNodeRequest = createBasicNode({
+const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 400,
@@ -18,7 +18,7 @@ const addNode1Request: AddNodeRequest = createBasicNode({
   backPortId: "port-1-out",
 });
 
-const addNode2Request: AddNodeRequest = createBasicNode({
+const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 500,
   y: 500,

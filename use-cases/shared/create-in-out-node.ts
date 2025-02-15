@@ -1,6 +1,7 @@
 import { AddNodeRequest } from "@html-graph/html-graph";
 
-export function createBasicNode(params: {
+export function createInOutNode(params: {
+  id?: unknown;
   name: string;
   x: number;
   y: number;
@@ -21,6 +22,19 @@ export function createBasicNode(params: {
   const backPort = document.createElement("div");
   backPort.classList.add("node-port");
   node.appendChild(backPort);
+
+  if (params.id !== undefined) {
+    return {
+      id: params.id,
+      element: node,
+      x: params.x,
+      y: params.y,
+      ports: [
+        { id: params.frontPortId, element: frontPort },
+        { id: params.backPortId, element: backPort },
+      ],
+    };
+  }
 
   return {
     element: node,

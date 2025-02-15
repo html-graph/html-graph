@@ -1,21 +1,23 @@
 .node {
   position: relative;
-  min-width: 150px;
-  height: 50px;
-  background: #ffdbab;
+  width: 150px;
+  height: 150px;
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--color-node-border);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   user-select: none;
 }
 
-.text {
-  padding: 8px;
-}
-
-.port {
-  position: absolute;
-  background: green;
-  color: white;
-  padding: 3px;
+.node-port {
+  --port-size: 20px;
+  position: relative;
+  width: calc(2 * var(--port-size));
+  height: calc(2 * var(--port-size));
+  background: var(--color-background-2);
+  border: 1px solid var(--color-node-border);
+  border-radius: 50%;
 }
