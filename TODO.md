@@ -1,12 +1,8 @@
 # TODO
 
-- unit tests for edge utils
-- rid of edge factories
 - update port element
 - update node element
-- move edge factory to edge render
-- set edge shape
-- arrows customization
+- update edge fron and to
 - double port mark example
 - refactor examples
 - before transform started example
@@ -16,6 +12,7 @@
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
+- arrows customization
 - update edge ports
 - optimize memory draggable nodes
 - drag edge creation
