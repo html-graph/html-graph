@@ -1025,4 +1025,79 @@ describe("UserDraggableNodesCanvas", () => {
 
     expect(edgeSvg.style.zIndex).toBe("1");
   });
+
+  it("should call on drag finished with mouse", () => {
+    const onNodeDragFinished = jest.fn();
+
+    const canvasCore = new CanvasCore();
+    const canvas = new UserDraggableNodesCanvas(canvasCore, {
+      events: {
+        onNodeDragFinished,
+      },
+    });
+
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    canvas.attach(canvasElement);
+
+    const element = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    expect(onNodeDragFinished).toHaveBeenCalledWith({
+      nodeId: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+  });
+
+  it("should call on drag finished with touch", () => {
+    const onNodeDragFinished = jest.fn();
+
+    const canvasCore = new CanvasCore();
+    const canvas = new UserDraggableNodesCanvas(canvasCore, {
+      events: {
+        onNodeDragFinished,
+      },
+    });
+
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    canvas.attach(canvasElement);
+
+    const element = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchend", {
+        touches: [],
+      }),
+    );
+
+    expect(onNodeDragFinished).toHaveBeenCalledWith({
+      nodeId: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+  });
 });

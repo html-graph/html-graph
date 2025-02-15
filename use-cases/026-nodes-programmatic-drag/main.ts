@@ -1,8 +1,11 @@
 import {
   HtmlGraphBuilder,
-  AddNodePorts,
   HtmlGraphError,
+  Canvas,
+  AddNodeRequest,
+  AddEdgeRequest,
 } from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
 class NodesDragHandler {
   private readonly nodes = new Map<
@@ -35,68 +38,40 @@ class NodesDragHandler {
         output: "port-2-2",
       },
     ],
-    [
-      "node-3",
-      {
-        name: "Node 3",
-        x: 200,
-        y: 800,
-        input: "port-3-1",
-        output: "port-3-2",
-      },
-    ],
-    [
-      "node-4",
-      {
-        name: "Node 4",
-        x: 1000,
-        y: 600,
-        input: "port-4-1",
-        output: "port-4-2",
-      },
-    ],
   ]);
 
   private grabbedNode: string | null = null;
 
   public constructor(private readonly element: HTMLElement) {
-    const canvas = new HtmlGraphBuilder()
-      .setOptions({
-        edges: {
-          shape: {
-            hasTargetArrow: true,
-          },
-        },
-      })
-      .build();
-
+    const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+    const canvas: Canvas = builder.build();
+    const canvasElement: HTMLElement = document.getElementById("canvas")!;
     canvas.attach(canvasElement);
 
     this.nodes.forEach((value, key) => {
-      const [element, ports] = this.createNode(
-        value.name,
-        value.input,
-        value.output,
-      );
+      const addNodeRequest: AddNodeRequest = createInOutNode({
+        id: key,
+        name: value.name,
+        x: value.x,
+        y: value.y,
+        frontPortId: value.input,
+        backPortId: value.output,
+      });
 
-      element.addEventListener("mousedown", () => {
+      addNodeRequest.element.addEventListener("mousedown", () => {
         this.element.style.cursor = "grab";
         this.grabbedNode = key;
       });
 
-      canvas.addNode({
-        id: key,
-        element,
-        x: value.x,
-        y: value.y,
-        ports,
-      });
+      canvas.addNode(addNodeRequest);
     });
 
-    canvas
-      .addEdge({ from: "port-1-2", to: "port-2-1" })
-      .addEdge({ from: "port-3-2", to: "port-2-1" })
-      .addEdge({ from: "port-2-2", to: "port-4-1" });
+    const addEdgeRequest: AddEdgeRequest = {
+      from: "port-1-2",
+      to: "port-2-1",
+    };
+
+    canvas.addEdge(addEdgeRequest);
 
     element.addEventListener("mousemove", (event: MouseEvent) => {
       if (this.grabbedNode !== null) {
@@ -126,33 +101,6 @@ class NodesDragHandler {
       this.element.style.removeProperty("cursor");
       this.grabbedNode = null;
     });
-  }
-
-  public createNode(
-    name: string,
-    frontPortId: string,
-    backPortId: string,
-  ): [HTMLElement, AddNodePorts] {
-    const node = document.createElement("div");
-    node.classList.add("node");
-
-    const frontPort = document.createElement("div");
-    node.appendChild(frontPort);
-
-    const text = document.createElement("div");
-    text.innerText = name;
-    node.appendChild(text);
-
-    const backPort = document.createElement("div");
-    node.appendChild(backPort);
-
-    return [
-      node,
-      [
-        { id: frontPortId, element: frontPort },
-        { id: backPortId, element: backPort },
-      ],
-    ];
   }
 }
 

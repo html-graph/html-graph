@@ -30,7 +30,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
 
-  private onNodeDragFinished: () => void;
+  private onNodeDragFinished: (nodeId: NodeDragPayload) => void;
 
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
     this.nodes.has(nodeId),
@@ -391,6 +391,17 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private cancelMouseDrag(): void {
+    const node = this.model.getNode(this.grabbedNodeId);
+
+    if (node !== null) {
+      this.onNodeDragFinished({
+        nodeId: this.grabbedNodeId,
+        element: node.element,
+        x: node.x,
+        y: node.y,
+      });
+    }
+
     this.grabbedNodeId = null;
 
     if (this.element !== null) {
@@ -398,7 +409,6 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
 
     this.removeMouseDragListeners();
-    this.onNodeDragFinished();
   }
 
   private removeMouseDragListeners(): void {
@@ -408,9 +418,19 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private cancelTouchDrag(): void {
     this.previousTouchCoords = null;
+    const node = this.model.getNode(this.grabbedNodeId);
+
+    if (node !== null) {
+      this.onNodeDragFinished({
+        nodeId: this.grabbedNodeId,
+        element: node.element,
+        x: node.x,
+        y: node.y,
+      });
+    }
+
     this.grabbedNodeId = null;
     this.removeTouchDragListeners();
-    this.onNodeDragFinished();
   }
 
   private removeTouchDragListeners(): void {

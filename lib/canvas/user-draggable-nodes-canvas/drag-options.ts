@@ -6,6 +6,6 @@ export interface DragOptions {
   readonly events?: {
     readonly onNodeDrag?: (payload: NodeDragPayload) => void;
     readonly onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;
-    readonly onNodeDragFinished?: () => void;
+    readonly onNodeDragFinished?: (nodeId: NodeDragPayload) => void;
   };
 }
