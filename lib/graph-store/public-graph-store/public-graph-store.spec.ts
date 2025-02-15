@@ -1,9 +1,14 @@
 import { EdgeShapeMock } from "@/edges";
-import { GraphStore } from "../graph-store";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  AddPortRequest,
+  GraphStore,
+} from "../graph-store";
 import { PublicGraphStore } from "./public-graph-store";
 import { Point } from "@/point";
 
-const addNodeRequest1 = {
+const addNodeRequest1: AddNodeRequest = {
   nodeId: "node-1",
   element: document.createElement("div"),
   x: 0,
@@ -12,15 +17,14 @@ const addNodeRequest1 = {
   priority: 0,
 };
 
-const addPortRequest1 = {
+const addPortRequest1: AddPortRequest = {
   portId: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
-  centerFn: (): Point => ({ x: 0, y: 0 }),
   direction: 0,
 };
 
-const addNodeRequest2 = {
+const addNodeRequest2: AddNodeRequest = {
   nodeId: "node-2",
   element: document.createElement("div"),
   x: 0,
@@ -29,15 +33,14 @@ const addNodeRequest2 = {
   priority: 0,
 };
 
-const addPortRequest2 = {
+const addPortRequest2: AddPortRequest = {
   portId: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
-  centerFn: (): Point => ({ x: 0, y: 0 }),
   direction: 0,
 };
 
-const addEdgeRequest12 = {
+const addEdgeRequest12: AddEdgeRequest = {
   edgeId: "edge-1-2",
   from: "port-1",
   to: "port-2",
@@ -45,7 +48,7 @@ const addEdgeRequest12 = {
   priority: 0,
 };
 
-const addEdgeRequest11 = {
+const addEdgeRequest11: AddEdgeRequest = {
   edgeId: "edge-1-1",
   from: "port-1",
   to: "port-1",
@@ -102,7 +105,6 @@ describe("PublicGraphStore", () => {
 
     expect(publicStore.getPort(addPortRequest1.portId)).toStrictEqual({
       element: addPortRequest1.element,
-      centerFn: addPortRequest1.centerFn,
       direction: addPortRequest1.direction,
     });
   });

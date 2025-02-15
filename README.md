@@ -67,16 +67,16 @@ const node1 = createNode({
   name: "Node 1",
   x: 200,
   y: 400,
-  frontPortId: "port-1-1",
-  backPortId: "port-1-2",
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
 });
 
 const node2 = createNode({
   name: "Node 2",
   x: 600,
   y: 500,
-  frontPortId: "port-2-1",
-  backPortId: "port-2-2",
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
 });
 
 const canvasElement = document.getElementById("canvas");
@@ -85,7 +85,7 @@ canvas
   .attach(canvasElement)
   .addNode(node1)
   .addNode(node2)
-  .addEdge({ from: "port-1-2", to: "port-2-1" });
+  .addEdge({ from: "node-1-out", to: "node-2-in" });
 ```
 
 ## Features:

@@ -1,91 +1,79 @@
 import {
+  BezierEdgeShape,
   EdgeShapeFactory,
-  createBezierEdgeShapeFactory,
-  createHorizontalEdgeShapeFactory,
-  createStraightEdgeShareFactory,
-  createVerticalEdgeShapeFactory,
+  HorizontalEdgeShape,
+  StraightEdgeShape,
+  VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShape } from "../../edge-options";
-import { defaultConstants } from "./default-constants";
 
 export const resolveEdgeShapeFactory: (
   options: EdgeShape,
 ) => EdgeShapeFactory = (options: EdgeShape) => {
+  if (typeof options === "function") {
+    return options;
+  }
+
   switch (options?.type) {
-    case "custom":
-      return options.factory;
     case "straight":
-      return createStraightEdgeShareFactory({
-        color: options.color ?? defaultConstants.edgeColor,
-        width: options.width ?? defaultConstants.edgeWidth,
-        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
-        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
-        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
-        hasSourceArrow:
-          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
-        hasTargetArrow:
-          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
-        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
-        roundness: options.roundness ?? defaultConstants.roundness,
-        detourDistance:
-          options.detourDistance ?? defaultConstants.detourDistance,
-        detourDirection:
-          options.detourDirection ?? defaultConstants.detourDirection,
-      });
+      return () =>
+        new StraightEdgeShape({
+          color: options.color,
+          width: options.width,
+          arrowLength: options.arrowLength,
+          arrowWidth: options.arrowWidth,
+          arrowOffset: options.arrowOffset,
+          hasSourceArrow: options.hasSourceArrow,
+          hasTargetArrow: options.hasTargetArrow,
+          cycleSquareSide: options.cycleSquareSide,
+          roundness: options.roundness,
+          detourDistance: options.detourDistance,
+          detourDirection: options.detourDirection,
+        });
     case "horizontal":
-      return createHorizontalEdgeShapeFactory({
-        color: options.color ?? defaultConstants.edgeColor,
-        width: options.width ?? defaultConstants.edgeWidth,
-        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
-        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
-        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
-        hasSourceArrow:
-          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
-        hasTargetArrow:
-          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
-        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
-        roundness: options.roundness ?? defaultConstants.roundness,
-        detourDistance:
-          options.detourDistance ?? defaultConstants.detourDistance,
-        detourDirection:
-          options.detourDirection ?? defaultConstants.detourDirection,
-      });
+      return () =>
+        new HorizontalEdgeShape({
+          color: options.color,
+          width: options.width,
+          arrowLength: options.arrowLength,
+          arrowWidth: options.arrowWidth,
+          arrowOffset: options.arrowOffset,
+          hasSourceArrow: options.hasSourceArrow,
+          hasTargetArrow: options.hasTargetArrow,
+          cycleSquareSide: options.cycleSquareSide,
+          roundness: options.roundness,
+          detourDistance: options.detourDistance,
+          detourDirection: options.detourDirection,
+        });
     case "vertical":
-      return createVerticalEdgeShapeFactory({
-        color: options.color ?? defaultConstants.edgeColor,
-        width: options.width ?? defaultConstants.edgeWidth,
-        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
-        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
-        arrowOffset: options.arrowOffset ?? defaultConstants.edgeArrowOffset,
-        hasSourceArrow:
-          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
-        hasTargetArrow:
-          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
-        cycleSquareSide: options.cycleSquareSide ?? defaultConstants.cycleSize,
-        roundness: options.roundness ?? defaultConstants.roundness,
-        detourDistance:
-          options.detourDistance ?? defaultConstants.detourDistance,
-        detourDirection:
-          options.detourDirection ?? defaultConstants.detourDirection,
-      });
+      return () =>
+        new VerticalEdgeShape({
+          color: options.color,
+          width: options.width,
+          arrowLength: options.arrowLength,
+          arrowWidth: options.arrowWidth,
+          arrowOffset: options.arrowOffset,
+          hasSourceArrow: options.hasSourceArrow,
+          hasTargetArrow: options.hasTargetArrow,
+          cycleSquareSide: options.cycleSquareSide,
+          roundness: options.roundness,
+          detourDistance: options.detourDistance,
+          detourDirection: options.detourDirection,
+        });
     default:
-      return createBezierEdgeShapeFactory({
-        color: options.color ?? defaultConstants.edgeColor,
-        width: options.width ?? defaultConstants.edgeWidth,
-        arrowLength: options.arrowLength ?? defaultConstants.edgeArrowLength,
-        arrowWidth: options.arrowWidth ?? defaultConstants.edgeArrowWidth,
-        hasSourceArrow:
-          options.hasSourceArrow ?? defaultConstants.hasSourceArrow,
-        hasTargetArrow:
-          options.hasTargetArrow ?? defaultConstants.hasTargetArrow,
-        cycleRadius: options.cycleRadius ?? defaultConstants.cycleSize,
-        smallCycleRadius:
-          options.smallCycleRadius ?? defaultConstants.smallCycleSize,
-        curvature: options.curvature ?? defaultConstants.curvature,
-        detourDistance:
-          options.detourDistance ?? defaultConstants.detourDistance,
-        detourDirection:
-          options.detourDirection ?? defaultConstants.detourDirection,
-      });
+      return () =>
+        new BezierEdgeShape({
+          color: options.color,
+          width: options.width,
+          arrowLength: options.arrowLength,
+          arrowWidth: options.arrowWidth,
+          hasSourceArrow: options.hasSourceArrow,
+          hasTargetArrow: options.hasTargetArrow,
+          cycleRadius: options.cycleRadius,
+          smallCycleRadius: options.smallCycleRadius,
+          curvature: options.curvature,
+          detourDistance: options.detourDistance,
+          detourDirection: options.detourDirection,
+        });
   }
 };

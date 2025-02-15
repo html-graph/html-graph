@@ -1,2 +1,2 @@
+export * from "./edge-shape-factory";
 export * from "./shapes";
-export * from "./factories";

@@ -2,6 +2,7 @@ import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
+import { EdgeRenderPort } from "@/edges";
 
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;
@@ -73,7 +74,7 @@ export class HtmlController {
     this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
     this.container.appendChild(edge.shape.svg);
 
-    this.updateEdge(edgeId);
+    this.renderEdge(edgeId);
     this.updateEdgePriority(edgeId);
   }
 
@@ -132,7 +133,7 @@ export class HtmlController {
     this.container.appendChild(edge.shape.svg);
   }
 
-  public updateEdge(edgeId: unknown): void {
+  public renderEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
@@ -152,45 +153,30 @@ export class HtmlController {
       y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy,
     };
 
-    const deltaCenterFrom = portFrom.centerFn(
-      rectFrom.width * viewportMatrix.scale,
-      rectFrom.height * viewportMatrix.scale,
-    );
-
-    const deltaCenterTo = portTo.centerFn(
-      rectTo.width * viewportMatrix.scale,
-      rectTo.height * viewportMatrix.scale,
-    );
-
-    const centerFrom: Point = {
-      x: from.x + deltaCenterFrom.x,
-      y: from.y + deltaCenterFrom.y,
+    const source: EdgeRenderPort = {
+      x: from.x,
+      y: from.y,
+      width: rectFrom.width * viewportMatrix.scale,
+      height: rectFrom.height * viewportMatrix.scale,
+      direction: portFrom.direction,
+      portId: edge.from,
+      nodeId: this.graphStore.getPortNodeId(edge.from),
     };
 
-    const centerTo: Point = {
-      x: to.x + deltaCenterTo.x,
-      y: to.y + deltaCenterTo.y,
+    const target: EdgeRenderPort = {
+      x: to.x,
+      y: to.y,
+      width: rectTo.width * viewportMatrix.scale,
+      height: rectTo.height * viewportMatrix.scale,
+      direction: portTo.direction,
+      portId: edge.to,
+      nodeId: this.graphStore.getPortNodeId(edge.to),
     };
 
-    const x = Math.min(centerFrom.x, centerTo.x);
-    const y = Math.min(centerFrom.y, centerTo.y);
-    const width = Math.abs(centerTo.x - centerFrom.x);
-    const height = Math.abs(centerTo.y - centerFrom.y);
-
-    edge.shape.svg.style.width = `${width}px`;
-    edge.shape.svg.style.height = `${height}px`;
-    edge.shape.svg.style.transform = `translate(${x}px, ${y}px)`;
-
-    const flipX = centerFrom.x <= centerTo.x ? 1 : -1;
-    const flipY = centerFrom.y <= centerTo.y ? 1 : -1;
-
-    edge.shape.update(
-      { x: width, y: height },
-      flipX,
-      flipY,
-      portFrom.direction,
-      portTo.direction,
-    );
+    edge.shape.render({
+      source,
+      target,
+    });
   }
 
   public updateEdgePriority(edgeId: unknown): void {

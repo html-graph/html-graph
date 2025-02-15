@@ -367,13 +367,9 @@ describe("ResizeReactiveNodesCanvas", () => {
 
     const shape = new EdgeShapeMock();
 
-    canvas.addEdge({
-      from: "port-1",
-      to: "port-1",
-      shape: { type: "custom", factory: () => shape },
-    });
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
 
-    const spy = jest.spyOn(shape, "update");
+    const spy = jest.spyOn(shape, "render");
 
     triggerResizeFor(element);
 

@@ -6,7 +6,7 @@ export class EdgeShapeMock implements EdgeShape {
     "svg",
   );
 
-  public update(): void {
+  public render(): void {
     // mock method is intended to be dummy
   }
 }

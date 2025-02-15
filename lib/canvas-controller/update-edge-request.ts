@@ -1,7 +1,7 @@
-import { EdgeShapeFactory } from "@/edges";
+import { EdgeShape } from "@/edges";
 
 export interface UpdateEdgeRequest {
   readonly edgeId: unknown;
-  readonly shape: EdgeShapeFactory | undefined;
+  readonly shape: EdgeShape | undefined;
   readonly priority: number | undefined;
 }

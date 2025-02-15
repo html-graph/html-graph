@@ -8,7 +8,6 @@ export interface Options {
     readonly priorityFn: PriorityFn;
   };
   readonly ports: {
-    readonly centerFn: CenterFn;
     readonly direction: number;
   };
   readonly edges: {

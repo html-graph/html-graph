@@ -18,7 +18,6 @@ export const createOptions: (apiOptions: CoreOptions | undefined) => Options = (
       priorityFn: priorities.nodesPriorityFn,
     },
     ports: {
-      centerFn: apiOptions?.ports?.centerFn ?? standardCenterFn,
       direction: apiOptions?.ports?.direction ?? 0,
     },
     edges: {

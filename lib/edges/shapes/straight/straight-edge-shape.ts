@@ -1,15 +1,22 @@
 import { EdgeShape } from "../edge-shape";
+import { EdgeRenderParams } from "../edge-render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createRotatedPoint,
   createEdgeLine,
-} from "../utils";
-import { createRoundedPath } from "../utils";
+  createEdgeRectangle,
+} from "../../utils";
+import {
+  createCycleSquarePath,
+  createDetourStraightPath,
+  createStraightLinePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
+import { StraightEdgeParams } from "./straight-edge-params";
+import { edgeConstants } from "../edge-constants";
 
 export class StraightEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -22,44 +29,137 @@ export class StraightEdgeShape implements EdgeShape {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(
-    color: string,
-    width: number,
-    private readonly arrowLength: number,
-    private readonly arrowWidth: number,
-    private readonly arrowOffset: number,
-    hasSourceArrow: boolean,
-    hasTargetArrow: boolean,
-    private readonly roundness: number,
-  ) {
+  private readonly arrowLength: number;
+
+  private readonly arrowWidth: number;
+
+  private readonly arrowOffset: number;
+
+  private readonly roundness: number;
+
+  private readonly cycleSquareSide: number;
+
+  private readonly detourDirection: number;
+
+  private readonly detourDistance: number;
+
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  public constructor(params?: StraightEdgeParams) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+
+    this.roundness = Math.min(
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
+    );
+
+    this.detourDirection =
+      params?.detourDirection ?? edgeConstants.detourDirection;
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
+    const color = params?.color ?? edgeConstants.color;
+    const width = params?.width ?? edgeConstants.width;
+
     this.svg.appendChild(this.group);
     this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
-    if (hasSourceArrow) {
+    if (this.hasSourceArrow) {
       this.sourceArrow = createEdgeArrow(color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (hasTargetArrow) {
+    if (this.hasTargetArrow) {
       this.targetArrow = createEdgeArrow(color);
       this.group.appendChild(this.targetArrow);
     }
   }
 
-  public update(
-    to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-    toDir: number,
-  ): void {
+  public render(params: EdgeRenderParams): void {
+    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+      params.source,
+      params.target,
+    );
+
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+    this.svg.style.width = `${width}px`;
+    this.svg.style.height = `${height}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
-    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
+    const fromVect = createFlipDirectionVector(
+      params.source.direction,
+      flipX,
+      flipY,
+    );
+    const toVect = createFlipDirectionVector(
+      params.target.direction,
+      flipX,
+      flipY,
+    );
 
-    const linePath = this.createLinePath(to, fromVect, toVect);
+    const to: Point = {
+      x: width,
+      y: height,
+    };
+
+    let linePath: string;
+    let targetVect = toVect;
+    let targetArrowLength = -this.arrowLength;
+
+    if (params.source.portId === params.target.portId) {
+      linePath = createCycleSquarePath({
+        fromVect,
+        arrowLength: this.arrowLength,
+        side: this.cycleSquareSide,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+      targetVect = fromVect;
+      targetArrowLength = this.arrowLength;
+    } else if (params.source.nodeId === params.target.nodeId) {
+      linePath = createDetourStraightPath({
+        to,
+        fromVect,
+        toVect,
+        flipX,
+        flipY,
+        arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+    } else {
+      linePath = createStraightLinePath({
+        to,
+        fromVect,
+        toVect,
+        arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+    }
 
     this.line.setAttribute("d", linePath);
 
@@ -76,29 +176,13 @@ export class StraightEdgeShape implements EdgeShape {
 
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
-        toVect,
+        targetVect,
         to,
-        -this.arrowLength,
+        targetArrowLength,
         this.arrowWidth,
       );
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createLinePath(to: Point, fromVect: Point, toVect: Point): string {
-    const pba: Point = this.sourceArrow
-      ? createRotatedPoint({ x: this.arrowLength, y: zero.y }, fromVect, zero)
-      : zero;
-    const pea: Point = this.targetArrow
-      ? createRotatedPoint({ x: to.x - this.arrowLength, y: to.y }, toVect, to)
-      : to;
-
-    const gap = this.arrowLength + this.arrowOffset;
-
-    const pbl = createRotatedPoint({ x: gap, y: zero.y }, fromVect, zero);
-    const pel = createRotatedPoint({ x: to.x - gap, y: to.y }, toVect, to);
-
-    return createRoundedPath([pba, pbl, pel, pea], this.roundness);
   }
 }

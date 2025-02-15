@@ -35,7 +35,6 @@ export class PublicGraphStore {
 
     return {
       element: port.element,
-      centerFn: port.centerFn,
       direction: port.direction,
     };
   }

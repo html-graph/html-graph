@@ -7,7 +7,7 @@ import {
 import { HtmlController } from "./html-controller";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { Point } from "@/point";
-import { EdgeShapeMock } from "@/edges";
+import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 
 const createHtmlController = (params?: {
   transformer?: ViewportTransformer;
@@ -43,7 +43,6 @@ const addPortRequest1: AddPortRequest = {
   portId: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
-  centerFn,
   direction: 0,
 };
 
@@ -55,7 +54,6 @@ const addPortRequest2: AddPortRequest = {
   portId: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
-  centerFn,
   direction: 0,
 };
 
@@ -67,14 +65,6 @@ const addEdgeRequest12: AddEdgeRequest = {
   edgeId: "edge-12",
   from: "port-1",
   to: "port-2",
-  shape: new EdgeShapeMock(),
-  priority: 0,
-};
-
-const addEdgeRequest21: AddEdgeRequest = {
-  edgeId: "edge-21",
-  from: "port-2",
-  to: "port-1",
   shape: new EdgeShapeMock(),
   priority: 0,
 };
@@ -339,17 +329,32 @@ describe("HtmlController", () => {
     htmlController.attachNode(addNodeRequest2.nodeId);
     htmlController.attachEdge(addEdgeRequest12.edgeId);
 
-    const spy = jest.spyOn(addEdgeRequest12.shape, "update");
+    const spy = jest.spyOn(addEdgeRequest12.shape, "render");
 
-    htmlController.updateEdge(addEdgeRequest12.edgeId);
+    htmlController.renderEdge(addEdgeRequest12.edgeId);
 
-    expect(spy).toHaveBeenCalledWith(
-      { x: 100, y: 100 },
-      1,
-      1,
-      addPortRequest1.direction,
-      addPortRequest2.direction,
-    );
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest1.portId,
+        nodeId: addPortRequest1.nodeId,
+        direction: 0,
+      },
+      target: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: addPortRequest2.portId,
+        nodeId: addPortRequest2.nodeId,
+        direction: 0,
+      },
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should update edge priority", () => {
@@ -376,34 +381,5 @@ describe("HtmlController", () => {
     const edgeSvg = container.children[2] as SVGSVGElement;
 
     expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should flip edge", () => {
-    const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
-    const div = document.createElement("div");
-    htmlController.attach(div);
-
-    store.addNode(addNodeRequest1);
-    store.addNode(addNodeRequest2);
-    store.addPort(addPortRequest1);
-    store.addPort(addPortRequest2);
-    store.addEdge(addEdgeRequest21);
-
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest21.edgeId);
-
-    const spy = jest.spyOn(addEdgeRequest21.shape, "update");
-
-    htmlController.updateEdge(addEdgeRequest21.edgeId);
-
-    expect(spy).toHaveBeenCalledWith(
-      { x: 100, y: 100 },
-      -1,
-      -1,
-      addPortRequest2.direction,
-      addPortRequest1.direction,
-    );
   });
 });

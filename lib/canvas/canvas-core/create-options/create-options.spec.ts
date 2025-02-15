@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { createOptions } from "./create-options";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
-import { BezierEdgeShape, EdgeType, StraightEdgeShape } from "@/edges";
+import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
 
 describe("createOptions", () => {
   it("should return standard nodes center fn", () => {
@@ -41,24 +41,6 @@ describe("createOptions", () => {
     expect(options.nodes.priorityFn).toBe(fn);
   });
 
-  it("should return standard ports center fn", () => {
-    const options = createOptions({});
-
-    expect(options.ports.centerFn).toBe(standardCenterFn);
-  });
-
-  it("should return specified nodes center fn", () => {
-    const fn = (): Point => ({ x: 0, y: 0 });
-
-    const options = createOptions({
-      ports: {
-        centerFn: fn,
-      },
-    });
-
-    expect(options.ports.centerFn).toBe(fn);
-  });
-
   it("should return standard ports direction", () => {
     const options = createOptions({});
 
@@ -95,7 +77,7 @@ describe("createOptions", () => {
 
   it("should return standard edges shape factory", () => {
     const options = createOptions({});
-    const shape = options.edges.shapeFactory(EdgeType.Regular);
+    const shape = options.edges.shapeFactory();
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
@@ -109,7 +91,7 @@ describe("createOptions", () => {
       },
     });
 
-    const shape = options.edges.shapeFactory(EdgeType.Regular);
+    const shape = options.edges.shapeFactory();
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });

@@ -1,7 +1,9 @@
 # TODO
 
+- update port element
+- update node element
+- update edge fron and to
 - double port mark example
-- set edge shape
 - refactor examples
 - before transform started example
 - improve reexport
@@ -10,6 +12,7 @@
   - refactor update edge shape
   - pass canvas host dimensions
   - node creation factory function?
+- arrows customization
 - update edge ports
 - optimize memory draggable nodes
 - drag edge creation

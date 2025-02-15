@@ -51,7 +51,6 @@ export class GraphStore {
   public addPort(request: AddPortRequest): void {
     this.ports.set(request.portId, {
       element: request.element,
-      centerFn: request.centerFn,
       direction: request.direction,
     });
 

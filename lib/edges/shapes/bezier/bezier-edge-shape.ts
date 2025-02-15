@@ -1,14 +1,22 @@
 import { EdgeShape } from "../edge-shape";
+import { EdgeRenderParams } from "../edge-render-params";
 import {
   createArrowPath,
   createFlipDirectionVector,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeSvg,
-  createRotatedPoint,
   createEdgeLine,
-} from "../utils";
+  createEdgeRectangle,
+} from "../../utils";
+import {
+  createBezierLinePath,
+  createDetourBezierPath,
+  createCycleCirclePath,
+} from "../../paths";
 import { Point, zero } from "@/point";
+import { BezierEdgeParams } from "./bezier-edge-params";
+import { edgeConstants } from "../edge-constants";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -21,43 +29,125 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(
-    color: string,
-    width: number,
-    private readonly curvature: number,
-    private readonly arrowLength: number,
-    private readonly arrowWidth: number,
-    hasSourceArrow: boolean,
-    hasTargetArrow: boolean,
-  ) {
+  private readonly arrowLength: number;
+
+  private readonly arrowWidth: number;
+
+  private readonly curvature: number;
+
+  private readonly portCycleRadius: number;
+
+  private readonly portCycleSmallRadius: number;
+
+  private readonly detourDirection: number;
+
+  private readonly detourDistance: number;
+
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  public constructor(params?: BezierEdgeParams) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
+    this.curvature = params?.curvature ?? edgeConstants.curvature;
+    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
+    this.portCycleSmallRadius =
+      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
+    this.detourDirection =
+      params?.detourDirection ?? edgeConstants.detourDirection;
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+    const color = params?.color ?? edgeConstants.color;
+    const width = params?.width ?? edgeConstants.width;
+
     this.svg.appendChild(this.group);
     this.line = createEdgeLine(color, width);
     this.group.appendChild(this.line);
 
-    if (hasSourceArrow) {
+    if (this.hasSourceArrow) {
       this.sourceArrow = createEdgeArrow(color);
       this.group.appendChild(this.sourceArrow);
     }
 
-    if (hasTargetArrow) {
+    if (this.hasTargetArrow) {
       this.targetArrow = createEdgeArrow(color);
       this.group.appendChild(this.targetArrow);
     }
   }
 
-  public update(
-    to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-    toDir: number,
-  ): void {
+  public render(params: EdgeRenderParams): void {
+    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+      params.source,
+      params.target,
+    );
+
+    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+    this.svg.style.width = `${width}px`;
+    this.svg.style.height = `${height}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(fromDir, flipX, flipY);
-    const toVect = createFlipDirectionVector(toDir, flipX, flipY);
+    const fromVect = createFlipDirectionVector(
+      params.source.direction,
+      flipX,
+      flipY,
+    );
+    const toVect = createFlipDirectionVector(
+      params.target.direction,
+      flipX,
+      flipY,
+    );
 
-    const linePath = this.createLinePath(to, fromVect, toVect);
+    const to: Point = {
+      x: width,
+      y: height,
+    };
+
+    let linePath: string;
+    let targetVect = toVect;
+    let targetArrowLength = -this.arrowLength;
+
+    if (params.source.portId === params.target.portId) {
+      linePath = createCycleCirclePath({
+        fromVect,
+        radius: this.portCycleRadius,
+        smallRadius: this.portCycleSmallRadius,
+        arrowLength: this.arrowLength,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+      targetVect = fromVect;
+      targetArrowLength = this.arrowLength;
+    } else if (params.source.nodeId === params.target.nodeId) {
+      linePath = createDetourBezierPath({
+        to,
+        fromVect,
+        toVect,
+        flipX,
+        flipY,
+        arrowLength: this.arrowLength,
+        detourDirection: this.detourDirection,
+        detourDistance: this.detourDistance,
+        curvature: this.curvature,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+    } else {
+      linePath = createBezierLinePath({
+        to,
+        fromVect,
+        toVect,
+        arrowLength: this.arrowLength,
+        curvature: this.curvature,
+        hasSourceArrow: this.hasSourceArrow,
+        hasTargetArrow: this.hasTargetArrow,
+      });
+    }
+
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
@@ -73,47 +163,13 @@ export class BezierEdgeShape implements EdgeShape {
 
     if (this.targetArrow) {
       const arrowPath = createArrowPath(
-        toVect,
+        targetVect,
         to,
-        -this.arrowLength,
+        targetArrowLength,
         this.arrowWidth,
       );
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createLinePath(to: Point, fromVect: Point, toVect: Point): string {
-    const pb = createRotatedPoint(
-      { x: this.arrowLength, y: zero.y },
-      fromVect,
-      zero,
-    );
-
-    const pe = createRotatedPoint(
-      { x: to.x - this.arrowLength, y: to.y },
-      toVect,
-      to,
-    );
-
-    const bpb: Point = {
-      x: pb.x + fromVect.x * this.curvature,
-      y: pb.y + fromVect.y * this.curvature,
-    };
-
-    const bpe: Point = {
-      x: pe.x - toVect.x * this.curvature,
-      y: pe.y - toVect.y * this.curvature,
-    };
-
-    const lcurve = `M ${pb.x} ${pb.y} C ${bpb.x} ${bpb.y}, ${bpe.x} ${bpe.y}, ${pe.x} ${pe.y}`;
-    const preLine = this.sourceArrow
-      ? ""
-      : `M ${zero.x} ${zero.y} L ${pb.x} ${pb.y} `;
-    const postLine = this.targetArrow
-      ? ""
-      : ` M ${pe.x} ${pe.y} L ${to.x} ${to.y}`;
-
-    return `${preLine}${lcurve}${postLine}`;
   }
 }

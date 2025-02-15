@@ -1,0 +1,16 @@
+export const edgeConstants = Object.freeze({
+  color: "#5c5c5c",
+  width: 1,
+  arrowLength: 15,
+  arrowWidth: 4,
+  arrowOffset: 15,
+  hasSourceArrow: false,
+  hasTargetArrow: false,
+  cycleRadius: 30,
+  cycleSquareSide: 30,
+  roundness: 10,
+  detourDistance: 100,
+  detourDirection: -Math.PI / 2,
+  smallCycleRadius: 15,
+  curvature: 90,
+});

@@ -1,13 +1,7 @@
-import { Point } from "@/point";
+import { EdgeRenderParams } from "./edge-render-params";
 
 export interface EdgeShape {
   readonly svg: SVGSVGElement;
 
-  update(
-    to: Point,
-    flipX: number,
-    flipY: number,
-    fromDir: number,
-    toDir: number,
-  ): void;
+  render(params: EdgeRenderParams): void;
 }

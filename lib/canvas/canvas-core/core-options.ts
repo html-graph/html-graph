@@ -22,11 +22,6 @@ export interface CoreOptions {
    */
   readonly ports?: {
     /**
-     * specifies how to determine center of port
-     * center of port determines point to which edge attaches
-     */
-    readonly centerFn?: CenterFn;
-    /**
      * specifies default direction of port
      */
     readonly direction?: number;

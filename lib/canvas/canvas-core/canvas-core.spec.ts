@@ -1,4 +1,4 @@
-import { EdgeShapeMock } from "@/edges";
+import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 import { CanvasCore } from "./canvas-core";
 import { HtmlGraphError } from "@/error";
 
@@ -208,9 +208,7 @@ describe("CanvasCore", () => {
 
     const shape = new EdgeShapeMock();
 
-    canvas.updateEdge("edge-1", {
-      shape: { type: "custom", factory: () => shape },
-    });
+    canvas.updateEdge("edge-1", { shape });
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2];
@@ -343,60 +341,34 @@ describe("CanvasCore", () => {
     });
 
     const shape = new EdgeShapeMock();
-    canvas.addEdge({
-      from: "port-1",
-      to: "port-1",
-      shape: { type: "custom", factory: () => shape },
-    });
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
 
-    const spy = jest.spyOn(shape, "update");
+    const spy = jest.spyOn(shape, "render");
 
     canvas.updatePort("port-1", { direction: Math.PI });
 
-    expect(spy).toHaveBeenCalledWith({ x: 0, y: 0 }, 1, 1, Math.PI, Math.PI);
-  });
+    const expected: EdgeRenderParams = {
+      source: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: Math.PI,
+      },
+      target: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: Math.PI,
+      },
+    };
 
-  it("should update port center function", () => {
-    const canvas = new CanvasCore();
-    const canvasElement = document.createElement("div");
-    canvas.attach(canvasElement);
-
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement({ width: 100, height: 100 }),
-        },
-      ],
-    });
-
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: createElement({ x: 100, y: 100 }),
-        },
-      ],
-    });
-
-    const shape = new EdgeShapeMock();
-    canvas.addEdge({
-      from: "port-1",
-      to: "port-2",
-      shape: { type: "custom", factory: () => shape },
-    });
-
-    const spy = jest.spyOn(shape, "update");
-
-    canvas.updatePort("port-1", { centerFn: () => ({ x: 0, y: 0 }) });
-
-    expect(spy).toHaveBeenCalledWith({ x: 100, y: 100 }, 1, 1, 0, 0);
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should unmark port", () => {

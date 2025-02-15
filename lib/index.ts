@@ -34,17 +34,16 @@ export {
   StraightEdgeShape,
   HorizontalEdgeShape,
   VerticalEdgeShape,
-  CycleCircleEdgeShape,
-  CycleSquareEdgeShape,
-  DetourStraightEdgeShape,
-  DetourBezierEdgeShape,
-  createBezierEdgeShapeFactory,
-  createStraightEdgeShareFactory,
-  createHorizontalEdgeShapeFactory,
-  createVerticalEdgeShapeFactory,
-  EdgeType,
 } from "./edges";
-export type { EdgeShape } from "./edges";
+export type {
+  EdgeShape,
+  EdgeRenderParams,
+  EdgeRenderPort,
+  BezierEdgeParams,
+  HorizontalEdgeParams,
+  VerticalEdgeParams,
+  StraightEdgeParams,
+} from "./edges";
 
 export type { Point } from "./point";
 

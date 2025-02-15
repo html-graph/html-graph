@@ -1,4 +1,8 @@
-import { BezierEdgeShape, HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  BezierEdgeParams,
+  BezierEdgeShape,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
 
 const canvas = new HtmlGraphBuilder()
   .setOptions({
@@ -51,19 +55,43 @@ canvas
 
 let i = 0;
 
-const redController = new BezierEdgeShape("red", 2, 90, 15, 4, true, false);
+const redParams: BezierEdgeParams = {
+  color: "red",
+  width: 2,
+  arrowLength: 15,
+  arrowWidth: 4,
+  curvature: 90,
+  hasSourceArrow: true,
+  hasTargetArrow: false,
+  cycleRadius: 40,
+  smallCycleRadius: 20,
+  detourDistance: 100,
+  detourDirection: -Math.PI / 2,
+};
 
-const greenController = new BezierEdgeShape("green", 2, 90, 15, 4, false, true);
+const greenParams: BezierEdgeParams = {
+  color: "green",
+  width: 2,
+  arrowLength: 15,
+  arrowWidth: 4,
+  curvature: 90,
+  hasSourceArrow: false,
+  hasTargetArrow: true,
+  cycleRadius: 40,
+  smallCycleRadius: 20,
+  detourDistance: 100,
+  detourDirection: -Math.PI / 2,
+};
+
+const redShape = new BezierEdgeShape(redParams);
+
+const greenShape = new BezierEdgeShape(greenParams);
 
 setInterval(() => {
   if (i % 2) {
-    canvas.updateEdge("con-1", {
-      shape: { type: "custom", factory: () => redController },
-    });
+    canvas.updateEdge("con-1", { shape: redShape });
   } else {
-    canvas.updateEdge("con-1", {
-      shape: { type: "custom", factory: () => greenController },
-    });
+    canvas.updateEdge("con-1", { shape: greenShape });
   }
 
   i++;
