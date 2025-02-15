@@ -11,7 +11,7 @@ import { TransformOptions } from "./transform-options";
 export const createOptions = (
   transformOptions: TransformOptions | undefined,
 ): Options => {
-  const optionsWheelSensitivity = transformOptions?.scale?.wheelSensitivity;
+  const optionsWheelSensitivity = transformOptions?.scale?.mouseWheelSensitivity;
   const wheelSensitivity =
     optionsWheelSensitivity !== undefined ? optionsWheelSensitivity : 1.2;
 

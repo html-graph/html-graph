@@ -14,7 +14,7 @@ describe("createOptions", () => {
   it("should set specified wheel velocity", () => {
     const res = createOptions({
       scale: {
-        wheelSensitivity: 1.5,
+        mouseWheelSensitivity: 1.5,
       },
     });
 

@@ -4,7 +4,7 @@ import { TransformPreprocessorOption } from "./transform-preprocessor-option";
 
 export interface TransformOptions {
   readonly scale?: {
-    readonly wheelSensitivity?: number;
+    readonly mouseWheelSensitivity?: number;
   };
   readonly shift?: {
     readonly cursor?: string | null;
