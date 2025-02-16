@@ -1,12 +1,30 @@
 .node {
+  position: relative;
   width: 100px;
   height: 100px;
-  background: #ffdbab;
-  border: 1px solid #bababa;
-  border-radius: 1000px;
-  white-space: nowrap;
-  user-select: none;
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
+  box-shadow: 0 0 5px var(--color-node-border);
+  border-radius: 50%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  user-select: none;
+}
+
+.node-port {
+  position: relative;
+  width: 0;
+}
+
+.node-port::after {
+  --port-size: 3px;
+  content: "";
+  position: absolute;
+  top: calc(-1 * var(--port-size));
+  left: calc(-1 * var(--port-size));
+  width: calc(2 * var(--port-size));
+  height: calc(2 * var(--port-size));
+  background: var(--color-edge);
+  border-radius: calc(2 * var(--port-size));
 }
