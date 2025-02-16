@@ -15,26 +15,22 @@ export const createScaleLimitTransformPreprocessor: (
     minContentScale !== null ? 1 / minContentScale : Infinity;
 
   return (params: TransformPreprocessorParams) => {
-    let nextScale = params.nextTransform.scale;
-    let nextDx = params.nextTransform.dx;
-    let nextDy = params.nextTransform.dy;
+    const prev = params.prevTransform;
+    const next = params.nextTransform;
+    let nextScale = next.scale;
+    let nextDx = next.dx;
+    let nextDy = next.dy;
 
-    if (
-      params.nextTransform.scale > maxViewScale &&
-      params.nextTransform.scale > params.prevTransform.scale
-    ) {
-      nextScale = Math.max(params.prevTransform.scale, maxViewScale);
-      nextDx = params.prevTransform.dx;
-      nextDy = params.prevTransform.dy;
+    if (next.scale > maxViewScale && next.scale > prev.scale) {
+      nextScale = Math.max(prev.scale, maxViewScale);
+      nextDx = prev.dx;
+      nextDy = prev.dy;
     }
 
-    if (
-      params.nextTransform.scale < minViewScale &&
-      params.nextTransform.scale < params.prevTransform.scale
-    ) {
-      nextScale = Math.min(params.prevTransform.scale, minViewScale);
-      nextDx = params.prevTransform.dx;
-      nextDy = params.prevTransform.dy;
+    if (next.scale < minViewScale && next.scale < prev.scale) {
+      nextScale = Math.min(prev.scale, minViewScale);
+      nextDx = prev.dx;
+      nextDy = prev.dy;
     }
 
     return {
