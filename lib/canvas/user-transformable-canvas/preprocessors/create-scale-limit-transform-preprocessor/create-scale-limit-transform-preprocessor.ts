@@ -25,12 +25,18 @@ export const createScaleLimitTransformPreprocessor: (
       nextScale = Math.max(prev.scale, maxViewScale);
       nextDx = prev.dx;
       nextDy = prev.dy;
+      const ratio = (nextScale - prev.scale) / (next.scale - prev.scale);
+      nextDx = prev.dx + (next.dx - prev.dx) * ratio;
+      nextDy = prev.dy + (next.dy - prev.dy) * ratio;
     }
 
     if (next.scale < minViewScale && next.scale < prev.scale) {
       nextScale = Math.min(prev.scale, minViewScale);
       nextDx = prev.dx;
       nextDy = prev.dy;
+      const ratio = (nextScale - prev.scale) / (next.scale - prev.scale);
+      nextDx = prev.dx + (next.dx - prev.dx) * ratio;
+      nextDy = prev.dy + (next.dy - prev.dy) * ratio;
     }
 
     return {

@@ -1,6 +1,5 @@
 # TODO
 
-- fix scale limit shift
 - improve transform events
 - node drag finish example
 - double port mark example
