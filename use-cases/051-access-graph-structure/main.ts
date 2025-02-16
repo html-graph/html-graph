@@ -3,9 +3,6 @@ import {
   AddNodeRequest,
   Canvas,
   CoreOptions,
-  GraphEdge,
-  GraphNode,
-  GraphPort,
   HtmlGraphBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -83,9 +80,9 @@ canvas
   .addEdge(addEdge3Request);
 
 const structure: {
-  nodes: GraphNode[];
-  edges: GraphEdge[];
-  ports: GraphPort[];
+  nodes: Array<{ nodeId: unknown; x: number; y: number }>;
+  ports: Array<{ portId: unknown; direction: number }>;
+  edges: Array<{ edgeId: unknown; from: unknown; to: unknown }>;
 } = {
   nodes: [],
   edges: [],
@@ -94,17 +91,28 @@ const structure: {
 
 canvas.model.getAllNodeIds().forEach((nodeId) => {
   const node = canvas.model.getNode(nodeId)!;
-  structure.nodes.push(node);
+  structure.nodes.push({
+    nodeId,
+    x: node.x,
+    y: node.y,
+  });
 });
 
 canvas.model.getAllPortIds().forEach((portId) => {
   const port = canvas.model.getPort(portId)!;
-  structure.ports.push(port);
+  structure.ports.push({
+    portId,
+    direction: port.direction,
+  });
 });
 
 canvas.model.getAllEdgeIds().forEach((edgeId) => {
   const edge = canvas.model.getEdge(edgeId)!;
-  structure.edges.push(edge);
+  structure.edges.push({
+    edgeId,
+    from: edge.from,
+    to: edge.to,
+  });
 });
 
 const nodesElement: HTMLElement = document.getElementById("nodes")!;

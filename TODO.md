@@ -1,6 +1,5 @@
 # TODO
 
-- refactor examples
 - fix scale limit shift
 - node drag finish example
 - double port mark example
