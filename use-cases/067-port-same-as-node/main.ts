@@ -7,7 +7,7 @@ import {
   HtmlGraphBuilder,
 } from "@html-graph/html-graph";
 
-export function createInOutNode(params: {
+export function createNode(params: {
   name: string;
   x: number;
   y: number;
@@ -29,6 +29,13 @@ export function createInOutNode(params: {
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const coreOptions: CoreOptions = {
+  edges: {
+    shape: {
+      type: "straight",
+      arrowLength: 0,
+      arrowOffset: 0,
+    },
+  },
   nodes: {
     priority: 1,
   },
@@ -43,14 +50,14 @@ builder.setOptions(coreOptions).setUserDraggableNodes(dragOptions);
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const addNode1Request: AddNodeRequest = createInOutNode({
+const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",
   x: 200,
   y: 400,
   portId: "node-1-port",
 });
 
-const addNode2Request: AddNodeRequest = createInOutNode({
+const addNode2Request: AddNodeRequest = createNode({
   name: "Node 2",
   x: 500,
   y: 500,

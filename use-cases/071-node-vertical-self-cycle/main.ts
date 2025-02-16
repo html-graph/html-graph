@@ -1,49 +1,42 @@
-import { HtmlGraphBuilder, AddNodePorts } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  CoreOptions,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        type: "vertical",
-        hasTargetArrow: true,
-      },
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+
+const coreOptions: CoreOptions = {
+  edges: {
+    shape: {
+      type: "vertical",
+      hasTargetArrow: true,
     },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+  },
+  ports: {
+    direction: Math.PI / 2,
+  },
+};
 
-function createNode(
-  name: string,
-  frontPortId: string,
-  backPortId: string,
-): [HTMLElement, AddNodePorts] {
-  const node = document.createElement("div");
-  node.classList.add("node");
+builder.setOptions(coreOptions);
 
-  const frontPort = document.createElement("div");
-  node.appendChild(frontPort);
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-  const text = document.createElement("div");
-  text.innerText = name;
-  node.appendChild(text);
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 200,
+  y: 400,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
 
-  const backPort = document.createElement("div");
-  node.appendChild(backPort);
+const addEdge1Request: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-1-in",
+};
 
-  return [
-    node,
-    [
-      { id: frontPortId, element: frontPort },
-      { id: backPortId, element: backPort },
-    ],
-  ];
-}
-
-const [node1, ports1] = createNode("Node 1", "port-1-1", "port-1-2");
-const canvasElement = document.getElementById("canvas")!;
-
-canvas
-  .attach(canvasElement)
-  .addNode({ element: node1, x: 200, y: 400, ports: ports1 })
-  .addEdge({ from: "port-1-2", to: "port-1-1" });
+canvas.attach(canvasElement).addNode(addNode1Request).addEdge(addEdge1Request);

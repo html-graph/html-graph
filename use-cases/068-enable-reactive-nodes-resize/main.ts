@@ -1,67 +1,75 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .setResizeReactiveNodes()
-  .build();
+export function createInOutNode(params: {
+  name: string;
+  x: number;
+  y: number;
+  frontPortId: string;
+  backPortId: string;
+  priority?: number;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
+  const frontPort = document.createElement("div");
+  frontPort.classList.add("node-port");
+  node.appendChild(frontPort);
 
-const text1 = document.createElement("div");
-text1.classList.add("text");
-text1.innerText = "1";
-node1.appendChild(text1);
+  const textarea = document.createElement("textarea");
+  textarea.value = params.name;
+  node.appendChild(textarea);
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
+  const backPort = document.createElement("div");
+  backPort.classList.add("node-port");
+  node.appendChild(backPort);
 
-const text2 = document.createElement("div");
-text2.classList.add("text");
-text2.innerText = "2";
-node2.appendChild(text2);
+  return {
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [
+      { id: params.frontPortId, element: frontPort },
+      { id: params.backPortId, element: backPort },
+    ],
+    priority: params.priority,
+  };
+}
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
+builder.setResizeReactiveNodes();
 
-node1.appendChild(port1);
-node2.appendChild(port2);
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const canvasElement = document.getElementById("canvas")!;
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 400,
+  y: 400,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
+
+const addNode2Request: AddNodeRequest = createInOutNode({
+  name: "Node 2",
+  x: 800,
+  y: 500,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
+
+const addEdgeRequest: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({
-    element: node1,
-    x: 200,
-    y: 300,
-    ports: [{ id: "port-1", element: port1 }],
-  })
-  .addNode({
-    element: node2,
-    x: 600,
-    y: 500,
-    ports: [{ id: "port-2", element: port2 }],
-  })
-  .addEdge({ from: "port-1", to: "port-2" });
-
-let i = 0;
-
-setInterval(() => {
-  text1.innerText = i % 2 ? "1" : "111111111111";
-  text2.innerText = i % 2 ? "222222222222" : "2";
-  i++;
-}, 1000);
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest);
