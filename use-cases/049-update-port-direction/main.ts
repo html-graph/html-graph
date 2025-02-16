@@ -1,60 +1,61 @@
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  CoreOptions,
+  HtmlGraphBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
 
-const canvas = new HtmlGraphBuilder()
-  .setOptions({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+
+const coreOptions: CoreOptions = {
+  edges: {
+    shape: {
+      hasTargetArrow: true,
     },
-  })
-  .setUserDraggableNodes()
-  .setUserTransformableCanvas()
-  .build();
+  },
+};
 
-const node1 = document.createElement("div");
-node1.classList.add("node");
-node1.innerText = "1";
+builder.setOptions(coreOptions);
 
-const node2 = document.createElement("div");
-node2.classList.add("node");
-node2.innerText = "2";
+const canvas: Canvas = builder.build();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const port1 = document.createElement("div");
-port1.classList.add("port");
-port1.style.right = "0";
+const addNode1Request: AddNodeRequest = createInOutNode({
+  id: "node-1",
+  name: "Node 1",
+  x: 200,
+  y: 300,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
 
-const port2 = document.createElement("div");
-port2.classList.add("port");
-port2.style.left = "0";
+const addNode2Request: AddNodeRequest = createInOutNode({
+  id: "node-2",
+  name: "Node 2",
+  x: 500,
+  y: 400,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
 
-node1.appendChild(port1);
-node2.appendChild(port2);
-
-const canvasElement = document.getElementById("canvas")!;
+const addEdge1Request: AddEdgeRequest = {
+  id: "edge-1",
+  from: "node-1-out",
+  to: "node-2-in",
+};
 
 canvas
   .attach(canvasElement)
-  .addNode({
-    id: "node-1",
-    element: node1,
-    x: 200,
-    y: 300,
-    ports: [{ id: "port-1", element: port1 }],
-  })
-  .addNode({
-    id: "node-2",
-    element: node2,
-    x: 600,
-    y: 500,
-    ports: [{ id: "port-2", element: port2 }],
-  })
-  .addEdge({ from: "port-1", to: "port-2" });
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdge1Request);
 
-let i = 1;
+const slider: HTMLInputElement = document.getElementById(
+  "direction",
+) as HTMLInputElement;
 
-setInterval(() => {
-  canvas.updatePort("port-2", { direction: (Math.PI * i) / 12 });
-
-  i++;
-}, 1000);
+slider.addEventListener("input", () => {
+  canvas.updatePort("node-2-in", { direction: parseFloat(slider.value) });
+});

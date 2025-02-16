@@ -12,6 +12,21 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
+    <div class="overlay">
+      This use case specifies how update port direction.
+      <br />
+      <br />
+      <label> Change port direction </label>
+      <br />
+      <input
+        type="range"
+        min="-3"
+        max="3"
+        value="0"
+        id="direction"
+        step="0.1"
+      />
+    </div>
     <div id="canvas" class="canvas"></div>
     <script type="module" src="main.ts"></script>
   </body>

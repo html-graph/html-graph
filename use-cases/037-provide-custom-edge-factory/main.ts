@@ -1,6 +1,7 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
+  BezierEdgeShape,
   Canvas,
   CoreOptions,
   HtmlGraphBuilder,
@@ -10,14 +11,13 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const coreOptions: CoreOptions = {
-  nodes: {
-    priority: "shared-incremental",
-  },
   edges: {
-    shape: {
-      hasTargetArrow: true,
-    },
-    priority: "shared-incremental",
+    shape: () =>
+      new BezierEdgeShape({
+        color: "var(--color-edge-2)",
+        width: 2,
+        hasTargetArrow: true,
+      }),
   },
 };
 
@@ -27,33 +27,37 @@ const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const addNode1Request: AddNodeRequest = createInOutNode({
+  id: "node-1",
   name: "Node 1",
   x: 200,
-  y: 300,
+  y: 400,
   frontPortId: "node-1-in",
   backPortId: "node-1-out",
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
+  id: "node-2",
   name: "Node 2",
-  x: 300,
-  y: 400,
+  x: 500,
+  y: 500,
   frontPortId: "node-2-in",
   backPortId: "node-2-out",
 });
 
 const addNode3Request: AddNodeRequest = createInOutNode({
+  id: "node-3",
   name: "Node 3",
-  x: 400,
-  y: 500,
+  x: 800,
+  y: 700,
   frontPortId: "node-3-in",
   backPortId: "node-3-out",
 });
 
 const addNode4Request: AddNodeRequest = createInOutNode({
+  id: "node-4",
   name: "Node 4",
-  x: 500,
-  y: 600,
+  x: 800,
+  y: 300,
   frontPortId: "node-4-in",
   backPortId: "node-4-out",
 });
@@ -69,7 +73,7 @@ const addEdge2Request: AddEdgeRequest = {
 };
 
 const addEdge3Request: AddEdgeRequest = {
-  from: "node-3-out",
+  from: "node-2-out",
   to: "node-4-in",
 };
 
