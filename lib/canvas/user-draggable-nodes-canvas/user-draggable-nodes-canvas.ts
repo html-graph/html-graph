@@ -190,6 +190,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     };
 
     const onTouchStart: (event: TouchEvent) => void = (event: TouchEvent) => {
+      if (event.touches.length !== 1) {
+        return;
+      }
+
       event.stopImmediatePropagation();
 
       this.previousTouchCoords = {
@@ -207,10 +211,6 @@ export class UserDraggableNodesCanvas implements Canvas {
       });
 
       if (!isDragAllowed) {
-        return;
-      }
-
-      if (event.touches.length !== 1) {
         return;
       }
 

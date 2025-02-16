@@ -9,7 +9,7 @@
 </a>
 
 Instead of connecting nodes directly this library uses concept of ports, which provide greater fexibility at managing edges.
-Port is an entity of a node to which an edge can be attached to.
+Port is an entity of a node to which edges can be attached to.
 
 Visit <a target="_blank" href="https://html-graph.github.io/use-cases/">use cases</a> and [use cases implementation](use-cases).
 
@@ -61,27 +61,25 @@ const canvas = new HtmlGraphBuilder()
   .setResizeReactiveNodes()
   .build();
 
-const node1 = createNode({
-  name: "Node 1",
-  x: 200,
-  y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
-});
-
-const node2 = createNode({
-  name: "Node 2",
-  x: 600,
-  y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
-});
-
-const canvasElement = document.getElementById("canvas");
-
 canvas
-  .attach(canvasElement)
-  .addNode(node1)
-  .addNode(node2)
+  .attach(document.getElementById("canvas"))
+  .addNode(
+    createNode({
+      name: "Node 1",
+      x: 200,
+      y: 400,
+      frontPortId: "node-1-in",
+      backPortId: "node-1-out",
+    }),
+  )
+  .addNode(
+    createNode({
+      name: "Node 2",
+      x: 600,
+      y: 500,
+      frontPortId: "node-2-in",
+      backPortId: "node-2-out",
+    }),
+  )
   .addEdge({ from: "node-1-out", to: "node-2-in" });
 ```
