@@ -49,6 +49,8 @@ class ReleaseNextVersion {
       `git tag -a v${newVersion} -m "new version ${newVersion}"`,
       "git push",
       "git push --tags",
+      "git push gitverse master",
+      "git push --tags gitverse master",
     ];
 
     this.execute(cmdsBeforePublish.join(" && "))
