@@ -742,7 +742,7 @@ describe("UserDraggableNodesCanvas", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
-  it("should continue moving node with touch after release one of touches", () => {
+  it("should stop moving node with touch after release one of touches", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserDraggableNodesCanvas(canvasCore);
     const canvasElement = createElement({ width: 1000, height: 1000 });
@@ -785,7 +785,7 @@ describe("UserDraggableNodesCanvas", () => {
     const container = canvasElement.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
 
-    expect(nodeWrapper.style.transform).toBe("translate(200px, 200px)");
+    expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
   it("should not move node with mouse if drag is not allowed", () => {
