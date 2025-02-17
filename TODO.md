@@ -1,7 +1,5 @@
 # TODO
 
-- double port mark example
-- improve transform events
 - node drag finish example
 - before transform started example
 - improve reexport

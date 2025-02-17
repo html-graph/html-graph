@@ -26,7 +26,7 @@ const updateTransform = (): void => {
 
 const transformOptions: TransformOptions = {
   events: {
-    onBeforeTransformStarted: () => {
+    onBeforeTransformChange: () => {
       updateTransform();
     },
   },

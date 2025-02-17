@@ -39,7 +39,7 @@ const coreOptions: CoreOptions = {
 
 const transformOptions: TransformOptions = {
   events: {
-    onTransformFinished: () => {
+    onTransformChange: () => {
       backgroundDrawingFn(ctx, canvas.transformation);
     },
   },

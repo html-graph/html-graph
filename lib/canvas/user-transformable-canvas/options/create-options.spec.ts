@@ -111,7 +111,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onBeforeTransformStarted,
+        onBeforeTransformChange: onBeforeTransformStarted,
       },
     });
 
@@ -123,7 +123,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformFinished,
+        onTransformChange: onTransformFinished,
       },
     });
 

@@ -22,7 +22,7 @@ new ResizeObserver(() => {
 const canvas = new HtmlGraphBuilder()
   .setUserTransformableCanvas({
     events: {
-      onTransformFinished: () => {
+      onTransformChange: () => {
         backgroundDrawingFn(ctx, canvas.transformation);
       },
     },

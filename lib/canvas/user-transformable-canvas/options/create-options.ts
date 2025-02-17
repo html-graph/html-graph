@@ -44,10 +44,10 @@ export const createOptions = (
       : "grab";
 
   const onBeforeTransformStarted =
-    transformOptions?.events?.onBeforeTransformStarted ?? ((): void => {});
+    transformOptions?.events?.onBeforeTransformChange ?? ((): void => {});
 
   const onTransformFinished =
-    transformOptions?.events?.onTransformFinished ?? ((): void => {});
+    transformOptions?.events?.onTransformChange ?? ((): void => {});
 
   return {
     wheelSensitivity: wheelSensitivity,

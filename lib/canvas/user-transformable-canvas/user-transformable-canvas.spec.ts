@@ -424,7 +424,7 @@ describe("UserTransformableCanvas", () => {
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onBeforeTransformStarted,
+        onBeforeTransformChange: onBeforeTransformStarted,
       },
     });
 
@@ -447,7 +447,7 @@ describe("UserTransformableCanvas", () => {
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onTransformFinished,
+        onTransformChange: onTransformFinished,
       },
     });
 
@@ -470,7 +470,7 @@ describe("UserTransformableCanvas", () => {
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onTransformFinished,
+        onTransformChange: onTransformFinished,
       },
     });
 
@@ -540,7 +540,7 @@ describe("UserTransformableCanvas", () => {
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onTransformFinished,
+        onTransformChange: onTransformFinished,
       },
     });
 

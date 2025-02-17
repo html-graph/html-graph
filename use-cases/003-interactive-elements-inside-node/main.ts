@@ -1,6 +1,6 @@
 import {
   AddNodeRequest,
-  BeforeTransformStartedFn,
+  BeforeTransformChangeFn,
   Canvas,
   HtmlGraphBuilder,
   TransformOptions,
@@ -8,7 +8,7 @@ import {
 
 let dragging: boolean = false;
 
-const onBeforeTransformStarted: BeforeTransformStartedFn = () => {
+const onBeforeTransformStarted: BeforeTransformChangeFn = () => {
   dragging = true;
 };
 
@@ -16,7 +16,7 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const transformOptions: TransformOptions = {
   events: {
-    onBeforeTransformStarted,
+    onBeforeTransformChange: onBeforeTransformStarted,
   },
 };
 
