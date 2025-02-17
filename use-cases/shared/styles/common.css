@@ -45,7 +45,3 @@ input[type="range"] {
   box-shadow: 0 0 5px var(--color-node-border);
   z-index: 1;
 }
-
-.mt-4 {
-  margin-top: 1rem;
-}
