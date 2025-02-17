@@ -95,17 +95,9 @@ export class UserDraggableNodesCanvas implements Canvas {
     }
   };
 
-  private readonly onWindowTouchFinish: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
-    if (event.touches.length > 0) {
-      this.previousTouchCoords = {
-        x: event.touches[0].clientX,
-        y: event.touches[0].clientY,
-      };
-    } else {
-      this.cancelTouchDrag();
-    }
+  private readonly onWindowTouchFinish: (event: TouchEvent) => void = () => {
+    this.previousTouchCoords = null;
+    this.cancelTouchDrag();
   };
 
   private previousTouchCoords: Point | null = null;
