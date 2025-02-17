@@ -1,22 +1,16 @@
 # TODO
 
 - node drag finish example
-- before transform started example
+- transform started and finished events
 - improve reexport
-- optimize background drawing
-- virtual scroll
-  - refactor update edge shape
-  - pass canvas host dimensions
-  - node creation factory function?
-- arrows customization
-- update edge ports
-- optimize memory draggable nodes
-- drag edge creation
-- layouts
-- limit node drag box
-- edge controller constructor 1 parameter ?
-- node drag handle example
-- refactor use cases
 - e2e tests
+- virtual scroll
+- layouts
+- drag edge creation
+- optimize background drawing
+- arrows customization
+- optimize memory draggable nodes
+- node drag handle example
 - snap nodes to grid
+- node creation factory function?
 - sankey connections
