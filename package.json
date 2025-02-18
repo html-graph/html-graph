@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@playwright/test": "^1.50.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.5.0",
     "dependency-cruiser": "^16.7.0",
@@ -63,7 +64,7 @@
     "prettier": "3.3.3",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tsx": "^4.18.0",
+    "tsx": "^3.12.10",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.1",
