@@ -13,7 +13,7 @@ const config: Config = {
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "/lib/.*\\.mock\\.ts$",
-    "/lib/index\\.ts$",
+    "/index\\.ts$",
   ],
   collectCoverageFrom: ["./lib/**/*.ts"],
   coverageThreshold: {
