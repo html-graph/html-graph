@@ -1,4 +1,4 @@
-import { NodeDragPayload } from "./node-drag-payload";
+import { NodeDragPayload } from "../node-drag-payload";
 
 export interface DragOptions {
   readonly moveOnTop?: boolean;

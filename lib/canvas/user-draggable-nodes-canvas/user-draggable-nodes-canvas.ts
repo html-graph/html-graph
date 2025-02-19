@@ -5,8 +5,7 @@ import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
-import { DragOptions } from "./drag-options";
-import { NodeDragPayload } from "./node-drag-payload";
+import { DragOptions } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
@@ -14,6 +13,7 @@ import { Canvas } from "../canvas";
 import { UpdatePortRequest } from "../update-port-request";
 import { NodeState } from "./node-state";
 import { Point } from "@/point";
+import { createOptions, Options } from "./create-options";
 
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly model: PublicGraphStore;
@@ -25,12 +25,6 @@ export class UserDraggableNodesCanvas implements Canvas {
   private readonly nodes = new Map<unknown, NodeState>();
 
   private grabbedNodeId: unknown | null = null;
-
-  private onNodeDrag: (payload: NodeDragPayload) => void;
-
-  private onBeforeNodeDrag: (payload: NodeDragPayload) => boolean;
-
-  private onNodeDragFinished: (nodeId: NodeDragPayload) => void;
 
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
     this.nodes.has(nodeId),
@@ -58,7 +52,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (!this.mouseUpEventValidator(event)) {
+    if (!this.options.mouseUpEventValidator(event)) {
       return;
     }
 
@@ -102,15 +96,9 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private previousTouchCoords: Point | null = null;
 
-  private readonly freezePriority: boolean;
-
   private readonly window = window;
 
-  private readonly dragCursor: string | null;
-
-  private readonly mouseDownEventValidator: (event: MouseEvent) => boolean;
-
-  private readonly mouseUpEventValidator: (event: MouseEvent) => boolean;
+  private readonly options: Options;
 
   public constructor(
     private readonly canvas: Canvas,
@@ -119,32 +107,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
 
-    this.onNodeDrag = dragOptions?.events?.onNodeDrag ?? ((): void => {});
-
-    this.onBeforeNodeDrag =
-      dragOptions?.events?.onBeforeNodeDrag ?? ((): boolean => true);
-
-    this.onNodeDragFinished =
-      dragOptions?.events?.onNodeDragFinished ?? ((): void => {});
-
-    this.freezePriority = dragOptions?.moveOnTop === false;
-
-    const cursor = dragOptions?.mouse?.dragCursor;
-    this.dragCursor = cursor !== undefined ? cursor : "grab";
-
-    const mouseDownEventValidator = dragOptions?.mouse?.mouseDownEventValidator;
-
-    this.mouseDownEventValidator =
-      mouseDownEventValidator !== undefined
-        ? mouseDownEventValidator
-        : (event: MouseEvent): boolean => event.button === 0;
-
-    const mouseUpEventValidator = dragOptions?.mouse?.mouseUpEventValidator;
-
-    this.mouseUpEventValidator =
-      mouseUpEventValidator !== undefined
-        ? mouseUpEventValidator
-        : (event: MouseEvent): boolean => event.button === 0;
+    this.options = createOptions(dragOptions ?? {});
   }
 
   public attach(element: HTMLElement): UserDraggableNodesCanvas {
@@ -174,13 +137,16 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.updateMaxNodePriority(nodeId);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
-      if (this.element === null || !this.mouseDownEventValidator(event)) {
+      if (
+        this.element === null ||
+        !this.options.mouseDownEventValidator(event)
+      ) {
         return;
       }
 
       const node = this.model.getNode(nodeId)!;
 
-      const isDragAllowed = this.onBeforeNodeDrag({
+      const isDragAllowed = this.options.onBeforeNodeDrag({
         nodeId,
         element: request.element,
         x: node.x,
@@ -193,7 +159,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       event.stopImmediatePropagation();
       this.grabbedNodeId = nodeId;
-      setCursor(this.element, this.dragCursor);
+      setCursor(this.element, this.options.dragCursor);
       this.moveNodeOnTop(nodeId);
       this.window.addEventListener("mouseup", this.onWindowMouseUp);
       this.window.addEventListener("mousemove", this.onWindowMouseMove);
@@ -213,7 +179,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
       const node = this.model.getNode(nodeId)!;
 
-      const isDragAllowed = this.onBeforeNodeDrag({
+      const isDragAllowed = this.options.onBeforeNodeDrag({
         nodeId,
         element: request.element,
         x: node.x,
@@ -369,7 +335,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     const contentY = matrixViewport.scale * newViewportY + matrixViewport.dy;
     this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
 
-    this.onNodeDrag({
+    this.options.onNodeDrag({
       nodeId,
       element: node.element,
       x: node.x,
@@ -384,7 +350,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
-    if (this.freezePriority) {
+    if (this.options.freezePriority) {
       return;
     }
 
@@ -404,7 +370,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     const node = this.model.getNode(this.grabbedNodeId);
 
     if (node !== null) {
-      this.onNodeDragFinished({
+      this.options.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
         element: node.element,
         x: node.x,
@@ -431,7 +397,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     const node = this.model.getNode(this.grabbedNodeId);
 
     if (node !== null) {
-      this.onNodeDragFinished({
+      this.options.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
         element: node.element,
         x: node.x,
