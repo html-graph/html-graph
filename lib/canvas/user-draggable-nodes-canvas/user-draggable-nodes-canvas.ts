@@ -139,7 +139,7 @@ export class UserDraggableNodesCanvas implements Canvas {
         ? mouseDownEventValidator
         : (event: MouseEvent): boolean => event.button === 0;
 
-    const mouseUpEventValidator = dragOptions?.mouse?.mouseDownEventValidator;
+    const mouseUpEventValidator = dragOptions?.mouse?.mouseUpEventValidator;
 
     this.mouseUpEventValidator =
       mouseUpEventValidator !== undefined
