@@ -1,6 +1,5 @@
 # TODO
 
-- shift, drag, scale modifier keys
 - improve reexport
 - e2e tests
 - virtual scroll

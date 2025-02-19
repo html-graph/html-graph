@@ -29,7 +29,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || event.button !== 0) {
+    if (this.element === null || !this.options.mouseDownEventValidator(event)) {
       return;
     }
 
@@ -60,7 +60,7 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || event.button !== 0) {
+    if (this.element === null || !this.options.mouseUpEventValidator(event)) {
       return;
     }
 
@@ -70,6 +70,10 @@ export class UserTransformableCanvas implements Canvas {
   private readonly onWheelScroll: (event: WheelEvent) => void = (
     event: WheelEvent,
   ) => {
+    if (!this.options.mouseWheelEventValidator(event)) {
+      return;
+    }
+
     event.preventDefault();
 
     const { left, top } = this.element!.getBoundingClientRect();

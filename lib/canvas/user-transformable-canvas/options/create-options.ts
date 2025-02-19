@@ -49,6 +49,30 @@ export const createOptions = (
   const onTransformFinished =
     transformOptions?.events?.onTransformChange ?? ((): void => {});
 
+  const defaultMouseDownEventValidator =
+    transformOptions?.shift?.mouseDownEventValidator;
+
+  const mouseDownEventValidator =
+    defaultMouseDownEventValidator !== undefined
+      ? defaultMouseDownEventValidator
+      : (event: MouseEvent): boolean => event.button === 0;
+
+  const defaultMouseUpEventValidator =
+    transformOptions?.shift?.mouseUpEventValidator;
+
+  const mouseUpEventValidator =
+    defaultMouseUpEventValidator !== undefined
+      ? defaultMouseUpEventValidator
+      : (event: MouseEvent): boolean => event.button === 0;
+
+  const defaultMouseWheelEventValidator =
+    transformOptions?.scale?.mouseWheelEventValidator;
+
+  const mouseWheelEventValidator =
+    defaultMouseWheelEventValidator !== undefined
+      ? defaultMouseWheelEventValidator
+      : (): boolean => true;
+
   return {
     wheelSensitivity: wheelSensitivity,
     onTransformStarted:
@@ -59,5 +83,8 @@ export const createOptions = (
     onTransformChange: onTransformFinished,
     transformPreprocessor,
     shiftCursor,
+    mouseDownEventValidator,
+    mouseUpEventValidator,
+    mouseWheelEventValidator,
   };
 };

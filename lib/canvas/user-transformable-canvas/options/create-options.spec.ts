@@ -3,6 +3,7 @@ import {
   TransformPreprocessorParams,
 } from "../preprocessors";
 import { createOptions } from "./create-options";
+import { TransformOptions } from "./transform-options";
 
 describe("createOptions", () => {
   it("should set default wheel velocity if not specified", () => {
@@ -152,5 +153,47 @@ describe("createOptions", () => {
     });
 
     expect(res.onTransformFinished).toBe(onTransformFinished);
+  });
+
+  it("should set default mouse down event validator", () => {
+    const mouseDownEventValidator = (): boolean => false;
+
+    const dragOptions: TransformOptions = {
+      shift: {
+        mouseDownEventValidator,
+      },
+    };
+
+    const options = createOptions(dragOptions);
+
+    expect(options.mouseDownEventValidator).toBe(mouseDownEventValidator);
+  });
+
+  it("should set default mouse up event validator", () => {
+    const mouseUpEventValidator = (): boolean => false;
+
+    const dragOptions: TransformOptions = {
+      shift: {
+        mouseUpEventValidator,
+      },
+    };
+
+    const options = createOptions(dragOptions);
+
+    expect(options.mouseUpEventValidator).toBe(mouseUpEventValidator);
+  });
+
+  it("should set default mouse wheel event validator", () => {
+    const mouseWheelEventValidator = (): boolean => false;
+
+    const dragOptions: TransformOptions = {
+      scale: {
+        mouseWheelEventValidator,
+      },
+    };
+
+    const options = createOptions(dragOptions);
+
+    expect(options.mouseWheelEventValidator).toBe(mouseWheelEventValidator);
   });
 });

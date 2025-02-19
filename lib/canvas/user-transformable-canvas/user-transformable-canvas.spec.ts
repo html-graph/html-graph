@@ -930,4 +930,27 @@ describe("UserTransformableCanvas", () => {
 
     expect(onTransformFinished).toHaveBeenCalled();
   });
+
+  it("should not scale canvas if mouse wheel event not valid", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserTransformableCanvas(canvasCore, {
+      scale: {
+        mouseWheelEventValidator: (event: WheelEvent): boolean => event.ctrlKey,
+      },
+    });
+
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe(`matrix(1, 0, 0, 1, 0, 0)`);
+  });
 });
