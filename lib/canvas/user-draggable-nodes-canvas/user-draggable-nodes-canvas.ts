@@ -58,7 +58,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (event.button !== 0) {
+    if (!this.mouseUpEventValidator(event)) {
       return;
     }
 
@@ -108,6 +108,10 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private readonly dragCursor: string | null;
 
+  private readonly mouseDownEventValidator: (event: MouseEvent) => boolean;
+
+  private readonly mouseUpEventValidator: (event: MouseEvent) => boolean;
+
   public constructor(
     private readonly canvas: Canvas,
     dragOptions?: DragOptions,
@@ -125,8 +129,22 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     this.freezePriority = dragOptions?.moveOnTop === false;
 
-    this.dragCursor =
-      dragOptions?.dragCursor !== undefined ? dragOptions.dragCursor : "grab";
+    const cursor = dragOptions?.mouse?.dragCursor;
+    this.dragCursor = cursor !== undefined ? cursor : "grab";
+
+    const mouseDownEventValidator = dragOptions?.mouse?.mouseDownEventValidator;
+
+    this.mouseDownEventValidator =
+      mouseDownEventValidator !== undefined
+        ? mouseDownEventValidator
+        : (event: MouseEvent): boolean => event.button === 0;
+
+    const mouseUpEventValidator = dragOptions?.mouse?.mouseDownEventValidator;
+
+    this.mouseUpEventValidator =
+      mouseUpEventValidator !== undefined
+        ? mouseUpEventValidator
+        : (event: MouseEvent): boolean => event.button === 0;
   }
 
   public attach(element: HTMLElement): UserDraggableNodesCanvas {
@@ -156,7 +174,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.updateMaxNodePriority(nodeId);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
-      if (this.element === null || event.button !== 0) {
+      if (this.element === null || !this.mouseDownEventValidator(event)) {
         return;
       }
 

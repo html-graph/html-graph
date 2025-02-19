@@ -1,6 +1,5 @@
 # TODO
 
-- transform started and finished events
 - shift, drag, scale modifier keys
 - improve reexport
 - e2e tests

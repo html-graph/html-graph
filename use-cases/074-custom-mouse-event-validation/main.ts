@@ -11,7 +11,8 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const dragOptions: DragOptions = {
   mouse: {
-    dragCursor: "crosshair",
+    mouseDownEventValidator: (event: MouseEvent) =>
+      event.button === 0 && event.ctrlKey,
   },
 };
 

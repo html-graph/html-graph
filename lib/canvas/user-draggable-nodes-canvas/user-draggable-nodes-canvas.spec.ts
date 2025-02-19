@@ -485,7 +485,9 @@ describe("UserDraggableNodesCanvas", () => {
   it("should change cursor on node grab on specified", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserDraggableNodesCanvas(canvasCore, {
-      dragCursor: "crosshair",
+      mouse: {
+        dragCursor: "crosshair",
+      },
     });
     const canvasElement = createElement({ width: 1000, height: 1000 });
 
@@ -1099,5 +1101,79 @@ describe("UserDraggableNodesCanvas", () => {
       x: 0,
       y: 0,
     });
+  });
+
+  it("should not start drag when mouse down validator not passed", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserDraggableNodesCanvas(canvasCore, {
+      mouse: {
+        mouseDownEventValidator: (event: MouseEvent): boolean =>
+          event.button === 0 && event.ctrlKey,
+      },
+    });
+
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    canvas.attach(canvasElement);
+
+    const element = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    window.dispatchEvent(
+      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
+    );
+
+    const container = canvasElement.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should not stop drag when mouse up validator not passed", () => {
+    const canvasCore = new CanvasCore();
+    const canvas = new UserDraggableNodesCanvas(canvasCore, {
+      mouse: {
+        mouseDownEventValidator: (event: MouseEvent): boolean =>
+          event.button === 0 && event.ctrlKey,
+      },
+    });
+
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    canvas.attach(canvasElement);
+
+    const element = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+    });
+
+    element.dispatchEvent(
+      new MouseEvent("mousedown", { button: 0, ctrlKey: true }),
+    );
+
+    window.dispatchEvent(
+      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
+    );
+
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    window.dispatchEvent(
+      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
+    );
+
+    const container = canvasElement.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(200px, 200px)");
   });
 });
