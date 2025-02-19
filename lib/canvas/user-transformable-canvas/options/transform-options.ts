@@ -13,6 +13,8 @@ export interface TransformOptions {
     | TransformPreprocessorOption
     | TransformPreprocessorOption[];
   readonly events?: {
+    readonly onTransformStarted?: () => void;
+    readonly onTransformFinished?: () => void;
     readonly onBeforeTransformChange?: BeforeTransformChangeFn;
     readonly onTransformChange?: TransformChangeFn;
   };

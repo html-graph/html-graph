@@ -418,13 +418,13 @@ describe("UserTransformableCanvas", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
 
-  it("should call onBeforeTransformStarted for move with mouse", () => {
+  it("should call onBeforeTransformChange for move with mouse", () => {
     const canvasCore = new CanvasCore();
-    const onBeforeTransformStarted = jest.fn((): void => {});
+    const onBeforeTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onBeforeTransformChange: onBeforeTransformStarted,
+        onBeforeTransformChange,
       },
     });
 
@@ -438,16 +438,16 @@ describe("UserTransformableCanvas", () => {
 
     window.dispatchEvent(moveEvent);
 
-    expect(onBeforeTransformStarted).toHaveBeenCalled();
+    expect(onBeforeTransformChange).toHaveBeenCalled();
   });
 
-  it("should call onTransformFinished for move with mouse", () => {
+  it("should call onTransformChange for move with mouse", () => {
     const canvasCore = new CanvasCore();
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onTransformChange: onTransformFinished,
+        onTransformChange,
       },
     });
 
@@ -461,7 +461,7 @@ describe("UserTransformableCanvas", () => {
 
     window.dispatchEvent(moveEvent);
 
-    expect(onTransformFinished).toHaveBeenCalled();
+    expect(onTransformChange).toHaveBeenCalled();
   });
 
   it("should unset cursor after move with mouse finished", () => {
@@ -536,11 +536,11 @@ describe("UserTransformableCanvas", () => {
 
   it("should not unset cursor left mouse button was not releaseed", () => {
     const canvasCore = new CanvasCore();
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableCanvas(canvasCore, {
       events: {
-        onTransformChange: onTransformFinished,
+        onTransformChange,
       },
     });
 
@@ -842,5 +842,92 @@ describe("UserTransformableCanvas", () => {
     const container = element.children[0].children[0] as HTMLElement;
 
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 200, 0)");
+  });
+
+  it("should call onTransformStarted for move with mouse", () => {
+    const canvasCore = new CanvasCore();
+    const onTransformStarted = jest.fn((): void => {});
+
+    const canvas = new UserTransformableCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    expect(onTransformStarted).toHaveBeenCalled();
+  });
+
+  it("should call onTransformStarted for move with touch", () => {
+    const canvasCore = new CanvasCore();
+    const onTransformStarted = jest.fn((): void => {});
+
+    const canvas = new UserTransformableCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    expect(onTransformStarted).toHaveBeenCalled();
+  });
+
+  it("should call onTransformFinished on finish move with mouse", () => {
+    const canvasCore = new CanvasCore();
+    const onTransformFinished = jest.fn((): void => {});
+
+    const canvas = new UserTransformableCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    expect(onTransformFinished).toHaveBeenCalled();
+  });
+
+  it("should call onTransformFinished on finish move with touch", () => {
+    const canvasCore = new CanvasCore();
+    const onTransformFinished = jest.fn((): void => {});
+
+    const canvas = new UserTransformableCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    expect(onTransformFinished).toHaveBeenCalled();
   });
 });

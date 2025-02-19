@@ -106,16 +106,40 @@ describe("createOptions", () => {
     expect(res.shiftCursor).toBe("crosshair");
   });
 
-  it("should set specified onBeforeTransformStarted", () => {
-    const onBeforeTransformStarted = (): void => {};
+  it("should set specified onBeforeTransformChange", () => {
+    const onBeforeTransformChange = (): void => {};
 
     const res = createOptions({
       events: {
-        onBeforeTransformChange: onBeforeTransformStarted,
+        onBeforeTransformChange,
       },
     });
 
-    expect(res.onBeforeTransformStarted).toBe(onBeforeTransformStarted);
+    expect(res.onBeforeTransformChange).toBe(onBeforeTransformChange);
+  });
+
+  it("should set specified onTransformChange", () => {
+    const onTransformChange = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onTransformChange,
+      },
+    });
+
+    expect(res.onTransformChange).toBe(onTransformChange);
+  });
+
+  it("should set specified onTransformStarted", () => {
+    const onTransformStarted = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onTransformStarted,
+      },
+    });
+
+    expect(res.onTransformStarted).toBe(onTransformStarted);
   });
 
   it("should set specified onTransformFinished", () => {
@@ -123,7 +147,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformChange: onTransformFinished,
+        onTransformFinished,
       },
     });
 

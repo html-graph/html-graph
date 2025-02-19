@@ -51,8 +51,12 @@ export const createOptions = (
 
   return {
     wheelSensitivity: wheelSensitivity,
-    onBeforeTransformStarted,
-    onTransformFinished,
+    onTransformStarted:
+      transformOptions?.events?.onTransformStarted ?? ((): void => {}),
+    onTransformFinished:
+      transformOptions?.events?.onTransformFinished ?? ((): void => {}),
+    onBeforeTransformChange: onBeforeTransformStarted,
+    onTransformChange: onTransformFinished,
     transformPreprocessor,
     shiftCursor,
   };

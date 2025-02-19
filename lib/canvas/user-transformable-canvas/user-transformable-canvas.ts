@@ -36,6 +36,7 @@ export class UserTransformableCanvas implements Canvas {
     setCursor(this.element, this.options.shiftCursor);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
+    this.options.onTransformStarted();
   };
 
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
@@ -90,6 +91,7 @@ export class UserTransformableCanvas implements Canvas {
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.options.onTransformStarted();
   };
 
   private readonly onWindowTouchMove: (event: TouchEvent) => void = (
@@ -157,7 +159,7 @@ export class UserTransformableCanvas implements Canvas {
     });
 
     this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformFinished();
+    this.options.onTransformChange();
   });
 
   private readonly options: Options;
@@ -295,7 +297,7 @@ export class UserTransformableCanvas implements Canvas {
   }
 
   private moveViewport(element: HTMLElement, dx: number, dy: number): void {
-    this.options.onBeforeTransformStarted();
+    this.options.onBeforeTransformChange();
 
     const prevTransform = this.transformation.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
@@ -309,7 +311,7 @@ export class UserTransformableCanvas implements Canvas {
     });
 
     this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformFinished();
+    this.options.onTransformChange();
   }
 
   private scaleViewport(
@@ -318,7 +320,7 @@ export class UserTransformableCanvas implements Canvas {
     cx: number,
     cy: number,
   ): void {
-    this.options.onBeforeTransformStarted();
+    this.options.onBeforeTransformChange();
 
     const prevTransform = this.canvas.transformation.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
@@ -332,7 +334,7 @@ export class UserTransformableCanvas implements Canvas {
     });
 
     this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformFinished();
+    this.options.onTransformChange();
   }
 
   private stopMouseDrag(): void {
@@ -341,6 +343,7 @@ export class UserTransformableCanvas implements Canvas {
     }
 
     this.removeMouseDragListeners();
+    this.options.onTransformFinished();
   }
 
   private removeMouseDragListeners(): void {
@@ -351,6 +354,7 @@ export class UserTransformableCanvas implements Canvas {
   private stopTouchDrag(): void {
     this.prevTouches = null;
     this.removeTouchDragListeners();
+    this.options.onTransformFinished();
   }
 
   private removeTouchDragListeners(): void {

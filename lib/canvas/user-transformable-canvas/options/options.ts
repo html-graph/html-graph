@@ -4,8 +4,10 @@ import { TransformChangeFn } from "./transform-change-fn";
 
 export interface Options {
   readonly wheelSensitivity: number;
-  readonly onBeforeTransformStarted: BeforeTransformChangeFn;
-  readonly onTransformFinished: TransformChangeFn;
+  readonly onTransformStarted: () => void;
+  readonly onTransformFinished: () => void;
+  readonly onBeforeTransformChange: BeforeTransformChangeFn;
+  readonly onTransformChange: TransformChangeFn;
   readonly transformPreprocessor: TransformPreprocessorFn;
   readonly shiftCursor: string | null;
 }
