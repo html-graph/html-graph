@@ -1,2 +1,2 @@
-export * from "./process-touch";
-export * from "./touch-state";
+export { processTouch } from "./process-touch";
+export type { TouchState } from "./touch-state";

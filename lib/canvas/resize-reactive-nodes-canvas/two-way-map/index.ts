@@ -1,1 +1,1 @@
-export * from "./two-way-map";
+export { TwoWayMap } from "./two-way-map";

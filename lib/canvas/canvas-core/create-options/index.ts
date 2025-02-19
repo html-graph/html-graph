@@ -1,1 +1,1 @@
-export * from "./create-options";
+export { createOptions } from "./create-options";

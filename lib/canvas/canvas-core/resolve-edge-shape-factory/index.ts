@@ -1,1 +1,1 @@
-export * from "./resolve-edge-shape-factory";
+export { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";

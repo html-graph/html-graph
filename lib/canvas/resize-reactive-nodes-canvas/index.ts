@@ -1,1 +1,1 @@
-export * from "./resize-reactive-nodes-canvas";
+export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";

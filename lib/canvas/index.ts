@@ -1,15 +1,28 @@
-export * from "./edge-options";
-export * from "./patch-transform-request";
-export * from "./add-edge-request";
-export * from "./mark-port-request";
-export * from "./add-node-request";
-export * from "./mark-node-port-request";
-export * from "./update-edge-request";
-export * from "./update-node-request";
-export * from "./update-port-request";
-export * from "./add-node-ports";
-export * from "./canvas";
-export * from "./canvas-core";
-export * from "./user-draggable-nodes-canvas";
-export * from "./user-transformable-canvas";
-export * from "./resize-reactive-nodes-canvas";
+export type { EdgeShape } from "./edge-shape";
+export type { PatchMatrixRequest } from "./patch-transform-request";
+export type { AddEdgeRequest } from "./add-edge-request";
+export type { MarkPortRequest } from "./mark-port-request";
+export type { AddNodeRequest } from "./add-node-request";
+export type { MarkNodePortRequest } from "./mark-node-port-request";
+export type { UpdateEdgeRequest } from "./update-edge-request";
+export type { UpdateNodeRequest } from "./update-node-request";
+export type { UpdatePortRequest } from "./update-port-request";
+export type { AddNodePorts } from "./add-node-ports";
+export type { Canvas } from "./canvas";
+export { CanvasCore } from "./canvas-core";
+export type { CoreOptions } from "./canvas-core";
+export { UserDraggableNodesCanvas } from "./user-draggable-nodes-canvas";
+export type {
+  DragOptions,
+  NodeDragPayload,
+} from "./user-draggable-nodes-canvas";
+export { UserTransformableCanvas } from "./user-transformable-canvas";
+export type {
+  TransformOptions,
+  TransformPayload,
+  TransformPreprocessorFn,
+  TransformPreprocessorParams,
+  ShiftLimitPreprocessorParams,
+  ScaleLimitPreprocessorParams,
+} from "./user-transformable-canvas";
+export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";

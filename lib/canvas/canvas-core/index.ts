@@ -1,2 +1,2 @@
-export * from "./canvas-core";
-export * from "./core-options";
+export { CanvasCore } from "./canvas-core";
+export type { CoreOptions } from "./core-options";

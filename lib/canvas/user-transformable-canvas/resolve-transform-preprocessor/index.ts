@@ -1,1 +1,1 @@
-export * from "./resolve-transform-preprocessor";
+export { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";

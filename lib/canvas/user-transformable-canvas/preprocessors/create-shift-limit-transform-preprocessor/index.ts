@@ -1,2 +1,2 @@
-export * from "./create-shift-limit-transform-preprocessor";
-export * from "./shift-limit-preprocessor-params";
+export { createShiftLimitTransformPreprocessor } from "./create-shift-limit-transform-preprocessor";
+export type { ShiftLimitPreprocessorParams } from "./shift-limit-preprocessor-params";

@@ -1,1 +1,1 @@
-export * from "./resolve-priority";
+export { resolvePriority } from "./resolve-priority";

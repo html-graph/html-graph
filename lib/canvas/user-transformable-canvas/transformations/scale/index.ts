@@ -1,1 +1,1 @@
-export * from "./scale";
+export { scale } from "./scale";

@@ -1,1 +1,1 @@
-export * from "./create-combined-transform-preprocessor";
+export { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";

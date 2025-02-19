@@ -1,1 +1,1 @@
-export * from "./set-cursor";
+export { setCursor } from "./set-cursor";

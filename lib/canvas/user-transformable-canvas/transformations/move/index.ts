@@ -1,1 +1,1 @@
-export * from "./move";
+export { move } from "./move";

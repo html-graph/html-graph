@@ -1,1 +1,1 @@
-export * from "./is-point-on-element";
+export { isPointOnElement } from "./is-point-on-element";

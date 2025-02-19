@@ -1,2 +1,2 @@
-export * from "./create-scale-limit-transform-preprocessor";
-export * from "./scale-limit-preprocessor-params";
+export { createScaleLimitTransformPreprocessor } from "./create-scale-limit-transform-preprocessor";
+export type { ScaleLimitPreprocessorParams } from "./scale-limit-preprocessor-params";

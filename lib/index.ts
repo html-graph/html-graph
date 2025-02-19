@@ -21,8 +21,6 @@ export type {
   TransformPayload,
   AddNodePorts,
   TransformPreprocessorFn,
-  TransformChangeFn,
-  BeforeTransformChangeFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,

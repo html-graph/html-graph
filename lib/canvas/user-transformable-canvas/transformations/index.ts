@@ -1,2 +1,2 @@
-export * from "./move";
-export * from "./scale";
+export { move } from "./move";
+export { scale } from "./scale";

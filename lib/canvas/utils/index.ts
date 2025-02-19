@@ -1,3 +1,3 @@
-export * from "./is-point-on-element";
-export * from "./is-point-on-window";
-export * from "./set-cursor";
+export { isPointOnElement } from "./is-point-on-element";
+export { isPointOnWindow } from "./is-point-on-window";
+export { setCursor } from "./set-cursor";
