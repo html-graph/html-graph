@@ -1,2 +1,7 @@
-export * from "./graph-store";
-export * from "./public-graph-store";
+export { GraphStore } from "./graph-store";
+export type { NodePayload } from "./node-payload";
+export type { PortPayload } from "./port-payload";
+export type { EdgePayload } from "./edge-payload";
+export type { AddNodeRequest } from "./add-node-request";
+export type { AddPortRequest } from "./add-port-request";
+export type { AddEdgeRequest } from "./add-edge-request";

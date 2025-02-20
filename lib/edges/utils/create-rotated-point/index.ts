@@ -1,1 +1,1 @@
-export * from "./create-rotated-point";
+export { createRotatedPoint } from "./create-rotated-point";

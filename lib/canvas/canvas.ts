@@ -6,7 +6,7 @@ import { PatchMatrixRequest } from "./patch-transform-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { PublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/public-graph-store";
 
 export interface Canvas {
   /**

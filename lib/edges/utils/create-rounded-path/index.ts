@@ -1,1 +1,1 @@
-export * from "./create-rounded-path";
+export { createRoundedPath } from "./create-rounded-path";

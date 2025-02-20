@@ -1,1 +1,1 @@
-export * from "./create-detour-straight-path";
+export { createDetourStraightPath } from "./create-detour-straight-path";

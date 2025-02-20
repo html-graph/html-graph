@@ -51,7 +51,7 @@ export type {
   GraphPort,
   GraphEdge,
   PublicGraphStore,
-} from "./graph-store";
+} from "./public-graph-store";
 
 export type { PublicViewportTransformer } from "./viewport-transformer";
 

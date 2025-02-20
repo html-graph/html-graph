@@ -1,1 +1,1 @@
-export * from "./id-generator";
+export { IdGenerator } from "./id-generator";

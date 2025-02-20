@@ -1,1 +1,1 @@
-export * from "./create-edge-arrow";
+export { createEdgeArrow } from "./create-edge-arrow";

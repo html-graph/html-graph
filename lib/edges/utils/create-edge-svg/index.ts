@@ -1,1 +1,1 @@
-export * from "./create-edge-svg";
+export { createEdgeSvg } from "./create-edge-svg";

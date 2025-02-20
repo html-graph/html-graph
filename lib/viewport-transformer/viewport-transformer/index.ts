@@ -1,1 +1,1 @@
-export * from "./viewport-transformer";
+export { ViewportTransformer } from "./viewport-transformer";

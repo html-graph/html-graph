@@ -7,7 +7,7 @@ import { MarkPortRequest } from "../mark-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { DragOptions } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { PublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/public-graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { UpdatePortRequest } from "../update-port-request";

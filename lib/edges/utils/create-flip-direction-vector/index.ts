@@ -1,1 +1,1 @@
-export * from "./create-flip-direction-vector";
+export { createFlipDirectionVector } from "./create-flip-direction-vector";

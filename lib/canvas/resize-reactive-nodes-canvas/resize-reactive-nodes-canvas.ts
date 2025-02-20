@@ -8,7 +8,7 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
-import { PublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/public-graph-store";
 import { Canvas } from "../canvas";
 
 export class ResizeReactiveNodesCanvas implements Canvas {

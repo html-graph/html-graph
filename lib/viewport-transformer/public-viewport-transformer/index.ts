@@ -1,1 +1,1 @@
-export * from "./public-viewport-transformer";
+export { PublicViewportTransformer } from "./public-viewport-transformer";

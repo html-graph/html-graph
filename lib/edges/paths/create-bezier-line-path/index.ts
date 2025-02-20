@@ -1,1 +1,1 @@
-export * from "./create-bezier-line-path";
+export { createBezierLinePath } from "./create-bezier-line-path";

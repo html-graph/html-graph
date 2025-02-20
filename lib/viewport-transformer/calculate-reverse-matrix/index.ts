@@ -1,1 +1,1 @@
-export * from "./calculate-reverse-matrix";
+export { calculateReverseMatrix } from "./calculate-reverse-matrix";

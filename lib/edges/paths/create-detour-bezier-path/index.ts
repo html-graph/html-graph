@@ -1,1 +1,1 @@
-export * from "./create-detour-bezier-path";
+export { createDetourBezierPath } from "./create-detour-bezier-path";

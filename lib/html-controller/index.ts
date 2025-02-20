@@ -1,1 +1,1 @@
-export * from "./html-controller";
+export { HtmlController } from "./html-controller";

@@ -1,1 +1,1 @@
-export * from "./html-graph-error";
+export { HtmlGraphError } from "./html-graph-error";

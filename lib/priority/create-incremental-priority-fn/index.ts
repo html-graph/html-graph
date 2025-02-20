@@ -1,1 +1,1 @@
-export * from "./create-incremental-priority-fn";
+export { createIncrementalPriorityFn } from "./create-incremental-priority-fn";

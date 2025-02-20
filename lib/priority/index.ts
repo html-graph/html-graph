@@ -1,4 +1,4 @@
-export * from "./priority-fn";
-export * from "./standard-priority-fn";
-export * from "./create-constant-priority-fn";
-export * from "./create-incremental-priority-fn";
+export type { PriorityFn } from "./priority-fn";
+export { standardPriorityFn } from "./standard-priority-fn";
+export { createConstantPriorityFn } from "./create-constant-priority-fn";
+export { createIncrementalPriorityFn } from "./create-incremental-priority-fn";

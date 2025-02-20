@@ -1,1 +1,1 @@
-export * from "./create-constant-priority-fn";
+export { createConstantPriorityFn } from "./create-constant-priority-fn";

@@ -1,1 +1,1 @@
-export * from "./create-cycle-square-path";
+export { createCycleSquarePath } from "./create-cycle-square-path";

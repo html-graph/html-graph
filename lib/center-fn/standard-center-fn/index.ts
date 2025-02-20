@@ -1,1 +1,1 @@
-export * from "./standard-center-fn";
+export { standardCenterFn } from "./standard-center-fn";

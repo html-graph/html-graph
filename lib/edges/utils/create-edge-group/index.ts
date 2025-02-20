@@ -1,1 +1,1 @@
-export * from "./create-edge-group";
+export { createEdgeGroup } from "./create-edge-group";

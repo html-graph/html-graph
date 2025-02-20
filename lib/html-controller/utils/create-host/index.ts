@@ -1,1 +1,1 @@
-export * from "./create-host";
+export { createHost } from "./create-host";

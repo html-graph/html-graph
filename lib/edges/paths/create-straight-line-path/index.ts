@@ -1,1 +1,1 @@
-export * from "./create-straight-line-path";
+export { createStraightLinePath } from "./create-straight-line-path";

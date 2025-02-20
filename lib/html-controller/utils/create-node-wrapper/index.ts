@@ -1,1 +1,1 @@
-export * from "./create-node-wrapper";
+export { createNodeWrapper } from "./create-node-wrapper";

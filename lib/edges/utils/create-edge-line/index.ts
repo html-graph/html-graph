@@ -1,1 +1,1 @@
-export * from "./create-edge-line";
+export { createEdgeLine } from "./create-edge-line";

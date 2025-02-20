@@ -2,7 +2,7 @@ import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
 import { EdgeShapeFactory } from "@/edges";
-import { GraphStore, PublicGraphStore } from "@/graph-store";
+import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,
   ViewportTransformer,
@@ -17,6 +17,7 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { HtmlController } from "@/html-controller";
 import { CanvasController } from "@/canvas-controller";
+import { PublicGraphStore } from "@/public-graph-store";
 
 /**
  * Provides low level API for acting on graph

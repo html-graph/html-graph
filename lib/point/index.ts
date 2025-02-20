@@ -1,2 +1,2 @@
-export * from "./point";
-export * from "./zero";
+export type { Point } from "./point";
+export { zero } from "./zero";

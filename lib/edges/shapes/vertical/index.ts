@@ -1,2 +1,2 @@
-export * from "./vertical-edge-shape";
-export * from "./vertical-edge-params";
+export { VerticalEdgeShape } from "./vertical-edge-shape";
+export type { VerticalEdgeParams } from "./vertical-edge-params";

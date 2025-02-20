@@ -1,1 +1,1 @@
-export * from "./create-cycle-circle-path";
+export { createCycleCirclePath } from "./create-cycle-circle-path";

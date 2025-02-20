@@ -1,1 +1,1 @@
-export * from "./create-arrow-path";
+export { createArrowPath } from "./create-arrow-path";

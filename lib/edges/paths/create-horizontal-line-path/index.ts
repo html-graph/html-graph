@@ -1,1 +1,1 @@
-export * from "./create-horizontal-line-path";
+export { createHorizontalLinePath } from "./create-horizontal-line-path";

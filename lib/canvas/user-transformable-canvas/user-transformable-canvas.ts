@@ -7,7 +7,7 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-transform-request";
 import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { PublicGraphStore } from "@/graph-store";
+import { PublicGraphStore } from "@/public-graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { createOptions } from "./options/create-options";

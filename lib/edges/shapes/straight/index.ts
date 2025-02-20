@@ -1,2 +1,2 @@
-export * from "./straight-edge-shape";
-export * from "./straight-edge-params";
+export { StraightEdgeShape } from "./straight-edge-shape";
+export type { StraightEdgeParams } from "./straight-edge-params";

@@ -1,6 +1,5 @@
 # TODO
 
-- improve reexport
 - fix deps cycle
 - e2e tests
 - virtual scroll

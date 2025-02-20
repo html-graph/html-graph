@@ -1,1 +1,1 @@
-export * from "./standard-priority-fn";
+export { standardPriorityFn } from "./standard-priority-fn";

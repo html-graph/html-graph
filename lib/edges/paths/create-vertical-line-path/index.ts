@@ -1,1 +1,1 @@
-export * from "./create-vertical-line-path";
+export { createVerticalLinePath } from "./create-vertical-line-path";

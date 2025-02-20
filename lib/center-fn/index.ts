@@ -1,2 +1,2 @@
-export * from "./standard-center-fn";
-export * from "./center-fn";
+export { standardCenterFn } from "./standard-center-fn";
+export type { CenterFn } from "./center-fn";

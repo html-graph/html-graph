@@ -1,1 +1,1 @@
-export * from "./initial-matrix";
+export { initialMatrix } from "./initial-matrix";

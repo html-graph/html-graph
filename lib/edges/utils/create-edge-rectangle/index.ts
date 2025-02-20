@@ -1,2 +1,1 @@
-export * from "./create-edge-rectangle";
-export * from "./edge-rectangle";
+export { createEdgeRectangle } from "./create-edge-rectangle";
