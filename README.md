@@ -11,7 +11,7 @@
 Instead of connecting nodes directly this library uses concept of ports, which provide greater fexibility at managing edges.
 Port is an entity of a node to which edges can be attached to.
 
-Visit <a target="_blank" href="https://html-graph.github.io/use-cases/">use cases</a> and [use cases implementation](use-cases).
+Visit <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a> for more.
 
 ## Getting started:
 
