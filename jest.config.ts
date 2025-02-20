@@ -6,6 +6,7 @@ import { compilerOptions } from "./tsconfig.json";
 
 const config: Config = {
   preset: "ts-jest",
+  roots: ["lib"],
   testEnvironment: "jsdom",
   setupFiles: ["./setup-jest.ts"],
   modulePaths: [compilerOptions.baseUrl],
