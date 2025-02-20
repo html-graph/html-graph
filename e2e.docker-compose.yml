@@ -7,6 +7,6 @@ services:
         HOST_USER_ID: ${HOST_USER_ID:-1000}
         HOST_GROUP_ID: ${HOST_GROUP_ID:-1000}
     ports:
-      - 0.0.0.0:9323:9323
+      - ${E2E_SERVER_PORT:-39921}:39921
     volumes:
       - ./:/app

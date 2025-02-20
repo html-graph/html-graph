@@ -76,6 +76,7 @@ export class UserTransformableCanvas implements Canvas {
 
     event.preventDefault();
 
+    this.options.onTransformStarted();
     const { left, top } = this.element!.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
@@ -86,6 +87,7 @@ export class UserTransformableCanvas implements Canvas {
     const deltaViewScale = 1 / deltaScale;
 
     this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
+    this.options.onTransformFinished();
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
