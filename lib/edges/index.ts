@@ -1,19 +1,12 @@
-export type { EdgeShapeFactory } from "./edge-shape-factory";
-
-export {
-  BezierEdgeShape,
-  StraightEdgeShape,
-  VerticalEdgeShape,
-  HorizontalEdgeShape,
-  EdgeShapeMock,
-} from "./shapes";
-
-export type {
-  BezierEdgeParams,
-  StraightEdgeParams,
-  VerticalEdgeParams,
-  HorizontalEdgeParams,
-  EdgeShape,
-  EdgeRenderParams,
-  EdgeRenderPort,
-} from "./shapes";
+export type { EdgeShape } from "./edge-shape";
+export type { EdgeRenderParams } from "./edge-render-params";
+export type { EdgeRenderPort } from "./edge-render-port";
+export { BezierEdgeShape } from "./bezier";
+export type { BezierEdgeParams } from "./bezier";
+export { HorizontalEdgeShape } from "./horizontal";
+export type { HorizontalEdgeParams } from "./horizontal";
+export { StraightEdgeShape } from "./straight";
+export type { StraightEdgeParams } from "./straight";
+export { VerticalEdgeShape } from "./vertical";
+export type { VerticalEdgeParams } from "./vertical";
+export { EdgeShapeMock } from "./edge-shape.mock";

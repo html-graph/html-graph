@@ -1,3 +1,3 @@
-import { EdgeShape } from "./shapes";
+import { EdgeShape } from "@/edges";
 
 export type EdgeShapeFactory = () => EdgeShape;

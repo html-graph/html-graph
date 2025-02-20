@@ -1,7 +1,7 @@
 import { Options } from "./options";
 import { CoreOptions } from "./core-options";
 import { createOptions } from "./create-options";
-import { EdgeShapeFactory } from "@/edges";
+import { EdgeShapeFactory } from "../edge-shape-factory";
 import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,

@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeShapeFactory } from "@/edges";
+import { EdgeShapeFactory } from "../edge-shape-factory";
 import { PriorityFn } from "@/priority";
 
 export interface Options {

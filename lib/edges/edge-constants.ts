@@ -1,5 +1,5 @@
 export const edgeConstants = Object.freeze({
-  color: "#5c5c5c",
+  color: "#777777",
   width: 1,
   arrowLength: 15,
   arrowWidth: 4,

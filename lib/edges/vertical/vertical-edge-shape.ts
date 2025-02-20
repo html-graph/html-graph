@@ -8,17 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../../utils";
+} from "../utils";
 import {
   createCycleSquarePath,
   createDetourStraightPath,
-  createHorizontalLinePath,
-} from "../../paths";
+  createVerticalLinePath,
+} from "../paths";
 import { Point, zero } from "@/point";
-import { HorizontalEdgeParams } from "./horizontal-edge-params";
+import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class HorizontalEdgeShape implements EdgeShape {
+export class VerticalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -47,7 +47,7 @@ export class HorizontalEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: HorizontalEdgeParams) {
+  public constructor(params?: VerticalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
@@ -62,7 +62,7 @@ export class HorizontalEdgeShape implements EdgeShape {
     );
 
     this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
+      params?.detourDirection ?? edgeConstants.detourDirectionVertical;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
     this.hasSourceArrow =
@@ -147,11 +147,11 @@ export class HorizontalEdgeShape implements EdgeShape {
         hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createHorizontalLinePath({
+      linePath = createVerticalLinePath({
         to,
         fromVect,
         toVect,
-        flipX,
+        flipY,
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,

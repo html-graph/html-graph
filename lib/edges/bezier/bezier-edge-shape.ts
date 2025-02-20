@@ -8,17 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../../utils";
+} from "../utils";
 import {
-  createCycleSquarePath,
-  createDetourStraightPath,
-  createVerticalLinePath,
-} from "../../paths";
+  createBezierLinePath,
+  createDetourBezierPath,
+  createCycleCirclePath,
+} from "../paths";
 import { Point, zero } from "@/point";
-import { VerticalEdgeParams } from "./vertical-edge-params";
+import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class VerticalEdgeShape implements EdgeShape {
+export class BezierEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -33,11 +33,11 @@ export class VerticalEdgeShape implements EdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly arrowOffset: number;
+  private readonly curvature: number;
 
-  private readonly roundness: number;
+  private readonly portCycleRadius: number;
 
-  private readonly cycleSquareSide: number;
+  private readonly portCycleSmallRadius: number;
 
   private readonly detourDirection: number;
 
@@ -47,29 +47,21 @@ export class VerticalEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: VerticalEdgeParams) {
+  public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
+    this.curvature = params?.curvature ?? edgeConstants.curvature;
+    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
+    this.portCycleSmallRadius =
+      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
     this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirectionVertical;
+      params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
-
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
 
@@ -120,41 +112,37 @@ export class VerticalEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleSquarePath({
+      linePath = createCycleCirclePath({
         fromVect,
+        radius: this.portCycleRadius,
+        smallRadius: this.portCycleSmallRadius,
         arrowLength: this.arrowLength,
-        side: this.cycleSquareSide,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourStraightPath({
+      linePath = createDetourBezierPath({
         to,
         fromVect,
         toVect,
         flipX,
         flipY,
         arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
         detourDirection: this.detourDirection,
         detourDistance: this.detourDistance,
+        curvature: this.curvature,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createVerticalLinePath({
+      linePath = createBezierLinePath({
         to,
         fromVect,
         toVect,
-        flipY,
         arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
+        curvature: this.curvature,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });

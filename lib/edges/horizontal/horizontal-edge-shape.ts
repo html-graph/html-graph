@@ -8,17 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../../utils";
+} from "../utils";
 import {
   createCycleSquarePath,
   createDetourStraightPath,
-  createStraightLinePath,
-} from "../../paths";
+  createHorizontalLinePath,
+} from "../paths";
 import { Point, zero } from "@/point";
-import { StraightEdgeParams } from "./straight-edge-params";
+import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class StraightEdgeShape implements EdgeShape {
+export class HorizontalEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -47,7 +47,7 @@ export class StraightEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: StraightEdgeParams) {
+  public constructor(params?: HorizontalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
@@ -55,7 +55,6 @@ export class StraightEdgeShape implements EdgeShape {
       params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
 
     const roundness = params?.roundness ?? edgeConstants.roundness;
-
     this.roundness = Math.min(
       roundness,
       this.arrowOffset,
@@ -66,7 +65,6 @@ export class StraightEdgeShape implements EdgeShape {
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
@@ -149,10 +147,11 @@ export class StraightEdgeShape implements EdgeShape {
         hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createStraightLinePath({
+      linePath = createHorizontalLinePath({
         to,
         fromVect,
         toVect,
+        flipX,
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,
         roundness: this.roundness,

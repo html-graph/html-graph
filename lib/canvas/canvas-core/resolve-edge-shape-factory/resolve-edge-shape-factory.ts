@@ -1,11 +1,11 @@
 import {
   BezierEdgeShape,
-  EdgeShapeFactory,
   HorizontalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShape } from "../../edge-shape";
+import { EdgeShapeFactory } from "../../edge-shape-factory";
 
 export const resolveEdgeShapeFactory: (
   options: EdgeShape,

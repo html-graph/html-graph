@@ -8,17 +8,17 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../../utils";
+} from "../utils";
 import {
-  createBezierLinePath,
-  createDetourBezierPath,
-  createCycleCirclePath,
-} from "../../paths";
+  createCycleSquarePath,
+  createDetourStraightPath,
+  createStraightLinePath,
+} from "../paths";
 import { Point, zero } from "@/point";
-import { BezierEdgeParams } from "./bezier-edge-params";
+import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";
 
-export class BezierEdgeShape implements EdgeShape {
+export class StraightEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -33,11 +33,11 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly curvature: number;
+  private readonly arrowOffset: number;
 
-  private readonly portCycleRadius: number;
+  private readonly roundness: number;
 
-  private readonly portCycleSmallRadius: number;
+  private readonly cycleSquareSide: number;
 
   private readonly detourDirection: number;
 
@@ -47,21 +47,31 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  public constructor(params?: BezierEdgeParams) {
+  public constructor(params?: StraightEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
-    this.curvature = params?.curvature ?? edgeConstants.curvature;
-    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
-    this.portCycleSmallRadius =
-      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+
+    this.roundness = Math.min(
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
+    );
+
     this.detourDirection =
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
+
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
     const color = params?.color ?? edgeConstants.color;
     const width = params?.width ?? edgeConstants.width;
 
@@ -112,37 +122,40 @@ export class BezierEdgeShape implements EdgeShape {
     let targetArrowLength = -this.arrowLength;
 
     if (params.source.portId === params.target.portId) {
-      linePath = createCycleCirclePath({
+      linePath = createCycleSquarePath({
         fromVect,
-        radius: this.portCycleRadius,
-        smallRadius: this.portCycleSmallRadius,
         arrowLength: this.arrowLength,
+        side: this.cycleSquareSide,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
     } else if (params.source.nodeId === params.target.nodeId) {
-      linePath = createDetourBezierPath({
+      linePath = createDetourStraightPath({
         to,
         fromVect,
         toVect,
         flipX,
         flipY,
         arrowLength: this.arrowLength,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
         detourDirection: this.detourDirection,
         detourDistance: this.detourDistance,
-        curvature: this.curvature,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });
     } else {
-      linePath = createBezierLinePath({
+      linePath = createStraightLinePath({
         to,
         fromVect,
         toVect,
         arrowLength: this.arrowLength,
-        curvature: this.curvature,
+        arrowOffset: this.arrowOffset,
+        roundness: this.roundness,
         hasSourceArrow: this.hasSourceArrow,
         hasTargetArrow: this.hasTargetArrow,
       });
