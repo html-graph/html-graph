@@ -23,8 +23,7 @@ export const createOptions = (dragOptions: DragOptions): Options => {
       ? defaultMouseDownEventValidator
       : (event: MouseEvent): boolean => event.button === 0;
 
-  const defaultMouseUpEventValidator =
-    dragOptions?.mouse?.mouseUpEventVerifier;
+  const defaultMouseUpEventValidator = dragOptions?.mouse?.mouseUpEventVerifier;
 
   const mouseUpEventValidator =
     defaultMouseUpEventValidator !== undefined
