@@ -78,7 +78,7 @@ describe("createOptions", () => {
 
     const dragOptions: DragOptions = {
       mouse: {
-        mouseDownEventValidator,
+        mouseDownEventVerifier: mouseDownEventValidator,
       },
     };
 
@@ -92,7 +92,7 @@ describe("createOptions", () => {
 
     const dragOptions: DragOptions = {
       mouse: {
-        mouseUpEventValidator,
+        mouseUpEventVerifier: mouseUpEventValidator,
       },
     };
 

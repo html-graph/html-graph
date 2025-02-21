@@ -11,7 +11,7 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const transformOptions: TransformOptions = {
   scale: {
-    mouseWheelEventValidator: (event: WheelEvent): boolean => event.ctrlKey,
+    mouseWheelEventVerifier: (event: WheelEvent): boolean => event.ctrlKey,
   },
 };
 

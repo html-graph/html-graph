@@ -16,7 +16,7 @@ export const createOptions = (dragOptions: DragOptions): Options => {
   const dragCursor = cursor !== undefined ? cursor : "grab";
 
   const defaultMouseDownEventValidator =
-    dragOptions?.mouse?.mouseDownEventValidator;
+    dragOptions?.mouse?.mouseDownEventVerifier;
 
   const mouseDownEventValidator =
     defaultMouseDownEventValidator !== undefined
@@ -24,7 +24,7 @@ export const createOptions = (dragOptions: DragOptions): Options => {
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseUpEventValidator =
-    dragOptions?.mouse?.mouseUpEventValidator;
+    dragOptions?.mouse?.mouseUpEventVerifier;
 
   const mouseUpEventValidator =
     defaultMouseUpEventValidator !== undefined

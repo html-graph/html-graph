@@ -160,7 +160,7 @@ describe("createOptions", () => {
 
     const dragOptions: TransformOptions = {
       shift: {
-        mouseDownEventValidator,
+        mouseDownEventVerifier: mouseDownEventValidator,
       },
     };
 
@@ -174,7 +174,7 @@ describe("createOptions", () => {
 
     const dragOptions: TransformOptions = {
       shift: {
-        mouseUpEventValidator,
+        mouseUpEventVerifier: mouseUpEventValidator,
       },
     };
 
@@ -188,7 +188,7 @@ describe("createOptions", () => {
 
     const dragOptions: TransformOptions = {
       scale: {
-        mouseWheelEventValidator,
+        mouseWheelEventVerifier: mouseWheelEventValidator,
       },
     };
 

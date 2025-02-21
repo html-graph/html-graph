@@ -11,7 +11,7 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const dragOptions: DragOptions = {
   mouse: {
-    mouseDownEventValidator: (event: MouseEvent) =>
+    mouseDownEventVerifier: (event: MouseEvent) =>
       event.button === 0 && event.ctrlKey,
   },
 };

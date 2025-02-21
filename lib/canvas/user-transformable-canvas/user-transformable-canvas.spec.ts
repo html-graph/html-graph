@@ -935,7 +935,7 @@ describe("UserTransformableCanvas", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserTransformableCanvas(canvasCore, {
       scale: {
-        mouseWheelEventValidator: (event: WheelEvent): boolean => event.ctrlKey,
+        mouseWheelEventVerifier: (event: WheelEvent): boolean => event.ctrlKey,
       },
     });
 

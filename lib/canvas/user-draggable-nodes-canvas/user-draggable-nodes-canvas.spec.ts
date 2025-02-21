@@ -1107,7 +1107,7 @@ describe("UserDraggableNodesCanvas", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserDraggableNodesCanvas(canvasCore, {
       mouse: {
-        mouseDownEventValidator: (event: MouseEvent): boolean =>
+        mouseDownEventVerifier: (event: MouseEvent): boolean =>
           event.button === 0 && event.ctrlKey,
       },
     });
@@ -1140,7 +1140,7 @@ describe("UserDraggableNodesCanvas", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserDraggableNodesCanvas(canvasCore, {
       mouse: {
-        mouseUpEventValidator: (event: MouseEvent): boolean =>
+        mouseUpEventVerifier: (event: MouseEvent): boolean =>
           event.button === 0 && event.ctrlKey,
       },
     });

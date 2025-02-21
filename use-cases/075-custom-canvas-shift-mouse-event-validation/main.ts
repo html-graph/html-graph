@@ -11,7 +11,7 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const transformOptions: TransformOptions = {
   shift: {
-    mouseDownEventValidator: (event: MouseEvent) =>
+    mouseDownEventVerifier: (event: MouseEvent) =>
       event.button === 0 && event.ctrlKey,
   },
 };

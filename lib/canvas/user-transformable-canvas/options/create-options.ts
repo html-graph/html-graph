@@ -50,7 +50,7 @@ export const createOptions = (
     transformOptions?.events?.onTransformChange ?? ((): void => {});
 
   const defaultMouseDownEventValidator =
-    transformOptions?.shift?.mouseDownEventValidator;
+    transformOptions?.shift?.mouseDownEventVerifier;
 
   const mouseDownEventValidator =
     defaultMouseDownEventValidator !== undefined
@@ -58,7 +58,7 @@ export const createOptions = (
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseUpEventValidator =
-    transformOptions?.shift?.mouseUpEventValidator;
+    transformOptions?.shift?.mouseUpEventVerifier;
 
   const mouseUpEventValidator =
     defaultMouseUpEventValidator !== undefined
@@ -66,7 +66,7 @@ export const createOptions = (
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseWheelEventValidator =
-    transformOptions?.scale?.mouseWheelEventValidator;
+    transformOptions?.scale?.mouseWheelEventVerifier;
 
   const mouseWheelEventValidator =
     defaultMouseWheelEventValidator !== undefined
