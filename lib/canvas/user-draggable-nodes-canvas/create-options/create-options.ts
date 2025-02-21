@@ -15,26 +15,26 @@ export const createOptions = (dragOptions: DragOptions): Options => {
   const cursor = dragOptions?.mouse?.dragCursor;
   const dragCursor = cursor !== undefined ? cursor : "grab";
 
-  const defaultMouseDownEventValidator =
+  const defaultMouseDownEventVerifier =
     dragOptions?.mouse?.mouseDownEventVerifier;
 
-  const mouseDownEventValidator =
-    defaultMouseDownEventValidator !== undefined
-      ? defaultMouseDownEventValidator
+  const mouseDownEventVerifier =
+    defaultMouseDownEventVerifier !== undefined
+      ? defaultMouseDownEventVerifier
       : (event: MouseEvent): boolean => event.button === 0;
 
-  const defaultMouseUpEventValidator = dragOptions?.mouse?.mouseUpEventVerifier;
+  const defaultMouseUpEventVerifier = dragOptions?.mouse?.mouseUpEventVerifier;
 
-  const mouseUpEventValidator =
-    defaultMouseUpEventValidator !== undefined
-      ? defaultMouseUpEventValidator
+  const mouseUpEventVerifier =
+    defaultMouseUpEventVerifier !== undefined
+      ? defaultMouseUpEventVerifier
       : (event: MouseEvent): boolean => event.button === 0;
 
   return {
     freezePriority,
     dragCursor,
-    mouseDownEventValidator,
-    mouseUpEventValidator,
+    mouseDownEventVerifier: mouseDownEventVerifier,
+    mouseUpEventVerifier,
     onNodeDrag,
     onBeforeNodeDrag,
     onNodeDragFinished,

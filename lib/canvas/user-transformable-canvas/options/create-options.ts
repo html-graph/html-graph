@@ -49,28 +49,28 @@ export const createOptions = (
   const onTransformFinished =
     transformOptions?.events?.onTransformChange ?? ((): void => {});
 
-  const defaultMouseDownEventValidator =
+  const defaultMouseDownEventVerifier =
     transformOptions?.shift?.mouseDownEventVerifier;
 
-  const mouseDownEventValidator =
-    defaultMouseDownEventValidator !== undefined
-      ? defaultMouseDownEventValidator
+  const mouseDownEventVerifier =
+    defaultMouseDownEventVerifier !== undefined
+      ? defaultMouseDownEventVerifier
       : (event: MouseEvent): boolean => event.button === 0;
 
-  const defaultMouseUpEventValidator =
+  const defaultMouseUpEventVerifier =
     transformOptions?.shift?.mouseUpEventVerifier;
 
-  const mouseUpEventValidator =
-    defaultMouseUpEventValidator !== undefined
-      ? defaultMouseUpEventValidator
+  const mouseUpEventVerifier =
+    defaultMouseUpEventVerifier !== undefined
+      ? defaultMouseUpEventVerifier
       : (event: MouseEvent): boolean => event.button === 0;
 
-  const defaultMouseWheelEventValidator =
+  const defaultMouseWheelEventVerifier =
     transformOptions?.scale?.mouseWheelEventVerifier;
 
-  const mouseWheelEventValidator =
-    defaultMouseWheelEventValidator !== undefined
-      ? defaultMouseWheelEventValidator
+  const mouseWheelEventVerifier =
+    defaultMouseWheelEventVerifier !== undefined
+      ? defaultMouseWheelEventVerifier
       : (): boolean => true;
 
   return {
@@ -83,8 +83,8 @@ export const createOptions = (
     onTransformChange: onTransformFinished,
     transformPreprocessor,
     shiftCursor,
-    mouseDownEventValidator,
-    mouseUpEventValidator,
-    mouseWheelEventValidator,
+    mouseDownEventVerifier,
+    mouseUpEventVerifier,
+    mouseWheelEventVerifier,
   };
 };

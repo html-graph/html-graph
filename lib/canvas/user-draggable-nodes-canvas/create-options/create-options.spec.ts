@@ -74,30 +74,30 @@ describe("createOptions", () => {
   });
 
   it("should set default mouse down event validator", () => {
-    const mouseDownEventValidator = (): boolean => false;
+    const mouseDownEventVerifier = (): boolean => false;
 
     const dragOptions: DragOptions = {
       mouse: {
-        mouseDownEventVerifier: mouseDownEventValidator,
+        mouseDownEventVerifier: mouseDownEventVerifier,
       },
     };
 
     const options = createOptions(dragOptions);
 
-    expect(options.mouseDownEventValidator).toBe(mouseDownEventValidator);
+    expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
   it("should set default mouse up event validator", () => {
-    const mouseUpEventValidator = (): boolean => false;
+    const mouseUpEventVerifier = (): boolean => false;
 
     const dragOptions: DragOptions = {
       mouse: {
-        mouseUpEventVerifier: mouseUpEventValidator,
+        mouseUpEventVerifier: mouseUpEventVerifier,
       },
     };
 
     const options = createOptions(dragOptions);
 
-    expect(options.mouseUpEventValidator).toBe(mouseUpEventValidator);
+    expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
 });

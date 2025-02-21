@@ -52,7 +52,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (!this.options.mouseUpEventValidator(event)) {
+    if (!this.options.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -139,7 +139,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
       if (
         this.element === null ||
-        !this.options.mouseDownEventValidator(event)
+        !this.options.mouseDownEventVerifier(event)
       ) {
         return;
       }

@@ -8,7 +8,7 @@ export interface Options {
   readonly onTransformChange: () => void;
   readonly transformPreprocessor: TransformPreprocessorFn;
   readonly shiftCursor: string | null;
-  readonly mouseDownEventValidator: (event: MouseEvent) => boolean;
-  readonly mouseUpEventValidator: (event: MouseEvent) => boolean;
-  readonly mouseWheelEventValidator: (event: WheelEvent) => boolean;
+  readonly mouseDownEventVerifier: (event: MouseEvent) => boolean;
+  readonly mouseUpEventVerifier: (event: MouseEvent) => boolean;
+  readonly mouseWheelEventVerifier: (event: WheelEvent) => boolean;
 }

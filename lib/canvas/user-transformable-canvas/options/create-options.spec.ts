@@ -156,44 +156,44 @@ describe("createOptions", () => {
   });
 
   it("should set default mouse down event validator", () => {
-    const mouseDownEventValidator = (): boolean => false;
+    const mouseDownEventVerifier = (): boolean => false;
 
     const dragOptions: TransformOptions = {
       shift: {
-        mouseDownEventVerifier: mouseDownEventValidator,
+        mouseDownEventVerifier: mouseDownEventVerifier,
       },
     };
 
     const options = createOptions(dragOptions);
 
-    expect(options.mouseDownEventValidator).toBe(mouseDownEventValidator);
+    expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
   it("should set default mouse up event validator", () => {
-    const mouseUpEventValidator = (): boolean => false;
+    const mouseUpEventVerifier = (): boolean => false;
 
     const dragOptions: TransformOptions = {
       shift: {
-        mouseUpEventVerifier: mouseUpEventValidator,
+        mouseUpEventVerifier: mouseUpEventVerifier,
       },
     };
 
     const options = createOptions(dragOptions);
 
-    expect(options.mouseUpEventValidator).toBe(mouseUpEventValidator);
+    expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
 
   it("should set default mouse wheel event validator", () => {
-    const mouseWheelEventValidator = (): boolean => false;
+    const mouseWheelEventVerifier = (): boolean => false;
 
     const dragOptions: TransformOptions = {
       scale: {
-        mouseWheelEventVerifier: mouseWheelEventValidator,
+        mouseWheelEventVerifier: mouseWheelEventVerifier,
       },
     };
 
     const options = createOptions(dragOptions);
 
-    expect(options.mouseWheelEventValidator).toBe(mouseWheelEventValidator);
+    expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
 });
