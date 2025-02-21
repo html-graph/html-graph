@@ -86,10 +86,18 @@ const markPort2OutRequest: MarkPortRequest = {
   element: addNode2Request.element.children[2] as HTMLElement,
 };
 
-canvas
-  .markPort(markPort1InRequest)
-  .markPort(markPort1OutRequest)
-  .markPort(markPort2InRequest)
-  .markPort(markPort2OutRequest);
+const markPortsBtn = document.getElementById("mark-ports")!;
 
-canvas.addEdge(addEdgeRequest);
+markPortsBtn.addEventListener("click", () => {
+  canvas
+    .markPort(markPort1InRequest)
+    .markPort(markPort1OutRequest)
+    .markPort(markPort2InRequest)
+    .markPort(markPort2OutRequest);
+});
+
+const addEdgeBtn = document.getElementById("create-edge")!;
+
+addEdgeBtn.addEventListener("click", () => {
+  canvas.addEdge(addEdgeRequest);
+});
