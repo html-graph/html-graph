@@ -9,6 +9,8 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
+const boundsElement = document.getElementById("bounds")! as HTMLElement;
+
 const transformOptions: TransformOptions = {
   transformPreprocessor: [
     {
@@ -21,9 +23,16 @@ const transformOptions: TransformOptions = {
     {
       type: "scale-limit",
       minContentScale: 0.5,
-      maxContentScale: 5,
+      maxContentScale: 1.5,
     },
   ],
+  events: {
+    onTransformChange: () => {
+      const { scale, dx, dy } = canvas.transformation.getContentMatrix();
+
+      boundsElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${dx}, ${dy})`;
+    },
+  },
 };
 
 builder.setUserTransformableCanvas(transformOptions);

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should have inscreased scale velocity", async ({ page }) => {
+test("should have scale limit", async ({ page }) => {
   await page.goto(`${e2eBase}/033-scale-limit/`);
   await expect(page).toHaveScreenshot("initial.png");
 
