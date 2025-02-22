@@ -75,7 +75,6 @@ sliderDeltaX.addEventListener("input", () => {
 const sliderDeltaY: HTMLInputElement = document.getElementById(
   "delta-y",
 ) as HTMLInputElement;
-
 const deltaYValue: HTMLElement = document.getElementById(
   "delta-y-value",
 ) as HTMLElement;
@@ -85,6 +84,6 @@ sliderDeltaY.addEventListener("input", () => {
     y: parseFloat(sliderDeltaY.value),
   };
 
-  canvas.patchViewportMatrix(patchRequest);
+  canvas.patchContentMatrix(patchRequest);
   deltaYValue.innerText = sliderDeltaY.value;
 });

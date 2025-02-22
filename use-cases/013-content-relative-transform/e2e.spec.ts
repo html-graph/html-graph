@@ -5,7 +5,7 @@ test("should apply content transform", async ({ page }) => {
   await page.goto(`${e2eBase}/013-content-relative-transform/`);
   await expect(page).toHaveScreenshot("initial.png");
 
-  await page.locator("#scale").fill("0.7");
+  await page.locator("#scale").fill("1.5");
 
   await expect(page).toHaveScreenshot("after-scale.png");
 
