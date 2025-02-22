@@ -41,7 +41,7 @@ const addNode2Request: AddNodeRequest = createInOutNode({
 
 const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
-  x: 800,
+  x: 200,
   y: 650,
   frontPortId: "node-3-in",
   backPortId: "node-3-out",
