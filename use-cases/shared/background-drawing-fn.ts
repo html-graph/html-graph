@@ -26,9 +26,9 @@ export const backgroundDrawingFn = (
   }
 
   const zeroOffsetX =
-    matrixContent.dx - Math.floor(matrixContent.dx / viewGap) * viewGap;
+    matrixContent.x - Math.floor(matrixContent.x / viewGap) * viewGap;
   const zeroOffsetY =
-    matrixContent.dy - Math.floor(matrixContent.dy / viewGap) * viewGap;
+    matrixContent.y - Math.floor(matrixContent.y / viewGap) * viewGap;
 
   const r = dotRadius * matrixContent.scale;
   const pi2 = 2 * Math.PI;

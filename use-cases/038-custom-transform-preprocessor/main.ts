@@ -17,8 +17,8 @@ const transformOptions: TransformOptions = {
 
     return {
       scale: params.nextTransform.scale,
-      dx: Math.max(params.nextTransform.dx, -500),
-      dy: params.nextTransform.dy,
+      x: Math.max(params.nextTransform.x, -500),
+      y: params.nextTransform.y,
     };
   },
 };

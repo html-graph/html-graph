@@ -1,3 +1,4 @@
+import { TransformState } from "@/viewport-transformer";
 import { createShiftLimitTransformPreprocessor } from "./create-shift-limit-transform-preprocessor";
 
 describe("createShiftLimitTransformPreprocessor", () => {
@@ -10,13 +11,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 100, dy: 100 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 100, y: 100 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 100, dy: 100 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 100,
+      y: 100,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform horizontally to less than minX", () => {
@@ -28,13 +35,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: -200, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: -200, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: -100, dy: 0 });
+    const expected: TransformState = {
+      scale: 1,
+      x: -100,
+      y: 0,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform horizontally to less when limit bypassed", () => {
@@ -46,13 +59,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: -200, dy: 0 },
-      nextTransform: { scale: 1, dx: -300, dy: 0 },
+      prevTransform: { scale: 1, x: -200, y: 0 },
+      nextTransform: { scale: 1, x: -300, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: -200, dy: 0 });
+    const expected: TransformState = {
+      scale: 1,
+      x: -200,
+      y: 0,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform horizontally to more than maxX", () => {
@@ -64,13 +83,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 200, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 200, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 100, dy: 0 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 100,
+      y: 0,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform horizontally to more when limit bypassed", () => {
@@ -82,13 +107,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 200, dy: 0 },
-      nextTransform: { scale: 1, dx: 300, dy: 0 },
+      prevTransform: { scale: 1, x: 200, y: 0 },
+      nextTransform: { scale: 1, x: 300, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 200, dy: 0 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 200,
+      y: 0,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform vertically to less than minY", () => {
@@ -100,13 +131,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 0, dy: -200 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 0, y: -200 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 0, dy: -100 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 0,
+      y: -100,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform vertically to less when limit bypassed", () => {
@@ -118,13 +155,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: -200 },
-      nextTransform: { scale: 1, dx: 0, dy: -300 },
+      prevTransform: { scale: 1, x: 0, y: -200 },
+      nextTransform: { scale: 1, x: 0, y: -300 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 0, dy: -200 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 0,
+      y: -200,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform vertically to more than maxY", () => {
@@ -136,13 +179,19 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 0, dy: 200 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 0, y: 200 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 0, dy: 100 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 0,
+      y: 100,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 
   it("should not transform vertically to more when limit bypassed", () => {
@@ -154,12 +203,18 @@ describe("createShiftLimitTransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 200 },
-      nextTransform: { scale: 1, dx: 0, dy: 300 },
+      prevTransform: { scale: 1, x: 0, y: 200 },
+      nextTransform: { scale: 1, x: 0, y: 300 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res).toStrictEqual({ scale: 1, dx: 0, dy: 200 });
+    const expected: TransformState = {
+      scale: 1,
+      x: 0,
+      y: 200,
+    };
+
+    expect(res).toStrictEqual(expected);
   });
 });

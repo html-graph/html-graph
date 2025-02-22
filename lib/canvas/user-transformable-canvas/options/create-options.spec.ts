@@ -1,3 +1,4 @@
+import { TransformState } from "@/viewport-transformer";
 import {
   TransformPayload,
   TransformPreprocessorParams,
@@ -28,17 +29,19 @@ describe("createOptions", () => {
     const preprocessor = res.transformPreprocessor;
 
     const matrix = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1_000_000, dx: 1_000_000, dy: 1_000_000 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1_000_000, x: 1_000_000, y: 1_000_000 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(matrix).toStrictEqual({
+    const expected: TransformState = {
       scale: 1_000_000,
-      dx: 1_000_000,
-      dy: 1_000_000,
-    });
+      x: 1_000_000,
+      y: 1_000_000,
+    };
+
+    expect(matrix).toStrictEqual(expected);
   });
 
   it("should set specified single transform preprocessor", () => {
@@ -57,8 +60,8 @@ describe("createOptions", () => {
     const preprocessor = res.transformPreprocessor;
 
     preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 2, dx: 3, dy: 4 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 2, x: 3, y: 4 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
@@ -82,8 +85,8 @@ describe("createOptions", () => {
     const preprocessor = res.transformPreprocessor;
 
     preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 2, dx: 3, dy: 4 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 2, x: 3, y: 4 },
       canvasWidth: 500,
       canvasHeight: 500,
     });

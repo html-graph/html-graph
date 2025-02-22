@@ -83,15 +83,15 @@ class NodesDragHandler {
 
         const matrixContent = canvas.transformation.getContentMatrix();
 
-        const xViewport = matrixContent.scale * node.x + matrixContent.dx;
-        const yViewport = matrixContent.scale * node.y + matrixContent.dy;
+        const xViewport = matrixContent.scale * node.x + matrixContent.x;
+        const yViewport = matrixContent.scale * node.y + matrixContent.y;
 
         const newNodeX = xViewport + event.movementX;
         const newNodeY = yViewport + event.movementY;
 
         const matrixViewport = canvas.transformation.getViewportMatrix();
-        node.x = matrixViewport.scale * newNodeX + matrixViewport.dx;
-        node.y = matrixViewport.scale * newNodeY + matrixViewport.dy;
+        node.x = matrixViewport.scale * newNodeX + matrixViewport.x;
+        node.y = matrixViewport.scale * newNodeY + matrixViewport.y;
 
         canvas.updateNode(this.grabbedNode, { x: node.x, y: node.y });
       }

@@ -39,7 +39,7 @@ export class HtmlController {
   public applyTransform(): void {
     const m = this.viewportTransformer.getContentMatrix();
 
-    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.dx}, ${m.dy})`;
+    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
   }
 
   public attachNode(nodeId: unknown): void {
@@ -144,13 +144,13 @@ export class HtmlController {
     const viewportMatrix = this.viewportTransformer.getViewportMatrix();
 
     const from: Point = {
-      x: viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.dx,
-      y: viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.dy,
+      x: viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.x,
+      y: viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.y,
     };
 
     const to: Point = {
-      x: viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.dx,
-      y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.dy,
+      x: viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.x,
+      y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.y,
     };
 
     const source: EdgeRenderPort = {

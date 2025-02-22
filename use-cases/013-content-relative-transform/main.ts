@@ -65,7 +65,7 @@ const deltaXValue: HTMLElement = document.getElementById(
 
 sliderDeltaX.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
-    dx: parseFloat(sliderDeltaX.value),
+    x: parseFloat(sliderDeltaX.value),
   };
 
   canvas.patchViewportMatrix(patchRequest);
@@ -82,7 +82,7 @@ const deltaYValue: HTMLElement = document.getElementById(
 
 sliderDeltaY.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
-    dy: parseFloat(sliderDeltaY.value),
+    y: parseFloat(sliderDeltaY.value),
   };
 
   canvas.patchViewportMatrix(patchRequest);

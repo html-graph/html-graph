@@ -401,7 +401,7 @@ describe("CanvasCore", () => {
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
-    canvas.patchViewportMatrix({ scale: 2, dx: 2, dy: 2 });
+    canvas.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
     const container = canvasElement.children[0].children[0] as HTMLElement;
 
@@ -413,7 +413,7 @@ describe("CanvasCore", () => {
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
-    canvas.patchContentMatrix({ scale: 2, dx: 3, dy: 4 });
+    canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
     const container = canvasElement.children[0].children[0] as HTMLElement;
 

@@ -19,7 +19,7 @@ export const scale = (
    */
   return {
     scale: prevTransform.scale * s2,
-    dx: prevTransform.scale * (1 - s2) * cx + prevTransform.dx,
-    dy: prevTransform.scale * (1 - s2) * cy + prevTransform.dy,
+    x: prevTransform.scale * (1 - s2) * cx + prevTransform.x,
+    y: prevTransform.scale * (1 - s2) * cy + prevTransform.y,
   };
 };

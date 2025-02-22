@@ -19,8 +19,8 @@ export class ViewportTransformer {
   public patchViewportMatrix(matrix: PatchTransformRequest): void {
     this.viewportMatrix = {
       scale: matrix.scale ?? this.viewportMatrix.scale,
-      dx: matrix.dx ?? this.viewportMatrix.dx,
-      dy: matrix.dy ?? this.viewportMatrix.dy,
+      x: matrix.x ?? this.viewportMatrix.x,
+      y: matrix.y ?? this.viewportMatrix.y,
     };
 
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
@@ -29,8 +29,8 @@ export class ViewportTransformer {
   public patchContentMatrix(matrix: PatchTransformRequest): void {
     this.contentMatrix = {
       scale: matrix.scale ?? this.contentMatrix.scale,
-      dx: matrix.dx ?? this.contentMatrix.dx,
-      dy: matrix.dy ?? this.contentMatrix.dy,
+      x: matrix.x ?? this.contentMatrix.x,
+      y: matrix.y ?? this.contentMatrix.y,
     };
 
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);

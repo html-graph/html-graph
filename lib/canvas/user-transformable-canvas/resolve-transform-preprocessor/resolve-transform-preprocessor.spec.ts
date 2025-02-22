@@ -19,13 +19,13 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: -200, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: -200, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res.dx).toBe(-100);
+    expect(res.x).toBe(-100);
   });
 
   it("should resolve scale limit transform preprocessor", () => {
@@ -35,8 +35,8 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 10, dx: 0, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 10, x: 0, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
@@ -50,8 +50,8 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 10, dx: 0, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 10, x: 0, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
@@ -65,8 +65,8 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 0.001, dx: 0, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 0.001, x: 0, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
@@ -80,13 +80,13 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: -1_000_000, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: -1_000_000, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res.dx).toBe(-1_000_000);
+    expect(res.x).toBe(-1_000_000);
   });
 
   it("should maxX as Infinity when not specified", () => {
@@ -95,13 +95,13 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 1_000_000, dy: 0 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 1_000_000, y: 0 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res.dx).toBe(1_000_000);
+    expect(res.x).toBe(1_000_000);
   });
 
   it("should minY as -Infinity when not specified", () => {
@@ -110,13 +110,13 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 0, dy: -1_000_000 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 0, y: -1_000_000 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res.dy).toBe(-1_000_000);
+    expect(res.y).toBe(-1_000_000);
   });
 
   it("should maxY as Infinity when not specified", () => {
@@ -125,12 +125,12 @@ describe("olveransformPreprocessor", () => {
     });
 
     const res = preprocessor({
-      prevTransform: { scale: 1, dx: 0, dy: 0 },
-      nextTransform: { scale: 1, dx: 0, dy: 1_000_000 },
+      prevTransform: { scale: 1, x: 0, y: 0 },
+      nextTransform: { scale: 1, x: 0, y: 1_000_000 },
       canvasWidth: 500,
       canvasHeight: 500,
     });
 
-    expect(res.dy).toBe(1_000_000);
+    expect(res.y).toBe(1_000_000);
   });
 });

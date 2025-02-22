@@ -1,5 +1,5 @@
 export interface PatchMatrixRequest {
   readonly scale?: number;
-  readonly dx?: number;
-  readonly dy?: number;
+  readonly x?: number;
+  readonly y?: number;
 }

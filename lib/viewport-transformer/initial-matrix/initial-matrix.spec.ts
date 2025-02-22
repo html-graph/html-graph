@@ -1,11 +1,14 @@
+import { TransformState } from "../transform-state";
 import { initialMatrix } from "./initial-matrix";
 
 describe("initialMatrix", () => {
   it("should be 1 matrix", () => {
-    expect(initialMatrix).toStrictEqual({
+    const expected: TransformState = {
       scale: 1,
-      dx: 0,
-      dy: 0,
-    });
+      x: 0,
+      y: 0,
+    };
+
+    expect(initialMatrix).toStrictEqual(expected);
   });
 });

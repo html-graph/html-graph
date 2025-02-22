@@ -28,7 +28,7 @@ const transformOptions: TransformOptions = {
   ],
   events: {
     onTransformChange: () => {
-      const { scale, dx, dy } = canvas.transformation.getContentMatrix();
+      const { scale, x: dx, y: dy } = canvas.transformation.getContentMatrix();
 
       boundsElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${dx}, ${dy})`;
     },

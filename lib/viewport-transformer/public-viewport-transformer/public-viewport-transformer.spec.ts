@@ -7,34 +7,46 @@ describe("PublicViewportTransformer", () => {
     const transformer = new ViewportTransformer();
     jest
       .spyOn(transformer, "getViewportMatrix")
-      .mockReturnValue({ scale: 2, dx: 1, dy: 1 });
+      .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
     const publicTransformer = new PublicViewportTransformer(transformer);
 
     const viewportMatrix = publicTransformer.getViewportMatrix();
 
-    expect(viewportMatrix).toEqual({ scale: 2, dx: 1, dy: 1 });
+    const expected: TransformState = {
+      scale: 2,
+      x: 1,
+      y: 1,
+    };
+
+    expect(viewportMatrix).toEqual(expected);
   });
 
   it("should return initial content matrix", () => {
     const transformer = new ViewportTransformer();
     jest
       .spyOn(transformer, "getContentMatrix")
-      .mockReturnValue({ scale: 2, dx: 1, dy: 1 });
+      .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
     const publicTransformer = new PublicViewportTransformer(transformer);
 
     const viewportMatrix = publicTransformer.getContentMatrix();
 
-    expect(viewportMatrix).toEqual({ scale: 2, dx: 1, dy: 1 });
+    const expected: TransformState = {
+      scale: 2,
+      x: 1,
+      y: 1,
+    };
+
+    expect(viewportMatrix).toEqual(expected);
   });
 
   it("should return viewport matrix as a new object", () => {
     const transformer = new ViewportTransformer();
     const matrix: TransformState = {
       scale: 2,
-      dx: 1,
-      dy: 1,
+      x: 1,
+      y: 1,
     };
 
     jest.spyOn(transformer, "getViewportMatrix").mockReturnValue(matrix);
@@ -50,8 +62,8 @@ describe("PublicViewportTransformer", () => {
     const transformer = new ViewportTransformer();
     const matrix: TransformState = {
       scale: 2,
-      dx: 1,
-      dy: 1,
+      x: 1,
+      y: 1,
     };
 
     jest.spyOn(transformer, "getContentMatrix").mockReturnValue(matrix);

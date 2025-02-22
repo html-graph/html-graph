@@ -1403,7 +1403,7 @@ describe("CanvasController", () => {
     const div = document.createElement("div");
     canvasController.attach(div);
 
-    canvasController.patchViewportMatrix({ scale: 2, dx: 2, dy: 2 });
+    canvasController.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
     const container = div.children[0].children[0] as HTMLElement;
 
@@ -1415,7 +1415,7 @@ describe("CanvasController", () => {
     const div = document.createElement("div");
     canvasController.attach(div);
 
-    canvasController.patchContentMatrix({ scale: 2, dx: 2, dy: 2 });
+    canvasController.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
     const container = div.children[0].children[0] as HTMLElement;
 

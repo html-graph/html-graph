@@ -53,6 +53,6 @@ addNodeRequests.forEach((request) => {
     const targetX = node.x - (sv * rect.width) / 2;
     const targetY = node.y - (sv * rect.height) / 2;
 
-    canvas.patchViewportMatrix({ dx: targetX, dy: targetY });
+    canvas.patchViewportMatrix({ x: targetX, y: targetY });
   });
 });

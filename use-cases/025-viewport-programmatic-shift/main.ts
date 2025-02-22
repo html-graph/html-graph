@@ -60,8 +60,8 @@ class ViewportTransformer {
         const matrixViewport = this.canvas.transformation.getViewportMatrix();
 
         const patchMatrixRequest: PatchMatrixRequest = {
-          dx: matrixViewport.scale * -event.movementX + matrixViewport.dx,
-          dy: matrixViewport.scale * -event.movementY + matrixViewport.dy,
+          x: matrixViewport.scale * -event.movementX + matrixViewport.x,
+          y: matrixViewport.scale * -event.movementY + matrixViewport.y,
         };
 
         this.canvas.patchViewportMatrix(patchMatrixRequest);

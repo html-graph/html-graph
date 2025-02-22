@@ -105,8 +105,8 @@ describe("HtmlController", () => {
 
     transformer.patchContentMatrix({
       scale: 2,
-      dx: 3,
-      dy: 4,
+      x: 3,
+      y: 4,
     });
 
     const htmlController = createHtmlController({ transformer });

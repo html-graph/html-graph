@@ -19,7 +19,7 @@ export const move = (
 
   return {
     scale: prevTransform.scale,
-    dx: prevTransform.dx + prevTransform.scale * dx,
-    dy: prevTransform.dy + prevTransform.scale * dy,
+    x: prevTransform.x + prevTransform.scale * dx,
+    y: prevTransform.y + prevTransform.scale * dy,
   };
 };

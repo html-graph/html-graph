@@ -3,10 +3,16 @@ import { calculateReverseMatrix } from "./calculate-reverse-matrix";
 
 describe("createReverseMatrix", () => {
   it("should return inversed matrix", () => {
-    const matrix: TransformState = { scale: 2, dx: 2, dy: 2 };
+    const matrix: TransformState = { scale: 2, x: 2, y: 2 };
 
     const reverse: TransformState = calculateReverseMatrix(matrix);
 
-    expect(reverse).toStrictEqual({ scale: 1 / 2, dx: -1, dy: -1 });
+    const expected: TransformState = {
+      scale: 1 / 2,
+      x: -1,
+      y: -1,
+    };
+
+    expect(reverse).toStrictEqual(expected);
   });
 });

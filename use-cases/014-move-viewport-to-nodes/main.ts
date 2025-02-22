@@ -76,5 +76,5 @@ navigateBtn.addEventListener("click", () => {
   const targetX = avgX - (viewportScale * rect.width) / 2;
   const targetY = avgY - (viewportScale * rect.height) / 2;
 
-  canvas.patchViewportMatrix({ dx: targetX, dy: targetY });
+  canvas.patchViewportMatrix({ x: targetX, y: targetY });
 });

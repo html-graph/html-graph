@@ -17,29 +17,31 @@ export const createShiftLimitTransformPreprocessor: (
     preprocessorParams.maxY !== null ? preprocessorParams.maxY : Infinity;
 
   return (params: TransformPreprocessorParams) => {
-    let dx = params.nextTransform.dx;
-    let dy = params.nextTransform.dy;
+    let dx = params.nextTransform.x;
+    let dy = params.nextTransform.y;
 
-    if (dx < minX && dx < params.prevTransform.dx) {
-      dx = Math.min(params.prevTransform.dx, minX);
+    if (dx < minX && dx < params.prevTransform.x) {
+      dx = Math.min(params.prevTransform.x, minX);
     }
 
     const w = params.canvasWidth * params.prevTransform.scale;
+    const maxScreenX = maxX - w;
 
-    if (dx > maxX - w && dx > params.prevTransform.dx) {
-      dx = Math.max(params.prevTransform.dx, maxX - w);
+    if (dx > maxScreenX && dx > params.prevTransform.x) {
+      dx = Math.max(params.prevTransform.x, maxScreenX);
     }
 
-    if (dy < minY && dy < params.prevTransform.dy) {
-      dy = Math.min(params.prevTransform.dy, minY);
+    if (dy < minY && dy < params.prevTransform.y) {
+      dy = Math.min(params.prevTransform.y, minY);
     }
 
     const h = params.canvasHeight * params.prevTransform.scale;
+    const maxScreenY = maxY - h;
 
-    if (dy > maxY - h && dy > params.prevTransform.dy) {
-      dy = Math.max(params.prevTransform.dy, maxY - h);
+    if (dy > maxScreenY && dy > params.prevTransform.y) {
+      dy = Math.max(params.prevTransform.y, maxScreenY);
     }
 
-    return { scale: params.nextTransform.scale, dx, dy };
+    return { scale: params.nextTransform.scale, x: dx, y: dy };
   };
 };
