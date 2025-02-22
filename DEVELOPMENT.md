@@ -46,7 +46,7 @@ npx jest --coverage
 
 ## Development without Docker
 
-Use node version 20
+Use node version >=20
 
 ```
 npm install
