@@ -51,7 +51,7 @@ sliderScale.addEventListener("input", () => {
     scale: parseFloat(sliderScale.value),
   };
 
-  canvas.patchViewportMatrix(patchRequest);
+  canvas.patchContentMatrix(patchRequest);
   scaleValue.innerText = sliderScale.value;
 });
 
@@ -68,7 +68,7 @@ sliderDeltaX.addEventListener("input", () => {
     x: parseFloat(sliderDeltaX.value),
   };
 
-  canvas.patchViewportMatrix(patchRequest);
+  canvas.patchContentMatrix(patchRequest);
   deltaXValue.innerText = sliderDeltaX.value;
 });
 
