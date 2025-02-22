@@ -1,14 +1,15 @@
 name: CI
 run-name: Continuous Integration (${{ github.actor }})
-on: [push]
+on: [push, pull_request]
 jobs:
   ci:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: lts/*
       - name: Install packages
         run: npm ci
       - name: Run prettier
@@ -17,5 +18,15 @@ jobs:
         run: npm run lint
       - name: Run unit tests
         run: npm run test:ci
+      - name: install e2e testing dependencies
+        run: npx playwright install --with-deps
+      - name: Run e2e tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
       - name: Build production bundle
         run: npm run build
