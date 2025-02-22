@@ -42,34 +42,49 @@ const sliderScale: HTMLInputElement = document.getElementById(
   "scale",
 ) as HTMLInputElement;
 
+const scaleValue: HTMLElement = document.getElementById(
+  "scale-value",
+) as HTMLElement;
+
 sliderScale.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
     scale: parseFloat(sliderScale.value),
   };
 
-  canvas.patchContentMatrix(patchRequest);
+  canvas.patchViewportMatrix(patchRequest);
+  scaleValue.innerText = sliderScale.value;
 });
 
 const sliderDeltaX: HTMLInputElement = document.getElementById(
   "delta-x",
 ) as HTMLInputElement;
 
+const deltaXValue: HTMLElement = document.getElementById(
+  "delta-x-value",
+) as HTMLElement;
+
 sliderDeltaX.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
     dx: parseFloat(sliderDeltaX.value),
   };
 
-  canvas.patchContentMatrix(patchRequest);
+  canvas.patchViewportMatrix(patchRequest);
+  deltaXValue.innerText = sliderDeltaX.value;
 });
 
 const sliderDeltaY: HTMLInputElement = document.getElementById(
   "delta-y",
 ) as HTMLInputElement;
 
+const deltaYValue: HTMLElement = document.getElementById(
+  "delta-y-value",
+) as HTMLElement;
+
 sliderDeltaY.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
     dy: parseFloat(sliderDeltaY.value),
   };
 
-  canvas.patchContentMatrix(patchRequest);
+  canvas.patchViewportMatrix(patchRequest);
+  deltaYValue.innerText = sliderDeltaY.value;
 });

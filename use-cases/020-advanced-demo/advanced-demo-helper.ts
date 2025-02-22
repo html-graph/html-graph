@@ -129,7 +129,9 @@ export class AdvancedDemoHelper {
       hover = false;
     });
 
-    element.addEventListener("mousedown", () => {
+    element.addEventListener("mousedown", (event: Event) => {
+      event.stopPropagation();
+
       down = true;
     });
 
