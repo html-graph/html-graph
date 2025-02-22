@@ -338,8 +338,8 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.options.onNodeDrag({
       nodeId,
       element: node.element,
-      x: node.x,
-      y: node.y,
+      x: contentX,
+      y: contentY,
     });
   }
 
