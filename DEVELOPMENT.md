@@ -38,7 +38,7 @@ npx jest --coverage
 
 4. `docker compose down [--volumes]` - to stop detached container [and clear volumes]
 
-5. `docker compose -f idle.docker-compose.yml up` - to start idle container (to upgrade packages and so on)
+5. `docker compose -f idle.docker-compose.yml up` - to start idle container for manual actions
 
 6. `docker compose -f e2e.docker-compose.yml up` - to start container for end-to-end testing, then open http://localhost:39921
 
