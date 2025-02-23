@@ -35,6 +35,10 @@ input[type="range"] {
   overflow: hidden;
 }
 
+.canvas {
+  z-index: 0;
+}
+
 .overlay {
   position: absolute;
   top: 2rem;
