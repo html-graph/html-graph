@@ -1,7 +1,7 @@
-import { spawn } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import readline from "readline";
 import { stdin, stdout } from "process";
+import { execute } from "./execute";
 
 class ReleaseNextVersion {
   public static do(): void {
@@ -53,30 +53,9 @@ class ReleaseNextVersion {
       "git push --tags gitverse master",
     ];
 
-    this.execute(cmdsBeforePublish.join(" && "))
+    execute(cmdsBeforePublish.join(" && "))
       .then(() => this.askCode())
-      .then((otp) => this.execute(`npm publish --access=public --otp=${otp}`));
-  }
-
-  private static execute(cmd: string): Promise<void> {
-    return new Promise((res, rej) => {
-      const proc = spawn(cmd, [], {
-        cwd: "./",
-        shell: true,
-      });
-
-      proc.stderr.setEncoding("utf-8");
-      proc.stdout.pipe(process.stdout);
-      proc.stderr.pipe(process.stderr);
-
-      proc.on("close", (code) => {
-        if (code === 0) {
-          res();
-        } else {
-          rej();
-        }
-      });
-    });
+      .then((otp) => execute(`npm publish --access=public --otp=${otp}`));
   }
 
   private static askCode(): Promise<string> {
