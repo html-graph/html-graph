@@ -74,3 +74,9 @@ npm run make-deps-graph // next patch version
 ```
 npm run build-docs
 ```
+
+## Deploy documentation
+
+```
+npm run deploy-docs
+```
