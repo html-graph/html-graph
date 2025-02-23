@@ -160,7 +160,7 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
     this.canvas.updateNode(nodeId);
 
-    const edges = this.model.getNodeAdjacentEdgeIds(nodeId);
+    const edges = this.model.getNodeAdjacentEdgeIds(nodeId)!;
 
     edges.forEach((edge) => {
       this.canvas.updateEdge(edge);

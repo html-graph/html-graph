@@ -302,4 +302,60 @@ describe("PublicGraphStore", () => {
       addEdgeRequest12.edgeId,
     ]);
   });
+
+  it("should return null when accessing non-existing port incoming edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getPortIncomingEdgeIds("port-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing port outcoming edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getPortOutcomingEdgeIds("port-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing port cycle edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getPortCycleEdgeIds("port-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing port adjacent edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getPortAdjacentEdgeIds("port-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing node incoming edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getNodeIncomingEdgeIds("node-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing node outcoming edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getNodeOutcomingEdgeIds("node-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing node cycle edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getNodeCycleEdgeIds("node-1")).toEqual(null);
+  });
+
+  it("should return null when accessing non-existing node adjacent edges", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getNodeAdjacentEdgeIds("node-1")).toEqual(null);
+  });
 });
