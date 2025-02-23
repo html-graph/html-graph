@@ -67,7 +67,7 @@ npm run release-next-version:major // next major version
 npm run make-deps-graph // next patch version
 ```
 
-`./deps-graph/deps-graph.dot` will contain dependency graph in DOT format. It can be opened by software such as `xdot`.
+`./deps-graph/deps-graph.dot` will contain dependency graph in GraphVis format. It can be opened by software such as `xdot`.
 
 ## Build documentation
 
