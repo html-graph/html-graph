@@ -1,4 +1,4 @@
-export type { EdgeShape } from "./edge-shape";
+export type { EdgeShape } from "./canvas-core";
 export type { PatchMatrixRequest } from "./patch-transform-request";
 export type { AddEdgeRequest } from "./add-edge-request";
 export type { MarkPortRequest } from "./mark-port-request";

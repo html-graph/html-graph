@@ -1,2 +1,2 @@
 export { CanvasCore } from "./canvas-core";
-export type { CoreOptions } from "./core-options";
+export type { CoreOptions, EdgeShape } from "./options";

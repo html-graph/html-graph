@@ -1,8 +1,8 @@
 import { standardCenterFn } from "@/center-fn";
-import { CoreOptions } from "../core-options";
-import { Options } from "../options";
-import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
-import { resolvePriority } from "../resolve-priority";
+import { CoreOptions } from "./core-options";
+import { Options } from "./options";
+import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
+import { resolvePriority } from "./resolve-priority";
 
 export const createOptions: (apiOptions: CoreOptions | undefined) => Options = (
   apiOptions: CoreOptions | undefined,

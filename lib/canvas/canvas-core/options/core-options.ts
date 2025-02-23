@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeShape } from "../edge-shape";
+import { EdgeShape } from "./edge-shape";
 import { Priority } from "./priority";
 
 export interface CoreOptions {
