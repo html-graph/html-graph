@@ -30,4 +30,4 @@ RUN npx playwright install
 # create empty config in order to avoid initial prompt
 RUN touch ~/.zshrc
 
-CMD npx playwright test --ui-host=0.0.0.0 --ui-port=39921
+CMD npx playwright test --ui-host=0.0.0.0 --ui-port=3101
