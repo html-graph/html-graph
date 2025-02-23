@@ -348,7 +348,7 @@ describe("CanvasCore", () => {
     canvas.updatePort("port-1", { direction: Math.PI });
 
     const expected: EdgeRenderParams = {
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -357,7 +357,7 @@ describe("CanvasCore", () => {
         nodeId: "node-1",
         direction: Math.PI,
       },
-      target: {
+      to: {
         x: 0,
         y: 0,
         width: 0,

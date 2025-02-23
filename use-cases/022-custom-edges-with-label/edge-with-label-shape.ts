@@ -74,8 +74,8 @@ export class EdgeWithLabelShape implements EdgeShape {
 
   public render(params: EdgeRenderParams): void {
     const { x, y, width, height, flipX, flipY } = this.createEdgeRectangle(
-      params.source,
-      params.target,
+      params.from,
+      params.to,
     );
 
     this.svg.style.width = `${width}px`;
@@ -84,12 +84,12 @@ export class EdgeWithLabelShape implements EdgeShape {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = this.createDirectionVector(
-      params.source.direction,
+      params.from.direction,
       flipX,
       flipY,
     );
     const toVect = this.createDirectionVector(
-      params.target.direction,
+      params.to.direction,
       flipX,
       flipY,
     );

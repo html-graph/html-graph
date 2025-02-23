@@ -10,7 +10,7 @@ import { PriorityFn } from "@/priority";
 import { MarkNodePortRequest } from "./mark-node-port-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { EdgeShapeMock } from "@/edges";
+import { EdgeRenderParams, EdgeShapeMock } from "@/edges";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateNodeRequest } from "./update-node-request";
 
@@ -589,8 +589,8 @@ describe("CanvasController", () => {
       to: undefined,
     });
 
-    expect(spy).toHaveBeenCalledWith({
-      source: {
+    const expected: EdgeRenderParams = {
+      from: {
         x: -100,
         y: -100,
         width: 0,
@@ -599,7 +599,7 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-1",
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -608,7 +608,9 @@ describe("CanvasController", () => {
         nodeId: "node-2",
         portId: "port-2",
       },
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should update edge shape if specified", () => {
@@ -850,8 +852,8 @@ describe("CanvasController", () => {
     const spy = jest.spyOn(shape, "render");
     canvasController.updatePort(markPortRequest1.id, updatePortRequest);
 
-    expect(spy).toHaveBeenCalledWith({
-      source: {
+    const expected: EdgeRenderParams = {
+      from: {
         x: 0,
         y: 0,
         width: 50,
@@ -860,7 +862,7 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-1",
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -869,7 +871,9 @@ describe("CanvasController", () => {
         nodeId: "node-2",
         portId: "port-2",
       },
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should throw error when trying to update nonexisting port", () => {
@@ -1087,8 +1091,8 @@ describe("CanvasController", () => {
 
     canvasController.updateNode(addNodeRequest1.nodeId, updateNodeRequest);
 
-    expect(spy).toHaveBeenCalledWith({
-      source: {
+    const expected: EdgeRenderParams = {
+      from: {
         x: 50,
         y: 50,
         width: 0,
@@ -1097,7 +1101,7 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-1",
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -1106,7 +1110,9 @@ describe("CanvasController", () => {
         nodeId: "node-2",
         portId: "port-2",
       },
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should remove edge from store", () => {
@@ -1633,8 +1639,8 @@ describe("CanvasController", () => {
       priority: undefined,
     });
 
-    expect(spy).toHaveBeenCalledWith({
-      source: {
+    const expected: EdgeRenderParams = {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -1643,7 +1649,7 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-1",
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -1652,7 +1658,9 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-2",
       },
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 
   it("should update edge target", () => {
@@ -1705,8 +1713,8 @@ describe("CanvasController", () => {
       priority: undefined,
     });
 
-    expect(spy).toHaveBeenCalledWith({
-      source: {
+    const expected: EdgeRenderParams = {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -1715,7 +1723,7 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-1",
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -1724,6 +1732,8 @@ describe("CanvasController", () => {
         nodeId: "node-1",
         portId: "port-2",
       },
-    });
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
   });
 });

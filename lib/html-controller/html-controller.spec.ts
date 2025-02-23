@@ -334,7 +334,7 @@ describe("HtmlController", () => {
     htmlController.renderEdge(addEdgeRequest12.edgeId);
 
     const expected: EdgeRenderParams = {
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -343,7 +343,7 @@ describe("HtmlController", () => {
         nodeId: addPortRequest1.nodeId,
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,

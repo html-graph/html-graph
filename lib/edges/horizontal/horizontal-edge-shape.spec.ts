@@ -56,7 +56,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 100,
         width: 0,
@@ -65,7 +65,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 0,
         width: 0,
@@ -85,7 +85,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -94,7 +94,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -117,7 +117,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 100,
         y: 0,
         width: 0,
@@ -126,7 +126,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 0,
         y: 100,
         width: 0,
@@ -149,7 +149,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -158,7 +158,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -181,7 +181,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -190,7 +190,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -213,7 +213,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -222,7 +222,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -243,7 +243,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -252,7 +252,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -273,7 +273,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -282,7 +282,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 0,
         y: 0,
         width: 0,
@@ -305,7 +305,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -314,7 +314,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 0,
         y: 0,
         width: 0,
@@ -335,7 +335,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -344,7 +344,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -367,7 +367,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -376,7 +376,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -399,7 +399,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -408,7 +408,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -431,7 +431,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -440,7 +440,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -461,7 +461,7 @@ describe("HorizontalEdgeShape", () => {
     const shape = createHorizontalEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -470,7 +470,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,

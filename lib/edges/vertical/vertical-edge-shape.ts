@@ -90,8 +90,8 @@ export class VerticalEdgeShape implements EdgeShape {
 
   public render(params: EdgeRenderParams): void {
     const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
-      params.source,
-      params.target,
+      params.from,
+      params.to,
     );
 
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
@@ -100,15 +100,11 @@ export class VerticalEdgeShape implements EdgeShape {
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createFlipDirectionVector(
-      params.source.direction,
+      params.from.direction,
       flipX,
       flipY,
     );
-    const toVect = createFlipDirectionVector(
-      params.target.direction,
-      flipX,
-      flipY,
-    );
+    const toVect = createFlipDirectionVector(params.to.direction, flipX, flipY);
 
     const to: Point = {
       x: width,
@@ -119,7 +115,7 @@ export class VerticalEdgeShape implements EdgeShape {
     let targetVect = toVect;
     let targetArrowLength = -this.arrowLength;
 
-    if (params.source.portId === params.target.portId) {
+    if (params.from.portId === params.to.portId) {
       linePath = createCycleSquarePath({
         fromVect,
         arrowLength: this.arrowLength,
@@ -131,7 +127,7 @@ export class VerticalEdgeShape implements EdgeShape {
       });
       targetVect = fromVect;
       targetArrowLength = this.arrowLength;
-    } else if (params.source.nodeId === params.target.nodeId) {
+    } else if (params.from.nodeId === params.to.nodeId) {
       linePath = createDetourStraightPath({
         to,
         fromVect,

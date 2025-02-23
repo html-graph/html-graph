@@ -56,7 +56,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 100,
         width: 0,
@@ -65,7 +65,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 0,
         width: 0,
@@ -85,7 +85,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -94,7 +94,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -117,7 +117,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -126,7 +126,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -149,7 +149,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -158,7 +158,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -181,7 +181,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -190,7 +190,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -211,7 +211,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -220,7 +220,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -241,7 +241,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -250,7 +250,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 0,
         y: 0,
         width: 0,
@@ -273,7 +273,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -282,7 +282,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 0,
         y: 0,
         width: 0,
@@ -303,7 +303,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -312,7 +312,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -335,7 +335,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -344,7 +344,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -367,7 +367,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -376,7 +376,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -399,7 +399,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(false, true);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -408,7 +408,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,
@@ -429,7 +429,7 @@ describe("StraightEdgeShape", () => {
     const shape = createStraightEdge(true, false);
 
     shape.render({
-      source: {
+      from: {
         x: 0,
         y: 0,
         width: 0,
@@ -438,7 +438,7 @@ describe("StraightEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
-      target: {
+      to: {
         x: 100,
         y: 100,
         width: 0,

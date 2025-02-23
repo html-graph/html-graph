@@ -174,8 +174,8 @@ export class HtmlController {
     };
 
     edge.shape.render({
-      source,
-      target,
+      from: source,
+      to: target,
     });
   }
 
