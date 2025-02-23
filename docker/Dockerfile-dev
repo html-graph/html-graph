@@ -29,5 +29,4 @@ USER ${HOST_USER_ID}:${HOST_GROUP_ID}
 # create empty config in order to avoid initial prompt
 RUN touch ~/.zshrc
 
-CMD /entrypoint.sh
-
+CMD npm install && npm run start
