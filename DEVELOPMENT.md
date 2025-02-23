@@ -2,6 +2,7 @@
 
 ```
 npm install
+
 npm run start
 ```
 
@@ -44,15 +45,6 @@ npx jest --coverage
 6. `docker compose -f e2e.docker-compose.yml up` - to start container for end-to-end testing, then open http://localhost:3101
 
 7. `docker compose exec html-graph-e2e zsh` - enter e2e tests container
-
-## Development without Docker
-
-Use node version >=20
-
-```
-npm install
-npm run start
-```
 
 ## Release next version
 
