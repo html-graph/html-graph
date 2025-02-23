@@ -1,5 +1,5 @@
 export type MarkNodePortRequest = {
-  readonly id?: unknown;
+  readonly id?: unknown | undefined;
   readonly element: HTMLElement;
-  readonly direction?: number;
+  readonly direction?: number | undefined;
 };

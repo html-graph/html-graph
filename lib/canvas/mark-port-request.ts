@@ -1,6 +1,6 @@
 export interface MarkPortRequest {
-  readonly id?: unknown;
+  readonly id?: unknown | undefined;
   readonly element: HTMLElement;
   readonly nodeId: unknown;
-  readonly direction?: number;
+  readonly direction?: number | undefined;
 }
