@@ -33,3 +33,17 @@
   background: var(--color-edge);
   border-radius: calc(2 * var(--port-size));
 }
+
+.bounds-container {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.bounds {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border: 5px solid var(--color-node-border);
+  visibility: hidden;
+}

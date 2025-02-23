@@ -9,11 +9,11 @@ test("should apply content transform", async ({ page }) => {
 
   await expect(page).toHaveScreenshot("after-scale.png");
 
-  await page.locator("#delta-x").fill("500");
+  await page.locator("#x").fill("500");
 
-  await expect(page).toHaveScreenshot("after-delta-x.png");
+  await expect(page).toHaveScreenshot("after-x.png");
 
-  await page.locator("#delta-y").fill("300");
+  await page.locator("#y").fill("300");
 
-  await expect(page).toHaveScreenshot("after-delta-y.png");
+  await expect(page).toHaveScreenshot("after-y.png");
 });

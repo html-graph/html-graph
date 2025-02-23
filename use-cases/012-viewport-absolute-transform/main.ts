@@ -4,12 +4,65 @@ import {
   Canvas,
   HtmlGraphBuilder,
   PatchMatrixRequest,
+  TransformOptions,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
-const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const boundsElement = document.getElementById("bounds")! as HTMLElement;
+
+new ResizeObserver(() => {
+  const { width, height } = canvasElement.getBoundingClientRect();
+
+  boundsElement.style.visibility = "visible";
+  boundsElement.style.width = `${width - 10}px`;
+  boundsElement.style.height = `${height - 10}px`;
+}).observe(canvasElement);
+
+const sliderScale: HTMLInputElement = document.getElementById(
+  "scale",
+) as HTMLInputElement;
+
+const scaleValue: HTMLElement = document.getElementById("scale-value")!;
+
+const sliderX: HTMLInputElement = document.getElementById(
+  "x",
+) as HTMLInputElement;
+
+const xValue: HTMLElement = document.getElementById("x-value")!;
+
+const sliderY: HTMLInputElement = document.getElementById(
+  "y",
+) as HTMLInputElement;
+
+const yValue: HTMLElement = document.getElementById("y-value")!;
+
+const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const boundsContainerElement = document.getElementById(
+  "bounds-container",
+)! as HTMLElement;
+
+const updateRectangleTransform = (): void => {
+  const viewportMatrix = canvas.transformation.getViewportMatrix();
+  scaleValue.innerText = `${viewportMatrix.scale.toFixed(2)}`;
+  xValue.innerText = `${viewportMatrix.x.toFixed(2)}`;
+  yValue.innerText = `${viewportMatrix.y.toFixed(2)}`;
+
+  const { scale, x, y } = canvas.transformation.getContentMatrix();
+  boundsContainerElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
+};
+
+const transformOptions: TransformOptions = {
+  events: {
+    onTransformChange: () => {
+      updateRectangleTransform();
+    },
+  },
+};
+
+builder.setUserTransformableCanvas(transformOptions);
+
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
@@ -38,14 +91,6 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-const sliderScale: HTMLInputElement = document.getElementById(
-  "scale",
-) as HTMLInputElement;
-
-const scaleValue: HTMLElement = document.getElementById(
-  "scale-value",
-) as HTMLElement;
-
 sliderScale.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
     scale: parseFloat(sliderScale.value),
@@ -53,38 +98,25 @@ sliderScale.addEventListener("input", () => {
 
   canvas.patchViewportMatrix(patchRequest);
   scaleValue.innerText = sliderScale.value;
+  updateRectangleTransform();
 });
 
-const sliderDeltaX: HTMLInputElement = document.getElementById(
-  "delta-x",
-) as HTMLInputElement;
-
-const deltaXValue: HTMLElement = document.getElementById(
-  "delta-x-value",
-) as HTMLElement;
-
-sliderDeltaX.addEventListener("input", () => {
+sliderX.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
-    x: parseFloat(sliderDeltaX.value),
+    x: parseFloat(sliderX.value),
   };
 
   canvas.patchViewportMatrix(patchRequest);
-  deltaXValue.innerText = sliderDeltaX.value;
+  xValue.innerText = sliderX.value;
+  updateRectangleTransform();
 });
 
-const sliderDeltaY: HTMLInputElement = document.getElementById(
-  "delta-y",
-) as HTMLInputElement;
-
-const deltaYValue: HTMLElement = document.getElementById(
-  "delta-y-value",
-) as HTMLElement;
-
-sliderDeltaY.addEventListener("input", () => {
+sliderY.addEventListener("input", () => {
   const patchRequest: PatchMatrixRequest = {
-    y: parseFloat(sliderDeltaY.value),
+    y: parseFloat(sliderY.value),
   };
 
   canvas.patchViewportMatrix(patchRequest);
-  deltaYValue.innerText = sliderDeltaY.value;
+  yValue.innerText = sliderY.value;
+  updateRectangleTransform();
 });
