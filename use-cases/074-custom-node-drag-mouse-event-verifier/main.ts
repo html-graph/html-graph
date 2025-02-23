@@ -7,12 +7,26 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
+let isSpacePressed = false;
+
+document.addEventListener("keydown", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = true;
+  }
+});
+
+document.addEventListener("keyup", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = false;
+  }
+});
+
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const dragOptions: DragOptions = {
   mouse: {
     mouseDownEventVerifier: (event: MouseEvent) =>
-      event.button === 0 && event.ctrlKey,
+      event.button === 0 && isSpacePressed,
   },
 };
 

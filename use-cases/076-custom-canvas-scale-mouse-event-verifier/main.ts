@@ -9,9 +9,23 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
+let isSpacePressed = false;
+
+document.addEventListener("keydown", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = true;
+  }
+});
+
+document.addEventListener("keyup", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = false;
+  }
+});
+
 const transformOptions: TransformOptions = {
   scale: {
-    mouseWheelEventVerifier: (event: WheelEvent): boolean => event.ctrlKey,
+    mouseWheelEventVerifier: (): boolean => isSpacePressed,
   },
 };
 
