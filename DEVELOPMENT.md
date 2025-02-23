@@ -18,7 +18,8 @@ Open `http://localhost:3100`
 1. [optional] Create `.env` file and set default variables:
 
 ```
-SERVER_PORT=3100 # (3100 by default)
+SERVER_PORT=3100 # (3100 by default) // development server port
+E2E_SERVER_PORT=3101 # (3101 by default) // end-to-end tests ui server
 HOST_USER_ID=1000 # (1000 by default) host user id to fix file permissions issue
 HOST_GROUP_ID=1000 # (1000 by default) host group id to fix file permissions issue
 ```
