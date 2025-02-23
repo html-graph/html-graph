@@ -20,7 +20,6 @@ RUN addgroup -S ${HOST_GROUP_ID} && adduser\
  --shell /bin/zsh\
  "${USER_NAME}" || true
 
-COPY docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # act as non-root user inside container (1000:1000 by default)
