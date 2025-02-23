@@ -43,8 +43,12 @@ export class PublicGraphStore {
     return this.graphStore.getAllPortIds();
   }
 
-  public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
-    return this.graphStore.getNodePortIds(nodeId);
+  public getNodePortIds(nodeId: unknown): readonly unknown[] | null {
+    if (this.graphStore.getNode(nodeId) === undefined) {
+      return null;
+    }
+
+    return this.graphStore.getNodePortIds(nodeId)!;
   }
 
   public getPortNodeId(portId: unknown): unknown | null {

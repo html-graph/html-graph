@@ -131,7 +131,14 @@ describe("PublicGraphStore", () => {
     ]);
   });
 
-  it("should return undefined when no node in store", () => {
+  it("should return null when accessing non-existing node port ids", () => {
+    const store = new GraphStore();
+    const publicStore = new PublicGraphStore(store);
+
+    expect(publicStore.getNodePortIds(addNodeRequest1.nodeId)).toEqual(null);
+  });
+
+  it("should return null when no node in store", () => {
     const store = new GraphStore();
     const publicStore = new PublicGraphStore(store);
 
