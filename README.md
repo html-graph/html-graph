@@ -33,9 +33,9 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
   backPort.classList.add("port");
   text.innerText = name;
 
-  node.appendChild(backPort);
-  node.appendChild(text);
   node.appendChild(frontPort);
+  node.appendChild(text);
+  node.appendChild(backPort);
 
   return {
     element: node,
