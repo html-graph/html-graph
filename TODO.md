@@ -4,6 +4,7 @@
 - layouts
 - drag edge creation
 - arrows customization
+- rename setUserTransformableCanvas to setUserTransformableViewport
 - sankey connections
 - transformable canvas shift limit when scaling ?
 - optimize memory draggable nodes
