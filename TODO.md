@@ -1,11 +1,12 @@
 # TODO
 
+- rename setUserTransformableCanvas to setUserTransformableViewport
+- rename HtmlGraphBuilder to CanvasBuilder
+- rename TransformableCanvas to TransformableViewportCanvas
 - virtual scroll
 - layouts
 - drag edge creation
 - arrows customization
-- rename setUserTransformableCanvas to setUserTransformableViewport
-- rename HtmlGraphBuilder to CanvasBuilder
 - sankey connections
 - transformable canvas shift limit when scaling ?
 - optimize memory draggable nodes
