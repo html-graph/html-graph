@@ -9,7 +9,7 @@ import {
   ResizeReactiveNodesCanvas,
 } from "@/canvas";
 
-export class HtmlGraphBuilder {
+export class CanvasBuilder {
   private coreOptions: CoreOptions | undefined = undefined;
 
   private dragOptions: DragOptions | undefined = undefined;
@@ -22,13 +22,13 @@ export class HtmlGraphBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  public setOptions(options: CoreOptions): HtmlGraphBuilder {
+  public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
-  public setUserDraggableNodes(options?: DragOptions): HtmlGraphBuilder {
+  public setUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.isDraggable = true;
     this.dragOptions = options;
 
@@ -41,20 +41,20 @@ export class HtmlGraphBuilder {
    */
   public setUserTransformableViewportCanvas(
     options?: TransformOptions,
-  ): HtmlGraphBuilder {
+  ): CanvasBuilder {
     return this.setUserTransformableViewport(options);
   }
 
   public setUserTransformableViewport(
     options?: TransformOptions,
-  ): HtmlGraphBuilder {
+  ): CanvasBuilder {
     this.isTransformable = true;
     this.transformOptions = options;
 
     return this;
   }
 
-  public setResizeReactiveNodes(): HtmlGraphBuilder {
+  public setResizeReactiveNodes(): CanvasBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;

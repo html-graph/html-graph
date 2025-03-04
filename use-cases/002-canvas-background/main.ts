@@ -1,4 +1,4 @@
-import { HtmlGraphBuilder, AddNodeRequest } from "@html-graph/html-graph";
+import { CanvasBuilder, AddNodeRequest } from "@html-graph/html-graph";
 import { backgroundDrawingFn } from "../shared/background-drawing-fn";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -19,7 +19,7 @@ new ResizeObserver(() => {
   backgroundDrawingFn(ctx, canvas.transformation);
 }).observe(canvasElement);
 
-const canvas = new HtmlGraphBuilder()
+const canvas = new CanvasBuilder()
   .setUserTransformableViewport({
     events: {
       onTransformChange: () => {

@@ -4,11 +4,11 @@ import {
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
 } from "@/canvas";
-import { HtmlGraphBuilder } from "./html-graph-builder";
+import { CanvasBuilder } from "./canvas-builder";
 
-describe("HtmlGraphBuilder", () => {
+describe("CanvasBuilder", () => {
   it("should build core canvas", () => {
-    const builder = new HtmlGraphBuilder();
+    const builder = new CanvasBuilder();
 
     const canvas = builder.build();
 
@@ -16,7 +16,7 @@ describe("HtmlGraphBuilder", () => {
   });
 
   it("should set core options", () => {
-    const builder = new HtmlGraphBuilder();
+    const builder = new CanvasBuilder();
 
     const canvas = builder
       .setOptions({
@@ -42,7 +42,7 @@ describe("HtmlGraphBuilder", () => {
   });
 
   it("should build resize reactive canvas", () => {
-    const builder = new HtmlGraphBuilder();
+    const builder = new CanvasBuilder();
 
     const canvas = builder.setResizeReactiveNodes().build();
 
@@ -50,7 +50,7 @@ describe("HtmlGraphBuilder", () => {
   });
 
   it("should build user draggable nodes canvas", () => {
-    const builder = new HtmlGraphBuilder();
+    const builder = new CanvasBuilder();
 
     const canvas = builder.setUserDraggableNodes().build();
 
@@ -58,7 +58,7 @@ describe("HtmlGraphBuilder", () => {
   });
 
   it("should build user transformable canvas", () => {
-    const builder = new HtmlGraphBuilder();
+    const builder = new CanvasBuilder();
 
     const canvas = builder.setUserTransformableViewport().build();
 

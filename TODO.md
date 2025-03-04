@@ -1,8 +1,7 @@
 # TODO
 
 - rename setUserTransformableCanvas to setUserTransformableViewport
-- rename HtmlGraphBuilder to CanvasBuilder
-- rename TransformableCanvas to TransformableViewportCanvas
+- rename CanvasBuilder to CanvasBuilder
 - virtual scroll
 - layouts
 - drag edge creation

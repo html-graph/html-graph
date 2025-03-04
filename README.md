@@ -20,7 +20,7 @@ npm i @html-graph/html-graph
 ```
 
 ```javascript
-import { HtmlGraphBuilder } from "@html-graph/html-graph";
+import { CanvasBuilder } from "@html-graph/html-graph";
 
 function createNode({ name, x, y, frontPortId, backPortId }) {
   const node = document.createElement("div");
@@ -48,7 +48,7 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
   };
 }
 
-const canvas = new HtmlGraphBuilder()
+const canvas = new CanvasBuilder()
   .setOptions({
     edges: {
       shape: {

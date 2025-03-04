@@ -3,12 +3,12 @@ import {
   AddNodeRequest,
   Canvas,
   CoreOptions,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   PriorityFn,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 let indexNode = 1;
 

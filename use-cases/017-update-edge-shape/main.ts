@@ -4,12 +4,12 @@ import {
   BezierEdgeParams,
   BezierEdgeShape,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   UpdateEdgeRequest,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 

@@ -2,13 +2,13 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   TransformOptions,
   TransformPreprocessorParams,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 const transformOptions: TransformOptions = {
   transformPreprocessor: (params: TransformPreprocessorParams) => {

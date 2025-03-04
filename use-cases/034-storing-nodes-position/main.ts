@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   DragOptions,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -12,7 +12,7 @@ const positions = new Map<unknown, { x: number; y: number }>();
 
 const nodesElement: HTMLElement = document.getElementById("nodes")!;
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 const dragOptions: DragOptions = {
   events: {

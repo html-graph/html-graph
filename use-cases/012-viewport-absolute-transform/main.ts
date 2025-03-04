@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   PatchMatrixRequest,
   TransformOptions,
 } from "@html-graph/html-graph";
@@ -37,7 +37,7 @@ const sliderY: HTMLInputElement = document.getElementById(
 
 const yValue: HTMLElement = document.getElementById("y-value")!;
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 const boundsContainerElement = document.getElementById(
   "bounds-container",
 )! as HTMLElement;

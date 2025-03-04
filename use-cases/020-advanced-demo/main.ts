@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   CoreOptions,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   TransformOptions,
 } from "@html-graph/html-graph";
 import { backgroundDrawingFn } from "../shared/background-drawing-fn";
@@ -45,7 +45,7 @@ const transformOptions: TransformOptions = {
   },
 };
 
-const builder = new HtmlGraphBuilder();
+const builder = new CanvasBuilder();
 
 const canvas = builder
   .setOptions(coreOptions)

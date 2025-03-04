@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   DragOptions,
-  HtmlGraphBuilder,
+  CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -21,7 +21,7 @@ document.addEventListener("keyup", (event: KeyboardEvent) => {
   }
 });
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 const dragOptions: DragOptions = {
   mouse: {

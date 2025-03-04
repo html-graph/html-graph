@@ -1,5 +1,5 @@
 import {
-  HtmlGraphBuilder,
+  CanvasBuilder,
   HtmlGraphError,
   Canvas,
   AddNodeRequest,
@@ -43,7 +43,7 @@ class NodesDragHandler {
   private grabbedNode: string | null = null;
 
   public constructor(private readonly element: HTMLElement) {
-    const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+    const builder: CanvasBuilder = new CanvasBuilder();
     const canvas: Canvas = builder.build();
     const canvasElement: HTMLElement = document.getElementById("canvas")!;
     canvas.attach(canvasElement);

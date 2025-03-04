@@ -1,8 +1,4 @@
-import {
-  AddNodeRequest,
-  Canvas,
-  HtmlGraphBuilder,
-} from "@html-graph/html-graph";
+import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 
 export function createNode(params: {
   portId: unknown;
@@ -21,7 +17,7 @@ export function createNode(params: {
   };
 }
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 builder
   .setOptions({

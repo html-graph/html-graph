@@ -1,4 +1,12 @@
-export { HtmlGraphBuilder } from "./html-graph-builder";
+export { CanvasBuilder } from "./canvas-builder";
+
+export {
+  /**
+   * @deprecated
+   * use CanvasBuilder instead
+   */
+  CanvasBuilder as HtmlGraphBuilder,
+} from "./canvas-builder";
 
 export {
   CanvasCore,

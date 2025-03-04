@@ -1,7 +1,7 @@
 import {
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   TransformOptions,
 } from "@html-graph/html-graph";
 
@@ -11,7 +11,7 @@ const onBeforeTransformStarted = (): void => {
   dragging = true;
 };
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 const transformOptions: TransformOptions = {
   events: {

@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   MarkPortRequest,
 } from "@html-graph/html-graph";
 
@@ -35,7 +35,7 @@ export function createNode(params: {
   };
 }
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 builder.setResizeReactiveNodes();
 
 const canvas: Canvas = builder.build();

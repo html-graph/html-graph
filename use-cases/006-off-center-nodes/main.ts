@@ -3,13 +3,13 @@ import {
   AddNodeRequest,
   Canvas,
   CenterFn,
-  HtmlGraphBuilder,
+  CanvasBuilder,
   Point,
   UpdateNodeRequest,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 

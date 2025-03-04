@@ -2,11 +2,11 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 
 const stateElement: HTMLElement = document.getElementById("state")!;
 

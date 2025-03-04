@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  HtmlGraphBuilder,
+  CanvasBuilder,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
@@ -47,7 +47,7 @@ export function createNode(params: {
   };
 }
 
-const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
+const builder: CanvasBuilder = new CanvasBuilder();
 builder.setOptions({
   edges: {
     shape: {
