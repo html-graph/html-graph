@@ -39,7 +39,7 @@ builder
   .setUserDraggableNodes({
     moveOnTop: false,
   })
-  .setUserTransformableCanvas();
+  .setUserTransformableViewport();
 
 const canvas: Canvas = builder.build();
 const canvasElement = document.getElementById("canvas")!;

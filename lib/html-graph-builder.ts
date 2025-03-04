@@ -4,7 +4,7 @@ import {
   CoreOptions,
   UserDraggableNodesCanvas,
   DragOptions,
-  UserTransformableCanvas,
+  UserTransformableViewportCanvas,
   TransformOptions,
   ResizeReactiveNodesCanvas,
 } from "@/canvas";
@@ -35,7 +35,17 @@ export class HtmlGraphBuilder {
     return this;
   }
 
-  public setUserTransformableCanvas(
+  /**
+   * @deprecated
+   * use setUserTransformableViewport instead
+   */
+  public setUserTransformableViewportCanvas(
+    options?: TransformOptions,
+  ): HtmlGraphBuilder {
+    return this.setUserTransformableViewport(options);
+  }
+
+  public setUserTransformableViewport(
     options?: TransformOptions,
   ): HtmlGraphBuilder {
     this.isTransformable = true;
@@ -62,7 +72,7 @@ export class HtmlGraphBuilder {
     }
 
     if (this.isTransformable) {
-      res = new UserTransformableCanvas(res, this.transformOptions);
+      res = new UserTransformableViewportCanvas(res, this.transformOptions);
     }
 
     return res;

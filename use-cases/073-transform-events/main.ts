@@ -10,7 +10,7 @@ const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
 
 const stateElement: HTMLElement = document.getElementById("state")!;
 
-builder.setUserTransformableCanvas({
+builder.setUserTransformableViewport({
   events: {
     onTransformStarted: () => {
       stateElement.innerHTML = "STARTED";

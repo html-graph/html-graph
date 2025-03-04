@@ -57,7 +57,7 @@ const canvas = new HtmlGraphBuilder()
     },
   })
   .setUserDraggableNodes()
-  .setUserTransformableCanvas()
+  .setUserTransformableViewport()
   .setResizeReactiveNodes()
   .build();
 

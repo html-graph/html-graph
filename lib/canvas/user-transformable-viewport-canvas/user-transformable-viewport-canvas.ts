@@ -15,7 +15,7 @@ import { Options } from "./options/options";
 import { processTouch, TouchState } from "./process-touch";
 import { move, scale } from "./transformations";
 
-export class UserTransformableCanvas implements Canvas {
+export class UserTransformableViewportCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
   public readonly transformation: PublicViewportTransformer;
@@ -180,7 +180,7 @@ export class UserTransformableCanvas implements Canvas {
     this.model = this.canvas.model;
   }
 
-  public attach(element: HTMLElement): UserTransformableCanvas {
+  public attach(element: HTMLElement): UserTransformableViewportCanvas {
     this.detach();
     this.element = element;
     this.observer.observe(this.element);
@@ -193,7 +193,7 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public detach(): UserTransformableCanvas {
+  public detach(): UserTransformableViewportCanvas {
     this.canvas.detach();
 
     if (this.element !== null) {
@@ -208,7 +208,7 @@ export class UserTransformableCanvas implements Canvas {
     return this;
   }
 
-  public addNode(node: AddNodeRequest): UserTransformableCanvas {
+  public addNode(node: AddNodeRequest): UserTransformableViewportCanvas {
     this.canvas.addNode(node);
 
     return this;
@@ -217,19 +217,19 @@ export class UserTransformableCanvas implements Canvas {
   public updateNode(
     nodeId: unknown,
     request?: UpdateNodeRequest,
-  ): UserTransformableCanvas {
+  ): UserTransformableViewportCanvas {
     this.canvas.updateNode(nodeId, request);
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): UserTransformableCanvas {
+  public removeNode(nodeId: unknown): UserTransformableViewportCanvas {
     this.canvas.removeNode(nodeId);
 
     return this;
   }
 
-  public markPort(port: MarkPortRequest): UserTransformableCanvas {
+  public markPort(port: MarkPortRequest): UserTransformableViewportCanvas {
     this.canvas.markPort(port);
 
     return this;
@@ -238,19 +238,19 @@ export class UserTransformableCanvas implements Canvas {
   public updatePort(
     portId: string,
     request?: UpdatePortRequest,
-  ): UserTransformableCanvas {
+  ): UserTransformableViewportCanvas {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): UserTransformableCanvas {
+  public unmarkPort(portId: string): UserTransformableViewportCanvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): UserTransformableCanvas {
+  public addEdge(edge: AddEdgeRequest): UserTransformableViewportCanvas {
     this.canvas.addEdge(edge);
 
     return this;
@@ -259,13 +259,13 @@ export class UserTransformableCanvas implements Canvas {
   public updateEdge(
     edgeId: unknown,
     request?: UpdateEdgeRequest,
-  ): UserTransformableCanvas {
+  ): UserTransformableViewportCanvas {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): UserTransformableCanvas {
+  public removeEdge(edgeId: unknown): UserTransformableViewportCanvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
@@ -273,7 +273,7 @@ export class UserTransformableCanvas implements Canvas {
 
   public patchViewportMatrix(
     request: PatchMatrixRequest,
-  ): UserTransformableCanvas {
+  ): UserTransformableViewportCanvas {
     this.canvas.patchViewportMatrix(request);
 
     return this;
@@ -281,13 +281,13 @@ export class UserTransformableCanvas implements Canvas {
 
   public patchContentMatrix(
     request: PatchMatrixRequest,
-  ): UserTransformableCanvas {
+  ): UserTransformableViewportCanvas {
     this.canvas.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): UserTransformableCanvas {
+  public clear(): UserTransformableViewportCanvas {
     this.canvas.clear();
 
     return this;

@@ -33,7 +33,7 @@ builder
       priority: 1,
     },
   })
-  .setUserTransformableCanvas();
+  .setUserTransformableViewport();
 
 const canvas: Canvas = builder.build();
 const canvasElement = document.getElementById("canvas")!;

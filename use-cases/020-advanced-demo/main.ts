@@ -50,7 +50,7 @@ const builder = new HtmlGraphBuilder();
 const canvas = builder
   .setOptions(coreOptions)
   .setUserDraggableNodes()
-  .setUserTransformableCanvas(transformOptions)
+  .setUserTransformableViewport(transformOptions)
   .setResizeReactiveNodes()
   .build();
 

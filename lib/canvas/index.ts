@@ -16,7 +16,7 @@ export type {
   DragOptions,
   NodeDragPayload,
 } from "./user-draggable-nodes-canvas";
-export { UserTransformableCanvas } from "./user-transformable-canvas";
+export { UserTransformableViewportCanvas } from "./user-transformable-viewport-canvas";
 export type {
   TransformOptions,
   TransformPayload,
@@ -24,5 +24,5 @@ export type {
   TransformPreprocessorParams,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
-} from "./user-transformable-canvas";
+} from "./user-transformable-viewport-canvas";
 export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";

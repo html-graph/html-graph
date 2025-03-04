@@ -23,7 +23,7 @@ export function createNode(params: {
 }
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
-builder.setUserTransformableCanvas();
+builder.setUserTransformableViewport();
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

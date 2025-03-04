@@ -7,7 +7,7 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: HtmlGraphBuilder = new HtmlGraphBuilder();
-builder.setUserTransformableCanvas().setUserDraggableNodes();
+builder.setUserTransformableViewport().setUserDraggableNodes();
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 

@@ -3,9 +3,18 @@ export { HtmlGraphBuilder } from "./html-graph-builder";
 export {
   CanvasCore,
   UserDraggableNodesCanvas,
-  UserTransformableCanvas,
+  UserTransformableViewportCanvas,
   ResizeReactiveNodesCanvas,
 } from "./canvas";
+
+export {
+  /**
+   * @deprecated
+   * use UserTransformableViewportCanvas instead
+   */
+  UserTransformableViewportCanvas as UserTransformableCanvas,
+} from "./canvas";
+
 export type {
   Canvas,
   CoreOptions,

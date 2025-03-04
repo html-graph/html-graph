@@ -28,7 +28,7 @@ const transformOptions: TransformOptions = {
   },
 };
 
-builder.setUserTransformableCanvas(transformOptions);
+builder.setUserTransformableViewport(transformOptions);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

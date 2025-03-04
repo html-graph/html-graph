@@ -2,7 +2,7 @@ import {
   CanvasCore,
   ResizeReactiveNodesCanvas,
   UserDraggableNodesCanvas,
-  UserTransformableCanvas,
+  UserTransformableViewportCanvas,
 } from "@/canvas";
 import { HtmlGraphBuilder } from "./html-graph-builder";
 
@@ -60,8 +60,8 @@ describe("HtmlGraphBuilder", () => {
   it("should build user transformable canvas", () => {
     const builder = new HtmlGraphBuilder();
 
-    const canvas = builder.setUserTransformableCanvas().build();
+    const canvas = builder.setUserTransformableViewport().build();
 
-    expect(canvas instanceof UserTransformableCanvas).toBe(true);
+    expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
   });
 });
