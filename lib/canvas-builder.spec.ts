@@ -64,4 +64,12 @@ describe("CanvasBuilder", () => {
 
     expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
   });
+
+  it("should build user transformable canvas using deprecated method", () => {
+    const builder = new CanvasBuilder();
+
+    const canvas = builder.setUserTransformableCanvas().build();
+
+    expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
+  });
 });

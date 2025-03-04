@@ -1,7 +1,5 @@
 # TODO
 
-- rename setUserTransformableCanvas to setUserTransformableViewport
-- rename CanvasBuilder to CanvasBuilder
 - virtual scroll
 - layouts
 - drag edge creation

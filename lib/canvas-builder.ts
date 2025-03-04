@@ -39,9 +39,7 @@ export class CanvasBuilder {
    * @deprecated
    * use setUserTransformableViewport instead
    */
-  public setUserTransformableViewportCanvas(
-    options?: TransformOptions,
-  ): CanvasBuilder {
+  public setUserTransformableCanvas(options?: TransformOptions): CanvasBuilder {
     return this.setUserTransformableViewport(options);
   }
 
