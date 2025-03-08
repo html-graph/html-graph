@@ -13,6 +13,7 @@ export {
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
   ResizeReactiveNodesCanvas,
+  VirtualScrollCanvas,
 } from "./canvas";
 
 export {
