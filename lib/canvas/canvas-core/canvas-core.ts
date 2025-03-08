@@ -18,6 +18,7 @@ import {
   GraphStoreControllerOptions,
 } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
+import { GraphStoreControllerEvents } from "@/graph-store-controller/graph-store-controller-events";
 
 /**
  * Provides low level API for acting on graph
@@ -51,50 +52,52 @@ export class CanvasCore implements Canvas {
       this.viewportTransformer,
     );
 
+    const events: GraphStoreControllerEvents = {
+      onAfterNodeAdded: (nodeId): void => {
+        this.htmlController.attachNode(nodeId);
+      },
+      onAfterEdgeAdded: (edgeId): void => {
+        this.htmlController.attachEdge(edgeId);
+      },
+      onAfterEdgeShapeUpdated: (edgeId): void => {
+        this.htmlController.updateEdgeShape(edgeId);
+      },
+      onAfterEdgePriorityUpdated: (edgeId): void => {
+        this.htmlController.updateEdgePriority(edgeId);
+      },
+      onAfterEdgeUpdated: (edgeId): void => {
+        this.htmlController.renderEdge(edgeId);
+      },
+      onAfterPortUpdated: (portId): void => {
+        const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+        edges.forEach((edge) => {
+          this.htmlController.renderEdge(edge);
+        });
+      },
+      onAfterNodePriorityUpdated: (nodeId): void => {
+        this.htmlController.updateNodePriority(nodeId);
+      },
+      onAfterNodeUpdated: (nodeId): void => {
+        this.htmlController.updateNodeCoordinates(nodeId);
+        const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+
+        edges.forEach((edge) => {
+          this.htmlController.renderEdge(edge);
+        });
+      },
+      onBeforeEdgeRemoved: (edgeId): void => {
+        this.htmlController.detachEdge(edgeId);
+      },
+      onBeforeNodeRemoved: (nodeId): void => {
+        this.htmlController.detachNode(nodeId);
+      },
+    };
+
     this.graphStoreController = new GraphStoreController(
       this.graphStore,
       options,
-      {
-        onAfterNodeAdded: (nodeId): void => {
-          this.htmlController.attachNode(nodeId);
-        },
-        onAfterEdgeAdded: (edgeId): void => {
-          this.htmlController.attachEdge(edgeId);
-        },
-        onAfterEdgeShapeUpdated: (edgeId): void => {
-          this.htmlController.updateEdgeShape(edgeId);
-        },
-        onAfterEdgePriorityUpdated: (edgeId): void => {
-          this.htmlController.updateEdgePriority(edgeId);
-        },
-        onAfterEdgeUpdated: (edgeId): void => {
-          this.htmlController.renderEdge(edgeId);
-        },
-        onAfterPortUpdated: (portId): void => {
-          const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-          edges.forEach((edge) => {
-            this.htmlController.renderEdge(edge);
-          });
-        },
-        onAfterNodePriorityUpdated: (nodeId): void => {
-          this.htmlController.updateNodePriority(nodeId);
-        },
-        onAfterNodeUpdated: (nodeId): void => {
-          this.htmlController.updateNodeCoordinates(nodeId);
-          const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-          edges.forEach((edge) => {
-            this.htmlController.renderEdge(edge);
-          });
-        },
-        onBeforeEdgeRemoved: (edgeId): void => {
-          this.htmlController.detachEdge(edgeId);
-        },
-        onBeforeNodeRemoved: (nodeId): void => {
-          this.htmlController.detachNode(nodeId);
-        },
-      },
+      events,
     );
   }
 
