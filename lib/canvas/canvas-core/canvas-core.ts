@@ -61,6 +61,9 @@ export class CanvasCore implements Canvas {
         onAfterEdgeAdded: (edgeId): void => {
           this.htmlController.attachEdge(edgeId);
         },
+        onAfterEdgeShapeUpdated: (edgeId): void => {
+          this.htmlController.updateEdgeShape(edgeId);
+        },
         onAfterEdgePriorityUpdated: (edgeId): void => {
           this.htmlController.updateEdgePriority(edgeId);
         },

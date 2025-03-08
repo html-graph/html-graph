@@ -109,7 +109,10 @@ export class GraphStoreController {
       throw new HtmlGraphError("failed to update nonexisting edge");
     }
 
-    edge.shape = request.shape ?? edge.shape;
+    if (request.shape !== undefined) {
+      edge.shape = request.shape;
+      this.events.onAfterEdgeShapeUpdated(edgeId);
+    }
 
     if (request.from !== undefined) {
       this.graphStore.updateEdgeFrom(edgeId, request.from);

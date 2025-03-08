@@ -67,6 +67,9 @@ const createCanvasController = (params?: {
       onAfterEdgeAdded: (): void => {
         //
       },
+      onAfterEdgeShapeUpdated: (): void => {
+        //
+      },
       onAfterEdgePriorityUpdated: (): void => {
         //
       },

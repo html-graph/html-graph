@@ -1,6 +1,7 @@
 export interface GraphStoreControllerEvents {
   readonly onAfterNodeAdded: (nodeId: unknown) => void;
   readonly onAfterEdgeAdded: (edgeId: unknown) => void;
+  readonly onAfterEdgeShapeUpdated: (edgeId: unknown) => void;
   readonly onAfterEdgePriorityUpdated: (edgeId: unknown) => void;
   readonly onAfterEdgeUpdated: (edgeId: unknown) => void;
   readonly onAfterPortUpdated: (portId: unknown) => void;
