@@ -10,9 +10,10 @@ import { PriorityFn } from "@/priority";
 import { MarkNodePortRequest } from "./mark-node-port-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { EdgeRenderParams, EdgeShapeMock } from "@/edges";
+import { EdgeRenderParams, EdgeShape, EdgeShapeMock } from "@/edges";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateNodeRequest } from "./update-node-request";
+import { EdgeShapeFactory } from "./edge-shape-factory";
 
 const createElement = (params?: {
   x?: number;
@@ -54,6 +55,7 @@ const createCanvasController = (params?: {
   portsDirection?: number;
   nodesPriorityFn?: PriorityFn;
   edgesPriorityFn?: PriorityFn;
+  edgesShapeFactory?: EdgeShapeFactory;
 }): CanvasController => {
   const graphStore = params?.graphStore ?? new GraphStore();
   const viewportTransformer =
@@ -62,15 +64,20 @@ const createCanvasController = (params?: {
     params?.htmlController ??
     createHtmlController({ graphStore, viewportTransformer });
 
-  return new CanvasController(
-    graphStore,
-    htmlController,
-    viewportTransformer,
-    params?.nodesCenterFn ?? ((): Point => ({ x: 0, y: 0 })),
-    params?.portsDirection ?? 0,
-    params?.nodesPriorityFn ?? ((): number => 0),
-    params?.edgesPriorityFn ?? ((): number => 0),
-  );
+  return new CanvasController(graphStore, htmlController, viewportTransformer, {
+    nodes: {
+      centerFn: params?.nodesCenterFn ?? ((): Point => ({ x: 0, y: 0 })),
+      priorityFn: params?.nodesPriorityFn ?? ((): number => 0),
+    },
+    ports: {
+      direction: params?.portsDirection ?? 0,
+    },
+    edges: {
+      priorityFn: params?.edgesPriorityFn ?? ((): number => 0),
+      shapeFactory:
+        params?.edgesShapeFactory ?? ((): EdgeShape => new EdgeShapeMock()),
+    },
+  });
 };
 
 describe("CanvasController", () => {
@@ -79,18 +86,17 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController({ graphStore });
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
 
     canvasController.addNode(addNodeRequest);
 
-    const node = graphStore.getNode(addNodeRequest.nodeId);
+    const node = graphStore.getNode(addNodeRequest.id);
 
     expect(node).toStrictEqual({
       element: addNodeRequest.element,
@@ -105,11 +111,10 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController();
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -130,18 +135,16 @@ describe("CanvasController", () => {
     });
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
-      centerFn: undefined,
       priority: 0,
     };
 
     canvasController.addNode(addNodeRequest);
 
-    const node = graphStore.getNode(addNodeRequest.nodeId);
+    const node = graphStore.getNode(addNodeRequest.id);
 
     expect(node).toStrictEqual({
       element: addNodeRequest.element,
@@ -159,12 +162,10 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
-      centerFn: undefined,
       priority: 0,
     };
 
@@ -184,27 +185,24 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
-      centerFn: undefined,
-      priority: undefined,
     };
 
     canvasController.addNode(addNodeRequest);
 
     const markPortRequest: MarkPortRequest = {
-      portId: "port-1",
-      nodeId: addNodeRequest.nodeId,
+      id: "port-1",
+      nodeId: addNodeRequest.id,
       element: document.createElement("div"),
       direction: 0,
     };
 
     canvasController.markPort(markPortRequest);
 
-    const port = graphStore.getPort(markPortRequest.portId);
+    const port = graphStore.getPort(markPortRequest.id);
 
     expect(port).toStrictEqual({
       element: markPortRequest.element,
@@ -224,27 +222,23 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
-      centerFn: undefined,
-      priority: undefined,
     };
 
     canvasController.addNode(addNodeRequest);
 
     const markPortRequest: MarkPortRequest = {
-      portId: "port-1",
-      nodeId: addNodeRequest.nodeId,
+      id: "port-1",
+      nodeId: addNodeRequest.id,
       element: document.createElement("div"),
-      direction: undefined,
     };
 
     canvasController.markPort(markPortRequest);
 
-    const port = graphStore.getPort(markPortRequest.portId)!;
+    const port = graphStore.getPort(markPortRequest.id)!;
 
     expect(port.direction).toStrictEqual(portsDirection);
   });
@@ -257,20 +251,17 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
-      centerFn: undefined,
-      priority: undefined,
     };
 
     canvasController.addNode(addNodeRequest);
 
     const markPortRequest1: MarkPortRequest = {
-      portId: "port-1",
-      nodeId: addNodeRequest.nodeId,
+      id: "port-1",
+      nodeId: addNodeRequest.id,
       element: document.createElement("div"),
       direction: 0,
     };
@@ -290,7 +281,7 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const markPortRequest1: MarkPortRequest = {
-      portId: "port-1",
+      id: "port-1",
       nodeId: "node-1",
       element: document.createElement("div"),
       direction: 0,
@@ -314,12 +305,11 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
       ports: [markPortRequest],
-      centerFn: undefined,
       priority: 0,
     };
 
@@ -328,9 +318,9 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest);
 
     expect(spy).toHaveBeenCalledWith({
-      portId: markPortRequest.id,
+      id: markPortRequest.id,
       element: markPortRequest.element,
-      nodeId: addNodeRequest.nodeId,
+      nodeId: addNodeRequest.id,
       direction: markPortRequest.direction,
     });
   });
@@ -347,7 +337,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -365,7 +355,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -379,10 +369,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
+      id: "edge-1",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -404,7 +393,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -422,7 +411,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -436,10 +425,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
+      id: "edge-1",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -460,7 +448,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -474,10 +462,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
+      id: "edge-1",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -496,7 +483,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -510,10 +497,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1",
+      id: "edge-1",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -534,7 +520,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -552,7 +538,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -566,10 +552,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -581,13 +566,7 @@ describe("CanvasController", () => {
 
     const spy = jest.spyOn(shape, "render");
 
-    canvasController.updateEdge({
-      edgeId: addEdgeRequest12.edgeId,
-      shape: undefined,
-      priority: undefined,
-      from: undefined,
-      to: undefined,
-    });
+    canvasController.updateEdge(addEdgeRequest12.id, {});
 
     const expected: EdgeRenderParams = {
       from: {
@@ -625,7 +604,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -643,7 +622,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -655,10 +634,9 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest2);
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape: new EdgeShapeMock(),
     };
 
@@ -666,12 +644,8 @@ describe("CanvasController", () => {
 
     const newShape = new EdgeShapeMock();
 
-    canvasController.updateEdge({
-      edgeId: addEdgeRequest12.edgeId,
+    canvasController.updateEdge(addEdgeRequest12.id, {
       shape: newShape,
-      priority: undefined,
-      from: undefined,
-      to: undefined,
     });
 
     const container = div.children[0].children[0];
@@ -692,7 +666,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -710,7 +684,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -722,21 +696,16 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest2);
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
 
-    canvasController.updateEdge({
-      edgeId: addEdgeRequest12.edgeId,
-      shape: undefined,
+    canvasController.updateEdge(addEdgeRequest12.id, {
       priority: 10,
-      from: undefined,
-      to: undefined,
     });
 
     const container = div.children[0].children[0];
@@ -749,13 +718,7 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController();
 
     expect(() => {
-      canvasController.updateEdge({
-        edgeId: "edge-1",
-        shape: undefined,
-        priority: undefined,
-        from: undefined,
-        to: undefined,
-      });
+      canvasController.updateEdge("edge-1", {});
     }).toThrow(HtmlGraphError);
   });
 
@@ -770,7 +733,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -804,7 +767,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -822,7 +785,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -836,18 +799,15 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
 
-    const updatePortRequest: UpdatePortRequest = {
-      direction: undefined,
-    };
+    const updatePortRequest: UpdatePortRequest = {};
 
     const spy = jest.spyOn(shape, "render");
     canvasController.updatePort(markPortRequest1.id, updatePortRequest);
@@ -880,9 +840,7 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController();
 
     expect(() => {
-      canvasController.updatePort("port-1", {
-        direction: undefined,
-      });
+      canvasController.updatePort("port-1", {});
     }).toThrow(HtmlGraphError);
   });
 
@@ -892,11 +850,10 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -905,12 +862,9 @@ describe("CanvasController", () => {
 
     const updateNodeRequest: UpdateNodeRequest = {
       x: 100,
-      y: undefined,
-      priority: undefined,
-      centerFn: undefined,
     };
 
-    canvasController.updateNode(addNodeRequest.nodeId, updateNodeRequest);
+    canvasController.updateNode(addNodeRequest.id, updateNodeRequest);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
@@ -924,11 +878,10 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -936,13 +889,10 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest);
 
     const updateNodeRequest: UpdateNodeRequest = {
-      x: undefined,
       y: 100,
-      priority: undefined,
-      centerFn: undefined,
     };
 
-    canvasController.updateNode(addNodeRequest.nodeId, updateNodeRequest);
+    canvasController.updateNode(addNodeRequest.id, updateNodeRequest);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
@@ -956,11 +906,10 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -968,13 +917,10 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest);
 
     const updateNodeRequest: UpdateNodeRequest = {
-      x: undefined,
-      y: undefined,
       priority: 10,
-      centerFn: undefined,
     };
 
-    canvasController.updateNode(addNodeRequest.nodeId, updateNodeRequest);
+    canvasController.updateNode(addNodeRequest.id, updateNodeRequest);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
@@ -988,25 +934,21 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement({ width: 100, height: 100 }),
       x: 0,
       y: 0,
       centerFn: () => ({ x: 0, y: 0 }),
-      ports: undefined,
       priority: 0,
     };
 
     canvasController.addNode(addNodeRequest);
 
     const updateNodeRequest: UpdateNodeRequest = {
-      x: undefined,
-      y: undefined,
-      priority: undefined,
       centerFn: (width, height) => ({ x: width, y: height }),
     };
 
-    canvasController.updateNode(addNodeRequest.nodeId, updateNodeRequest);
+    canvasController.updateNode(addNodeRequest.id, updateNodeRequest);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
@@ -1035,7 +977,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1053,7 +995,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1067,21 +1009,15 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
     canvasController.addEdge(addEdgeRequest12);
 
-    const updateNodeRequest: UpdateNodeRequest = {
-      x: undefined,
-      y: undefined,
-      centerFn: undefined,
-      priority: undefined,
-    };
+    const updateNodeRequest: UpdateNodeRequest = {};
 
     markPortRequest1.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(50, 50, 0, 0);
@@ -1089,7 +1025,7 @@ describe("CanvasController", () => {
 
     const spy = jest.spyOn(shape, "render");
 
-    canvasController.updateNode(addNodeRequest1.nodeId, updateNodeRequest);
+    canvasController.updateNode(addNodeRequest1.id, updateNodeRequest);
 
     const expected: EdgeRenderParams = {
       from: {
@@ -1126,7 +1062,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1144,7 +1080,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1156,18 +1092,17 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest2);
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
 
-    canvasController.removeEdge(addEdgeRequest12.edgeId);
+    canvasController.removeEdge(addEdgeRequest12.id);
 
-    const edge = graphStore.getEdge(addEdgeRequest12.edgeId);
+    const edge = graphStore.getEdge(addEdgeRequest12.id);
 
     expect(edge).toBe(undefined);
   });
@@ -1184,7 +1119,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1202,7 +1137,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1214,16 +1149,15 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest2);
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape: new EdgeShapeMock(),
     };
 
     canvasController.addEdge(addEdgeRequest12);
 
-    canvasController.removeEdge(addEdgeRequest12.edgeId);
+    canvasController.removeEdge(addEdgeRequest12.id);
 
     const container = div.children[0].children[0] as HTMLElement;
 
@@ -1249,7 +1183,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1276,7 +1210,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1294,7 +1228,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1306,10 +1240,9 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest2);
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: "edge-1-2",
+      id: "edge-1-2",
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape: new EdgeShapeMock(),
     };
 
@@ -1319,7 +1252,7 @@ describe("CanvasController", () => {
 
     canvasController.unmarkPort(markPortRequest1.id);
 
-    expect(spy).toHaveBeenCalledWith(addEdgeRequest12.edgeId);
+    expect(spy).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should throw error when trying to unmark nonexisting port", () => {
@@ -1335,20 +1268,19 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController({ graphStore });
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
       centerFn: () => ({ x: 0, y: 0 }),
-      ports: undefined,
       priority: 0,
     };
 
     canvasController.addNode(addNodeRequest1);
 
-    canvasController.removeNode(addNodeRequest1.nodeId);
+    canvasController.removeNode(addNodeRequest1.id);
 
-    const node = graphStore.getNode(addNodeRequest1.nodeId);
+    const node = graphStore.getNode(addNodeRequest1.id);
 
     expect(node).toBe(undefined);
   });
@@ -1359,17 +1291,16 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
       centerFn: () => ({ x: 0, y: 0 }),
-      ports: undefined,
       priority: 0,
     };
 
     canvasController.addNode(addNodeRequest1);
-    canvasController.removeNode(addNodeRequest1.nodeId);
+    canvasController.removeNode(addNodeRequest1.id);
 
     const container = div.children[0].children[0] as HTMLElement;
 
@@ -1386,7 +1317,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1399,7 +1330,7 @@ describe("CanvasController", () => {
 
     const spy = jest.spyOn(canvasController, "unmarkPort");
 
-    canvasController.removeNode(addNodeRequest1.nodeId);
+    canvasController.removeNode(addNodeRequest1.id);
 
     expect(spy).toHaveBeenCalledWith(markPortRequest1.id);
   });
@@ -1476,11 +1407,9 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController({ graphStore });
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: undefined,
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -1497,11 +1426,10 @@ describe("CanvasController", () => {
     const canvasController = createCanvasController({ graphStore });
 
     const addNodeRequest: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: undefined,
       centerFn: () => ({ x: 0, y: 0 }),
       priority: 0,
     };
@@ -1509,8 +1437,7 @@ describe("CanvasController", () => {
     canvasController.addNode(addNodeRequest);
 
     const markPortRequest1: MarkPortRequest = {
-      portId: undefined,
-      nodeId: addNodeRequest.nodeId,
+      nodeId: addNodeRequest.id,
       element: document.createElement("div"),
       direction: 0,
     };
@@ -1535,7 +1462,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1553,7 +1480,7 @@ describe("CanvasController", () => {
     };
 
     const addNodeRequest2: AddNodeRequest = {
-      nodeId: "node-2",
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1567,10 +1494,8 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest12: AddEdgeRequest = {
-      edgeId: undefined,
       from: "port-1",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -1595,7 +1520,7 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1620,10 +1545,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest: AddEdgeRequest = {
-      edgeId: "con-1",
+      id: "con-1",
       from: "port-2",
       to: "port-2",
-      priority: undefined,
       shape,
     };
 
@@ -1631,12 +1555,8 @@ describe("CanvasController", () => {
 
     const spy = jest.spyOn(shape, "render");
 
-    canvasController.updateEdge({
-      edgeId: "con-1",
+    canvasController.updateEdge("con-1", {
       from: "port-1",
-      to: undefined,
-      shape: undefined,
-      priority: undefined,
     });
 
     const expected: EdgeRenderParams = {
@@ -1669,7 +1589,7 @@ describe("CanvasController", () => {
     canvasController.attach(div);
 
     const addNodeRequest1: AddNodeRequest = {
-      nodeId: "node-1",
+      id: "node-1",
       element: createElement(),
       x: 0,
       y: 0,
@@ -1694,10 +1614,9 @@ describe("CanvasController", () => {
     const shape = new EdgeShapeMock();
 
     const addEdgeRequest: AddEdgeRequest = {
-      edgeId: "con-1",
+      id: "con-1",
       from: "port-1",
       to: "port-1",
-      priority: undefined,
       shape,
     };
 
@@ -1705,12 +1624,8 @@ describe("CanvasController", () => {
 
     const spy = jest.spyOn(shape, "render");
 
-    canvasController.updateEdge({
-      edgeId: "con-1",
-      from: undefined,
+    canvasController.updateEdge("con-1", {
       to: "port-2",
-      shape: undefined,
-      priority: undefined,
     });
 
     const expected: EdgeRenderParams = {

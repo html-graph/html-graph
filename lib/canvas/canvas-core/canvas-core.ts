@@ -1,9 +1,4 @@
-import {
-  Options,
-  CoreOptions,
-  createOptions,
-  EdgeShapeFactory,
-} from "./options";
+import { CoreOptions, createOptions } from "./options";
 import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,
@@ -16,9 +11,9 @@ import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
-import { PatchMatrixRequest } from "../patch-transform-request";
+import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlController } from "@/html-controller";
-import { CanvasController } from "@/canvas-controller";
+import { CanvasController, Options } from "@/canvas-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 
 /**
@@ -31,7 +26,7 @@ export class CanvasCore implements Canvas {
 
   private readonly canvasController: CanvasController;
 
-  private readonly edgeShapeFactory: EdgeShapeFactory;
+  private readonly htmlController: HtmlController;
 
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: Options = createOptions(this.apiOptions);
@@ -40,22 +35,16 @@ export class CanvasCore implements Canvas {
     const graphStore = new GraphStore();
 
     this.model = new PublicGraphStore(graphStore);
-
     this.transformation = new PublicViewportTransformer(viewportTransformer);
 
-    const htmlController = new HtmlController(graphStore, viewportTransformer);
+    this.htmlController = new HtmlController(graphStore, viewportTransformer);
 
     this.canvasController = new CanvasController(
       graphStore,
-      htmlController,
+      this.htmlController,
       viewportTransformer,
-      options.nodes.centerFn,
-      options.ports.direction,
-      options.nodes.priorityFn,
-      options.edges.priorityFn,
+      options,
     );
-
-    this.edgeShapeFactory = options.edges.shapeFactory;
   }
 
   public attach(element: HTMLElement): CanvasCore {
@@ -71,26 +60,13 @@ export class CanvasCore implements Canvas {
   }
 
   public addNode(request: AddNodeRequest): CanvasCore {
-    this.canvasController.addNode({
-      nodeId: request.id,
-      element: request.element,
-      x: request.x,
-      y: request.y,
-      ports: request.ports,
-      centerFn: request.centerFn,
-      priority: request.priority,
-    });
+    this.canvasController.addNode(request);
 
     return this;
   }
 
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
-    this.canvasController.updateNode(nodeId, {
-      x: request?.x,
-      y: request?.y,
-      priority: request?.priority,
-      centerFn: request?.centerFn,
-    });
+    this.canvasController.updateNode(nodeId, request);
 
     return this;
   }
@@ -101,26 +77,14 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): CanvasCore {
-    this.canvasController.addEdge({
-      edgeId: edge.id,
-      from: edge.from,
-      to: edge.to,
-      shape: edge.shape ?? this.edgeShapeFactory(),
-      priority: edge.priority,
-    });
+  public addEdge(request: AddEdgeRequest): CanvasCore {
+    this.canvasController.addEdge(request);
 
     return this;
   }
 
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasCore {
-    this.canvasController.updateEdge({
-      edgeId,
-      shape: request?.shape,
-      priority: request?.priority,
-      from: request?.from,
-      to: request?.to,
-    });
+    this.canvasController.updateEdge(edgeId, request ?? {});
 
     return this;
   }
@@ -131,21 +95,14 @@ export class CanvasCore implements Canvas {
     return this;
   }
 
-  public markPort(port: MarkPortRequest): CanvasCore {
-    this.canvasController.markPort({
-      portId: port.id,
-      element: port.element,
-      nodeId: port.nodeId,
-      direction: port.direction,
-    });
+  public markPort(request: MarkPortRequest): CanvasCore {
+    this.canvasController.markPort(request);
 
     return this;
   }
 
   public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
-    this.canvasController.updatePort(portId, {
-      direction: request?.direction,
-    });
+    this.canvasController.updatePort(portId, request ?? {});
 
     return this;
   }
@@ -175,7 +132,6 @@ export class CanvasCore implements Canvas {
   }
 
   public destroy(): void {
-    this.clear();
     this.canvasController.destroy();
   }
 }

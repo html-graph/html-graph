@@ -4,7 +4,7 @@ import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
-import { PatchMatrixRequest } from "../patch-transform-request";
+import { PatchMatrixRequest } from "../patch-matrix-request";
 import { PublicGraphStore } from "@/public-graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";

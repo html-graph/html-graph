@@ -5,7 +5,7 @@ import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
-import { PatchMatrixRequest } from "../patch-transform-request";
+import { PatchMatrixRequest } from "../patch-matrix-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
 import { PublicGraphStore } from "@/public-graph-store";

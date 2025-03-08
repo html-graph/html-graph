@@ -1,6 +1,4 @@
-import { CenterFn } from "@/center-fn";
 import { IdGenerator } from "@/id-generator";
-import { PriorityFn } from "@/priority";
 import { HtmlGraphError } from "@/error";
 import { HtmlController } from "@/html-controller";
 import { GraphStore } from "@/graph-store";
@@ -12,6 +10,7 @@ import { UpdatePortRequest } from "./update-port-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { PatchTransformRequest } from "./patch-transform-request";
 import { AddEdgeRequest } from "./add-edge-request";
+import { Options } from "./options";
 
 export class CanvasController {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -30,10 +29,7 @@ export class CanvasController {
     private readonly graphStore: GraphStore,
     private readonly htmlController: HtmlController,
     private readonly viewportTransformer: ViewportTransformer,
-    private readonly defaultNodesCenterFn: CenterFn,
-    private readonly defaultPortsDirection: number,
-    private readonly defaultNodesPriorityFn: PriorityFn,
-    private readonly defaultEdgesPriorityFn: PriorityFn,
+    private readonly options: Options,
   ) {}
 
   public attach(element: HTMLElement): void {
@@ -45,7 +41,7 @@ export class CanvasController {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const nodeId = this.nodeIdGenerator.create(request.nodeId);
+    const nodeId = this.nodeIdGenerator.create(request.id);
 
     if (this.graphStore.getNode(nodeId) !== undefined) {
       throw new HtmlGraphError("failed to add node with existing id");
@@ -56,15 +52,15 @@ export class CanvasController {
       element: request.element,
       x: request.x,
       y: request.y,
-      centerFn: request.centerFn ?? this.defaultNodesCenterFn,
-      priority: request.priority ?? this.defaultNodesPriorityFn(),
+      centerFn: request.centerFn ?? this.options.nodes.centerFn,
+      priority: request.priority ?? this.options.nodes.priorityFn(),
     });
 
     this.htmlController.attachNode(nodeId);
 
     Array.from(request.ports ?? []).forEach((port) => {
       this.markPort({
-        portId: port.id,
+        id: port.id,
         element: port.element,
         nodeId,
         direction: port.direction,
@@ -73,7 +69,7 @@ export class CanvasController {
   }
 
   public markPort(request: MarkPortRequest): void {
-    const portId = this.portIdGenerator.create(request.portId);
+    const portId = this.portIdGenerator.create(request.id);
 
     if (this.graphStore.getPort(portId) !== undefined) {
       throw new HtmlGraphError("failed to add port with existing id");
@@ -87,12 +83,12 @@ export class CanvasController {
       portId,
       element: request.element,
       nodeId: request.nodeId,
-      direction: request.direction ?? this.defaultPortsDirection,
+      direction: request.direction ?? this.options.ports.direction,
     });
   }
 
   public addEdge(request: AddEdgeRequest): void {
-    const edgeId = this.edgeIdGenerator.create(request.edgeId);
+    const edgeId = this.edgeIdGenerator.create(request.id);
 
     if (this.graphStore.getEdge(edgeId) !== undefined) {
       throw new HtmlGraphError("failed to add edge with existing id");
@@ -110,15 +106,15 @@ export class CanvasController {
       edgeId,
       from: request.from,
       to: request.to,
-      shape: request.shape,
-      priority: request.priority ?? this.defaultEdgesPriorityFn(),
+      shape: request.shape ?? this.options.edges.shapeFactory(),
+      priority: request.priority ?? this.options.edges.priorityFn(),
     });
 
     this.htmlController.attachEdge(edgeId);
   }
 
-  public updateEdge(request: UpdateEdgeRequest): void {
-    const edge = this.graphStore.getEdge(request.edgeId);
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
+    const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {
       throw new HtmlGraphError("failed to update nonexisting edge");
@@ -126,23 +122,23 @@ export class CanvasController {
 
     if (request.shape !== undefined) {
       edge.shape = request.shape;
-      this.htmlController.updateEdgeShape(request.edgeId);
+      this.htmlController.updateEdgeShape(edgeId);
     }
 
     if (request.priority !== undefined) {
       edge.priority = request.priority;
-      this.htmlController.updateEdgePriority(request.edgeId);
+      this.htmlController.updateEdgePriority(edgeId);
     }
 
     if (request.from !== undefined) {
-      this.graphStore.updateEdgeFrom(request.edgeId, request.from);
+      this.graphStore.updateEdgeFrom(edgeId, request.from);
     }
 
     if (request.to !== undefined) {
-      this.graphStore.updateEdgeTo(request.edgeId, request.to);
+      this.graphStore.updateEdgeTo(edgeId, request.to);
     }
 
-    this.htmlController.renderEdge(request.edgeId);
+    this.htmlController.renderEdge(edgeId);
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {

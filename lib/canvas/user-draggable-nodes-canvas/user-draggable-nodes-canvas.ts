@@ -4,7 +4,7 @@ import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
 import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
-import { PatchMatrixRequest } from "../patch-transform-request";
+import { PatchMatrixRequest } from "../patch-matrix-request";
 import { DragOptions } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { PublicGraphStore } from "@/public-graph-store";
@@ -323,16 +323,16 @@ export class UserDraggableNodesCanvas implements Canvas {
       return;
     }
 
-    const matrixContent = this.canvas.transformation.getContentMatrix();
-    const viewportX = matrixContent.scale * node.x + matrixContent.x;
-    const viewportY = matrixContent.scale * node.y + matrixContent.y;
+    const contentMatrix = this.canvas.transformation.getContentMatrix();
+    const viewportX = contentMatrix.scale * node.x + contentMatrix.x;
+    const viewportY = contentMatrix.scale * node.y + contentMatrix.y;
 
     const newViewportX = viewportX + dx;
     const newViewportY = viewportY + dy;
 
-    const matrixViewport = this.canvas.transformation.getViewportMatrix();
-    const contentX = matrixViewport.scale * newViewportX + matrixViewport.x;
-    const contentY = matrixViewport.scale * newViewportY + matrixViewport.y;
+    const viewportMatrix = this.canvas.transformation.getViewportMatrix();
+    const contentX = viewportMatrix.scale * newViewportX + viewportMatrix.x;
+    const contentY = viewportMatrix.scale * newViewportY + viewportMatrix.y;
     this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
 
     this.options.onNodeDrag({

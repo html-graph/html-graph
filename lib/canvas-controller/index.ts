@@ -7,3 +7,4 @@ export type { PatchTransformRequest } from "./patch-transform-request";
 export type { UpdateEdgeRequest } from "./update-edge-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { UpdateNodeRequest } from "./update-node-request";
+export type { Options } from "./options";

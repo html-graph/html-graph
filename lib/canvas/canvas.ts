@@ -2,7 +2,7 @@ import { PublicViewportTransformer } from "@/viewport-transformer";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
-import { PatchMatrixRequest } from "./patch-transform-request";
+import { PatchMatrixRequest } from "./patch-matrix-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
