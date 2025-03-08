@@ -13,7 +13,6 @@ export {
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
   ResizeReactiveNodesCanvas,
-  VirtualScrollCanvas,
 } from "./canvas";
 
 export {
@@ -29,7 +28,6 @@ export type {
   CoreOptions,
   TransformOptions,
   DragOptions,
-  RenderingBox,
   AddEdgeRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
@@ -79,5 +77,3 @@ export type { CenterFn } from "./center-fn";
 export type { PriorityFn } from "./priority";
 
 export { HtmlGraphError } from "./error";
-
-export { EventSubject } from "./event-subject";

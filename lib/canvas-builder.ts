@@ -7,10 +7,7 @@ import {
   UserTransformableViewportCanvas,
   TransformOptions,
   ResizeReactiveNodesCanvas,
-  VirtualScrollCanvas,
-  RenderingBox,
 } from "@/canvas";
-import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions | undefined = undefined;
@@ -19,15 +16,11 @@ export class CanvasBuilder {
 
   private transformOptions: TransformOptions | undefined = undefined;
 
-  private virtualScrollTrigger = new EventSubject<RenderingBox>();
-
   private isDraggable = false;
 
   private isTransformable = false;
 
   private hasResizeReactiveNodes = false;
-
-  private hasVirtualScroll = false;
 
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
@@ -65,13 +58,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(trigger: EventSubject<RenderingBox>): CanvasBuilder {
-    this.hasVirtualScroll = true;
-    this.virtualScrollTrigger = trigger;
-
-    return this;
-  }
-
   public build(): Canvas {
     let res: Canvas = new CanvasCore(this.coreOptions);
 
@@ -85,10 +71,6 @@ export class CanvasBuilder {
 
     if (this.hasResizeReactiveNodes) {
       res = new ResizeReactiveNodesCanvas(res);
-    }
-
-    if (this.hasVirtualScroll) {
-      res = new VirtualScrollCanvas(res, this.virtualScrollTrigger);
     }
 
     return res;
