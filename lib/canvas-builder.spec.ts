@@ -3,6 +3,7 @@ import {
   ResizeReactiveNodesCanvas,
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
+  VirtualScrollCanvas,
 } from "@/canvas";
 import { CanvasBuilder } from "./canvas-builder";
 
@@ -71,5 +72,13 @@ describe("CanvasBuilder", () => {
     const canvas = builder.setUserTransformableCanvas().build();
 
     expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
+  });
+
+  it("should build virtual scroll canvas", () => {
+    const builder = new CanvasBuilder();
+
+    const canvas = builder.setVirtualScroll().build();
+
+    expect(canvas instanceof VirtualScrollCanvas).toBe(true);
   });
 });
