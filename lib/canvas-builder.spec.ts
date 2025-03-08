@@ -1,11 +1,13 @@
 import {
   CanvasCore,
+  RenderingBox,
   ResizeReactiveNodesCanvas,
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
   VirtualScrollCanvas,
 } from "@/canvas";
 import { CanvasBuilder } from "./canvas-builder";
+import { EventSubject } from "./event-subject";
 
 describe("CanvasBuilder", () => {
   it("should build core canvas", () => {
@@ -77,7 +79,9 @@ describe("CanvasBuilder", () => {
   it("should build virtual scroll canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.setVirtualScroll().build();
+    const trigger = new EventSubject<RenderingBox>();
+
+    const canvas = builder.setVirtualScroll(trigger).build();
 
     expect(canvas instanceof VirtualScrollCanvas).toBe(true);
   });

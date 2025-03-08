@@ -8,7 +8,9 @@ import {
   TransformOptions,
   ResizeReactiveNodesCanvas,
   VirtualScrollCanvas,
+  RenderingBox,
 } from "@/canvas";
+import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions | undefined = undefined;
@@ -16,6 +18,8 @@ export class CanvasBuilder {
   private dragOptions: DragOptions | undefined = undefined;
 
   private transformOptions: TransformOptions | undefined = undefined;
+
+  private virtualScrollTrigger = new EventSubject<RenderingBox>();
 
   private isDraggable = false;
 
@@ -61,8 +65,9 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(): CanvasBuilder {
+  public setVirtualScroll(trigger: EventSubject<RenderingBox>): CanvasBuilder {
     this.hasVirtualScroll = true;
+    this.virtualScrollTrigger = trigger;
 
     return this;
   }
@@ -83,7 +88,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasVirtualScroll) {
-      res = new VirtualScrollCanvas(res);
+      res = new VirtualScrollCanvas(res, this.virtualScrollTrigger);
     }
 
     return res;

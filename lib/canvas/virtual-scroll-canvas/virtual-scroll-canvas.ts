@@ -8,13 +8,23 @@ import { PatchMatrixRequest } from "../patch-transform-request";
 import { PublicGraphStore } from "@/public-graph-store";
 import { PublicViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
+import { RenderingBox } from "./rendering-box";
+import { EventSubject } from "@/event-subject";
 
 export class VirtualScrollCanvas implements Canvas {
   public readonly model: PublicGraphStore;
 
   public readonly transformation: PublicViewportTransformer;
 
-  public constructor(private readonly canvas: Canvas) {
+  private triggerCallback = (payload: RenderingBox): void => {
+    console.log(payload);
+  };
+
+  public constructor(
+    private readonly canvas: Canvas,
+    private readonly trigger: EventSubject<RenderingBox>,
+  ) {
+    this.trigger.subscribe(this.triggerCallback);
     this.transformation = this.canvas.transformation;
     this.model = this.canvas.model;
   }
@@ -113,6 +123,7 @@ export class VirtualScrollCanvas implements Canvas {
   }
 
   public destroy(): void {
+    this.trigger.unsubscribe(this.triggerCallback);
     this.canvas.destroy();
   }
 }

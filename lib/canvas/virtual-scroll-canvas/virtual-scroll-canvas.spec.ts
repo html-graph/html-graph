@@ -1,10 +1,13 @@
+import { EventSubject } from "@/event-subject";
 import { CanvasCore } from "../canvas-core";
 import { VirtualScrollCanvas } from "./virtual-scroll-canvas";
+import { RenderingBox } from "./rendering-box";
 
 describe("VirtualScrollCanvas", () => {
   it("should call attach on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
     const canvasElement = document.createElement("div");
 
     const spy = jest.spyOn(canvasCore, "attach");
@@ -16,7 +19,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call detach on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
     const canvasElement = document.createElement("div");
 
     const spy = jest.spyOn(canvasCore, "detach");
@@ -29,7 +33,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call addNode on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     const spy = jest.spyOn(canvasCore, "addNode");
 
@@ -44,7 +49,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call updateNode on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -62,7 +68,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call removeNode on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -80,7 +87,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call markPort on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -101,7 +109,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call updatePort on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -125,7 +134,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call unmarkPort on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -149,7 +159,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call addEdge on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -173,7 +184,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call updateEdge on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -199,7 +211,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call removeEdge on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     canvas.addNode({
       id: "node-1",
@@ -225,7 +238,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call patchViewportMatrix on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     const spy = jest.spyOn(canvasCore, "patchViewportMatrix");
 
@@ -236,7 +250,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call patchContentMatrix on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     const spy = jest.spyOn(canvasCore, "patchContentMatrix");
 
@@ -247,7 +262,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call clear on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     const spy = jest.spyOn(canvasCore, "clear");
 
@@ -258,7 +274,8 @@ describe("VirtualScrollCanvas", () => {
 
   it("should call destroy on canvas", () => {
     const canvasCore = new CanvasCore();
-    const canvas = new VirtualScrollCanvas(canvasCore);
+    const trigger = new EventSubject<RenderingBox>();
+    const canvas = new VirtualScrollCanvas(canvasCore, trigger);
 
     const spy = jest.spyOn(canvasCore, "destroy");
 

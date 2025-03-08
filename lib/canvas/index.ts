@@ -13,6 +13,7 @@ export { CanvasCore } from "./canvas-core";
 export type { CoreOptions } from "./canvas-core";
 export { UserDraggableNodesCanvas } from "./user-draggable-nodes-canvas";
 export { VirtualScrollCanvas } from "./virtual-scroll-canvas";
+export type { RenderingBox } from "./virtual-scroll-canvas";
 export type {
   DragOptions,
   NodeDragPayload,

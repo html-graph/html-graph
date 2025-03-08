@@ -4,6 +4,8 @@ import {
   Canvas,
   CanvasBuilder,
   CoreOptions,
+  EventSubject,
+  RenderingBox,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -18,10 +20,12 @@ const options: CoreOptions = {
   },
 };
 
+const virtualScrollTrigger = new EventSubject<RenderingBox>();
+
 const canvas: Canvas = builder
   .setOptions(options)
-  .setUserDraggableNodes()
   .setUserTransformableViewport()
+  .setVirtualScroll(virtualScrollTrigger)
   .build();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -30,10 +34,9 @@ canvas.attach(canvasElement);
 
 let nodeId = 0;
 let sourcePortId: string | null = null;
-const side = 30;
 
-for (let i = 0; i < side; i++) {
-  for (let j = 0; j < side; j++) {
+for (let i = 0; i < 5; i++) {
+  for (let j = 0; j < 400; j++) {
     const frontPortId = `node-${nodeId}-in`;
     const backPortId = `node-${nodeId}-out`;
 
@@ -60,3 +63,7 @@ for (let i = 0; i < side; i++) {
     nodeId++;
   }
 }
+
+const viewportBox: RenderingBox = { x: 0, y: 0, width: 1000, height: 1000 };
+
+virtualScrollTrigger.emit(viewportBox);
