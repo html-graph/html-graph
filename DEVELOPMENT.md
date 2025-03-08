@@ -61,15 +61,3 @@ npm run make-deps-graph // next patch version
 ```
 
 `./deps-graph/deps-graph.dot` will contain dependency graph in GraphViz format. It can be opened by software such as `xdot`.
-
-## Build documentation
-
-```
-npm run build-docs
-```
-
-## Deploy documentation
-
-```
-npm run deploy-docs
-```
