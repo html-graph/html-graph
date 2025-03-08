@@ -3,6 +3,9 @@ import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
 
+/**
+ * This entity is responsible for providing access to end user in a safe way
+ */
 export class PublicGraphStore {
   public constructor(private readonly graphStore: GraphStore) {}
 

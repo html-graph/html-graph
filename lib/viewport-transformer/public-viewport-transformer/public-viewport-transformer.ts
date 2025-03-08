@@ -1,6 +1,10 @@
 import { TransformState } from "../transform-state";
 import { ViewportTransformer } from "../viewport-transformer";
 
+/**
+ * This entity is responsible for providing viewport transformation state to the
+ * end user in a safe way
+ */
 export class PublicViewportTransformer {
   public constructor(private readonly transformer: ViewportTransformer) {}
 

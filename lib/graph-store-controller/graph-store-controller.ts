@@ -10,6 +10,10 @@ import { AddEdgeRequest } from "./add-edge-request";
 import { GraphStoreControllerOptions } from "./options";
 import { GraphStoreControllerEvents } from "./graph-store-controller-events";
 
+/**
+ * This entity is responsible for keeping consistent state of graph when
+ * nodes, ports and edges get added, updated or removed
+ */
 export class GraphStoreController {
   private readonly nodeIdGenerator = new IdGenerator(
     (nodeId) => this.graphStore.getNode(nodeId) !== undefined,

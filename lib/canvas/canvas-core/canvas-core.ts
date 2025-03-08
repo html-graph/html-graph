@@ -16,9 +16,9 @@ import { HtmlController } from "@/html-controller";
 import {
   GraphStoreController,
   GraphStoreControllerOptions,
+  GraphStoreControllerEvents,
 } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
-import { GraphStoreControllerEvents } from "@/graph-store-controller/graph-store-controller-events";
 
 /**
  * Provides low level API for acting on graph
@@ -28,21 +28,21 @@ export class CanvasCore implements Canvas {
 
   public readonly model: PublicGraphStore;
 
+  private readonly viewportTransformer: ViewportTransformer;
+
+  private readonly graphStore: GraphStore;
+
   private readonly graphStoreController: GraphStoreController;
 
   private readonly htmlController: HtmlController;
 
-  private readonly viewportTransformer: ViewportTransformer;
-
-  private readonly graphStore = new GraphStore();
-
   public constructor(private readonly apiOptions?: CoreOptions) {
     const options: GraphStoreControllerOptions = createOptions(this.apiOptions);
 
-    this.viewportTransformer = new ViewportTransformer();
     this.graphStore = new GraphStore();
-
     this.model = new PublicGraphStore(this.graphStore);
+
+    this.viewportTransformer = new ViewportTransformer();
     this.transformation = new PublicViewportTransformer(
       this.viewportTransformer,
     );
