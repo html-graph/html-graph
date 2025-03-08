@@ -1,18 +1,16 @@
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
-import { HtmlController } from "@/html-controller";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
 import { AddNodeRequest } from "./add-node-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
-import { PatchTransformRequest } from "./patch-transform-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { Options } from "./options";
+import { GraphStoreControllerOptions } from "./options";
+import { GraphStoreControllerEvents } from "./graph-store-controller-events";
 
-export class CanvasController {
+export class GraphStoreController {
   private readonly nodeIdGenerator = new IdGenerator(
     (nodeId) => this.graphStore.getNode(nodeId) !== undefined,
   );
@@ -27,18 +25,9 @@ export class CanvasController {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly htmlController: HtmlController,
-    private readonly viewportTransformer: ViewportTransformer,
-    private readonly options: Options,
+    private readonly options: GraphStoreControllerOptions,
+    private readonly events: GraphStoreControllerEvents,
   ) {}
-
-  public attach(element: HTMLElement): void {
-    this.htmlController.attach(element);
-  }
-
-  public detach(): void {
-    this.htmlController.detach();
-  }
 
   public addNode(request: AddNodeRequest): void {
     const nodeId = this.nodeIdGenerator.create(request.id);
@@ -56,7 +45,7 @@ export class CanvasController {
       priority: request.priority ?? this.options.nodes.priorityFn(),
     });
 
-    this.htmlController.attachNode(nodeId);
+    this.events.onAfterNodeAdded(nodeId);
 
     Array.from(request.ports ?? []).forEach((port) => {
       this.markPort({
@@ -110,7 +99,7 @@ export class CanvasController {
       priority: request.priority ?? this.options.edges.priorityFn(),
     });
 
-    this.htmlController.attachEdge(edgeId);
+    this.events.onAfterEdgeAdded(edgeId);
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
@@ -120,15 +109,7 @@ export class CanvasController {
       throw new HtmlGraphError("failed to update nonexisting edge");
     }
 
-    if (request.shape !== undefined) {
-      edge.shape = request.shape;
-      this.htmlController.updateEdgeShape(edgeId);
-    }
-
-    if (request.priority !== undefined) {
-      edge.priority = request.priority;
-      this.htmlController.updateEdgePriority(edgeId);
-    }
+    edge.shape = request.shape ?? edge.shape;
 
     if (request.from !== undefined) {
       this.graphStore.updateEdgeFrom(edgeId, request.from);
@@ -138,7 +119,12 @@ export class CanvasController {
       this.graphStore.updateEdgeTo(edgeId, request.to);
     }
 
-    this.htmlController.renderEdge(edgeId);
+    this.events.onAfterEdgeUpdated(edgeId);
+
+    if (request.priority !== undefined) {
+      edge.priority = request.priority;
+      this.events.onAfterEdgePriorityUpdated(edgeId);
+    }
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
@@ -150,14 +136,10 @@ export class CanvasController {
 
     port.direction = request.direction ?? port.direction;
 
-    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-    edges.forEach((edge) => {
-      this.htmlController.renderEdge(edge);
-    });
+    this.events.onAfterPortUpdated(portId);
   }
 
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): void {
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
@@ -166,17 +148,14 @@ export class CanvasController {
 
     node.x = request?.x ?? node.x;
     node.y = request?.y ?? node.y;
-    node.centerFn = request?.centerFn ?? node.centerFn;
-    node.priority = request?.priority ?? node.priority;
+    node.centerFn = request.centerFn ?? node.centerFn;
 
-    this.htmlController.updateNodeCoordinates(nodeId);
-    this.htmlController.updateNodePriority(nodeId);
+    this.events.onAfterNodeUpdated(nodeId);
 
-    const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-    edges.forEach((edge) => {
-      this.htmlController.renderEdge(edge);
-    });
+    if (request.priority !== undefined) {
+      node.priority = request.priority;
+      this.events.onAfterNodePriorityUpdated(nodeId);
+    }
   }
 
   public removeEdge(edgeId: unknown): void {
@@ -184,7 +163,7 @@ export class CanvasController {
       throw new HtmlGraphError("failed to remove nonexisting edge");
     }
 
-    this.htmlController.detachEdge(edgeId);
+    this.events.onBeforeEdgeRemoved(edgeId);
     this.graphStore.removeEdge(edgeId);
   }
 
@@ -209,30 +188,14 @@ export class CanvasController {
       this.unmarkPort(portId);
     });
 
-    this.htmlController.detachNode(nodeId);
+    this.events.onBeforeNodeRemoved(nodeId);
     this.graphStore.removeNode(nodeId);
   }
 
-  public patchViewportMatrix(matrix: PatchTransformRequest): void {
-    this.viewportTransformer.patchViewportMatrix(matrix);
-    this.htmlController.applyTransform();
-  }
-
-  public patchContentMatrix(matrix: PatchTransformRequest): void {
-    this.viewportTransformer.patchContentMatrix(matrix);
-    this.htmlController.applyTransform();
-  }
-
   public clear(): void {
-    this.htmlController.clear();
     this.graphStore.clear();
     this.nodeIdGenerator.reset();
     this.portIdGenerator.reset();
     this.edgeIdGenerator.reset();
-  }
-
-  public destroy(): void {
-    this.clear();
-    this.htmlController.destroy();
   }
 }

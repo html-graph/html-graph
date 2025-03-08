@@ -13,7 +13,10 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlController } from "@/html-controller";
-import { CanvasController, Options } from "@/canvas-controller";
+import {
+  GraphStoreController,
+  GraphStoreControllerOptions,
+} from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 
 /**
@@ -24,114 +27,163 @@ export class CanvasCore implements Canvas {
 
   public readonly model: PublicGraphStore;
 
-  private readonly canvasController: CanvasController;
+  private readonly graphStoreController: GraphStoreController;
 
   private readonly htmlController: HtmlController;
 
+  private readonly viewportTransformer: ViewportTransformer;
+
+  private readonly graphStore = new GraphStore();
+
   public constructor(private readonly apiOptions?: CoreOptions) {
-    const options: Options = createOptions(this.apiOptions);
+    const options: GraphStoreControllerOptions = createOptions(this.apiOptions);
 
-    const viewportTransformer = new ViewportTransformer();
-    const graphStore = new GraphStore();
+    this.viewportTransformer = new ViewportTransformer();
+    this.graphStore = new GraphStore();
 
-    this.model = new PublicGraphStore(graphStore);
-    this.transformation = new PublicViewportTransformer(viewportTransformer);
+    this.model = new PublicGraphStore(this.graphStore);
+    this.transformation = new PublicViewportTransformer(
+      this.viewportTransformer,
+    );
 
-    this.htmlController = new HtmlController(graphStore, viewportTransformer);
+    this.htmlController = new HtmlController(
+      this.graphStore,
+      this.viewportTransformer,
+    );
 
-    this.canvasController = new CanvasController(
-      graphStore,
-      this.htmlController,
-      viewportTransformer,
+    this.graphStoreController = new GraphStoreController(
+      this.graphStore,
       options,
+      {
+        onAfterNodeAdded: (nodeId): void => {
+          this.htmlController.attachNode(nodeId);
+        },
+        onAfterEdgeAdded: (edgeId): void => {
+          this.htmlController.attachEdge(edgeId);
+        },
+        onAfterEdgePriorityUpdated: (edgeId): void => {
+          this.htmlController.updateEdgePriority(edgeId);
+        },
+        onAfterEdgeUpdated: (edgeId): void => {
+          this.htmlController.renderEdge(edgeId);
+        },
+        onAfterPortUpdated: (portId): void => {
+          const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+          edges.forEach((edge) => {
+            this.htmlController.renderEdge(edge);
+          });
+        },
+        onAfterNodePriorityUpdated: (nodeId): void => {
+          this.htmlController.updateNodePriority(nodeId);
+        },
+        onAfterNodeUpdated: (nodeId): void => {
+          this.htmlController.updateNodeCoordinates(nodeId);
+          const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+
+          edges.forEach((edge) => {
+            this.htmlController.renderEdge(edge);
+          });
+        },
+        onBeforeEdgeRemoved: (edgeId): void => {
+          this.htmlController.detachEdge(edgeId);
+        },
+        onBeforeNodeRemoved: (nodeId): void => {
+          this.htmlController.detachNode(nodeId);
+        },
+      },
     );
   }
 
   public attach(element: HTMLElement): CanvasCore {
-    this.canvasController.attach(element);
+    this.htmlController.attach(element);
 
     return this;
   }
 
   public detach(): CanvasCore {
-    this.canvasController.detach();
+    this.htmlController.detach();
 
     return this;
   }
 
   public addNode(request: AddNodeRequest): CanvasCore {
-    this.canvasController.addNode(request);
+    this.graphStoreController.addNode(request);
 
     return this;
   }
 
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
-    this.canvasController.updateNode(nodeId, request);
+    this.graphStoreController.updateNode(nodeId, request ?? {});
 
     return this;
   }
 
   public removeNode(nodeId: unknown): CanvasCore {
-    this.canvasController.removeNode(nodeId);
+    this.graphStoreController.removeNode(nodeId);
 
     return this;
   }
 
   public addEdge(request: AddEdgeRequest): CanvasCore {
-    this.canvasController.addEdge(request);
+    this.graphStoreController.addEdge(request);
 
     return this;
   }
 
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasCore {
-    this.canvasController.updateEdge(edgeId, request ?? {});
+    this.graphStoreController.updateEdge(edgeId, request ?? {});
 
     return this;
   }
 
   public removeEdge(edgeId: unknown): CanvasCore {
-    this.canvasController.removeEdge(edgeId);
+    this.graphStoreController.removeEdge(edgeId);
 
     return this;
   }
 
   public markPort(request: MarkPortRequest): CanvasCore {
-    this.canvasController.markPort(request);
+    this.graphStoreController.markPort(request);
 
     return this;
   }
 
   public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
-    this.canvasController.updatePort(portId, request ?? {});
+    this.graphStoreController.updatePort(portId, request ?? {});
 
     return this;
   }
 
   public unmarkPort(portId: string): CanvasCore {
-    this.canvasController.unmarkPort(portId);
+    this.graphStoreController.unmarkPort(portId);
 
     return this;
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.canvasController.patchViewportMatrix(request);
+    this.viewportTransformer.patchViewportMatrix(request);
+    this.htmlController.applyTransform();
 
     return this;
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
-    this.canvasController.patchContentMatrix(request);
+    this.viewportTransformer.patchContentMatrix(request);
+    this.htmlController.applyTransform();
 
     return this;
   }
 
   public clear(): CanvasCore {
-    this.canvasController.clear();
+    this.htmlController.clear();
+    this.graphStoreController.clear();
 
     return this;
   }
 
   public destroy(): void {
-    this.canvasController.destroy();
+    this.htmlController.destroy();
+    this.graphStoreController.clear();
   }
 }
