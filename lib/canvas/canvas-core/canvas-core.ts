@@ -96,8 +96,9 @@ export class CanvasCore implements Canvas {
     this.graphStoreController = new GraphStoreController(
       this.internalModel,
       createOptions(apiOptions),
-      this.events,
     );
+
+    this.graphStoreController.setEventHandlers(this.events);
   }
 
   public attach(element: HTMLElement): CanvasCore {
