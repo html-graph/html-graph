@@ -7,5 +7,5 @@ export type { PatchTransformRequest } from "./patch-transform-request";
 export type { UpdateEdgeRequest } from "./update-edge-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { UpdateNodeRequest } from "./update-node-request";
-export type { GraphStoreControllerOptions } from "./options";
+export type { GraphStoreControllerDefaults } from "./graph-store-controller-defaults";
 export type { GraphStoreControllerEvents } from "./graph-store-controller-events";

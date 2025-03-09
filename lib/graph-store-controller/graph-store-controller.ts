@@ -7,7 +7,7 @@ import { MarkPortRequest } from "./mark-port-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { GraphStoreControllerOptions } from "./options";
+import { GraphStoreControllerDefaults } from "./graph-store-controller-defaults";
 import { GraphStoreControllerEvents } from "./graph-store-controller-events";
 
 /**
@@ -29,7 +29,7 @@ export class GraphStoreController {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly options: GraphStoreControllerOptions,
+    private readonly options: GraphStoreControllerDefaults,
     private readonly events: GraphStoreControllerEvents,
   ) {}
 

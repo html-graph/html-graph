@@ -1,6 +1,11 @@
 import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 import { CoreCanvas } from "./core-canvas";
 import { HtmlGraphError } from "@/error";
+import { DiContainer } from "./di-container";
+
+const createCanvas = (): CoreCanvas => {
+  return new CoreCanvas(new DiContainer({}));
+};
 
 const createElement = (params?: {
   x?: number;
@@ -24,7 +29,7 @@ const createElement = (params?: {
 
 describe("CoreCanvas", () => {
   it("should attach canvas", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -32,7 +37,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should detach canvas", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
     canvas.detach();
@@ -41,7 +46,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should create node", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -57,7 +62,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update node coordinates", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -77,7 +82,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update node priority", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -97,7 +102,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update node centerFn", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -117,7 +122,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should remove node", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -136,7 +141,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should create edge", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -174,7 +179,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update edge shape", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -217,7 +222,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update edge priority", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -260,7 +265,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should remove edge", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -300,7 +305,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should mark port", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -323,7 +328,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should update port direction", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -372,7 +377,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should unmark port", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -397,7 +402,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should patch viewport matrix", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -409,7 +414,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should patch content matrix", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -421,7 +426,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should clear canvas", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
@@ -462,7 +467,7 @@ describe("CoreCanvas", () => {
   });
 
   it("should clear canvas on destroy", () => {
-    const canvas = new CoreCanvas();
+    const canvas = createCanvas();
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 

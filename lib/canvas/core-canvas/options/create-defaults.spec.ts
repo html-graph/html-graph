@@ -1,12 +1,12 @@
 import { Point } from "@/point";
-import { createOptions } from "./create-options";
+import { createDefaults } from "./create-defaults";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
 import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
 
 describe("createOptions", () => {
   it("should return standard nodes center fn", () => {
-    const options = createOptions({});
+    const options = createDefaults({});
 
     expect(options.nodes.centerFn).toBe(standardCenterFn);
   });
@@ -14,7 +14,7 @@ describe("createOptions", () => {
   it("should return specified nodes center fn", () => {
     const fn = (): Point => ({ x: 0, y: 0 });
 
-    const options = createOptions({
+    const options = createDefaults({
       nodes: {
         centerFn: fn,
       },
@@ -24,7 +24,7 @@ describe("createOptions", () => {
   });
 
   it("should return standard nodes priority fn", () => {
-    const options = createOptions({});
+    const options = createDefaults({});
 
     expect(options.nodes.priorityFn).toBe(standardPriorityFn);
   });
@@ -32,7 +32,7 @@ describe("createOptions", () => {
   it("should return specified nodes priority fn", () => {
     const fn = (): number => 0;
 
-    const options = createOptions({
+    const options = createDefaults({
       nodes: {
         priority: fn,
       },
@@ -42,13 +42,13 @@ describe("createOptions", () => {
   });
 
   it("should return standard ports direction", () => {
-    const options = createOptions({});
+    const options = createDefaults({});
 
     expect(options.ports.direction).toBe(0);
   });
 
   it("should return specified ports direction", () => {
-    const options = createOptions({
+    const options = createDefaults({
       ports: {
         direction: Math.PI,
       },
@@ -58,7 +58,7 @@ describe("createOptions", () => {
   });
 
   it("should return standard edges priority fn", () => {
-    const options = createOptions({});
+    const options = createDefaults({});
 
     expect(options.edges.priorityFn).toBe(standardPriorityFn);
   });
@@ -66,7 +66,7 @@ describe("createOptions", () => {
   it("should return specified edges priority fn", () => {
     const fn = (): number => 0;
 
-    const options = createOptions({
+    const options = createDefaults({
       edges: {
         priority: fn,
       },
@@ -76,14 +76,14 @@ describe("createOptions", () => {
   });
 
   it("should return standard edges shape factory", () => {
-    const options = createOptions({});
+    const options = createDefaults({});
     const shape = options.edges.shapeFactory();
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
 
   it("should return specified edges shape factory", () => {
-    const options = createOptions({
+    const options = createDefaults({
       edges: {
         shape: {
           type: "straight",

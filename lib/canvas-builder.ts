@@ -7,6 +7,7 @@ import {
   TransformOptions,
   ResizeReactiveNodesCanvas,
   CoreCanvas,
+  DiContainer,
 } from "@/canvas";
 
 export class CanvasBuilder {
@@ -59,20 +60,24 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    let res: Canvas = new CoreCanvas(this.coreOptions);
+    const diContainer = new DiContainer(this.coreOptions ?? {});
+    let canvas: Canvas = new CoreCanvas(diContainer);
 
     if (this.hasResizeReactiveNodes) {
-      res = new ResizeReactiveNodesCanvas(res);
+      canvas = new ResizeReactiveNodesCanvas(canvas);
     }
 
     if (this.isDraggable) {
-      res = new UserDraggableNodesCanvas(res, this.dragOptions);
+      canvas = new UserDraggableNodesCanvas(canvas, this.dragOptions);
     }
 
     if (this.isTransformable) {
-      res = new UserTransformableViewportCanvas(res, this.transformOptions);
+      canvas = new UserTransformableViewportCanvas(
+        canvas,
+        this.transformOptions,
+      );
     }
 
-    return res;
+    return canvas;
   }
 }
