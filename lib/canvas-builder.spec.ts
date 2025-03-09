@@ -1,5 +1,5 @@
 import {
-  CanvasCore,
+  CoreCanvas,
   ResizeReactiveNodesCanvas,
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
@@ -12,7 +12,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.build();
 
-    expect(canvas instanceof CanvasCore).toBe(true);
+    expect(canvas instanceof CoreCanvas).toBe(true);
   });
 
   it("should set core options", () => {
