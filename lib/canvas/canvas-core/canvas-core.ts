@@ -79,8 +79,6 @@ export class CanvasCore implements Canvas {
   };
 
   public constructor(private readonly apiOptions?: CoreOptions) {
-    const options: GraphStoreControllerOptions = createOptions(this.apiOptions);
-
     this.graphStore = new GraphStore();
     this.model = new PublicGraphStore(this.graphStore);
 
@@ -93,6 +91,8 @@ export class CanvasCore implements Canvas {
       this.graphStore,
       this.viewportTransformer,
     );
+
+    const options: GraphStoreControllerOptions = createOptions(this.apiOptions);
 
     this.graphStoreController = new GraphStoreController(
       this.graphStore,
