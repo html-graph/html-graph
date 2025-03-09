@@ -128,39 +128,21 @@ const addEdgeRequest12: AddEdgeRequest = {
   shape: new EdgeShapeMock(),
 };
 
-const addNodeRequestNoPorts: AddNodeRequest = {
-  id: "node-3",
-  element: createElement(),
-  x: 0,
-  y: 0,
-  centerFn: () => ({ x: 0, y: 0 }),
-  priority: 0,
-};
-
 describe("GraphStoreController", () => {
   it("should add node to store", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      priority: 0,
-    };
+    graphStoreController.addNode(addNodeRequest1);
 
-    graphStoreController.addNode(addNodeRequest);
-
-    const node = graphStore.getNode(addNodeRequest.id);
+    const node = graphStore.getNode(addNodeRequest1.id);
 
     expect(node).toStrictEqual({
-      element: addNodeRequest.element,
-      x: addNodeRequest.x,
-      y: addNodeRequest.y,
-      centerFn: addNodeRequest.centerFn,
-      priority: addNodeRequest.priority,
+      element: addNodeRequest1.element,
+      x: addNodeRequest1.x,
+      y: addNodeRequest1.y,
+      centerFn: addNodeRequest1.centerFn,
+      priority: addNodeRequest1.priority,
     });
   });
 
@@ -172,31 +154,13 @@ describe("GraphStoreController", () => {
       onAfterNodeAdded,
     });
 
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      priority: 0,
-    };
-
-    graphStoreController.addNode(addNodeRequest);
+    graphStoreController.addNode(addNodeRequest1);
 
     expect(onAfterNodeAdded).toHaveBeenCalledWith("node-1");
   });
 
   it("should throw error when trying to add node with existing id", () => {
     const graphStoreController = createGraphStoreController();
-
-    const addNodeRequest1: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      priority: 0,
-    };
 
     graphStoreController.addNode(addNodeRequest1);
 
@@ -307,17 +271,17 @@ describe("GraphStoreController", () => {
 
     graphStoreController.addNode(addNodeRequest);
 
-    const markPortRequest1: MarkPortRequest = {
+    const markPortRequest: MarkPortRequest = {
       id: "port-1",
       nodeId: addNodeRequest.id,
       element: document.createElement("div"),
       direction: 0,
     };
 
-    graphStoreController.markPort(markPortRequest1);
+    graphStoreController.markPort(markPortRequest);
 
     expect(() => {
-      graphStoreController.markPort(markPortRequest1);
+      graphStoreController.markPort(markPortRequest);
     }).toThrow(HtmlGraphError);
   });
 
@@ -325,7 +289,7 @@ describe("GraphStoreController", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
-    const markPortRequest1: MarkPortRequest = {
+    const markPortRequest: MarkPortRequest = {
       id: "port-1",
       nodeId: "node-1",
       element: document.createElement("div"),
@@ -333,37 +297,22 @@ describe("GraphStoreController", () => {
     };
 
     expect(() => {
-      graphStoreController.markPort(markPortRequest1);
+      graphStoreController.markPort(markPortRequest);
     }).toThrow(HtmlGraphError);
   });
 
   it("should mark specified ports", () => {
     const graphStoreController = createGraphStoreController();
 
-    const markPortRequest: MarkNodePortRequest = {
-      id: "port-1",
-      element: document.createElement("div"),
-      direction: 0,
-    };
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [markPortRequest],
-      priority: 0,
-    };
-
     const spy = jest.spyOn(graphStoreController, "markPort");
 
-    graphStoreController.addNode(addNodeRequest);
+    graphStoreController.addNode(addNodeRequest1);
 
     expect(spy).toHaveBeenCalledWith({
-      id: markPortRequest.id,
-      element: markPortRequest.element,
-      nodeId: addNodeRequest.id,
-      direction: markPortRequest.direction,
+      id: markPortRequest1.id,
+      element: markPortRequest1.element,
+      nodeId: addNodeRequest1.id,
+      direction: markPortRequest1.direction,
     });
   });
 
@@ -668,15 +617,24 @@ describe("GraphStoreController", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
-    graphStoreController.addNode(addNodeRequestNoPorts);
+    const addNodeRequest: AddNodeRequest = {
+      id: "node-3",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      centerFn: () => ({ x: 0, y: 0 }),
+      priority: 0,
+    };
 
-    const markPortRequest1: MarkPortRequest = {
-      nodeId: addNodeRequestNoPorts.id,
+    graphStoreController.addNode(addNodeRequest);
+
+    const markPortRequest: MarkPortRequest = {
+      nodeId: addNodeRequest.id,
       element: document.createElement("div"),
       direction: 0,
     };
 
-    graphStoreController.markPort(markPortRequest1);
+    graphStoreController.markPort(markPortRequest);
 
     const ports = graphStore.getAllPortIds();
 
