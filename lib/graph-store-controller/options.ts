@@ -2,7 +2,7 @@ import { CenterFn } from "@/center-fn";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { PriorityFn } from "@/priority";
 
-export interface Options {
+export interface GraphStoreControllerOptions {
   readonly nodes: {
     readonly centerFn: CenterFn;
     readonly priorityFn: PriorityFn;

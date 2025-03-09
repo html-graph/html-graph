@@ -1,12 +1,12 @@
 import { standardCenterFn } from "@/center-fn";
 import { CoreOptions } from "./core-options";
-import { Options } from "./options";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { resolvePriority } from "./resolve-priority";
+import { GraphStoreControllerOptions } from "@/graph-store-controller";
 
-export const createOptions: (apiOptions: CoreOptions | undefined) => Options = (
+export const createOptions: (
   apiOptions: CoreOptions | undefined,
-) => {
+) => GraphStoreControllerOptions = (apiOptions: CoreOptions | undefined) => {
   const priorities = resolvePriority(
     apiOptions?.nodes?.priority,
     apiOptions?.edges?.priority,

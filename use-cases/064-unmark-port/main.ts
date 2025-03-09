@@ -7,7 +7,7 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder.setUserDraggableNodes().build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const addNode1Request: AddNodeRequest = createInOutNode({

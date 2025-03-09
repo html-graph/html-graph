@@ -5,6 +5,9 @@ import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
 
+/**
+ * This entity is responsible for storing state of graph
+ */
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
 

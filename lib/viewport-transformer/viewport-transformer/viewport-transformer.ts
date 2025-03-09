@@ -3,6 +3,9 @@ import { initialMatrix } from "../initial-matrix";
 import { TransformState } from "../transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
 
+/**
+ * This entity is responsible for storing viewport transformation
+ */
 export class ViewportTransformer {
   private viewportMatrix: TransformState = initialMatrix;
 

@@ -1,3 +1,6 @@
+/**
+ * This entity is responsible for generating node, port and edge IDs
+ */
 export class IdGenerator {
   private counter = 0;
 
