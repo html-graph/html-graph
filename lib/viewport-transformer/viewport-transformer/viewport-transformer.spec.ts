@@ -1,11 +1,9 @@
 import { TransformState } from "../transform-state";
 import { ViewportTransformer } from "./viewport-transformer";
 
-const onAfterUpdate = jest.fn();
-
 describe("ViewportTransformer", () => {
   it("should return initial viewport matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     const viewportMatrix: TransformState = transformer.getViewportMatrix();
 
@@ -19,7 +17,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should return initial content matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     const contentMatrix: TransformState = transformer.getContentMatrix();
 
@@ -33,7 +31,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch viewport matrix scale", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchViewportMatrix({ scale: 2 });
 
@@ -49,7 +47,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch viewport matrix dx", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchViewportMatrix({ x: 1 });
 
@@ -65,7 +63,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch viewport matrix dy", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchViewportMatrix({ y: 1 });
 
@@ -81,7 +79,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch content matrix scale", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchContentMatrix({ scale: 2 });
 
@@ -97,7 +95,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch content matrix dx", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchContentMatrix({ x: 1 });
 
@@ -113,7 +111,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should patch content matrix dy", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchContentMatrix({ y: 1 });
 
@@ -129,7 +127,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should calculate content matrix when patching viewport matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -145,7 +143,7 @@ describe("ViewportTransformer", () => {
   });
 
   it("should calculate viewport matrix when patching content matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
 
     transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -161,7 +159,9 @@ describe("ViewportTransformer", () => {
   });
 
   it("should call callback after patching content matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
+    const onAfterUpdate = jest.fn();
+    transformer.onAfterUpdate.subscribe(onAfterUpdate);
 
     transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -169,7 +169,9 @@ describe("ViewportTransformer", () => {
   });
 
   it("should call callback after patching viewport matrix", () => {
-    const transformer = new ViewportTransformer(onAfterUpdate);
+    const transformer = new ViewportTransformer();
+    const onAfterUpdate = jest.fn();
+    transformer.onAfterUpdate.subscribe(onAfterUpdate);
 
     transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 

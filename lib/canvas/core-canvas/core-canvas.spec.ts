@@ -3,6 +3,7 @@ import { CoreCanvas } from "./core-canvas";
 import { HtmlGraphError } from "@/error";
 import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
+import { MarkPortRequest } from "../mark-port-request";
 
 const createCanvas = (): CoreCanvas => {
   return new CoreCanvas(new DiContainer({}));
@@ -52,6 +53,19 @@ const addNodeRequest2: AddNodeRequest = {
       element: createElement(),
     },
   ],
+};
+
+const addNodeRequest: AddNodeRequest = {
+  id: "node-1",
+  element: createElement(),
+  x: 0,
+  y: 0,
+};
+
+const markPortRequest: MarkPortRequest = {
+  id: "port-1",
+  element: createElement(),
+  nodeId: "node-1",
 };
 
 describe("CoreCanvas", () => {
@@ -206,20 +220,10 @@ describe("CoreCanvas", () => {
   it("should mark port", () => {
     const canvas = createCanvas();
     const canvasElement = document.createElement("div");
+
     canvas.attach(canvasElement);
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      element: createElement(),
-      nodeId: "node-1",
-    });
+    canvas.addNode(addNodeRequest);
+    canvas.markPort(markPortRequest);
 
     expect(() => {
       canvas.addEdge({ from: "port-1", to: "port-1" });
@@ -229,20 +233,10 @@ describe("CoreCanvas", () => {
   it("should update port direction", () => {
     const canvas = createCanvas();
     const canvasElement = document.createElement("div");
+
     canvas.attach(canvasElement);
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      element: createElement(),
-      nodeId: "node-1",
-    });
+    canvas.addNode(addNodeRequest);
+    canvas.markPort(markPortRequest);
 
     const shape = new EdgeShapeMock();
     canvas.addEdge({ from: "port-1", to: "port-1", shape });
@@ -278,21 +272,10 @@ describe("CoreCanvas", () => {
   it("should unmark port", () => {
     const canvas = createCanvas();
     const canvasElement = document.createElement("div");
+
     canvas.attach(canvasElement);
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      element: createElement(),
-      nodeId: "node-1",
-    });
-
+    canvas.addNode(addNodeRequest);
+    canvas.markPort(markPortRequest);
     canvas.unmarkPort("port-1");
 
     expect(() => {

@@ -27,10 +27,7 @@ export class DiContainer {
     this.graphStore = new GraphStore();
     this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
-    this.viewportTransformer = new ViewportTransformer(() => {
-      this.htmlController.applyTransform();
-    });
-
+    this.viewportTransformer = new ViewportTransformer();
     this.publicViewportTransformer = new PublicViewportTransformer(
       this.viewportTransformer,
     );

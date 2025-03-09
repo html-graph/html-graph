@@ -77,13 +77,17 @@ export class CanvasCore implements Canvas {
     },
   };
 
+  private readonly onAfterUpdate = (): void => {
+    this.htmlController.applyTransform();
+  };
+
   public constructor(apiOptions?: CoreOptions) {
     this.internalModel = new GraphStore();
     this.model = new PublicGraphStore(this.internalModel);
 
-    this.internalTransformation = new ViewportTransformer(() => {
-      this.htmlController.applyTransform();
-    });
+    this.internalTransformation = new ViewportTransformer();
+    this.internalTransformation.onAfterUpdate.subscribe(this.onAfterUpdate);
+
     this.transformation = new PublicViewportTransformer(
       this.internalTransformation,
     );
@@ -189,5 +193,6 @@ export class CanvasCore implements Canvas {
   public destroy(): void {
     this.htmlController.destroy();
     this.graphStoreController.clear();
+    this.internalTransformation.onAfterUpdate.unsubscribe(this.onAfterUpdate);
   }
 }
