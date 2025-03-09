@@ -1,6 +1,9 @@
 name: CI
 run-name: Continuous Integration (${{ github.actor }})
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+  pull_request:
 jobs:
   ci:
     timeout-minutes: 15
