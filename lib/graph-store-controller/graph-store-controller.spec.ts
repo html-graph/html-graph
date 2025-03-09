@@ -88,7 +88,7 @@ const createGraphStoreController = (params?: {
   );
 };
 
-const markPortRequest1: MarkNodePortRequest = {
+const markNodePortRequest1: MarkNodePortRequest = {
   id: "port-1",
   element: createElement({ x: 0, y: 0 }),
   direction: 0,
@@ -100,11 +100,11 @@ const addNodeRequest1: AddNodeRequest = {
   x: 0,
   y: 0,
   centerFn: () => ({ x: 0, y: 0 }),
-  ports: [markPortRequest1],
+  ports: [markNodePortRequest1],
   priority: 0,
 };
 
-const markPortRequest2: MarkNodePortRequest = {
+const markNodePortRequest2: MarkNodePortRequest = {
   id: "port-2",
   element: createElement({ x: 100, y: 100 }),
   direction: 0,
@@ -116,7 +116,7 @@ const addNodeRequest2: AddNodeRequest = {
   x: 0,
   y: 0,
   centerFn: () => ({ x: 0, y: 0 }),
-  ports: [markPortRequest2],
+  ports: [markNodePortRequest2],
   priority: 0,
 };
 
@@ -309,10 +309,10 @@ describe("GraphStoreController", () => {
     graphStoreController.addNode(addNodeRequest1);
 
     expect(spy).toHaveBeenCalledWith({
-      id: markPortRequest1.id,
-      element: markPortRequest1.element,
+      id: markNodePortRequest1.id,
+      element: markNodePortRequest1.element,
       nodeId: addNodeRequest1.id,
-      direction: markPortRequest1.direction,
+      direction: markNodePortRequest1.direction,
     });
   });
 
@@ -324,7 +324,7 @@ describe("GraphStoreController", () => {
     graphStoreController.addNode(addNodeRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
-    const edge = graphStore.getEdge("edge-1-2");
+    const edge = graphStore.getEdge(addEdgeRequest12.id);
 
     expect(edge).toStrictEqual({
       from: addEdgeRequest12.from,
@@ -332,6 +332,21 @@ describe("GraphStoreController", () => {
       priority: addEdgeRequest12.priority,
       shape: addEdgeRequest12.shape,
     });
+  });
+
+  it("should call callback after edge added", () => {
+    const graphStore = new GraphStore();
+    const onAfterEdgeAdded = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterEdgeAdded,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.addEdge(addEdgeRequest12);
+
+    expect(onAfterEdgeAdded).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should throw error when trying to add existing edge", () => {
@@ -380,8 +395,29 @@ describe("GraphStoreController", () => {
       shape: newShape,
     });
 
-    const edge = graphStore.getEdge("edge-1-2");
+    const edge = graphStore.getEdge(addEdgeRequest12.id);
     expect(edge?.shape).toBe(newShape);
+  });
+
+  it("should call callback after edge shape updated", () => {
+    const graphStore = new GraphStore();
+    const onAfterEdgeShapeUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterEdgeShapeUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.addEdge(addEdgeRequest12);
+
+    const newShape = new EdgeShapeMock();
+
+    graphStoreController.updateEdge(addEdgeRequest12.id, {
+      shape: newShape,
+    });
+
+    expect(onAfterEdgeShapeUpdated).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should update edge priority if specified", () => {
@@ -395,9 +431,46 @@ describe("GraphStoreController", () => {
       priority: 10,
     });
 
-    const edge = graphStore.getEdge("edge-1-2");
+    const edge = graphStore.getEdge(addEdgeRequest12.id);
 
     expect(edge?.priority).toBe(10);
+  });
+
+  it("should call callback after edge priority update", () => {
+    const graphStore = new GraphStore();
+    const onAfterEdgePriorityUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterEdgePriorityUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.addEdge(addEdgeRequest12);
+    graphStoreController.updateEdge(addEdgeRequest12.id, {
+      priority: 10,
+    });
+
+    expect(onAfterEdgePriorityUpdated).toHaveBeenCalledWith(
+      addEdgeRequest12.id,
+    );
+  });
+
+  it("should call callback after edge updated", () => {
+    const graphStore = new GraphStore();
+    const onAfterEdgeUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterEdgeUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.addEdge(addEdgeRequest12);
+
+    graphStoreController.updateEdge(addEdgeRequest12.id, {});
+
+    expect(onAfterEdgeUpdated).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should throw error when trying to update nonexisting edge", () => {
@@ -418,9 +491,9 @@ describe("GraphStoreController", () => {
       direction: Math.PI,
     };
 
-    graphStoreController.updatePort(markPortRequest1.id, updatePortRequest);
+    graphStoreController.updatePort(markNodePortRequest1.id, updatePortRequest);
 
-    const port = graphStore.getPort(markPortRequest1.id)!;
+    const port = graphStore.getPort(markNodePortRequest1.id)!;
 
     expect(port.direction).toBe(updatePortRequest.direction);
   });
@@ -538,9 +611,9 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
-    graphStoreController.unmarkPort(markPortRequest1.id);
+    graphStoreController.unmarkPort(markNodePortRequest1.id);
 
-    const port = graphStore.getPort(markPortRequest1.id);
+    const port = graphStore.getPort(markNodePortRequest1.id);
 
     expect(port).toBe(undefined);
   });
@@ -554,7 +627,7 @@ describe("GraphStoreController", () => {
 
     const spy = jest.spyOn(graphStoreController, "removeEdge");
 
-    graphStoreController.unmarkPort(markPortRequest1.id);
+    graphStoreController.unmarkPort(markNodePortRequest1.id);
 
     expect(spy).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
@@ -588,7 +661,7 @@ describe("GraphStoreController", () => {
 
     graphStoreController.removeNode(addNodeRequest1.id);
 
-    expect(spy).toHaveBeenCalledWith(markPortRequest1.id);
+    expect(spy).toHaveBeenCalledWith(markNodePortRequest1.id);
   });
 
   it("should clear store", () => {
@@ -670,11 +743,11 @@ describe("GraphStoreController", () => {
     graphStoreController.addNode(addNodeRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
-    graphStoreController.updateEdge("edge-1-2", {
+    graphStoreController.updateEdge(addEdgeRequest12.id, {
       from: "port-1",
     });
 
-    const edge = graphStore.getEdge("edge-1-2")!;
+    const edge = graphStore.getEdge(addEdgeRequest12.id)!;
 
     expect(edge.from).toBe("port-1");
   });
@@ -687,11 +760,11 @@ describe("GraphStoreController", () => {
     graphStoreController.addNode(addNodeRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
-    graphStoreController.updateEdge("edge-1-2", {
+    graphStoreController.updateEdge(addEdgeRequest12.id, {
       to: "port-2",
     });
 
-    const edge = graphStore.getEdge("edge-1-2")!;
+    const edge = graphStore.getEdge(addEdgeRequest12.id)!;
 
     expect(edge.to).toBe("port-2");
   });
