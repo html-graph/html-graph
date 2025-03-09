@@ -15,7 +15,7 @@ const createHtmlController = (params?: {
 }): HtmlController => {
   return new HtmlController(
     params?.store ?? new GraphStore(),
-    params?.transformer ?? new ViewportTransformer(),
+    params?.transformer ?? new ViewportTransformer(() => {}),
   );
 };
 
@@ -101,7 +101,7 @@ describe("HtmlController", () => {
   });
 
   it("should apply transform to container", () => {
-    const transformer = new ViewportTransformer();
+    const transformer = new ViewportTransformer(() => {});
 
     transformer.patchContentMatrix({
       scale: 2,

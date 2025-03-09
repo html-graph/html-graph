@@ -11,6 +11,8 @@ export class ViewportTransformer {
 
   private contentMatrix: TransformState = initialMatrix;
 
+  public constructor(private readonly onAfterUpdate: () => void) {}
+
   public getViewportMatrix(): TransformState {
     return this.viewportMatrix;
   }
@@ -27,6 +29,7 @@ export class ViewportTransformer {
     };
 
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
+    this.onAfterUpdate();
   }
 
   public patchContentMatrix(matrix: PatchTransformRequest): void {
@@ -37,5 +40,6 @@ export class ViewportTransformer {
     };
 
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);
+    this.onAfterUpdate();
   }
 }

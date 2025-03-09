@@ -1,12 +1,12 @@
 import {
   Canvas,
-  CanvasCore,
   CoreOptions,
   UserDraggableNodesCanvas,
   DragOptions,
   UserTransformableViewportCanvas,
   TransformOptions,
   ResizeReactiveNodesCanvas,
+  CoreCanvas,
 } from "@/canvas";
 
 export class CanvasBuilder {
@@ -59,7 +59,7 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    let res: Canvas = new CanvasCore(this.coreOptions);
+    let res: Canvas = new CoreCanvas(this.coreOptions);
 
     if (this.hasResizeReactiveNodes) {
       res = new ResizeReactiveNodesCanvas(res);

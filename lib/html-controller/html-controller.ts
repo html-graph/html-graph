@@ -5,7 +5,7 @@ import { ViewportTransformer } from "@/viewport-transformer";
 import { EdgeRenderPort } from "@/edges";
 
 /**
- * This entuty is responsible for HTML modifications
+ * This entity is responsible for HTML modifications
  */
 export class HtmlController {
   private canvasWrapper: HTMLElement | null = null;

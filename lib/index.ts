@@ -9,9 +9,25 @@ export {
 } from "./canvas-builder";
 
 export {
+  /**
+   * @deprecated
+   * use CanvasBuilder build method instead
+   */
   CanvasCore,
+  /**
+   * @deprecated
+   * use CanvasBuilder build method instead
+   */
   UserDraggableNodesCanvas,
+  /**
+   * @deprecated
+   * use CanvasBuilder build method instead
+   */
   UserTransformableViewportCanvas,
+  /**
+   * @deprecated
+   * use CanvasBuilder build method instead
+   */
   ResizeReactiveNodesCanvas,
 } from "./canvas";
 
