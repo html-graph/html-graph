@@ -61,16 +61,16 @@ export class CanvasBuilder {
   public build(): Canvas {
     let res: Canvas = new CanvasCore(this.coreOptions);
 
+    if (this.hasResizeReactiveNodes) {
+      res = new ResizeReactiveNodesCanvas(res);
+    }
+
     if (this.isDraggable) {
       res = new UserDraggableNodesCanvas(res, this.dragOptions);
     }
 
     if (this.isTransformable) {
       res = new UserTransformableViewportCanvas(res, this.transformOptions);
-    }
-
-    if (this.hasResizeReactiveNodes) {
-      res = new ResizeReactiveNodesCanvas(res);
     }
 
     return res;
