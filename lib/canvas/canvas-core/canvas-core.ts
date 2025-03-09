@@ -81,16 +81,14 @@ export class CanvasCore implements Canvas {
     this.htmlController.detachNode(nodeId);
   };
 
-  private readonly onAfterUpdate = (): void => {
+  private readonly onAfterTransformUpdate = (): void => {
     this.htmlController.applyTransform();
   };
 
   public constructor(apiOptions?: CoreOptions) {
     this.internalModel = new GraphStore();
     this.model = new PublicGraphStore(this.internalModel);
-
     this.internalTransformation = new ViewportTransformer();
-    this.internalTransformation.onAfterUpdate.subscribe(this.onAfterUpdate);
 
     this.transformation = new PublicViewportTransformer(
       this.internalTransformation,
@@ -106,11 +104,18 @@ export class CanvasCore implements Canvas {
       createOptions(apiOptions),
     );
 
+    this.internalTransformation.onAfterUpdate.subscribe(
+      this.onAfterTransformUpdate,
+    );
+
     this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+
     this.graphStoreController.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
+
     this.graphStoreController.onAfterEdgeShapeUpdated.subscribe(
       this.onAfterEdgeShapeUpdated,
     );
+
     this.graphStoreController.onAfterEdgePriorityUpdated.subscribe(
       this.onAfterEdgePriorityUpdated,
     );
@@ -228,17 +233,23 @@ export class CanvasCore implements Canvas {
   public destroy(): void {
     this.htmlController.destroy();
     this.graphStoreController.clear();
-    this.internalTransformation.onAfterUpdate.unsubscribe(this.onAfterUpdate);
+
+    this.internalTransformation.onAfterUpdate.unsubscribe(
+      this.onAfterTransformUpdate,
+    );
 
     this.graphStoreController.onAfterNodeAdded.unsubscribe(
       this.onAfterNodeAdded,
     );
+
     this.graphStoreController.onAfterEdgeAdded.unsubscribe(
       this.onAfterEdgeAdded,
     );
+
     this.graphStoreController.onAfterEdgeShapeUpdated.unsubscribe(
       this.onAfterEdgeShapeUpdated,
     );
+
     this.graphStoreController.onAfterEdgePriorityUpdated.unsubscribe(
       this.onAfterEdgePriorityUpdated,
     );

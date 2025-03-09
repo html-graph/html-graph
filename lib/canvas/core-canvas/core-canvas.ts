@@ -81,7 +81,7 @@ export class CoreCanvas implements Canvas {
     this.htmlController.detachNode(nodeId);
   };
 
-  private readonly onAfterUpdate = (): void => {
+  private readonly onAfterTransformUpdate = (): void => {
     this.htmlController.applyTransform();
   };
 
@@ -89,17 +89,22 @@ export class CoreCanvas implements Canvas {
     this.model = di.publicGraphStore;
     this.internalModel = di.graphStore;
     this.internalTransformation = di.viewportTransformer;
-    this.internalTransformation.onAfterUpdate.subscribe(this.onAfterUpdate);
-
     this.transformation = di.publicViewportTransformer;
     this.htmlController = di.htmlController;
     this.graphStoreController = di.graphStoreController;
 
+    this.internalTransformation.onAfterUpdate.subscribe(
+      this.onAfterTransformUpdate,
+    );
+
     this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+
     this.graphStoreController.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
+
     this.graphStoreController.onAfterEdgeShapeUpdated.subscribe(
       this.onAfterEdgeShapeUpdated,
     );
+
     this.graphStoreController.onAfterEdgePriorityUpdated.subscribe(
       this.onAfterEdgePriorityUpdated,
     );
@@ -217,16 +222,23 @@ export class CoreCanvas implements Canvas {
   public destroy(): void {
     this.htmlController.destroy();
     this.graphStoreController.clear();
-    this.internalTransformation.onAfterUpdate.unsubscribe(this.onAfterUpdate);
+
+    this.internalTransformation.onAfterUpdate.unsubscribe(
+      this.onAfterTransformUpdate,
+    );
+
     this.graphStoreController.onAfterNodeAdded.unsubscribe(
       this.onAfterNodeAdded,
     );
+
     this.graphStoreController.onAfterEdgeAdded.unsubscribe(
       this.onAfterEdgeAdded,
     );
+
     this.graphStoreController.onAfterEdgeShapeUpdated.unsubscribe(
       this.onAfterEdgeShapeUpdated,
     );
+
     this.graphStoreController.onAfterEdgePriorityUpdated.unsubscribe(
       this.onAfterEdgePriorityUpdated,
     );

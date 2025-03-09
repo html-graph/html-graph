@@ -22,8 +22,6 @@ export class DiContainer {
   public readonly graphStoreController: GraphStoreController;
 
   public constructor(coreOptions: CoreOptions) {
-    const defaults = createDefaults(coreOptions);
-
     this.graphStore = new GraphStore();
     this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
@@ -39,7 +37,7 @@ export class DiContainer {
 
     this.graphStoreController = new GraphStoreController(
       this.graphStore,
-      defaults,
+      createDefaults(coreOptions),
     );
   }
 }
