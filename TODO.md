@@ -1,8 +1,6 @@
 # TODO
 
 - virtual scroll
-  - refactor CanvasController
-  - extract model
 - layouts
 - drag edge creation
 - background decorator
