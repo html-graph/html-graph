@@ -13,10 +13,7 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlController } from "@/html-controller";
-import {
-  GraphStoreController,
-  GraphStoreControllerEvents,
-} from "@/graph-store-controller";
+import { GraphStoreController } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 
 /**
@@ -35,46 +32,53 @@ export class CanvasCore implements Canvas {
 
   private readonly htmlController: HtmlController;
 
-  private readonly events: GraphStoreControllerEvents = {
-    onAfterNodeAdded: (nodeId): void => {
-      this.htmlController.attachNode(nodeId);
-    },
-    onAfterEdgeAdded: (edgeId): void => {
-      this.htmlController.attachEdge(edgeId);
-    },
-    onAfterEdgeShapeUpdated: (edgeId): void => {
-      this.htmlController.updateEdgeShape(edgeId);
-    },
-    onAfterEdgePriorityUpdated: (edgeId): void => {
-      this.htmlController.updateEdgePriority(edgeId);
-    },
-    onAfterEdgeUpdated: (edgeId): void => {
-      this.htmlController.renderEdge(edgeId);
-    },
-    onAfterPortUpdated: (portId): void => {
-      const edges = this.internalModel.getPortAdjacentEdgeIds(portId);
+  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+    this.htmlController.attachNode(nodeId);
+  };
 
-      edges.forEach((edge) => {
-        this.htmlController.renderEdge(edge);
-      });
-    },
-    onAfterNodePriorityUpdated: (nodeId): void => {
-      this.htmlController.updateNodePriority(nodeId);
-    },
-    onAfterNodeUpdated: (nodeId): void => {
-      this.htmlController.updateNodeCoordinates(nodeId);
-      const edges = this.internalModel.getNodeAdjacentEdgeIds(nodeId);
+  private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
+    this.htmlController.attachEdge(edgeId);
+  };
 
-      edges.forEach((edge) => {
-        this.htmlController.renderEdge(edge);
-      });
-    },
-    onBeforeEdgeRemoved: (edgeId): void => {
-      this.htmlController.detachEdge(edgeId);
-    },
-    onBeforeNodeRemoved: (nodeId): void => {
-      this.htmlController.detachNode(nodeId);
-    },
+  private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
+    this.htmlController.updateEdgeShape(edgeId);
+  };
+
+  private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
+    this.htmlController.updateEdgePriority(edgeId);
+  };
+
+  private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
+    this.htmlController.renderEdge(edgeId);
+  };
+
+  private readonly onAfterPortUpdated = (portId: unknown): void => {
+    const edges = this.internalModel.getPortAdjacentEdgeIds(portId);
+
+    edges.forEach((edge) => {
+      this.htmlController.renderEdge(edge);
+    });
+  };
+
+  private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
+    this.htmlController.updateNodePriority(nodeId);
+  };
+
+  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
+    this.htmlController.updateNodeCoordinates(nodeId);
+    const edges = this.internalModel.getNodeAdjacentEdgeIds(nodeId);
+
+    edges.forEach((edge) => {
+      this.htmlController.renderEdge(edge);
+    });
+  };
+
+  private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
+    this.htmlController.detachEdge(edgeId);
+  };
+
+  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+    this.htmlController.detachNode(nodeId);
   };
 
   private readonly onAfterUpdate = (): void => {
@@ -102,7 +106,38 @@ export class CanvasCore implements Canvas {
       createOptions(apiOptions),
     );
 
-    this.graphStoreController.setEventHandlers(this.events);
+    this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+    this.graphStoreController.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
+    this.graphStoreController.onAfterEdgeShapeUpdated.subscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+    this.graphStoreController.onAfterEdgePriorityUpdated.subscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStoreController.onAfterEdgeUpdated.subscribe(
+      this.onAfterEdgeUpdated,
+    );
+
+    this.graphStoreController.onAfterPortUpdated.subscribe(
+      this.onAfterPortUpdated,
+    );
+
+    this.graphStoreController.onAfterNodePriorityUpdated.subscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStoreController.onAfterNodeUpdated.subscribe(
+      this.onAfterNodeUpdated,
+    );
+
+    this.graphStoreController.onBeforeEdgeRemoved.subscribe(
+      this.onBeforeEdgeRemoved,
+    );
+
+    this.graphStoreController.onBeforeNodeRemoved.subscribe(
+      this.onBeforeNodeRemoved,
+    );
   }
 
   public attach(element: HTMLElement): CanvasCore {
@@ -194,5 +229,42 @@ export class CanvasCore implements Canvas {
     this.htmlController.destroy();
     this.graphStoreController.clear();
     this.internalTransformation.onAfterUpdate.unsubscribe(this.onAfterUpdate);
+
+    this.graphStoreController.onAfterNodeAdded.unsubscribe(
+      this.onAfterNodeAdded,
+    );
+    this.graphStoreController.onAfterEdgeAdded.unsubscribe(
+      this.onAfterEdgeAdded,
+    );
+    this.graphStoreController.onAfterEdgeShapeUpdated.unsubscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+    this.graphStoreController.onAfterEdgePriorityUpdated.unsubscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStoreController.onAfterEdgeUpdated.unsubscribe(
+      this.onAfterEdgeUpdated,
+    );
+
+    this.graphStoreController.onAfterPortUpdated.unsubscribe(
+      this.onAfterPortUpdated,
+    );
+
+    this.graphStoreController.onAfterNodePriorityUpdated.unsubscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStoreController.onAfterNodeUpdated.unsubscribe(
+      this.onAfterNodeUpdated,
+    );
+
+    this.graphStoreController.onBeforeEdgeRemoved.unsubscribe(
+      this.onBeforeEdgeRemoved,
+    );
+
+    this.graphStoreController.onBeforeNodeRemoved.unsubscribe(
+      this.onBeforeNodeRemoved,
+    );
   }
 }

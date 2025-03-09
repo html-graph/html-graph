@@ -8,7 +8,7 @@ import { UpdatePortRequest } from "./update-port-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { AddEdgeRequest } from "./add-edge-request";
 import { GraphStoreControllerDefaults } from "./graph-store-controller-defaults";
-import { GraphStoreControllerEvents } from "./graph-store-controller-events";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 /**
  * This entity is responsible for keeping consistent state of graph when
@@ -27,15 +27,70 @@ export class GraphStoreController {
     (edgeId) => this.graphStore.getEdge(edgeId) !== undefined,
   );
 
-  private eventHandlers: GraphStoreControllerEvents | null = null;
+  public readonly onAfterNodeAdded: EventHandler<unknown>;
+
+  private readonly onAfterNodeAddedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterEdgeAdded: EventHandler<unknown>;
+
+  private readonly onAfterEdgeAddedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
+
+  private readonly onAfterEdgeShapeUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterEdgePriorityUpdated: EventHandler<unknown>;
+
+  private readonly onAfterEdgePriorityUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterEdgeUpdated: EventHandler<unknown>;
+
+  private readonly onAfterEdgeUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterPortUpdated: EventHandler<unknown>;
+
+  private readonly onAfterPortUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
+
+  private readonly onAfterNodePriorityUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onAfterNodeUpdated: EventHandler<unknown>;
+
+  private readonly onAfterNodeUpdatedEmitter: EventEmitter<unknown>;
+
+  public readonly onBeforeEdgeRemoved: EventHandler<unknown>;
+
+  private readonly onBeforeEdgeRemovedEmitter: EventEmitter<unknown>;
+
+  public readonly onBeforeNodeRemoved: EventHandler<unknown>;
+
+  private readonly onBeforeNodeRemovedEmitter: EventEmitter<unknown>;
 
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly options: GraphStoreControllerDefaults,
-  ) {}
-
-  public setEventHandlers(eventHandlers: GraphStoreControllerEvents): void {
-    this.eventHandlers = eventHandlers;
+  ) {
+    [this.onAfterNodeAddedEmitter, this.onAfterNodeAdded] =
+      createPair<unknown>();
+    [this.onAfterEdgeAddedEmitter, this.onAfterEdgeAdded] =
+      createPair<unknown>();
+    [this.onAfterEdgeShapeUpdatedEmitter, this.onAfterEdgeShapeUpdated] =
+      createPair<unknown>();
+    [this.onAfterEdgePriorityUpdatedEmitter, this.onAfterEdgePriorityUpdated] =
+      createPair<unknown>();
+    [this.onAfterEdgeUpdatedEmitter, this.onAfterEdgeUpdated] =
+      createPair<unknown>();
+    [this.onAfterPortUpdatedEmitter, this.onAfterPortUpdated] =
+      createPair<unknown>();
+    [this.onAfterNodePriorityUpdatedEmitter, this.onAfterNodePriorityUpdated] =
+      createPair<unknown>();
+    [this.onAfterNodeUpdatedEmitter, this.onAfterNodeUpdated] =
+      createPair<unknown>();
+    [this.onBeforeEdgeRemovedEmitter, this.onBeforeEdgeRemoved] =
+      createPair<unknown>();
+    [this.onBeforeNodeRemovedEmitter, this.onBeforeNodeRemoved] =
+      createPair<unknown>();
   }
 
   public addNode(request: AddNodeRequest): void {
@@ -54,7 +109,7 @@ export class GraphStoreController {
       priority: request.priority ?? this.options.nodes.priorityFn(),
     });
 
-    this.eventHandlers!.onAfterNodeAdded(nodeId);
+    this.onAfterNodeAddedEmitter.emit(nodeId);
 
     Array.from(request.ports ?? []).forEach((port) => {
       this.markPort({
@@ -108,7 +163,7 @@ export class GraphStoreController {
       priority: request.priority ?? this.options.edges.priorityFn(),
     });
 
-    this.eventHandlers!.onAfterEdgeAdded(edgeId);
+    this.onAfterEdgeAddedEmitter.emit(edgeId);
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
@@ -120,7 +175,7 @@ export class GraphStoreController {
 
     if (request.shape !== undefined) {
       edge.shape = request.shape;
-      this.eventHandlers!.onAfterEdgeShapeUpdated(edgeId);
+      this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
     }
 
     if (request.from !== undefined) {
@@ -131,11 +186,11 @@ export class GraphStoreController {
       this.graphStore.updateEdgeTo(edgeId, request.to);
     }
 
-    this.eventHandlers!.onAfterEdgeUpdated(edgeId);
+    this.onAfterEdgeUpdatedEmitter.emit(edgeId);
 
     if (request.priority !== undefined) {
       edge.priority = request.priority;
-      this.eventHandlers!.onAfterEdgePriorityUpdated(edgeId);
+      this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
     }
   }
 
@@ -148,7 +203,7 @@ export class GraphStoreController {
 
     port.direction = request.direction ?? port.direction;
 
-    this.eventHandlers!.onAfterPortUpdated(portId);
+    this.onAfterPortUpdatedEmitter.emit(portId);
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
@@ -162,11 +217,11 @@ export class GraphStoreController {
     node.y = request?.y ?? node.y;
     node.centerFn = request.centerFn ?? node.centerFn;
 
-    this.eventHandlers!.onAfterNodeUpdated(nodeId);
+    this.onAfterNodeUpdatedEmitter.emit(nodeId);
 
     if (request.priority !== undefined) {
       node.priority = request.priority;
-      this.eventHandlers!.onAfterNodePriorityUpdated(nodeId);
+      this.onAfterNodePriorityUpdatedEmitter.emit(nodeId);
     }
   }
 
@@ -175,7 +230,7 @@ export class GraphStoreController {
       throw new HtmlGraphError("failed to remove nonexisting edge");
     }
 
-    this.eventHandlers!.onBeforeEdgeRemoved(edgeId);
+    this.onBeforeEdgeRemovedEmitter.emit(edgeId);
     this.graphStore.removeEdge(edgeId);
   }
 
@@ -200,7 +255,7 @@ export class GraphStoreController {
       this.unmarkPort(portId);
     });
 
-    this.eventHandlers!.onBeforeNodeRemoved(nodeId);
+    this.onBeforeNodeRemovedEmitter.emit(nodeId);
     this.graphStore.removeNode(nodeId);
   }
 

@@ -1,4 +1,4 @@
-import { EventEmitter, EventHandler, EventSubject } from "@/event-subject";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { calculateReverseMatrix } from "../calculate-reverse-matrix";
 import { initialMatrix } from "../initial-matrix";
 import { TransformState } from "../transform-state";
@@ -17,9 +17,7 @@ export class ViewportTransformer {
   public readonly onAfterUpdate: EventHandler<void>;
 
   public constructor() {
-    const subject = new EventSubject<void>();
-    this.emitter = new EventEmitter<void>(subject);
-    this.onAfterUpdate = new EventHandler(subject);
+    [this.emitter, this.onAfterUpdate] = createPair<void>();
   }
 
   public getViewportMatrix(): TransformState {
