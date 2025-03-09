@@ -498,6 +498,20 @@ describe("GraphStoreController", () => {
     expect(port.direction).toBe(updatePortRequest.direction);
   });
 
+  it("should call callback after port update", () => {
+    const graphStore = new GraphStore();
+    const onAfterPortUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterPortUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.updatePort(markNodePortRequest1.id, {});
+
+    expect(onAfterPortUpdated).toHaveBeenCalledWith(markNodePortRequest1.id);
+  });
+
   it("should throw error when trying to update nonexisting port", () => {
     const graphStoreController = createGraphStoreController();
 
@@ -557,6 +571,25 @@ describe("GraphStoreController", () => {
     expect(node.priority).toBe(10);
   });
 
+  it("should call callback after node priority update", () => {
+    const graphStore = new GraphStore();
+    const onAfterNodePriorityUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterNodePriorityUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+
+    const updateNodeRequest: UpdateNodeRequest = {
+      priority: 10,
+    };
+
+    graphStoreController.updateNode(addNodeRequest1.id, updateNodeRequest);
+
+    expect(onAfterNodePriorityUpdated).toHaveBeenCalledWith(addNodeRequest1.id);
+  });
+
   it("should update node centerFn if specified", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
@@ -573,6 +606,20 @@ describe("GraphStoreController", () => {
     const node = graphStore.getNode("node-1")!;
 
     expect(node.centerFn).toBe(centerFn);
+  });
+
+  it("should call callback after node update", () => {
+    const graphStore = new GraphStore();
+    const onAfterNodeUpdated = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onAfterNodeUpdated,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.updateNode(addNodeRequest1.id, {});
+
+    expect(onAfterNodeUpdated).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
   it("should throw error when trying to update nonexisting node", () => {
@@ -596,6 +643,22 @@ describe("GraphStoreController", () => {
     const edge = graphStore.getEdge(addEdgeRequest12.id);
 
     expect(edge).toBe(undefined);
+  });
+
+  it("should call callback before edge removed", () => {
+    const graphStore = new GraphStore();
+    const onBeforeEdgeRemoved = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onBeforeEdgeRemoved,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.addEdge(addEdgeRequest12);
+    graphStoreController.removeEdge(addEdgeRequest12.id);
+
+    expect(onBeforeEdgeRemoved).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should throw error when trying to remove nonexisting edge", () => {
@@ -650,6 +713,20 @@ describe("GraphStoreController", () => {
     const node = graphStore.getNode(addNodeRequest1.id);
 
     expect(node).toBe(undefined);
+  });
+
+  it("should call callback before node removed", () => {
+    const graphStore = new GraphStore();
+    const onBeforeNodeRemoved = jest.fn();
+    const graphStoreController = createGraphStoreController({
+      graphStore,
+      onBeforeNodeRemoved,
+    });
+
+    graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.removeNode(addNodeRequest1.id);
+
+    expect(onBeforeNodeRemoved).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
   it("should unmark node ports", () => {
