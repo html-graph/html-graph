@@ -1,4 +1,7 @@
-export class EventSubject<T> {
+import { EventEmitter } from "./event-emitter";
+import { EventHandler } from "./event-handler";
+
+export class EventSubject<T> implements EventEmitter<T>, EventHandler<T> {
   private readonly callbacks = new Set<(payload: T) => void>();
 
   public subscribe(callback: (payload: T) => void): void {

@@ -8,5 +8,5 @@ export const createPair = <T>(): readonly [
 ] => {
   const subject = new EventSubject<T>();
 
-  return [new EventEmitter(subject), new EventHandler(subject)];
+  return [subject, subject];
 };
