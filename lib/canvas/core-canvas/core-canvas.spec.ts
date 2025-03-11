@@ -4,6 +4,7 @@ import { HtmlGraphError } from "@/error";
 import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
+import { MarkNodePortRequest } from "../mark-node-port-request";
 
 const createCanvas = (): CoreCanvas => {
   return new CoreCanvas(new DiContainer({}));
@@ -217,7 +218,8 @@ describe("CoreCanvas", () => {
     canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
+    port.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
@@ -239,7 +241,8 @@ describe("CoreCanvas", () => {
     canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
+    port.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
@@ -261,7 +264,8 @@ describe("CoreCanvas", () => {
     canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
+    port.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
