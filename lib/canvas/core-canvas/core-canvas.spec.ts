@@ -29,30 +29,34 @@ const createElement = (params?: {
   return div;
 };
 
-const addNodeRequest1: AddNodeRequest = {
-  id: "node-1",
-  element: createElement(),
-  x: 0,
-  y: 0,
-  ports: [
-    {
-      id: "port-1",
-      element: createElement(),
-    },
-  ],
+const createNodeRequest1 = (): AddNodeRequest => {
+  return {
+    id: "node-1",
+    element: createElement(),
+    x: 0,
+    y: 0,
+    ports: [
+      {
+        id: "port-1",
+        element: createElement(),
+      },
+    ],
+  };
 };
 
-const addNodeRequest2: AddNodeRequest = {
-  id: "node-2",
-  element: createElement(),
-  x: 500,
-  y: 500,
-  ports: [
-    {
-      id: "port-2",
-      element: createElement(),
-    },
-  ],
+const createNodeRequest2 = (): AddNodeRequest => {
+  return {
+    id: "node-2",
+    element: createElement(),
+    x: 500,
+    y: 500,
+    ports: [
+      {
+        id: "port-2",
+        element: createElement(),
+      },
+    ],
+  };
 };
 
 const addNodeRequest: AddNodeRequest = {
@@ -93,7 +97,7 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
+    canvas.addNode(createNodeRequest1());
 
     const container = canvasElement.children[0].children[0];
     expect(container.children.length).toBe(1);
@@ -104,7 +108,7 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
+    canvas.addNode(createNodeRequest1());
     canvas.updateNode("node-1", { x: 100, y: 100 });
 
     const container = canvasElement.children[0].children[0];
@@ -117,7 +121,7 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
+    canvas.addNode(createNodeRequest1());
     canvas.updateNode("node-1", { priority: 10 });
 
     const container = canvasElement.children[0].children[0];
@@ -148,7 +152,7 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
+    canvas.addNode(createNodeRequest1());
     canvas.removeNode("node-1");
 
     const container = canvasElement.children[0].children[0];
@@ -160,8 +164,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ from: "port-1", to: "port-2" });
 
     const container = canvasElement.children[0].children[0];
@@ -173,8 +177,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
     const shape = new EdgeShapeMock();
@@ -191,8 +195,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
     canvas.updateEdge("edge-1", {
       priority: 10,
@@ -208,38 +212,13 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-
-    const portElement1 = createElement({ x: 0, y: 0 });
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement1,
-        },
-      ],
-    });
-
-    const portElement2 = createElement({ x: 100, y: 100 });
-    canvas.addNode({
-      id: "node-2",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: portElement2,
-        },
-      ],
-    });
+    canvas.addNode(createNodeRequest1());
+    const nodeRequest2 = createNodeRequest2();
+    canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    portElement2.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(200, 200, 0, 0);
+    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 100, 0, 0);
     };
 
     canvas.updateEdge("edge-1");
@@ -255,38 +234,13 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-
-    const portElement1 = createElement({ x: 0, y: 0 });
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement1,
-        },
-      ],
-    });
-
-    const portElement2 = createElement({ x: 100, y: 100 });
-    canvas.addNode({
-      id: "node-2",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: portElement2,
-        },
-      ],
-    });
+    canvas.addNode(createNodeRequest1());
+    const nodeRequest2 = createNodeRequest2();
+    canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    portElement2.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(200, 200, 0, 0);
+    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 100, 0, 0);
     };
 
     canvas.updatePort("port-2");
@@ -302,38 +256,13 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-
-    const portElement1 = createElement({ x: 0, y: 0 });
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement1,
-        },
-      ],
-    });
-
-    const portElement2 = createElement({ x: 100, y: 100 });
-    canvas.addNode({
-      id: "node-2",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: portElement2,
-        },
-      ],
-    });
+    canvas.addNode(createNodeRequest1());
+    const nodeRequest2 = createNodeRequest2();
+    canvas.addNode(nodeRequest2);
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    portElement2.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(200, 200, 0, 0);
+    nodeRequest2.ports![0].element.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 100, 0, 0);
     };
 
     canvas.updateNode("node-2");
@@ -349,8 +278,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
     canvas.removeEdge("edge-1");
 
@@ -453,8 +382,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ from: "port-1", to: "port-2" });
     canvas.clear();
 
@@ -467,8 +396,8 @@ describe("CoreCanvas", () => {
     const canvasElement = document.createElement("div");
 
     canvas.attach(canvasElement);
-    canvas.addNode(addNodeRequest1);
-    canvas.addNode(addNodeRequest2);
+    canvas.addNode(createNodeRequest1());
+    canvas.addNode(createNodeRequest2());
     canvas.addEdge({ from: "port-1", to: "port-2" });
     canvas.destroy();
 
