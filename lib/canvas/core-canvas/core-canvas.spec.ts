@@ -203,6 +203,147 @@ describe("CoreCanvas", () => {
     expect(edgeSvg.style.zIndex).toBe("10");
   });
 
+  it("should update edge without arguments", () => {
+    const canvas = createCanvas();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+
+    const portElement1 = createElement({ x: 0, y: 0 });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: portElement1,
+        },
+      ],
+    });
+
+    const portElement2 = createElement({ x: 100, y: 100 });
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: portElement2,
+        },
+      ],
+    });
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    portElement2.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 200, 0, 0);
+    };
+
+    canvas.updateEdge("edge-1");
+
+    const container = canvasElement.children[0].children[0];
+    const edgeSvg = container.children[2] as SVGSVGElement;
+
+    expect(edgeSvg.style.width).toBe("200px");
+  });
+
+  it("should update port without arguments", () => {
+    const canvas = createCanvas();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+
+    const portElement1 = createElement({ x: 0, y: 0 });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: portElement1,
+        },
+      ],
+    });
+
+    const portElement2 = createElement({ x: 100, y: 100 });
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: portElement2,
+        },
+      ],
+    });
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    portElement2.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 200, 0, 0);
+    };
+
+    canvas.updatePort("port-2");
+
+    const container = canvasElement.children[0].children[0];
+    const edgeSvg = container.children[2] as SVGSVGElement;
+
+    expect(edgeSvg.style.width).toBe("200px");
+  });
+
+  it("should update node without arguments", () => {
+    const canvas = createCanvas();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+
+    const portElement1 = createElement({ x: 0, y: 0 });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: portElement1,
+        },
+      ],
+    });
+
+    const portElement2 = createElement({ x: 100, y: 100 });
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: portElement2,
+        },
+      ],
+    });
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    portElement2.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(200, 200, 0, 0);
+    };
+
+    canvas.updateNode("node-2");
+
+    const container = canvasElement.children[0].children[0];
+    const edgeSvg = container.children[2] as SVGSVGElement;
+
+    expect(edgeSvg.style.width).toBe("200px");
+  });
+
   it("should remove edge", () => {
     const canvas = createCanvas();
     const canvasElement = document.createElement("div");
