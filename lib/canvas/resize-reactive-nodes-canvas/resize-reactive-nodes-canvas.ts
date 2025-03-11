@@ -29,7 +29,7 @@ export class ResizeReactiveNodesCanvas implements Canvas {
       entries.forEach((entry) => {
         const element = entry.target as HTMLElement;
 
-        this.reactNodeChange(element);
+        this.handleNodeResize(element);
       });
     });
 
@@ -155,7 +155,7 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     this.canvas.destroy();
   }
 
-  private reactNodeChange(element: HTMLElement): void {
+  private handleNodeResize(element: HTMLElement): void {
     const nodeId = this.nodes.getByValue(element)!;
 
     this.canvas.updateNode(nodeId);

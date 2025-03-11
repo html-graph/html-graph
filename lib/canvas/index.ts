@@ -10,7 +10,8 @@ export type { UpdatePortRequest } from "./update-port-request";
 export type { AddNodePorts } from "./add-node-ports";
 export type { Canvas } from "./canvas";
 export { CanvasCore } from "./canvas-core";
-export type { CoreOptions } from "./canvas-core";
+export { CoreCanvas, DiContainer } from "./core-canvas";
+export type { CoreOptions } from "./core-canvas";
 export { UserDraggableNodesCanvas } from "./user-draggable-nodes-canvas";
 export type {
   DragOptions,

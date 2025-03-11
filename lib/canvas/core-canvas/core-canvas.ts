@@ -1,5 +1,3 @@
-import { CoreOptions, createOptions } from "./options";
-import { GraphStore } from "@/graph-store";
 import {
   PublicViewportTransformer,
   ViewportTransformer,
@@ -15,11 +13,13 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlController } from "@/html-controller";
 import { GraphStoreController } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
+import { DiContainer } from "./di-container";
+import { GraphStore } from "@/graph-store";
 
 /**
- * @deprecated
+ * Provides low level API for acting on graph
  */
-export class CanvasCore implements Canvas {
+export class CoreCanvas implements Canvas {
   public readonly transformation: PublicViewportTransformer;
 
   public readonly model: PublicGraphStore;
@@ -85,24 +85,13 @@ export class CanvasCore implements Canvas {
     this.htmlController.applyTransform();
   };
 
-  public constructor(apiOptions?: CoreOptions) {
-    this.internalModel = new GraphStore();
-    this.model = new PublicGraphStore(this.internalModel);
-    this.internalTransformation = new ViewportTransformer();
-
-    this.transformation = new PublicViewportTransformer(
-      this.internalTransformation,
-    );
-
-    this.htmlController = new HtmlController(
-      this.internalModel,
-      this.internalTransformation,
-    );
-
-    this.graphStoreController = new GraphStoreController(
-      this.internalModel,
-      createOptions(apiOptions),
-    );
+  public constructor(di: DiContainer) {
+    this.model = di.publicGraphStore;
+    this.internalModel = di.graphStore;
+    this.internalTransformation = di.viewportTransformer;
+    this.transformation = di.publicViewportTransformer;
+    this.htmlController = di.htmlController;
+    this.graphStoreController = di.graphStoreController;
 
     this.internalTransformation.onAfterUpdate.subscribe(
       this.onAfterTransformUpdate,
@@ -145,85 +134,85 @@ export class CanvasCore implements Canvas {
     );
   }
 
-  public attach(element: HTMLElement): CanvasCore {
+  public attach(element: HTMLElement): CoreCanvas {
     this.htmlController.attach(element);
 
     return this;
   }
 
-  public detach(): CanvasCore {
+  public detach(): CoreCanvas {
     this.htmlController.detach();
 
     return this;
   }
 
-  public addNode(request: AddNodeRequest): CanvasCore {
+  public addNode(request: AddNodeRequest): CoreCanvas {
     this.graphStoreController.addNode(request);
 
     return this;
   }
 
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasCore {
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): CoreCanvas {
     this.graphStoreController.updateNode(nodeId, request ?? {});
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): CanvasCore {
+  public removeNode(nodeId: unknown): CoreCanvas {
     this.graphStoreController.removeNode(nodeId);
 
     return this;
   }
 
-  public addEdge(request: AddEdgeRequest): CanvasCore {
+  public addEdge(request: AddEdgeRequest): CoreCanvas {
     this.graphStoreController.addEdge(request);
 
     return this;
   }
 
-  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasCore {
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CoreCanvas {
     this.graphStoreController.updateEdge(edgeId, request ?? {});
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): CanvasCore {
+  public removeEdge(edgeId: unknown): CoreCanvas {
     this.graphStoreController.removeEdge(edgeId);
 
     return this;
   }
 
-  public markPort(request: MarkPortRequest): CanvasCore {
+  public markPort(request: MarkPortRequest): CoreCanvas {
     this.graphStoreController.markPort(request);
 
     return this;
   }
 
-  public updatePort(portId: string, request?: UpdatePortRequest): CanvasCore {
+  public updatePort(portId: string, request?: UpdatePortRequest): CoreCanvas {
     this.graphStoreController.updatePort(portId, request ?? {});
 
     return this;
   }
 
-  public unmarkPort(portId: string): CanvasCore {
+  public unmarkPort(portId: string): CoreCanvas {
     this.graphStoreController.unmarkPort(portId);
 
     return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): CanvasCore {
+  public patchViewportMatrix(request: PatchMatrixRequest): CoreCanvas {
     this.internalTransformation.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): CanvasCore {
+  public patchContentMatrix(request: PatchMatrixRequest): CoreCanvas {
     this.internalTransformation.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): CanvasCore {
+  public clear(): CoreCanvas {
     this.htmlController.clear();
     this.graphStoreController.clear();
 

@@ -157,4 +157,24 @@ describe("ViewportTransformer", () => {
 
     expect(contentMatrix).toEqual(expected);
   });
+
+  it("should call callback after patching content matrix", () => {
+    const transformer = new ViewportTransformer();
+    const onAfterUpdate = jest.fn();
+    transformer.onAfterUpdate.subscribe(onAfterUpdate);
+
+    transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onAfterUpdate).toHaveBeenCalled();
+  });
+
+  it("should call callback after patching viewport matrix", () => {
+    const transformer = new ViewportTransformer();
+    const onAfterUpdate = jest.fn();
+    transformer.onAfterUpdate.subscribe(onAfterUpdate);
+
+    transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onAfterUpdate).toHaveBeenCalled();
+  });
 });

@@ -163,16 +163,16 @@ export class GraphStore {
   }
 
   public clear(): void {
-    this.nodes.clear();
+    this.edges.clear();
+    this.incommingEdges.clear();
+    this.outcommingEdges.clear();
+    this.cycleEdges.clear();
 
     this.ports.clear();
     this.nodePorts.clear();
     this.portNodeId.clear();
 
-    this.edges.clear();
-    this.incommingEdges.clear();
-    this.outcommingEdges.clear();
-    this.cycleEdges.clear();
+    this.nodes.clear();
   }
 
   public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] {

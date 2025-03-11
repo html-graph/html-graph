@@ -1,24 +1,25 @@
 import {
   Canvas,
-  CanvasCore,
   CoreOptions,
   UserDraggableNodesCanvas,
   DragOptions,
   UserTransformableViewportCanvas,
   TransformOptions,
   ResizeReactiveNodesCanvas,
+  CoreCanvas,
+  DiContainer,
 } from "@/canvas";
 
 export class CanvasBuilder {
-  private coreOptions: CoreOptions | undefined = undefined;
+  private coreOptions: CoreOptions = {};
 
   private dragOptions: DragOptions | undefined = undefined;
 
   private transformOptions: TransformOptions | undefined = undefined;
 
-  private isDraggable = false;
+  private hasDraggableNode = false;
 
-  private isTransformable = false;
+  private hasTransformableViewport = false;
 
   private hasResizeReactiveNodes = false;
 
@@ -29,7 +30,7 @@ export class CanvasBuilder {
   }
 
   public setUserDraggableNodes(options?: DragOptions): CanvasBuilder {
-    this.isDraggable = true;
+    this.hasDraggableNode = true;
     this.dragOptions = options;
 
     return this;
@@ -46,7 +47,7 @@ export class CanvasBuilder {
   public setUserTransformableViewport(
     options?: TransformOptions,
   ): CanvasBuilder {
-    this.isTransformable = true;
+    this.hasTransformableViewport = true;
     this.transformOptions = options;
 
     return this;
@@ -59,20 +60,25 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    let res: Canvas = new CanvasCore(this.coreOptions);
+    const container = new DiContainer(this.coreOptions);
+
+    let canvas: Canvas = new CoreCanvas(container);
 
     if (this.hasResizeReactiveNodes) {
-      res = new ResizeReactiveNodesCanvas(res);
+      canvas = new ResizeReactiveNodesCanvas(canvas);
     }
 
-    if (this.isDraggable) {
-      res = new UserDraggableNodesCanvas(res, this.dragOptions);
+    if (this.hasDraggableNode) {
+      canvas = new UserDraggableNodesCanvas(canvas, this.dragOptions);
     }
 
-    if (this.isTransformable) {
-      res = new UserTransformableViewportCanvas(res, this.transformOptions);
+    if (this.hasTransformableViewport) {
+      canvas = new UserTransformableViewportCanvas(
+        canvas,
+        this.transformOptions,
+      );
     }
 
-    return res;
+    return canvas;
   }
 }

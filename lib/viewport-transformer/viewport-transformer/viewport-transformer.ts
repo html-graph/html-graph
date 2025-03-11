@@ -1,3 +1,4 @@
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { calculateReverseMatrix } from "../calculate-reverse-matrix";
 import { initialMatrix } from "../initial-matrix";
 import { TransformState } from "../transform-state";
@@ -10,6 +11,14 @@ export class ViewportTransformer {
   private viewportMatrix: TransformState = initialMatrix;
 
   private contentMatrix: TransformState = initialMatrix;
+
+  private readonly emitter: EventEmitter<void>;
+
+  public readonly onAfterUpdate: EventHandler<void>;
+
+  public constructor() {
+    [this.emitter, this.onAfterUpdate] = createPair<void>();
+  }
 
   public getViewportMatrix(): TransformState {
     return this.viewportMatrix;
@@ -27,6 +36,7 @@ export class ViewportTransformer {
     };
 
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
+    this.emitter.emit();
   }
 
   public patchContentMatrix(matrix: PatchTransformRequest): void {
@@ -37,5 +47,6 @@ export class ViewportTransformer {
     };
 
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);
+    this.emitter.emit();
   }
 }

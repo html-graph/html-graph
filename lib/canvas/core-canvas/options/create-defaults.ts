@@ -4,8 +4,8 @@ import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { resolvePriority } from "./resolve-priority";
 import { GraphStoreControllerDefaults } from "@/graph-store-controller";
 
-export const createOptions: (
-  apiOptions: CoreOptions | undefined,
+export const createDefaults: (
+  coreOptions: CoreOptions | undefined,
 ) => GraphStoreControllerDefaults = (apiOptions: CoreOptions | undefined) => {
   const priorities = resolvePriority(
     apiOptions?.nodes?.priority,
