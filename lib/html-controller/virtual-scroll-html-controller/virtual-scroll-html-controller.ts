@@ -46,9 +46,9 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public destroy(): void {
-    this.htmlController.destroy();
-
     this.trigger.unsubscribe(this.onRenderTrigger);
+
+    this.htmlController.destroy();
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
