@@ -6,8 +6,8 @@ import { ViewportBox } from "./viewport-box";
  * This entity is responsible for HTML modifications regarding for viewport
  */
 export class VirtualScrollHtmlController implements HtmlController {
-  private readonly onRefresh = (): void => {
-    console.log("HERE");
+  private readonly onRefresh = (viewBox: ViewportBox): void => {
+    console.log(viewBox);
   };
 
   public constructor(
