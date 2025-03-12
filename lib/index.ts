@@ -93,3 +93,7 @@ export type { CenterFn } from "./center-fn";
 export type { PriorityFn } from "./priority";
 
 export { HtmlGraphError } from "./error";
+
+export { EventSubject } from "./event-subject";
+
+export type { ViewportBox } from "./html-controller";

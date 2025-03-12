@@ -5,9 +5,17 @@ import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { MarkNodePortRequest } from "../mark-node-port-request";
+import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
+import { CoreHtmlController, HtmlController } from "@/html-controller";
 
 const createCanvas = (): CoreCanvas => {
-  return new CoreCanvas(new DiContainer({}));
+  const htmlControllerFactory = (
+    graphStore: GraphStore,
+    viewportTransformer: ViewportTransformer,
+  ): HtmlController => new CoreHtmlController(graphStore, viewportTransformer);
+
+  return new CoreCanvas(new DiContainer({}, htmlControllerFactory));
 };
 
 const createElement = (params?: {

@@ -12,7 +12,7 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { HtmlController } from "@/html-controller";
+import { CoreHtmlController } from "@/html-controller";
 import { GraphStoreController } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 
@@ -30,7 +30,7 @@ export class CanvasCore implements Canvas {
 
   private readonly graphStoreController: GraphStoreController;
 
-  private readonly htmlController: HtmlController;
+  private readonly htmlController: CoreHtmlController;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.htmlController.attachNode(nodeId);
@@ -90,7 +90,7 @@ export class CanvasCore implements Canvas {
       this.internalTransformation,
     );
 
-    this.htmlController = new HtmlController(
+    this.htmlController = new CoreHtmlController(
       this.internalModel,
       this.internalTransformation,
     );

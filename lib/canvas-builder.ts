@@ -9,6 +9,15 @@ import {
   CoreCanvas,
   DiContainer,
 } from "@/canvas";
+import {
+  CoreHtmlController,
+  HtmlController,
+  ViewportBox,
+  VirtualScrollHtmlController,
+} from "./html-controller";
+import { GraphStore } from "./graph-store";
+import { ViewportTransformer } from "./viewport-transformer";
+import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -22,6 +31,21 @@ export class CanvasBuilder {
   private hasTransformableViewport = false;
 
   private hasResizeReactiveNodes = false;
+
+  private hasVirtualScroll = false;
+
+  private readonly coreHtmlControllerFactory = (
+    graphStore: GraphStore,
+    viewportTransformer: ViewportTransformer,
+  ): HtmlController => new CoreHtmlController(graphStore, viewportTransformer);
+
+  private readonly virtualScrollHtmlControllerFactory = (
+    graphStore: GraphStore,
+    viewportTransformer: ViewportTransformer,
+  ): HtmlController =>
+    new VirtualScrollHtmlController(
+      new CoreHtmlController(graphStore, viewportTransformer),
+    );
 
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
@@ -59,8 +83,19 @@ export class CanvasBuilder {
     return this;
   }
 
+  public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
+    console.log(trigger);
+    this.hasVirtualScroll = true;
+
+    return this;
+  }
+
   public build(): Canvas {
-    const container = new DiContainer(this.coreOptions);
+    const htmlControllerFactory = this.hasVirtualScroll
+      ? this.virtualScrollHtmlControllerFactory
+      : this.coreHtmlControllerFactory;
+
+    const container = new DiContainer(this.coreOptions, htmlControllerFactory);
 
     let canvas: Canvas = new CoreCanvas(container);
 

@@ -21,7 +21,13 @@ export class DiContainer {
 
   public readonly graphStoreController: GraphStoreController;
 
-  public constructor(coreOptions: CoreOptions) {
+  public constructor(
+    coreOptions: CoreOptions,
+    htmlControllerFactory: (
+      graphStore: GraphStore,
+      viewportTransformer: ViewportTransformer,
+    ) => HtmlController,
+  ) {
     this.graphStore = new GraphStore();
     this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
@@ -30,7 +36,7 @@ export class DiContainer {
       this.viewportTransformer,
     );
 
-    this.htmlController = new HtmlController(
+    this.htmlController = htmlControllerFactory(
       this.graphStore,
       this.viewportTransformer,
     );
