@@ -1,10 +1,17 @@
+import { EventSubject } from "@/event-subject";
 import { HtmlController } from "../html-controller";
+import { ViewportBox } from "./viewport-box";
 
 /**
  * This entity is responsible for HTML modifications regarding for viewport
  */
 export class VirtualScrollHtmlController implements HtmlController {
-  public constructor(private readonly htmlController: HtmlController) {}
+  public constructor(
+    private readonly htmlController: HtmlController,
+    private readonly trigger: EventSubject<ViewportBox>,
+  ) {
+    console.log(this.trigger);
+  }
 
   public attach(canvasWrapper: HTMLElement): void {
     this.htmlController.attach(canvasWrapper);

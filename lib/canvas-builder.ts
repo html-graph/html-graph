@@ -47,6 +47,7 @@ export class CanvasBuilder {
   ): HtmlController =>
     new VirtualScrollHtmlController(
       this.coreHtmlControllerFactory(graphStore, viewportTransformer),
+      this.trigger,
     );
 
   public setOptions(options: CoreOptions): CanvasBuilder {
