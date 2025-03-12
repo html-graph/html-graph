@@ -44,7 +44,7 @@ export class CanvasBuilder {
     viewportTransformer: ViewportTransformer,
   ): HtmlController =>
     new VirtualScrollHtmlController(
-      new CoreHtmlController(graphStore, viewportTransformer),
+      this.coreHtmlControllerFactory(graphStore, viewportTransformer),
     );
 
   public setOptions(options: CoreOptions): CanvasBuilder {
