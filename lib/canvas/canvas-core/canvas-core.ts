@@ -81,10 +81,6 @@ export class CanvasCore implements Canvas {
     this.htmlController.detachNode(nodeId);
   };
 
-  private readonly onAfterTransformUpdate = (): void => {
-    this.htmlController.applyTransform();
-  };
-
   public constructor(apiOptions?: CoreOptions) {
     this.internalModel = new GraphStore();
     this.model = new PublicGraphStore(this.internalModel);
@@ -102,10 +98,6 @@ export class CanvasCore implements Canvas {
     this.graphStoreController = new GraphStoreController(
       this.internalModel,
       createOptions(apiOptions),
-    );
-
-    this.internalTransformation.onAfterUpdate.subscribe(
-      this.onAfterTransformUpdate,
     );
 
     this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
@@ -233,10 +225,6 @@ export class CanvasCore implements Canvas {
   public destroy(): void {
     this.htmlController.destroy();
     this.graphStoreController.clear();
-
-    this.internalTransformation.onAfterUpdate.unsubscribe(
-      this.onAfterTransformUpdate,
-    );
 
     this.graphStoreController.onAfterNodeAdded.unsubscribe(
       this.onAfterNodeAdded,

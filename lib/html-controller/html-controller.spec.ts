@@ -103,17 +103,16 @@ describe("HtmlController", () => {
   it("should apply transform to container", () => {
     const transformer = new ViewportTransformer();
 
+    const htmlController = createHtmlController({ transformer });
+    const div = document.createElement("div");
+
     transformer.patchContentMatrix({
       scale: 2,
       x: 3,
       y: 4,
     });
 
-    const htmlController = createHtmlController({ transformer });
-    const div = document.createElement("div");
     htmlController.attach(div);
-
-    htmlController.applyTransform();
 
     const container = div.children[0].children[0] as HTMLDivElement;
 
