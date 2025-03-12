@@ -34,6 +34,8 @@ export class CanvasBuilder {
 
   private hasVirtualScroll = false;
 
+  private trigger = new EventSubject<ViewportBox>();
+
   private readonly coreHtmlControllerFactory = (
     graphStore: GraphStore,
     viewportTransformer: ViewportTransformer,
@@ -84,8 +86,10 @@ export class CanvasBuilder {
   }
 
   public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
-    console.log(trigger);
     this.hasVirtualScroll = true;
+    if (trigger !== undefined) {
+      this.trigger = trigger;
+    }
 
     return this;
   }
