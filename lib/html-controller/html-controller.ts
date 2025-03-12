@@ -18,11 +18,19 @@ export class HtmlController {
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
+  private readonly applyTransform = (): void => {
+    const m = this.viewportTransformer.getContentMatrix();
+
+    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
+  };
+
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportTransformer: ViewportTransformer,
   ) {
     this.host.appendChild(this.container);
+
+    this.viewportTransformer.onAfterUpdate.subscribe(this.applyTransform);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -37,12 +45,6 @@ export class HtmlController {
       this.canvasWrapper.removeChild(this.host);
       this.canvasWrapper = null;
     }
-  }
-
-  public applyTransform(): void {
-    const m = this.viewportTransformer.getContentMatrix();
-
-    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
   }
 
   public attachNode(nodeId: unknown): void {
@@ -101,6 +103,8 @@ export class HtmlController {
   public destroy(): void {
     this.clear();
     this.detach();
+
+    this.viewportTransformer.onAfterUpdate.unsubscribe(this.applyTransform);
 
     this.host.removeChild(this.container);
   }
