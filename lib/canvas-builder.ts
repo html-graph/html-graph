@@ -88,6 +88,7 @@ export class CanvasBuilder {
 
   public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
     this.hasVirtualScroll = true;
+
     if (trigger !== undefined) {
       this.trigger = trigger;
     }
