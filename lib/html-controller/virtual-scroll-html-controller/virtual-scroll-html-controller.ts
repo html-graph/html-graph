@@ -6,7 +6,7 @@ import { ViewportBox } from "./viewport-box";
  * This entity is responsible for HTML modifications regarding for viewport
  */
 export class VirtualScrollHtmlController implements HtmlController {
-  private readonly onRefresh = (viewBox: ViewportBox): void => {
+  private readonly onRenderViewport = (viewBox: ViewportBox): void => {
     console.log(viewBox);
   };
 
@@ -14,7 +14,7 @@ export class VirtualScrollHtmlController implements HtmlController {
     private readonly htmlController: HtmlController,
     private readonly trigger: EventSubject<ViewportBox>,
   ) {
-    this.trigger.subscribe(this.onRefresh);
+    this.trigger.subscribe(this.onRenderViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -48,7 +48,7 @@ export class VirtualScrollHtmlController implements HtmlController {
   public destroy(): void {
     this.htmlController.destroy();
 
-    this.trigger.unsubscribe(this.onRefresh);
+    this.trigger.unsubscribe(this.onRenderViewport);
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
