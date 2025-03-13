@@ -18,6 +18,7 @@ import {
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 import { EventSubject } from "./event-subject";
+import { HtmlControllerFactory } from "./canvas/core-canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -34,12 +35,12 @@ export class CanvasBuilder {
 
   private trigger = new EventSubject<ViewportBox>();
 
-  private readonly coreHtmlControllerFactory = (
+  private readonly coreHtmlControllerFactory: HtmlControllerFactory = (
     graphStore: GraphStore,
     viewportTransformer: ViewportTransformer,
   ): HtmlController => new CoreHtmlController(graphStore, viewportTransformer);
 
-  private readonly virtualScrollHtmlControllerFactory = (
+  private readonly virtualScrollHtmlControllerFactory: HtmlControllerFactory = (
     graphStore: GraphStore,
     viewportTransformer: ViewportTransformer,
   ): HtmlController =>
@@ -48,10 +49,8 @@ export class CanvasBuilder {
       this.trigger,
     );
 
-  private htmlControllerFactory: (
-    graphStore: GraphStore,
-    viewportTransformer: ViewportTransformer,
-  ) => HtmlController = this.coreHtmlControllerFactory;
+  private htmlControllerFactory: HtmlControllerFactory =
+    this.coreHtmlControllerFactory;
 
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
