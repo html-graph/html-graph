@@ -1,7 +1,6 @@
 import { GraphStore } from "@/graph-store";
 import { HtmlController } from "../html-controller";
 import { ViewportBox } from "./viewport-box";
-import { VirtualScrollHtmlControllerConfig } from "./virtual-scroll-html-controller-config";
 import { EventSubject } from "@/event-subject";
 
 /**
@@ -12,13 +11,19 @@ export class VirtualScrollHtmlController implements HtmlController {
 
   private readonly viewportEdges = new Set<unknown>();
 
-  private readonly trigger: EventSubject<ViewportBox>;
+  private xFrom = Infinity;
 
-  private readonly setViewport = (viewBox: ViewportBox): void => {
-    const vxFrom = viewBox.x;
-    const vxTo = viewBox.x + viewBox.width;
-    const vyFrom = viewBox.y;
-    const vyTo = viewBox.y + viewBox.height;
+  private yFrom = Infinity;
+
+  private xTo = Infinity;
+
+  private yTo = Infinity;
+
+  private readonly updateViewport = (viewBox: ViewportBox): void => {
+    this.xFrom = viewBox.x;
+    this.xTo = viewBox.x + viewBox.width;
+    this.yFrom = viewBox.y;
+    this.yTo = viewBox.y + viewBox.width;
 
     const nodesToAttach = new Set<unknown>();
     const nodesToDetach = new Set<unknown>();
@@ -26,57 +31,60 @@ export class VirtualScrollHtmlController implements HtmlController {
     const edgesToDetach = new Set<unknown>();
 
     this.graphStore.getAllNodeIds().forEach((nodeId) => {
-      const node = this.graphStore.getNode(nodeId)!;
-
-      const isNodeInViewport =
-        node.x > vxFrom && node.x < vxTo && node.y > vyFrom && node.y < vyTo;
-
+      const isInViewport = this.isNodeInViewport(nodeId);
       const wasInViewport = this.viewportNodes.has(nodeId);
 
-      if (isNodeInViewport && !wasInViewport) {
+      if (isInViewport && !wasInViewport) {
         nodesToAttach.add(nodeId);
-      } else if (!isNodeInViewport && wasInViewport) {
+      } else if (!isInViewport && wasInViewport) {
         nodesToDetach.add(nodeId);
       }
     });
 
     this.graphStore.getAllEdgeIds().forEach((edgeId) => {
-      const edge = this.graphStore.getEdge(edgeId)!;
-
-      const fromNodeId = this.graphStore.getPortNodeId(edge.from)!;
-      const toNodeId = this.graphStore.getPortNodeId(edge.to)!;
-      const from = this.graphStore.getNode(fromNodeId)!;
-      const to = this.graphStore.getNode(toNodeId)!;
-
-      const xFrom = Math.min(from.x, to.x);
-      const xTo = Math.max(from.x, to.x);
-      const yFrom = Math.min(from.y, to.y);
-      const yTo = Math.max(from.y, to.y);
-      const isInViewport =
-        xFrom < vxTo && xTo > vxFrom && yFrom < vyTo && yTo > vyFrom;
+      const [isInViewport, nodeFromId, nodeToId] =
+        this.isEdgeInViewport(edgeId);
       const wasInViewport = this.viewportEdges.has(edgeId);
 
       if (isInViewport && !wasInViewport) {
         edgesToAttach.add(edgeId);
-        nodesToAttach.add(fromNodeId);
-        nodesToAttach.add(toNodeId);
-        nodesToDetach.delete(fromNodeId);
-        nodesToDetach.delete(toNodeId);
+        nodesToAttach.add(nodeFromId);
+        nodesToAttach.add(nodeToId);
+        nodesToDetach.delete(nodeFromId);
+        nodesToDetach.delete(nodeToId);
       } else if (!isInViewport && wasInViewport) {
         edgesToDetach.add(edgeId);
       }
     });
 
-    console.log(nodesToAttach, nodesToDetach, edgesToAttach, edgesToDetach);
+    edgesToDetach.forEach((edgeId) => {
+      this.htmlController.detachEdge(edgeId);
+    });
+
+    nodesToDetach.forEach((nodeId) => {
+      this.htmlController.detachNode(nodeId);
+    });
+
+    nodesToAttach.forEach((nodeId) => {
+      this.htmlController.attachNode(nodeId);
+    });
+
+    edgesToAttach.forEach((edgeId) => {
+      this.htmlController.attachEdge(edgeId);
+    });
+
+    nodesToAttach.clear();
+    nodesToDetach.clear();
+    edgesToAttach.clear();
+    edgesToDetach.clear();
   };
 
   public constructor(
     private readonly htmlController: HtmlController,
     private readonly graphStore: GraphStore,
-    config: VirtualScrollHtmlControllerConfig,
+    private readonly trigger: EventSubject<ViewportBox>,
   ) {
-    this.trigger = config.trigger;
-    this.trigger.subscribe(this.setViewport);
+    this.trigger.subscribe(this.updateViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -88,19 +96,27 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public attachNode(nodeId: unknown): void {
-    this.htmlController.attachNode(nodeId);
+    if (this.isNodeInViewport(nodeId)) {
+      this.htmlController.attachNode(nodeId);
+    }
   }
 
   public detachNode(nodeId: unknown): void {
-    this.htmlController.detachNode(nodeId);
+    if (this.isNodeInViewport(nodeId)) {
+      this.htmlController.detachNode(nodeId);
+    }
   }
 
   public attachEdge(edgeId: unknown): void {
-    this.htmlController.attachEdge(edgeId);
+    if (this.isEdgeInViewport(edgeId)) {
+      this.htmlController.attachEdge(edgeId);
+    }
   }
 
   public detachEdge(edgeId: unknown): void {
-    this.htmlController.detachEdge(edgeId);
+    if (this.isEdgeInViewport(edgeId)) {
+      this.htmlController.detachEdge(edgeId);
+    }
   }
 
   public clear(): void {
@@ -108,28 +124,71 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public destroy(): void {
-    this.trigger.unsubscribe(this.setViewport);
+    this.trigger.unsubscribe(this.updateViewport);
 
     this.htmlController.destroy();
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    this.htmlController.updateNodeCoordinates(nodeId);
+    if (this.isNodeInViewport(nodeId)) {
+      this.htmlController.updateNodeCoordinates(nodeId);
+    }
   }
 
   public updateNodePriority(nodeId: unknown): void {
-    this.htmlController.updateNodePriority(nodeId);
+    if (this.isNodeInViewport(nodeId)) {
+      this.htmlController.updateNodePriority(nodeId);
+    }
   }
 
   public updateEdgeShape(edgeId: unknown): void {
-    this.htmlController.updateEdgeShape(edgeId);
+    if (this.isEdgeInViewport(edgeId)) {
+      this.htmlController.updateEdgeShape(edgeId);
+    }
   }
 
   public renderEdge(edgeId: unknown): void {
-    this.htmlController.renderEdge(edgeId);
+    if (this.isEdgeInViewport(edgeId)) {
+      this.htmlController.renderEdge(edgeId);
+    }
   }
 
   public updateEdgePriority(edgeId: unknown): void {
-    this.htmlController.updateEdgePriority(edgeId);
+    if (this.isEdgeInViewport(edgeId)) {
+      this.htmlController.updateEdgePriority(edgeId);
+    }
+  }
+
+  private isNodeInViewport(nodeId: unknown): boolean {
+    const node = this.graphStore.getNode(nodeId)!;
+
+    return (
+      node.x > this.xFrom &&
+      node.x < this.xTo &&
+      node.y > this.yFrom &&
+      node.y < this.yTo
+    );
+  }
+
+  private isEdgeInViewport(edgeId: unknown): [boolean, unknown, unknown] {
+    const edge = this.graphStore.getEdge(edgeId)!;
+
+    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
+    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+    const nodeFrom = this.graphStore.getNode(nodeFromId)!;
+    const nodeTo = this.graphStore.getNode(nodeToId)!;
+
+    const xFrom = Math.min(nodeFrom.x, nodeTo.x);
+    const xTo = Math.max(nodeFrom.x, nodeTo.x);
+    const yFrom = Math.min(nodeFrom.y, nodeTo.y);
+    const yTo = Math.max(nodeFrom.y, nodeTo.y);
+
+    const isInViewport =
+      xFrom < this.xTo &&
+      xTo > this.xFrom &&
+      yFrom < this.yTo &&
+      yTo > this.yFrom;
+
+    return [isInViewport, nodeFromId, nodeToId];
   }
 }

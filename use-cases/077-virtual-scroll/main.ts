@@ -12,13 +12,7 @@ const trigger = new EventSubject<ViewportBox>();
 
 const canvas: Canvas = new CanvasBuilder()
   .setUserTransformableViewport()
-  .setVirtualScroll({
-    trigger,
-    nodeOffsets: {
-      vertical: 100,
-      horizontal: 100,
-    },
-  })
+  .setVirtualScroll(trigger)
   .build();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

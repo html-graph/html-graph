@@ -14,12 +14,10 @@ import {
   HtmlController,
   ViewportBox,
   VirtualScrollHtmlController,
-  VirtualScrollHtmlControllerConfig,
 } from "./html-controller";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 import { HtmlControllerFactory } from "./canvas/core-canvas";
-import { VirtualScrollOptions } from "./virtual-scroll-options";
 import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
@@ -35,7 +33,9 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private virtualScrollOptions: VirtualScrollOptions | null = null;
+  private hasVirtualScroll = false;
+
+  private virtualScrollTrigger = new EventSubject<ViewportBox>();
 
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
@@ -73,8 +73,12 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
-    this.virtualScrollOptions = options;
+  public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
+    this.hasVirtualScroll = true;
+
+    if (trigger !== undefined) {
+      this.virtualScrollTrigger = trigger;
+    }
 
     return this;
   }
@@ -111,21 +115,15 @@ export class CanvasBuilder {
       return new CoreHtmlController(graphStore, viewportTransformer);
     };
 
-    if (this.virtualScrollOptions !== null) {
-      const options = this.virtualScrollOptions;
-
+    if (this.hasVirtualScroll) {
       factory = (
         graphStore: GraphStore,
         viewportTransformer: ViewportTransformer,
       ): HtmlController => {
-        const params: VirtualScrollHtmlControllerConfig = {
-          trigger: options.trigger ?? new EventSubject<ViewportBox>(),
-        };
-
         return new VirtualScrollHtmlController(
           new CoreHtmlController(graphStore, viewportTransformer),
           graphStore,
-          params,
+          this.virtualScrollTrigger,
         );
       };
     }
