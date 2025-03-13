@@ -50,6 +50,11 @@ export class CanvasBuilder {
       this.trigger,
     );
 
+  private htmlControllerFactory: (
+    graphStore: GraphStore,
+    viewportTransformer: ViewportTransformer,
+  ) => HtmlController = this.coreHtmlControllerFactory;
+
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
@@ -87,7 +92,7 @@ export class CanvasBuilder {
   }
 
   public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
-    this.hasVirtualScroll = true;
+    this.htmlControllerFactory = this.virtualScrollHtmlControllerFactory;
 
     if (trigger !== undefined) {
       this.trigger = trigger;
@@ -97,11 +102,10 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    const htmlControllerFactory = this.hasVirtualScroll
-      ? this.virtualScrollHtmlControllerFactory
-      : this.coreHtmlControllerFactory;
-
-    const container = new DiContainer(this.coreOptions, htmlControllerFactory);
+    const container = new DiContainer(
+      this.coreOptions,
+      this.htmlControllerFactory,
+    );
 
     let canvas: Canvas = new CoreCanvas(container);
 
