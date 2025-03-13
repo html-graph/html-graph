@@ -14,6 +14,7 @@ import {
   HtmlController,
   ViewportBox,
   VirtualScrollHtmlController,
+  VirtualScrollHtmlControllerParams,
 } from "./html-controller";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
@@ -32,8 +33,6 @@ export class CanvasBuilder {
   private hasTransformableViewport = false;
 
   private hasResizeReactiveNodes = false;
-
-  private trigger = new EventSubject<ViewportBox>();
 
   private readonly coreHtmlControllerFactory: HtmlControllerFactory = (
     graphStore: GraphStore,
@@ -88,12 +87,10 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
+  public setVirtualScroll(
+    params: VirtualScrollHtmlControllerParams,
+  ): CanvasBuilder {
     this.htmlControllerFactory = this.virtualScrollHtmlControllerFactory;
-
-    if (trigger !== undefined) {
-      this.trigger = trigger;
-    }
 
     return this;
   }

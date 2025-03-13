@@ -1,6 +1,6 @@
-import { EventSubject } from "@/event-subject";
 import { HtmlController } from "../html-controller";
 import { ViewportBox } from "./viewport-box";
+import { VirtualScrollHtmlControllerParams } from "./virtual-scroll-html-controller-params";
 
 /**
  * This entity is responsible for HTML modifications regarding for viewport
@@ -12,9 +12,9 @@ export class VirtualScrollHtmlController implements HtmlController {
 
   public constructor(
     private readonly htmlController: HtmlController,
-    private readonly trigger: EventSubject<ViewportBox>,
+    private readonly params: VirtualScrollHtmlControllerParams,
   ) {
-    this.trigger.subscribe(this.setViewport);
+    this.params.trigger.subscribe(this.setViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -46,7 +46,7 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public destroy(): void {
-    this.trigger.unsubscribe(this.setViewport);
+    this.params.trigger.unsubscribe(this.setViewport);
 
     this.htmlController.destroy();
   }
