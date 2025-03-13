@@ -14,12 +14,13 @@ import {
   HtmlController,
   ViewportBox,
   VirtualScrollHtmlController,
-  VirtualScrollHtmlControllerParams,
+  VirtualScrollHtmlControllerConfig,
 } from "./html-controller";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
-import { EventSubject } from "./event-subject";
 import { HtmlControllerFactory } from "./canvas/core-canvas";
+import { VirtualScrollOptions } from "./virtual-scroll-options";
+import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -34,22 +35,7 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private readonly coreHtmlControllerFactory: HtmlControllerFactory = (
-    graphStore: GraphStore,
-    viewportTransformer: ViewportTransformer,
-  ): HtmlController => new CoreHtmlController(graphStore, viewportTransformer);
-
-  private readonly virtualScrollHtmlControllerFactory: HtmlControllerFactory = (
-    graphStore: GraphStore,
-    viewportTransformer: ViewportTransformer,
-  ): HtmlController =>
-    new VirtualScrollHtmlController(
-      this.coreHtmlControllerFactory(graphStore, viewportTransformer),
-      this.trigger,
-    );
-
-  private htmlControllerFactory: HtmlControllerFactory =
-    this.coreHtmlControllerFactory;
+  private virtualScrollOptions: VirtualScrollOptions | null = null;
 
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
@@ -87,19 +73,15 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(
-    params: VirtualScrollHtmlControllerParams,
-  ): CanvasBuilder {
-    this.htmlControllerFactory = this.virtualScrollHtmlControllerFactory;
+  public setVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
+    this.virtualScrollOptions = options;
 
     return this;
   }
 
   public build(): Canvas {
-    const container = new DiContainer(
-      this.coreOptions,
-      this.htmlControllerFactory,
-    );
+    const htmlControllerFactory = this.createHtmlControllerFactory();
+    const container = new DiContainer(this.coreOptions, htmlControllerFactory);
 
     let canvas: Canvas = new CoreCanvas(container);
 
@@ -119,5 +101,35 @@ export class CanvasBuilder {
     }
 
     return canvas;
+  }
+
+  private createHtmlControllerFactory(): HtmlControllerFactory {
+    let factory: HtmlControllerFactory = (
+      graphStore: GraphStore,
+      viewportTransformer: ViewportTransformer,
+    ): HtmlController => {
+      return new CoreHtmlController(graphStore, viewportTransformer);
+    };
+
+    if (this.virtualScrollOptions !== null) {
+      const options = this.virtualScrollOptions;
+
+      factory = (
+        graphStore: GraphStore,
+        viewportTransformer: ViewportTransformer,
+      ): HtmlController => {
+        const params: VirtualScrollHtmlControllerConfig = {
+          trigger: options.trigger ?? new EventSubject<ViewportBox>(),
+        };
+
+        return new VirtualScrollHtmlController(
+          new CoreHtmlController(graphStore, viewportTransformer),
+          graphStore,
+          params,
+        );
+      };
+    }
+
+    return factory;
   }
 }

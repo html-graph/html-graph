@@ -1,20 +1,82 @@
+import { GraphStore } from "@/graph-store";
 import { HtmlController } from "../html-controller";
 import { ViewportBox } from "./viewport-box";
-import { VirtualScrollHtmlControllerParams } from "./virtual-scroll-html-controller-params";
+import { VirtualScrollHtmlControllerConfig } from "./virtual-scroll-html-controller-config";
+import { EventSubject } from "@/event-subject";
 
 /**
  * This entity is responsible for HTML modifications regarding for viewport
  */
 export class VirtualScrollHtmlController implements HtmlController {
+  private readonly viewportNodes = new Set<unknown>();
+
+  private readonly viewportEdges = new Set<unknown>();
+
+  private readonly trigger: EventSubject<ViewportBox>;
+
   private readonly setViewport = (viewBox: ViewportBox): void => {
-    console.log(viewBox);
+    const vxFrom = viewBox.x;
+    const vxTo = viewBox.x + viewBox.width;
+    const vyFrom = viewBox.y;
+    const vyTo = viewBox.y + viewBox.height;
+
+    const nodesToAttach = new Set<unknown>();
+    const nodesToDetach = new Set<unknown>();
+    const edgesToAttach = new Set<unknown>();
+    const edgesToDetach = new Set<unknown>();
+
+    this.graphStore.getAllNodeIds().forEach((nodeId) => {
+      const node = this.graphStore.getNode(nodeId)!;
+
+      const isNodeInViewport =
+        node.x > vxFrom && node.x < vxTo && node.y > vyFrom && node.y < vyTo;
+
+      const wasInViewport = this.viewportNodes.has(nodeId);
+
+      if (isNodeInViewport && !wasInViewport) {
+        nodesToAttach.add(nodeId);
+      } else if (!isNodeInViewport && wasInViewport) {
+        nodesToDetach.add(nodeId);
+      }
+    });
+
+    this.graphStore.getAllEdgeIds().forEach((edgeId) => {
+      const edge = this.graphStore.getEdge(edgeId)!;
+
+      const fromNodeId = this.graphStore.getPortNodeId(edge.from)!;
+      const toNodeId = this.graphStore.getPortNodeId(edge.to)!;
+      const from = this.graphStore.getNode(fromNodeId)!;
+      const to = this.graphStore.getNode(toNodeId)!;
+
+      const xFrom = Math.min(from.x, to.x);
+      const xTo = Math.max(from.x, to.x);
+      const yFrom = Math.min(from.y, to.y);
+      const yTo = Math.max(from.y, to.y);
+      const isInViewport =
+        xFrom < vxTo && xTo > vxFrom && yFrom < vyTo && yTo > vyFrom;
+      const wasInViewport = this.viewportEdges.has(edgeId);
+
+      if (isInViewport && !wasInViewport) {
+        edgesToAttach.add(edgeId);
+        nodesToAttach.add(fromNodeId);
+        nodesToAttach.add(toNodeId);
+        nodesToDetach.delete(fromNodeId);
+        nodesToDetach.delete(toNodeId);
+      } else if (!isInViewport && wasInViewport) {
+        edgesToDetach.add(edgeId);
+      }
+    });
+
+    console.log(nodesToAttach, nodesToDetach, edgesToAttach, edgesToDetach);
   };
 
   public constructor(
     private readonly htmlController: HtmlController,
-    private readonly params: VirtualScrollHtmlControllerParams,
+    private readonly graphStore: GraphStore,
+    config: VirtualScrollHtmlControllerConfig,
   ) {
-    this.params.trigger.subscribe(this.setViewport);
+    this.trigger = config.trigger;
+    this.trigger.subscribe(this.setViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -46,7 +108,7 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public destroy(): void {
-    this.params.trigger.unsubscribe(this.setViewport);
+    this.trigger.unsubscribe(this.setViewport);
 
     this.htmlController.destroy();
   }
