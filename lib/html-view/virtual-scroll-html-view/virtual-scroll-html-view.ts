@@ -1,12 +1,12 @@
 import { GraphStore } from "@/graph-store";
-import { HtmlController } from "../html-controller";
+import { HtmlView } from "../html-view";
 import { ViewportBox } from "./viewport-box";
 import { EventSubject } from "@/event-subject";
 
 /**
  * This entity is responsible for HTML modifications regarding for viewport
  */
-export class VirtualScrollHtmlController implements HtmlController {
+export class VirtualScrollHtmlView implements HtmlView {
   private readonly viewportNodes = new Set<unknown>();
 
   private readonly viewportEdges = new Set<unknown>();
@@ -61,24 +61,28 @@ export class VirtualScrollHtmlController implements HtmlController {
     });
 
     edgesToDetach.forEach((edgeId) => {
+      this.viewportEdges.delete(edgeId);
       this.htmlController.detachEdge(edgeId);
     });
 
     nodesToDetach.forEach((nodeId) => {
+      this.viewportNodes.delete(nodeId);
       this.htmlController.detachNode(nodeId);
     });
 
     nodesToAttach.forEach((nodeId) => {
+      this.viewportNodes.add(nodeId);
       this.htmlController.attachNode(nodeId);
     });
 
     edgesToAttach.forEach((edgeId) => {
+      this.viewportEdges.add(edgeId);
       this.htmlController.attachEdge(edgeId);
     });
   };
 
   public constructor(
-    private readonly htmlController: HtmlController,
+    private readonly htmlController: HtmlView,
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<ViewportBox>,
   ) {
@@ -132,13 +136,13 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    if (this.isNodeInViewport(nodeId)) {
+    if (this.viewportNodes.has(nodeId)) {
       this.htmlController.updateNodeCoordinates(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: unknown): void {
-    if (this.isNodeInViewport(nodeId)) {
+    if (this.viewportNodes.has(nodeId)) {
       this.htmlController.updateNodePriority(nodeId);
     }
   }

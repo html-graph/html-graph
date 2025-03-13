@@ -10,7 +10,7 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { HtmlController } from "@/html-controller";
+import { HtmlView } from "@/html-view";
 import { GraphStoreController } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 import { DiContainer } from "./di-container";
@@ -30,7 +30,7 @@ export class CoreCanvas implements Canvas {
 
   private readonly graphStoreController: GraphStoreController;
 
-  private readonly htmlController: HtmlController;
+  private readonly htmlController: HtmlView;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.htmlController.attachNode(nodeId);

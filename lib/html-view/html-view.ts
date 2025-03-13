@@ -1,4 +1,4 @@
-export interface HtmlController {
+export interface HtmlView {
   attach(canvasWrapper: HTMLElement): void;
 
   detach(): void;

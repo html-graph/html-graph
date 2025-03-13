@@ -10,14 +10,14 @@ import {
   DiContainer,
 } from "@/canvas";
 import {
-  CoreHtmlController,
-  HtmlController,
+  CoreHtmlView,
+  HtmlView,
   ViewportBox,
-  VirtualScrollHtmlController,
-} from "./html-controller";
+  VirtualScrollHtmlView,
+} from "./html-view";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
-import { HtmlControllerFactory } from "./canvas/core-canvas";
+import { HtmlViewFactory } from "./canvas/core-canvas";
 import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
@@ -84,8 +84,8 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    const htmlControllerFactory = this.createHtmlControllerFactory();
-    const container = new DiContainer(this.coreOptions, htmlControllerFactory);
+    const htmlViewFactory = this.createHtmlViewFactory();
+    const container = new DiContainer(this.coreOptions, htmlViewFactory);
 
     let canvas: Canvas = new CoreCanvas(container);
 
@@ -107,27 +107,25 @@ export class CanvasBuilder {
     return canvas;
   }
 
-  private createHtmlControllerFactory(): HtmlControllerFactory {
-    let factory: HtmlControllerFactory = (
-      graphStore: GraphStore,
-      viewportTransformer: ViewportTransformer,
-    ): HtmlController => {
-      return new CoreHtmlController(graphStore, viewportTransformer);
-    };
-
+  private createHtmlViewFactory(): HtmlViewFactory {
     if (this.hasVirtualScroll) {
-      factory = (
+      return (
         graphStore: GraphStore,
         viewportTransformer: ViewportTransformer,
-      ): HtmlController => {
-        return new VirtualScrollHtmlController(
-          new CoreHtmlController(graphStore, viewportTransformer),
+      ): HtmlView => {
+        return new VirtualScrollHtmlView(
+          new CoreHtmlView(graphStore, viewportTransformer),
           graphStore,
           this.virtualScrollTrigger,
         );
       };
     }
 
-    return factory;
+    return (
+      graphStore: GraphStore,
+      viewportTransformer: ViewportTransformer,
+    ): HtmlView => {
+      return new CoreHtmlView(graphStore, viewportTransformer);
+    };
   }
 }

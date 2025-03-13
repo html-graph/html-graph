@@ -1,8 +1,8 @@
 import { GraphStore } from "@/graph-store";
-import { HtmlController } from "@/html-controller";
+import { HtmlView } from "@/html-view";
 import { ViewportTransformer } from "@/viewport-transformer";
 
-export type HtmlControllerFactory = (
+export type HtmlViewFactory = (
   graphStore: GraphStore,
   viewportTransformer: ViewportTransformer,
-) => HtmlController;
+) => HtmlView;

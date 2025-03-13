@@ -7,13 +7,13 @@ import { MarkPortRequest } from "../mark-port-request";
 import { MarkNodePortRequest } from "../mark-node-port-request";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
-import { CoreHtmlController, HtmlController } from "@/html-controller";
+import { CoreHtmlView, HtmlView } from "@/html-view";
 
 const createCanvas = (): CoreCanvas => {
   const htmlControllerFactory = (
     graphStore: GraphStore,
     viewportTransformer: ViewportTransformer,
-  ): HtmlController => new CoreHtmlController(graphStore, viewportTransformer);
+  ): HtmlView => new CoreHtmlView(graphStore, viewportTransformer);
 
   return new CoreCanvas(new DiContainer({}, htmlControllerFactory));
 };

@@ -4,7 +4,7 @@ import {
   AddPortRequest,
   GraphStore,
 } from "@/graph-store";
-import { CoreHtmlController } from "./core-html-controller";
+import { CoreHtmlView } from "./core-html-view";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { Point } from "@/point";
 import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
@@ -12,8 +12,8 @@ import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 const createHtmlController = (params?: {
   transformer?: ViewportTransformer;
   store?: GraphStore;
-}): CoreHtmlController => {
-  return new CoreHtmlController(
+}): CoreHtmlView => {
+  return new CoreHtmlView(
     params?.store ?? new GraphStore(),
     params?.transformer ?? new ViewportTransformer(),
   );
@@ -69,7 +69,7 @@ const addEdgeRequest12: AddEdgeRequest = {
   priority: 0,
 };
 
-describe("CoreHtmlController", () => {
+describe("CoreHtmlView", () => {
   it("should attach host to wrapper element", () => {
     const htmlController = createHtmlController();
 
