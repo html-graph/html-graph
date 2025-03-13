@@ -32,8 +32,6 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private hasVirtualScroll = false;
-
   private trigger = new EventSubject<ViewportBox>();
 
   private readonly coreHtmlControllerFactory = (
