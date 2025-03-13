@@ -108,13 +108,13 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public attachEdge(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.isEdgeInViewport(edgeId)[0]) {
       this.htmlController.attachEdge(edgeId);
     }
   }
 
   public detachEdge(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.isEdgeInViewport(edgeId)[0]) {
       this.htmlController.detachEdge(edgeId);
     }
   }
@@ -142,19 +142,19 @@ export class VirtualScrollHtmlController implements HtmlController {
   }
 
   public updateEdgeShape(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.isEdgeInViewport(edgeId)[0]) {
       this.htmlController.updateEdgeShape(edgeId);
     }
   }
 
   public renderEdge(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.isEdgeInViewport(edgeId)[0]) {
       this.htmlController.renderEdge(edgeId);
     }
   }
 
   public updateEdgePriority(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.isEdgeInViewport(edgeId)[0]) {
       this.htmlController.updateEdgePriority(edgeId);
     }
   }

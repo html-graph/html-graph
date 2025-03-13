@@ -1,6 +1,4 @@
 import {
-  AddEdgeRequest,
-  AddNodeRequest,
   Canvas,
   CanvasBuilder,
   EventSubject,
@@ -11,37 +9,48 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const trigger = new EventSubject<ViewportBox>();
 
 const canvas: Canvas = new CanvasBuilder()
+  .setOptions({
+    edges: {
+      shape: {
+        type: "horizontal",
+        hasTargetArrow: true,
+      },
+    },
+  })
   .setUserTransformableViewport()
   .setVirtualScroll(trigger)
   .build();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const addNode1Request: AddNodeRequest = createInOutNode({
-  name: "Node 1",
-  x: 200,
-  y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
-});
+canvas.attach(canvasElement);
 
-const addNode2Request: AddNodeRequest = createInOutNode({
-  name: "Node 2",
-  x: 500,
-  y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
-});
+let cnt = 0;
 
-const addEdgeRequest: AddEdgeRequest = {
-  from: "node-1-out",
-  to: "node-2-in",
-};
+let prevPortId: unknown | null = null;
 
-canvas
-  .attach(canvasElement)
-  .addNode(addNode1Request)
-  .addNode(addNode2Request)
-  .addEdge(addEdgeRequest);
+for (let i = 0; i < 30; i++) {
+  for (let j = 0; j < 30; j++) {
+    const frontPortId = `node-${cnt}-in`;
+    const backPortId = `node-${cnt}-out`;
+
+    canvas.addNode(
+      createInOutNode({
+        name: `Node ${cnt}`,
+        x: j * 300,
+        y: i * 300,
+        frontPortId,
+        backPortId,
+      }),
+    );
+
+    if (prevPortId !== null) {
+      canvas.addEdge({ from: prevPortId, to: frontPortId });
+    }
+
+    prevPortId = backPortId;
+    cnt++;
+  }
+}
 
 trigger.emit({ x: 0, y: 0, width: 1000, height: 1000 });
