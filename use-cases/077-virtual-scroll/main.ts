@@ -29,8 +29,8 @@ let cnt = 0;
 
 let prevPortId: unknown | null = null;
 
-for (let i = 0; i < 30; i++) {
-  for (let j = 0; j < 30; j++) {
+for (let i = 0; i < 50; i++) {
+  for (let j = 0; j < 50; j++) {
     const frontPortId = `node-${cnt}-in`;
     const backPortId = `node-${cnt}-out`;
 
