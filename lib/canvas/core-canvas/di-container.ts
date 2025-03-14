@@ -36,10 +36,7 @@ export class DiContainer {
       this.viewportTransformer,
     );
 
-    this.htmlView = htmlViewFactory(
-      this.graphStore,
-      this.viewportTransformer,
-    );
+    this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
 
     this.graphStoreController = new GraphStoreController(
       this.graphStore,
