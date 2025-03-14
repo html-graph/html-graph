@@ -9,16 +9,10 @@ import {
   CoreCanvas,
   DiContainer,
 } from "@/canvas";
-import {
-  CoreHtmlView,
-  HtmlView,
-  ViewportBox,
-  ViewportHtmlView,
-} from "./html-view";
-import { GraphStore } from "./graph-store";
-import { ViewportTransformer } from "./viewport-transformer";
-import { HtmlViewFactory } from "./canvas/core-canvas";
+import { ViewportBox } from "./html-view";
 import { EventSubject } from "./event-subject";
+import { coreHtmlViewFactory } from "./core-html-view-factory";
+import { createViewportHtmlViewFactory } from "./create-viewport-html-view-factory";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -98,7 +92,11 @@ export class CanvasBuilder {
    * builds final canvas
    */
   public build(): Canvas {
-    const htmlViewFactory = this.createHtmlViewFactory();
+    const htmlViewFactory =
+      this.viewportRenderTrigger !== null
+        ? createViewportHtmlViewFactory(this.viewportRenderTrigger)
+        : coreHtmlViewFactory;
+
     const container = new DiContainer(this.coreOptions, htmlViewFactory);
 
     let canvas: Canvas = new CoreCanvas(container);
@@ -119,29 +117,5 @@ export class CanvasBuilder {
     }
 
     return canvas;
-  }
-
-  private createHtmlViewFactory(): HtmlViewFactory {
-    if (this.viewportRenderTrigger !== null) {
-      const trigger = this.viewportRenderTrigger;
-
-      return (
-        graphStore: GraphStore,
-        viewportTransformer: ViewportTransformer,
-      ): HtmlView => {
-        return new ViewportHtmlView(
-          new CoreHtmlView(graphStore, viewportTransformer),
-          graphStore,
-          trigger,
-        );
-      };
-    }
-
-    return (
-      graphStore: GraphStore,
-      viewportTransformer: ViewportTransformer,
-    ): HtmlView => {
-      return new CoreHtmlView(graphStore, viewportTransformer);
-    };
   }
 }
