@@ -43,18 +43,19 @@ export class ViewportHtmlView implements HtmlView {
 
     this.graphStore.getAllEdgeIds().forEach((edgeId) => {
       const isInViewport = this.isEdgeInViewport(edgeId);
-
       const wasInViewport = this.viewportEdges.has(edgeId);
 
       if (isInViewport && !wasInViewport) {
         const edge = this.graphStore.getEdge(edgeId)!;
         const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
         const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
-        edgesToAttach.add(edgeId);
+
         nodesToAttach.add(nodeFromId);
         nodesToAttach.add(nodeToId);
         nodesToDetach.delete(nodeFromId);
         nodesToDetach.delete(nodeToId);
+
+        edgesToAttach.add(edgeId);
       } else if (!isInViewport && wasInViewport) {
         edgesToDetach.add(edgeId);
       }
