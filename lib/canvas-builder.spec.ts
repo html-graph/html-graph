@@ -75,7 +75,7 @@ describe("CanvasBuilder", () => {
     expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
   });
 
-  it("should build canvas with set rendering box trigger", () => {
+  it("should build canvas with specified rendering trigger", () => {
     const builder = new CanvasBuilder();
     const trigger = new EventSubject<ViewportBox>();
 
