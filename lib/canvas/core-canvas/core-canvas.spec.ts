@@ -5,17 +5,10 @@ import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { MarkNodePortRequest } from "../mark-node-port-request";
-import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
-import { CoreHtmlView, HtmlView } from "@/html-view";
+import { coreHtmlViewFactory } from "./core-html-view-factory";
 
 const createCanvas = (): CoreCanvas => {
-  const htmlViewFactory = (
-    graphStore: GraphStore,
-    viewportTransformer: ViewportTransformer,
-  ): HtmlView => new CoreHtmlView(graphStore, viewportTransformer);
-
-  return new CoreCanvas(new DiContainer({}, htmlViewFactory));
+  return new CoreCanvas(new DiContainer({}, coreHtmlViewFactory));
 };
 
 const createElement = (params?: {

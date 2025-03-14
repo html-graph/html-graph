@@ -1,7 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView, HtmlView } from "@/html-view";
-import { HtmlViewFactory } from "./canvas/core-canvas";
+import { HtmlViewFactory } from "./html-view-factory";
 
 export const coreHtmlViewFactory: HtmlViewFactory = (
   graphStore: GraphStore,
