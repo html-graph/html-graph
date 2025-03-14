@@ -13,7 +13,7 @@ import {
   CoreHtmlView,
   HtmlView,
   ViewportBox,
-  VirtualScrollHtmlView,
+  ViewportHtmlView,
 } from "./html-view";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
@@ -33,16 +33,20 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private hasVirtualScroll = false;
+  private viewportRenderTrigger: EventSubject<ViewportBox> | null = null;
 
-  private virtualScrollTrigger = new EventSubject<ViewportBox>();
-
+  /**
+   * specifies options for fundamental aspects of visualization
+   */
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
+  /**
+   * enables nodes draggable bu user
+   */
   public setUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
     this.dragOptions = options;
@@ -58,6 +62,9 @@ export class CanvasBuilder {
     return this.setUserTransformableViewport(options);
   }
 
+  /**
+   * enables viewport transformable by user
+   */
   public setUserTransformableViewport(
     options?: TransformOptions,
   ): CanvasBuilder {
@@ -67,22 +74,29 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables automatic edges update on node resize
+   */
   public setResizeReactiveNodes(): CanvasBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;
   }
 
-  public setVirtualScroll(trigger?: EventSubject<ViewportBox>): CanvasBuilder {
-    this.hasVirtualScroll = true;
-
-    if (trigger !== undefined) {
-      this.virtualScrollTrigger = trigger;
-    }
+  /**
+   * sets emitter for rendering graph inside bounded area
+   */
+  public setViewportRenderTrigger(
+    trigger: EventSubject<ViewportBox>,
+  ): CanvasBuilder {
+    this.viewportRenderTrigger = trigger;
 
     return this;
   }
 
+  /**
+   * builds final canvas
+   */
   public build(): Canvas {
     const htmlViewFactory = this.createHtmlViewFactory();
     const container = new DiContainer(this.coreOptions, htmlViewFactory);
@@ -108,15 +122,17 @@ export class CanvasBuilder {
   }
 
   private createHtmlViewFactory(): HtmlViewFactory {
-    if (this.hasVirtualScroll) {
+    if (this.viewportRenderTrigger !== null) {
+      const trigger = this.viewportRenderTrigger;
+
       return (
         graphStore: GraphStore,
         viewportTransformer: ViewportTransformer,
       ): HtmlView => {
-        return new VirtualScrollHtmlView(
+        return new ViewportHtmlView(
           new CoreHtmlView(graphStore, viewportTransformer),
           graphStore,
-          this.virtualScrollTrigger,
+          trigger,
         );
       };
     }

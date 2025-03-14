@@ -5,7 +5,7 @@
   background: var(--color-node-background);
   border: 1px solid var(--color-node-border);
   box-shadow: 0 0 5px var(--color-node-border);
-  border-radius: 50%;
+  border-radius: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

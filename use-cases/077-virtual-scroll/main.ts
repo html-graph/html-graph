@@ -18,7 +18,7 @@ const canvas: Canvas = new CanvasBuilder()
     },
   })
   .setUserTransformableViewport()
-  .setVirtualScroll(trigger)
+  .setViewportRenderTrigger(trigger)
   .build();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

@@ -6,7 +6,7 @@ import { EventSubject } from "@/event-subject";
 /**
  * This entity is responsible for HTML modifications regarding for viewport
  */
-export class VirtualScrollHtmlView implements HtmlView {
+export class ViewportHtmlView implements HtmlView {
   private readonly viewportNodes = new Set<unknown>();
 
   private readonly viewportEdges = new Set<unknown>();
@@ -19,7 +19,7 @@ export class VirtualScrollHtmlView implements HtmlView {
 
   private yTo = Infinity;
 
-  private readonly updateViewport = (viewBox: ViewportBox): void => {
+  private readonly setViewport = (viewBox: ViewportBox): void => {
     this.xFrom = viewBox.x;
     this.xTo = viewBox.x + viewBox.width;
     this.yFrom = viewBox.y;
@@ -61,23 +61,19 @@ export class VirtualScrollHtmlView implements HtmlView {
     });
 
     edgesToDetach.forEach((edgeId) => {
-      this.viewportEdges.delete(edgeId);
-      this.htmlController.detachEdge(edgeId);
+      this.detachEdgeInternal(edgeId);
     });
 
     nodesToDetach.forEach((nodeId) => {
-      this.viewportNodes.delete(nodeId);
-      this.htmlController.detachNode(nodeId);
+      this.detachNodeInternal(nodeId);
     });
 
     nodesToAttach.forEach((nodeId) => {
-      this.viewportNodes.add(nodeId);
-      this.htmlController.attachNode(nodeId);
+      this.attachNodeInternal(nodeId);
     });
 
     edgesToAttach.forEach((edgeId) => {
-      this.viewportEdges.add(edgeId);
-      this.htmlController.attachEdge(edgeId);
+      this.attachEdgeInternal(edgeId);
     });
   };
 
@@ -86,7 +82,7 @@ export class VirtualScrollHtmlView implements HtmlView {
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<ViewportBox>,
   ) {
-    this.trigger.subscribe(this.updateViewport);
+    this.trigger.subscribe(this.setViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -99,45 +95,51 @@ export class VirtualScrollHtmlView implements HtmlView {
 
   public attachNode(nodeId: unknown): void {
     if (this.isNodeInViewport(nodeId)) {
-      this.viewportNodes.add(nodeId);
-      this.htmlController.attachNode(nodeId);
+      this.attachNodeInternal(nodeId);
     }
   }
 
   public detachNode(nodeId: unknown): void {
-    if (this.isNodeInViewport(nodeId)) {
-      this.viewportNodes.delete(nodeId);
-      this.htmlController.detachNode(nodeId);
+    if (this.viewportNodes.has(nodeId)) {
+      this.detachNodeInternal(nodeId);
     }
   }
 
   public attachEdge(edgeId: unknown): void {
     if (this.isEdgeInViewport(edgeId)) {
-      this.viewportEdges.add(edgeId);
-      this.htmlController.attachEdge(edgeId);
+      this.attachEdgeInternal(edgeId);
     }
   }
 
   public detachEdge(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
-      this.viewportEdges.delete(edgeId);
-      this.htmlController.detachEdge(edgeId);
+    if (this.viewportEdges.has(edgeId)) {
+      this.detachEdgeInternal(edgeId);
     }
   }
 
   public clear(): void {
     this.htmlController.clear();
+    this.viewportNodes.clear();
+    this.viewportEdges.clear();
   }
 
   public destroy(): void {
-    this.trigger.unsubscribe(this.updateViewport);
+    this.clear();
+    this.trigger.unsubscribe(this.setViewport);
 
     this.htmlController.destroy();
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    if (this.viewportNodes.has(nodeId)) {
-      this.htmlController.updateNodeCoordinates(nodeId);
+    const wasInViewport = this.viewportNodes.has(nodeId);
+    const isInViewport = this.isNodeInViewport(nodeId);
+
+    if (isInViewport && !wasInViewport) {
+      this.attachNodeInternal(nodeId);
+    } else if (wasInViewport && !isInViewport) {
+      this.detachNodeInternal(nodeId);
+    } else if (wasInViewport && isInViewport) {
+      this.updateNodeCoordinates(nodeId);
     }
   }
 
@@ -148,19 +150,26 @@ export class VirtualScrollHtmlView implements HtmlView {
   }
 
   public updateEdgeShape(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.viewportEdges.has(edgeId)) {
       this.htmlController.updateEdgeShape(edgeId);
     }
   }
 
   public renderEdge(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    const wasInViewport = this.viewportNodes.has(edgeId);
+    const isInViewport = this.isNodeInViewport(edgeId);
+
+    if (isInViewport && !wasInViewport) {
+      this.attachEdgeInternal(edgeId);
+    } else if (wasInViewport && !isInViewport) {
+      this.detachEdgeInternal(edgeId);
+    } else if (wasInViewport && isInViewport) {
       this.htmlController.renderEdge(edgeId);
     }
   }
 
   public updateEdgePriority(edgeId: unknown): void {
-    if (this.isEdgeInViewport(edgeId)) {
+    if (this.viewportEdges.has(edgeId)) {
       this.htmlController.updateEdgePriority(edgeId);
     }
   }
@@ -195,5 +204,25 @@ export class VirtualScrollHtmlView implements HtmlView {
       yFrom <= this.yTo &&
       yTo >= this.yFrom
     );
+  }
+
+  private attachNodeInternal(nodeId: unknown): void {
+    this.viewportNodes.add(nodeId);
+    this.htmlController.attachNode(nodeId);
+  }
+
+  private detachNodeInternal(nodeId: unknown): void {
+    this.htmlController.detachNode(nodeId);
+    this.viewportNodes.delete(nodeId);
+  }
+
+  private attachEdgeInternal(edgeId: unknown): void {
+    this.viewportEdges.add(edgeId);
+    this.htmlController.attachEdge(edgeId);
+  }
+
+  private detachEdgeInternal(edgeId: unknown): void {
+    this.htmlController.detachEdge(edgeId);
+    this.viewportEdges.delete(edgeId);
   }
 }
