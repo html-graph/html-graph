@@ -157,7 +157,7 @@ export class ViewportHtmlView implements HtmlView {
   }
 
   public renderEdge(edgeId: unknown): void {
-    const wasInViewport = this.viewportNodes.has(edgeId);
+    const wasInViewport = this.viewportEdges.has(edgeId);
     const isInViewport = this.isEdgeInViewport(edgeId);
 
     if (isInViewport && !wasInViewport) {

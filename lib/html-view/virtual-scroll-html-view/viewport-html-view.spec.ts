@@ -553,11 +553,13 @@ describe("ViewportHtmlView", () => {
   it("should attach edge when moved inside of the viewport", () => {
     const { trigger, coreView, store, viewportView } = create();
 
-    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
-
     configureEdgeGraph(store);
 
-    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    const node = store.getNode("node-2")!;
+    node.x = 12;
+    node.y = 12;
 
     const spy = jest.spyOn(coreView, "attachEdge");
 
@@ -571,11 +573,13 @@ describe("ViewportHtmlView", () => {
 
     configureEdgeGraph(store);
 
-    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 8, height: 8 });
+
+    const node = store.getNode("node-1")!;
+    node.x = 9;
+    node.y = 9;
 
     const spy = jest.spyOn(coreView, "detachEdge");
-
-    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     viewportView.renderEdge("edge-1");
 
@@ -584,8 +588,6 @@ describe("ViewportHtmlView", () => {
 
   it("should render edge when kept inside of the viewport", () => {
     const { trigger, coreView, store, viewportView } = create();
-
-    trigger.emit({ x: -1, y: -1, width: 12, height: 12 });
 
     configureEdgeGraph(store);
 
