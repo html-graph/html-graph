@@ -11,8 +11,10 @@ import {
 } from "@/canvas";
 import { ViewportBox } from "./html-view";
 import { EventSubject } from "./event-subject";
-import { coreHtmlViewFactory } from "./core-html-view-factory";
-import { createViewportHtmlViewFactory } from "./create-viewport-html-view-factory";
+import {
+  coreHtmlViewFactory,
+  createViewportHtmlViewFactory,
+} from "./canvas/core-canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
