@@ -79,7 +79,7 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder();
     const trigger = new EventSubject<RenderingBox>();
 
-    const canvas = builder.setBoxRenderTrigger(trigger).build();
+    const canvas = builder.setBoxRenderingTrigger(trigger).build();
 
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);

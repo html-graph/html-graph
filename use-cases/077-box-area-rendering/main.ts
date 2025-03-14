@@ -1,0 +1,118 @@
+import {
+  Canvas,
+  CanvasBuilder,
+  EventSubject,
+  RenderingBox,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
+
+const trigger = new EventSubject<RenderingBox>();
+
+const canvas: Canvas = new CanvasBuilder()
+  .setOptions({
+    edges: {
+      shape: {
+        type: "horizontal",
+        hasTargetArrow: true,
+      },
+    },
+  })
+  .setUserTransformableViewport({
+    events: {
+      onTransformChange: () => {
+        updateTransform();
+      },
+    },
+  })
+  .setBoxRenderingTrigger(trigger)
+  .build();
+
+const boundsElement = document.getElementById("bounds")! as HTMLElement;
+const boundsContainerElement = document.getElementById(
+  "bounds-container",
+)! as HTMLElement;
+
+const map = new Map([
+  ["x", 0],
+  ["y", 0],
+  ["width", 1000],
+  ["height", 1000],
+]);
+
+function updateRectangle(): void {
+  const x = map.get("x")!;
+  const y = map.get("y")!;
+  const width = map.get("width")!;
+  const height = map.get("height")!;
+
+  boundsElement.style.left = `${x}px`;
+  boundsElement.style.top = `${y}px`;
+  boundsElement.style.width = `${width}px`;
+  boundsElement.style.height = `${height}px`;
+
+  updateTransform();
+}
+
+function updateTransform(): void {
+  const { scale, x, y } = canvas.transformation.getContentMatrix();
+  boundsContainerElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
+}
+
+map.forEach((_value, id) => {
+  const el: HTMLInputElement = document.getElementById(id)! as HTMLInputElement;
+  const valueEl: HTMLElement = document.getElementById(`${id}-value`)!;
+
+  valueEl.innerText = el.value;
+
+  el.addEventListener("input", () => {
+    map.set(id, parseFloat(el.value));
+    valueEl.innerText = el.value;
+    updateRectangle();
+  });
+
+  updateRectangle();
+  boundsElement.style.visibility = "visible";
+});
+
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+
+canvas.attach(canvasElement);
+
+let cnt = 0;
+
+let prevPortId: unknown | null = null;
+
+for (let i = 0; i < 50; i++) {
+  for (let j = 0; j < 50; j++) {
+    const frontPortId = `node-${cnt}-in`;
+    const backPortId = `node-${cnt}-out`;
+
+    canvas.addNode(
+      createInOutNode({
+        name: `Node ${cnt}`,
+        x: j * 300,
+        y: i * 300,
+        frontPortId,
+        backPortId,
+      }),
+    );
+
+    if (prevPortId !== null) {
+      canvas.addEdge({ from: prevPortId, to: frontPortId });
+    }
+
+    prevPortId = backPortId;
+    cnt++;
+  }
+}
+
+const applyEl = document.getElementById("apply")!;
+
+applyEl.addEventListener("click", () => {
+  const x = map.get("x")!;
+  const y = map.get("y")!;
+  const width = map.get("width")!;
+  const height = map.get("height")!;
+
+  trigger.emit({ x, y, width, height });
+});

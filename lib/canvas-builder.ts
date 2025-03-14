@@ -29,7 +29,7 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private viewportRenderTrigger: EventSubject<RenderingBox> | null = null;
+  private boxRenderingTrigger: EventSubject<RenderingBox> | null = null;
 
   /**
    * specifies options for fundamental aspects of visualization
@@ -82,10 +82,10 @@ export class CanvasBuilder {
   /**
    * sets emitter for rendering graph inside bounded area
    */
-  public setBoxRenderTrigger(
+  public setBoxRenderingTrigger(
     trigger: EventSubject<RenderingBox>,
   ): CanvasBuilder {
-    this.viewportRenderTrigger = trigger;
+    this.boxRenderingTrigger = trigger;
 
     return this;
   }
@@ -95,8 +95,8 @@ export class CanvasBuilder {
    */
   public build(): Canvas {
     const htmlViewFactory =
-      this.viewportRenderTrigger !== null
-        ? createBoxHtmlViewFactory(this.viewportRenderTrigger)
+      this.boxRenderingTrigger !== null
+        ? createBoxHtmlViewFactory(this.boxRenderingTrigger)
         : coreHtmlViewFactory;
 
     const container = new DiContainer(this.coreOptions, htmlViewFactory);
