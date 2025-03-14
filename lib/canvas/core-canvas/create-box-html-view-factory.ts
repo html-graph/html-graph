@@ -1,16 +1,16 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
-import { CoreHtmlView, ViewportBox, ViewportHtmlView } from "@/html-view";
+import { BoxHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
-import { HtmlViewFactory } from "./canvas/core-canvas";
+import { HtmlViewFactory } from "./html-view-factory";
 
-export const createViewportHtmlViewFactory: (
-  trigger: EventSubject<ViewportBox>,
+export const createBoxHtmlViewFactory: (
+  trigger: EventSubject<RenderingBox>,
 ) => HtmlViewFactory = (
-  trigger: EventSubject<ViewportBox>,
+  trigger: EventSubject<RenderingBox>,
 ): HtmlViewFactory => {
   return (graphStore: GraphStore, viewportTransformer: ViewportTransformer) =>
-    new ViewportHtmlView(
+    new BoxHtmlView(
       new CoreHtmlView(graphStore, viewportTransformer),
       graphStore,
       trigger,

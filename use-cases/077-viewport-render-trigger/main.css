@@ -1,3 +1,9 @@
+.sliders {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .node {
   position: relative;
   width: 100px;

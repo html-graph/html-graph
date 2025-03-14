@@ -1,12 +1,12 @@
 import { GraphStore } from "@/graph-store";
 import { HtmlView } from "../html-view";
-import { ViewportBox } from "./viewport-box";
+import { RenderingBox } from "./rendering-box";
 import { EventSubject } from "@/event-subject";
 
 /**
  * This entity is responsible for HTML modifications regarding for viewport
  */
-export class ViewportHtmlView implements HtmlView {
+export class BoxHtmlView implements HtmlView {
   private readonly viewportNodes = new Set<unknown>();
 
   private readonly viewportEdges = new Set<unknown>();
@@ -19,7 +19,7 @@ export class ViewportHtmlView implements HtmlView {
 
   private yTo = Infinity;
 
-  private readonly setViewport = (viewBox: ViewportBox): void => {
+  private readonly setViewport = (viewBox: RenderingBox): void => {
     this.xFrom = viewBox.x;
     this.xTo = viewBox.x + viewBox.width;
     this.yFrom = viewBox.y;
@@ -81,7 +81,7 @@ export class ViewportHtmlView implements HtmlView {
   public constructor(
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
-    private readonly trigger: EventSubject<ViewportBox>,
+    private readonly trigger: EventSubject<RenderingBox>,
   ) {
     this.trigger.subscribe(this.setViewport);
   }

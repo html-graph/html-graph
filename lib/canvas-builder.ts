@@ -9,11 +9,11 @@ import {
   CoreCanvas,
   DiContainer,
 } from "@/canvas";
-import { ViewportBox } from "./html-view";
+import { RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
 import {
   coreHtmlViewFactory,
-  createViewportHtmlViewFactory,
+  createBoxHtmlViewFactory,
 } from "./canvas/core-canvas";
 
 export class CanvasBuilder {
@@ -29,7 +29,7 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
-  private viewportRenderTrigger: EventSubject<ViewportBox> | null = null;
+  private viewportRenderTrigger: EventSubject<RenderingBox> | null = null;
 
   /**
    * specifies options for fundamental aspects of visualization
@@ -82,8 +82,8 @@ export class CanvasBuilder {
   /**
    * sets emitter for rendering graph inside bounded area
    */
-  public setViewportRenderTrigger(
-    trigger: EventSubject<ViewportBox>,
+  public setBoxRenderTrigger(
+    trigger: EventSubject<RenderingBox>,
   ): CanvasBuilder {
     this.viewportRenderTrigger = trigger;
 
@@ -96,7 +96,7 @@ export class CanvasBuilder {
   public build(): Canvas {
     const htmlViewFactory =
       this.viewportRenderTrigger !== null
-        ? createViewportHtmlViewFactory(this.viewportRenderTrigger)
+        ? createBoxHtmlViewFactory(this.viewportRenderTrigger)
         : coreHtmlViewFactory;
 
     const container = new DiContainer(this.coreOptions, htmlViewFactory);

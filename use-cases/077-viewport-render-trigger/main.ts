@@ -2,11 +2,11 @@ import {
   Canvas,
   CanvasBuilder,
   EventSubject,
-  ViewportBox,
+  RenderingBox,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const trigger = new EventSubject<ViewportBox>();
+const trigger = new EventSubject<RenderingBox>();
 
 const canvas: Canvas = new CanvasBuilder()
   .setOptions({
@@ -18,7 +18,7 @@ const canvas: Canvas = new CanvasBuilder()
     },
   })
   .setUserTransformableViewport()
-  .setViewportRenderTrigger(trigger)
+  .setBoxRenderTrigger(trigger)
   .build();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

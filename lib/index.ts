@@ -96,4 +96,4 @@ export { HtmlGraphError } from "./error";
 
 export { EventSubject } from "./event-subject";
 
-export type { ViewportBox } from "./html-view";
+export type { RenderingBox } from "./html-view";

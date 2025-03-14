@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>HTMLGraph | Viewport render trigger</title>
+    <link rel="stylesheet" href="../shared/styles/normalize.css" />
+    <link rel="stylesheet" href="../shared/styles/common.css" />
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <div class="overlay">
+      This use case specifies how to enable manual rendering of graph limited by
+      particular area.
+      <br />
+      <br />
+      <div class="sliders">
+        <div>
+          <button>Trigger viewport box update</button>
+        </div>
+        <div>
+          <label> X: <span id="x-value"></span> </label>
+          <br />
+          <input type="range" min="-500" max="500" value="0" id="x" />
+        </div>
+
+        <div>
+          <label> Y: <span id="y-value"></span></label>
+          <br />
+          <input type="range" min="-500" max="500" value="0" id="y" />
+        </div>
+
+        <div>
+          <label> Width: <span id="width-value"></span> </label>
+          <br />
+          <input
+            type="range"
+            min="0.5"
+            max="5"
+            value="1"
+            id="width"
+            step="0.1"
+          />
+        </div>
+
+        <div>
+          <label> Height: <span id="width-value"></span> </label>
+          <br />
+          <input
+            type="range"
+            min="0.5"
+            max="5"
+            value="1"
+            id="width"
+            step="0.1"
+          />
+        </div>
+      </div>
+    </div>
+    <div id="canvas" class="canvas"></div>
+    <script type="module" src="main.ts"></script>
+  </body>
+</html>

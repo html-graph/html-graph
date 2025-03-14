@@ -6,7 +6,7 @@ import {
 } from "@/canvas";
 import { CanvasBuilder } from "./canvas-builder";
 import { EventSubject } from "./event-subject";
-import { ViewportBox } from "./html-view";
+import { RenderingBox } from "./html-view";
 
 describe("CanvasBuilder", () => {
   it("should build core canvas", () => {
@@ -77,9 +77,9 @@ describe("CanvasBuilder", () => {
 
   it("should build canvas with specified rendering trigger", () => {
     const builder = new CanvasBuilder();
-    const trigger = new EventSubject<ViewportBox>();
+    const trigger = new EventSubject<RenderingBox>();
 
-    const canvas = builder.setViewportRenderTrigger(trigger).build();
+    const canvas = builder.setBoxRenderTrigger(trigger).build();
 
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
