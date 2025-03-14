@@ -17,13 +17,13 @@ export class DiContainer {
 
   public readonly graphStore: GraphStore;
 
-  public readonly htmlController: HtmlView;
+  public readonly htmlView: HtmlView;
 
   public readonly graphStoreController: GraphStoreController;
 
   public constructor(
     coreOptions: CoreOptions,
-    htmlControllerFactory: (
+    htmlViewFactory: (
       graphStore: GraphStore,
       viewportTransformer: ViewportTransformer,
     ) => HtmlView,
@@ -36,7 +36,7 @@ export class DiContainer {
       this.viewportTransformer,
     );
 
-    this.htmlController = htmlControllerFactory(
+    this.htmlView = htmlViewFactory(
       this.graphStore,
       this.viewportTransformer,
     );

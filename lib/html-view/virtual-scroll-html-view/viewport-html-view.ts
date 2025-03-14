@@ -79,7 +79,7 @@ export class ViewportHtmlView implements HtmlView {
   };
 
   public constructor(
-    private readonly htmlController: HtmlView,
+    private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<ViewportBox>,
   ) {
@@ -87,11 +87,11 @@ export class ViewportHtmlView implements HtmlView {
   }
 
   public attach(canvasWrapper: HTMLElement): void {
-    this.htmlController.attach(canvasWrapper);
+    this.htmlView.attach(canvasWrapper);
   }
 
   public detach(): void {
-    this.htmlController.detach();
+    this.htmlView.detach();
   }
 
   public attachNode(nodeId: unknown): void {
@@ -119,7 +119,7 @@ export class ViewportHtmlView implements HtmlView {
   }
 
   public clear(): void {
-    this.htmlController.clear();
+    this.htmlView.clear();
     this.viewportNodes.clear();
     this.viewportEdges.clear();
   }
@@ -128,7 +128,7 @@ export class ViewportHtmlView implements HtmlView {
     this.clear();
     this.trigger.unsubscribe(this.setViewport);
 
-    this.htmlController.destroy();
+    this.htmlView.destroy();
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
@@ -140,38 +140,38 @@ export class ViewportHtmlView implements HtmlView {
     } else if (wasInViewport && !isInViewport) {
       this.detachNodeInternal(nodeId);
     } else if (wasInViewport && isInViewport) {
-      this.updateNodeCoordinates(nodeId);
+      this.htmlView.updateNodeCoordinates(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: unknown): void {
     if (this.viewportNodes.has(nodeId)) {
-      this.htmlController.updateNodePriority(nodeId);
+      this.htmlView.updateNodePriority(nodeId);
     }
   }
 
   public updateEdgeShape(edgeId: unknown): void {
     if (this.viewportEdges.has(edgeId)) {
-      this.htmlController.updateEdgeShape(edgeId);
+      this.htmlView.updateEdgeShape(edgeId);
     }
   }
 
   public renderEdge(edgeId: unknown): void {
     const wasInViewport = this.viewportNodes.has(edgeId);
-    const isInViewport = this.isNodeInViewport(edgeId);
+    const isInViewport = this.isEdgeInViewport(edgeId);
 
     if (isInViewport && !wasInViewport) {
       this.attachEdgeInternal(edgeId);
     } else if (wasInViewport && !isInViewport) {
       this.detachEdgeInternal(edgeId);
     } else if (wasInViewport && isInViewport) {
-      this.htmlController.renderEdge(edgeId);
+      this.htmlView.renderEdge(edgeId);
     }
   }
 
   public updateEdgePriority(edgeId: unknown): void {
     if (this.viewportEdges.has(edgeId)) {
-      this.htmlController.updateEdgePriority(edgeId);
+      this.htmlView.updateEdgePriority(edgeId);
     }
   }
 
@@ -209,21 +209,21 @@ export class ViewportHtmlView implements HtmlView {
 
   private attachNodeInternal(nodeId: unknown): void {
     this.viewportNodes.add(nodeId);
-    this.htmlController.attachNode(nodeId);
+    this.htmlView.attachNode(nodeId);
   }
 
   private detachNodeInternal(nodeId: unknown): void {
-    this.htmlController.detachNode(nodeId);
+    this.htmlView.detachNode(nodeId);
     this.viewportNodes.delete(nodeId);
   }
 
   private attachEdgeInternal(edgeId: unknown): void {
     this.viewportEdges.add(edgeId);
-    this.htmlController.attachEdge(edgeId);
+    this.htmlView.attachEdge(edgeId);
   }
 
   private detachEdgeInternal(edgeId: unknown): void {
-    this.htmlController.detachEdge(edgeId);
+    this.htmlView.detachEdge(edgeId);
     this.viewportEdges.delete(edgeId);
   }
 }

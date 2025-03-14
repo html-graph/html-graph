@@ -10,12 +10,12 @@ import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView, HtmlView } from "@/html-view";
 
 const createCanvas = (): CoreCanvas => {
-  const htmlControllerFactory = (
+  const htmlViewFactory = (
     graphStore: GraphStore,
     viewportTransformer: ViewportTransformer,
   ): HtmlView => new CoreHtmlView(graphStore, viewportTransformer);
 
-  return new CoreCanvas(new DiContainer({}, htmlControllerFactory));
+  return new CoreCanvas(new DiContainer({}, htmlViewFactory));
 };
 
 const createElement = (params?: {

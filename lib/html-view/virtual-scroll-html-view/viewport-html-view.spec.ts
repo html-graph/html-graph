@@ -396,4 +396,233 @@ describe("ViewportHtmlView", () => {
 
     expect(spy).not.toHaveBeenCalled();
   });
+
+  it("should update node coordinates when kept inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    store.addNode({
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    trigger.emit({ x: 0, y: 0, width: 2, height: 2 });
+
+    const node = store.getNode("node-1")!;
+    node.x = 2;
+    node.y = 2;
+
+    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
+
+    viewportView.updateNodeCoordinates("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should detach node when updating coordinates when gone outside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    store.addNode({
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    trigger.emit({ x: 0, y: 0, width: 2, height: 2 });
+
+    const node = store.getNode("node-1")!;
+    node.x = 3;
+    node.y = 3;
+
+    const spy = jest.spyOn(coreView, "detachNode");
+
+    viewportView.updateNodeCoordinates("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should attach node when updating coordinates when goes inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    store.addNode({
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      x: 3,
+      y: 3,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    trigger.emit({ x: 0, y: 0, width: 2, height: 2 });
+
+    const node = store.getNode("node-1")!;
+    node.x = 0;
+    node.y = 0;
+
+    const spy = jest.spyOn(coreView, "attachNode");
+
+    viewportView.updateNodeCoordinates("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should update node priority when inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    store.addNode({
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    trigger.emit({ x: 0, y: 0, width: 2, height: 2 });
+
+    const spy = jest.spyOn(coreView, "updateNodePriority");
+
+    viewportView.updateNodePriority("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should not update node priority when outside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    store.addNode({
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      x: 3,
+      y: 3,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    trigger.emit({ x: 0, y: 0, width: 2, height: 2 });
+
+    const spy = jest.spyOn(coreView, "updateNodePriority");
+
+    viewportView.updateNodePriority("node-1");
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("should update edge shape when inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const edge = store.getEdge("edge-1")!;
+
+    edge.shape = new EdgeShapeMock();
+
+    const spy = jest.spyOn(coreView, "updateEdgeShape");
+
+    viewportView.updateEdgeShape("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should not update edge shape when outside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    const edge = store.getEdge("edge-1")!;
+
+    edge.shape = new EdgeShapeMock();
+
+    const spy = jest.spyOn(coreView, "updateEdgeShape");
+
+    viewportView.updateEdgeShape("edge-1");
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it("should attach edge when moved inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const spy = jest.spyOn(coreView, "attachEdge");
+
+    viewportView.renderEdge("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should detach edge when moved outside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const spy = jest.spyOn(coreView, "detachEdge");
+
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    viewportView.renderEdge("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should render edge when kept inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    trigger.emit({ x: -1, y: -1, width: 12, height: 12 });
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const spy = jest.spyOn(coreView, "renderEdge");
+
+    viewportView.renderEdge("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should update edge priority when inside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const spy = jest.spyOn(coreView, "updateEdgePriority");
+
+    viewportView.updateEdgePriority("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should not update edge priority when outside of the viewport", () => {
+    const { trigger, coreView, store, viewportView } = create();
+
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    const spy = jest.spyOn(coreView, "updateEdgePriority");
+
+    viewportView.updateEdgePriority("edge-1");
+
+    expect(spy).not.toHaveBeenCalledWith("edge-1");
+  });
 });

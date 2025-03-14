@@ -71,31 +71,31 @@ const addEdgeRequest12: AddEdgeRequest = {
 
 describe("CoreHtmlView", () => {
   it("should attach host to wrapper element", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     expect(div.children.length).toBe(1);
   });
 
   it("should detach host to wrapper element", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
     const div = document.createElement("div");
-    htmlController.attach(div);
-    htmlController.detach();
+    htmlView.attach(div);
+    htmlView.detach();
 
     expect(div.children.length).toBe(0);
   });
 
   it("should detach before attaching", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
-    const spy = jest.spyOn(htmlController, "detach");
+    const spy = jest.spyOn(htmlView, "detach");
 
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     expect(spy).toHaveBeenCalled();
   });
@@ -103,7 +103,7 @@ describe("CoreHtmlView", () => {
   it("should apply transform to container", () => {
     const transformer = new ViewportTransformer();
 
-    const htmlController = createHtmlController({ transformer });
+    const htmlView = createHtmlController({ transformer });
     const div = document.createElement("div");
 
     transformer.patchContentMatrix({
@@ -112,7 +112,7 @@ describe("CoreHtmlView", () => {
       y: 4,
     });
 
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     const container = div.children[0].children[0] as HTMLDivElement;
 
@@ -121,12 +121,12 @@ describe("CoreHtmlView", () => {
 
   it("should attach node", () => {
     const store = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlController.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
 
     const container = div.children[0].children[0];
 
@@ -135,14 +135,14 @@ describe("CoreHtmlView", () => {
 
   it("should detach node", () => {
     const store = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
 
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.detachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.detachNode(addNodeRequest1.nodeId);
 
     const container = div.children[0].children[0];
 
@@ -151,9 +151,9 @@ describe("CoreHtmlView", () => {
 
   it("should attach edge", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -161,9 +161,9 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
 
     const container = div.children[0].children[0];
 
@@ -172,9 +172,9 @@ describe("CoreHtmlView", () => {
 
   it("should detach edge", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -182,10 +182,10 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
-    htmlController.detachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.detachEdge(addEdgeRequest12.edgeId);
 
     const container = div.children[0].children[0];
 
@@ -194,9 +194,9 @@ describe("CoreHtmlView", () => {
 
   it("should clear nodes and edges", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -204,10 +204,10 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
-    htmlController.clear();
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.clear();
 
     const container = div.children[0].children[0];
 
@@ -215,49 +215,49 @@ describe("CoreHtmlView", () => {
   });
 
   it("should remove subelements on destroy", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
     const div = document.createElement("div");
-    htmlController.attach(div);
-    htmlController.destroy();
+    htmlView.attach(div);
+    htmlView.destroy();
 
     expect(div.children.length).toBe(0);
   });
 
   it("should clear on destroy", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
-    const spy = jest.spyOn(htmlController, "clear");
+    const spy = jest.spyOn(htmlView, "clear");
 
-    htmlController.destroy();
+    htmlView.destroy();
 
     expect(spy).toHaveBeenCalled();
   });
 
   it("should detach on destroy", () => {
-    const htmlController = createHtmlController();
+    const htmlView = createHtmlController();
 
-    const spy = jest.spyOn(htmlController, "detach");
+    const spy = jest.spyOn(htmlView, "detach");
 
-    htmlController.destroy();
+    htmlView.destroy();
 
     expect(spy).toHaveBeenCalled();
   });
 
   it("should update node coordinates", () => {
     const store = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlController.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
 
     const node = store.getNode(addNodeRequest1.nodeId)!;
     node.x = 100;
     node.y = 100;
 
-    htmlController.updateNodeCoordinates(addNodeRequest1.nodeId);
+    htmlView.updateNodeCoordinates(addNodeRequest1.nodeId);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
@@ -267,28 +267,28 @@ describe("CoreHtmlView", () => {
 
   it("should update node priority", () => {
     const store = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlController.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
     const node = store.getNode(addNodeRequest1.nodeId)!;
     node.priority = 10;
-    htmlController.updateNodePriority(addNodeRequest1.nodeId);
+    htmlView.updateNodePriority(addNodeRequest1.nodeId);
 
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
   it("should update edge shape", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -296,16 +296,16 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
 
     const edge = store.getEdge(addEdgeRequest12.edgeId)!;
 
     const newShape = new EdgeShapeMock();
     edge.shape = newShape;
 
-    htmlController.updateEdgeShape(addEdgeRequest12.edgeId);
+    htmlView.updateEdgeShape(addEdgeRequest12.edgeId);
 
     const container = div.children[0].children[0];
 
@@ -314,9 +314,9 @@ describe("CoreHtmlView", () => {
 
   it("should update edge coordinates", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -324,13 +324,13 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
 
     const spy = jest.spyOn(addEdgeRequest12.shape, "render");
 
-    htmlController.renderEdge(addEdgeRequest12.edgeId);
+    htmlView.renderEdge(addEdgeRequest12.edgeId);
 
     const expected: EdgeRenderParams = {
       from: {
@@ -358,9 +358,9 @@ describe("CoreHtmlView", () => {
 
   it("should update edge priority", () => {
     const store: GraphStore = new GraphStore();
-    const htmlController = createHtmlController({ store });
+    const htmlView = createHtmlController({ store });
     const div = document.createElement("div");
-    htmlController.attach(div);
+    htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -368,13 +368,13 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlController.attachNode(addNodeRequest1.nodeId);
-    htmlController.attachNode(addNodeRequest2.nodeId);
-    htmlController.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest2.nodeId);
+    htmlView.attachEdge(addEdgeRequest12.edgeId);
 
     const edge = store.getEdge(addEdgeRequest12.edgeId)!;
     edge.priority = 10;
-    htmlController.updateEdgePriority(addEdgeRequest12.edgeId);
+    htmlView.updateEdgePriority(addEdgeRequest12.edgeId);
 
     const container = div.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
