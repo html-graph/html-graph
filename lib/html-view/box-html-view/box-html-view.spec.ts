@@ -418,6 +418,36 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
+  it("should not detach node when it has edges inside of the viewport", () => {
+    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    configureEdgeGraph(store);
+    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const node = store.getNode(addNodeRequest.nodeId)!;
+    node.x = 11;
+    node.y = 11;
+
+    const spy = jest.spyOn(coreView, "detachNode");
+    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
+
+    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
+  });
+
+  it("should update node coordinates when it has edges inside of the viewport", () => {
+    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    configureEdgeGraph(store);
+    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+
+    const node = store.getNode(addNodeRequest.nodeId)!;
+    node.x = 11;
+    node.y = 11;
+
+    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
+    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
+
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+  });
+
   it("should not detach node when kept outside of the viewport", () => {
     const { updateEntitiesTrigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);

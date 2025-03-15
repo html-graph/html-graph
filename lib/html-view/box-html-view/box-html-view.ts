@@ -160,7 +160,16 @@ export class BoxHtmlView implements HtmlView {
     if (isInViewport && wasInViewport) {
       this.htmlView.updateNodeCoordinates(nodeId);
     } else if (!isInViewport && wasInViewport) {
-      this.handleDetachNode(nodeId);
+      const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+      const hasViewportEdges = edgeIds.some((edgeId) =>
+        this.renderingBox.hasEdge(edgeId),
+      );
+
+      if (!hasViewportEdges) {
+        this.handleDetachNode(nodeId);
+      } else {
+        this.htmlView.updateNodeCoordinates(nodeId);
+      }
     } else if (isInViewport && !wasInViewport) {
       this.handleAttachNode(nodeId);
     }
