@@ -5,17 +5,17 @@ import { EventSubject } from "@/event-subject";
 import { RenderingBoxState } from "./rendering-box-state";
 
 /**
- * This entity is responsible for HTML modifications regarding for limited box
+ * This entity is responsible for HTML rendering optimization regarding for limited box
  */
 export class BoxHtmlView implements HtmlView {
   private readonly attachedNodes = new Set<unknown>();
 
   private readonly attachedEdges = new Set<unknown>();
 
-  private readonly renderingBoxState: RenderingBoxState;
+  private readonly renderingBox: RenderingBoxState;
 
   private readonly setRenderingBox = (viewBox: RenderingBox): void => {
-    this.renderingBoxState.setRenderingBox(viewBox);
+    this.renderingBox.setRenderingBox(viewBox);
   };
 
   public constructor(
@@ -23,7 +23,7 @@ export class BoxHtmlView implements HtmlView {
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<RenderingBox>,
   ) {
-    this.renderingBoxState = new RenderingBoxState(this.graphStore);
+    this.renderingBox = new RenderingBoxState(this.graphStore);
     this.trigger.subscribe(this.setRenderingBox);
   }
 
@@ -36,7 +36,7 @@ export class BoxHtmlView implements HtmlView {
   }
 
   public attachNode(nodeId: unknown): void {
-    if (!this.renderingBoxState.hasNode(nodeId)) {
+    if (!this.renderingBox.hasNode(nodeId)) {
       return;
     }
 
@@ -54,7 +54,7 @@ export class BoxHtmlView implements HtmlView {
   }
 
   public attachEdge(edgeId: unknown): void {
-    if (!this.renderingBoxState.hasEdge(edgeId)) {
+    if (!this.renderingBox.hasEdge(edgeId)) {
       return;
     }
 
@@ -86,42 +86,95 @@ export class BoxHtmlView implements HtmlView {
     const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
     const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
 
-    if (!this.renderingBoxState.hasNode(nodeFromId)) {
+    if (!this.renderingBox.hasNode(nodeFromId)) {
       this.handleDetachNode(nodeFromId);
     }
 
-    if (!this.renderingBoxState.hasNode(nodeToId)) {
+    if (!this.renderingBox.hasNode(nodeToId)) {
       this.handleDetachNode(nodeToId);
     }
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    const isInViewport = this.renderingBoxState.hasNode(nodeId);
+    const isInViewport = this.renderingBox.hasNode(nodeId);
+    const wasInViewport = this.attachedNodes.has(nodeId);
 
-    if (!isInViewport) {
+    if (isInViewport && wasInViewport) {
+      this.htmlView.updateNodeCoordinates(nodeId);
+    } else if (!isInViewport && wasInViewport) {
       this.handleDetachNode(nodeId);
-    } else {
-      const wasInViewport = this.attachedNodes.has(nodeId);
-
-      if (wasInViewport) {
-        this.htmlView.updateNodeCoordinates(nodeId);
-      } else {
-        this.handleAttachNode(nodeId);
-      }
+    } else if (isInViewport && !wasInViewport) {
+      this.handleAttachNode(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: unknown): void {
-    if (this.renderingBoxState.hasNode(nodeId)) {
+    const isInViewport = this.renderingBox.hasNode(nodeId);
+    const wasInViewport = this.attachedNodes.has(nodeId);
+
+    if (!isInViewport && !wasInViewport) {
+      return;
+    }
+
+    if (isInViewport && wasInViewport) {
       this.htmlView.updateNodePriority(nodeId);
+    } else if (!isInViewport && wasInViewport) {
+      this.handleDetachNode(nodeId);
+    } else {
+      this.handleAttachNode(nodeId);
     }
   }
 
-  public updateEdgeShape(): void {}
+  public updateEdgeShape(edgeId: unknown): void {
+    const isInViewport = this.renderingBox.hasEdge(edgeId);
+    const wasInViewport = this.attachedEdges.has(edgeId);
 
-  public renderEdge(): void {}
+    if (!isInViewport && !wasInViewport) {
+      return;
+    }
 
-  public updateEdgePriority(): void {}
+    if (isInViewport && wasInViewport) {
+      this.htmlView.updateEdgeShape(edgeId);
+    } else if (!isInViewport && wasInViewport) {
+      this.htmlView.detachEdge(edgeId);
+    } else {
+      this.htmlView.attachEdge(edgeId);
+    }
+  }
+
+  public renderEdge(edgeId: unknown): void {
+    const isInViewport = this.renderingBox.hasEdge(edgeId);
+    const wasInViewport = this.attachedEdges.has(edgeId);
+
+    if (!isInViewport && !wasInViewport) {
+      return;
+    }
+
+    if (isInViewport && wasInViewport) {
+      this.htmlView.renderEdge(edgeId);
+    } else if (!isInViewport && wasInViewport) {
+      this.htmlView.detachEdge(edgeId);
+    } else {
+      this.htmlView.attachEdge(edgeId);
+    }
+  }
+
+  public updateEdgePriority(edgeId: unknown): void {
+    const isInViewport = this.renderingBox.hasEdge(edgeId);
+    const wasInViewport = this.attachedEdges.has(edgeId);
+
+    if (!isInViewport && !wasInViewport) {
+      return;
+    }
+
+    if (isInViewport && wasInViewport) {
+      this.htmlView.updateEdgePriority(edgeId);
+    } else if (!isInViewport && wasInViewport) {
+      this.htmlView.detachEdge(edgeId);
+    } else {
+      this.htmlView.attachEdge(edgeId);
+    }
+  }
 
   public clear(): void {
     this.htmlView.clear();
