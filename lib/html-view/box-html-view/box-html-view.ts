@@ -5,7 +5,7 @@ import { EventSubject } from "@/event-subject";
 import { RenderingBoxState } from "./rendering-box-state";
 
 /**
- * This entity is responsible for HTML rendering optimization regarding for limited box
+ * This entity is responsible for HTML rendering optimization regarding for limited rendering box
  */
 export class BoxHtmlView implements HtmlView {
   private readonly attachedNodes = new Set<unknown>();
@@ -18,13 +18,77 @@ export class BoxHtmlView implements HtmlView {
     this.renderingBox.setRenderingBox(viewBox);
   };
 
+  private readonly updateEntities = (viewBox: RenderingBox): void => {
+    this.renderingBox.setRenderingBox(viewBox);
+
+    const nodesToAttach = new Set<unknown>();
+    const nodesToDetach = new Set<unknown>();
+    const edgesToAttach = new Set<unknown>();
+    const edgesToDetach = new Set<unknown>();
+
+    this.graphStore.getAllNodeIds().forEach((nodeId) => {
+      const isInViewport = this.renderingBox.hasNode(nodeId);
+      const wasInViewport = this.attachedNodes.has(nodeId);
+
+      if (isInViewport && !wasInViewport) {
+        nodesToAttach.add(nodeId);
+      } else if (!isInViewport && wasInViewport) {
+        nodesToDetach.add(nodeId);
+      }
+    });
+
+    this.graphStore.getAllEdgeIds().forEach((edgeId) => {
+      const isInViewport = this.renderingBox.hasEdge(edgeId);
+      const wasInViewport = this.attachedEdges.has(edgeId);
+      const edge = this.graphStore.getEdge(edgeId)!;
+      const fromNodeId = this.graphStore.getPortNodeId(edge.from);
+      const toNodeId = this.graphStore.getPortNodeId(edge.to);
+
+      if (isInViewport) {
+        if (!this.renderingBox.hasNode(fromNodeId)) {
+          nodesToAttach.add(fromNodeId);
+          nodesToDetach.delete(fromNodeId);
+        }
+
+        if (!this.renderingBox.hasNode(toNodeId)) {
+          nodesToAttach.add(toNodeId);
+          nodesToDetach.delete(toNodeId);
+        }
+      }
+
+      if (isInViewport && !wasInViewport) {
+        edgesToAttach.add(edgeId);
+      } else if (!isInViewport && wasInViewport) {
+        edgesToDetach.add(edgeId);
+      }
+    });
+
+    edgesToDetach.forEach((edgeId) => {
+      this.handleDetachEdge(edgeId);
+    });
+
+    nodesToDetach.forEach((nodeId) => {
+      this.handleDetachNode(nodeId);
+    });
+
+    nodesToAttach.forEach((nodeId) => {
+      this.handleAttachNode(nodeId);
+    });
+
+    edgesToAttach.forEach((edgeId) => {
+      this.handleAttachEdge(edgeId);
+    });
+  };
+
   public constructor(
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
-    private readonly trigger: EventSubject<RenderingBox>,
+    private readonly setRenderingBoxTrigger: EventSubject<RenderingBox>,
+    private readonly updateEntitiesTrigger: EventSubject<RenderingBox>,
   ) {
     this.renderingBox = new RenderingBoxState(this.graphStore);
-    this.trigger.subscribe(this.setRenderingBox);
+    this.setRenderingBoxTrigger.subscribe(this.setRenderingBox);
+    this.updateEntitiesTrigger.subscribe(this.updateEntities);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -185,7 +249,8 @@ export class BoxHtmlView implements HtmlView {
   public destroy(): void {
     this.clear();
     this.htmlView.destroy();
-    this.trigger.unsubscribe(this.setRenderingBox);
+    this.setRenderingBoxTrigger.unsubscribe(this.setRenderingBox);
+    this.updateEntitiesTrigger.unsubscribe(this.updateEntities);
   }
 
   private handleAttachNode(nodeId: unknown): void {
