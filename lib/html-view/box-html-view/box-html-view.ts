@@ -14,7 +14,7 @@ export class BoxHtmlView implements HtmlView {
 
   private readonly renderingBoxState: RenderingBoxState;
 
-  private readonly setViewport = (viewBox: RenderingBox): void => {
+  private readonly setRenderingBox = (viewBox: RenderingBox): void => {
     this.renderingBoxState.setRenderingBox(viewBox);
   };
 
@@ -24,7 +24,7 @@ export class BoxHtmlView implements HtmlView {
     private readonly trigger: EventSubject<RenderingBox>,
   ) {
     this.renderingBoxState = new RenderingBoxState(this.graphStore);
-    this.trigger.subscribe(this.setViewport);
+    this.trigger.subscribe(this.setRenderingBox);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -36,17 +36,21 @@ export class BoxHtmlView implements HtmlView {
   }
 
   public attachNode(nodeId: unknown): void {
-    if (this.renderingBoxState.hasNode(nodeId)) {
-      this.attachedNodes.add(nodeId);
-      this.htmlView.attachNode(nodeId);
+    if (!this.renderingBoxState.hasNode(nodeId)) {
+      return;
+    }
+
+    if (!this.attachedNodes.has(nodeId)) {
+      this.handleAttachNode(nodeId);
     }
   }
 
   public detachNode(nodeId: unknown): void {
-    if (this.attachedNodes.has(nodeId)) {
-      this.htmlView.detachNode(nodeId);
-      this.attachedNodes.delete(nodeId);
+    if (!this.attachedNodes.has(nodeId)) {
+      return;
     }
+
+    this.handleDetachNode(nodeId);
   }
 
   public attachEdge(edgeId: unknown): void {
@@ -59,26 +63,59 @@ export class BoxHtmlView implements HtmlView {
     const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
 
     if (!this.attachedNodes.has(nodeFromId)) {
-      this.htmlView.attachNode(nodeFromId);
-      this.attachedNodes.add(nodeFromId);
+      this.handleAttachNode(nodeFromId);
     }
 
     if (!this.attachedNodes.has(nodeToId)) {
-      this.htmlView.attachNode(nodeToId);
-      this.attachedNodes.add(nodeToId);
+      this.handleAttachNode(nodeToId);
     }
 
     if (!this.attachedEdges.has(edgeId)) {
-      this.htmlView.attachEdge(edgeId);
-      this.attachedEdges.add(edgeId);
+      this.handleAttachEdge(edgeId);
     }
   }
 
-  public detachEdge(): void {}
+  public detachEdge(edgeId: unknown): void {
+    if (!this.attachedEdges.has(edgeId)) {
+      return;
+    }
 
-  public updateNodeCoordinates(): void {}
+    this.handleDetachEdge(edgeId);
 
-  public updateNodePriority(): void {}
+    const edge = this.graphStore.getEdge(edgeId)!;
+    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
+    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+
+    if (!this.renderingBoxState.hasNode(nodeFromId)) {
+      this.handleDetachNode(nodeFromId);
+    }
+
+    if (!this.renderingBoxState.hasNode(nodeToId)) {
+      this.handleDetachNode(nodeToId);
+    }
+  }
+
+  public updateNodeCoordinates(nodeId: unknown): void {
+    const isInViewport = this.renderingBoxState.hasNode(nodeId);
+
+    if (!isInViewport) {
+      this.handleDetachNode(nodeId);
+    } else {
+      const wasInViewport = this.attachedNodes.has(nodeId);
+
+      if (wasInViewport) {
+        this.htmlView.updateNodeCoordinates(nodeId);
+      } else {
+        this.handleAttachNode(nodeId);
+      }
+    }
+  }
+
+  public updateNodePriority(nodeId: unknown): void {
+    if (this.renderingBoxState.hasNode(nodeId)) {
+      this.htmlView.updateNodePriority(nodeId);
+    }
+  }
 
   public updateEdgeShape(): void {}
 
@@ -88,10 +125,33 @@ export class BoxHtmlView implements HtmlView {
 
   public clear(): void {
     this.htmlView.clear();
+    this.attachedNodes.clear();
+    this.attachedEdges.clear();
   }
 
   public destroy(): void {
     this.clear();
     this.htmlView.destroy();
+    this.trigger.unsubscribe(this.setRenderingBox);
+  }
+
+  private handleAttachNode(nodeId: unknown): void {
+    this.attachedNodes.add(nodeId);
+    this.htmlView.attachNode(nodeId);
+  }
+
+  private handleDetachNode(nodeId: unknown): void {
+    this.htmlView.detachNode(nodeId);
+    this.attachedNodes.delete(nodeId);
+  }
+
+  private handleAttachEdge(edgeId: unknown): void {
+    this.attachedEdges.add(edgeId);
+    this.htmlView.attachEdge(edgeId);
+  }
+
+  private handleDetachEdge(edgeId: unknown): void {
+    this.htmlView.detachEdge(edgeId);
+    this.attachedEdges.delete(edgeId);
   }
 }
