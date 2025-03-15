@@ -25,6 +25,7 @@ const canvas: Canvas = new CanvasBuilder()
     },
   })
   .setBoxRenderingTrigger(trigger)
+  .setUserDraggableNodes()
   .build();
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;
