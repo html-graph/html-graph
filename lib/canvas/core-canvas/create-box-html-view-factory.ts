@@ -14,6 +14,5 @@ export const createBoxHtmlViewFactory: (
       new CoreHtmlView(graphStore, viewportTransformer),
       graphStore,
       trigger,
-      trigger,
     );
 };
