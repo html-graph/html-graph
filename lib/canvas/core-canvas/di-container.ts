@@ -6,7 +6,7 @@ import {
 } from "@/viewport-transformer";
 import { PublicGraphStore } from "@/public-graph-store";
 import { GraphStore } from "@/graph-store";
-import { HtmlController } from "@/html-controller";
+import { HtmlView } from "@/html-view";
 
 export class DiContainer {
   public readonly publicViewportTransformer: PublicViewportTransformer;
@@ -17,11 +17,17 @@ export class DiContainer {
 
   public readonly graphStore: GraphStore;
 
-  public readonly htmlController: HtmlController;
+  public readonly htmlView: HtmlView;
 
   public readonly graphStoreController: GraphStoreController;
 
-  public constructor(coreOptions: CoreOptions) {
+  public constructor(
+    coreOptions: CoreOptions,
+    htmlViewFactory: (
+      graphStore: GraphStore,
+      viewportTransformer: ViewportTransformer,
+    ) => HtmlView,
+  ) {
     this.graphStore = new GraphStore();
     this.publicGraphStore = new PublicGraphStore(this.graphStore);
 
@@ -30,10 +36,7 @@ export class DiContainer {
       this.viewportTransformer,
     );
 
-    this.htmlController = new HtmlController(
-      this.graphStore,
-      this.viewportTransformer,
-    );
+    this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
 
     this.graphStoreController = new GraphStoreController(
       this.graphStore,

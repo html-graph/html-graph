@@ -9,6 +9,12 @@ import {
   CoreCanvas,
   DiContainer,
 } from "@/canvas";
+import { RenderingBox } from "./html-view";
+import { EventSubject } from "./event-subject";
+import {
+  coreHtmlViewFactory,
+  createBoxHtmlViewFactory,
+} from "./canvas/core-canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -23,12 +29,20 @@ export class CanvasBuilder {
 
   private hasResizeReactiveNodes = false;
 
+  private boxRenderingTrigger: EventSubject<RenderingBox> | null = null;
+
+  /**
+   * specifies options for fundamental aspects of visualization
+   */
   public setOptions(options: CoreOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;
   }
 
+  /**
+   * enables nodes draggable bu user
+   */
   public setUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
     this.dragOptions = options;
@@ -44,6 +58,9 @@ export class CanvasBuilder {
     return this.setUserTransformableViewport(options);
   }
 
+  /**
+   * enables viewport transformable by user
+   */
   public setUserTransformableViewport(
     options?: TransformOptions,
   ): CanvasBuilder {
@@ -53,14 +70,36 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables automatic edges update on node resize
+   */
   public setResizeReactiveNodes(): CanvasBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;
   }
 
+  /**
+   * sets emitter for rendering graph inside bounded area
+   */
+  public setBoxRenderingTrigger(
+    trigger: EventSubject<RenderingBox>,
+  ): CanvasBuilder {
+    this.boxRenderingTrigger = trigger;
+
+    return this;
+  }
+
+  /**
+   * builds final canvas
+   */
   public build(): Canvas {
-    const container = new DiContainer(this.coreOptions);
+    const htmlViewFactory =
+      this.boxRenderingTrigger !== null
+        ? createBoxHtmlViewFactory(this.boxRenderingTrigger)
+        : coreHtmlViewFactory;
+
+    const container = new DiContainer(this.coreOptions, htmlViewFactory);
 
     let canvas: Canvas = new CoreCanvas(container);
 

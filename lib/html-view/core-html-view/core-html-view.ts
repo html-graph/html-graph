@@ -3,11 +3,12 @@ import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { EdgeRenderPort } from "@/edges";
+import { HtmlView } from "../html-view";
 
 /**
  * This entity is responsible for HTML modifications
  */
-export class HtmlController {
+export class CoreHtmlView implements HtmlView {
   private canvasWrapper: HTMLElement | null = null;
 
   private readonly host = createHost();
