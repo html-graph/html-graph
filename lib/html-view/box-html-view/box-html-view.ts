@@ -14,10 +14,6 @@ export class BoxHtmlView implements HtmlView {
 
   private readonly renderingBox: RenderingBoxState;
 
-  private readonly setRenderingBox = (viewBox: RenderingBox): void => {
-    this.renderingBox.setRenderingBox(viewBox);
-  };
-
   private readonly updateEntities = (viewBox: RenderingBox): void => {
     this.renderingBox.setRenderingBox(viewBox);
 
@@ -83,11 +79,9 @@ export class BoxHtmlView implements HtmlView {
   public constructor(
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
-    private readonly setRenderingBoxTrigger: EventSubject<RenderingBox>,
     private readonly updateEntitiesTrigger: EventSubject<RenderingBox>,
   ) {
     this.renderingBox = new RenderingBoxState(this.graphStore);
-    this.setRenderingBoxTrigger.subscribe(this.setRenderingBox);
     this.updateEntitiesTrigger.subscribe(this.updateEntities);
   }
 
@@ -176,16 +170,8 @@ export class BoxHtmlView implements HtmlView {
     const isInViewport = this.renderingBox.hasNode(nodeId);
     const wasInViewport = this.attachedNodes.has(nodeId);
 
-    if (!isInViewport && !wasInViewport) {
-      return;
-    }
-
     if (isInViewport && wasInViewport) {
       this.htmlView.updateNodePriority(nodeId);
-    } else if (!isInViewport && wasInViewport) {
-      this.handleDetachNode(nodeId);
-    } else {
-      this.handleAttachNode(nodeId);
     }
   }
 
@@ -193,16 +179,8 @@ export class BoxHtmlView implements HtmlView {
     const isInViewport = this.renderingBox.hasEdge(edgeId);
     const wasInViewport = this.attachedEdges.has(edgeId);
 
-    if (!isInViewport && !wasInViewport) {
-      return;
-    }
-
     if (isInViewport && wasInViewport) {
       this.htmlView.updateEdgeShape(edgeId);
-    } else if (!isInViewport && wasInViewport) {
-      this.htmlView.detachEdge(edgeId);
-    } else {
-      this.htmlView.attachEdge(edgeId);
     }
   }
 
@@ -210,16 +188,8 @@ export class BoxHtmlView implements HtmlView {
     const isInViewport = this.renderingBox.hasEdge(edgeId);
     const wasInViewport = this.attachedEdges.has(edgeId);
 
-    if (!isInViewport && !wasInViewport) {
-      return;
-    }
-
     if (isInViewport && wasInViewport) {
       this.htmlView.renderEdge(edgeId);
-    } else if (!isInViewport && wasInViewport) {
-      this.htmlView.detachEdge(edgeId);
-    } else {
-      this.htmlView.attachEdge(edgeId);
     }
   }
 
@@ -227,16 +197,8 @@ export class BoxHtmlView implements HtmlView {
     const isInViewport = this.renderingBox.hasEdge(edgeId);
     const wasInViewport = this.attachedEdges.has(edgeId);
 
-    if (!isInViewport && !wasInViewport) {
-      return;
-    }
-
     if (isInViewport && wasInViewport) {
       this.htmlView.updateEdgePriority(edgeId);
-    } else if (!isInViewport && wasInViewport) {
-      this.htmlView.detachEdge(edgeId);
-    } else {
-      this.htmlView.attachEdge(edgeId);
     }
   }
 
@@ -249,7 +211,6 @@ export class BoxHtmlView implements HtmlView {
   public destroy(): void {
     this.clear();
     this.htmlView.destroy();
-    this.setRenderingBoxTrigger.unsubscribe(this.setRenderingBox);
     this.updateEntitiesTrigger.unsubscribe(this.updateEntities);
   }
 
