@@ -239,6 +239,16 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
+  it("should attach edge outside of the viewbox", () => {
+    const { updateEntitiesTrigger, coreView, store } = create();
+    configureEdgeGraph(store);
+
+    const spy = jest.spyOn(coreView, "attachEdge");
+    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+
+    expect(spy).not.toHaveBeenCalledWith("edge-1");
+  });
+
   it("should not attach edge twice", () => {
     const { updateEntitiesTrigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
