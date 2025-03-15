@@ -19,25 +19,25 @@ export class BoxHtmlView implements HtmlView {
 
   private yTo = Infinity;
 
+  private readonly nodesToAttach = new Set<unknown>();
+  private readonly nodesToDetach = new Set<unknown>();
+  private readonly edgesToAttach = new Set<unknown>();
+  private readonly edgesToDetach = new Set<unknown>();
+
   private readonly setViewport = (viewBox: RenderingBox): void => {
     this.xFrom = viewBox.x;
     this.xTo = viewBox.x + viewBox.width;
     this.yFrom = viewBox.y;
     this.yTo = viewBox.y + viewBox.width;
 
-    const nodesToAttach = new Set<unknown>();
-    const nodesToDetach = new Set<unknown>();
-    const edgesToAttach = new Set<unknown>();
-    const edgesToDetach = new Set<unknown>();
-
     this.graphStore.getAllNodeIds().forEach((nodeId) => {
       const isInViewport = this.isNodeInViewport(nodeId);
       const wasInViewport = this.viewportNodes.has(nodeId);
 
       if (isInViewport && !wasInViewport) {
-        nodesToAttach.add(nodeId);
+        this.nodesToAttach.add(nodeId);
       } else if (!isInViewport && wasInViewport) {
-        nodesToDetach.add(nodeId);
+        this.nodesToDetach.add(nodeId);
       }
     });
 
@@ -46,36 +46,17 @@ export class BoxHtmlView implements HtmlView {
       const wasInViewport = this.viewportEdges.has(edgeId);
 
       if (isInViewport && !wasInViewport) {
-        const edge = this.graphStore.getEdge(edgeId)!;
-        const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
-        const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+        this.attachEdgeNodes(edgeId);
 
-        nodesToAttach.add(nodeFromId);
-        nodesToAttach.add(nodeToId);
-        nodesToDetach.delete(nodeFromId);
-        nodesToDetach.delete(nodeToId);
-
-        edgesToAttach.add(edgeId);
+        this.edgesToAttach.add(edgeId);
       } else if (!isInViewport && wasInViewport) {
-        edgesToDetach.add(edgeId);
+        this.edgesToDetach.add(edgeId);
+      } else if (isInViewport && wasInViewport) {
+        this.attachEdgeNodes(edgeId);
       }
     });
 
-    edgesToDetach.forEach((edgeId) => {
-      this.detachEdgeInternal(edgeId);
-    });
-
-    nodesToDetach.forEach((nodeId) => {
-      this.detachNodeInternal(nodeId);
-    });
-
-    nodesToAttach.forEach((nodeId) => {
-      this.attachNodeInternal(nodeId);
-    });
-
-    edgesToAttach.forEach((edgeId) => {
-      this.attachEdgeInternal(edgeId);
-    });
+    this.apply();
   };
 
   public constructor(
@@ -225,5 +206,39 @@ export class BoxHtmlView implements HtmlView {
   private detachEdgeInternal(edgeId: unknown): void {
     this.htmlView.detachEdge(edgeId);
     this.viewportEdges.delete(edgeId);
+  }
+
+  private attachEdgeNodes(edgeId: unknown): void {
+    const edge = this.graphStore.getEdge(edgeId)!;
+    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
+    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+
+    this.nodesToAttach.add(nodeFromId);
+    this.nodesToAttach.add(nodeToId);
+    this.nodesToDetach.delete(nodeFromId);
+    this.nodesToDetach.delete(nodeToId);
+  }
+
+  private apply(): void {
+    this.edgesToDetach.forEach((edgeId) => {
+      this.detachEdgeInternal(edgeId);
+    });
+
+    this.nodesToDetach.forEach((nodeId) => {
+      this.detachNodeInternal(nodeId);
+    });
+
+    this.nodesToAttach.forEach((nodeId) => {
+      this.attachNodeInternal(nodeId);
+    });
+
+    this.edgesToAttach.forEach((edgeId) => {
+      this.attachEdgeInternal(edgeId);
+    });
+
+    this.nodesToAttach.clear();
+    this.edgesToAttach.clear();
+    this.nodesToDetach.clear();
+    this.edgesToDetach.clear();
   }
 }

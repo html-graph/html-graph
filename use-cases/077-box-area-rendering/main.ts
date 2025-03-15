@@ -20,7 +20,7 @@ const canvas: Canvas = new CanvasBuilder()
   .setUserTransformableViewport({
     events: {
       onTransformChange: () => {
-        updateTransform();
+        updateRectangle();
       },
     },
   })
@@ -45,17 +45,11 @@ function updateRectangle(): void {
   const width = map.get("width")!;
   const height = map.get("height")!;
 
-  boundsElement.style.left = `${x}px`;
-  boundsElement.style.top = `${y}px`;
   boundsElement.style.width = `${width}px`;
   boundsElement.style.height = `${height}px`;
 
-  updateTransform();
-}
-
-function updateTransform(): void {
-  const { scale, x, y } = canvas.transformation.getContentMatrix();
-  boundsContainerElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
+  const m = canvas.transformation.getContentMatrix();
+  boundsContainerElement.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y}) translate(${x}px, ${y}px) `;
 }
 
 map.forEach((_value, id) => {
