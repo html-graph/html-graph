@@ -14,7 +14,7 @@ export class BoxHtmlView implements HtmlView {
 
   private readonly renderingBox: RenderingBoxState;
 
-  private readonly updateEntities = (viewBox: RenderingBox): void => {
+  private readonly updateViewport = (viewBox: RenderingBox): void => {
     this.renderingBox.setRenderingBox(viewBox);
 
     const nodesToAttach = new Set<unknown>();
@@ -79,10 +79,10 @@ export class BoxHtmlView implements HtmlView {
   public constructor(
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
-    private readonly updateEntitiesTrigger: EventSubject<RenderingBox>,
+    private readonly trigger: EventSubject<RenderingBox>,
   ) {
     this.renderingBox = new RenderingBoxState(this.graphStore);
-    this.updateEntitiesTrigger.subscribe(this.updateEntities);
+    this.trigger.subscribe(this.updateViewport);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -94,21 +94,15 @@ export class BoxHtmlView implements HtmlView {
   }
 
   public attachNode(nodeId: unknown): void {
-    if (!this.renderingBox.hasNode(nodeId)) {
-      return;
-    }
-
-    if (!this.attachedNodes.has(nodeId)) {
+    if (this.renderingBox.hasNode(nodeId)) {
       this.handleAttachNode(nodeId);
     }
   }
 
   public detachNode(nodeId: unknown): void {
-    if (!this.attachedNodes.has(nodeId)) {
-      return;
+    if (this.attachedNodes.has(nodeId)) {
+      this.handleDetachNode(nodeId);
     }
-
-    this.handleDetachNode(nodeId);
   }
 
   public attachEdge(edgeId: unknown): void {
@@ -116,97 +110,49 @@ export class BoxHtmlView implements HtmlView {
       return;
     }
 
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
-    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
-
-    if (!this.attachedNodes.has(nodeFromId)) {
-      this.handleAttachNode(nodeFromId);
-    }
-
-    if (!this.attachedNodes.has(nodeToId)) {
-      this.handleAttachNode(nodeToId);
-    }
-
-    if (!this.attachedEdges.has(edgeId)) {
-      this.handleAttachEdge(edgeId);
-    }
+    this.attachSingleEdge(edgeId);
   }
 
   public detachEdge(edgeId: unknown): void {
-    if (!this.attachedEdges.has(edgeId)) {
-      return;
-    }
-
-    this.handleDetachEdge(edgeId);
-
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
-    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
-
-    if (!this.renderingBox.hasNode(nodeFromId)) {
-      this.handleDetachNode(nodeFromId);
-    }
-
-    if (!this.renderingBox.hasNode(nodeToId)) {
-      this.handleDetachNode(nodeToId);
+    if (this.attachedEdges.has(edgeId)) {
+      this.handleDetachEdge(edgeId);
     }
   }
 
   public updateNodeCoordinates(nodeId: unknown): void {
-    const isInViewport = this.renderingBox.hasNode(nodeId);
-    const wasInViewport = this.attachedNodes.has(nodeId);
-
-    if (isInViewport && wasInViewport) {
+    if (this.attachedNodes.has(nodeId)) {
       this.htmlView.updateNodeCoordinates(nodeId);
-    } else if (!isInViewport && wasInViewport) {
-      const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-      const hasViewportEdges = edgeIds.some((edgeId) =>
-        this.renderingBox.hasEdge(edgeId),
-      );
+    } else {
+      if (this.renderingBox.hasNode(nodeId)) {
+        this.handleAttachNode(nodeId);
 
-      if (!hasViewportEdges) {
-        this.handleDetachNode(nodeId);
-      } else {
-        this.htmlView.updateNodeCoordinates(nodeId);
+        this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edgeId) => {
+          this.attachSingleEdge(edgeId);
+        });
       }
-    } else if (isInViewport && !wasInViewport) {
-      this.handleAttachNode(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: unknown): void {
-    const isInViewport = this.renderingBox.hasNode(nodeId);
-    const wasInViewport = this.attachedNodes.has(nodeId);
-
-    if (isInViewport && wasInViewport) {
+    if (this.attachedNodes.has(nodeId)) {
       this.htmlView.updateNodePriority(nodeId);
     }
   }
 
   public updateEdgeShape(edgeId: unknown): void {
-    const isInViewport = this.renderingBox.hasEdge(edgeId);
-    const wasInViewport = this.attachedEdges.has(edgeId);
-
-    if (isInViewport && wasInViewport) {
+    if (this.attachedEdges.has(edgeId)) {
       this.htmlView.updateEdgeShape(edgeId);
     }
   }
 
   public renderEdge(edgeId: unknown): void {
-    const isInViewport = this.renderingBox.hasEdge(edgeId);
-    const wasInViewport = this.attachedEdges.has(edgeId);
-
-    if (isInViewport && wasInViewport) {
+    if (this.attachedEdges.has(edgeId)) {
       this.htmlView.renderEdge(edgeId);
     }
   }
 
   public updateEdgePriority(edgeId: unknown): void {
-    const isInViewport = this.renderingBox.hasEdge(edgeId);
-    const wasInViewport = this.attachedEdges.has(edgeId);
-
-    if (isInViewport && wasInViewport) {
+    if (this.attachedEdges.has(edgeId)) {
       this.htmlView.updateEdgePriority(edgeId);
     }
   }
@@ -220,7 +166,23 @@ export class BoxHtmlView implements HtmlView {
   public destroy(): void {
     this.clear();
     this.htmlView.destroy();
-    this.updateEntitiesTrigger.unsubscribe(this.updateEntities);
+    this.trigger.unsubscribe(this.updateViewport);
+  }
+
+  public attachSingleEdge(edgeId: unknown): void {
+    const edge = this.graphStore.getEdge(edgeId)!;
+    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
+    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+
+    if (!this.attachedNodes.has(nodeFromId)) {
+      this.handleAttachNode(nodeFromId);
+    }
+
+    if (!this.attachedNodes.has(nodeToId)) {
+      this.handleAttachNode(nodeToId);
+    }
+
+    this.handleAttachEdge(edgeId);
   }
 
   private handleAttachNode(nodeId: unknown): void {

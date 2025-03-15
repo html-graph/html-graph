@@ -8,18 +8,18 @@ import { standardCenterFn } from "@/center-fn";
 import { EdgeShapeMock } from "@/edges";
 
 const create = (): {
-  updateEntitiesTrigger: EventSubject<RenderingBox>;
+  trigger: EventSubject<RenderingBox>;
   store: GraphStore;
   coreView: CoreHtmlView;
   boxView: BoxHtmlView;
 } => {
-  const updateEntitiesTrigger = new EventSubject<RenderingBox>();
+  const trigger = new EventSubject<RenderingBox>();
   const store = new GraphStore();
   const transformer = new ViewportTransformer();
   const coreView = new CoreHtmlView(store, transformer);
-  const boxView = new BoxHtmlView(coreView, store, updateEntitiesTrigger);
+  const boxView = new BoxHtmlView(coreView, store, trigger);
 
-  return { updateEntitiesTrigger, store, coreView, boxView };
+  return { trigger, store, coreView, boxView };
 };
 
 const addNodeRequest: AddNodeRequest = {
@@ -121,30 +121,19 @@ describe("BoxHtmlView", () => {
   });
 
   it("should attach node inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
 
     const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
-  it("should not attach already attached node", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
-
-    const spy = jest.spyOn(coreView, "attachNode");
-    boxView.attachNode(addNodeRequest.nodeId);
-
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
   it("should not attach node outside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 9, y: 9, width: 2, height: 2 });
+    trigger.emit({ x: 9, y: 9, width: 2, height: 2 });
 
     const spy = jest.spyOn(coreView, "attachNode");
     boxView.attachNode(addNodeRequest.nodeId);
@@ -153,9 +142,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should detach node inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
     const spy = jest.spyOn(coreView, "detachNode");
     boxView.detachNode("node-1");
@@ -174,9 +163,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should reattach node inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.detachNode(addNodeRequest.nodeId);
     const spy = jest.spyOn(coreView, "attachNode");
 
@@ -186,19 +175,19 @@ describe("BoxHtmlView", () => {
   });
 
   it("should attach source node before attaching edge inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-1");
   });
 
   it("should not attach source node before attaching edge inside of the viewbox if already attached", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
     const spy = jest.spyOn(coreView, "attachNode");
@@ -208,19 +197,19 @@ describe("BoxHtmlView", () => {
   });
 
   it("should attach target node before attaching edge inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-2");
   });
 
   it("should not attach tagret node before attaching edge inside of the viewbox if already attached", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
     const spy = jest.spyOn(coreView, "attachNode");
@@ -230,30 +219,19 @@ describe("BoxHtmlView", () => {
   });
 
   it("should attach edge inside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachEdge");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
   it("should attach edge outside of the viewbox", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
-
-    const spy = jest.spyOn(coreView, "attachEdge");
-    boxView.attachEdge("edge-1");
-
-    expect(spy).not.toHaveBeenCalledWith("edge-1");
-  });
-
-  it("should not attach edge twice", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "attachEdge");
     boxView.attachEdge("edge-1");
@@ -262,19 +240,19 @@ describe("BoxHtmlView", () => {
   });
 
   it("should not attach edge outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachEdge");
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
   });
 
   it("should detach edge", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "detachEdge");
     boxView.detachEdge("edge-1");
@@ -283,9 +261,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should not detach edge twice", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
     const spy = jest.spyOn(coreView, "detachEdge");
@@ -295,9 +273,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should clear nodes", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.clear();
 
     const spy = jest.spyOn(coreView, "attachNode");
@@ -307,9 +285,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should clear edges", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.clear();
 
     const spy = jest.spyOn(coreView, "attachEdge");
@@ -318,125 +296,10 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
-  it("should detach edge source node when outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 8, height: 8 });
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.detachEdge("edge-1");
-
-    expect(spy).toHaveBeenCalledWith("node-1");
-  });
-
-  it("should not detach edge source node when inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 9, height: 9 });
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.detachEdge("edge-1");
-
-    expect(spy).not.toHaveBeenCalledWith("node-1");
-  });
-
-  it("should reattach detached source node when detaching edge", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 8, height: 8 });
-
-    boxView.detachEdge("edge-1");
-
-    const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    expect(spy).toHaveBeenCalledWith("node-1");
-  });
-
-  it("should detach edge target node when outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 8, height: 8 });
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.detachEdge("edge-1");
-
-    expect(spy).toHaveBeenCalledWith("node-2");
-  });
-
-  it("should not detach edge target node when inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 9, height: 9 });
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.detachEdge("edge-1");
-
-    expect(spy).not.toHaveBeenCalledWith("node-2");
-  });
-
-  it("should reattach detached target node when detaching edge", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 8, height: 8 });
-
-    boxView.detachEdge("edge-1");
-
-    const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    expect(spy).toHaveBeenCalledWith("node-2");
-  });
-
-  it("should update node coordinates inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should update node coordinates if was attached", () => {
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = 1;
-    node.y = 1;
-
-    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should detach node when moved outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = 11;
-    node.y = 11;
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should not detach node when it has edges inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = 11;
-    node.y = 11;
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should update node coordinates when it has edges inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const node = store.getNode(addNodeRequest.nodeId)!;
     node.x = 11;
@@ -446,58 +309,12 @@ describe("BoxHtmlView", () => {
     boxView.updateNodeCoordinates(addNodeRequest.nodeId);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should not detach node when kept outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = -1;
-    node.y = -1;
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should not detach node when kept inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-    boxView.attachNode(addNodeRequest.nodeId);
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = 10;
-    node.y = 10;
-
-    const spy = jest.spyOn(coreView, "detachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
-  });
-
-  it("should not update node coordinates when moved outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
-
-    const node = store.getNode(addNodeRequest.nodeId)!;
-    node.x = 11;
-    node.y = 11;
-
-    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
-
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
   it("should attach node when moved inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+    trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     const node = store.getNode(addNodeRequest.nodeId)!;
     node.x = 2;
@@ -509,21 +326,24 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
-  it("should not update node cordinates when kept outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
-    store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+  it("should attach node adjacent edges when moved inside of the viewport", () => {
+    const { trigger, coreView, store, boxView } = create();
+    configureEdgeGraph(store);
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
+    const node = store.getNode("node-1")!;
+    node.x = 12;
+    node.y = 12;
 
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
+    const spy = jest.spyOn(coreView, "attachEdge");
+    boxView.updateNodeCoordinates("node-1");
+    expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
-  it("should update node priority when kept inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should update node priority for attached node", () => {
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateNodePriority");
     boxView.updateNodePriority(addNodeRequest.nodeId);
@@ -531,10 +351,10 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
-  it("should not update node priority when kept outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should not update node priority if not attached", () => {
+    const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+    trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateNodePriority");
     boxView.updateNodePriority(addNodeRequest.nodeId);
@@ -542,10 +362,10 @@ describe("BoxHtmlView", () => {
     expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
-  it("should update edge shape when inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should update edge shape when attached", () => {
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateEdgeShape");
     boxView.updateEdgeShape("edge-1");
@@ -553,10 +373,10 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
-  it("should not update edge shape when moved outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should not update edge shape when edge is not attached", () => {
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateEdgeShape");
     boxView.updateEdgeShape("edge-1");
@@ -564,10 +384,10 @@ describe("BoxHtmlView", () => {
     expect(spy).not.toHaveBeenCalledWith("edge-1");
   });
 
-  it("should render edge shape when inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should render edge shape", () => {
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "renderEdge");
     boxView.renderEdge("edge-1");
@@ -575,10 +395,10 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
-  it("should not render edge shape when outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should not render edge shape when not attached", () => {
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "renderEdge");
     boxView.renderEdge("edge-1");
@@ -586,10 +406,10 @@ describe("BoxHtmlView", () => {
     expect(spy).not.toHaveBeenCalledWith("edge-1");
   });
 
-  it("should update edge priority when inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+  it("should update edge priority", () => {
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateEdgePriority");
     boxView.updateEdgePriority("edge-1");
@@ -598,9 +418,9 @@ describe("BoxHtmlView", () => {
   });
 
   it("should not update edge priority when kept outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store, boxView } = create();
+    const { trigger, coreView, store, boxView } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateEdgePriority");
     boxView.updateEdgePriority("edge-1");
@@ -609,96 +429,96 @@ describe("BoxHtmlView", () => {
   });
 
   it("should attach node moved to inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
     const spy = jest.spyOn(coreView, "attachNode");
 
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
   it("should not attach node moved to outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
 
     const spy = jest.spyOn(coreView, "attachNode");
 
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 2, height: 2 });
+    trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
     expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
   it("should detach node moved to outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
-    updateEntitiesTrigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
     const spy = jest.spyOn(coreView, "detachNode");
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 2, height: 2 });
+    trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
   });
 
   it("should attach edge moved to inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachEdge");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
   it("should detach edge moved to outside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "detachEdge");
-    updateEntitiesTrigger.emit({ x: 11, y: 11, width: 10, height: 10 });
+    trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
   it("should attach source node outside of the viewport when edge is inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+    trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-1");
   });
 
   it("should attach target node outside of the viewport when edge is inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
     const spy = jest.spyOn(coreView, "attachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 9, height: 9 });
+    trigger.emit({ x: 0, y: 0, width: 9, height: 9 });
 
     expect(spy).toHaveBeenCalledWith("node-2");
   });
 
   it("should not detach source node outside of the viewport when edge is inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "detachNode");
-    updateEntitiesTrigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+    trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
   });
 
-  it("should not detach terget node outside of the viewport when edge is inside of the viewport", () => {
-    const { updateEntitiesTrigger, coreView, store } = create();
+  it("should not detach target node outside of the viewport when edge is inside of the viewport", () => {
+    const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 10, height: 10 });
+    trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "detachNode");
-    updateEntitiesTrigger.emit({ x: 0, y: 0, width: 9, height: 9 });
+    trigger.emit({ x: 0, y: 0, width: 9, height: 9 });
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
   });

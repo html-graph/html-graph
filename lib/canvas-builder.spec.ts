@@ -7,8 +7,6 @@ import {
 import { CanvasBuilder } from "./canvas-builder";
 import { EventSubject } from "./event-subject";
 import { RenderingBox } from "./html-view";
-// import { EventSubject } from "./event-subject";
-// import { RenderingBox } from "./html-view";
 
 describe("CanvasBuilder", () => {
   it("should build core canvas", () => {

@@ -50,7 +50,7 @@ function updateRectangle(): void {
   boundsElement.style.height = `${height}px`;
 
   const m = canvas.transformation.getContentMatrix();
-  boundsContainerElement.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y}) translate(${x}px, ${y}px) `;
+  boundsContainerElement.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y}) translate(${x - 5}px, ${y - 5}px) `;
 }
 
 map.forEach((_value, id) => {
@@ -103,11 +103,17 @@ for (let i = 0; i < 100; i++) {
 
 const applyEl = document.getElementById("apply")!;
 
-applyEl.addEventListener("click", () => {
+function refresh(): void {
   const x = map.get("x")!;
   const y = map.get("y")!;
   const width = map.get("width")!;
   const height = map.get("height")!;
 
   trigger.emit({ x, y, width, height });
+}
+
+applyEl.addEventListener("click", () => {
+  refresh();
 });
+
+refresh();
