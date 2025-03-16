@@ -169,7 +169,7 @@ export class BoxHtmlView implements HtmlView {
     this.trigger.unsubscribe(this.updateViewport);
   }
 
-  public attachSingleEdge(edgeId: unknown): void {
+  private attachSingleEdge(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
     const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
