@@ -83,14 +83,14 @@ export class CoreCanvas implements Canvas {
   };
 
   public constructor(di: DiContainer) {
-    this.graph = di.publicGraphStore;
+    this.graph = di.graph;
     this.model = this.graph;
     this.internalModel = di.graphStore;
     this.internalTransformation = di.viewportTransformer;
     this.viewport = di.publicViewportTransformer;
     this.transformation = this.viewport;
     this.htmlView = di.htmlView;
-    this.graphStoreController = di.graphStoreController;
+    this.graphStoreContviewporttroller;
 
     this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
 

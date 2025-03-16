@@ -6,9 +6,9 @@ import { GraphStore } from "@/graph-store";
 import { HtmlView } from "@/html-view";
 
 export class DiContainer {
-  public readonly publicViewportTransformer: Viewport;
+  public readonly viewport: Viewport;
 
-  public readonly publicGraphStore: Graph;
+  public readonly graph: Graph;
 
   public readonly viewportTransformer: ViewportTransformer;
 
@@ -26,10 +26,10 @@ export class DiContainer {
     ) => HtmlView,
   ) {
     this.graphStore = new GraphStore();
-    this.publicGraphStore = new Graph(this.graphStore);
+    this.graph = new Graph(this.graphStore);
 
     this.viewportTransformer = new ViewportTransformer();
-    this.publicViewportTransformer = new Viewport(this.viewportTransformer);
+    this.viewport = new Viewport(this.viewportTransformer);
 
     this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
 
