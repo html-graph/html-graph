@@ -57,7 +57,7 @@ class ViewportTransformer {
 
     this.element.addEventListener("mousemove", (event) => {
       if (this.isGrabbed) {
-        const matrixViewport = this.canvas.transformation.getViewportMatrix();
+        const matrixViewport = this.canvas.viewport.getViewportMatrix();
 
         const patchMatrixRequest: PatchMatrixRequest = {
           x: matrixViewport.scale * -event.movementX + matrixViewport.x,

@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Viewport } from "@/viewport-transformer";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
@@ -6,18 +6,30 @@ import { PatchMatrixRequest } from "./patch-matrix-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { PublicGraphStore } from "@/public-graph-store";
+import { Graph } from "@/graph";
 
 export interface Canvas {
   /**
    * provides api for accessing graph model
    */
-  readonly model: PublicGraphStore;
+  readonly graph: Graph;
 
   /**
-   * provides api for canvas transformation
+   * @deprecated
+   * use "graph" property instead
    */
-  readonly transformation: PublicViewportTransformer;
+  readonly model: Graph;
+
+  /**
+   * provides api for canvas accessing viewport state
+   */
+  readonly viewport: Viewport;
+
+  /**
+   * @deprecated
+   * use "viewport" property instead
+   */
+  readonly transformation: Viewport;
 
   /**
    * adds node to graph

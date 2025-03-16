@@ -10,8 +10,8 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const builder: CanvasBuilder = new CanvasBuilder();
 
 const updateTransform = (): void => {
-  const viewportTransform = canvas.transformation.getViewportMatrix();
-  const contentTransform = canvas.transformation.getContentMatrix();
+  const viewportTransform = canvas.viewport.getViewportMatrix();
+  const contentTransform = canvas.viewport.getContentMatrix();
 
   const currentViewport = document.getElementById(
     "current-viewport",

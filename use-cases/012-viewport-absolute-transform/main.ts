@@ -43,12 +43,12 @@ const boundsContainerElement = document.getElementById(
 )! as HTMLElement;
 
 const updateRectangleTransform = (): void => {
-  const viewportMatrix = canvas.transformation.getViewportMatrix();
+  const viewportMatrix = canvas.viewport.getViewportMatrix();
   scaleValue.innerText = `${viewportMatrix.scale.toFixed(2)}`;
   xValue.innerText = `${viewportMatrix.x.toFixed(2)}`;
   yValue.innerText = `${viewportMatrix.y.toFixed(2)}`;
 
-  const { scale, x, y } = canvas.transformation.getContentMatrix();
+  const { scale, x, y } = canvas.viewport.getContentMatrix();
   boundsContainerElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
 };
 

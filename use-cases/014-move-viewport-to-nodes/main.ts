@@ -59,8 +59,8 @@ const navigateBtn: HTMLElement = document.getElementById("navigate")!;
 
 navigateBtn.addEventListener("click", () => {
   const nodes = [
-    canvas.model.getNode("node-2")!,
-    canvas.model.getNode("node-3")!,
+    canvas.graph.getNode("node-2")!,
+    canvas.graph.getNode("node-3")!,
   ];
 
   const [x, y] = nodes.reduce(
@@ -71,7 +71,7 @@ navigateBtn.addEventListener("click", () => {
   const avgX = x / nodes.length;
   const avgY = y / nodes.length;
   const rect = canvasElement.getBoundingClientRect();
-  const viewportScale = canvas.transformation.getViewportMatrix().scale;
+  const viewportScale = canvas.viewport.getViewportMatrix().scale;
 
   const targetX = avgX - (viewportScale * rect.width) / 2;
   const targetY = avgY - (viewportScale * rect.height) / 2;

@@ -89,8 +89,8 @@ const structure: {
   ports: [],
 };
 
-canvas.model.getAllNodeIds().forEach((nodeId) => {
-  const node = canvas.model.getNode(nodeId)!;
+canvas.graph.getAllNodeIds().forEach((nodeId) => {
+  const node = canvas.graph.getNode(nodeId)!;
   structure.nodes.push({
     nodeId,
     x: node.x,
@@ -98,16 +98,16 @@ canvas.model.getAllNodeIds().forEach((nodeId) => {
   });
 });
 
-canvas.model.getAllPortIds().forEach((portId) => {
-  const port = canvas.model.getPort(portId)!;
+canvas.graph.getAllPortIds().forEach((portId) => {
+  const port = canvas.graph.getPort(portId)!;
   structure.ports.push({
     portId,
     direction: port.direction,
   });
 });
 
-canvas.model.getAllEdgeIds().forEach((edgeId) => {
-  const edge = canvas.model.getEdge(edgeId)!;
+canvas.graph.getAllEdgeIds().forEach((edgeId) => {
+  const edge = canvas.graph.getEdge(edgeId)!;
   structure.edges.push({
     edgeId,
     from: edge.from,

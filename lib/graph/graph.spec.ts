@@ -5,7 +5,7 @@ import {
   AddPortRequest,
   GraphStore,
 } from "../graph-store";
-import { PublicGraphStore } from "./public-graph-store";
+import { Graph } from "./graph";
 import { Point } from "@/point";
 
 const addNodeRequest1: AddNodeRequest = {
@@ -56,17 +56,17 @@ const addEdgeRequest11: AddEdgeRequest = {
   priority: 0,
 };
 
-describe("PublicGraphStore", () => {
+describe("Graph", () => {
   it("should return null when no node in store", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNode(1)).toBe(null);
   });
 
   it("should return specified node", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
 
@@ -81,7 +81,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
 
@@ -90,7 +90,7 @@ describe("PublicGraphStore", () => {
 
   it("should return null for no port in store", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPort(1)).toBe(null);
   });
@@ -101,7 +101,7 @@ describe("PublicGraphStore", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPort(addPortRequest1.portId)).toStrictEqual({
       element: addPortRequest1.element,
@@ -111,7 +111,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified port ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
@@ -121,7 +121,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node port ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
@@ -133,21 +133,21 @@ describe("PublicGraphStore", () => {
 
   it("should return null when accessing non-existing node port ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNodePortIds(addNodeRequest1.nodeId)).toEqual(null);
   });
 
   it("should return null when no node in store", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPortNodeId(1)).toBe(null);
   });
 
   it("should return specified port node id", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
@@ -159,7 +159,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -172,14 +172,14 @@ describe("PublicGraphStore", () => {
 
   it("should return null for no edge in store", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getEdge(1)).toBe(null);
   });
 
   it("should return specified edge", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -196,7 +196,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified port incoming edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -211,7 +211,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified port outcoming edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -226,7 +226,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified port cycle edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
@@ -239,7 +239,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified port adjacent edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -254,7 +254,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node incoming edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -269,7 +269,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node outcoming edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -284,7 +284,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node cycle edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
@@ -297,7 +297,7 @@ describe("PublicGraphStore", () => {
 
   it("should return specified node adjacent edge ids", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
@@ -312,56 +312,56 @@ describe("PublicGraphStore", () => {
 
   it("should return null when accessing non-existing port incoming edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPortIncomingEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port outcoming edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPortOutcomingEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port cycle edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPortCycleEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port adjacent edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getPortAdjacentEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node incoming edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNodeIncomingEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node outcoming edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNodeOutcomingEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node cycle edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNodeCycleEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node adjacent edges", () => {
     const store = new GraphStore();
-    const publicStore = new PublicGraphStore(store);
+    const publicStore = new Graph(store);
 
     expect(publicStore.getNodeAdjacentEdgeIds("node-1")).toEqual(null);
   });

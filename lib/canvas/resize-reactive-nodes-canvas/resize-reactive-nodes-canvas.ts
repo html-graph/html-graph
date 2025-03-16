@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Viewport } from "@/viewport-transformer";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -8,13 +8,17 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
-import { PublicGraphStore } from "@/public-graph-store";
+import { Graph } from "@/graph";
 import { Canvas } from "../canvas";
 
 export class ResizeReactiveNodesCanvas implements Canvas {
-  public readonly transformation: PublicViewportTransformer;
+  public readonly viewport: Viewport;
 
-  public readonly model: PublicGraphStore;
+  public readonly transformation: Viewport;
+
+  public readonly graph: Graph;
+
+  public readonly model: Graph;
 
   private readonly nodes = new TwoWayMap<unknown, Element>();
 
@@ -33,8 +37,10 @@ export class ResizeReactiveNodesCanvas implements Canvas {
       });
     });
 
-    this.transformation = this.canvas.transformation;
-    this.model = this.canvas.model;
+    this.viewport = this.canvas.viewport;
+    this.transformation = this.viewport;
+    this.graph = this.canvas.graph;
+    this.model = this.graph;
   }
 
   public attach(element: HTMLElement): ResizeReactiveNodesCanvas {
@@ -160,7 +166,7 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
     this.canvas.updateNode(nodeId);
 
-    const edges = this.model.getNodeAdjacentEdgeIds(nodeId)!;
+    const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
     edges.forEach((edge) => {
       this.canvas.updateEdge(edge);

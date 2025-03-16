@@ -83,10 +83,22 @@ export type {
   GraphNode,
   GraphPort,
   GraphEdge,
-  PublicGraphStore,
-} from "./public-graph-store";
+  Graph,
+  /**
+   * @deprecated
+   * use Graph instead
+   */
+  Graph as PublicGraphStore,
+} from "./graph";
 
-export type { PublicViewportTransformer } from "./viewport-transformer";
+export type {
+  Viewport,
+  /**
+   * @deprecated
+   * use Viewport instead
+   */
+  Viewport as PublicViewportTransformer,
+} from "./viewport-transformer";
 
 export type { CenterFn } from "./center-fn";
 

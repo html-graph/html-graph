@@ -57,7 +57,7 @@ class ViewportTransformer {
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {
-    const matrixViewport = this.canvas.transformation.getViewportMatrix();
+    const matrixViewport = this.canvas.viewport.getViewportMatrix();
 
     const scale = matrixViewport.scale * s2;
     const x = matrixViewport.scale * (1 - s2) * cx + matrixViewport.x;
