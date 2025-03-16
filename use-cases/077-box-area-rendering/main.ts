@@ -116,4 +116,6 @@ applyEl.addEventListener("click", () => {
   refresh();
 });
 
+canvas.patchContentMatrix({ scale: 0.2, x: 250, y: 250 });
+
 refresh();
