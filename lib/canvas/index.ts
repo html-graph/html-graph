@@ -10,7 +10,12 @@ export type { UpdatePortRequest } from "./update-port-request";
 export type { AddNodePorts } from "./add-node-ports";
 export type { Canvas } from "./canvas";
 export { CanvasCore } from "./canvas-core";
-export { CoreCanvas, DiContainer } from "./core-canvas";
+export {
+  CoreCanvas,
+  DiContainer,
+  coreHtmlViewFactory,
+  createBoxHtmlViewFactory,
+} from "./core-canvas";
 export type { CoreOptions } from "./core-canvas";
 export { UserDraggableNodesCanvas } from "./user-draggable-nodes-canvas";
 export type {
@@ -27,3 +32,8 @@ export type {
   ScaleLimitPreprocessorParams,
 } from "./user-transformable-viewport-canvas";
 export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";
+export {
+  TransformVirtualScrollCanvas,
+  type VirtualScrollOptions,
+  hookTransformOptions,
+} from "./transform-virtual-scroll-canvas";

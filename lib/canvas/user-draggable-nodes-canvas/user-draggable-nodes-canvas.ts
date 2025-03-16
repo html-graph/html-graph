@@ -116,7 +116,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     this.options = createOptions(dragOptions ?? {});
   }
 
-  public attach(element: HTMLElement): UserDraggableNodesCanvas {
+  public attach(element: HTMLElement): Canvas {
     this.detach();
     this.element = element;
 
@@ -125,7 +125,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public detach(): UserDraggableNodesCanvas {
+  public detach(): Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {
@@ -135,7 +135,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public addNode(request: AddNodeRequest): UserDraggableNodesCanvas {
+  public addNode(request: AddNodeRequest): Canvas {
     const nodeId = this.nodeIdGenerator.create(request.id);
 
     this.canvas.addNode({ ...request, id: nodeId });
@@ -215,10 +215,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public updateNode(
-    nodeId: unknown,
-    request?: UpdateNodeRequest,
-  ): UserDraggableNodesCanvas {
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
     this.canvas.updateNode(nodeId, request);
 
     this.updateMaxNodePriority(nodeId);
@@ -226,7 +223,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public removeNode(nodeId: unknown): UserDraggableNodesCanvas {
+  public removeNode(nodeId: unknown): Canvas {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -240,65 +237,55 @@ export class UserDraggableNodesCanvas implements Canvas {
     return this;
   }
 
-  public markPort(port: MarkPortRequest): UserDraggableNodesCanvas {
+  public markPort(port: MarkPortRequest): Canvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePort(
-    portId: string,
-    request?: UpdatePortRequest,
-  ): UserDraggableNodesCanvas {
+  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): UserDraggableNodesCanvas {
+  public unmarkPort(portId: string): Canvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): UserDraggableNodesCanvas {
+  public addEdge(edge: AddEdgeRequest): Canvas {
     this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public updateEdge(
-    edgeId: unknown,
-    request?: UpdateEdgeRequest,
-  ): UserDraggableNodesCanvas {
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): UserDraggableNodesCanvas {
+  public removeEdge(edgeId: unknown): Canvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
   }
 
-  public patchViewportMatrix(
-    request: PatchMatrixRequest,
-  ): UserDraggableNodesCanvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(
-    request: PatchMatrixRequest,
-  ): UserDraggableNodesCanvas {
+  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): UserDraggableNodesCanvas {
+  public clear(): Canvas {
     this.canvas.clear();
 
     this.nodes.forEach((value) => {

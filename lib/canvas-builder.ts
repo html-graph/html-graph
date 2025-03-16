@@ -8,13 +8,14 @@ import {
   ResizeReactiveNodesCanvas,
   CoreCanvas,
   DiContainer,
-} from "@/canvas";
-import { RenderingBox } from "./html-view";
-import { EventSubject } from "./event-subject";
-import {
   coreHtmlViewFactory,
   createBoxHtmlViewFactory,
-} from "./canvas/core-canvas";
+  TransformVirtualScrollCanvas,
+  hookTransformOptions,
+  VirtualScrollOptions,
+} from "./canvas";
+import { RenderingBox } from "./html-view";
+import { EventSubject } from "./event-subject";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -23,13 +24,16 @@ export class CanvasBuilder {
 
   private transformOptions: TransformOptions | undefined = undefined;
 
+  private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
+
   private hasDraggableNode = false;
 
   private hasTransformableViewport = false;
 
   private hasResizeReactiveNodes = false;
 
-  private boxRenderingTrigger: EventSubject<RenderingBox> | null = null;
+  private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
+    undefined;
 
   /**
    * specifies options for fundamental aspects of visualization
@@ -90,12 +94,20 @@ export class CanvasBuilder {
     return this;
   }
 
+  public setTransformVirtualScroll(
+    options: VirtualScrollOptions,
+  ): CanvasBuilder {
+    this.virtualScrollOptions = options;
+
+    return this;
+  }
+
   /**
    * builds final canvas
    */
   public build(): Canvas {
     const htmlViewFactory =
-      this.boxRenderingTrigger !== null
+      this.boxRenderingTrigger !== undefined
         ? createBoxHtmlViewFactory(this.boxRenderingTrigger)
         : coreHtmlViewFactory;
 
@@ -112,10 +124,24 @@ export class CanvasBuilder {
     }
 
     if (this.hasTransformableViewport) {
-      canvas = new UserTransformableViewportCanvas(
-        canvas,
-        this.transformOptions,
-      );
+      let transformOptions: TransformOptions | undefined =
+        this.transformOptions;
+      const trigger =
+        this.boxRenderingTrigger ?? new EventSubject<RenderingBox>();
+
+      if (this.virtualScrollOptions !== undefined) {
+        transformOptions = hookTransformOptions(transformOptions, trigger);
+      }
+
+      canvas = new UserTransformableViewportCanvas(canvas, transformOptions);
+
+      if (this.virtualScrollOptions !== undefined) {
+        canvas = new TransformVirtualScrollCanvas(
+          canvas,
+          trigger,
+          this.virtualScrollOptions,
+        );
+      }
     }
 
     return canvas;

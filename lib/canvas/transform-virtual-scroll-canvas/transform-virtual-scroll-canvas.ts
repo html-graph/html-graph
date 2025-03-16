@@ -1,4 +1,3 @@
-import { Viewport } from "@/viewport-transformer";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -6,37 +5,28 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { IdGenerator } from "@/id-generator";
-import { TwoWayMap } from "./two-way-map";
 import { Graph } from "@/graph";
+import { Viewport } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
+import { EventSubject } from "@/event-subject";
+import { RenderingBox } from "@/html-view";
+import { VirtualScrollOptions } from "./virtual-scroll-options";
 
-export class ResizeReactiveNodesCanvas implements Canvas {
-  public readonly viewport: Viewport;
-
-  public readonly transformation: Viewport;
-
+export class TransformVirtualScrollCanvas implements Canvas {
   public readonly graph: Graph;
 
   public readonly model: Graph;
 
-  private readonly nodes = new TwoWayMap<unknown, Element>();
+  public readonly viewport: Viewport;
 
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
-    this.nodes.hasKey(nodeId),
-  );
+  public readonly transformation: Viewport;
 
-  private readonly nodesResizeObserver: ResizeObserver;
-
-  public constructor(private readonly canvas: Canvas) {
-    this.nodesResizeObserver = new window.ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        const element = entry.target as HTMLElement;
-
-        this.handleNodeResize(element);
-      });
-    });
-
+  public constructor(
+    private readonly canvas: Canvas,
+    private readonly trigger: EventSubject<RenderingBox>,
+    private readonly options: VirtualScrollOptions,
+  ) {
+    console.log(this.trigger, this.options);
     this.viewport = this.canvas.viewport;
     this.transformation = this.viewport;
     this.graph = this.canvas.graph;
@@ -55,16 +45,8 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     return this;
   }
 
-  public addNode(request: AddNodeRequest): Canvas {
-    const id = this.nodeIdGenerator.create(request.id);
-
-    this.canvas.addNode({
-      ...request,
-      id,
-    });
-
-    this.nodes.set(id, request.element);
-    this.nodesResizeObserver.observe(request.element);
+  public addNode(node: AddNodeRequest): Canvas {
+    this.canvas.addNode(node);
 
     return this;
   }
@@ -77,11 +59,6 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
   public removeNode(nodeId: unknown): Canvas {
     this.canvas.removeNode(nodeId);
-
-    const element = this.nodes.getByKey(nodeId);
-    this.nodes.deleteByKey(nodeId);
-
-    this.nodesResizeObserver.unobserve(element!);
 
     return this;
   }
@@ -137,26 +114,10 @@ export class ResizeReactiveNodesCanvas implements Canvas {
   public clear(): Canvas {
     this.canvas.clear();
 
-    this.nodesResizeObserver.disconnect();
-    this.nodes.clear();
-
     return this;
   }
 
   public destroy(): void {
-    this.clear();
     this.canvas.destroy();
-  }
-
-  private handleNodeResize(element: HTMLElement): void {
-    const nodeId = this.nodes.getByValue(element)!;
-
-    this.canvas.updateNode(nodeId);
-
-    const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
-
-    edges.forEach((edge) => {
-      this.canvas.updateEdge(edge);
-    });
   }
 }
