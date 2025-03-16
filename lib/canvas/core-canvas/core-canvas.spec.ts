@@ -5,9 +5,10 @@ import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { MarkNodePortRequest } from "../mark-node-port-request";
+import { coreHtmlViewFactory } from "./core-html-view-factory";
 
 const createCanvas = (): CoreCanvas => {
-  return new CoreCanvas(new DiContainer({}));
+  return new CoreCanvas(new DiContainer({}, coreHtmlViewFactory));
 };
 
 const createElement = (params?: {

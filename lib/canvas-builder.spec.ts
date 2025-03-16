@@ -5,6 +5,8 @@ import {
   UserTransformableViewportCanvas,
 } from "@/canvas";
 import { CanvasBuilder } from "./canvas-builder";
+import { EventSubject } from "./event-subject";
+import { RenderingBox } from "./html-view";
 
 describe("CanvasBuilder", () => {
   it("should build core canvas", () => {
@@ -71,5 +73,28 @@ describe("CanvasBuilder", () => {
     const canvas = builder.setUserTransformableCanvas().build();
 
     expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
+  });
+
+  it("should build canvas with specified rendering trigger", () => {
+    const builder = new CanvasBuilder();
+    const trigger = new EventSubject<RenderingBox>();
+
+    const canvas = builder.setBoxRenderingTrigger(trigger).build();
+
+    const canvasElement = document.createElement("div");
+    canvas.attach(canvasElement);
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const container = canvasElement.children[0].children[0];
+    const elementsBefore = container.children.length;
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+    const elementsAfter = container.children.length;
+
+    expect([elementsBefore, elementsAfter]).toStrictEqual([0, 1]);
   });
 });

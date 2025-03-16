@@ -10,7 +10,7 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { HtmlController } from "@/html-controller";
+import { HtmlView } from "@/html-view";
 import { GraphStoreController } from "@/graph-store-controller";
 import { PublicGraphStore } from "@/public-graph-store";
 import { DiContainer } from "./di-container";
@@ -30,55 +30,55 @@ export class CoreCanvas implements Canvas {
 
   private readonly graphStoreController: GraphStoreController;
 
-  private readonly htmlController: HtmlController;
+  private readonly htmlView: HtmlView;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
-    this.htmlController.attachNode(nodeId);
+    this.htmlView.attachNode(nodeId);
   };
 
   private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
-    this.htmlController.attachEdge(edgeId);
+    this.htmlView.attachEdge(edgeId);
   };
 
   private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
-    this.htmlController.updateEdgeShape(edgeId);
+    this.htmlView.updateEdgeShape(edgeId);
   };
 
   private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
-    this.htmlController.updateEdgePriority(edgeId);
+    this.htmlView.updateEdgePriority(edgeId);
   };
 
   private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
-    this.htmlController.renderEdge(edgeId);
+    this.htmlView.renderEdge(edgeId);
   };
 
   private readonly onAfterPortUpdated = (portId: unknown): void => {
     const edges = this.internalModel.getPortAdjacentEdgeIds(portId);
 
     edges.forEach((edge) => {
-      this.htmlController.renderEdge(edge);
+      this.htmlView.renderEdge(edge);
     });
   };
 
   private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
-    this.htmlController.updateNodePriority(nodeId);
+    this.htmlView.updateNodePriority(nodeId);
   };
 
   private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
-    this.htmlController.updateNodeCoordinates(nodeId);
+    this.htmlView.updateNodeCoordinates(nodeId);
     const edges = this.internalModel.getNodeAdjacentEdgeIds(nodeId);
 
     edges.forEach((edge) => {
-      this.htmlController.renderEdge(edge);
+      this.htmlView.renderEdge(edge);
     });
   };
 
   private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
-    this.htmlController.detachEdge(edgeId);
+    this.htmlView.detachEdge(edgeId);
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
-    this.htmlController.detachNode(nodeId);
+    this.htmlView.detachNode(nodeId);
   };
 
   public constructor(di: DiContainer) {
@@ -86,7 +86,7 @@ export class CoreCanvas implements Canvas {
     this.internalModel = di.graphStore;
     this.internalTransformation = di.viewportTransformer;
     this.transformation = di.publicViewportTransformer;
-    this.htmlController = di.htmlController;
+    this.htmlView = di.htmlView;
     this.graphStoreController = di.graphStoreController;
 
     this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
@@ -127,13 +127,13 @@ export class CoreCanvas implements Canvas {
   }
 
   public attach(element: HTMLElement): CoreCanvas {
-    this.htmlController.attach(element);
+    this.htmlView.attach(element);
 
     return this;
   }
 
   public detach(): CoreCanvas {
-    this.htmlController.detach();
+    this.htmlView.detach();
 
     return this;
   }
@@ -205,14 +205,14 @@ export class CoreCanvas implements Canvas {
   }
 
   public clear(): CoreCanvas {
-    this.htmlController.clear();
+    this.htmlView.clear();
     this.graphStoreController.clear();
 
     return this;
   }
 
   public destroy(): void {
-    this.htmlController.destroy();
+    this.htmlView.destroy();
     this.graphStoreController.clear();
 
     this.graphStoreController.onAfterNodeAdded.unsubscribe(
