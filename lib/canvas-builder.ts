@@ -10,8 +10,7 @@ import {
   DiContainer,
   coreHtmlViewFactory,
   createBoxHtmlViewFactory,
-  TransformVirtualScrollCanvas,
-  hookTransformOptions,
+  UserTransformableViewportVirtualScrollCanvas,
   VirtualScrollOptions,
 } from "./canvas";
 import { RenderingBox } from "./html-view";
@@ -94,9 +93,7 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setTransformVirtualScroll(
-    options: VirtualScrollOptions,
-  ): CanvasBuilder {
+  public setVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
     this.virtualScrollOptions = options;
 
     return this;
@@ -106,9 +103,15 @@ export class CanvasBuilder {
    * builds final canvas
    */
   public build(): Canvas {
+    let trigger = this.boxRenderingTrigger;
+
+    if (this.virtualScrollOptions !== undefined && trigger === undefined) {
+      trigger = new EventSubject<RenderingBox>();
+    }
+
     const htmlViewFactory =
-      this.boxRenderingTrigger !== undefined
-        ? createBoxHtmlViewFactory(this.boxRenderingTrigger)
+      trigger !== undefined
+        ? createBoxHtmlViewFactory(trigger)
         : coreHtmlViewFactory;
 
     const container = new DiContainer(this.coreOptions, htmlViewFactory);
@@ -123,25 +126,18 @@ export class CanvasBuilder {
       canvas = new UserDraggableNodesCanvas(canvas, this.dragOptions);
     }
 
-    if (this.hasTransformableViewport) {
-      let transformOptions: TransformOptions | undefined =
-        this.transformOptions;
-      const trigger =
-        this.boxRenderingTrigger ?? new EventSubject<RenderingBox>();
-
-      if (this.virtualScrollOptions !== undefined) {
-        transformOptions = hookTransformOptions(transformOptions, trigger);
-      }
-
-      canvas = new UserTransformableViewportCanvas(canvas, transformOptions);
-
-      if (this.virtualScrollOptions !== undefined) {
-        canvas = new TransformVirtualScrollCanvas(
-          canvas,
-          trigger,
-          this.virtualScrollOptions,
-        );
-      }
+    if (this.virtualScrollOptions !== undefined) {
+      canvas = new UserTransformableViewportVirtualScrollCanvas(
+        canvas,
+        trigger!,
+        this.transformOptions,
+        this.virtualScrollOptions,
+      );
+    } else if (this.hasTransformableViewport) {
+      canvas = new UserTransformableViewportCanvas(
+        canvas,
+        this.transformOptions,
+      );
     }
 
     return canvas;

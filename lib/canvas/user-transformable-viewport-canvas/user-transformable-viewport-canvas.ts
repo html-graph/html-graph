@@ -80,7 +80,6 @@ export class UserTransformableViewportCanvas implements Canvas {
 
     event.preventDefault();
 
-    this.options.onTransformStarted();
     const { left, top } = this.element!.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
@@ -90,8 +89,9 @@ export class UserTransformableViewportCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
+    this.options.onBeforeTransformChange();
     this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
-    this.options.onTransformFinished();
+    this.options.onTransformChange();
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -168,6 +168,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
+    this.options.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(transform);
     this.options.onTransformChange();
   });
@@ -296,8 +297,6 @@ export class UserTransformableViewportCanvas implements Canvas {
   }
 
   private moveViewport(element: HTMLElement, dx: number, dy: number): void {
-    this.options.onBeforeTransformChange();
-
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = element.getBoundingClientRect();
@@ -309,6 +308,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
+    this.options.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(transform);
     this.options.onTransformChange();
   }
@@ -319,8 +319,6 @@ export class UserTransformableViewportCanvas implements Canvas {
     cx: number,
     cy: number,
   ): void {
-    this.options.onBeforeTransformChange();
-
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = element.getBoundingClientRect();
@@ -332,6 +330,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
+    this.options.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(transform);
     this.options.onTransformChange();
   }

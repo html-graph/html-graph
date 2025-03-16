@@ -33,7 +33,6 @@ export type {
 } from "./user-transformable-viewport-canvas";
 export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";
 export {
-  TransformVirtualScrollCanvas,
+  UserTransformableViewportVirtualScrollCanvas,
   type VirtualScrollOptions,
-  hookTransformOptions,
-} from "./transform-virtual-scroll-canvas";
+} from "./user-transformable-viewport-virtual-scroll-canvas";

@@ -28,8 +28,10 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
   private readonly nodesResizeObserver: ResizeObserver;
 
+  private readonly window = window;
+
   public constructor(private readonly canvas: Canvas) {
-    this.nodesResizeObserver = new window.ResizeObserver((entries) => {
+    this.nodesResizeObserver = new this.window.ResizeObserver((entries) => {
       entries.forEach((entry) => {
         const element = entry.target as HTMLElement;
 

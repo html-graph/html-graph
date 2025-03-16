@@ -10,8 +10,13 @@ const canvas: Canvas = new CanvasBuilder()
       },
     },
   })
-  .setUserTransformableViewport()
-  .setTransformVirtualScroll({
+  .setUserTransformableViewport({
+    transformPreprocessor: {
+      type: "scale-limit",
+      minContentScale: 0.3,
+    },
+  })
+  .setVirtualScroll({
     horizontalOffset: 25,
     verticalOffset: 25,
   })
@@ -25,8 +30,8 @@ let cnt = 0;
 
 let prevPortId: unknown | null = null;
 
-for (let i = 0; i < 20; i++) {
-  for (let j = 0; j < 20; j++) {
+for (let i = 0; i < 100; i++) {
+  for (let j = 0; j < 100; j++) {
     const frontPortId = `node-${cnt}-in`;
     const backPortId = `node-${cnt}-out`;
 
