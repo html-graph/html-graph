@@ -7,8 +7,8 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { PublicGraphStore } from "@/public-graph-store";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
@@ -16,9 +16,13 @@ import { processTouch, TouchState } from "./process-touch";
 import { move, scale } from "./transformations";
 
 export class UserTransformableViewportCanvas implements Canvas {
-  public readonly model: PublicGraphStore;
+  public readonly graph: Graph;
 
-  public readonly transformation: PublicViewportTransformer;
+  public readonly model: Graph;
+
+  public readonly viewport: Viewport;
+
+  public readonly transformation: Viewport;
 
   private element: HTMLElement | null = null;
 
@@ -154,7 +158,7 @@ export class UserTransformableViewportCanvas implements Canvas {
   };
 
   private readonly observer = new ResizeObserver(() => {
-    const prevTransform = this.canvas.transformation.getViewportMatrix();
+    const prevTransform = this.canvas.viewport.getViewportMatrix();
 
     const { width, height } = this.element!.getBoundingClientRect();
     const transform = this.options.transformPreprocessor({
@@ -176,8 +180,10 @@ export class UserTransformableViewportCanvas implements Canvas {
   ) {
     this.options = createOptions(transformOptions);
 
-    this.transformation = this.canvas.transformation;
-    this.model = this.canvas.model;
+    this.viewport = this.canvas.viewport;
+    this.transformation = this.viewport;
+    this.graph = this.canvas.graph;
+    this.model = this.graph;
   }
 
   public attach(element: HTMLElement): UserTransformableViewportCanvas {
@@ -305,7 +311,7 @@ export class UserTransformableViewportCanvas implements Canvas {
   private moveViewport(element: HTMLElement, dx: number, dy: number): void {
     this.options.onBeforeTransformChange();
 
-    const prevTransform = this.transformation.getViewportMatrix();
+    const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = element.getBoundingClientRect();
 
@@ -328,7 +334,7 @@ export class UserTransformableViewportCanvas implements Canvas {
   ): void {
     this.options.onBeforeTransformChange();
 
-    const prevTransform = this.canvas.transformation.getViewportMatrix();
+    const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = element.getBoundingClientRect();
 

@@ -57,8 +57,8 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-canvas.model.getAllNodeIds().forEach((nodeId) => {
-  const node = canvas.model.getNode(nodeId)!;
+canvas.graph.getAllNodeIds().forEach((nodeId) => {
+  const node = canvas.graph.getNode(nodeId)!;
 
   positions.set(nodeId, { x: node.x, y: node.y });
 });

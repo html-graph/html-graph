@@ -16,14 +16,14 @@ new ResizeObserver(() => {
   ctx.canvas.width = width;
   ctx.canvas.height = height;
 
-  backgroundDrawingFn(ctx, canvas.transformation);
+  backgroundDrawingFn(ctx, canvas.viewport);
 }).observe(canvasElement);
 
 const canvas = new CanvasBuilder()
   .setUserTransformableViewport({
     events: {
       onTransformChange: () => {
-        backgroundDrawingFn(ctx, canvas.transformation);
+        backgroundDrawingFn(ctx, canvas.viewport);
       },
     },
   })

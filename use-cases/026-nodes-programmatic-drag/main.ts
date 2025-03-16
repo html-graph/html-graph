@@ -81,7 +81,7 @@ class NodesDragHandler {
           throw new HtmlGraphError("failed to drag nonexisting node");
         }
 
-        const matrixContent = canvas.transformation.getContentMatrix();
+        const matrixContent = canvas.viewport.getContentMatrix();
 
         const xViewport = matrixContent.scale * node.x + matrixContent.x;
         const yViewport = matrixContent.scale * node.y + matrixContent.y;
@@ -89,7 +89,7 @@ class NodesDragHandler {
         const newNodeX = xViewport + event.movementX;
         const newNodeY = yViewport + event.movementY;
 
-        const matrixViewport = canvas.transformation.getViewportMatrix();
+        const matrixViewport = canvas.viewport.getViewportMatrix();
         node.x = matrixViewport.scale * newNodeX + matrixViewport.x;
         node.y = matrixViewport.scale * newNodeY + matrixViewport.y;
 

@@ -43,7 +43,7 @@ const boundsContainerElement = document.getElementById(
 )! as HTMLElement;
 
 const updateRectangleTransform = (): void => {
-  const { scale, x, y } = canvas.transformation.getContentMatrix();
+  const { scale, x, y } = canvas.viewport.getContentMatrix();
 
   scaleValue.innerText = `${scale.toFixed(2)}`;
   xValue.innerText = `${x.toFixed(2)}`;

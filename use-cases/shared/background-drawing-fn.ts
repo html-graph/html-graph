@@ -1,4 +1,4 @@
-import { PublicViewportTransformer } from "@html-graph/html-graph";
+import { Viewport } from "@html-graph/html-graph";
 
 const dotColor = "#d8d8d8";
 const dotGap = 25;
@@ -8,7 +8,7 @@ const limit = 10000;
 
 export const backgroundDrawingFn = (
   ctx: CanvasRenderingContext2D,
-  transformer: PublicViewportTransformer,
+  transformer: Viewport,
 ): void => {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 

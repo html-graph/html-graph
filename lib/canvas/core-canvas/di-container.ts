@@ -1,17 +1,17 @@
 import { GraphStoreController } from "@/graph-store-controller";
 import { CoreOptions, createDefaults } from "./options";
 import {
-  PublicViewportTransformer,
+  Viewport,
   ViewportTransformer,
 } from "@/viewport-transformer";
-import { PublicGraphStore } from "@/public-graph-store";
+import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { HtmlView } from "@/html-view";
 
 export class DiContainer {
-  public readonly publicViewportTransformer: PublicViewportTransformer;
+  public readonly publicViewportTransformer: Viewport;
 
-  public readonly publicGraphStore: PublicGraphStore;
+  public readonly publicGraphStore: Graph;
 
   public readonly viewportTransformer: ViewportTransformer;
 
@@ -29,10 +29,10 @@ export class DiContainer {
     ) => HtmlView,
   ) {
     this.graphStore = new GraphStore();
-    this.publicGraphStore = new PublicGraphStore(this.graphStore);
+    this.publicGraphStore = new Graph(this.graphStore);
 
     this.viewportTransformer = new ViewportTransformer();
-    this.publicViewportTransformer = new PublicViewportTransformer(
+    this.publicViewportTransformer = new Viewport(
       this.viewportTransformer,
     );
 

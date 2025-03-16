@@ -1,15 +1,15 @@
 import { TransformState } from "../transform-state";
 import { ViewportTransformer } from "../viewport-transformer";
-import { PublicViewportTransformer } from "./public-viewport-transformer";
+import { Viewport } from "./public-viewport-transformer";
 
-describe("PublicViewportTransformer", () => {
+describe("Viewport", () => {
   it("should return initial viewport matrix", () => {
     const transformer = new ViewportTransformer();
     jest
       .spyOn(transformer, "getViewportMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
-    const publicTransformer = new PublicViewportTransformer(transformer);
+    const publicTransformer = new Viewport(transformer);
 
     const viewportMatrix = publicTransformer.getViewportMatrix();
 
@@ -28,7 +28,7 @@ describe("PublicViewportTransformer", () => {
       .spyOn(transformer, "getContentMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
-    const publicTransformer = new PublicViewportTransformer(transformer);
+    const publicTransformer = new Viewport(transformer);
 
     const viewportMatrix = publicTransformer.getContentMatrix();
 
@@ -51,7 +51,7 @@ describe("PublicViewportTransformer", () => {
 
     jest.spyOn(transformer, "getViewportMatrix").mockReturnValue(matrix);
 
-    const publicTransformer = new PublicViewportTransformer(transformer);
+    const publicTransformer = new Viewport(transformer);
 
     const viewportMatrix = publicTransformer.getViewportMatrix();
 
@@ -68,7 +68,7 @@ describe("PublicViewportTransformer", () => {
 
     jest.spyOn(transformer, "getContentMatrix").mockReturnValue(matrix);
 
-    const publicTransformer = new PublicViewportTransformer(transformer);
+    const publicTransformer = new Viewport(transformer);
 
     const viewportMatrix = publicTransformer.getContentMatrix();
 

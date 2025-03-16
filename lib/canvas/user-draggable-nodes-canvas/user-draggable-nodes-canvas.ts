@@ -7,8 +7,8 @@ import { MarkPortRequest } from "../mark-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { DragOptions } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { PublicGraphStore } from "@/public-graph-store";
-import { PublicViewportTransformer } from "@/viewport-transformer";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
 import { UpdatePortRequest } from "../update-port-request";
 import { NodeState } from "./node-state";
@@ -16,9 +16,13 @@ import { Point } from "@/point";
 import { createOptions, Options } from "./create-options";
 
 export class UserDraggableNodesCanvas implements Canvas {
-  public readonly model: PublicGraphStore;
+  public readonly graph: Graph;
 
-  public readonly transformation: PublicViewportTransformer;
+  public readonly model: Graph;
+
+  public readonly viewport: Viewport;
+
+  public readonly transformation: Viewport;
 
   private maxNodePriority = 0;
 
@@ -104,8 +108,10 @@ export class UserDraggableNodesCanvas implements Canvas {
     private readonly canvas: Canvas,
     dragOptions?: DragOptions,
   ) {
-    this.transformation = this.canvas.transformation;
-    this.model = this.canvas.model;
+    this.viewport = this.canvas.viewport;
+    this.transformation = this.viewport;
+    this.graph = this.canvas.graph;
+    this.model = this.graph;
 
     this.options = createOptions(dragOptions ?? {});
   }
@@ -144,7 +150,7 @@ export class UserDraggableNodesCanvas implements Canvas {
         return;
       }
 
-      const node = this.model.getNode(nodeId)!;
+      const node = this.graph.getNode(nodeId)!;
 
       const isDragAllowed = this.options.onBeforeNodeDrag({
         nodeId,
@@ -177,7 +183,7 @@ export class UserDraggableNodesCanvas implements Canvas {
         y: event.touches[0].clientY,
       };
 
-      const node = this.model.getNode(nodeId)!;
+      const node = this.graph.getNode(nodeId)!;
 
       const isDragAllowed = this.options.onBeforeNodeDrag({
         nodeId,
@@ -317,20 +323,20 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
-    const node = this.model.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     if (node === null) {
       return;
     }
 
-    const contentMatrix = this.canvas.transformation.getContentMatrix();
+    const contentMatrix = this.canvas.viewport.getContentMatrix();
     const viewportX = contentMatrix.scale * node.x + contentMatrix.x;
     const viewportY = contentMatrix.scale * node.y + contentMatrix.y;
 
     const newViewportX = viewportX + dx;
     const newViewportY = viewportY + dy;
 
-    const viewportMatrix = this.canvas.transformation.getViewportMatrix();
+    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
     const contentX = viewportMatrix.scale * newViewportX + viewportMatrix.x;
     const contentY = viewportMatrix.scale * newViewportY + viewportMatrix.y;
     this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
@@ -344,7 +350,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private updateMaxNodePriority(nodeId: unknown): void {
-    const priority = this.model.getNode(nodeId)!.priority;
+    const priority = this.graph.getNode(nodeId)!.priority;
 
     this.maxNodePriority = Math.max(this.maxNodePriority, priority);
   }
@@ -359,7 +365,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
     const edgePriority = this.maxNodePriority - 1;
 
-    const edges = this.model.getNodeAdjacentEdgeIds(nodeId)!;
+    const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
     edges.forEach((edgeId) => {
       this.updateEdge(edgeId, { priority: edgePriority });
@@ -367,7 +373,7 @@ export class UserDraggableNodesCanvas implements Canvas {
   }
 
   private cancelMouseDrag(): void {
-    const node = this.model.getNode(this.grabbedNodeId);
+    const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {
       this.options.onNodeDragFinished({
@@ -394,7 +400,7 @@ export class UserDraggableNodesCanvas implements Canvas {
 
   private cancelTouchDrag(): void {
     this.previousTouchCoords = null;
-    const node = this.model.getNode(this.grabbedNodeId);
+    const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {
       this.options.onNodeDragFinished({

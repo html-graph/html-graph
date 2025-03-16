@@ -1,7 +1,7 @@
 import { CoreOptions, createOptions } from "./options";
 import { GraphStore } from "@/graph-store";
 import {
-  PublicViewportTransformer,
+  Viewport,
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
@@ -14,15 +14,19 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { CoreHtmlView } from "@/html-view";
 import { GraphStoreController } from "@/graph-store-controller";
-import { PublicGraphStore } from "@/public-graph-store";
+import { Graph } from "@/graph";
 
 /**
  * @deprecated
  */
 export class CanvasCore implements Canvas {
-  public readonly transformation: PublicViewportTransformer;
+  public readonly viewport: Viewport;
 
-  public readonly model: PublicGraphStore;
+  public readonly transformation: Viewport;
+
+  public readonly graph: Graph;
+
+  public readonly model: Graph;
 
   private readonly internalTransformation: ViewportTransformer;
 
@@ -83,12 +87,12 @@ export class CanvasCore implements Canvas {
 
   public constructor(apiOptions?: CoreOptions) {
     this.internalModel = new GraphStore();
-    this.model = new PublicGraphStore(this.internalModel);
+    this.graph = new Graph(this.internalModel);
+    this.model = this.graph;
     this.internalTransformation = new ViewportTransformer();
 
-    this.transformation = new PublicViewportTransformer(
-      this.internalTransformation,
-    );
+    this.viewport = new Viewport(this.internalTransformation);
+    this.transformation = this.viewport;
 
     this.htmlView = new CoreHtmlView(
       this.internalModel,

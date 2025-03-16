@@ -49,7 +49,7 @@ function updateRectangle(): void {
   boundsElement.style.width = `${width}px`;
   boundsElement.style.height = `${height}px`;
 
-  const m = canvas.transformation.getContentMatrix();
+  const m = canvas.viewport.getContentMatrix();
   boundsContainerElement.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y}) translate(${x - 5}px, ${y - 5}px) `;
 }
 

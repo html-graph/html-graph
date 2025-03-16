@@ -22,7 +22,7 @@ new ResizeObserver(() => {
   ctx.canvas.width = width;
   ctx.canvas.height = height;
 
-  backgroundDrawingFn(ctx, canvas.transformation);
+  backgroundDrawingFn(ctx, canvas.viewport);
 }).observe(canvasElement);
 
 const coreOptions: CoreOptions = {
@@ -40,7 +40,7 @@ const coreOptions: CoreOptions = {
 const transformOptions: TransformOptions = {
   events: {
     onTransformChange: () => {
-      backgroundDrawingFn(ctx, canvas.transformation);
+      backgroundDrawingFn(ctx, canvas.viewport);
     },
   },
 };

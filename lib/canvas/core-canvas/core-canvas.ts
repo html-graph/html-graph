@@ -1,5 +1,5 @@
 import {
-  PublicViewportTransformer,
+  Viewport,
   ViewportTransformer,
 } from "@/viewport-transformer";
 import { Canvas } from "../canvas";
@@ -12,7 +12,7 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlView } from "@/html-view";
 import { GraphStoreController } from "@/graph-store-controller";
-import { PublicGraphStore } from "@/public-graph-store";
+import { Graph } from "@/graph";
 import { DiContainer } from "./di-container";
 import { GraphStore } from "@/graph-store";
 
@@ -20,9 +20,13 @@ import { GraphStore } from "@/graph-store";
  * Provides low level API for acting on graph
  */
 export class CoreCanvas implements Canvas {
-  public readonly transformation: PublicViewportTransformer;
+  public readonly viewport: Viewport;
 
-  public readonly model: PublicGraphStore;
+  public readonly transformation: Viewport;
+
+  public readonly graph: Graph;
+
+  public readonly model: Graph;
 
   private readonly internalTransformation: ViewportTransformer;
 
@@ -82,10 +86,12 @@ export class CoreCanvas implements Canvas {
   };
 
   public constructor(di: DiContainer) {
-    this.model = di.publicGraphStore;
+    this.graph = di.publicGraphStore;
+    this.model = this.graph;
     this.internalModel = di.graphStore;
     this.internalTransformation = di.viewportTransformer;
-    this.transformation = di.publicViewportTransformer;
+    this.viewport = di.publicViewportTransformer;
+    this.transformation = this.viewport;
     this.htmlView = di.htmlView;
     this.graphStoreController = di.graphStoreController;
 
