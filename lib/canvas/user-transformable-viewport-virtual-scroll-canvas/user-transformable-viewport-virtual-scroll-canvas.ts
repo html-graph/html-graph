@@ -80,7 +80,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
       this.viewportWidth = entry.contentRect.width;
       this.viewportHeight = entry.contentRect.height;
 
-      this.ensureViewportAreaLoaded();
+      this.scheduleEnsureViewportAreaLoaded();
     });
 
     const onTransformFinished =
@@ -98,7 +98,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
           this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
 
           if (viewportMatrix.scale !== this.viewportMatrix.scale) {
-            this.ensureViewportAreaLoaded();
+            this.scheduleEnsureViewportAreaLoaded();
           }
 
           onTransformChange();
@@ -204,12 +204,16 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
 
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchViewportMatrix(request);
+    this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
+    this.loadAreaAroundViewport();
 
     return this;
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchContentMatrix(request);
+    this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
+    this.loadAreaAroundViewport();
 
     return this;
   }
@@ -231,7 +235,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     });
   }
 
-  private ensureViewportAreaLoaded(): void {
+  private scheduleEnsureViewportAreaLoaded(): void {
     const absoluteViewportWidth =
       this.viewportWidth * this.viewportMatrix.scale;
     const absoluteViewportHeight =
@@ -251,7 +255,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
       this.loadedArea.yTo > yViewportTo;
 
     if (!isLoaded) {
-      this.loadAreaAroundViewport();
+      this.scheduleLoadAreaAroundViewport();
     }
   }
 

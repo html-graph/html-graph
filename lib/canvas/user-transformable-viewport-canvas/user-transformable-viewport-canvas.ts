@@ -30,6 +30,8 @@ export class UserTransformableViewportCanvas implements Canvas {
 
   private window = window;
 
+  private wheelFinishTimer: ReturnType<typeof setTimeout> | null = null;
+
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
@@ -89,9 +91,17 @@ export class UserTransformableViewportCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
-    this.options.onBeforeTransformChange();
+    this.options.onTransformStarted();
     this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
-    this.options.onTransformChange();
+
+    if (this.wheelFinishTimer !== null) {
+      clearTimeout(this.wheelFinishTimer);
+    }
+
+    this.wheelFinishTimer = setTimeout(() => {
+      this.options.onTransformFinished();
+      this.wheelFinishTimer = null;
+    }, this.options.scaleWheelFinishTimeout);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (

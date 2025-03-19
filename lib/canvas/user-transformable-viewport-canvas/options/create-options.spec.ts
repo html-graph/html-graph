@@ -199,4 +199,10 @@ describe("createOptions", () => {
 
     expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
+
+  it("should set default scale wheel timeout", () => {
+    const res = createOptions(undefined);
+
+    expect(res.scaleWheelFinishTimeout).toBe(500);
+  });
 });

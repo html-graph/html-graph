@@ -621,6 +621,93 @@ describe("UserTransformableViewportCanvas", () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it("should call start event on mouse wheel scroll", () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformStarted = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    expect(onTransformStarted).toHaveBeenCalled();
+  });
+
+  it("should call finish event on mouse wheel scroll", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformFinished = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await new Promise((res) => {
+      setTimeout(() => {
+        expect(onTransformFinished).toHaveBeenCalled();
+        res(undefined);
+      }, 500);
+    });
+  });
+
+  it("should call finish after 500ms span without events", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformFinished = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await new Promise((r1) => {
+      setTimeout(async () => {
+        element.dispatchEvent(wheelEvent);
+
+        await new Promise((r2) => {
+          setTimeout(() => {
+            expect(onTransformFinished).toHaveBeenCalledTimes(1);
+            r2(undefined);
+          }, 500);
+        });
+
+        r1(undefined);
+      }, 499);
+    });
+  });
+
   it("should move canvas with touch", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserTransformableViewportCanvas(canvasCore);
