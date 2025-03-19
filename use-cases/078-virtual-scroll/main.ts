@@ -17,8 +17,10 @@ const canvas: Canvas = new CanvasBuilder()
     },
   })
   .setVirtualScroll({
-    horizontalOffset: 25,
-    verticalOffset: 25,
+    nodeContainingRadius: {
+      horizontal: 25,
+      vertical: 25,
+    },
   })
   .build();
 

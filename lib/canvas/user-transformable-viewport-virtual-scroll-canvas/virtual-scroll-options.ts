@@ -1,4 +1,6 @@
 export interface VirtualScrollOptions {
-  readonly verticalOffset: number;
-  readonly horizontalOffset: number;
+  readonly nodeContainingRadius: {
+    readonly vertical: number;
+    readonly horizontal: number;
+  };
 }
