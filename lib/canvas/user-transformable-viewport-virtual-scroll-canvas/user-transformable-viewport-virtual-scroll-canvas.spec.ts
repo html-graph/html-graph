@@ -431,6 +431,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     canvasElement.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(0, 0, 200, 200);
     };
@@ -450,6 +452,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     canvas.patchViewportMatrix({ x: 250, y: 250 });
 
     const container = canvasElement.children[0].children[0];
@@ -463,6 +467,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     canvas.patchContentMatrix({ x: -250, y: -250 });
 
     const container = canvasElement.children[0].children[0];
@@ -475,6 +481,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
     canvas.attach(canvasElement);
 
     configureEdgeGraph(canvas);
+
+    await wait(0);
 
     canvasElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -504,6 +512,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
       clientY: 0,
@@ -532,6 +542,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
       clientY: 0,
@@ -557,6 +569,8 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     configureEdgeGraph(canvas);
 
+    await wait(0);
+
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
       clientY: 0,
@@ -568,5 +582,33 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
     await wait(500);
 
     expect(onTransformFinished).toHaveBeenCalled();
+  });
+
+  it("should not load elements around viewport on wheel scale when not reached outside of viewport on next tick", async () => {
+    const { canvas } = create({
+      scale: {
+        mouseWheelSensitivity: 1.1,
+      },
+    });
+
+    const canvasElement = createElement({ width: 100, height: 100 });
+    canvas.attach(canvasElement);
+
+    configureEdgeGraph(canvas);
+
+    await wait(0);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    canvasElement.dispatchEvent(wheelEvent);
+
+    await wait(0);
+
+    const container = canvasElement.children[0].children[0];
+    expect(container.children.length).toBe(3);
   });
 });
