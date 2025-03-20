@@ -1,6 +1,14 @@
 import { CanvasCore } from "../canvas-core";
 import { UserTransformableViewportCanvas } from "./user-transformable-viewport-canvas";
 
+const wait = (timeout: number): Promise<void> => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res(undefined);
+    }, timeout);
+  });
+};
+
 const createElement = (params?: {
   x?: number;
   y?: number;
@@ -664,12 +672,8 @@ describe("UserTransformableViewportCanvas", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await new Promise((res) => {
-      setTimeout(() => {
-        expect(onTransformFinished).toHaveBeenCalled();
-        res(undefined);
-      }, 500);
-    });
+    await wait(500);
+    expect(onTransformFinished).toHaveBeenCalled();
   });
 
   it("should call finish after 500ms span without events", async () => {
@@ -692,20 +696,11 @@ describe("UserTransformableViewportCanvas", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await new Promise((r1) => {
-      setTimeout(async () => {
-        element.dispatchEvent(wheelEvent);
+    await wait(499);
+    element.dispatchEvent(wheelEvent);
+    await wait(500);
 
-        await new Promise((r2) => {
-          setTimeout(() => {
-            expect(onTransformFinished).toHaveBeenCalledTimes(1);
-            r2(undefined);
-          }, 500);
-        });
-
-        r1(undefined);
-      }, 499);
-    });
+    expect(onTransformFinished).toHaveBeenCalledTimes(1);
   });
 
   it("should call start before finish on wheel scale", async () => {
@@ -727,21 +722,11 @@ describe("UserTransformableViewportCanvas", () => {
     });
 
     element.dispatchEvent(wheelEvent);
+    await wait(499);
+    element.dispatchEvent(wheelEvent);
+    await wait(500);
 
-    await new Promise((r1) => {
-      setTimeout(async () => {
-        element.dispatchEvent(wheelEvent);
-
-        await new Promise((r2) => {
-          setTimeout(() => {
-            expect(onTransformStarted).toHaveBeenCalledTimes(1);
-            r2(undefined);
-          }, 500);
-        });
-
-        r1(undefined);
-      }, 499);
-    });
+    expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
 
   it("should move canvas with touch", () => {
