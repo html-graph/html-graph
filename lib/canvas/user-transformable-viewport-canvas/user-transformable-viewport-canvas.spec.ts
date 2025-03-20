@@ -708,6 +708,42 @@ describe("UserTransformableViewportCanvas", () => {
     });
   });
 
+  it("should call start before finish on wheel scale", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformStarted = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await new Promise((r1) => {
+      setTimeout(async () => {
+        element.dispatchEvent(wheelEvent);
+
+        await new Promise((r2) => {
+          setTimeout(() => {
+            expect(onTransformStarted).toHaveBeenCalledTimes(1);
+            r2(undefined);
+          }, 500);
+        });
+
+        r1(undefined);
+      }, 499);
+    });
+  });
+
   it("should move canvas with touch", () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserTransformableViewportCanvas(canvasCore);

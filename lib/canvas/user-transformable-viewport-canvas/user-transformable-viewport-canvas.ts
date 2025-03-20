@@ -91,7 +91,10 @@ export class UserTransformableViewportCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
-    this.options.onTransformStarted();
+    if (this.wheelFinishTimer === null) {
+      this.options.onTransformStarted();
+    }
+
     this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
 
     if (this.wheelFinishTimer !== null) {
