@@ -71,8 +71,8 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     private readonly virtualScrollOptions: VirtualScrollOptions,
   ) {
     this.nodeHorizontal =
-      this.virtualScrollOptions.nodeContainingRadius.horizontal;
-    this.nodeVertical = this.virtualScrollOptions.nodeContainingRadius.vertical;
+      this.virtualScrollOptions.maxNodeContainingRadius.horizontal;
+    this.nodeVertical = this.virtualScrollOptions.maxNodeContainingRadius.vertical;
 
     this.canvasResizeObserver = new this.window.ResizeObserver((entries) => {
       const entry = entries[0];

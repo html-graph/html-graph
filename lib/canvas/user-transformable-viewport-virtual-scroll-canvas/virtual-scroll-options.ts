@@ -1,5 +1,5 @@
 export interface VirtualScrollOptions {
-  readonly nodeContainingRadius: {
+  readonly maxNodeContainingRadius: {
     readonly vertical: number;
     readonly horizontal: number;
   };

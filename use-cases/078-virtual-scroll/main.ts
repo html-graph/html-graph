@@ -17,7 +17,7 @@ const canvas: Canvas = new CanvasBuilder()
     },
   })
   .setVirtualScroll({
-    nodeContainingRadius: {
+    maxNodeContainingRadius: {
       horizontal: 25,
       vertical: 25,
     },
@@ -32,8 +32,8 @@ let cnt = 0;
 
 let prevPortId: unknown | null = null;
 
-for (let i = 0; i < 100; i++) {
-  for (let j = 0; j < 100; j++) {
+for (let i = 0; i < 10; i++) {
+  for (let j = 0; j < 10000; j++) {
     const frontPortId = `node-${cnt}-in`;
     const backPortId = `node-${cnt}-out`;
 
