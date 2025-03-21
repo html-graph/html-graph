@@ -181,7 +181,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.canvas.patchViewportMatrix(transform);
+    this.performTransform(transform);
   });
 
   private readonly options: Options;
