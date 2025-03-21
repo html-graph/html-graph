@@ -1,7 +1,8 @@
 # TODO
 
 - virtual scroll
-- renname config methods from set* to enable*
+- rename config methods from set* to enable*
+- rename onTransformStarted to onUserTransformStarted
 - layouts
 - drag edge creation
 - background decorator
