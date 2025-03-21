@@ -1,10 +1,10 @@
 # TODO
 
-- virtual scroll
 - rename config methods from set* to enable*
 - rename onTransformStarted to onUserTransformStarted
 - rename onTransformFinished to onUserTransformFinished
 - add onResizeTransformStarted, onResizeTransformFinished
+- reset builder state
 - layouts
 - drag edge creation
 - background decorator
