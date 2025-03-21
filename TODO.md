@@ -3,6 +3,7 @@
 - virtual scroll
 - rename config methods from set* to enable*
 - rename onTransformStarted to onUserTransformStarted
+- rename onTransformFinished to onUserTransformFinished
 - layouts
 - drag edge creation
 - background decorator
