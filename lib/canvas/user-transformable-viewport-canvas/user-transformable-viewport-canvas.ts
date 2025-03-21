@@ -181,9 +181,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.options.onBeforeTransformChange();
-    this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
+    this.performTransform(transform);
   });
 
   private readonly options: Options;
@@ -321,9 +319,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.options.onBeforeTransformChange();
-    this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
+    this.performTransform(transform);
   }
 
   private scaleViewport(
@@ -343,9 +339,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.options.onBeforeTransformChange();
-    this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
+    this.performTransform(transform);
   }
 
   private stopMouseDrag(): void {
@@ -372,5 +366,11 @@ export class UserTransformableViewportCanvas implements Canvas {
     this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchFinish);
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
+  }
+
+  private performTransform(viewportTransform: PatchMatrixRequest): void {
+    this.options.onBeforeTransformChange();
+    this.canvas.patchViewportMatrix(viewportTransform);
+    this.options.onTransformChange();
   }
 }
