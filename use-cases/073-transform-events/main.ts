@@ -10,7 +10,7 @@ const builder: CanvasBuilder = new CanvasBuilder();
 
 const stateElement: HTMLElement = document.getElementById("state")!;
 
-builder.setUserTransformableViewport({
+builder.enableUserTransformableViewport({
   events: {
     onTransformStarted: () => {
       stateElement.innerHTML = "STARTED";

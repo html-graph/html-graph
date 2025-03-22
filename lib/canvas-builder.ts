@@ -46,7 +46,7 @@ export class CanvasBuilder {
   /**
    * enables nodes draggable bu user
    */
-  public setUserDraggableNodes(options?: DragOptions): CanvasBuilder {
+  public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
     this.dragOptions = options;
 
@@ -54,17 +54,9 @@ export class CanvasBuilder {
   }
 
   /**
-   * @deprecated
-   * use setUserTransformableViewport instead
-   */
-  public setUserTransformableCanvas(options?: TransformOptions): CanvasBuilder {
-    return this.setUserTransformableViewport(options);
-  }
-
-  /**
    * enables viewport transformable by user
    */
-  public setUserTransformableViewport(
+  public enableUserTransformableViewport(
     options?: TransformOptions,
   ): CanvasBuilder {
     this.hasTransformableViewport = true;
@@ -76,7 +68,7 @@ export class CanvasBuilder {
   /**
    * enables automatic edges update on node resize
    */
-  public setResizeReactiveNodes(): CanvasBuilder {
+  public enableResizeReactiveNodes(): CanvasBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;
@@ -85,7 +77,7 @@ export class CanvasBuilder {
   /**
    * sets emitter for rendering graph inside bounded area
    */
-  public setBoxRenderingTrigger(
+  public enableBoxAreaRendering(
     trigger: EventSubject<RenderingBox>,
   ): CanvasBuilder {
     this.boxRenderingTrigger = trigger;
@@ -93,7 +85,7 @@ export class CanvasBuilder {
     return this;
   }
 
-  public setVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
+  public enableVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
     this.virtualScrollOptions = options;
 
     return this;
@@ -140,6 +132,19 @@ export class CanvasBuilder {
       );
     }
 
+    this.reset();
+
     return canvas;
+  }
+
+  private reset(): void {
+    this.coreOptions = {};
+    this.dragOptions = undefined;
+    this.transformOptions = undefined;
+    this.virtualScrollOptions = undefined;
+    this.hasDraggableNode = false;
+    this.hasTransformableViewport = false;
+    this.hasResizeReactiveNodes = false;
+    this.boxRenderingTrigger = undefined;
   }
 }

@@ -49,9 +49,9 @@ const builder = new CanvasBuilder();
 
 const canvas = builder
   .setOptions(coreOptions)
-  .setUserDraggableNodes()
-  .setUserTransformableViewport(transformOptions)
-  .setResizeReactiveNodes()
+  .enableUserDraggableNodes()
+  .enableUserTransformableViewport(transformOptions)
+  .enableResizeReactiveNodes()
   .build();
 
 const helper = new AdvancedDemoHelper();

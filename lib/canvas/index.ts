@@ -1,4 +1,4 @@
-export type { EdgeShape } from "./canvas-core";
+export type { EdgeShapeConfig } from "./core-canvas";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
 export type { AddEdgeRequest } from "./add-edge-request";
 export type { MarkPortRequest } from "./mark-port-request";
@@ -9,7 +9,6 @@ export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { AddNodePorts } from "./add-node-ports";
 export type { Canvas } from "./canvas";
-export { CanvasCore } from "./canvas-core";
 export {
   CoreCanvas,
   DiContainer,
@@ -32,7 +31,5 @@ export type {
   ScaleLimitPreprocessorParams,
 } from "./user-transformable-viewport-canvas";
 export { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";
-export {
-  UserTransformableViewportVirtualScrollCanvas,
-  type VirtualScrollOptions,
-} from "./user-transformable-viewport-virtual-scroll-canvas";
+export { UserTransformableViewportVirtualScrollCanvas } from "./user-transformable-viewport-virtual-scroll-canvas";
+export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-canvas";

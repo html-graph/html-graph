@@ -19,11 +19,7 @@ import {
 export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
   public readonly graph: Graph;
 
-  public readonly model: Graph;
-
   public readonly viewport: Viewport;
-
-  public readonly transformation: Viewport;
 
   private readonly canvas: Canvas;
 
@@ -71,9 +67,8 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     private readonly virtualScrollOptions: VirtualScrollOptions,
   ) {
     this.nodeHorizontal =
-      this.virtualScrollOptions.maxNodeContainingRadius.horizontal;
-    this.nodeVertical =
-      this.virtualScrollOptions.maxNodeContainingRadius.vertical;
+      this.virtualScrollOptions.nodeContainingRadius.horizontal;
+    this.nodeVertical = this.virtualScrollOptions.nodeContainingRadius.vertical;
 
     this.canvasResizeObserver = new this.window.ResizeObserver((entries) => {
       const entry = entries[0];
@@ -119,9 +114,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
 
     this.viewport = this.canvas.viewport;
-    this.transformation = this.viewport;
     this.graph = this.canvas.graph;
-    this.model = this.graph;
 
     this.trigger.subscribe(this.updateLoadedArea);
   }

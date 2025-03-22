@@ -19,5 +19,7 @@ export interface TransformOptions {
     readonly onTransformFinished?: () => void;
     readonly onBeforeTransformChange?: () => void;
     readonly onTransformChange?: () => void;
+    readonly onResizeTransformStarted?: () => void;
+    readonly onResizeTransformFinished?: () => void;
   };
 }

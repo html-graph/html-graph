@@ -19,7 +19,7 @@ export function createNode(params: {
 }
 
 const builder: CanvasBuilder = new CanvasBuilder();
-builder.setUserTransformableViewport();
+builder.enableUserTransformableViewport();
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

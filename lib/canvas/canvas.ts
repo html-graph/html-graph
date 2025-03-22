@@ -15,21 +15,9 @@ export interface Canvas {
   readonly graph: Graph;
 
   /**
-   * @deprecated
-   * use "graph" property instead
-   */
-  readonly model: Graph;
-
-  /**
-   * provides api for canvas accessing viewport state
+   * provides api for accessing viewport state
    */
   readonly viewport: Viewport;
-
-  /**
-   * @deprecated
-   * use "viewport" property instead
-   */
-  readonly transformation: Viewport;
 
   /**
    * adds node to graph

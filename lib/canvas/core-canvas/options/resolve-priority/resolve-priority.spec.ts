@@ -27,10 +27,10 @@ describe("resolvePriority", () => {
     expect(priorities).toStrictEqual([0, 1]);
   });
 
-  it("should return shared incremental nodes and edges priority functions", () => {
+  it("should return incremental nodes and edges priority functions", () => {
     const { nodesPriorityFn, edgesPriorityFn } = resolvePriority(
-      "shared-incremental",
-      "shared-incremental",
+      "incremental",
+      "incremental",
     );
 
     const priorities = [

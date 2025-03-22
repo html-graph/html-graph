@@ -161,13 +161,13 @@ describe("createOptions", () => {
   it("should set default mouse down event validator", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       shift: {
-        mouseDownEventVerifier: mouseDownEventVerifier,
+        mouseDownEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
@@ -175,13 +175,13 @@ describe("createOptions", () => {
   it("should set default mouse up event validator", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       shift: {
-        mouseUpEventVerifier: mouseUpEventVerifier,
+        mouseUpEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
@@ -189,13 +189,13 @@ describe("createOptions", () => {
   it("should set default mouse wheel event validator", () => {
     const mouseWheelEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       scale: {
-        mouseWheelEventVerifier: mouseWheelEventVerifier,
+        mouseWheelEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
@@ -204,5 +204,29 @@ describe("createOptions", () => {
     const res = createOptions(undefined);
 
     expect(res.scaleWheelFinishTimeout).toBe(500);
+  });
+
+  it("should set specified onResizeTransformStarted", () => {
+    const onResizeTransformStarted = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onResizeTransformStarted,
+      },
+    });
+
+    expect(res.onResizeTransformStarted).toBe(onResizeTransformStarted);
+  });
+
+  it("should set specified onResizeTransformFinished", () => {
+    const onResizeTransformFinished = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onResizeTransformFinished,
+      },
+    });
+
+    expect(res.onResizeTransformFinished).toBe(onResizeTransformFinished);
   });
 });

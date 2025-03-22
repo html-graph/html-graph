@@ -32,7 +32,7 @@ const transformOptions: TransformOptions = {
   },
 };
 
-builder.setUserTransformableViewport(transformOptions);
+builder.enableUserTransformableViewport(transformOptions);
 
 const canvas: Canvas = builder.build();
 

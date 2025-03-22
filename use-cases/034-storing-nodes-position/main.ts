@@ -23,7 +23,7 @@ const dragOptions: DragOptions = {
   },
 };
 
-builder.setUserDraggableNodes(dragOptions);
+builder.enableUserDraggableNodes(dragOptions);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

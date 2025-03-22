@@ -20,8 +20,8 @@ const coreOptions: CoreOptions = {
 
 builder
   .setOptions(coreOptions)
-  .setUserTransformableViewport()
-  .setUserDraggableNodes();
+  .enableUserTransformableViewport()
+  .enableUserDraggableNodes();
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

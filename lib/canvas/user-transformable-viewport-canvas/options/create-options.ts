@@ -87,5 +87,9 @@ export const createOptions = (
     mouseUpEventVerifier,
     mouseWheelEventVerifier,
     scaleWheelFinishTimeout: transformOptions?.scale?.wheelFinishTimeout ?? 500,
+    onResizeTransformStarted:
+      transformOptions?.events?.onResizeTransformStarted ?? ((): void => {}),
+    onResizeTransformFinished:
+      transformOptions?.events?.onResizeTransformFinished ?? ((): void => {}),
   };
 };

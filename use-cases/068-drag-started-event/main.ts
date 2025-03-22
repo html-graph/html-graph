@@ -11,7 +11,7 @@ const builder: CanvasBuilder = new CanvasBuilder();
 
 const current = document.getElementById("current") as HTMLElement;
 
-builder.setUserDraggableNodes({
+builder.enableUserDraggableNodes({
   events: {
     onBeforeNodeDrag: (payload: NodeDragPayload) => {
       current.innerText = `before drag triggered for ${JSON.stringify(payload)}`;

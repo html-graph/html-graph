@@ -17,21 +17,13 @@ export const resolvePriority: (
   let nodesPriorityFn: PriorityFn = standardPriorityFn;
   let edgesPriorityFn: PriorityFn = standardPriorityFn;
 
-  if (nodesPriority === "incremental") {
-    nodesPriorityFn = createIncrementalPriorityFn();
-  }
-
-  if (edgesPriority === "incremental") {
-    edgesPriorityFn = createIncrementalPriorityFn();
-  }
-
   const sharedFn = createIncrementalPriorityFn();
 
-  if (nodesPriority === "shared-incremental") {
+  if (nodesPriority === "incremental") {
     nodesPriorityFn = sharedFn;
   }
 
-  if (edgesPriority === "shared-incremental") {
+  if (edgesPriority === "incremental") {
     edgesPriorityFn = sharedFn;
   }
 

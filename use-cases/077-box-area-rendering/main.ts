@@ -17,15 +17,15 @@ const canvas: Canvas = new CanvasBuilder()
       },
     },
   })
-  .setUserTransformableViewport({
+  .enableUserTransformableViewport({
     events: {
       onTransformChange: () => {
         updateRectangle();
       },
     },
   })
-  .setBoxRenderingTrigger(trigger)
-  .setUserDraggableNodes()
+  .enableBoxAreaRendering(trigger)
+  .enableUserDraggableNodes()
   .build();
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;

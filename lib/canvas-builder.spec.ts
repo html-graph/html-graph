@@ -47,7 +47,7 @@ describe("CanvasBuilder", () => {
   it("should build resize reactive canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.setResizeReactiveNodes().build();
+    const canvas = builder.enableResizeReactiveNodes().build();
 
     expect(canvas instanceof ResizeReactiveNodesCanvas).toBe(true);
   });
@@ -55,7 +55,7 @@ describe("CanvasBuilder", () => {
   it("should build user draggable nodes canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.setUserDraggableNodes().build();
+    const canvas = builder.enableUserDraggableNodes().build();
 
     expect(canvas instanceof UserDraggableNodesCanvas).toBe(true);
   });
@@ -63,15 +63,7 @@ describe("CanvasBuilder", () => {
   it("should build user transformable canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.setUserTransformableViewport().build();
-
-    expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
-  });
-
-  it("should build user transformable canvas using deprecated method", () => {
-    const builder = new CanvasBuilder();
-
-    const canvas = builder.setUserTransformableCanvas().build();
+    const canvas = builder.enableUserTransformableViewport().build();
 
     expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
   });
@@ -80,7 +72,7 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder();
     const trigger = new EventSubject<RenderingBox>();
 
-    const canvas = builder.setBoxRenderingTrigger(trigger).build();
+    const canvas = builder.enableBoxAreaRendering(trigger).build();
 
     const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
@@ -103,8 +95,8 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder();
 
     const canvas = builder
-      .setVirtualScroll({
-        maxNodeContainingRadius: {
+      .enableVirtualScroll({
+        nodeContainingRadius: {
           vertical: 100,
           horizontal: 100,
         },
