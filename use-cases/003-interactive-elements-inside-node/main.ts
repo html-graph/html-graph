@@ -30,7 +30,7 @@ const transformOptions: TransformOptions = {
 };
 
 const canvas: Canvas = builder
-  .setUserTransformableViewport(transformOptions)
+  .enableUserTransformableViewport(transformOptions)
   .build();
 
 let angle = 0;

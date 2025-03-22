@@ -1,5 +1,5 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeShape } from "./edge-shape";
+import { EdgeShapeConfig } from "./edge-shape-config";
 import { Priority } from "./priority";
 
 export interface CoreOptions {
@@ -33,7 +33,7 @@ export interface CoreOptions {
     /**
      * specifies default controller
      */
-    readonly shape?: EdgeShape;
+    readonly shape?: EdgeShapeConfig;
     /**
      * specifies default z-index value
      */

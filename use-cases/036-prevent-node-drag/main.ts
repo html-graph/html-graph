@@ -9,7 +9,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-builder.setUserDraggableNodes({
+builder.enableUserDraggableNodes({
   events: {
     onBeforeNodeDrag: (payload: NodeDragPayload) => {
       return payload.nodeId !== "node-1";

@@ -24,7 +24,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "lib/index.ts"),
       formats: ["es", "umd"],
-      fileName: "main",
+      fileName: "html-graph",
       name: "HtmlGraph",
     },
     copyPublicDir: false,

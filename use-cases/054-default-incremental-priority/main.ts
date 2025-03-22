@@ -17,7 +17,7 @@ const coreOptions: CoreOptions = {
     shape: {
       hasTargetArrow: true,
     },
-    priority: "incremental",
+    priority: 0,
   },
 };
 

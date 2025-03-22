@@ -32,10 +32,10 @@ builder
       priority: 1,
     },
   })
-  .setUserDraggableNodes({
+  .enableUserDraggableNodes({
     moveOnTop: false,
   })
-  .setUserTransformableViewport();
+  .enableUserTransformableViewport();
 
 const canvas: Canvas = builder.build();
 const canvasElement = document.getElementById("canvas")!;

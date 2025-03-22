@@ -18,11 +18,7 @@ import { createOptions, Options } from "./create-options";
 export class UserDraggableNodesCanvas implements Canvas {
   public readonly graph: Graph;
 
-  public readonly model: Graph;
-
   public readonly viewport: Viewport;
-
-  public readonly transformation: Viewport;
 
   private maxNodePriority = 0;
 
@@ -109,9 +105,7 @@ export class UserDraggableNodesCanvas implements Canvas {
     dragOptions?: DragOptions,
   ) {
     this.viewport = this.canvas.viewport;
-    this.transformation = this.viewport;
     this.graph = this.canvas.graph;
-    this.model = this.graph;
 
     this.options = createOptions(dragOptions ?? {});
   }

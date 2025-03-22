@@ -19,7 +19,7 @@ const coreOptions: CoreOptions = {
 
 builder.setOptions(coreOptions);
 
-builder.setUserDraggableNodes();
+builder.enableUserDraggableNodes();
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

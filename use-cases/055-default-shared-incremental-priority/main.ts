@@ -11,13 +11,13 @@ const builder: CanvasBuilder = new CanvasBuilder();
 
 const coreOptions: CoreOptions = {
   nodes: {
-    priority: "shared-incremental",
+    priority: "incremental",
   },
   edges: {
     shape: {
       hasTargetArrow: true,
     },
-    priority: "shared-incremental",
+    priority: "incremental",
   },
 };
 

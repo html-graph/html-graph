@@ -115,7 +115,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onBeforeTransformChange,
+        onBeforeTransformChange: onBeforeTransformChange,
       },
     });
 
@@ -127,7 +127,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformChange,
+        onTransformChange: onTransformChange,
       },
     });
 
@@ -139,7 +139,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformStarted,
+        onTransformStarted: onTransformStarted,
       },
     });
 
@@ -151,7 +151,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformFinished,
+        onTransformFinished: onTransformFinished,
       },
     });
 
@@ -161,13 +161,13 @@ describe("createOptions", () => {
   it("should set default mouse down event validator", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       shift: {
         mouseDownEventVerifier: mouseDownEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
@@ -175,13 +175,13 @@ describe("createOptions", () => {
   it("should set default mouse up event validator", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       shift: {
         mouseUpEventVerifier: mouseUpEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
@@ -189,13 +189,13 @@ describe("createOptions", () => {
   it("should set default mouse wheel event validator", () => {
     const mouseWheelEventVerifier = (): boolean => false;
 
-    const dragOptions: TransformOptions = {
+    const transformOptions: TransformOptions = {
       scale: {
         mouseWheelEventVerifier: mouseWheelEventVerifier,
       },
     };
 
-    const options = createOptions(dragOptions);
+    const options = createOptions(transformOptions);
 
     expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
@@ -204,5 +204,29 @@ describe("createOptions", () => {
     const res = createOptions(undefined);
 
     expect(res.scaleWheelFinishTimeout).toBe(500);
+  });
+
+  it("should set specified onResizeTransformStarted", () => {
+    const onResizeTransformStarted = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onResizeTransformStarted: onResizeTransformStarted,
+      },
+    });
+
+    expect(res.onResizeTransformStarted).toBe(onResizeTransformStarted);
+  });
+
+  it("should set specified onResizeTransformFinished", () => {
+    const onResizeTransformFinished = (): void => {};
+
+    const res = createOptions({
+      events: {
+        onResizeTransformFinished,
+      },
+    });
+
+    expect(res.onResizeTransformFinished).toBe(onResizeTransformFinished);
   });
 });

@@ -53,7 +53,7 @@ const create = (
     trigger,
     transformOptions,
     {
-      maxNodeContainingRadius: {
+      nodeContainingRadius: {
         vertical: 25,
         horizontal: 25,
       },
@@ -533,7 +533,7 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     const { canvas } = create({
       events: {
-        onTransformChange,
+        onTransformChange: onTransformChange,
       },
     });
 
@@ -560,7 +560,7 @@ describe("UserTransformableViewportVirtualScrollCanvas", () => {
 
     const { canvas } = create({
       events: {
-        onTransformFinished,
+        onTransformFinished: onTransformFinished,
       },
     });
 

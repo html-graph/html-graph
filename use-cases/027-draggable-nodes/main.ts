@@ -8,7 +8,7 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
-builder.setUserDraggableNodes({
+builder.enableUserDraggableNodes({
   events: {
     onNodeDrag: (payload: NodeDragPayload) => {
       const current = document.getElementById("current") as HTMLElement;

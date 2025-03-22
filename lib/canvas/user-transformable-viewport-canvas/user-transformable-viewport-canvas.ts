@@ -18,11 +18,7 @@ import { move, scale } from "./transformations";
 export class UserTransformableViewportCanvas implements Canvas {
   public readonly graph: Graph;
 
-  public readonly model: Graph;
-
   public readonly viewport: Viewport;
-
-  public readonly transformation: Viewport;
 
   private element: HTMLElement | null = null;
 
@@ -186,7 +182,9 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
+    this.options.onResizeTransformStarted();
     this.canvas.patchViewportMatrix(transform);
+    this.options.onResizeTransformFinished();
   });
 
   private readonly options: Options;
@@ -198,9 +196,7 @@ export class UserTransformableViewportCanvas implements Canvas {
     this.options = createOptions(transformOptions);
 
     this.viewport = this.canvas.viewport;
-    this.transformation = this.viewport;
     this.graph = this.canvas.graph;
-    this.model = this.graph;
   }
 
   public attach(element: HTMLElement): Canvas {

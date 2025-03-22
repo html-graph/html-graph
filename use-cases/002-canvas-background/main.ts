@@ -20,7 +20,7 @@ new ResizeObserver(() => {
 }).observe(canvasElement);
 
 const canvas = new CanvasBuilder()
-  .setUserTransformableViewport({
+  .enableUserTransformableViewport({
     events: {
       onTransformChange: () => {
         backgroundDrawingFn(ctx, canvas.viewport);

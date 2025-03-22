@@ -36,7 +36,7 @@ export function createNode(params: {
 }
 
 const builder: CanvasBuilder = new CanvasBuilder();
-builder.setResizeReactiveNodes();
+builder.enableResizeReactiveNodes();
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

@@ -4,14 +4,15 @@
 
 ### Graph visualization library that enables nodes customization using HTML
 
-<a target="_blank" href="https://html-graph.github.io/use-cases/020-advanced-demo/">
+<a target="_blank" href="https://html-graph.github.io/use-cases/advanced-demo/">
     <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
 
-Instead of connecting nodes directly this library uses concept of ports, which provide greater fexibility at managing edges.
-Port is an entity of a node to which edges can be attached to.
+Instead of connecting nodes directly, this library utilizes the concept of ports,
+which provide greater flexibility in managing edges. A port is an entity on a
+node to which edges can be attached.
 
-Visit <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a> for more.
+Visit the <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a> for more details.
 
 ## Getting started:
 
@@ -56,9 +57,10 @@ const canvas = new CanvasBuilder()
       },
     },
   })
-  .setUserDraggableNodes()
-  .setUserTransformableViewport()
-  .setResizeReactiveNodes()
+  .enableUserDraggableNodes()
+  .enableUserTransformableViewport()
+  .enableResizeReactiveNodes()
+  .enableVirtualScroll()
   .build();
 
 canvas

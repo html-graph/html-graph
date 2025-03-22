@@ -14,11 +14,7 @@ import { Canvas } from "../canvas";
 export class ResizeReactiveNodesCanvas implements Canvas {
   public readonly viewport: Viewport;
 
-  public readonly transformation: Viewport;
-
   public readonly graph: Graph;
-
-  public readonly model: Graph;
 
   private readonly nodes = new TwoWayMap<unknown, Element>();
 
@@ -40,9 +36,7 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     });
 
     this.viewport = this.canvas.viewport;
-    this.transformation = this.viewport;
     this.graph = this.canvas.graph;
-    this.model = this.graph;
   }
 
   public attach(element: HTMLElement): Canvas {

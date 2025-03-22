@@ -10,14 +10,14 @@ const canvas: Canvas = new CanvasBuilder()
       },
     },
   })
-  .setUserTransformableViewport({
+  .enableUserTransformableViewport({
     transformPreprocessor: {
       type: "scale-limit",
       minContentScale: 0.3,
     },
   })
-  .setVirtualScroll({
-    maxNodeContainingRadius: {
+  .enableVirtualScroll({
+    nodeContainingRadius: {
       horizontal: 25,
       vertical: 25,
     },

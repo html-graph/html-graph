@@ -19,11 +19,7 @@ import { GraphStore } from "@/graph-store";
 export class CoreCanvas implements Canvas {
   public readonly viewport: Viewport;
 
-  public readonly transformation: Viewport;
-
   public readonly graph: Graph;
-
-  public readonly model: Graph;
 
   private readonly internalTransformation: ViewportTransformer;
 
@@ -84,11 +80,9 @@ export class CoreCanvas implements Canvas {
 
   public constructor(di: DiContainer) {
     this.graph = di.graph;
-    this.model = this.graph;
     this.internalModel = di.graphStore;
     this.internalTransformation = di.viewportTransformer;
     this.viewport = di.viewport;
-    this.transformation = this.viewport;
     this.htmlView = di.htmlView;
     this.graphStoreController = di.graphStoreController;
 
