@@ -1,6 +1,5 @@
 # TODO
 
-- reset builder state
 - layouts
 - drag edge creation
 - background decorator
