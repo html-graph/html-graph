@@ -110,6 +110,11 @@ export class UserTransformableViewportCanvas implements Canvas {
   private readonly onTouchStart: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
+    if (this.prevTouches !== null) {
+      this.prevTouches = processTouch(event);
+      return;
+    }
+
     this.prevTouches = processTouch(event);
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);

@@ -817,6 +817,36 @@ describe("UserTransformableViewportCanvas", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
 
+  it("should not dispatch onTransformStarted for next touch", () => {
+    const canvasCore = new CanvasCore();
+    const onTransformStarted = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 10, clientY: 10 }),
+        ],
+      }),
+    );
+
+    expect(onTransformStarted).toHaveReturnedTimes(1);
+  });
+
   it("should handle touch gracefully if element gets detached in the process", async () => {
     const canvasCore = new CanvasCore();
     const canvas = new UserTransformableViewportCanvas(canvasCore);
