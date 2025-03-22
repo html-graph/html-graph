@@ -44,7 +44,6 @@ const slider: HTMLInputElement = document.getElementById(
 ) as HTMLInputElement;
 
 slider.addEventListener("input", () => {
-  console.log(slider.value);
   addNode1Request.element.style.width = `${slider.value}px`;
   addNode1Request.element.style.height = `${slider.value}px`;
   addNode2Request.element.style.width = `${slider.value}px`;

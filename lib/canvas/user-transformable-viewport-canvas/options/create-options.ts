@@ -86,5 +86,6 @@ export const createOptions = (
     mouseDownEventVerifier,
     mouseUpEventVerifier,
     mouseWheelEventVerifier,
+    scaleWheelFinishTimeout: transformOptions?.scale?.wheelFinishTimeout ?? 500,
   };
 };

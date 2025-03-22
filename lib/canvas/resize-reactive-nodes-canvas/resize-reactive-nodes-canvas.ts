@@ -28,8 +28,10 @@ export class ResizeReactiveNodesCanvas implements Canvas {
 
   private readonly nodesResizeObserver: ResizeObserver;
 
+  private readonly window = window;
+
   public constructor(private readonly canvas: Canvas) {
-    this.nodesResizeObserver = new window.ResizeObserver((entries) => {
+    this.nodesResizeObserver = new this.window.ResizeObserver((entries) => {
       entries.forEach((entry) => {
         const element = entry.target as HTMLElement;
 
@@ -43,19 +45,19 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     this.model = this.graph;
   }
 
-  public attach(element: HTMLElement): ResizeReactiveNodesCanvas {
+  public attach(element: HTMLElement): Canvas {
     this.canvas.attach(element);
 
     return this;
   }
 
-  public detach(): ResizeReactiveNodesCanvas {
+  public detach(): Canvas {
     this.canvas.detach();
 
     return this;
   }
 
-  public addNode(request: AddNodeRequest): ResizeReactiveNodesCanvas {
+  public addNode(request: AddNodeRequest): Canvas {
     const id = this.nodeIdGenerator.create(request.id);
 
     this.canvas.addNode({
@@ -69,16 +71,13 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     return this;
   }
 
-  public updateNode(
-    nodeId: unknown,
-    request?: UpdateNodeRequest,
-  ): ResizeReactiveNodesCanvas {
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
     this.canvas.updateNode(nodeId, request);
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): ResizeReactiveNodesCanvas {
+  public removeNode(nodeId: unknown): Canvas {
     this.canvas.removeNode(nodeId);
 
     const element = this.nodes.getByKey(nodeId);
@@ -89,65 +88,55 @@ export class ResizeReactiveNodesCanvas implements Canvas {
     return this;
   }
 
-  public markPort(port: MarkPortRequest): ResizeReactiveNodesCanvas {
+  public markPort(port: MarkPortRequest): Canvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePort(
-    portId: string,
-    request?: UpdatePortRequest,
-  ): ResizeReactiveNodesCanvas {
+  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): ResizeReactiveNodesCanvas {
+  public unmarkPort(portId: string): Canvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): ResizeReactiveNodesCanvas {
+  public addEdge(edge: AddEdgeRequest): Canvas {
     this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public updateEdge(
-    edgeId: unknown,
-    request?: UpdateEdgeRequest,
-  ): ResizeReactiveNodesCanvas {
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): ResizeReactiveNodesCanvas {
+  public removeEdge(edgeId: unknown): Canvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
   }
 
-  public patchViewportMatrix(
-    request: PatchMatrixRequest,
-  ): ResizeReactiveNodesCanvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(
-    request: PatchMatrixRequest,
-  ): ResizeReactiveNodesCanvas {
+  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): ResizeReactiveNodesCanvas {
+  public clear(): Canvas {
     this.canvas.clear();
 
     this.nodesResizeObserver.disconnect();

@@ -1,6 +1,14 @@
 import { CanvasCore } from "../canvas-core";
 import { UserTransformableViewportCanvas } from "./user-transformable-viewport-canvas";
 
+const wait = (timeout: number): Promise<void> => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res(undefined);
+    }, timeout);
+  });
+};
+
 const createElement = (params?: {
   x?: number;
   y?: number;
@@ -619,6 +627,106 @@ describe("UserTransformableViewportCanvas", () => {
     element.dispatchEvent(wheelEvent);
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("should call start event on mouse wheel scroll", () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformStarted = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    expect(onTransformStarted).toHaveBeenCalled();
+  });
+
+  it("should call finish event on mouse wheel scroll", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformFinished = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await wait(500);
+    expect(onTransformFinished).toHaveBeenCalled();
+  });
+
+  it("should call finish after 500ms span without events", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformFinished = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformFinished,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await wait(499);
+    element.dispatchEvent(wheelEvent);
+    await wait(500);
+
+    expect(onTransformFinished).toHaveBeenCalledTimes(1);
+  });
+
+  it("should call start before finish on wheel scale", async () => {
+    const canvasCore = new CanvasCore();
+
+    const onTransformStarted = jest.fn();
+    const canvas = new UserTransformableViewportCanvas(canvasCore, {
+      events: {
+        onTransformStarted,
+      },
+    });
+    const element = createElement({ width: 1000, height: 1000 });
+    canvas.attach(element);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+    await wait(499);
+    element.dispatchEvent(wheelEvent);
+    await wait(500);
+
+    expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
 
   it("should move canvas with touch", () => {

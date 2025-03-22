@@ -4,6 +4,7 @@ export interface TransformOptions {
   readonly scale?: {
     readonly mouseWheelSensitivity?: number;
     readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
+    readonly wheelFinishTimeout?: number;
   };
   readonly shift?: {
     readonly cursor?: string | null;

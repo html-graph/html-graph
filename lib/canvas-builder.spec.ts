@@ -3,6 +3,7 @@ import {
   ResizeReactiveNodesCanvas,
   UserDraggableNodesCanvas,
   UserTransformableViewportCanvas,
+  UserTransformableViewportVirtualScrollCanvas,
 } from "@/canvas";
 import { CanvasBuilder } from "./canvas-builder";
 import { EventSubject } from "./event-subject";
@@ -96,5 +97,22 @@ describe("CanvasBuilder", () => {
     const elementsAfter = container.children.length;
 
     expect([elementsBefore, elementsAfter]).toStrictEqual([0, 1]);
+  });
+
+  it("should build canvas with virtual scroll", () => {
+    const builder = new CanvasBuilder();
+
+    const canvas = builder
+      .setVirtualScroll({
+        maxNodeContainingRadius: {
+          vertical: 100,
+          horizontal: 100,
+        },
+      })
+      .build();
+
+    expect(canvas instanceof UserTransformableViewportVirtualScrollCanvas).toBe(
+      true,
+    );
   });
 });

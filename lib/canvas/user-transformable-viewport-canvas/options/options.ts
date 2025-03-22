@@ -11,4 +11,5 @@ export interface Options {
   readonly mouseDownEventVerifier: (event: MouseEvent) => boolean;
   readonly mouseUpEventVerifier: (event: MouseEvent) => boolean;
   readonly mouseWheelEventVerifier: (event: WheelEvent) => boolean;
+  readonly scaleWheelFinishTimeout: number;
 }

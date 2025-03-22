@@ -12,11 +12,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const boundsElement = document.getElementById("bounds")! as HTMLElement;
 
 new ResizeObserver(() => {
-  const { width, height } = canvasElement.getBoundingClientRect();
-
-  boundsElement.style.visibility = "visible";
-  boundsElement.style.width = `${width - 10}px`;
-  boundsElement.style.height = `${height - 10}px`;
+  updateRectangleSize();
 }).observe(canvasElement);
 
 const sliderScale: HTMLInputElement = document.getElementById(
@@ -50,6 +46,14 @@ const updateRectangleTransform = (): void => {
 
   const { scale, x, y } = canvas.viewport.getContentMatrix();
   boundsContainerElement.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
+};
+
+const updateRectangleSize = (): void => {
+  const { width, height } = canvasElement.getBoundingClientRect();
+
+  boundsElement.style.visibility = "visible";
+  boundsElement.style.width = `${width - 10}px`;
+  boundsElement.style.height = `${height - 10}px`;
 };
 
 const transformOptions: TransformOptions = {
@@ -120,3 +124,6 @@ sliderY.addEventListener("input", () => {
   yValue.innerText = sliderY.value;
   updateRectangleTransform();
 });
+
+updateRectangleSize();
+updateRectangleTransform();

@@ -30,6 +30,8 @@ export class UserTransformableViewportCanvas implements Canvas {
 
   private window = window;
 
+  private wheelFinishTimer: ReturnType<typeof setTimeout> | null = null;
+
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
@@ -80,7 +82,6 @@ export class UserTransformableViewportCanvas implements Canvas {
 
     event.preventDefault();
 
-    this.options.onTransformStarted();
     const { left, top } = this.element!.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
@@ -90,8 +91,20 @@ export class UserTransformableViewportCanvas implements Canvas {
         : 1 / this.options.wheelSensitivity;
     const deltaViewScale = 1 / deltaScale;
 
+    if (this.wheelFinishTimer === null) {
+      this.options.onTransformStarted();
+    }
+
     this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
-    this.options.onTransformFinished();
+
+    if (this.wheelFinishTimer !== null) {
+      clearTimeout(this.wheelFinishTimer);
+    }
+
+    this.wheelFinishTimer = setTimeout(() => {
+      this.options.onTransformFinished();
+      this.wheelFinishTimer = null;
+    }, this.options.scaleWheelFinishTimeout);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -169,7 +182,6 @@ export class UserTransformableViewportCanvas implements Canvas {
     });
 
     this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
   });
 
   private readonly options: Options;
@@ -186,7 +198,7 @@ export class UserTransformableViewportCanvas implements Canvas {
     this.model = this.graph;
   }
 
-  public attach(element: HTMLElement): UserTransformableViewportCanvas {
+  public attach(element: HTMLElement): Canvas {
     this.detach();
     this.element = element;
     this.observer.observe(this.element);
@@ -199,7 +211,7 @@ export class UserTransformableViewportCanvas implements Canvas {
     return this;
   }
 
-  public detach(): UserTransformableViewportCanvas {
+  public detach(): Canvas {
     this.canvas.detach();
 
     if (this.element !== null) {
@@ -214,86 +226,73 @@ export class UserTransformableViewportCanvas implements Canvas {
     return this;
   }
 
-  public addNode(node: AddNodeRequest): UserTransformableViewportCanvas {
+  public addNode(node: AddNodeRequest): Canvas {
     this.canvas.addNode(node);
 
     return this;
   }
 
-  public updateNode(
-    nodeId: unknown,
-    request?: UpdateNodeRequest,
-  ): UserTransformableViewportCanvas {
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
     this.canvas.updateNode(nodeId, request);
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): UserTransformableViewportCanvas {
+  public removeNode(nodeId: unknown): Canvas {
     this.canvas.removeNode(nodeId);
 
     return this;
   }
 
-  public markPort(port: MarkPortRequest): UserTransformableViewportCanvas {
+  public markPort(port: MarkPortRequest): Canvas {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePort(
-    portId: string,
-    request?: UpdatePortRequest,
-  ): UserTransformableViewportCanvas {
+  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): UserTransformableViewportCanvas {
+  public unmarkPort(portId: string): Canvas {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): UserTransformableViewportCanvas {
+  public addEdge(edge: AddEdgeRequest): Canvas {
     this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public updateEdge(
-    edgeId: unknown,
-    request?: UpdateEdgeRequest,
-  ): UserTransformableViewportCanvas {
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): UserTransformableViewportCanvas {
+  public removeEdge(edgeId: unknown): Canvas {
     this.canvas.removeEdge(edgeId);
 
     return this;
   }
 
-  public patchViewportMatrix(
-    request: PatchMatrixRequest,
-  ): UserTransformableViewportCanvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(
-    request: PatchMatrixRequest,
-  ): UserTransformableViewportCanvas {
+  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.canvas.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): UserTransformableViewportCanvas {
+  public clear(): Canvas {
     this.canvas.clear();
 
     return this;
@@ -309,8 +308,6 @@ export class UserTransformableViewportCanvas implements Canvas {
   }
 
   private moveViewport(element: HTMLElement, dx: number, dy: number): void {
-    this.options.onBeforeTransformChange();
-
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = element.getBoundingClientRect();
@@ -322,8 +319,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
+    this.performTransform(transform);
   }
 
   private scaleViewport(
@@ -332,8 +328,6 @@ export class UserTransformableViewportCanvas implements Canvas {
     cx: number,
     cy: number,
   ): void {
-    this.options.onBeforeTransformChange();
-
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = element.getBoundingClientRect();
@@ -345,8 +339,7 @@ export class UserTransformableViewportCanvas implements Canvas {
       canvasHeight: height,
     });
 
-    this.canvas.patchViewportMatrix(transform);
-    this.options.onTransformChange();
+    this.performTransform(transform);
   }
 
   private stopMouseDrag(): void {
@@ -373,5 +366,11 @@ export class UserTransformableViewportCanvas implements Canvas {
     this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchFinish);
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
+  }
+
+  private performTransform(viewportTransform: PatchMatrixRequest): void {
+    this.options.onBeforeTransformChange();
+    this.canvas.patchViewportMatrix(viewportTransform);
+    this.options.onTransformChange();
   }
 }

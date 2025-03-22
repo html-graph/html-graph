@@ -522,4 +522,15 @@ describe("BoxHtmlView", () => {
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
   });
+
+  it("should not attach same node twice", () => {
+    const { trigger, coreView, store } = create();
+    configureEdgeGraph(store);
+
+    trigger.emit({ x: 1, y: 1, width: 11, height: 11 });
+    const spy = jest.spyOn(coreView, "attachNode");
+    trigger.emit({ x: 1, y: 1, width: 11, height: 11 });
+
+    expect(spy).not.toHaveBeenCalledWith("node-1");
+  });
 });

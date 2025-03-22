@@ -5,17 +5,27 @@ import {
   TransformOptions,
 } from "@html-graph/html-graph";
 
-let dragging: boolean = false;
-
-const onBeforeTransformStarted = (): void => {
-  dragging = true;
-};
+let transformInProgress: boolean = false;
+let preventClick: boolean = false;
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
 const transformOptions: TransformOptions = {
   events: {
-    onBeforeTransformChange: onBeforeTransformStarted,
+    onTransformStarted: () => {
+      transformInProgress = true;
+    },
+    onTransformChange: () => {
+      if (transformInProgress) {
+        preventClick = true;
+      }
+    },
+    onTransformFinished: () => {
+      transformInProgress = false;
+      setTimeout(() => {
+        preventClick = false;
+      });
+    },
   },
 };
 
@@ -27,12 +37,6 @@ let angle = 0;
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-canvasElement.addEventListener("mouseup", () => {
-  setTimeout(() => {
-    dragging = false;
-  });
-});
-
 canvas.attach(canvasElement);
 
 const createNode: () => void = () => {
@@ -42,9 +46,11 @@ const createNode: () => void = () => {
   const btn = document.createElement("button");
   btn.innerText = "Add Node";
   btn.addEventListener("click", () => {
-    if (!dragging) {
-      createNode();
+    if (preventClick) {
+      return;
     }
+
+    createNode();
   });
 
   node.appendChild(btn);
