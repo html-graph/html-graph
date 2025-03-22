@@ -817,7 +817,7 @@ describe("UserTransformableViewportCanvas", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
 
-  it("should not dispatch touch start for next touch", () => {
+  it("should not dispatch onTransformStarted for next touch", () => {
     const canvasCore = new CanvasCore();
     const onTransformStarted = jest.fn();
     const canvas = new UserTransformableViewportCanvas(canvasCore, {
