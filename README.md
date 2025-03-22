@@ -60,7 +60,12 @@ const canvas = new CanvasBuilder()
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableResizeReactiveNodes()
-  .enableVirtualScroll()
+  .enableVirtualScroll({ 
+    nodeContainingRadius: {
+      horizontal: 25,
+      vertical: 25,
+    },
+  })
   .build();
 
 canvas
