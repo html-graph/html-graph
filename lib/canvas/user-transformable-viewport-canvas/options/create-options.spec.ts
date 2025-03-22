@@ -115,7 +115,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onBeforeTransformChange: onBeforeTransformChange,
+        onBeforeTransformChange,
       },
     });
 
@@ -127,7 +127,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformChange: onTransformChange,
+        onTransformChange,
       },
     });
 
@@ -139,7 +139,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformStarted: onTransformStarted,
+        onTransformStarted,
       },
     });
 
@@ -151,7 +151,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onTransformFinished: onTransformFinished,
+        onTransformFinished,
       },
     });
 
@@ -163,7 +163,7 @@ describe("createOptions", () => {
 
     const transformOptions: TransformOptions = {
       shift: {
-        mouseDownEventVerifier: mouseDownEventVerifier,
+        mouseDownEventVerifier,
       },
     };
 
@@ -177,7 +177,7 @@ describe("createOptions", () => {
 
     const transformOptions: TransformOptions = {
       shift: {
-        mouseUpEventVerifier: mouseUpEventVerifier,
+        mouseUpEventVerifier,
       },
     };
 
@@ -191,7 +191,7 @@ describe("createOptions", () => {
 
     const transformOptions: TransformOptions = {
       scale: {
-        mouseWheelEventVerifier: mouseWheelEventVerifier,
+        mouseWheelEventVerifier,
       },
     };
 
@@ -211,7 +211,7 @@ describe("createOptions", () => {
 
     const res = createOptions({
       events: {
-        onResizeTransformStarted: onResizeTransformStarted,
+        onResizeTransformStarted,
       },
     });
 
