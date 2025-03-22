@@ -1,8 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should have transformable canvas", async ({ page }) => {
-  await page.goto(`${e2eBase}/029-transformable-canvas-with-draggable-nodes/`);
+test("should have transformable viewport", async ({ page }) => {
+  await page.goto(
+    `${e2eBase}/029-transformable-viewport-with-draggable-nodes/`,
+  );
   await expect(page).toHaveScreenshot("initial-transform.png");
 
   await page.mouse.move(400, 500);
