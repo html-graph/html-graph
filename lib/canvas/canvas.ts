@@ -29,6 +29,8 @@ export class Canvas {
     (edgeId) => this.graph.getEdge(edgeId) !== null,
   );
 
+  private readonly defaults: GraphStoreControllerDefaults;
+
   /**
    * provides api for accessing graph model
    */
@@ -39,13 +41,11 @@ export class Canvas {
    */
   public readonly viewport: Viewport;
 
-  private readonly options: GraphStoreControllerDefaults;
-
   public constructor(
     private readonly controller: CanvasController,
     options: CoreOptions,
   ) {
-    this.options = createDefaults(options);
+    this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
   }
@@ -65,15 +65,15 @@ export class Canvas {
       element: request.element,
       x: request.x,
       y: request.y,
-      centerFn: request.centerFn ?? this.options.nodes.centerFn,
-      priority: request.priority ?? this.options.nodes.priorityFn(),
+      centerFn: request.centerFn ?? this.defaults.nodes.centerFn,
+      priority: request.priority ?? this.defaults.nodes.priorityFn(),
     });
 
     Array.from(request.ports ?? []).forEach((port) => {
       this.markPort({
         id: port.id,
         element: port.element,
-        nodeId: nodeId,
+        nodeId,
         direction: port.direction,
       });
     });
@@ -129,7 +129,7 @@ export class Canvas {
       id: portId,
       element: request.element,
       nodeId: request.nodeId,
-      direction: request.direction ?? this.options.ports.direction,
+      direction: request.direction ?? this.defaults.ports.direction,
     });
 
     return this;
@@ -186,8 +186,8 @@ export class Canvas {
       id: edgeId,
       from: request.from,
       to: request.to,
-      shape: request.shape ?? this.options.edges.shapeFactory(),
-      priority: request.priority ?? this.options.edges.priorityFn(),
+      shape: request.shape ?? this.defaults.edges.shapeFactory(),
+      priority: request.priority ?? this.defaults.edges.priorityFn(),
     });
 
     return this;

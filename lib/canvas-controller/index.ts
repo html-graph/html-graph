@@ -7,7 +7,6 @@ export type { MarkNodePortRequest } from "./mark-node-port-request";
 export type { UpdateEdgeRequest } from "./update-edge-request";
 export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdatePortRequest } from "./update-port-request";
-export type { AddNodePorts } from "./add-node-ports";
 export type { CanvasController } from "./canvas-controller";
 export {
   CoreCanvasController,

@@ -8,6 +8,8 @@ import {
   DiContainer,
 } from "../core-canvas-controller";
 import { TransformOptions } from "../user-transformable-viewport-canvas-controller";
+import { standardCenterFn } from "@/center-fn";
+import { EdgeShapeMock } from "@/edges";
 
 const wait = (timeout: number): Promise<void> => {
   return new Promise((res) => {
@@ -109,52 +111,67 @@ const createMouseWheelEvent = (params: {
 
 const configureEdgeGraph = (canvas: CanvasController): void => {
   canvas.addNode({
+    id: "node-1",
     element: document.createElement("div"),
     x: 0,
     y: 0,
-    ports: [
-      {
-        id: "port-1",
-        element: document.createElement("div"),
-        direction: 0,
-      },
-    ],
+    centerFn: standardCenterFn,
+    priority: 0,
+  });
+
+  canvas.markPort({
+    id: "port-1",
+    nodeId: "node-1",
+    element: document.createElement("div"),
+    direction: 0,
   });
 
   canvas.addNode({
+    id: "node-2",
     element: document.createElement("div"),
     x: 300,
     y: 300,
-    ports: [
-      {
-        id: "port-2",
-        element: document.createElement("div"),
-        direction: 0,
-      },
-    ],
+    centerFn: standardCenterFn,
+    priority: 0,
+  });
+
+  canvas.markPort({
+    id: "port-2",
+    nodeId: "node-2",
+    element: document.createElement("div"),
+    direction: 0,
   });
 
   canvas.addNode({
+    id: "node-3",
     element: document.createElement("div"),
     x: 600,
     y: 600,
-    ports: [
-      {
-        id: "port-3",
-        element: document.createElement("div"),
-        direction: 0,
-      },
-    ],
+    centerFn: standardCenterFn,
+    priority: 0,
+  });
+
+  canvas.markPort({
+    id: "port-3",
+    nodeId: "node-3",
+    element: document.createElement("div"),
+    direction: 0,
   });
 
   canvas.addEdge({
+    id: "edge-1",
     from: "port-1",
     to: "port-2",
+    shape: new EdgeShapeMock(),
+    priority: 0,
   });
 
   canvas.addEdge({
+    id: "edge-2",
     from: "port-2",
     to: "port-3",
+    shape: new EdgeShapeMock(),
+    priority: 0,
   });
 };
 
@@ -193,9 +210,12 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const spy = jest.spyOn(coreCanvas, "addNode");
 
     canvas.addNode({
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     expect(spy).toHaveBeenCalled();
@@ -209,6 +229,8 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updateNode");
@@ -226,6 +248,8 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "removeNode");
@@ -243,6 +267,8 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "markPort");
@@ -263,12 +289,15 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updatePort");
@@ -286,12 +315,15 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "unmarkPort");
@@ -309,17 +341,26 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "addEdge");
 
-    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -332,15 +373,24 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "updateEdge");
 
@@ -357,15 +407,24 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "removeEdge");
 

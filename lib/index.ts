@@ -1,26 +1,28 @@
 export { CanvasBuilder } from "./canvas-builder";
 
-export type { Canvas } from "./canvas";
+export type {
+  Canvas,
+  AddNodeRequest,
+  AddEdgeRequest,
+  AddNodePorts,
+  MarkNodePortRequest,
+  MarkPortRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
+  UpdateEdgeRequest,
+  PatchMatrixRequest,
+} from "./canvas";
 
 export type {
   CoreOptions,
   TransformOptions,
   DragOptions,
-  AddEdgeRequest,
-  UpdateEdgeRequest,
-  PatchMatrixRequest,
-  MarkPortRequest,
-  AddNodeRequest,
-  MarkNodePortRequest,
   NodeDragPayload,
   TransformPayload,
-  AddNodePorts,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
-  UpdatePortRequest,
-  UpdateNodeRequest,
 } from "./canvas-controller";
 
 export {

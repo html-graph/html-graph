@@ -1,3 +1,4 @@
+import { standardCenterFn } from "@/center-fn";
 import { CanvasController } from "../canvas-controller";
 import {
   CoreCanvasController,
@@ -5,6 +6,7 @@ import {
   DiContainer,
 } from "../core-canvas-controller";
 import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
+import { EdgeShapeMock } from "@/edges";
 
 const createElement = (params?: {
   x?: number;
@@ -124,9 +126,12 @@ describe("UserDraggableNodesCanvasController", () => {
     const spy = jest.spyOn(coreCanvas, "addNode");
 
     canvas.addNode({
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     expect(spy).toHaveBeenCalled();
@@ -141,6 +146,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updateNode");
@@ -159,6 +166,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "removeNode");
@@ -177,6 +186,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "markPort");
@@ -198,12 +209,15 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updatePort");
@@ -222,14 +236,16 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
     const spy = jest.spyOn(coreCanvas, "unmarkPort");
 
     canvas.unmarkPort("port-1");
@@ -246,17 +262,25 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
     const spy = jest.spyOn(coreCanvas, "addEdge");
 
-    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -270,15 +294,23 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "updateEdge");
 
@@ -296,15 +328,24 @@ describe("UserDraggableNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "removeEdge");
 
@@ -393,6 +434,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -414,6 +457,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 1 }));
@@ -435,6 +480,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -463,6 +510,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -485,6 +534,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -511,6 +562,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -532,6 +585,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -566,6 +621,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -592,6 +649,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -618,6 +677,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -655,6 +716,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -689,6 +752,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -723,6 +788,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -769,6 +836,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -819,6 +888,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -849,6 +920,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -883,6 +956,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -920,6 +995,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     canvas.clear();
@@ -943,6 +1020,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -970,6 +1049,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -996,6 +1077,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -1016,20 +1099,44 @@ describe("UserDraggableNodesCanvasController", () => {
     const element1 = createElement();
 
     canvas.addNode({
+      id: "node-1",
       element: element1,
       x: 0,
       y: 0,
-      ports: [{ id: "port-1", element: createElement() }],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+      direction: 0,
     });
 
     canvas.addNode({
+      id: "node-2",
       element: createElement(),
       x: 0,
       y: 0,
-      ports: [{ id: "port-2", element: createElement() }],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ from: "port-1", to: "port-2" });
+    canvas.markPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: createElement(),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     element1.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -1059,6 +1166,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -1092,6 +1201,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(
@@ -1133,6 +1244,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -1166,6 +1279,8 @@ describe("UserDraggableNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     element.dispatchEvent(

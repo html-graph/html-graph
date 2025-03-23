@@ -1,3 +1,4 @@
+import { standardCenterFn } from "@/center-fn";
 import { CanvasController } from "../canvas-controller";
 import {
   CoreCanvasController,
@@ -5,6 +6,7 @@ import {
   DiContainer,
 } from "../core-canvas-controller";
 import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
+import { EdgeShapeMock } from "@/edges";
 
 const wait = (timeout: number): Promise<void> => {
   return new Promise((res) => {
@@ -151,9 +153,12 @@ describe("UserTransformableViewportCanvasController", () => {
     const spy = jest.spyOn(coreCanvas, "addNode");
 
     canvas.addNode({
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     expect(spy).toHaveBeenCalled();
@@ -168,6 +173,8 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updateNode");
@@ -186,6 +193,8 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "removeNode");
@@ -204,6 +213,8 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "markPort");
@@ -225,12 +236,15 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(coreCanvas, "updatePort");
@@ -249,14 +263,16 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
     const spy = jest.spyOn(coreCanvas, "unmarkPort");
 
     canvas.unmarkPort("port-1");
@@ -273,17 +289,25 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
     const spy = jest.spyOn(coreCanvas, "addEdge");
 
-    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -297,15 +321,24 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "updateEdge");
 
@@ -323,15 +356,24 @@ describe("UserTransformableViewportCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(coreCanvas, "removeEdge");
 

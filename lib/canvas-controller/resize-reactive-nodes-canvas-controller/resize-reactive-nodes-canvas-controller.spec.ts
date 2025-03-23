@@ -6,6 +6,7 @@ import {
   DiContainer,
 } from "../core-canvas-controller";
 import { CanvasController } from "../canvas-controller";
+import { standardCenterFn } from "@/center-fn";
 
 const triggerResizeFor = (element: HTMLElement): void => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,9 +54,12 @@ describe("ResizeReactiveNodesCanvasController", () => {
     const spy = jest.spyOn(canvasCore, "addNode");
 
     canvas.addNode({
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     expect(spy).toHaveBeenCalled();
@@ -70,6 +74,8 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "updateNode");
@@ -88,6 +94,8 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "removeNode");
@@ -106,6 +114,8 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "markPort");
@@ -127,12 +137,15 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "updatePort");
@@ -151,12 +164,15 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "unmarkPort");
@@ -175,17 +191,26 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "addEdge");
 
-    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     expect(spy).toHaveBeenCalled();
   });
@@ -199,15 +224,24 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(canvasCore, "updateEdge");
 
@@ -225,15 +259,24 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new EdgeShapeMock(),
+      priority: 0,
+    });
 
     const spy = jest.spyOn(canvasCore, "removeEdge");
 
@@ -304,9 +347,12 @@ describe("ResizeReactiveNodesCanvasController", () => {
     const element = document.createElement("div");
 
     canvas.addNode({
+      id: "node-1",
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     const spy = jest.spyOn(canvasCore, "updateNode");
@@ -327,6 +373,8 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     canvas.removeNode("node-1");
@@ -349,6 +397,8 @@ describe("ResizeReactiveNodesCanvasController", () => {
       element,
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
 
     canvas.clear();
@@ -367,20 +417,30 @@ describe("ResizeReactiveNodesCanvasController", () => {
     const element = document.createElement("div");
 
     canvas.addNode({
+      id: "node-1",
       element,
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
     });
 
     const shape = new EdgeShapeMock();
 
-    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape,
+      priority: 0,
+    });
 
     const spy = jest.spyOn(shape, "render");
 

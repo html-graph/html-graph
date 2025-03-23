@@ -1,12 +1,10 @@
 import { CenterFn } from "@/center-fn";
-import { AddNodePorts } from "./add-node-ports";
 
 export interface AddNodeRequest {
-  readonly id?: unknown | undefined;
+  readonly id: unknown;
   readonly element: HTMLElement;
   readonly x: number;
   readonly y: number;
-  readonly ports?: AddNodePorts | undefined;
-  readonly centerFn?: CenterFn | undefined;
-  readonly priority?: number | undefined;
+  readonly centerFn: CenterFn;
+  readonly priority: number;
 }

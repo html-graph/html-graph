@@ -1,11 +1,12 @@
-import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
+import { EdgeShapeMock, EdgeRenderParams, BezierEdgeShape } from "@/edges";
 import { CoreCanvasController } from "./core-canvas-controller";
 import { HtmlGraphError } from "@/error";
 import { DiContainer } from "./di-container";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
-import { MarkNodePortRequest } from "../mark-node-port-request";
 import { coreHtmlViewFactory } from "./core-html-view-factory";
+import { standardCenterFn } from "@/center-fn";
+import { AddEdgeRequest } from "../add-edge-request";
 
 const createCanvasController = (): CoreCanvasController => {
   return new CoreCanvasController(new DiContainer({}, coreHtmlViewFactory));
@@ -37,12 +38,16 @@ const createNodeRequest1 = (): AddNodeRequest => {
     element: createElement(),
     x: 0,
     y: 0,
-    ports: [
-      {
-        id: "port-1",
-        element: createElement(),
-      },
-    ],
+    centerFn: standardCenterFn,
+    priority: 0,
+  };
+};
+
+const createPortRequest1 = (): MarkPortRequest => {
+  return {
+    id: "port-1",
+    nodeId: "node-1",
+    element: createElement(),
   };
 };
 
@@ -52,12 +57,26 @@ const createNodeRequest2 = (): AddNodeRequest => {
     element: createElement(),
     x: 500,
     y: 500,
-    ports: [
-      {
-        id: "port-2",
-        element: createElement(),
-      },
-    ],
+    centerFn: standardCenterFn,
+    priority: 0,
+  };
+};
+
+const createPortRequest2 = (): MarkPortRequest => {
+  return {
+    id: "port-2",
+    nodeId: "node-2",
+    element: createElement(),
+  };
+};
+
+const createEdgeRequest12 = (): AddEdgeRequest => {
+  return {
+    id: "edge-1",
+    from: "port-1",
+    to: "port-2",
+    shape: new BezierEdgeShape(),
+    priority: 0,
   };
 };
 
@@ -66,6 +85,8 @@ const addNodeRequest: AddNodeRequest = {
   element: createElement(),
   x: 0,
   y: 0,
+  centerFn: standardCenterFn,
+  priority: 0,
 };
 
 const markPortRequest: MarkPortRequest = {
@@ -100,6 +121,7 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
 
     const container = canvasElement.children[0].children[0];
     expect(container.children.length).toBe(1);
@@ -111,6 +133,7 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.updateNode("node-1", { x: 100, y: 100 });
 
     const container = canvasElement.children[0].children[0];
@@ -124,6 +147,7 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.updateNode("node-1", { priority: 10 });
 
     const container = canvasElement.children[0].children[0];
@@ -141,6 +165,8 @@ describe("CoreCanvasController", () => {
       element: createElement({ width: 100, height: 100 }),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     });
     canvas.updateNode("node-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
@@ -155,6 +181,7 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.removeNode("node-1");
 
     const container = canvasElement.children[0].children[0];
@@ -167,8 +194,10 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
 
     const container = canvasElement.children[0].children[0];
     expect(container.children.length).toBe(3);
@@ -180,8 +209,10 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
 
     const shape = new EdgeShapeMock();
 
@@ -198,8 +229,10 @@ describe("CoreCanvasController", () => {
     canvas.attach(canvasElement);
 
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
     canvas.updateEdge("edge-1", {
       priority: 10,
     });
@@ -215,12 +248,14 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     const nodeRequest2 = createNodeRequest2();
     canvas.addNode(nodeRequest2);
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    const portRequest2 = createPortRequest2();
+    canvas.markPort(portRequest2);
+    canvas.addEdge(createEdgeRequest12());
 
-    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
-    port.element.getBoundingClientRect = (): DOMRect => {
+    portRequest2.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
@@ -238,12 +273,14 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     const nodeRequest2 = createNodeRequest2();
     canvas.addNode(nodeRequest2);
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    const portRequest2 = createPortRequest2();
+    canvas.markPort(portRequest2);
+    canvas.addEdge(createEdgeRequest12());
 
-    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
-    port.element.getBoundingClientRect = (): DOMRect => {
+    portRequest2.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
@@ -261,12 +298,14 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     const nodeRequest2 = createNodeRequest2();
     canvas.addNode(nodeRequest2);
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    const portRequest2 = createPortRequest2();
+    canvas.markPort(portRequest2);
+    canvas.addEdge(createEdgeRequest12());
 
-    const port = (nodeRequest2.ports as Array<MarkNodePortRequest>)![0];
-    port.element.getBoundingClientRect = (): DOMRect => {
+    portRequest2.element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(200, 100, 0, 0);
     };
 
@@ -284,8 +323,10 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
     canvas.removeEdge("edge-1");
 
     const container = canvasElement.children[0].children[0];
@@ -301,7 +342,13 @@ describe("CoreCanvasController", () => {
     canvas.markPort(markPortRequest);
 
     expect(() => {
-      canvas.addEdge({ from: "port-1", to: "port-1" });
+      canvas.addEdge({
+        id: "edge-1",
+        from: "port-1",
+        to: "port-1",
+        shape: new EdgeShapeMock(),
+        priority: 0,
+      });
     }).not.toThrow(HtmlGraphError);
   });
 
@@ -314,7 +361,13 @@ describe("CoreCanvasController", () => {
     canvas.markPort(markPortRequest);
 
     const shape = new EdgeShapeMock();
-    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape,
+      priority: 0,
+    });
 
     const spy = jest.spyOn(shape, "render");
 
@@ -354,7 +407,7 @@ describe("CoreCanvasController", () => {
     canvas.unmarkPort("port-1");
 
     expect(() => {
-      canvas.addEdge({ from: "port-1", to: "port-1" });
+      canvas.addEdge(createEdgeRequest12());
     }).toThrow(HtmlGraphError);
   });
 
@@ -388,8 +441,10 @@ describe("CoreCanvasController", () => {
     canvas.attach(canvasElement);
 
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
     canvas.clear();
 
     const container = canvasElement.children[0].children[0];
@@ -402,8 +457,10 @@ describe("CoreCanvasController", () => {
 
     canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
-    canvas.addEdge({ from: "port-1", to: "port-2" });
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdgeRequest12());
     canvas.destroy();
 
     expect(canvasElement.children.length).toBe(0);
