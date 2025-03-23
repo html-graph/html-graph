@@ -1,5 +1,4 @@
 import { GraphStoreController } from "@/graph-store-controller";
-import { CoreOptions, createDefaults } from "./options";
 import { Viewport, ViewportTransformer } from "@/viewport-transformer";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
@@ -19,7 +18,6 @@ export class DiContainer {
   public readonly graphStoreController: GraphStoreController;
 
   public constructor(
-    coreOptions: CoreOptions,
     htmlViewFactory: (
       graphStore: GraphStore,
       viewportTransformer: ViewportTransformer,
@@ -33,9 +31,6 @@ export class DiContainer {
 
     this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
 
-    this.graphStoreController = new GraphStoreController(
-      this.graphStore,
-      createDefaults(coreOptions),
-    );
+    this.graphStoreController = new GraphStoreController(this.graphStore);
   }
 }

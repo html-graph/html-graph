@@ -16,6 +16,7 @@ import {
 import { RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
 import { Canvas } from "./canvas";
+import { createDefaults } from "./canvas-controller/core-canvas-controller/options";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -107,7 +108,7 @@ export class CanvasBuilder {
         ? createBoxHtmlViewFactory(trigger)
         : coreHtmlViewFactory;
 
-    const container = new DiContainer(this.coreOptions, htmlViewFactory);
+    const container = new DiContainer(htmlViewFactory);
 
     let canvasController: CanvasController = new CoreCanvasController(
       container,
@@ -143,7 +144,7 @@ export class CanvasBuilder {
 
     this.reset();
 
-    return new Canvas(canvasController, this.coreOptions);
+    return new Canvas(canvasController, createDefaults(this.coreOptions));
   }
 
   private reset(): void {

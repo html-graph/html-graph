@@ -102,7 +102,7 @@ let innerWidth: number;
 let innerHeight: number;
 
 const createCanvas = (): CanvasController => {
-  const container = new DiContainer({}, coreHtmlViewFactory);
+  const container = new DiContainer(coreHtmlViewFactory);
 
   return new CoreCanvasController(container);
 };

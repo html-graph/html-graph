@@ -14,7 +14,7 @@ const triggerResizeFor = (element: HTMLElement): void => {
 };
 
 const createCanvas = (): CanvasController => {
-  const container = new DiContainer({}, coreHtmlViewFactory);
+  const container = new DiContainer(coreHtmlViewFactory);
 
   return new CoreCanvasController(container);
 };

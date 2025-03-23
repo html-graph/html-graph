@@ -9,7 +9,7 @@ import { standardCenterFn } from "@/center-fn";
 import { AddEdgeRequest } from "../add-edge-request";
 
 const createCanvasController = (): CoreCanvasController => {
-  return new CoreCanvasController(new DiContainer({}, coreHtmlViewFactory));
+  return new CoreCanvasController(new DiContainer(coreHtmlViewFactory));
 };
 
 const createElement = (params?: {
@@ -411,7 +411,7 @@ describe("CoreCanvasController", () => {
 
     expect(() => {
       canvas.addEdge(createEdgeRequest12());
-    }).toThrow(HtmlGraphError);
+    }).toThrow(TypeError);
   });
 
   it("should patch viewport matrix", () => {

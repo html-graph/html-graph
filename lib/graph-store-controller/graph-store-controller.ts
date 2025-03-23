@@ -1,5 +1,3 @@
-import { IdGenerator } from "@/id-generator";
-import { HtmlGraphError } from "@/error";
 import { GraphStore } from "@/graph-store";
 import { AddNodeRequest } from "./add-node-request";
 import { UpdateNodeRequest } from "./update-node-request";
@@ -7,7 +5,6 @@ import { MarkPortRequest } from "./mark-port-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { GraphStoreControllerDefaults } from "./graph-store-controller-defaults";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 /**
@@ -15,18 +12,6 @@ import { createPair, EventEmitter, EventHandler } from "@/event-subject";
  * nodes, ports and edges get added, updated or removed
  */
 export class GraphStoreController {
-  private readonly nodeIdGenerator = new IdGenerator(
-    (nodeId) => this.graphStore.getNode(nodeId) !== undefined,
-  );
-
-  private readonly portIdGenerator = new IdGenerator(
-    (portId) => this.graphStore.getPort(portId) !== undefined,
-  );
-
-  private readonly edgeIdGenerator = new IdGenerator(
-    (edgeId) => this.graphStore.getEdge(edgeId) !== undefined,
-  );
-
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 
   private readonly onAfterNodeAddedEmitter: EventEmitter<unknown>;
@@ -67,10 +52,7 @@ export class GraphStoreController {
 
   private readonly onBeforeNodeRemovedEmitter: EventEmitter<unknown>;
 
-  public constructor(
-    private readonly graphStore: GraphStore,
-    private readonly options: GraphStoreControllerDefaults,
-  ) {
+  public constructor(private readonly graphStore: GraphStore) {
     [this.onAfterNodeAddedEmitter, this.onAfterNodeAdded] =
       createPair<unknown>();
     [this.onAfterEdgeAddedEmitter, this.onAfterEdgeAdded] =
@@ -94,75 +76,21 @@ export class GraphStoreController {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const nodeId = this.nodeIdGenerator.create(request.id);
-
-    if (this.graphStore.getNode(nodeId) !== undefined) {
-      throw new HtmlGraphError("failed to add node with existing id");
-    }
-
-    this.graphStore.addNode({
-      id: nodeId,
-      element: request.element,
-      x: request.x,
-      y: request.y,
-      centerFn: request.centerFn ?? this.options.nodes.centerFn,
-      priority: request.priority ?? this.options.nodes.priorityFn(),
-    });
-
-    this.onAfterNodeAddedEmitter.emit(nodeId);
+    this.graphStore.addNode(request);
+    this.onAfterNodeAddedEmitter.emit(request.id);
   }
 
   public markPort(request: MarkPortRequest): void {
-    const portId = this.portIdGenerator.create(request.id);
-
-    if (this.graphStore.getPort(portId) !== undefined) {
-      throw new HtmlGraphError("failed to add port with existing id");
-    }
-
-    if (this.graphStore.getNode(request.nodeId) === undefined) {
-      throw new HtmlGraphError("failed to set port on nonexisting node");
-    }
-
-    this.graphStore.addPort({
-      id: portId,
-      element: request.element,
-      nodeId: request.nodeId,
-      direction: request.direction ?? this.options.ports.direction,
-    });
+    this.graphStore.addPort(request);
   }
 
   public addEdge(request: AddEdgeRequest): void {
-    const edgeId = this.edgeIdGenerator.create(request.id);
-
-    if (this.graphStore.getEdge(edgeId) !== undefined) {
-      throw new HtmlGraphError("failed to add edge with existing id");
-    }
-
-    if (this.graphStore.getPort(request.from) === undefined) {
-      throw new HtmlGraphError("failed to add edge from nonexisting port");
-    }
-
-    if (this.graphStore.getPort(request.to) === undefined) {
-      throw new HtmlGraphError("failed to add edge to nonexisting port");
-    }
-
-    this.graphStore.addEdge({
-      id: edgeId,
-      from: request.from,
-      to: request.to,
-      shape: request.shape ?? this.options.edges.shapeFactory(),
-      priority: request.priority ?? this.options.edges.priorityFn(),
-    });
-
-    this.onAfterEdgeAddedEmitter.emit(edgeId);
+    this.graphStore.addEdge(request);
+    this.onAfterEdgeAddedEmitter.emit(request.id);
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    const edge = this.graphStore.getEdge(edgeId);
-
-    if (edge === undefined) {
-      throw new HtmlGraphError("failed to update nonexisting edge");
-    }
+    const edge = this.graphStore.getEdge(edgeId)!;
 
     if (request.shape !== undefined) {
       edge.shape = request.shape;
@@ -186,11 +114,7 @@ export class GraphStoreController {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    const port = this.graphStore.getPort(portId);
-
-    if (port === undefined) {
-      throw new HtmlGraphError("failed to unset nonexisting port");
-    }
+    const port = this.graphStore.getPort(portId)!;
 
     port.direction = request.direction ?? port.direction;
 
@@ -198,11 +122,7 @@ export class GraphStoreController {
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    const node = this.graphStore.getNode(nodeId);
-
-    if (node === undefined) {
-      throw new HtmlGraphError("failed to update nonexisting node");
-    }
+    const node = this.graphStore.getNode(nodeId)!;
 
     node.x = request?.x ?? node.x;
     node.y = request?.y ?? node.y;
@@ -217,19 +137,11 @@ export class GraphStoreController {
   }
 
   public removeEdge(edgeId: unknown): void {
-    if (this.graphStore.getEdge(edgeId) === undefined) {
-      throw new HtmlGraphError("failed to remove nonexisting edge");
-    }
-
     this.onBeforeEdgeRemovedEmitter.emit(edgeId);
     this.graphStore.removeEdge(edgeId);
   }
 
   public unmarkPort(portId: unknown): void {
-    if (this.graphStore.getPort(portId) === undefined) {
-      throw new HtmlGraphError("failed to unset nonexisting port");
-    }
-
     this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
@@ -238,10 +150,6 @@ export class GraphStoreController {
   }
 
   public removeNode(nodeId: unknown): void {
-    if (this.graphStore.getNode(nodeId) === undefined) {
-      throw new HtmlGraphError("failed to remove nonexisting node");
-    }
-
     this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
       this.unmarkPort(portId);
     });
@@ -252,8 +160,5 @@ export class GraphStoreController {
 
   public clear(): void {
     this.graphStore.clear();
-    this.nodeIdGenerator.reset();
-    this.portIdGenerator.reset();
-    this.edgeIdGenerator.reset();
   }
 }

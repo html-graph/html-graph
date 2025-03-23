@@ -47,7 +47,7 @@ const create = (
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const htmlViewFactory = createBoxHtmlViewFactory(trigger);
-  const container = new DiContainer({}, htmlViewFactory);
+  const container = new DiContainer(htmlViewFactory);
   const coreCanvas = new CoreCanvasController(container);
 
   const canvas = new UserTransformableViewportVirtualScrollCanvasController(

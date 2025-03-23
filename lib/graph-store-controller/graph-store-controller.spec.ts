@@ -1,12 +1,11 @@
 import { GraphStore } from "@/graph-store";
 import { GraphStoreController } from "./graph-store-controller";
-import { Point } from "@/point";
 import { AddNodeRequest } from "./add-node-request";
 import { CenterFn, standardCenterFn } from "@/center-fn";
 import { PriorityFn } from "@/priority";
 import { MarkPortRequest } from "./mark-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { EdgeShape, EdgeShapeMock } from "@/edges";
+import { EdgeShapeMock } from "@/edges";
 import { UpdatePortRequest } from "./update-port-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { EdgeShapeFactory } from "./edge-shape-factory";
@@ -42,22 +41,7 @@ const createGraphStoreController = (params?: {
 }): GraphStoreController => {
   const graphStore = params?.graphStore ?? new GraphStore();
 
-  const controller = new GraphStoreController(graphStore, {
-    nodes: {
-      centerFn: params?.nodesCenterFn ?? ((): Point => ({ x: 0, y: 0 })),
-      priorityFn: params?.nodesPriorityFn ?? ((): number => 0),
-    },
-    ports: {
-      direction: params?.portsDirection ?? 0,
-    },
-    edges: {
-      priorityFn: params?.edgesPriorityFn ?? ((): number => 0),
-      shapeFactory:
-        params?.edgesShapeFactory ?? ((): EdgeShape => new EdgeShapeMock()),
-    },
-  });
-
-  return controller;
+  return new GraphStoreController(graphStore);
 };
 
 const addNodeRequest1: AddNodeRequest = {
