@@ -22,77 +22,77 @@ export interface CanvasController {
   /**
    * adds node to graph
    */
-  addNode(node: AddNodeRequest): CanvasController;
+  addNode(node: AddNodeRequest): void;
 
   /**
    * updates node absolute coordinates
    */
-  updateNode(nodeId: unknown, request?: UpdateNodeRequest): CanvasController;
+  updateNode(nodeId: unknown, request: UpdateNodeRequest): void;
 
   /**
    * removes node from graph
    * all the ports of node get unmarked
    * all the edges adjacent to node get removed
    */
-  removeNode(nodeId: unknown): CanvasController;
+  removeNode(nodeId: unknown): void;
 
   /**
    * marks element as port of node
    */
-  markPort(port: MarkPortRequest): CanvasController;
+  markPort(port: MarkPortRequest): void;
 
   /**
    * updates port and attached edges
    */
-  updatePort(portId: unknown, request?: UpdatePortRequest): CanvasController;
+  updatePort(portId: unknown, request: UpdatePortRequest): void;
 
   /**
    * ummarks element as port of node
    * all the edges adjacent to port get removed
    */
-  unmarkPort(portId: unknown): CanvasController;
+  unmarkPort(portId: unknown): void;
 
   /**
    * adds edge to graph
    */
-  addEdge(edge: AddEdgeRequest): CanvasController;
+  addEdge(edge: AddEdgeRequest): void;
 
   /**
    * updates edge
    */
-  updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): CanvasController;
+  updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void;
 
   /**
    * removes edge from graph
    */
-  removeEdge(edgeId: unknown): CanvasController;
+  removeEdge(edgeId: unknown): void;
 
   /**
    * applies transformation for viewport
    */
-  patchViewportMatrix(request: PatchMatrixRequest): CanvasController;
+  patchViewportMatrix(request: PatchMatrixRequest): void;
 
   /**
    * applies transformation for content
    */
-  patchContentMatrix(request: PatchMatrixRequest): CanvasController;
+  patchContentMatrix(request: PatchMatrixRequest): void;
 
   /**
    * attaches canvas to given element
    */
-  attach(element: HTMLElement): CanvasController;
+  attach(element: HTMLElement): void;
 
   /**
    * detaches canvas from element
    */
-  detach(): CanvasController;
+  detach(): void;
 
   /**
    * clears graph
    * graph gets rolled back to initial state
    * canvas can be reused
    */
-  clear(): CanvasController;
+  clear(): void;
 
   /**
    * destroys canvas

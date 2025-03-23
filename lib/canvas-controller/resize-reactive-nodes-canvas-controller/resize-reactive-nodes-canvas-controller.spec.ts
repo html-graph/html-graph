@@ -74,7 +74,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
 
     const spy = jest.spyOn(canvasCore, "updateNode");
 
-    canvas.updateNode("node-1");
+    canvas.updateNode("node-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -137,7 +137,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
 
     const spy = jest.spyOn(canvasCore, "updatePort");
 
-    canvas.updatePort("port-1");
+    canvas.updatePort("port-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -211,7 +211,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
 
     const spy = jest.spyOn(canvasCore, "updateEdge");
 
-    canvas.updateEdge("edge-1");
+    canvas.updateEdge("edge-1", {});
 
     expect(spy).toHaveBeenCalled();
   });

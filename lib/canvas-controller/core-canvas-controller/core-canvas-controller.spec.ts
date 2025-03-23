@@ -224,7 +224,7 @@ describe("CoreCanvasController", () => {
       return new DOMRect(200, 100, 0, 0);
     };
 
-    canvas.updateEdge("edge-1");
+    canvas.updateEdge("edge-1", {});
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
@@ -247,7 +247,7 @@ describe("CoreCanvasController", () => {
       return new DOMRect(200, 100, 0, 0);
     };
 
-    canvas.updatePort("port-2");
+    canvas.updatePort("port-2", {});
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
@@ -270,7 +270,7 @@ describe("CoreCanvasController", () => {
       return new DOMRect(200, 100, 0, 0);
     };
 
-    canvas.updateNode("node-2");
+    canvas.updateNode("node-2", {});
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;

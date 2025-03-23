@@ -123,98 +123,70 @@ export class CoreCanvasController implements CanvasController {
     );
   }
 
-  public attach(element: HTMLElement): CanvasController {
+  public attach(element: HTMLElement): void {
     this.htmlView.attach(element);
-
-    return this;
   }
 
-  public detach(): CanvasController {
+  public detach(): void {
     this.htmlView.detach();
-
-    return this;
   }
 
-  public addNode(request: AddNodeRequest): CanvasController {
+  public addNode(request: AddNodeRequest): void {
     this.graphStoreController.addNode(request);
-
-    return this;
   }
 
   public updateNode(
     nodeId: unknown,
-    request?: UpdateNodeRequest,
-  ): CanvasController {
+    request: UpdateNodeRequest | undefined,
+  ): void {
     this.graphStoreController.updateNode(nodeId, request ?? {});
-
-    return this;
   }
 
-  public removeNode(nodeId: unknown): CanvasController {
+  public removeNode(nodeId: unknown): void {
     this.graphStoreController.removeNode(nodeId);
-
-    return this;
   }
 
-  public addEdge(request: AddEdgeRequest): CanvasController {
+  public addEdge(request: AddEdgeRequest): void {
     this.graphStoreController.addEdge(request);
-
-    return this;
   }
 
   public updateEdge(
     edgeId: unknown,
-    request?: UpdateEdgeRequest,
-  ): CanvasController {
+    request: UpdateEdgeRequest | undefined,
+  ): void {
     this.graphStoreController.updateEdge(edgeId, request ?? {});
-
-    return this;
   }
 
-  public removeEdge(edgeId: unknown): CanvasController {
+  public removeEdge(edgeId: unknown): void {
     this.graphStoreController.removeEdge(edgeId);
-
-    return this;
   }
 
-  public markPort(request: MarkPortRequest): CanvasController {
+  public markPort(request: MarkPortRequest): void {
     this.graphStoreController.markPort(request);
-
-    return this;
   }
 
   public updatePort(
     portId: string,
-    request?: UpdatePortRequest,
-  ): CanvasController {
+    request: UpdatePortRequest | undefined,
+  ): void {
     this.graphStoreController.updatePort(portId, request ?? {});
-
-    return this;
   }
 
-  public unmarkPort(portId: string): CanvasController {
+  public unmarkPort(portId: string): void {
     this.graphStoreController.unmarkPort(portId);
-
-    return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): CanvasController {
+  public patchViewportMatrix(request: PatchMatrixRequest): void {
     this.internalTransformation.patchViewportMatrix(request);
-
-    return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): CanvasController {
+  public patchContentMatrix(request: PatchMatrixRequest): void {
     this.internalTransformation.patchContentMatrix(request);
-
-    return this;
   }
 
-  public clear(): CanvasController {
+  public clear(): void {
     this.htmlView.clear();
     this.graphStoreController.clear();
-
-    return this;
   }
 
   public destroy(): void {

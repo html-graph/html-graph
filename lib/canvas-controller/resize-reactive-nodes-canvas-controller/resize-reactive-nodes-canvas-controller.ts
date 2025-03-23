@@ -39,19 +39,15 @@ export class ResizeReactiveNodesCanvasController implements CanvasController {
     this.graph = this.canvas.graph;
   }
 
-  public attach(element: HTMLElement): CanvasController {
+  public attach(element: HTMLElement): void {
     this.canvas.attach(element);
-
-    return this;
   }
 
-  public detach(): CanvasController {
+  public detach(): void {
     this.canvas.detach();
-
-    return this;
   }
 
-  public addNode(request: AddNodeRequest): CanvasController {
+  public addNode(request: AddNodeRequest): void {
     const id = this.nodeIdGenerator.create(request.id);
 
     this.canvas.addNode({
@@ -61,91 +57,58 @@ export class ResizeReactiveNodesCanvasController implements CanvasController {
 
     this.nodes.set(id, request.element);
     this.nodesResizeObserver.observe(request.element);
-
-    return this;
   }
 
-  public updateNode(
-    nodeId: unknown,
-    request?: UpdateNodeRequest,
-  ): CanvasController {
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
     this.canvas.updateNode(nodeId, request);
-
-    return this;
   }
 
-  public removeNode(nodeId: unknown): CanvasController {
+  public removeNode(nodeId: unknown): void {
     this.canvas.removeNode(nodeId);
 
     const element = this.nodes.getByKey(nodeId);
     this.nodes.deleteByKey(nodeId);
 
     this.nodesResizeObserver.unobserve(element!);
-
-    return this;
   }
 
-  public markPort(port: MarkPortRequest): CanvasController {
+  public markPort(port: MarkPortRequest): void {
     this.canvas.markPort(port);
-
-    return this;
   }
 
-  public updatePort(
-    portId: string,
-    request?: UpdatePortRequest,
-  ): CanvasController {
+  public updatePort(portId: string, request: UpdatePortRequest): void {
     this.canvas.updatePort(portId, request);
-
-    return this;
   }
 
-  public unmarkPort(portId: string): CanvasController {
+  public unmarkPort(portId: string): void {
     this.canvas.unmarkPort(portId);
-
-    return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): CanvasController {
+  public addEdge(edge: AddEdgeRequest): void {
     this.canvas.addEdge(edge);
-
-    return this;
   }
 
-  public updateEdge(
-    edgeId: unknown,
-    request?: UpdateEdgeRequest,
-  ): CanvasController {
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     this.canvas.updateEdge(edgeId, request);
-
-    return this;
   }
 
-  public removeEdge(edgeId: unknown): CanvasController {
+  public removeEdge(edgeId: unknown): void {
     this.canvas.removeEdge(edgeId);
-
-    return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): CanvasController {
+  public patchViewportMatrix(request: PatchMatrixRequest): void {
     this.canvas.patchViewportMatrix(request);
-
-    return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): CanvasController {
+  public patchContentMatrix(request: PatchMatrixRequest): void {
     this.canvas.patchContentMatrix(request);
-
-    return this;
   }
 
-  public clear(): CanvasController {
+  public clear(): void {
     this.canvas.clear();
 
     this.nodesResizeObserver.disconnect();
     this.nodes.clear();
-
-    return this;
   }
 
   public destroy(): void {
@@ -156,12 +119,12 @@ export class ResizeReactiveNodesCanvasController implements CanvasController {
   private handleNodeResize(element: HTMLElement): void {
     const nodeId = this.nodes.getByValue(element)!;
 
-    this.canvas.updateNode(nodeId);
+    this.canvas.updateNode(nodeId, {});
 
     const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
     edges.forEach((edge) => {
-      this.canvas.updateEdge(edge);
+      this.canvas.updateEdge(edge, {});
     });
   }
 }

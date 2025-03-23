@@ -108,51 +108,54 @@ const createMouseWheelEvent = (params: {
 };
 
 const configureEdgeGraph = (canvas: CanvasController): void => {
-  canvas
-    .addNode({
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-          direction: 0,
-        },
-      ],
-    })
-    .addNode({
-      element: document.createElement("div"),
-      x: 300,
-      y: 300,
-      ports: [
-        {
-          id: "port-2",
-          element: document.createElement("div"),
-          direction: 0,
-        },
-      ],
-    })
-    .addNode({
-      element: document.createElement("div"),
-      x: 600,
-      y: 600,
-      ports: [
-        {
-          id: "port-3",
-          element: document.createElement("div"),
-          direction: 0,
-        },
-      ],
-    })
-    .addEdge({
-      from: "port-1",
-      to: "port-2",
-    })
-    .addEdge({
-      from: "port-2",
-      to: "port-3",
-    });
+  canvas.addNode({
+    element: document.createElement("div"),
+    x: 0,
+    y: 0,
+    ports: [
+      {
+        id: "port-1",
+        element: document.createElement("div"),
+        direction: 0,
+      },
+    ],
+  });
+
+  canvas.addNode({
+    element: document.createElement("div"),
+    x: 300,
+    y: 300,
+    ports: [
+      {
+        id: "port-2",
+        element: document.createElement("div"),
+        direction: 0,
+      },
+    ],
+  });
+
+  canvas.addNode({
+    element: document.createElement("div"),
+    x: 600,
+    y: 600,
+    ports: [
+      {
+        id: "port-3",
+        element: document.createElement("div"),
+        direction: 0,
+      },
+    ],
+  });
+
+  canvas.addEdge({
+    from: "port-1",
+    to: "port-2",
+  });
+
+  canvas.addEdge({
+    from: "port-2",
+    to: "port-3",
+  });
 };
 
 const triggerResizeFor = (element: HTMLElement): void => {
@@ -210,7 +213,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updateNode");
 
-    canvas.updateNode("node-1");
+    canvas.updateNode("node-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -270,7 +273,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updatePort");
 
-    canvas.updatePort("port-1");
+    canvas.updatePort("port-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -341,7 +344,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updateEdge");
 
-    canvas.updateEdge("edge-1");
+    canvas.updateEdge("edge-1", {});
 
     expect(spy).toHaveBeenCalled();
   });

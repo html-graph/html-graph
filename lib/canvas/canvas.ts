@@ -38,7 +38,7 @@ export class Canvas {
    * updates node absolute coordinates
    */
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
-    this.controller.updateNode(nodeId, request);
+    this.controller.updateNode(nodeId, request ?? {});
 
     return this;
   }
@@ -67,7 +67,7 @@ export class Canvas {
    * updates port and attached edges
    */
   public updatePort(portId: unknown, request?: UpdatePortRequest): Canvas {
-    this.controller.updatePort(portId, request);
+    this.controller.updatePort(portId, request ?? {});
 
     return this;
   }
@@ -95,7 +95,7 @@ export class Canvas {
    * updates edge
    */
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
-    this.controller.updateEdge(edgeId, request);
+    this.controller.updateEdge(edgeId, request ?? {});
 
     return this;
   }

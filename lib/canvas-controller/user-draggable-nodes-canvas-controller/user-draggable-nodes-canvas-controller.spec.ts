@@ -145,7 +145,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updateNode");
 
-    canvas.updateNode("node-1");
+    canvas.updateNode("node-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -208,7 +208,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updatePort");
 
-    canvas.updatePort("port-1");
+    canvas.updatePort("port-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
@@ -282,7 +282,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     const spy = jest.spyOn(coreCanvas, "updateEdge");
 
-    canvas.updateEdge("edge-1");
+    canvas.updateEdge("edge-1", {});
 
     expect(spy).toHaveBeenCalled();
   });
