@@ -22,7 +22,7 @@ const createHtmlController = (params?: {
 const centerFn = (): Point => ({ x: 0, y: 0 });
 
 const addNodeRequest1: AddNodeRequest = {
-  nodeId: "node-1",
+  id: "node-1",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -31,7 +31,7 @@ const addNodeRequest1: AddNodeRequest = {
 };
 
 const addNodeRequest2: AddNodeRequest = {
-  nodeId: "node-2",
+  id: "node-2",
   element: document.createElement("div"),
   x: 100,
   y: 100,
@@ -40,7 +40,7 @@ const addNodeRequest2: AddNodeRequest = {
 };
 
 const addPortRequest1: AddPortRequest = {
-  portId: "port-1",
+  id: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
   direction: 0,
@@ -51,7 +51,7 @@ addPortRequest1.element.getBoundingClientRect = (): DOMRect => {
 };
 
 const addPortRequest2: AddPortRequest = {
-  portId: "port-2",
+  id: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
   direction: 0,
@@ -62,7 +62,7 @@ addPortRequest2.element.getBoundingClientRect = (): DOMRect => {
 };
 
 const addEdgeRequest12: AddEdgeRequest = {
-  edgeId: "edge-12",
+  id: "edge-12",
   from: "port-1",
   to: "port-2",
   shape: new EdgeShapeMock(),
@@ -126,7 +126,7 @@ describe("CoreHtmlView", () => {
     htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.id);
 
     const container = div.children[0].children[0];
 
@@ -141,8 +141,8 @@ describe("CoreHtmlView", () => {
     htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.detachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.detachNode(addNodeRequest1.id);
 
     const container = div.children[0].children[0];
 
@@ -161,9 +161,9 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
 
     const container = div.children[0].children[0];
 
@@ -182,10 +182,10 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
-    htmlView.detachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
+    htmlView.detachEdge(addEdgeRequest12.id);
 
     const container = div.children[0].children[0];
 
@@ -204,9 +204,9 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
     htmlView.clear();
 
     const container = div.children[0].children[0];
@@ -251,13 +251,13 @@ describe("CoreHtmlView", () => {
     htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.id);
 
-    const node = store.getNode(addNodeRequest1.nodeId)!;
+    const node = store.getNode(addNodeRequest1.id)!;
     node.x = 100;
     node.y = 100;
 
-    htmlView.updateNodeCoordinates(addNodeRequest1.nodeId);
+    htmlView.updateNodeCoordinates(addNodeRequest1.id);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
@@ -272,14 +272,14 @@ describe("CoreHtmlView", () => {
     htmlView.attach(div);
 
     store.addNode(addNodeRequest1);
-    htmlView.attachNode(addNodeRequest1.nodeId);
+    htmlView.attachNode(addNodeRequest1.id);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
-    const node = store.getNode(addNodeRequest1.nodeId)!;
+    const node = store.getNode(addNodeRequest1.id)!;
     node.priority = 10;
-    htmlView.updateNodePriority(addNodeRequest1.nodeId);
+    htmlView.updateNodePriority(addNodeRequest1.id);
 
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
@@ -296,16 +296,16 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
 
-    const edge = store.getEdge(addEdgeRequest12.edgeId)!;
+    const edge = store.getEdge(addEdgeRequest12.id)!;
 
     const newShape = new EdgeShapeMock();
     edge.shape = newShape;
 
-    htmlView.updateEdgeShape(addEdgeRequest12.edgeId);
+    htmlView.updateEdgeShape(addEdgeRequest12.id);
 
     const container = div.children[0].children[0];
 
@@ -324,13 +324,13 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
 
     const spy = jest.spyOn(addEdgeRequest12.shape, "render");
 
-    htmlView.renderEdge(addEdgeRequest12.edgeId);
+    htmlView.renderEdge(addEdgeRequest12.id);
 
     const expected: EdgeRenderParams = {
       from: {
@@ -338,7 +338,7 @@ describe("CoreHtmlView", () => {
         y: 0,
         width: 0,
         height: 0,
-        portId: addPortRequest1.portId,
+        portId: addPortRequest1.id,
         nodeId: addPortRequest1.nodeId,
         direction: 0,
       },
@@ -347,7 +347,7 @@ describe("CoreHtmlView", () => {
         y: 100,
         width: 0,
         height: 0,
-        portId: addPortRequest2.portId,
+        portId: addPortRequest2.id,
         nodeId: addPortRequest2.nodeId,
         direction: 0,
       },
@@ -368,13 +368,13 @@ describe("CoreHtmlView", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    htmlView.attachNode(addNodeRequest1.nodeId);
-    htmlView.attachNode(addNodeRequest2.nodeId);
-    htmlView.attachEdge(addEdgeRequest12.edgeId);
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachNode(addNodeRequest2.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
 
-    const edge = store.getEdge(addEdgeRequest12.edgeId)!;
+    const edge = store.getEdge(addEdgeRequest12.id)!;
     edge.priority = 10;
-    htmlView.updateEdgePriority(addEdgeRequest12.edgeId);
+    htmlView.updateEdgePriority(addEdgeRequest12.id);
 
     const container = div.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;

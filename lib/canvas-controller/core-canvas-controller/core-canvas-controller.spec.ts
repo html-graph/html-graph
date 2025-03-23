@@ -48,6 +48,7 @@ const createPortRequest1 = (): MarkPortRequest => {
     id: "port-1",
     nodeId: "node-1",
     element: createElement(),
+    direction: 0,
   };
 };
 
@@ -67,6 +68,7 @@ const createPortRequest2 = (): MarkPortRequest => {
     id: "port-2",
     nodeId: "node-2",
     element: createElement(),
+    direction: 0,
   };
 };
 
@@ -93,6 +95,7 @@ const markPortRequest: MarkPortRequest = {
   id: "port-1",
   element: createElement(),
   nodeId: "node-1",
+  direction: 0,
 };
 
 describe("CoreCanvasController", () => {

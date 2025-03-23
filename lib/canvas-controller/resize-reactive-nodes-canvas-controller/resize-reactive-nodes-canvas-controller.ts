@@ -6,7 +6,6 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { IdGenerator } from "@/id-generator";
 import { TwoWayMap } from "./two-way-map";
 import { Graph } from "@/graph";
 import { CanvasController } from "../canvas-controller";
@@ -17,10 +16,6 @@ export class ResizeReactiveNodesCanvasController implements CanvasController {
   public readonly graph: Graph;
 
   private readonly nodes = new TwoWayMap<unknown, Element>();
-
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
-    this.nodes.hasKey(nodeId),
-  );
 
   private readonly nodesResizeObserver: ResizeObserver;
 
@@ -48,14 +43,9 @@ export class ResizeReactiveNodesCanvasController implements CanvasController {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const id = this.nodeIdGenerator.create(request.id);
+    this.canvas.addNode(request);
 
-    this.canvas.addNode({
-      ...request,
-      id,
-    });
-
-    this.nodes.set(id, request.element);
+    this.nodes.set(request.id, request.element);
     this.nodesResizeObserver.observe(request.element);
   }
 

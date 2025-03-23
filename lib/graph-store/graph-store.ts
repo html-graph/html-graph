@@ -26,7 +26,7 @@ export class GraphStore {
   private readonly cycleEdges = new Map<unknown, Set<unknown>>();
 
   public addNode(request: AddNodeRequest): void {
-    this.nodes.set(request.nodeId, {
+    this.nodes.set(request.id, {
       element: request.element,
       x: request.x,
       y: request.y,
@@ -34,7 +34,7 @@ export class GraphStore {
       priority: request.priority,
     });
 
-    this.nodePorts.set(request.nodeId, new Map<string, HTMLElement>());
+    this.nodePorts.set(request.id, new Map<string, HTMLElement>());
   }
 
   public getAllNodeIds(): readonly unknown[] {
@@ -52,17 +52,17 @@ export class GraphStore {
   }
 
   public addPort(request: AddPortRequest): void {
-    this.ports.set(request.portId, {
+    this.ports.set(request.id, {
       element: request.element,
       direction: request.direction,
     });
 
-    this.cycleEdges.set(request.portId, new Set());
-    this.incommingEdges.set(request.portId, new Set());
-    this.outcommingEdges.set(request.portId, new Set());
-    this.portNodeId.set(request.portId, request.nodeId);
+    this.cycleEdges.set(request.id, new Set());
+    this.incommingEdges.set(request.id, new Set());
+    this.outcommingEdges.set(request.id, new Set());
+    this.portNodeId.set(request.id, request.nodeId);
 
-    this.nodePorts.get(request.nodeId)!.set(request.portId, request.element);
+    this.nodePorts.get(request.nodeId)!.set(request.id, request.element);
   }
 
   public getPort(portId: unknown): PortPayload | undefined {
@@ -98,7 +98,7 @@ export class GraphStore {
   }
 
   public addEdge(request: AddEdgeRequest): void {
-    this.edges.set(request.edgeId, {
+    this.edges.set(request.id, {
       from: request.from,
       to: request.to,
       shape: request.shape,
@@ -106,10 +106,10 @@ export class GraphStore {
     });
 
     if (request.from !== request.to) {
-      this.outcommingEdges.get(request.from)!.add(request.edgeId);
-      this.incommingEdges.get(request.to)!.add(request.edgeId);
+      this.outcommingEdges.get(request.from)!.add(request.id);
+      this.incommingEdges.get(request.to)!.add(request.id);
     } else {
-      this.cycleEdges.get(request.from)!.add(request.edgeId);
+      this.cycleEdges.get(request.from)!.add(request.id);
     }
   }
 
@@ -118,7 +118,7 @@ export class GraphStore {
 
     this.removeEdge(edgeId);
     this.addEdge({
-      edgeId,
+      id: edgeId,
       from,
       to: edge.to,
       shape: edge.shape,
@@ -131,7 +131,7 @@ export class GraphStore {
 
     this.removeEdge(edgeId);
     this.addEdge({
-      edgeId,
+      id: edgeId,
       from: edge.from,
       to,
       shape: edge.shape,

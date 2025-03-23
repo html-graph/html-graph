@@ -9,7 +9,7 @@ import { Graph } from "./graph";
 import { Point } from "@/point";
 
 const addNodeRequest1: AddNodeRequest = {
-  nodeId: "node-1",
+  id: "node-1",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -18,14 +18,14 @@ const addNodeRequest1: AddNodeRequest = {
 };
 
 const addPortRequest1: AddPortRequest = {
-  portId: "port-1",
+  id: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
   direction: 0,
 };
 
 const addNodeRequest2: AddNodeRequest = {
-  nodeId: "node-2",
+  id: "node-2",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -34,14 +34,14 @@ const addNodeRequest2: AddNodeRequest = {
 };
 
 const addPortRequest2: AddPortRequest = {
-  portId: "port-2",
+  id: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
   direction: 0,
 };
 
 const addEdgeRequest12: AddEdgeRequest = {
-  edgeId: "edge-1-2",
+  id: "edge-1-2",
   from: "port-1",
   to: "port-2",
   shape: new EdgeShapeMock(),
@@ -49,7 +49,7 @@ const addEdgeRequest12: AddEdgeRequest = {
 };
 
 const addEdgeRequest11: AddEdgeRequest = {
-  edgeId: "edge-1-1",
+  id: "edge-1-1",
   from: "port-1",
   to: "port-1",
   shape: new EdgeShapeMock(),
@@ -85,7 +85,7 @@ describe("Graph", () => {
 
     store.addNode(addNodeRequest1);
 
-    expect(publicStore.getAllNodeIds()).toEqual([addNodeRequest1.nodeId]);
+    expect(publicStore.getAllNodeIds()).toEqual([addNodeRequest1.id]);
   });
 
   it("should return null for no port in store", () => {
@@ -103,7 +103,7 @@ describe("Graph", () => {
 
     const publicStore = new Graph(store);
 
-    expect(publicStore.getPort(addPortRequest1.portId)).toStrictEqual({
+    expect(publicStore.getPort(addPortRequest1.id)).toStrictEqual({
       element: addPortRequest1.element,
       direction: addPortRequest1.direction,
     });
@@ -116,7 +116,7 @@ describe("Graph", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    expect(publicStore.getAllPortIds()).toStrictEqual([addPortRequest1.portId]);
+    expect(publicStore.getAllPortIds()).toStrictEqual([addPortRequest1.id]);
   });
 
   it("should return specified node port ids", () => {
@@ -126,8 +126,8 @@ describe("Graph", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    expect(publicStore.getNodePortIds(addNodeRequest1.nodeId)).toEqual([
-      addPortRequest1.portId,
+    expect(publicStore.getNodePortIds(addNodeRequest1.id)).toEqual([
+      addPortRequest1.id,
     ]);
   });
 
@@ -135,7 +135,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const publicStore = new Graph(store);
 
-    expect(publicStore.getNodePortIds(addNodeRequest1.nodeId)).toEqual(null);
+    expect(publicStore.getNodePortIds(addNodeRequest1.id)).toEqual(null);
   });
 
   it("should return null when no node in store", () => {
@@ -152,8 +152,8 @@ describe("Graph", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    expect(publicStore.getPortNodeId(addPortRequest1.portId)).toEqual(
-      addNodeRequest1.nodeId,
+    expect(publicStore.getPortNodeId(addPortRequest1.id)).toEqual(
+      addNodeRequest1.id,
     );
   });
 
@@ -167,7 +167,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getAllEdgeIds()).toEqual([addEdgeRequest12.edgeId]);
+    expect(publicStore.getAllEdgeIds()).toEqual([addEdgeRequest12.id]);
   });
 
   it("should return null for no edge in store", () => {
@@ -187,7 +187,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getEdge(addEdgeRequest12.edgeId)).toStrictEqual({
+    expect(publicStore.getEdge(addEdgeRequest12.id)).toStrictEqual({
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
       priority: addEdgeRequest12.priority,
@@ -204,8 +204,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getPortIncomingEdgeIds(addPortRequest2.portId)).toEqual([
-      addEdgeRequest12.edgeId,
+    expect(publicStore.getPortIncomingEdgeIds(addPortRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
@@ -219,8 +219,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getPortOutcomingEdgeIds(addPortRequest1.portId)).toEqual(
-      [addEdgeRequest12.edgeId],
+    expect(publicStore.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual(
+      [addEdgeRequest12.id],
     );
   });
 
@@ -232,8 +232,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest1);
     store.addEdge(addEdgeRequest11);
 
-    expect(publicStore.getPortCycleEdgeIds(addPortRequest1.portId)).toEqual([
-      addEdgeRequest11.edgeId,
+    expect(publicStore.getPortCycleEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
@@ -247,8 +247,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getPortAdjacentEdgeIds(addPortRequest1.portId)).toEqual([
-      addEdgeRequest12.edgeId,
+    expect(publicStore.getPortAdjacentEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
@@ -262,8 +262,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getNodeIncomingEdgeIds(addNodeRequest2.nodeId)).toEqual([
-      addEdgeRequest12.edgeId,
+    expect(publicStore.getNodeIncomingEdgeIds(addNodeRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
@@ -277,8 +277,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getNodeOutcomingEdgeIds(addNodeRequest1.nodeId)).toEqual(
-      [addEdgeRequest12.edgeId],
+    expect(publicStore.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual(
+      [addEdgeRequest12.id],
     );
   });
 
@@ -290,8 +290,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest1);
     store.addEdge(addEdgeRequest11);
 
-    expect(publicStore.getNodeCycleEdgeIds(addNodeRequest1.nodeId)).toEqual([
-      addEdgeRequest11.edgeId,
+    expect(publicStore.getNodeCycleEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
@@ -305,8 +305,8 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getNodeAdjacentEdgeIds(addNodeRequest2.nodeId)).toEqual([
-      addEdgeRequest12.edgeId,
+    expect(publicStore.getNodeAdjacentEdgeIds(addNodeRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 

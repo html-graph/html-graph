@@ -2,10 +2,8 @@ import { GraphStore } from "@/graph-store";
 import { GraphStoreController } from "./graph-store-controller";
 import { Point } from "@/point";
 import { AddNodeRequest } from "./add-node-request";
-import { CenterFn } from "@/center-fn";
-import { HtmlGraphError } from "@/error";
+import { CenterFn, standardCenterFn } from "@/center-fn";
 import { PriorityFn } from "@/priority";
-import { MarkNodePortRequest } from "./mark-node-port-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
 import { EdgeShape, EdgeShapeMock } from "@/edges";
@@ -62,25 +60,19 @@ const createGraphStoreController = (params?: {
   return controller;
 };
 
-const markNodePortRequest1: MarkNodePortRequest = {
-  id: "port-1",
-  element: createElement({ x: 0, y: 0 }),
-  direction: 0,
-};
-
 const addNodeRequest1: AddNodeRequest = {
   id: "node-1",
   element: createElement(),
   x: 0,
   y: 0,
   centerFn: () => ({ x: 0, y: 0 }),
-  ports: [markNodePortRequest1],
   priority: 0,
 };
 
-const markNodePortRequest2: MarkNodePortRequest = {
-  id: "port-2",
-  element: createElement({ x: 100, y: 100 }),
+const markPortRequest1: MarkPortRequest = {
+  id: "port-1",
+  nodeId: "node-1",
+  element: createElement({ x: 0, y: 0 }),
   direction: 0,
 };
 
@@ -90,8 +82,14 @@ const addNodeRequest2: AddNodeRequest = {
   x: 0,
   y: 0,
   centerFn: () => ({ x: 0, y: 0 }),
-  ports: [markNodePortRequest2],
   priority: 0,
+};
+
+const markPortRequest2: MarkPortRequest = {
+  id: "port-2",
+  nodeId: "node-2",
+  element: createElement({ x: 100, y: 100 }),
+  direction: 0,
 };
 
 const addEdgeRequest12: AddEdgeRequest = {
@@ -108,6 +106,7 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
 
     const node = graphStore.getNode(addNodeRequest1.id);
 
@@ -133,45 +132,6 @@ describe("GraphStoreController", () => {
     expect(callback).toHaveBeenCalledWith("node-1");
   });
 
-  it("should throw error when trying to add node with existing id", () => {
-    const graphStoreController = createGraphStoreController();
-
-    graphStoreController.addNode(addNodeRequest1);
-
-    expect(() => {
-      graphStoreController.addNode(addNodeRequest1);
-    }).toThrow(HtmlGraphError);
-  });
-
-  it("should use default node center fn when not specified", () => {
-    const graphStore = new GraphStore();
-    const nodesCenterFn = (): Point => ({ x: 0, y: 0 });
-    const graphStoreController = createGraphStoreController({
-      graphStore,
-      nodesCenterFn,
-    });
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      priority: 0,
-    };
-
-    graphStoreController.addNode(addNodeRequest);
-
-    const node = graphStore.getNode(addNodeRequest.id);
-
-    expect(node).toStrictEqual({
-      element: addNodeRequest.element,
-      x: addNodeRequest.x,
-      y: addNodeRequest.y,
-      centerFn: nodesCenterFn,
-      priority: addNodeRequest.priority,
-    });
-  });
-
   it("should add specified port to store", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
@@ -181,6 +141,8 @@ describe("GraphStoreController", () => {
       element: createElement(),
       x: 0,
       y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
     };
 
     graphStoreController.addNode(addNodeRequest);
@@ -202,91 +164,19 @@ describe("GraphStoreController", () => {
     });
   });
 
-  it("should use default port direction if not specified", () => {
-    const portsDirection = Math.PI;
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({
-      graphStore,
-      portsDirection,
-    });
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    };
-
-    graphStoreController.addNode(addNodeRequest);
-
-    const markPortRequest: MarkPortRequest = {
-      id: "port-1",
-      nodeId: addNodeRequest.id,
-      element: document.createElement("div"),
-    };
-
-    graphStoreController.markPort(markPortRequest);
-
-    const port = graphStore.getPort(markPortRequest.id)!;
-
-    expect(port.direction).toStrictEqual(portsDirection);
-  });
-
-  it("should throw error when trying to add port with existing id", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    };
-
-    graphStoreController.addNode(addNodeRequest);
-
-    const markPortRequest: MarkPortRequest = {
-      id: "port-1",
-      nodeId: addNodeRequest.id,
-      element: document.createElement("div"),
-      direction: 0,
-    };
-
-    graphStoreController.markPort(markPortRequest);
-
-    expect(() => {
-      graphStoreController.markPort(markPortRequest);
-    }).toThrow(HtmlGraphError);
-  });
-
-  it("should throw error when trying to add port to nonexisting node", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    const markPortRequest: MarkPortRequest = {
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    };
-
-    expect(() => {
-      graphStoreController.markPort(markPortRequest);
-    }).toThrow(HtmlGraphError);
-  });
-
   it("should mark specified ports", () => {
     const graphStoreController = createGraphStoreController();
 
     const spy = jest.spyOn(graphStoreController, "markPort");
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
 
     expect(spy).toHaveBeenCalledWith({
-      id: markNodePortRequest1.id,
-      element: markNodePortRequest1.element,
+      id: markPortRequest1.id,
+      element: markPortRequest1.element,
       nodeId: addNodeRequest1.id,
-      direction: markNodePortRequest1.direction,
+      direction: markPortRequest1.direction,
     });
   });
 
@@ -295,7 +185,9 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     const edge = graphStore.getEdge(addEdgeRequest12.id);
@@ -318,42 +210,12 @@ describe("GraphStoreController", () => {
     graphStoreController.onAfterEdgeAdded.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     expect(callback).toHaveBeenCalledWith(addEdgeRequest12.id);
-  });
-
-  it("should throw error when trying to add existing edge", () => {
-    const graphStoreController = createGraphStoreController();
-
-    graphStoreController.addNode(addNodeRequest1);
-    graphStoreController.addNode(addNodeRequest2);
-    graphStoreController.addEdge(addEdgeRequest12);
-
-    expect(() => {
-      graphStoreController.addEdge(addEdgeRequest12);
-    }).toThrow(HtmlGraphError);
-  });
-
-  it("should throw error when trying to attach edge to nonexisting port", () => {
-    const graphStoreController = createGraphStoreController();
-
-    graphStoreController.addNode(addNodeRequest1);
-
-    expect(() => {
-      graphStoreController.addEdge(addEdgeRequest12);
-    }).toThrow(HtmlGraphError);
-  });
-
-  it("should throw error when trying to attach edge from nonexisting port", () => {
-    const graphStoreController = createGraphStoreController();
-
-    graphStoreController.addNode(addNodeRequest2);
-
-    expect(() => {
-      graphStoreController.addEdge(addEdgeRequest12);
-    }).toThrow(HtmlGraphError);
   });
 
   it("should update edge shape if specified", () => {
@@ -361,7 +223,9 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     const newShape = new EdgeShapeMock();
@@ -384,7 +248,9 @@ describe("GraphStoreController", () => {
     graphStoreController.onAfterEdgeShapeUpdated.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     const newShape = new EdgeShapeMock();
@@ -401,7 +267,9 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
     graphStoreController.updateEdge(addEdgeRequest12.id, {
       priority: 10,
@@ -422,7 +290,9 @@ describe("GraphStoreController", () => {
     graphStoreController.onAfterEdgePriorityUpdated.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
     graphStoreController.updateEdge(addEdgeRequest12.id, {
       priority: 10,
@@ -441,7 +311,9 @@ describe("GraphStoreController", () => {
     graphStoreController.onAfterEdgeUpdated.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     graphStoreController.updateEdge(addEdgeRequest12.id, {});
@@ -449,27 +321,20 @@ describe("GraphStoreController", () => {
     expect(callback).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
-  it("should throw error when trying to update nonexisting edge", () => {
-    const graphStoreController = createGraphStoreController();
-
-    expect(() => {
-      graphStoreController.updateEdge("edge-1", {});
-    }).toThrow(HtmlGraphError);
-  });
-
   it("should update port direction", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
 
     const updatePortRequest: UpdatePortRequest = {
       direction: Math.PI,
     };
 
-    graphStoreController.updatePort(markNodePortRequest1.id, updatePortRequest);
+    graphStoreController.updatePort(markPortRequest1.id, updatePortRequest);
 
-    const port = graphStore.getPort(markNodePortRequest1.id)!;
+    const port = graphStore.getPort(markPortRequest1.id)!;
 
     expect(port.direction).toBe(updatePortRequest.direction);
   });
@@ -484,17 +349,10 @@ describe("GraphStoreController", () => {
     graphStoreController.onAfterPortUpdated.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
-    graphStoreController.updatePort(markNodePortRequest1.id, {});
+    graphStoreController.markPort(markPortRequest1);
+    graphStoreController.updatePort(markPortRequest1.id, {});
 
-    expect(callback).toHaveBeenCalledWith(markNodePortRequest1.id);
-  });
-
-  it("should throw error when trying to update nonexisting port", () => {
-    const graphStoreController = createGraphStoreController();
-
-    expect(() => {
-      graphStoreController.updatePort("port-1", {});
-    }).toThrow(HtmlGraphError);
+    expect(callback).toHaveBeenCalledWith(markPortRequest1.id);
   });
 
   it("should update node x coordinate if specified", () => {
@@ -601,21 +459,14 @@ describe("GraphStoreController", () => {
     expect(callback).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
-  it("should throw error when trying to update nonexisting node", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    expect(() => {
-      graphStoreController.updateNode(1, {});
-    }).toThrow(HtmlGraphError);
-  });
-
   it("should remove edge from store", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
     graphStoreController.removeEdge(addEdgeRequest12.id);
 
@@ -634,19 +485,13 @@ describe("GraphStoreController", () => {
     graphStoreController.onBeforeEdgeRemoved.subscribe(callback);
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
     graphStoreController.removeEdge(addEdgeRequest12.id);
 
     expect(callback).toHaveBeenCalledWith(addEdgeRequest12.id);
-  });
-
-  it("should throw error when trying to remove nonexisting edge", () => {
-    const graphStoreController = createGraphStoreController();
-
-    expect(() => {
-      graphStoreController.removeEdge("edge-1");
-    }).toThrow(HtmlGraphError);
   });
 
   it("should remove port from store", () => {
@@ -654,9 +499,10 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
-    graphStoreController.unmarkPort(markNodePortRequest1.id);
+    graphStoreController.markPort(markPortRequest1);
+    graphStoreController.unmarkPort(markPortRequest1.id);
 
-    const port = graphStore.getPort(markNodePortRequest1.id);
+    const port = graphStore.getPort(markPortRequest1.id);
 
     expect(port).toBe(undefined);
   });
@@ -665,22 +511,16 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController();
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     const spy = jest.spyOn(graphStoreController, "removeEdge");
 
-    graphStoreController.unmarkPort(markNodePortRequest1.id);
+    graphStoreController.unmarkPort(markPortRequest1.id);
 
     expect(spy).toHaveBeenCalledWith(addEdgeRequest12.id);
-  });
-
-  it("should throw error when trying to unmark nonexisting port", () => {
-    const graphStoreController = createGraphStoreController();
-
-    expect(() => {
-      graphStoreController.unmarkPort("port-1");
-    }).toThrow(HtmlGraphError);
   });
 
   it("should remove node from store", () => {
@@ -714,12 +554,13 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController();
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
 
     const spy = jest.spyOn(graphStoreController, "unmarkPort");
 
     graphStoreController.removeNode(addNodeRequest1.id);
 
-    expect(spy).toHaveBeenCalledWith(markNodePortRequest1.id);
+    expect(spy).toHaveBeenCalledWith(markPortRequest1.id);
   });
 
   it("should clear store", () => {
@@ -733,72 +574,14 @@ describe("GraphStoreController", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should add node with unspecified id", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    graphStoreController.addNode(addNodeRequest1);
-
-    const nodes = graphStore.getAllNodeIds();
-
-    expect(nodes.length).toBe(1);
-  });
-
-  it("should add port with unspecified id", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-3",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      centerFn: () => ({ x: 0, y: 0 }),
-      priority: 0,
-    };
-
-    graphStoreController.addNode(addNodeRequest);
-
-    const markPortRequest: MarkPortRequest = {
-      nodeId: addNodeRequest.id,
-      element: document.createElement("div"),
-      direction: 0,
-    };
-
-    graphStoreController.markPort(markPortRequest);
-
-    const ports = graphStore.getAllPortIds();
-
-    expect(ports.length).toBe(1);
-  });
-
-  it("should add edge with unspecified id", () => {
-    const graphStore = new GraphStore();
-    const graphStoreController = createGraphStoreController({ graphStore });
-
-    graphStoreController.addNode(addNodeRequest1);
-    graphStoreController.addNode(addNodeRequest2);
-    graphStoreController.addEdge(addEdgeRequest12);
-
-    const edges = graphStore.getAllEdgeIds();
-
-    expect(edges.length).toBe(1);
-  });
-
-  it("should throw error when trying to remove nonexisting node", () => {
-    const graphStoreController = createGraphStoreController();
-
-    expect(() => {
-      graphStoreController.removeNode("node-1");
-    }).toThrow(HtmlGraphError);
-  });
-
   it("should update edge source", () => {
     const graphStore = new GraphStore();
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     graphStoreController.updateEdge(addEdgeRequest12.id, {
@@ -815,7 +598,9 @@ describe("GraphStoreController", () => {
     const graphStoreController = createGraphStoreController({ graphStore });
 
     graphStoreController.addNode(addNodeRequest1);
+    graphStoreController.markPort(markPortRequest1);
     graphStoreController.addNode(addNodeRequest2);
+    graphStoreController.markPort(markPortRequest2);
     graphStoreController.addEdge(addEdgeRequest12);
 
     graphStoreController.updateEdge(addEdgeRequest12.id, {

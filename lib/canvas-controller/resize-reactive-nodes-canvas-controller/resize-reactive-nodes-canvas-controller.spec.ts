@@ -121,8 +121,10 @@ describe("ResizeReactiveNodesCanvasController", () => {
     const spy = jest.spyOn(canvasCore, "markPort");
 
     canvas.markPort({
+      id: "port-1",
       element: document.createElement("div"),
       nodeId: "node-1",
+      direction: 0,
     });
 
     expect(spy).toHaveBeenCalled();

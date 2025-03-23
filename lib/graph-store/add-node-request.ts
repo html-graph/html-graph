@@ -1,7 +1,7 @@
 import { CenterFn } from "@/center-fn";
 
 export interface AddNodeRequest {
-  readonly nodeId: unknown;
+  readonly id: unknown;
   readonly element: HTMLElement;
   readonly x: number;
   readonly y: number;

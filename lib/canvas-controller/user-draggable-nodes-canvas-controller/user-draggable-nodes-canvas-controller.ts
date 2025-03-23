@@ -1,4 +1,3 @@
-import { IdGenerator } from "@/id-generator";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -25,10 +24,6 @@ export class UserDraggableNodesCanvasController implements CanvasController {
   private readonly nodes = new Map<unknown, NodeState>();
 
   private grabbedNodeId: unknown | null = null;
-
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
-    this.nodes.has(nodeId),
-  );
 
   private element: HTMLElement | null = null;
 
@@ -126,11 +121,9 @@ export class UserDraggableNodesCanvasController implements CanvasController {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const nodeId = this.nodeIdGenerator.create(request.id);
+    this.canvas.addNode(request);
 
-    this.canvas.addNode({ ...request, id: nodeId });
-
-    this.updateMaxNodePriority(nodeId);
+    this.updateMaxNodePriority(request.id);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
       if (
@@ -140,10 +133,10 @@ export class UserDraggableNodesCanvasController implements CanvasController {
         return;
       }
 
-      const node = this.graph.getNode(nodeId)!;
+      const node = this.graph.getNode(request.id)!;
 
       const isDragAllowed = this.options.onBeforeNodeDrag({
-        nodeId,
+        nodeId: request.id,
         element: request.element,
         x: node.x,
         y: node.y,
@@ -154,9 +147,9 @@ export class UserDraggableNodesCanvasController implements CanvasController {
       }
 
       event.stopImmediatePropagation();
-      this.grabbedNodeId = nodeId;
+      this.grabbedNodeId = request.id;
       setCursor(this.element, this.options.dragCursor);
-      this.moveNodeOnTop(nodeId);
+      this.moveNodeOnTop(request.id);
       this.window.addEventListener("mouseup", this.onWindowMouseUp);
       this.window.addEventListener("mousemove", this.onWindowMouseMove);
     };
@@ -173,10 +166,10 @@ export class UserDraggableNodesCanvasController implements CanvasController {
         y: event.touches[0].clientY,
       };
 
-      const node = this.graph.getNode(nodeId)!;
+      const node = this.graph.getNode(request.id)!;
 
       const isDragAllowed = this.options.onBeforeNodeDrag({
-        nodeId,
+        nodeId: request.id,
         element: request.element,
         x: node.x,
         y: node.y,
@@ -186,14 +179,14 @@ export class UserDraggableNodesCanvasController implements CanvasController {
         return;
       }
 
-      this.grabbedNodeId = nodeId;
-      this.moveNodeOnTop(nodeId);
+      this.grabbedNodeId = request.id;
+      this.moveNodeOnTop(request.id);
       this.window.addEventListener("touchmove", this.onWindowTouchMove);
       this.window.addEventListener("touchend", this.onWindowTouchFinish);
       this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
     };
 
-    this.nodes.set(nodeId, {
+    this.nodes.set(request.id, {
       element: request.element,
       onMouseDown,
       onTouchStart,

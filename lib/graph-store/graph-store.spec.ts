@@ -3,9 +3,10 @@ import { GraphStore } from "./graph-store";
 import { EdgeShapeMock } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
+import { AddEdgeRequest } from "./add-edge-request";
 
 const node1Request: AddNodeRequest = {
-  nodeId: "node-1",
+  id: "node-1",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -14,14 +15,14 @@ const node1Request: AddNodeRequest = {
 };
 
 const port1Request: AddPortRequest = {
-  portId: "port-1",
+  id: "port-1",
   nodeId: "node-1",
   element: document.createElement("div"),
   direction: 0,
 };
 
 const node2Request: AddNodeRequest = {
-  nodeId: "node-2",
+  id: "node-2",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -30,22 +31,22 @@ const node2Request: AddNodeRequest = {
 };
 
 const port2Request: AddPortRequest = {
-  portId: "port-2",
+  id: "port-2",
   nodeId: "node-2",
   element: document.createElement("div"),
   direction: 0,
 };
 
-const edge1to2Request = {
-  edgeId: "edge-1",
+const edge1to2Request: AddEdgeRequest = {
+  id: "edge-1",
   from: "port-1",
   to: "port-2",
   shape: new EdgeShapeMock(),
   priority: 0,
 };
 
-const edge1to1Request = {
-  edgeId: "edge-2",
+const edge1to1Request: AddEdgeRequest = {
+  id: "edge-2",
   from: "port-1",
   to: "port-1",
   shape: new EdgeShapeMock(),
@@ -64,7 +65,7 @@ describe("GraphStore", () => {
 
     store.addNode(node1Request);
 
-    expect(store.getNode(node1Request.nodeId)).toEqual({
+    expect(store.getNode(node1Request.id)).toEqual({
       element: node1Request.element,
       x: node1Request.x,
       y: node1Request.y,
@@ -78,16 +79,16 @@ describe("GraphStore", () => {
 
     store.addNode(node1Request);
 
-    expect(store.getAllNodeIds()).toEqual([node1Request.nodeId]);
+    expect(store.getAllNodeIds()).toEqual([node1Request.id]);
   });
 
   it("should remove node", () => {
     const store = new GraphStore();
 
     store.addNode(node1Request);
-    store.removeNode(node1Request.nodeId);
+    store.removeNode(node1Request.id);
 
-    expect(store.getNode(node1Request.nodeId)).toBe(undefined);
+    expect(store.getNode(node1Request.id)).toBe(undefined);
   });
 
   it("should return undefined for non-existing port", () => {
@@ -102,7 +103,7 @@ describe("GraphStore", () => {
     store.addNode(node1Request);
     store.addPort(port1Request);
 
-    expect(store.getPort(port1Request.portId)).toEqual({
+    expect(store.getPort(port1Request.id)).toEqual({
       element: port1Request.element,
       direction: port1Request.direction,
     });
@@ -114,7 +115,7 @@ describe("GraphStore", () => {
     store.addNode(node1Request);
     store.addPort(port1Request);
 
-    expect(store.getAllPortIds()).toEqual([port1Request.portId]);
+    expect(store.getAllPortIds()).toEqual([port1Request.id]);
   });
 
   it("should return undefined when getting ports of non-existing node", () => {
@@ -129,9 +130,7 @@ describe("GraphStore", () => {
     store.addNode(node1Request);
     store.addPort(port1Request);
 
-    expect(store.getNodePortIds(node1Request.nodeId)).toEqual([
-      port1Request.portId,
-    ]);
+    expect(store.getNodePortIds(node1Request.id)).toEqual([port1Request.id]);
   });
 
   it("should return undefined when getting node id of non-existing port", () => {
@@ -145,9 +144,9 @@ describe("GraphStore", () => {
 
     store.addNode(node1Request);
     store.addPort(port1Request);
-    store.removePort(port1Request.portId);
+    store.removePort(port1Request.id);
 
-    expect(store.getPort(port1Request.portId)).toEqual(undefined);
+    expect(store.getPort(port1Request.id)).toEqual(undefined);
   });
 
   it("should return undefined when getting non-existing id", () => {
@@ -165,7 +164,7 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getEdge(edge1to2Request.edgeId)).toEqual({
+    expect(store.getEdge(edge1to2Request.id)).toEqual({
       from: edge1to2Request.from,
       to: edge1to2Request.to,
       shape: edge1to2Request.shape,
@@ -182,7 +181,7 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getAllEdgeIds()).toEqual([edge1to2Request.edgeId]);
+    expect(store.getAllEdgeIds()).toEqual([edge1to2Request.id]);
   });
 
   it("should remove edge", () => {
@@ -193,9 +192,9 @@ describe("GraphStore", () => {
     store.addNode(node2Request);
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
-    store.removeEdge(edge1to2Request.edgeId);
+    store.removeEdge(edge1to2Request.id);
 
-    expect(store.getEdge(edge1to2Request.edgeId)).toEqual(undefined);
+    expect(store.getEdge(edge1to2Request.id)).toEqual(undefined);
   });
 
   it("should clear node", () => {
@@ -204,7 +203,7 @@ describe("GraphStore", () => {
     store.addNode(node1Request);
     store.clear();
 
-    expect(store.getNode(node1Request.nodeId)).toEqual(undefined);
+    expect(store.getNode(node1Request.id)).toEqual(undefined);
   });
 
   it("should clear port", () => {
@@ -214,7 +213,7 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.clear();
 
-    expect(store.getPort(port1Request.portId)).toEqual(undefined);
+    expect(store.getPort(port1Request.id)).toEqual(undefined);
   });
 
   it("should clear node ports", () => {
@@ -224,7 +223,7 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.clear();
 
-    expect(store.getNodePortIds(node1Request.nodeId)).toEqual(undefined);
+    expect(store.getNodePortIds(node1Request.id)).toEqual(undefined);
   });
 
   it("should clear port node id", () => {
@@ -234,7 +233,7 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.clear();
 
-    expect(store.getPortNodeId(port1Request.portId)).toEqual(undefined);
+    expect(store.getPortNodeId(port1Request.id)).toEqual(undefined);
   });
 
   it("should clear edge", () => {
@@ -247,7 +246,7 @@ describe("GraphStore", () => {
     store.addEdge(edge1to2Request);
     store.clear();
 
-    expect(store.getEdge(edge1to2Request.edgeId)).toEqual(undefined);
+    expect(store.getEdge(edge1to2Request.id)).toEqual(undefined);
   });
 
   it("should return port incoming edge ids", () => {
@@ -259,8 +258,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getPortIncomingEdgeIds(port2Request.portId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getPortIncomingEdgeIds(port2Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -273,8 +272,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getPortOutcomingEdgeIds(port1Request.portId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getPortOutcomingEdgeIds(port1Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -285,8 +284,8 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.addEdge(edge1to1Request);
 
-    expect(store.getPortCycleEdgeIds(port1Request.portId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getPortCycleEdgeIds(port1Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 
@@ -299,8 +298,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.portId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -313,8 +312,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getPortAdjacentEdgeIds(port1Request.portId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getPortAdjacentEdgeIds(port1Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -325,8 +324,8 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.addEdge(edge1to1Request);
 
-    expect(store.getPortAdjacentEdgeIds(port1Request.portId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getPortAdjacentEdgeIds(port1Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 
@@ -339,8 +338,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getNodeIncomingEdgeIds(node2Request.nodeId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getNodeIncomingEdgeIds(node2Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -353,8 +352,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getNodeOutcomingEdgeIds(node1Request.nodeId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getNodeOutcomingEdgeIds(node1Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -365,8 +364,8 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.addEdge(edge1to1Request);
 
-    expect(store.getNodeCycleEdgeIds(node1Request.nodeId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getNodeCycleEdgeIds(node1Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 
@@ -379,8 +378,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getNodeAdjacentEdgeIds(node2Request.nodeId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getNodeAdjacentEdgeIds(node2Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -393,8 +392,8 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to2Request);
 
-    expect(store.getNodeAdjacentEdgeIds(node1Request.nodeId)).toEqual([
-      edge1to2Request.edgeId,
+    expect(store.getNodeAdjacentEdgeIds(node1Request.id)).toEqual([
+      edge1to2Request.id,
     ]);
   });
 
@@ -405,8 +404,8 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
     store.addEdge(edge1to1Request);
 
-    expect(store.getNodeAdjacentEdgeIds(node1Request.nodeId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getNodeAdjacentEdgeIds(node1Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 
@@ -419,10 +418,10 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to1Request);
 
-    store.updateEdgeFrom(edge1to1Request.edgeId, port2Request.portId);
+    store.updateEdgeFrom(edge1to1Request.id, port2Request.id);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.portId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 
@@ -435,10 +434,10 @@ describe("GraphStore", () => {
     store.addPort(port2Request);
     store.addEdge(edge1to1Request);
 
-    store.updateEdgeTo(edge1to1Request.edgeId, port2Request.portId);
+    store.updateEdgeTo(edge1to1Request.id, port2Request.id);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.portId)).toEqual([
-      edge1to1Request.edgeId,
+    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
+      edge1to1Request.id,
     ]);
   });
 });

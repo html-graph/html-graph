@@ -101,7 +101,7 @@ export class GraphStoreController {
     }
 
     this.graphStore.addNode({
-      nodeId,
+      id: nodeId,
       element: request.element,
       x: request.x,
       y: request.y,
@@ -110,15 +110,6 @@ export class GraphStoreController {
     });
 
     this.onAfterNodeAddedEmitter.emit(nodeId);
-
-    Array.from(request.ports ?? []).forEach((port) => {
-      this.markPort({
-        id: port.id,
-        element: port.element,
-        nodeId,
-        direction: port.direction,
-      });
-    });
   }
 
   public markPort(request: MarkPortRequest): void {
@@ -133,7 +124,7 @@ export class GraphStoreController {
     }
 
     this.graphStore.addPort({
-      portId,
+      id: portId,
       element: request.element,
       nodeId: request.nodeId,
       direction: request.direction ?? this.options.ports.direction,
@@ -156,7 +147,7 @@ export class GraphStoreController {
     }
 
     this.graphStore.addEdge({
-      edgeId,
+      id: edgeId,
       from: request.from,
       to: request.to,
       shape: request.shape ?? this.options.edges.shapeFactory(),

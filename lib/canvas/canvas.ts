@@ -51,6 +51,24 @@ export class Canvas {
   }
 
   /**
+   * attaches canvas to given element
+   */
+  public attach(element: HTMLElement): Canvas {
+    this.controller.attach(element);
+
+    return this;
+  }
+
+  /**
+   * detaches canvas from element
+   */
+  public detach(): Canvas {
+    this.controller.detach();
+
+    return this;
+  }
+
+  /**
    * adds node to graph
    */
   public addNode(request: AddNodeRequest): Canvas {
@@ -235,24 +253,6 @@ export class Canvas {
    */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.controller.patchContentMatrix(request);
-
-    return this;
-  }
-
-  /**
-   * attaches canvas to given element
-   */
-  public attach(element: HTMLElement): Canvas {
-    this.controller.attach(element);
-
-    return this;
-  }
-
-  /**
-   * detaches canvas from element
-   */
-  public detach(): Canvas {
-    this.controller.detach();
 
     return this;
   }
