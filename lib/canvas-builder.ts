@@ -143,7 +143,7 @@ export class CanvasBuilder {
 
     this.reset();
 
-    return new Canvas(canvasController);
+    return new Canvas(canvasController, this.coreOptions);
   }
 
   private reset(): void {

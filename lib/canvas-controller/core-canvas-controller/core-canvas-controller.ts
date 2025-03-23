@@ -135,11 +135,8 @@ export class CoreCanvasController implements CanvasController {
     this.graphStoreController.addNode(request);
   }
 
-  public updateNode(
-    nodeId: unknown,
-    request: UpdateNodeRequest | undefined,
-  ): void {
-    this.graphStoreController.updateNode(nodeId, request ?? {});
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
+    this.graphStoreController.updateNode(nodeId, request);
   }
 
   public removeNode(nodeId: unknown): void {
@@ -150,11 +147,8 @@ export class CoreCanvasController implements CanvasController {
     this.graphStoreController.addEdge(request);
   }
 
-  public updateEdge(
-    edgeId: unknown,
-    request: UpdateEdgeRequest | undefined,
-  ): void {
-    this.graphStoreController.updateEdge(edgeId, request ?? {});
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
+    this.graphStoreController.updateEdge(edgeId, request);
   }
 
   public removeEdge(edgeId: unknown): void {
@@ -165,11 +159,8 @@ export class CoreCanvasController implements CanvasController {
     this.graphStoreController.markPort(request);
   }
 
-  public updatePort(
-    portId: string,
-    request: UpdatePortRequest | undefined,
-  ): void {
-    this.graphStoreController.updatePort(portId, request ?? {});
+  public updatePort(portId: string, request: UpdatePortRequest): void {
+    this.graphStoreController.updatePort(portId, request);
   }
 
   public unmarkPort(portId: string): void {
