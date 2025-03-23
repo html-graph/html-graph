@@ -10,7 +10,7 @@ import { Graph } from "@/graph";
 import { CanvasController } from "@/canvas-controller";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
-import { GraphDefaults } from "./graph-store-controller-defaults";
+import { GraphDefaults } from "./graph-defaults";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -65,14 +65,14 @@ export class Canvas {
    * adds node to graph
    */
   public addNode(request: AddNodeRequest): Canvas {
-    const nodeId = this.nodeIdGenerator.create(request.id);
+    const id = this.nodeIdGenerator.create(request.id);
 
-    if (this.graph.getNode(nodeId) !== null) {
+    if (this.graph.getNode(id) !== null) {
       throw new HtmlGraphError("failed to add node with existing id");
     }
 
     this.controller.addNode({
-      id: nodeId,
+      id,
       element: request.element,
       x: request.x,
       y: request.y,
@@ -84,7 +84,7 @@ export class Canvas {
       this.markPort({
         id: port.id,
         element: port.element,
-        nodeId,
+        nodeId: id,
         direction: port.direction,
       });
     });
@@ -126,9 +126,9 @@ export class Canvas {
    * marks element as port of node
    */
   public markPort(request: MarkPortRequest): Canvas {
-    const portId = this.portIdGenerator.create(request.id);
+    const id = this.portIdGenerator.create(request.id);
 
-    if (this.graph.getPort(portId) !== null) {
+    if (this.graph.getPort(id) !== null) {
       throw new HtmlGraphError("failed to add port with existing id");
     }
 
@@ -137,7 +137,7 @@ export class Canvas {
     }
 
     this.controller.markPort({
-      id: portId,
+      id,
       element: request.element,
       nodeId: request.nodeId,
       direction: request.direction ?? this.defaults.ports.direction,
@@ -179,9 +179,9 @@ export class Canvas {
    * adds edge to graph
    */
   public addEdge(request: AddEdgeRequest): Canvas {
-    const edgeId = this.edgeIdGenerator.create(request.id);
+    const id = this.edgeIdGenerator.create(request.id);
 
-    if (this.graph.getEdge(edgeId) !== null) {
+    if (this.graph.getEdge(id) !== null) {
       throw new HtmlGraphError("failed to add edge with existing id");
     }
 
@@ -194,7 +194,7 @@ export class Canvas {
     }
 
     this.controller.addEdge({
-      id: edgeId,
+      id,
       from: request.from,
       to: request.to,
       shape: request.shape ?? this.defaults.edges.shapeFactory(),

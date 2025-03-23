@@ -10,7 +10,6 @@ export type { UpdatePortRequest } from "./update-port-request";
 export type { CanvasController } from "./canvas-controller";
 export {
   CoreCanvasController,
-  DiContainer,
   coreHtmlViewFactory,
   createBoxHtmlViewFactory,
 } from "./core-canvas-controller";

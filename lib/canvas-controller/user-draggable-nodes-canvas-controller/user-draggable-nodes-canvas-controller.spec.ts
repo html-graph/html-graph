@@ -3,7 +3,6 @@ import { CanvasController } from "../canvas-controller";
 import {
   CoreCanvasController,
   coreHtmlViewFactory,
-  DiContainer,
 } from "../core-canvas-controller";
 import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
 import { EdgeShapeMock } from "@/edges";
@@ -75,9 +74,7 @@ let innerWidth: number;
 let innerHeight: number;
 
 const createCanvas = (): CanvasController => {
-  const container = new DiContainer(coreHtmlViewFactory);
-
-  return new CoreCanvasController(container);
+  return new CoreCanvasController(coreHtmlViewFactory);
 };
 
 describe("UserDraggableNodesCanvasController", () => {

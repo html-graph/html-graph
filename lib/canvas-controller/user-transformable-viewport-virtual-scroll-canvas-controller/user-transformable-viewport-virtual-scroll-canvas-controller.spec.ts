@@ -5,7 +5,6 @@ import { CanvasController } from "../canvas-controller";
 import {
   CoreCanvasController,
   createBoxHtmlViewFactory,
-  DiContainer,
 } from "../core-canvas-controller";
 import { TransformOptions } from "../user-transformable-viewport-canvas-controller";
 import { standardCenterFn } from "@/center-fn";
@@ -47,8 +46,7 @@ const create = (
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const htmlViewFactory = createBoxHtmlViewFactory(trigger);
-  const container = new DiContainer(htmlViewFactory);
-  const coreCanvas = new CoreCanvasController(container);
+  const coreCanvas = new CoreCanvasController(htmlViewFactory);
 
   const canvas = new UserTransformableViewportVirtualScrollCanvasController(
     coreCanvas,

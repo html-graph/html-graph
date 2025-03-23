@@ -2,7 +2,7 @@ import { standardCenterFn } from "@/center-fn";
 import { CoreOptions } from "./core-options";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { resolvePriority } from "./resolve-priority";
-import { GraphDefaults } from "@/canvas/graph-store-controller-defaults";
+import { GraphDefaults } from "@/canvas";
 
 export const createDefaults: (
   coreOptions: CoreOptions | undefined,

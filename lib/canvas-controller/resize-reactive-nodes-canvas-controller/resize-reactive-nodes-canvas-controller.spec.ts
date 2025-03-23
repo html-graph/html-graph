@@ -3,7 +3,6 @@ import { EdgeShapeMock } from "@/edges";
 import {
   CoreCanvasController,
   coreHtmlViewFactory,
-  DiContainer,
 } from "../core-canvas-controller";
 import { CanvasController } from "../canvas-controller";
 import { standardCenterFn } from "@/center-fn";
@@ -14,9 +13,7 @@ const triggerResizeFor = (element: HTMLElement): void => {
 };
 
 const createCanvas = (): CanvasController => {
-  const container = new DiContainer(coreHtmlViewFactory);
-
-  return new CoreCanvasController(container);
+  return new CoreCanvasController(coreHtmlViewFactory);
 };
 
 describe("ResizeReactiveNodesCanvasController", () => {

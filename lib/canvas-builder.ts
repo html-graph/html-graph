@@ -7,7 +7,6 @@ import {
   TransformOptions,
   ResizeReactiveNodesCanvasController,
   CoreCanvasController,
-  DiContainer,
   coreHtmlViewFactory,
   createBoxHtmlViewFactory,
   UserTransformableViewportVirtualScrollCanvasController,
@@ -108,43 +107,40 @@ export class CanvasBuilder {
         ? createBoxHtmlViewFactory(trigger)
         : coreHtmlViewFactory;
 
-    const container = new DiContainer(htmlViewFactory);
-
-    let canvasController: CanvasController = new CoreCanvasController(
-      container,
+    let controller: CanvasController = new CoreCanvasController(
+      htmlViewFactory,
     );
 
     if (this.hasResizeReactiveNodes) {
-      canvasController = new ResizeReactiveNodesCanvasController(
-        canvasController,
-      );
+      controller = new ResizeReactiveNodesCanvasController(controller);
     }
 
     if (this.hasDraggableNode) {
-      canvasController = new UserDraggableNodesCanvasController(
-        canvasController,
+      controller = new UserDraggableNodesCanvasController(
+        controller,
         this.dragOptions,
       );
     }
 
     if (this.virtualScrollOptions !== undefined) {
-      canvasController =
-        new UserTransformableViewportVirtualScrollCanvasController(
-          canvasController,
-          trigger!,
-          this.transformOptions,
-          this.virtualScrollOptions,
-        );
+      controller = new UserTransformableViewportVirtualScrollCanvasController(
+        controller,
+        trigger!,
+        this.transformOptions,
+        this.virtualScrollOptions,
+      );
     } else if (this.hasTransformableViewport) {
-      canvasController = new UserTransformableViewportCanvasController(
-        canvasController,
+      controller = new UserTransformableViewportCanvasController(
+        controller,
         this.transformOptions,
       );
     }
 
+    const canvas = new Canvas(controller, createDefaults(this.coreOptions));
+
     this.reset();
 
-    return new Canvas(canvasController, createDefaults(this.coreOptions));
+    return canvas;
   }
 
   private reset(): void {

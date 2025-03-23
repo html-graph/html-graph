@@ -8,9 +8,7 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlView } from "@/html-view";
-import { GraphStoreController } from "@/graph-store-controller";
 import { Graph } from "@/graph";
-import { DiContainer } from "./di-container";
 import { GraphStore } from "@/graph-store";
 
 /**
@@ -21,106 +19,25 @@ export class CoreCanvasController implements CanvasController {
 
   public readonly graph: Graph;
 
-  private readonly internalTransformation: ViewportTransformer;
+  private readonly viewportTransformer: ViewportTransformer;
 
-  private readonly internalModel: GraphStore;
-
-  private readonly graphStoreController: GraphStoreController;
+  private readonly graphStore: GraphStore;
 
   private readonly htmlView: HtmlView;
 
-  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
-    this.htmlView.attachNode(nodeId);
-  };
+  public constructor(
+    htmlViewFactory: (
+      graphStore: GraphStore,
+      viewportTransformer: ViewportTransformer,
+    ) => HtmlView,
+  ) {
+    this.graphStore = new GraphStore();
+    this.graph = new Graph(this.graphStore);
 
-  private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
-    this.htmlView.attachEdge(edgeId);
-  };
+    this.viewportTransformer = new ViewportTransformer();
+    this.viewport = new Viewport(this.viewportTransformer);
 
-  private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
-    this.htmlView.updateEdgeShape(edgeId);
-  };
-
-  private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
-    this.htmlView.updateEdgePriority(edgeId);
-  };
-
-  private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
-    this.htmlView.renderEdge(edgeId);
-  };
-
-  private readonly onAfterPortUpdated = (portId: unknown): void => {
-    const edges = this.internalModel.getPortAdjacentEdgeIds(portId);
-
-    edges.forEach((edge) => {
-      this.htmlView.renderEdge(edge);
-    });
-  };
-
-  private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
-    this.htmlView.updateNodePriority(nodeId);
-  };
-
-  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
-    this.htmlView.updateNodeCoordinates(nodeId);
-    const edges = this.internalModel.getNodeAdjacentEdgeIds(nodeId);
-
-    edges.forEach((edge) => {
-      this.htmlView.renderEdge(edge);
-    });
-  };
-
-  private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
-    this.htmlView.detachEdge(edgeId);
-  };
-
-  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
-    this.htmlView.detachNode(nodeId);
-  };
-
-  public constructor(di: DiContainer) {
-    this.graph = di.graph;
-    this.internalModel = di.graphStore;
-    this.internalTransformation = di.viewportTransformer;
-    this.viewport = di.viewport;
-    this.htmlView = di.htmlView;
-    this.graphStoreController = di.graphStoreController;
-
-    this.graphStoreController.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
-
-    this.graphStoreController.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
-
-    this.graphStoreController.onAfterEdgeShapeUpdated.subscribe(
-      this.onAfterEdgeShapeUpdated,
-    );
-
-    this.graphStoreController.onAfterEdgePriorityUpdated.subscribe(
-      this.onAfterEdgePriorityUpdated,
-    );
-
-    this.graphStoreController.onAfterEdgeUpdated.subscribe(
-      this.onAfterEdgeUpdated,
-    );
-
-    this.graphStoreController.onAfterPortUpdated.subscribe(
-      this.onAfterPortUpdated,
-    );
-
-    this.graphStoreController.onAfterNodePriorityUpdated.subscribe(
-      this.onAfterNodePriorityUpdated,
-    );
-
-    this.graphStoreController.onAfterNodeUpdated.subscribe(
-      this.onAfterNodeUpdated,
-    );
-
-    this.graphStoreController.onBeforeEdgeRemoved.subscribe(
-      this.onBeforeEdgeRemoved,
-    );
-
-    this.graphStoreController.onBeforeNodeRemoved.subscribe(
-      this.onBeforeNodeRemoved,
-    );
+    this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
   }
 
   public attach(element: HTMLElement): void {
@@ -132,96 +49,112 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public addNode(request: AddNodeRequest): void {
-    this.graphStoreController.addNode(request);
+    this.graphStore.addNode(request);
+    this.htmlView.attachNode(request.id);
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    this.graphStoreController.updateNode(nodeId, request);
+    const node = this.graphStore.getNode(nodeId)!;
+
+    node.x = request?.x ?? node.x;
+    node.y = request?.y ?? node.y;
+    node.centerFn = request.centerFn ?? node.centerFn;
+
+    this.htmlView.updateNodeCoordinates(nodeId);
+    const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+
+    edges.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+
+    if (request.priority !== undefined) {
+      node.priority = request.priority;
+      this.htmlView.updateNodePriority(nodeId);
+    }
   }
 
   public removeNode(nodeId: unknown): void {
-    this.graphStoreController.removeNode(nodeId);
+    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
+      this.unmarkPort(portId);
+    });
+
+    this.htmlView.detachNode(nodeId);
+    this.graphStore.removeNode(nodeId);
   }
 
   public addEdge(request: AddEdgeRequest): void {
-    this.graphStoreController.addEdge(request);
+    this.graphStore.addEdge(request);
+    this.htmlView.attachEdge(request.id);
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    this.graphStoreController.updateEdge(edgeId, request);
+    const edge = this.graphStore.getEdge(edgeId)!;
+
+    if (request.shape !== undefined) {
+      edge.shape = request.shape;
+      this.htmlView.updateEdgeShape(edgeId);
+    }
+
+    if (request.from !== undefined) {
+      this.graphStore.updateEdgeFrom(edgeId, request.from);
+    }
+
+    if (request.to !== undefined) {
+      this.graphStore.updateEdgeTo(edgeId, request.to);
+    }
+
+    this.htmlView.renderEdge(edgeId);
+
+    if (request.priority !== undefined) {
+      edge.priority = request.priority;
+      this.htmlView.updateEdgePriority(edgeId);
+    }
   }
 
   public removeEdge(edgeId: unknown): void {
-    this.graphStoreController.removeEdge(edgeId);
+    this.htmlView.detachEdge(edgeId);
+    this.graphStore.removeEdge(edgeId);
   }
 
   public markPort(request: MarkPortRequest): void {
-    this.graphStoreController.markPort(request);
+    this.graphStore.addPort(request);
   }
 
-  public updatePort(portId: string, request: UpdatePortRequest): void {
-    this.graphStoreController.updatePort(portId, request);
+  public updatePort(portId: unknown, request: UpdatePortRequest): void {
+    const port = this.graphStore.getPort(portId)!;
+
+    port.direction = request.direction ?? port.direction;
+
+    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+    edges.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
   }
 
-  public unmarkPort(portId: string): void {
-    this.graphStoreController.unmarkPort(portId);
+  public unmarkPort(portId: unknown): void {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+
+    this.graphStore.removePort(portId);
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {
-    this.internalTransformation.patchViewportMatrix(request);
+    this.viewportTransformer.patchViewportMatrix(request);
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): void {
-    this.internalTransformation.patchContentMatrix(request);
+    this.viewportTransformer.patchContentMatrix(request);
   }
 
   public clear(): void {
     this.htmlView.clear();
-    this.graphStoreController.clear();
+    this.graphStore.clear();
   }
 
   public destroy(): void {
+    this.clear();
     this.htmlView.destroy();
-    this.graphStoreController.clear();
-
-    this.graphStoreController.onAfterNodeAdded.unsubscribe(
-      this.onAfterNodeAdded,
-    );
-
-    this.graphStoreController.onAfterEdgeAdded.unsubscribe(
-      this.onAfterEdgeAdded,
-    );
-
-    this.graphStoreController.onAfterEdgeShapeUpdated.unsubscribe(
-      this.onAfterEdgeShapeUpdated,
-    );
-
-    this.graphStoreController.onAfterEdgePriorityUpdated.unsubscribe(
-      this.onAfterEdgePriorityUpdated,
-    );
-
-    this.graphStoreController.onAfterEdgeUpdated.unsubscribe(
-      this.onAfterEdgeUpdated,
-    );
-
-    this.graphStoreController.onAfterPortUpdated.unsubscribe(
-      this.onAfterPortUpdated,
-    );
-
-    this.graphStoreController.onAfterNodePriorityUpdated.unsubscribe(
-      this.onAfterNodePriorityUpdated,
-    );
-
-    this.graphStoreController.onAfterNodeUpdated.unsubscribe(
-      this.onAfterNodeUpdated,
-    );
-
-    this.graphStoreController.onBeforeEdgeRemoved.unsubscribe(
-      this.onBeforeEdgeRemoved,
-    );
-
-    this.graphStoreController.onBeforeNodeRemoved.unsubscribe(
-      this.onBeforeNodeRemoved,
-    );
   }
 }
