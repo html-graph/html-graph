@@ -1,5 +1,5 @@
 import { Viewport, ViewportTransformer } from "@/viewport-transformer";
-import { Canvas } from "../canvas";
+import { CanvasController } from "../canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -16,7 +16,7 @@ import { GraphStore } from "@/graph-store";
 /**
  * Provides low level API for acting on graph
  */
-export class CoreCanvas implements Canvas {
+export class CoreCanvasController implements CanvasController {
   public readonly viewport: Viewport;
 
   public readonly graph: Graph;
@@ -123,85 +123,94 @@ export class CoreCanvas implements Canvas {
     );
   }
 
-  public attach(element: HTMLElement): Canvas {
+  public attach(element: HTMLElement): CanvasController {
     this.htmlView.attach(element);
 
     return this;
   }
 
-  public detach(): Canvas {
+  public detach(): CanvasController {
     this.htmlView.detach();
 
     return this;
   }
 
-  public addNode(request: AddNodeRequest): Canvas {
+  public addNode(request: AddNodeRequest): CanvasController {
     this.graphStoreController.addNode(request);
 
     return this;
   }
 
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
+  public updateNode(
+    nodeId: unknown,
+    request?: UpdateNodeRequest,
+  ): CanvasController {
     this.graphStoreController.updateNode(nodeId, request ?? {});
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): Canvas {
+  public removeNode(nodeId: unknown): CanvasController {
     this.graphStoreController.removeNode(nodeId);
 
     return this;
   }
 
-  public addEdge(request: AddEdgeRequest): Canvas {
+  public addEdge(request: AddEdgeRequest): CanvasController {
     this.graphStoreController.addEdge(request);
 
     return this;
   }
 
-  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
+  public updateEdge(
+    edgeId: unknown,
+    request?: UpdateEdgeRequest,
+  ): CanvasController {
     this.graphStoreController.updateEdge(edgeId, request ?? {});
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): Canvas {
+  public removeEdge(edgeId: unknown): CanvasController {
     this.graphStoreController.removeEdge(edgeId);
 
     return this;
   }
 
-  public markPort(request: MarkPortRequest): Canvas {
+  public markPort(request: MarkPortRequest): CanvasController {
     this.graphStoreController.markPort(request);
 
     return this;
   }
 
-  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
+  public updatePort(
+    portId: string,
+    request?: UpdatePortRequest,
+  ): CanvasController {
     this.graphStoreController.updatePort(portId, request ?? {});
 
     return this;
   }
 
-  public unmarkPort(portId: string): Canvas {
+  public unmarkPort(portId: string): CanvasController {
     this.graphStoreController.unmarkPort(portId);
 
     return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): CanvasController {
     this.internalTransformation.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
+  public patchContentMatrix(request: PatchMatrixRequest): CanvasController {
     this.internalTransformation.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): Canvas {
+  public clear(): CanvasController {
     this.htmlView.clear();
     this.graphStoreController.clear();
 

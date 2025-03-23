@@ -1,20 +1,21 @@
 import {
-  Canvas,
+  CanvasController,
   CoreOptions,
-  UserDraggableNodesCanvas,
+  UserDraggableNodesCanvasController,
   DragOptions,
-  UserTransformableViewportCanvas,
+  UserTransformableViewportCanvasController,
   TransformOptions,
-  ResizeReactiveNodesCanvas,
-  CoreCanvas,
+  ResizeReactiveNodesCanvasController,
+  CoreCanvasController,
   DiContainer,
   coreHtmlViewFactory,
   createBoxHtmlViewFactory,
-  UserTransformableViewportVirtualScrollCanvas,
+  UserTransformableViewportVirtualScrollCanvasController,
   VirtualScrollOptions,
-} from "./canvas";
+} from "./canvas-controller";
 import { RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
+import { Canvas } from "./canvas";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -108,33 +109,41 @@ export class CanvasBuilder {
 
     const container = new DiContainer(this.coreOptions, htmlViewFactory);
 
-    let canvas: Canvas = new CoreCanvas(container);
+    let canvasController: CanvasController = new CoreCanvasController(
+      container,
+    );
 
     if (this.hasResizeReactiveNodes) {
-      canvas = new ResizeReactiveNodesCanvas(canvas);
+      canvasController = new ResizeReactiveNodesCanvasController(
+        canvasController,
+      );
     }
 
     if (this.hasDraggableNode) {
-      canvas = new UserDraggableNodesCanvas(canvas, this.dragOptions);
+      canvasController = new UserDraggableNodesCanvasController(
+        canvasController,
+        this.dragOptions,
+      );
     }
 
     if (this.virtualScrollOptions !== undefined) {
-      canvas = new UserTransformableViewportVirtualScrollCanvas(
-        canvas,
-        trigger!,
-        this.transformOptions,
-        this.virtualScrollOptions,
-      );
+      canvasController =
+        new UserTransformableViewportVirtualScrollCanvasController(
+          canvasController,
+          trigger!,
+          this.transformOptions,
+          this.virtualScrollOptions,
+        );
     } else if (this.hasTransformableViewport) {
-      canvas = new UserTransformableViewportCanvas(
-        canvas,
+      canvasController = new UserTransformableViewportCanvasController(
+        canvasController,
         this.transformOptions,
       );
     }
 
     this.reset();
 
-    return canvas;
+    return new Canvas(canvasController);
   }
 
   private reset(): void {

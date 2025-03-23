@@ -7,97 +7,161 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { Graph } from "@/graph";
+import { CanvasController } from "@/canvas-controller";
 
-export interface Canvas {
+export class Canvas {
   /**
    * provides api for accessing graph model
    */
-  readonly graph: Graph;
+  public readonly graph: Graph;
 
   /**
    * provides api for accessing viewport state
    */
-  readonly viewport: Viewport;
+  public readonly viewport: Viewport;
+
+  public constructor(private readonly controller: CanvasController) {
+    this.graph = controller.graph;
+    this.viewport = controller.viewport;
+  }
 
   /**
    * adds node to graph
    */
-  addNode(node: AddNodeRequest): Canvas;
+  public addNode(node: AddNodeRequest): Canvas {
+    this.controller.addNode(node);
+
+    return this;
+  }
 
   /**
    * updates node absolute coordinates
    */
-  updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas;
+  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
+    this.controller.updateNode(nodeId, request);
+
+    return this;
+  }
 
   /**
    * removes node from graph
    * all the ports of node get unmarked
    * all the edges adjacent to node get removed
    */
-  removeNode(nodeId: unknown): Canvas;
+  public removeNode(nodeId: unknown): Canvas {
+    this.controller.removeNode(nodeId);
+
+    return this;
+  }
 
   /**
    * marks element as port of node
    */
-  markPort(port: MarkPortRequest): Canvas;
+  public markPort(port: MarkPortRequest): Canvas {
+    this.controller.markPort(port);
+
+    return this;
+  }
 
   /**
    * updates port and attached edges
    */
-  updatePort(portId: unknown, request?: UpdatePortRequest): Canvas;
+  public updatePort(portId: unknown, request?: UpdatePortRequest): Canvas {
+    this.controller.updatePort(portId, request);
+
+    return this;
+  }
 
   /**
    * ummarks element as port of node
    * all the edges adjacent to port get removed
    */
-  unmarkPort(portId: unknown): Canvas;
+  public unmarkPort(portId: unknown): Canvas {
+    this.controller.unmarkPort(portId);
+
+    return this;
+  }
 
   /**
    * adds edge to graph
    */
-  addEdge(edge: AddEdgeRequest): Canvas;
+  public addEdge(edge: AddEdgeRequest): Canvas {
+    this.controller.addEdge(edge);
+
+    return this;
+  }
 
   /**
    * updates edge
    */
-  updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas;
+  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
+    this.controller.updateEdge(edgeId, request);
+
+    return this;
+  }
 
   /**
    * removes edge from graph
    */
-  removeEdge(edgeId: unknown): Canvas;
+  public removeEdge(edgeId: unknown): Canvas {
+    this.controller.removeEdge(edgeId);
+
+    return this;
+  }
 
   /**
    * applies transformation for viewport
    */
-  patchViewportMatrix(request: PatchMatrixRequest): Canvas;
+  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
+    this.controller.patchViewportMatrix(request);
+
+    return this;
+  }
 
   /**
    * applies transformation for content
    */
-  patchContentMatrix(request: PatchMatrixRequest): Canvas;
+  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
+    this.controller.patchContentMatrix(request);
+
+    return this;
+  }
 
   /**
    * attaches canvas to given element
    */
-  attach(element: HTMLElement): Canvas;
+  public attach(element: HTMLElement): Canvas {
+    this.controller.attach(element);
+
+    return this;
+  }
 
   /**
    * detaches canvas from element
    */
-  detach(): Canvas;
+  public detach(): Canvas {
+    this.controller.detach();
+
+    return this;
+  }
 
   /**
    * clears graph
    * graph gets rolled back to initial state
    * canvas can be reused
    */
-  clear(): Canvas;
+  public clear(): Canvas {
+    this.controller.clear();
+
+    return this;
+  }
 
   /**
    * destroys canvas
    * canvas element gets rolled back to initial state
    * canvas can not be reused
    */
-  destroy(): void;
+  public destroy(): void {
+    this.controller.destroy();
+  }
 }

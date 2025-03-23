@@ -1,10 +1,10 @@
 import {
-  CoreCanvas,
-  ResizeReactiveNodesCanvas,
-  UserDraggableNodesCanvas,
-  UserTransformableViewportCanvas,
-  UserTransformableViewportVirtualScrollCanvas,
-} from "@/canvas";
+  CoreCanvasController,
+  ResizeReactiveNodesCanvasController,
+  UserDraggableNodesCanvasController,
+  UserTransformableViewportCanvasController,
+  UserTransformableViewportVirtualScrollCanvasController,
+} from "./canvas-controller";
 import { CanvasBuilder } from "./canvas-builder";
 import { EventSubject } from "./event-subject";
 import { RenderingBox } from "./html-view";
@@ -15,7 +15,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.build();
 
-    expect(canvas instanceof CoreCanvas).toBe(true);
+    expect(canvas instanceof CoreCanvasController).toBe(true);
   });
 
   it("should set core options", () => {
@@ -49,7 +49,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableResizeReactiveNodes().build();
 
-    expect(canvas instanceof ResizeReactiveNodesCanvas).toBe(true);
+    expect(canvas instanceof ResizeReactiveNodesCanvasController).toBe(true);
   });
 
   it("should build user draggable nodes canvas", () => {
@@ -57,7 +57,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableUserDraggableNodes().build();
 
-    expect(canvas instanceof UserDraggableNodesCanvas).toBe(true);
+    expect(canvas instanceof UserDraggableNodesCanvasController).toBe(true);
   });
 
   it("should build user transformable canvas", () => {
@@ -65,7 +65,9 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableUserTransformableViewport().build();
 
-    expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
+    expect(canvas instanceof UserTransformableViewportCanvasController).toBe(
+      true,
+    );
   });
 
   it("should build canvas with specified rendering trigger", () => {
@@ -103,8 +105,8 @@ describe("CanvasBuilder", () => {
       })
       .build();
 
-    expect(canvas instanceof UserTransformableViewportVirtualScrollCanvas).toBe(
-      true,
-    );
+    expect(
+      canvas instanceof UserTransformableViewportVirtualScrollCanvasController,
+    ).toBe(true);
   });
 });

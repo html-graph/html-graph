@@ -1,7 +1,8 @@
 export { CanvasBuilder } from "./canvas-builder";
 
+export type { Canvas } from "./canvas";
+
 export type {
-  Canvas,
   CoreOptions,
   TransformOptions,
   DragOptions,
@@ -20,7 +21,7 @@ export type {
   TransformPreprocessorParams,
   UpdatePortRequest,
   UpdateNodeRequest,
-} from "./canvas";
+} from "./canvas-controller";
 
 export {
   BezierEdgeShape,

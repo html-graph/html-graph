@@ -1,4 +1,4 @@
-export { CoreCanvas } from "./core-canvas";
+export { CoreCanvasController } from "./core-canvas-controller";
 export type { CoreOptions, EdgeShapeConfig } from "./options";
 export { DiContainer } from "./di-container";
 export type { HtmlViewFactory } from "./html-view-factory";

@@ -1,13 +1,13 @@
-import { UserTransformableViewportVirtualScrollCanvas } from "./user-transformable-viewport-virtual-scroll-canvas";
+import { UserTransformableViewportVirtualScrollCanvasController } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "@/html-view";
-import { Canvas } from "../canvas";
+import { CanvasController } from "../canvas-controller";
 import {
-  CoreCanvas,
+  CoreCanvasController,
   createBoxHtmlViewFactory,
   DiContainer,
-} from "../core-canvas";
-import { TransformOptions } from "../user-transformable-viewport-canvas";
+} from "../core-canvas-controller";
+import { TransformOptions } from "../user-transformable-viewport-canvas-controller";
 
 const wait = (timeout: number): Promise<void> => {
   return new Promise((res) => {
@@ -40,15 +40,15 @@ const createElement = (params?: {
 const create = (
   transformOptions?: TransformOptions,
 ): {
-  canvas: UserTransformableViewportVirtualScrollCanvas;
-  coreCanvas: CoreCanvas;
+  canvas: UserTransformableViewportVirtualScrollCanvasController;
+  coreCanvas: CoreCanvasController;
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const htmlViewFactory = createBoxHtmlViewFactory(trigger);
   const container = new DiContainer({}, htmlViewFactory);
-  const coreCanvas = new CoreCanvas(container);
+  const coreCanvas = new CoreCanvasController(container);
 
-  const canvas = new UserTransformableViewportVirtualScrollCanvas(
+  const canvas = new UserTransformableViewportVirtualScrollCanvasController(
     coreCanvas,
     trigger,
     transformOptions,
@@ -107,7 +107,7 @@ const createMouseWheelEvent = (params: {
   return wheelEvent;
 };
 
-const configureEdgeGraph = (canvas: Canvas): void => {
+const configureEdgeGraph = (canvas: CanvasController): void => {
   canvas
     .addNode({
       element: document.createElement("div"),
@@ -160,7 +160,7 @@ const triggerResizeFor = (element: HTMLElement): void => {
   (global as any).triggerResizeFor(element);
 };
 
-describe("UserTransformableViewportVirtualScrollCanvas", () => {
+describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   it("should call attach on canvas", () => {
     const { canvas, coreCanvas } = create();
     const canvasElement = document.createElement("div");

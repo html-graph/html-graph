@@ -7,21 +7,23 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { Graph } from "@/graph";
 import { TransformState, Viewport } from "@/viewport-transformer";
-import { Canvas } from "../canvas";
+import { CanvasController } from "../canvas-controller";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "@/html-view";
 import { VirtualScrollOptions } from "./virtual-scroll-options";
 import {
   TransformOptions,
-  UserTransformableViewportCanvas,
-} from "../user-transformable-viewport-canvas";
+  UserTransformableViewportCanvasController,
+} from "../user-transformable-viewport-canvas-controller";
 
-export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
+export class UserTransformableViewportVirtualScrollCanvasController
+  implements CanvasController
+{
   public readonly graph: Graph;
 
   public readonly viewport: Viewport;
 
-  private readonly canvas: Canvas;
+  private readonly canvas: CanvasController;
 
   private element: HTMLElement | null = null;
 
@@ -61,7 +63,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
   };
 
   public constructor(
-    canvas: Canvas,
+    canvas: CanvasController,
     private readonly trigger: EventSubject<RenderingBox>,
     transformOptions: TransformOptions | undefined,
     private readonly virtualScrollOptions: VirtualScrollOptions,
@@ -106,7 +108,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
       },
     };
 
-    this.canvas = new UserTransformableViewportCanvas(
+    this.canvas = new UserTransformableViewportCanvasController(
       canvas,
       patchedTransformOptions,
     );
@@ -119,7 +121,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     this.trigger.subscribe(this.updateLoadedArea);
   }
 
-  public attach(element: HTMLElement): Canvas {
+  public attach(element: HTMLElement): CanvasController {
     this.detach();
 
     this.element = element;
@@ -129,7 +131,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     return this;
   }
 
-  public detach(): Canvas {
+  public detach(): CanvasController {
     if (this.element !== null) {
       this.canvasResizeObserver.unobserve(this.element);
       this.element = null;
@@ -142,61 +144,70 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     return this;
   }
 
-  public addNode(node: AddNodeRequest): Canvas {
+  public addNode(node: AddNodeRequest): CanvasController {
     this.canvas.addNode(node);
 
     return this;
   }
 
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
+  public updateNode(
+    nodeId: unknown,
+    request?: UpdateNodeRequest,
+  ): CanvasController {
     this.canvas.updateNode(nodeId, request);
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): Canvas {
+  public removeNode(nodeId: unknown): CanvasController {
     this.canvas.removeNode(nodeId);
 
     return this;
   }
 
-  public markPort(port: MarkPortRequest): Canvas {
+  public markPort(port: MarkPortRequest): CanvasController {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
+  public updatePort(
+    portId: string,
+    request?: UpdatePortRequest,
+  ): CanvasController {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): Canvas {
+  public unmarkPort(portId: string): CanvasController {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): Canvas {
+  public addEdge(edge: AddEdgeRequest): CanvasController {
     this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
+  public updateEdge(
+    edgeId: unknown,
+    request?: UpdateEdgeRequest,
+  ): CanvasController {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): Canvas {
+  public removeEdge(edgeId: unknown): CanvasController {
     this.canvas.removeEdge(edgeId);
 
     return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): CanvasController {
     this.canvas.patchViewportMatrix(request);
     this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
     this.loadAreaAroundViewport();
@@ -204,7 +215,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
+  public patchContentMatrix(request: PatchMatrixRequest): CanvasController {
     this.canvas.patchContentMatrix(request);
     this.viewportMatrix = this.canvas.viewport.getViewportMatrix();
     this.loadAreaAroundViewport();
@@ -212,7 +223,7 @@ export class UserTransformableViewportVirtualScrollCanvas implements Canvas {
     return this;
   }
 
-  public clear(): Canvas {
+  public clear(): CanvasController {
     this.canvas.clear();
 
     return this;

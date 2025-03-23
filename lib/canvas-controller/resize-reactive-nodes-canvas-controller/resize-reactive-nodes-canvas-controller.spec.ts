@@ -1,23 +1,27 @@
-import { ResizeReactiveNodesCanvas } from "./resize-reactive-nodes-canvas";
+import { ResizeReactiveNodesCanvasController } from "./resize-reactive-nodes-canvas-controller";
 import { EdgeShapeMock } from "@/edges";
-import { CoreCanvas, coreHtmlViewFactory, DiContainer } from "../core-canvas";
-import { Canvas } from "../canvas";
+import {
+  CoreCanvasController,
+  coreHtmlViewFactory,
+  DiContainer,
+} from "../core-canvas-controller";
+import { CanvasController } from "../canvas-controller";
 
 const triggerResizeFor = (element: HTMLElement): void => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (global as any).triggerResizeFor(element);
 };
 
-const createCanvas = (): Canvas => {
+const createCanvas = (): CanvasController => {
   const container = new DiContainer({}, coreHtmlViewFactory);
 
-  return new CoreCanvas(container);
+  return new CoreCanvasController(container);
 };
 
-describe("ResizeReactiveNodesCanvas", () => {
+describe("ResizeReactiveNodesCanvasController", () => {
   it("should call attach on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const canvasElement = document.createElement("div");
 
@@ -30,7 +34,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call detach on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const canvasElement = document.createElement("div");
 
@@ -44,7 +48,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call addNode on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvasCore, "addNode");
 
@@ -59,7 +63,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call updateNode on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -77,7 +81,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call removeNode on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -95,7 +99,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call markPort on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -116,7 +120,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call updatePort on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -140,7 +144,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call unmarkPort on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -164,7 +168,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call addEdge on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -188,7 +192,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call updateEdge on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -214,7 +218,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call removeEdge on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     canvas.addNode({
       id: "node-1",
@@ -240,7 +244,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call patchViewportMatrix on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvasCore, "patchViewportMatrix");
 
@@ -251,7 +255,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call patchContentMatrix on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvasCore, "patchContentMatrix");
 
@@ -262,7 +266,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call clear on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvasCore, "clear");
 
@@ -273,7 +277,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call destroy on canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvasCore, "destroy");
 
@@ -284,7 +288,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should call clear on destroy canvas", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const spy = jest.spyOn(canvas, "clear");
 
@@ -295,7 +299,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should react to node changes", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const element = document.createElement("div");
 
@@ -314,7 +318,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should not react to node changes on removed nodes", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const element = document.createElement("div");
 
@@ -336,7 +340,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should not react to node changes on cleared nodes", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const element = document.createElement("div");
 
@@ -358,7 +362,7 @@ describe("ResizeReactiveNodesCanvas", () => {
 
   it("should react to edge node changes", () => {
     const canvasCore = createCanvas();
-    const canvas = new ResizeReactiveNodesCanvas(canvasCore);
+    const canvas = new ResizeReactiveNodesCanvasController(canvasCore);
 
     const element = document.createElement("div");
 

@@ -9,13 +9,15 @@ import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport-transformer";
-import { Canvas } from "../canvas";
+import { CanvasController } from "../canvas-controller";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
 import { processTouch, TouchState } from "./process-touch";
 import { move, scale } from "./transformations";
 
-export class UserTransformableViewportCanvas implements Canvas {
+export class UserTransformableViewportCanvasController
+  implements CanvasController
+{
   public readonly graph: Graph;
 
   public readonly viewport: Viewport;
@@ -190,7 +192,7 @@ export class UserTransformableViewportCanvas implements Canvas {
   private readonly options: Options;
 
   public constructor(
-    private readonly canvas: Canvas,
+    private readonly canvas: CanvasController,
     transformOptions?: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
@@ -199,7 +201,7 @@ export class UserTransformableViewportCanvas implements Canvas {
     this.graph = this.canvas.graph;
   }
 
-  public attach(element: HTMLElement): Canvas {
+  public attach(element: HTMLElement): CanvasController {
     this.detach();
     this.element = element;
     this.observer.observe(this.element);
@@ -212,7 +214,7 @@ export class UserTransformableViewportCanvas implements Canvas {
     return this;
   }
 
-  public detach(): Canvas {
+  public detach(): CanvasController {
     this.canvas.detach();
 
     if (this.element !== null) {
@@ -227,73 +229,82 @@ export class UserTransformableViewportCanvas implements Canvas {
     return this;
   }
 
-  public addNode(node: AddNodeRequest): Canvas {
+  public addNode(node: AddNodeRequest): CanvasController {
     this.canvas.addNode(node);
 
     return this;
   }
 
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
+  public updateNode(
+    nodeId: unknown,
+    request?: UpdateNodeRequest,
+  ): CanvasController {
     this.canvas.updateNode(nodeId, request);
 
     return this;
   }
 
-  public removeNode(nodeId: unknown): Canvas {
+  public removeNode(nodeId: unknown): CanvasController {
     this.canvas.removeNode(nodeId);
 
     return this;
   }
 
-  public markPort(port: MarkPortRequest): Canvas {
+  public markPort(port: MarkPortRequest): CanvasController {
     this.canvas.markPort(port);
 
     return this;
   }
 
-  public updatePort(portId: string, request?: UpdatePortRequest): Canvas {
+  public updatePort(
+    portId: string,
+    request?: UpdatePortRequest,
+  ): CanvasController {
     this.canvas.updatePort(portId, request);
 
     return this;
   }
 
-  public unmarkPort(portId: string): Canvas {
+  public unmarkPort(portId: string): CanvasController {
     this.canvas.unmarkPort(portId);
 
     return this;
   }
 
-  public addEdge(edge: AddEdgeRequest): Canvas {
+  public addEdge(edge: AddEdgeRequest): CanvasController {
     this.canvas.addEdge(edge);
 
     return this;
   }
 
-  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
+  public updateEdge(
+    edgeId: unknown,
+    request?: UpdateEdgeRequest,
+  ): CanvasController {
     this.canvas.updateEdge(edgeId, request);
 
     return this;
   }
 
-  public removeEdge(edgeId: unknown): Canvas {
+  public removeEdge(edgeId: unknown): CanvasController {
     this.canvas.removeEdge(edgeId);
 
     return this;
   }
 
-  public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
+  public patchViewportMatrix(request: PatchMatrixRequest): CanvasController {
     this.canvas.patchViewportMatrix(request);
 
     return this;
   }
 
-  public patchContentMatrix(request: PatchMatrixRequest): Canvas {
+  public patchContentMatrix(request: PatchMatrixRequest): CanvasController {
     this.canvas.patchContentMatrix(request);
 
     return this;
   }
 
-  public clear(): Canvas {
+  public clear(): CanvasController {
     this.canvas.clear();
 
     return this;
