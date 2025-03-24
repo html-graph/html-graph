@@ -10,10 +10,8 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlView } from "@/html-view";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
+import { HtmlViewFactory } from "./html-view-factory";
 
-/**
- * Provides low level API for acting on graph
- */
 export class CoreCanvasController implements CanvasController {
   public readonly viewport: Viewport;
 
@@ -25,12 +23,7 @@ export class CoreCanvasController implements CanvasController {
 
   private readonly htmlView: HtmlView;
 
-  public constructor(
-    htmlViewFactory: (
-      graphStore: GraphStore,
-      viewportTransformer: ViewportTransformer,
-    ) => HtmlView,
-  ) {
+  public constructor(htmlViewFactory: HtmlViewFactory) {
     this.graphStore = new GraphStore();
     this.graph = new Graph(this.graphStore);
 

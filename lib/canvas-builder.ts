@@ -16,6 +16,7 @@ import { RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
 import { Canvas } from "./canvas";
 import { createDefaults } from "./canvas-controller/core-canvas-controller/options";
+import { HtmlViewFactory } from "./canvas-controller/core-canvas-controller";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -102,7 +103,7 @@ export class CanvasBuilder {
       trigger = new EventSubject<RenderingBox>();
     }
 
-    const htmlViewFactory =
+    const htmlViewFactory: HtmlViewFactory =
       trigger !== undefined
         ? createBoxHtmlViewFactory(trigger)
         : coreHtmlViewFactory;

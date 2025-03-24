@@ -102,10 +102,10 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public destroy(): void {
+    this.viewportTransformer.onAfterUpdate.unsubscribe(this.applyTransform);
+
     this.clear();
     this.detach();
-
-    this.viewportTransformer.onAfterUpdate.unsubscribe(this.applyTransform);
 
     this.host.removeChild(this.container);
   }

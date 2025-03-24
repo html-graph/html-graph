@@ -20,6 +20,16 @@ export interface CanvasController {
   readonly viewport: Viewport;
 
   /**
+   * attaches canvas to given element
+   */
+  attach(element: HTMLElement): void;
+
+  /**
+   * detaches canvas from element
+   */
+  detach(): void;
+
+  /**
    * adds node to graph
    */
   addNode(node: AddNodeRequest): void;
@@ -76,16 +86,6 @@ export interface CanvasController {
    * applies transformation for content
    */
   patchContentMatrix(request: PatchMatrixRequest): void;
-
-  /**
-   * attaches canvas to given element
-   */
-  attach(element: HTMLElement): void;
-
-  /**
-   * detaches canvas from element
-   */
-  detach(): void;
 
   /**
    * clears graph
