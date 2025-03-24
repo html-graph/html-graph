@@ -218,11 +218,11 @@ export class UserDraggableNodesCanvasController implements CanvasController {
     this.canvas.markPort(port);
   }
 
-  public updatePort(portId: string, request: UpdatePortRequest): void {
+  public updatePort(portId: unknown, request: UpdatePortRequest): void {
     this.canvas.updatePort(portId, request);
   }
 
-  public unmarkPort(portId: string): void {
+  public unmarkPort(portId: unknown): void {
     this.canvas.unmarkPort(portId);
   }
 
