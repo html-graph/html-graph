@@ -10,27 +10,19 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlView } from "@/html-view";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
-import { HtmlViewFactory } from "./html-view-factory";
 
 export class CoreCanvasController implements CanvasController {
   public readonly viewport: Viewport;
 
   public readonly graph: Graph;
 
-  private readonly viewportTransformer: ViewportTransformer;
-
-  private readonly graphStore: GraphStore;
-
-  private readonly htmlView: HtmlView;
-
-  public constructor(htmlViewFactory: HtmlViewFactory) {
-    this.graphStore = new GraphStore();
+  public constructor(
+    private readonly graphStore: GraphStore,
+    private readonly viewportTransformer: ViewportTransformer,
+    private readonly htmlView: HtmlView,
+  ) {
     this.graph = new Graph(this.graphStore);
-
-    this.viewportTransformer = new ViewportTransformer();
     this.viewport = new Viewport(this.viewportTransformer);
-
-    this.htmlView = htmlViewFactory(this.graphStore, this.viewportTransformer);
   }
 
   public attach(element: HTMLElement): void {
@@ -75,6 +67,30 @@ export class CoreCanvasController implements CanvasController {
     this.graphStore.removeNode(nodeId);
   }
 
+  public markPort(request: MarkPortRequest): void {
+    this.graphStore.addPort(request);
+  }
+
+  public updatePort(portId: unknown, request: UpdatePortRequest): void {
+    const port = this.graphStore.getPort(portId)!;
+
+    port.direction = request.direction ?? port.direction;
+
+    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+    edges.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+  }
+
+  public unmarkPort(portId: unknown): void {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+
+    this.graphStore.removePort(portId);
+  }
+
   public addEdge(request: AddEdgeRequest): void {
     this.graphStore.addEdge(request);
     this.htmlView.attachEdge(request.id);
@@ -107,30 +123,6 @@ export class CoreCanvasController implements CanvasController {
   public removeEdge(edgeId: unknown): void {
     this.htmlView.detachEdge(edgeId);
     this.graphStore.removeEdge(edgeId);
-  }
-
-  public markPort(request: MarkPortRequest): void {
-    this.graphStore.addPort(request);
-  }
-
-  public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    const port = this.graphStore.getPort(portId)!;
-
-    port.direction = request.direction ?? port.direction;
-
-    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-    edges.forEach((edge) => {
-      this.htmlView.renderEdge(edge);
-    });
-  }
-
-  public unmarkPort(portId: unknown): void {
-    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-
-    this.graphStore.removePort(portId);
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {

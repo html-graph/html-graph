@@ -1,14 +1,23 @@
 import { EdgeRenderParams } from "@/edges";
-import { coreHtmlViewFactory } from "./core-html-view-factory";
 import { CoreCanvasController } from "./core-canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { standardCenterFn } from "@/center-fn";
 import { AddEdgeRequest } from "../add-edge-request";
 import { BezierEdgeShape } from "@/edges";
+import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
+import { CoreHtmlView } from "@/html-view";
 
 const createCanvasController = (): CoreCanvasController => {
-  return new CoreCanvasController(coreHtmlViewFactory);
+  const graphStore = new GraphStore();
+  const viewportTransformer = new ViewportTransformer();
+
+  return new CoreCanvasController(
+    graphStore,
+    viewportTransformer,
+    new CoreHtmlView(graphStore, viewportTransformer),
+  );
 };
 
 const createElement = (params?: {
@@ -198,6 +207,21 @@ describe("CoreCanvasController", () => {
 
     const container = canvasElement.children[0].children[0];
     expect(container.children.length).toBe(0);
+  });
+
+  it("should unmark port when removing node", () => {
+    const canvas = createCanvasController();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+    canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
+
+    const spy = jest.spyOn(canvas, "unmarkPort");
+
+    canvas.removeNode("node-1");
+
+    expect(spy).toHaveBeenCalledWith("port-1");
   });
 
   it("should create edge", () => {

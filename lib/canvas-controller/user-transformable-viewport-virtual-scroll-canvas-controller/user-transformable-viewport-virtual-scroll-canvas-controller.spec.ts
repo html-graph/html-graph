@@ -1,14 +1,13 @@
 import { UserTransformableViewportVirtualScrollCanvasController } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
 import { EventSubject } from "@/event-subject";
-import { RenderingBox } from "@/html-view";
+import { BoxHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { CanvasController } from "../canvas-controller";
-import {
-  CoreCanvasController,
-  createBoxHtmlViewFactory,
-} from "../core-canvas-controller";
+import { CoreCanvasController } from "../core-canvas-controller";
 import { TransformOptions } from "../user-transformable-viewport-canvas-controller";
 import { standardCenterFn } from "@/center-fn";
 import { EdgeShapeMock } from "@/edges";
+import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
 
 const wait = (timeout: number): Promise<void> => {
   return new Promise((res) => {
@@ -45,8 +44,17 @@ const create = (
   coreCanvas: CoreCanvasController;
 } => {
   const trigger = new EventSubject<RenderingBox>();
-  const htmlViewFactory = createBoxHtmlViewFactory(trigger);
-  const coreCanvas = new CoreCanvasController(htmlViewFactory);
+  const graphStore = new GraphStore();
+  const viewportTransformer = new ViewportTransformer();
+  const coreCanvas = new CoreCanvasController(
+    graphStore,
+    viewportTransformer,
+    new BoxHtmlView(
+      new CoreHtmlView(graphStore, viewportTransformer),
+      graphStore,
+      trigger,
+    ),
+  );
 
   const canvas = new UserTransformableViewportVirtualScrollCanvasController(
     coreCanvas,

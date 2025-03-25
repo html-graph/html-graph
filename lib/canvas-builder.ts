@@ -7,16 +7,15 @@ import {
   TransformOptions,
   ResizeReactiveNodesCanvasController,
   CoreCanvasController,
-  coreHtmlViewFactory,
-  createBoxHtmlViewFactory,
   UserTransformableViewportVirtualScrollCanvasController,
   VirtualScrollOptions,
 } from "./canvas-controller";
-import { RenderingBox } from "./html-view";
+import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
 import { Canvas } from "./canvas";
 import { createDefaults } from "./canvas-controller/core-canvas-controller/options";
-import { HtmlViewFactory } from "./canvas-controller/core-canvas-controller";
+import { GraphStore } from "./graph-store";
+import { ViewportTransformer } from "./viewport-transformer";
 
 export class CanvasBuilder {
   private coreOptions: CoreOptions = {};
@@ -103,13 +102,19 @@ export class CanvasBuilder {
       trigger = new EventSubject<RenderingBox>();
     }
 
-    const htmlViewFactory: HtmlViewFactory =
-      trigger !== undefined
-        ? createBoxHtmlViewFactory(trigger)
-        : coreHtmlViewFactory;
+    const graphStore = new GraphStore();
+    const viewportTransformer = new ViewportTransformer();
+
+    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportTransformer);
+
+    if (trigger !== undefined) {
+      htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
+    }
 
     let controller: CanvasController = new CoreCanvasController(
-      htmlViewFactory,
+      graphStore,
+      viewportTransformer,
+      htmlView,
     );
 
     if (this.hasResizeReactiveNodes) {

@@ -1,11 +1,11 @@
 import { standardCenterFn } from "@/center-fn";
 import { CanvasController } from "../canvas-controller";
-import {
-  CoreCanvasController,
-  coreHtmlViewFactory,
-} from "../core-canvas-controller";
+import { CoreCanvasController } from "../core-canvas-controller";
 import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
 import { EdgeShapeMock } from "@/edges";
+import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
+import { CoreHtmlView } from "@/html-view";
 
 const createElement = (params?: {
   x?: number;
@@ -74,7 +74,14 @@ let innerWidth: number;
 let innerHeight: number;
 
 const createCanvas = (): CanvasController => {
-  return new CoreCanvasController(coreHtmlViewFactory);
+  const graphStore = new GraphStore();
+  const viewportTransformer = new ViewportTransformer();
+
+  return new CoreCanvasController(
+    graphStore,
+    viewportTransformer,
+    new CoreHtmlView(graphStore, viewportTransformer),
+  );
 };
 
 describe("UserDraggableNodesCanvasController", () => {

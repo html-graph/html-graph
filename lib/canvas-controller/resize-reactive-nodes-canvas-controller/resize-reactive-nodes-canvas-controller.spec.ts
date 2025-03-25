@@ -1,11 +1,11 @@
 import { ResizeReactiveNodesCanvasController } from "./resize-reactive-nodes-canvas-controller";
 import { EdgeShapeMock } from "@/edges";
-import {
-  CoreCanvasController,
-  coreHtmlViewFactory,
-} from "../core-canvas-controller";
+import { CoreCanvasController } from "../core-canvas-controller";
 import { CanvasController } from "../canvas-controller";
 import { standardCenterFn } from "@/center-fn";
+import { GraphStore } from "@/graph-store";
+import { ViewportTransformer } from "@/viewport-transformer";
+import { CoreHtmlView } from "@/html-view";
 
 const triggerResizeFor = (element: HTMLElement): void => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,7 +13,14 @@ const triggerResizeFor = (element: HTMLElement): void => {
 };
 
 const createCanvas = (): CanvasController => {
-  return new CoreCanvasController(coreHtmlViewFactory);
+  const graphStore = new GraphStore();
+  const viewportTransformer = new ViewportTransformer();
+
+  return new CoreCanvasController(
+    graphStore,
+    viewportTransformer,
+    new CoreHtmlView(graphStore, viewportTransformer),
+  );
 };
 
 describe("ResizeReactiveNodesCanvasController", () => {
