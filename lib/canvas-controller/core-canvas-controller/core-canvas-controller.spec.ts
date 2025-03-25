@@ -1,8 +1,4 @@
 import { EdgeRenderParams } from "@/edges";
-// import { HtmlGraphError } from "@/error";
-// import { AddNodeRequest } from "../add-node-request";
-// import { MarkPortRequest } from "../mark-port-request";
-// import { MarkNodePortRequest } from "../mark-node-port-request";
 import { coreHtmlViewFactory } from "./core-html-view-factory";
 import { CoreCanvasController } from "./core-canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
@@ -239,6 +235,80 @@ describe("CoreCanvasController", () => {
     expect(edgeSvg).toBe(shape.svg);
   });
 
+  it("should update edge source", () => {
+    const canvas = createCanvasController();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+    canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
+    canvas.addNode(createNodeRequest2());
+    canvas.markPort(createPortRequest2());
+    const addEdge = createEdge12();
+    canvas.addEdge(addEdge);
+
+    const spy = jest.spyOn(addEdge.shape, "render");
+    canvas.updateEdge("edge-1", { from: "port-2" });
+
+    expect(spy).toHaveBeenCalledWith({
+      from: {
+        direction: 0,
+        height: 0,
+        nodeId: "node-2",
+        portId: "port-2",
+        width: 0,
+        x: 0,
+        y: 0,
+      },
+      to: {
+        direction: 0,
+        height: 0,
+        nodeId: "node-2",
+        portId: "port-2",
+        width: 0,
+        x: 0,
+        y: 0,
+      },
+    });
+  });
+
+  it("should update edge target", () => {
+    const canvas = createCanvasController();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+    canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
+    canvas.addNode(createNodeRequest2());
+    canvas.markPort(createPortRequest2());
+    const addEdge = createEdge12();
+    canvas.addEdge(addEdge);
+
+    const spy = jest.spyOn(addEdge.shape, "render");
+    canvas.updateEdge("edge-1", { to: "port-1" });
+
+    expect(spy).toHaveBeenCalledWith({
+      from: {
+        direction: 0,
+        height: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+        width: 0,
+        x: 0,
+        y: 0,
+      },
+      to: {
+        direction: 0,
+        height: 0,
+        nodeId: "node-1",
+        portId: "port-1",
+        width: 0,
+        x: 0,
+        y: 0,
+      },
+    });
+  });
+
   it("should update edge priority", () => {
     const canvas = createCanvasController();
     const canvasElement = document.createElement("div");
@@ -279,7 +349,6 @@ describe("CoreCanvasController", () => {
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
-
     expect(edgeSvg.style.width).toBe("200px");
   });
 
@@ -327,7 +396,6 @@ describe("CoreCanvasController", () => {
 
     const container = canvasElement.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
-
     expect(edgeSvg.style.width).toBe("200px");
   });
 
@@ -414,6 +482,23 @@ describe("CoreCanvasController", () => {
     }).toThrow();
   });
 
+  it("should remove edge when port gest unmarked", () => {
+    const canvas = createCanvasController();
+    const canvasElement = document.createElement("div");
+
+    canvas.attach(canvasElement);
+    canvas.addNode(createNodeRequest1());
+    canvas.markPort(createPortRequest1());
+    canvas.addNode(createNodeRequest2());
+    canvas.markPort(createPortRequest2());
+    canvas.addEdge(createEdge12());
+
+    canvas.unmarkPort("port-1");
+
+    const container = canvasElement.children[0].children[0];
+    expect(container.children.length).toBe(2);
+  });
+
   it("should patch viewport matrix", () => {
     const canvas = createCanvasController();
     const canvasElement = document.createElement("div");
@@ -422,7 +507,6 @@ describe("CoreCanvasController", () => {
     canvas.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
     const container = canvasElement.children[0].children[0] as HTMLElement;
-
     expect(container.style.transform).toBe("matrix(0.5, 0, 0, 0.5, -1, -1)");
   });
 
@@ -434,7 +518,6 @@ describe("CoreCanvasController", () => {
     canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
     const container = canvasElement.children[0].children[0] as HTMLElement;
-
     expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
   });
 
