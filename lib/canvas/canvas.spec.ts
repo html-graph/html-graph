@@ -8,6 +8,7 @@ import { CanvasOptions } from "./options";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { UpdateNodeRequest } from "./update-node-request";
+import { MarkPortRequest } from "./mark-port-request";
 
 const createCanvas = (
   options: CanvasOptions,
@@ -188,37 +189,6 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should mark specified ports when adding node", () => {
-    const { canvas } = createCanvas({});
-
-    const portElement = document.createElement("div");
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement,
-          direction: Math.PI,
-        },
-      ],
-    };
-
-    const spy = jest.spyOn(canvas, "markPort");
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith({
-      id: "port-1",
-      element: portElement,
-      nodeId: "node-1",
-      direction: Math.PI,
-    });
-  });
-
   it("should update node without parameters", () => {
     const { canvas, controller } = createCanvas({});
 
@@ -297,5 +267,135 @@ describe("Canvas", () => {
     expect(() => {
       canvas.removeNode("node-1");
     }).toThrow(HtmlGraphError);
+  });
+
+  it("should mark specified port on controller", () => {
+    const { canvas, controller } = createCanvas({});
+
+    const portElement = document.createElement("div");
+
+    const addNodeRequest: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    };
+
+    const markPortRequest: MarkPortRequest = {
+      nodeId: "node-1",
+      element: portElement,
+    };
+
+    canvas.addNode(addNodeRequest);
+
+    const spy = jest.spyOn(controller, "markPort");
+
+    canvas.markPort(markPortRequest);
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ nodeId: "node-1", element: portElement }),
+    );
+  });
+
+  it("should mark specified port with default direction when none specified", () => {
+    const { canvas, controller } = createCanvas({
+      ports: { direction: Math.PI },
+    });
+
+    const portElement = document.createElement("div");
+
+    const addNodeRequest: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    };
+
+    const markPortRequest: MarkPortRequest = {
+      nodeId: "node-1",
+      element: portElement,
+    };
+
+    canvas.addNode(addNodeRequest);
+
+    const spy = jest.spyOn(controller, "markPort");
+
+    canvas.markPort(markPortRequest);
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ direction: Math.PI }),
+    );
+  });
+
+  it("should throw error when trying to add port with existing id", () => {
+    const { canvas } = createCanvas({});
+
+    const portElement = document.createElement("div");
+
+    const addNodeRequest: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    };
+
+    const markPortRequest: MarkPortRequest = {
+      id: "port-1",
+      nodeId: "node-1",
+      element: portElement,
+    };
+
+    canvas.addNode(addNodeRequest);
+    canvas.markPort(markPortRequest);
+
+    expect(() => {
+      canvas.markPort(markPortRequest);
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should throw error when trying to add port to nonexisting node", () => {
+    const { canvas } = createCanvas({});
+
+    const portElement = document.createElement("div");
+
+    const markPortRequest: MarkPortRequest = {
+      nodeId: "node-1",
+      element: portElement,
+    };
+
+    expect(() => {
+      canvas.markPort(markPortRequest);
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should mark specified ports when adding node", () => {
+    const { canvas } = createCanvas({});
+
+    const portElement = document.createElement("div");
+
+    const addNodeRequest: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: portElement,
+          direction: Math.PI,
+        },
+      ],
+    };
+
+    const spy = jest.spyOn(canvas, "markPort");
+
+    canvas.addNode(addNodeRequest);
+
+    expect(spy).toHaveBeenCalledWith({
+      id: "port-1",
+      element: portElement,
+      nodeId: "node-1",
+      direction: Math.PI,
+    });
   });
 });
