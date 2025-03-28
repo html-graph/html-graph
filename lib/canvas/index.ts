@@ -8,4 +8,4 @@ export type { UpdateEdgeRequest } from "./update-edge-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
 export { Canvas } from "./canvas";
-export type { CoreOptions, EdgeShapeConfig } from "./options";
+export type { CanvasOptions, EdgeShapeConfig } from "./options";

@@ -11,12 +11,12 @@ import {
 } from "./canvas-controller";
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
-import { Canvas, CoreOptions } from "./canvas";
+import { Canvas, CanvasOptions } from "./canvas";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 
 export class CanvasBuilder {
-  private coreOptions: CoreOptions = {};
+  private coreOptions: CanvasOptions = {};
 
   private dragOptions: DragOptions | undefined = undefined;
 
@@ -36,7 +36,7 @@ export class CanvasBuilder {
   /**
    * specifies options for fundamental aspects of visualization
    */
-  public setOptions(options: CoreOptions): CanvasBuilder {
+  public setOptions(options: CanvasOptions): CanvasBuilder {
     this.coreOptions = options;
 
     return this;

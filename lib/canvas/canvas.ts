@@ -10,7 +10,7 @@ import { Graph } from "@/graph";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
 import { CanvasController } from "@/canvas-controller";
-import { CoreOptions } from "./options";
+import { CanvasOptions } from "./options";
 import { createDefaults, GraphDefaults } from "./create-defaults";
 
 export class Canvas {
@@ -34,7 +34,7 @@ export class Canvas {
 
   public constructor(
     private readonly controller: CanvasController,
-    options: CoreOptions,
+    options: CanvasOptions,
   ) {
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
@@ -94,7 +94,7 @@ export class Canvas {
   }
 
   public removeNode(nodeId: unknown): Canvas {
-    if (this.graph.getNode(nodeId) === undefined) {
+    if (this.graph.getNode(nodeId) === null) {
       throw new HtmlGraphError("failed to remove nonexisting node");
     }
 

@@ -11,7 +11,7 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
-  CoreOptions,
+  CanvasOptions as CoreOptions,
 } from "./canvas";
 
 export type {

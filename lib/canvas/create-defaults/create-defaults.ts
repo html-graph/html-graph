@@ -2,11 +2,11 @@ import { standardCenterFn } from "@/center-fn";
 import { resolvePriority } from "./resolve-priority";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { GraphDefaults } from "./graph-defaults";
-import { CoreOptions } from "../options";
+import { CanvasOptions } from "../options";
 
 export const createDefaults: (
-  coreOptions: CoreOptions | undefined,
-) => GraphDefaults = (apiOptions: CoreOptions | undefined) => {
+  coreOptions: CanvasOptions | undefined,
+) => GraphDefaults = (apiOptions: CanvasOptions | undefined) => {
   const priorities = resolvePriority(
     apiOptions?.nodes?.priority,
     apiOptions?.edges?.priority,
