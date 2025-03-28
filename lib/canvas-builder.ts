@@ -16,7 +16,7 @@ import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 
 export class CanvasBuilder {
-  private coreOptions: CanvasOptions = {};
+  private canvasOptions: CanvasOptions = {};
 
   private dragOptions: DragOptions | undefined = undefined;
 
@@ -37,7 +37,7 @@ export class CanvasBuilder {
    * specifies options for fundamental aspects of visualization
    */
   public setOptions(options: CanvasOptions): CanvasBuilder {
-    this.coreOptions = options;
+    this.canvasOptions = options;
 
     return this;
   }
@@ -140,7 +140,7 @@ export class CanvasBuilder {
       );
     }
 
-    const canvas = new Canvas(controller, this.coreOptions);
+    const canvas = new Canvas(controller, this.canvasOptions);
 
     this.reset();
 
@@ -148,7 +148,7 @@ export class CanvasBuilder {
   }
 
   private reset(): void {
-    this.coreOptions = {};
+    this.canvasOptions = {};
     this.dragOptions = undefined;
     this.transformOptions = undefined;
     this.virtualScrollOptions = undefined;

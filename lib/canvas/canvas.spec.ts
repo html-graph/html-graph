@@ -435,7 +435,6 @@ describe("Canvas", () => {
     const spy = jest.spyOn(controller, "updatePort");
 
     canvas.updatePort("port-1");
-
     expect(spy).toHaveBeenCalledWith("port-1", {});
   });
 
@@ -462,6 +461,14 @@ describe("Canvas", () => {
     canvas.updatePort("port-1", { direction: Math.PI });
 
     expect(spy).toHaveBeenCalledWith("port-1", { direction: Math.PI });
+  });
+
+  it("should throw error when trying to update nonexisting port", () => {
+    const { canvas } = createCanvas({});
+
+    expect(() => {
+      canvas.updatePort("port-1");
+    }).toThrow(HtmlGraphError);
   });
 
   it("should unmark port on controller", () => {
