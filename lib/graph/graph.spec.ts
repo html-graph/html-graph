@@ -219,9 +219,9 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual(
-      [addEdgeRequest12.id],
-    );
+    expect(publicStore.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest12.id,
+    ]);
   });
 
   it("should return specified port cycle edge ids", () => {
@@ -277,9 +277,9 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(publicStore.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual(
-      [addEdgeRequest12.id],
-    );
+    expect(publicStore.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest12.id,
+    ]);
   });
 
   it("should return specified node cycle edge ids", () => {
