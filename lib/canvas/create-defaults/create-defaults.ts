@@ -1,8 +1,8 @@
 import { standardCenterFn } from "@/center-fn";
-import { CoreOptions } from "./core-options";
-import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { resolvePriority } from "./resolve-priority";
-import { GraphDefaults } from "@/canvas";
+import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
+import { GraphDefaults } from "./graph-defaults";
+import { CoreOptions } from "../options";
 
 export const createDefaults: (
   coreOptions: CoreOptions | undefined,

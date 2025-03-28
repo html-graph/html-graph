@@ -1,4 +1,4 @@
-import { EdgeShapeFactory } from "./edge-shape-factory";
+import { EdgeShapeFactory } from "../create-defaults";
 import { BezierEdgeShapeConfig } from "./bezier-edge-shape-config";
 import { HorizontalEdgeShapeConfig } from "./horizontal-edge-shape-config";
 import { StraightEdgeShapeConfig } from "./straight-edge-shape-config";

@@ -7,10 +7,11 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { Graph } from "@/graph";
-import { CanvasController } from "@/canvas-controller";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
-import { GraphDefaults } from "./graph-defaults";
+import { CanvasController } from "@/canvas-controller";
+import { CoreOptions } from "./options";
+import { createDefaults, GraphDefaults } from "./create-defaults";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -25,14 +26,17 @@ export class Canvas {
     (edgeId) => this.graph.getEdge(edgeId) !== null,
   );
 
+  private readonly defaults: GraphDefaults;
+
   public readonly graph: Graph;
 
   public readonly viewport: Viewport;
 
   public constructor(
     private readonly controller: CanvasController,
-    private readonly defaults: GraphDefaults,
+    options: CoreOptions,
   ) {
+    this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
   }

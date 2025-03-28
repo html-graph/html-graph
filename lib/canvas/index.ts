@@ -7,5 +7,5 @@ export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdateEdgeRequest } from "./update-edge-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
-export type { GraphDefaults } from "./graph-defaults";
 export { Canvas } from "./canvas";
+export type { CoreOptions, EdgeShapeConfig } from "./options";

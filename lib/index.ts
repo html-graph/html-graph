@@ -11,10 +11,10 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
+  CoreOptions,
 } from "./canvas";
 
 export type {
-  CoreOptions,
   TransformOptions,
   DragOptions,
   NodeDragPayload,

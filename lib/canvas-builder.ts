@@ -1,6 +1,5 @@
 import {
   CanvasController,
-  CoreOptions,
   UserDraggableNodesCanvasController,
   DragOptions,
   UserTransformableViewportCanvasController,
@@ -12,8 +11,7 @@ import {
 } from "./canvas-controller";
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
-import { Canvas } from "./canvas";
-import { createDefaults } from "./canvas-controller/core-canvas-controller/options";
+import { Canvas, CoreOptions } from "./canvas";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 
@@ -142,7 +140,7 @@ export class CanvasBuilder {
       );
     }
 
-    const canvas = new Canvas(controller, createDefaults(this.coreOptions));
+    const canvas = new Canvas(controller, this.coreOptions);
 
     this.reset();
 

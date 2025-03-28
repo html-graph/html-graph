@@ -1,4 +1,3 @@
-export type { EdgeShapeConfig } from "./core-canvas-controller";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
 export type { AddEdgeRequest } from "./add-edge-request";
 export type { MarkPortRequest } from "./mark-port-request";
@@ -9,7 +8,6 @@ export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { CanvasController } from "./canvas-controller";
 export { CoreCanvasController } from "./core-canvas-controller";
-export type { CoreOptions } from "./core-canvas-controller";
 export { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
 export type {
   DragOptions,
