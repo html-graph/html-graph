@@ -1,24 +1,44 @@
-import {
-  CoreCanvas,
-  ResizeReactiveNodesCanvas,
-  UserDraggableNodesCanvas,
-  UserTransformableViewportCanvas,
-  UserTransformableViewportVirtualScrollCanvas,
-} from "@/canvas";
+import { AddEdgeRequest, AddNodeRequest } from "./canvas";
 import { CanvasBuilder } from "./canvas-builder";
+import { standardCenterFn } from "./center-fn";
+import { BezierEdgeShape } from "./edges";
 import { EventSubject } from "./event-subject";
 import { RenderingBox } from "./html-view";
+import {
+  createElement,
+  createMouseMoveEvent,
+  triggerResizeFor,
+  wait,
+} from "./mocks";
 
 describe("CanvasBuilder", () => {
-  it("should build core canvas", () => {
+  it("should build canvas with specified defaults", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.build();
+    const canvas = builder
+      .setDefaults({
+        nodes: {
+          priority: () => 10,
+        },
+      })
+      .build();
 
-    expect(canvas instanceof CoreCanvas).toBe(true);
+    const canvasElement = document.createElement("div");
+    canvas.attach(canvasElement);
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const container = canvasElement.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should set core options", () => {
+  it("should build canvas with specified options", () => {
     const builder = new CanvasBuilder();
 
     const canvas = builder
@@ -49,7 +69,50 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableResizeReactiveNodes().build();
 
-    expect(canvas instanceof ResizeReactiveNodesCanvas).toBe(true);
+    const canvasElement = document.createElement("div");
+    canvas.attach(canvasElement);
+
+    const nodeRequest1: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: document.createElement("div"),
+        },
+      ],
+    };
+
+    const nodeRequest2: AddNodeRequest = {
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: document.createElement("div"),
+        },
+      ],
+    };
+
+    const shape = new BezierEdgeShape();
+
+    const addEdge: AddEdgeRequest = {
+      from: "port-1",
+      to: "port-2",
+      shape,
+    };
+
+    canvas.addNode(nodeRequest1).addNode(nodeRequest2).addEdge(addEdge);
+
+    const spy = jest.spyOn(shape, "render");
+
+    triggerResizeFor(nodeRequest1.element);
+
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should build user draggable nodes canvas", () => {
@@ -57,7 +120,31 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableUserDraggableNodes().build();
 
-    expect(canvas instanceof UserDraggableNodesCanvas).toBe(true);
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(canvasElement);
+
+    const element = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    window.dispatchEvent(
+      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
+    );
+
+    const container = canvasElement.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
   it("should build user transformable canvas", () => {
@@ -65,7 +152,19 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder.enableUserTransformableViewport().build();
 
-    expect(canvas instanceof UserTransformableViewportCanvas).toBe(true);
+    const element = createElement({ width: 1000, height: 1000 });
+
+    canvas.attach(element);
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
+
+    window.dispatchEvent(moveEvent);
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
 
   it("should build canvas with specified rendering trigger", () => {
@@ -91,20 +190,40 @@ describe("CanvasBuilder", () => {
     expect([elementsBefore, elementsAfter]).toStrictEqual([0, 1]);
   });
 
-  it("should build canvas with virtual scroll", () => {
+  it("should build canvas with virtual scroll", async () => {
     const builder = new CanvasBuilder();
 
     const canvas = builder
       .enableVirtualScroll({
         nodeContainingRadius: {
-          vertical: 100,
-          horizontal: 100,
+          vertical: 10,
+          horizontal: 10,
         },
       })
       .build();
 
-    expect(canvas instanceof UserTransformableViewportVirtualScrollCanvas).toBe(
-      true,
-    );
+    const canvasElement = createElement({ width: 100, height: 100 });
+    canvas.attach(canvasElement);
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 300,
+      y: 300,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    await wait(0);
+
+    const container = canvasElement.children[0].children[0];
+    expect(container.children.length).toBe(1);
   });
 });

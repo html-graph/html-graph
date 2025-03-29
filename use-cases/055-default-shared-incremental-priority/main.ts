@@ -2,14 +2,14 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  CoreOptions,
+  CanvasDefaults,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-const coreOptions: CoreOptions = {
+const canvasDefaults: CanvasDefaults = {
   nodes: {
     priority: "incremental",
   },
@@ -21,7 +21,7 @@ const coreOptions: CoreOptions = {
   },
 };
 
-builder.setOptions(coreOptions);
+builder.setDefaults(canvasDefaults);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

@@ -9,7 +9,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const trigger = new EventSubject<RenderingBox>();
 
 const canvas: Canvas = new CanvasBuilder()
-  .setOptions({
+  .setDefaults({
     edges: {
       shape: {
         type: "horizontal",

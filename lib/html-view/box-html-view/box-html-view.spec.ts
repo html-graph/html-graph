@@ -23,7 +23,7 @@ const create = (): {
 };
 
 const addNodeRequest: AddNodeRequest = {
-  nodeId: "node-1",
+  id: "node-1",
   element: document.createElement("div"),
   x: 0,
   y: 0,
@@ -33,7 +33,7 @@ const addNodeRequest: AddNodeRequest = {
 
 const configureEdgeGraph = (store: GraphStore): void => {
   store.addNode({
-    nodeId: "node-1",
+    id: "node-1",
     element: document.createElement("div"),
     x: 0,
     y: 0,
@@ -42,7 +42,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
   });
 
   store.addNode({
-    nodeId: "node-2",
+    id: "node-2",
     element: document.createElement("div"),
     x: 10,
     y: 10,
@@ -51,14 +51,14 @@ const configureEdgeGraph = (store: GraphStore): void => {
   });
 
   store.addPort({
-    portId: "port-1",
+    id: "port-1",
     nodeId: "node-1",
     element: document.createElement("div"),
     direction: 0,
   });
 
   store.addPort({
-    portId: "port-2",
+    id: "port-2",
     nodeId: "node-2",
     element: document.createElement("div"),
     direction: 0,
@@ -67,7 +67,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
   store.addEdge({
     from: "port-1",
     to: "port-2",
-    edgeId: "edge-1",
+    id: "edge-1",
     shape: new EdgeShapeMock(),
     priority: 0,
   });
@@ -127,7 +127,7 @@ describe("BoxHtmlView", () => {
     const spy = jest.spyOn(coreView, "attachNode");
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should not attach node outside of the viewbox", () => {
@@ -136,9 +136,9 @@ describe("BoxHtmlView", () => {
     trigger.emit({ x: 9, y: 9, width: 2, height: 2 });
 
     const spy = jest.spyOn(coreView, "attachNode");
-    boxView.attachNode(addNodeRequest.nodeId);
+    boxView.attachNode(addNodeRequest.id);
 
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should detach node inside of the viewbox", () => {
@@ -149,7 +149,7 @@ describe("BoxHtmlView", () => {
     const spy = jest.spyOn(coreView, "detachNode");
     boxView.detachNode("node-1");
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should not detach not attached node", () => {
@@ -166,12 +166,12 @@ describe("BoxHtmlView", () => {
     const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
-    boxView.detachNode(addNodeRequest.nodeId);
+    boxView.detachNode(addNodeRequest.id);
     const spy = jest.spyOn(coreView, "attachNode");
 
-    boxView.attachNode(addNodeRequest.nodeId);
+    boxView.attachNode(addNodeRequest.id);
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should attach source node before attaching edge inside of the viewbox", () => {
@@ -279,9 +279,9 @@ describe("BoxHtmlView", () => {
     boxView.clear();
 
     const spy = jest.spyOn(coreView, "attachNode");
-    boxView.attachNode(addNodeRequest.nodeId);
+    boxView.attachNode(addNodeRequest.id);
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should clear edges", () => {
@@ -301,14 +301,14 @@ describe("BoxHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const node = store.getNode(addNodeRequest.nodeId)!;
+    const node = store.getNode(addNodeRequest.id)!;
     node.x = 11;
     node.y = 11;
 
     const spy = jest.spyOn(coreView, "updateNodeCoordinates");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
+    boxView.updateNodeCoordinates(addNodeRequest.id);
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should attach node when moved inside of the viewport", () => {
@@ -316,14 +316,14 @@ describe("BoxHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
-    const node = store.getNode(addNodeRequest.nodeId)!;
+    const node = store.getNode(addNodeRequest.id)!;
     node.x = 2;
     node.y = 2;
 
     const spy = jest.spyOn(coreView, "attachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.nodeId);
+    boxView.updateNodeCoordinates(addNodeRequest.id);
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should attach node adjacent edges when moved inside of the viewport", () => {
@@ -346,9 +346,9 @@ describe("BoxHtmlView", () => {
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateNodePriority");
-    boxView.updateNodePriority(addNodeRequest.nodeId);
+    boxView.updateNodePriority(addNodeRequest.id);
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should not update node priority if not attached", () => {
@@ -357,9 +357,9 @@ describe("BoxHtmlView", () => {
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     const spy = jest.spyOn(coreView, "updateNodePriority");
-    boxView.updateNodePriority(addNodeRequest.nodeId);
+    boxView.updateNodePriority(addNodeRequest.id);
 
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should update edge shape when attached", () => {
@@ -435,7 +435,7 @@ describe("BoxHtmlView", () => {
 
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should not attach node moved to outside of the viewport", () => {
@@ -446,7 +446,7 @@ describe("BoxHtmlView", () => {
 
     trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
-    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should detach node moved to outside of the viewport", () => {
@@ -457,7 +457,7 @@ describe("BoxHtmlView", () => {
     const spy = jest.spyOn(coreView, "detachNode");
     trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
-    expect(spy).toHaveBeenCalledWith(addNodeRequest.nodeId);
+    expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should attach edge moved to inside of the viewport", () => {

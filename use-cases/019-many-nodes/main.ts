@@ -20,7 +20,7 @@ export function createNode(params: {
 const builder: CanvasBuilder = new CanvasBuilder();
 
 builder
-  .setOptions({
+  .setDefaults({
     edges: {
       priority: 0,
       shape: {

@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  CoreOptions,
+  CanvasDefaults,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 
@@ -51,7 +51,7 @@ export function createNode(params: {
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-const coreOptions: CoreOptions = {
+const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: {
       hasTargetArrow: true,
@@ -59,7 +59,7 @@ const coreOptions: CoreOptions = {
   },
 };
 
-builder.setOptions(coreOptions);
+builder.setDefaults(canvasDefaults);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

@@ -2,25 +2,33 @@ export { CanvasBuilder } from "./canvas-builder";
 
 export type {
   Canvas,
-  CoreOptions,
-  TransformOptions,
-  DragOptions,
+  AddNodeRequest,
   AddEdgeRequest,
+  AddNodePorts,
+  MarkNodePortRequest,
+  MarkPortRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
-  MarkPortRequest,
-  AddNodeRequest,
-  MarkNodePortRequest,
+  /**
+   * @deprecated
+   * use CanvasDefaults instead
+   */
+  CanvasDefaults as CoreOptions,
+  CanvasDefaults,
+} from "./canvas";
+
+export type {
+  TransformOptions,
+  DragOptions,
   NodeDragPayload,
   TransformPayload,
-  AddNodePorts,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
-  UpdatePortRequest,
-  UpdateNodeRequest,
-} from "./canvas";
+} from "./canvas-controller";
 
 export {
   BezierEdgeShape,

@@ -8,7 +8,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-builder.setOptions({
+builder.setDefaults({
   edges: {
     priority: 1,
   },

@@ -1,23 +1,22 @@
 import {
-  Canvas,
-  CoreOptions,
-  UserDraggableNodesCanvas,
+  CanvasController,
+  UserDraggableNodesCanvasController,
   DragOptions,
-  UserTransformableViewportCanvas,
+  UserTransformableViewportCanvasController,
   TransformOptions,
-  ResizeReactiveNodesCanvas,
-  CoreCanvas,
-  DiContainer,
-  coreHtmlViewFactory,
-  createBoxHtmlViewFactory,
-  UserTransformableViewportVirtualScrollCanvas,
+  ResizeReactiveNodesCanvasController,
+  CoreCanvasController,
+  UserTransformableViewportVirtualScrollCanvasController,
   VirtualScrollOptions,
-} from "./canvas";
-import { RenderingBox } from "./html-view";
+} from "./canvas-controller";
+import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
+import { Canvas, CanvasDefaults } from "./canvas";
+import { GraphStore } from "./graph-store";
+import { ViewportTransformer } from "./viewport-transformer";
 
 export class CanvasBuilder {
-  private coreOptions: CoreOptions = {};
+  private canvasDefaults: CanvasDefaults = {};
 
   private dragOptions: DragOptions | undefined = undefined;
 
@@ -35,16 +34,26 @@ export class CanvasBuilder {
     undefined;
 
   /**
-   * specifies options for fundamental aspects of visualization
+   * specifies default values for graph entities
    */
-  public setOptions(options: CoreOptions): CanvasBuilder {
-    this.coreOptions = options;
+  public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
+    this.canvasDefaults = defaults;
 
     return this;
   }
 
   /**
-   * enables nodes draggable bu user
+   * @deprecated
+   * use setDefaults instead
+   */
+  public setOptions(options: CanvasDefaults): CanvasBuilder {
+    this.setDefaults(options);
+
+    return this;
+  }
+
+  /**
+   * enables nodes draggable by user
    */
   public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
@@ -101,36 +110,47 @@ export class CanvasBuilder {
       trigger = new EventSubject<RenderingBox>();
     }
 
-    const htmlViewFactory =
-      trigger !== undefined
-        ? createBoxHtmlViewFactory(trigger)
-        : coreHtmlViewFactory;
+    const graphStore = new GraphStore();
+    const viewportTransformer = new ViewportTransformer();
 
-    const container = new DiContainer(this.coreOptions, htmlViewFactory);
+    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportTransformer);
 
-    let canvas: Canvas = new CoreCanvas(container);
+    if (trigger !== undefined) {
+      htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
+    }
+
+    let controller: CanvasController = new CoreCanvasController(
+      graphStore,
+      viewportTransformer,
+      htmlView,
+    );
 
     if (this.hasResizeReactiveNodes) {
-      canvas = new ResizeReactiveNodesCanvas(canvas);
+      controller = new ResizeReactiveNodesCanvasController(controller);
     }
 
     if (this.hasDraggableNode) {
-      canvas = new UserDraggableNodesCanvas(canvas, this.dragOptions);
+      controller = new UserDraggableNodesCanvasController(
+        controller,
+        this.dragOptions,
+      );
     }
 
     if (this.virtualScrollOptions !== undefined) {
-      canvas = new UserTransformableViewportVirtualScrollCanvas(
-        canvas,
+      controller = new UserTransformableViewportVirtualScrollCanvasController(
+        controller,
         trigger!,
         this.transformOptions,
         this.virtualScrollOptions,
       );
     } else if (this.hasTransformableViewport) {
-      canvas = new UserTransformableViewportCanvas(
-        canvas,
+      controller = new UserTransformableViewportCanvasController(
+        controller,
         this.transformOptions,
       );
     }
+
+    const canvas = new Canvas(controller, this.canvasDefaults);
 
     this.reset();
 
@@ -138,7 +158,7 @@ export class CanvasBuilder {
   }
 
   private reset(): void {
-    this.coreOptions = {};
+    this.canvasDefaults = {};
     this.dragOptions = undefined;
     this.transformOptions = undefined;
     this.virtualScrollOptions = undefined;

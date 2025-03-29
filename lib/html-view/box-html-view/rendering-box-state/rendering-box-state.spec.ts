@@ -15,7 +15,7 @@ const create = (): {
 
 const configureEdgeGraph = (store: GraphStore): void => {
   store.addNode({
-    nodeId: "node-1",
+    id: "node-1",
     element: document.createElement("div"),
     x: 0,
     y: 0,
@@ -24,7 +24,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
   });
 
   store.addNode({
-    nodeId: "node-2",
+    id: "node-2",
     element: document.createElement("div"),
     x: 10,
     y: 10,
@@ -33,14 +33,14 @@ const configureEdgeGraph = (store: GraphStore): void => {
   });
 
   store.addPort({
-    portId: "port-1",
+    id: "port-1",
     nodeId: "node-1",
     element: document.createElement("div"),
     direction: 0,
   });
 
   store.addPort({
-    portId: "port-2",
+    id: "port-2",
     nodeId: "node-2",
     element: document.createElement("div"),
     direction: 0,
@@ -49,7 +49,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
   store.addEdge({
     from: "port-1",
     to: "port-2",
-    edgeId: "edge-1",
+    id: "edge-1",
     shape: new EdgeShapeMock(),
     priority: 0,
   });
@@ -60,7 +60,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
@@ -75,7 +75,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
@@ -92,7 +92,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
@@ -109,7 +109,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
@@ -126,7 +126,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
@@ -143,7 +143,7 @@ describe("RenderingBoxState", () => {
     const { graphStore, renderingBoxState } = create();
 
     graphStore.addNode({
-      nodeId: "node-1",
+      id: "node-1",
       element: document.createElement("div"),
       x: 0,
       y: 0,
