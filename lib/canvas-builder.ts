@@ -53,7 +53,7 @@ export class CanvasBuilder {
   }
 
   /**
-   * enables nodes draggable bu user
+   * enables nodes draggable by user
    */
   public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
