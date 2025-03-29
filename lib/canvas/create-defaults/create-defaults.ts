@@ -5,7 +5,7 @@ import { Defaults as Result } from "./graph-defaults";
 import { CanvasDefaults } from "../options";
 
 export const createDefaults: (
-  coreOptions: CanvasDefaults | undefined,
+  canvasDefaults: CanvasDefaults | undefined,
 ) => Result = (apiOptions: CanvasDefaults | undefined) => {
   const priorities = resolvePriority(
     apiOptions?.nodes?.priority,

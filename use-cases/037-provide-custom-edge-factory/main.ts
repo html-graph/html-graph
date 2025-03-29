@@ -10,7 +10,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-const coreOptions: CanvasDefaults = {
+const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: () =>
       new BezierEdgeShape({
@@ -21,7 +21,7 @@ const coreOptions: CanvasDefaults = {
   },
 };
 
-builder.setDefaults(coreOptions);
+builder.setDefaults(canvasDefaults);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

@@ -30,7 +30,7 @@ const customEdgePriority: PriorityFn = () => {
   return i;
 };
 
-const coreOptions: CanvasDefaults = {
+const canvasDefaults: CanvasDefaults = {
   nodes: {
     priority: customNodePriority,
   },
@@ -42,7 +42,7 @@ const coreOptions: CanvasDefaults = {
   },
 };
 
-builder.setDefaults(coreOptions);
+builder.setDefaults(canvasDefaults);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

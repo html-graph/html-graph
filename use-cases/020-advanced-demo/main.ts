@@ -25,7 +25,7 @@ new ResizeObserver(() => {
   backgroundDrawingFn(ctx, canvas.viewport);
 }).observe(canvasElement);
 
-const coreOptions: CanvasDefaults = {
+const canvasDefaults: CanvasDefaults = {
   nodes: {
     centerFn: () => ({ x: 0, y: 0 }),
   },
@@ -48,7 +48,7 @@ const transformOptions: TransformOptions = {
 const builder = new CanvasBuilder();
 
 const canvas = builder
-  .setDefaults(coreOptions)
+  .setDefaults(canvasDefaults)
   .enableUserDraggableNodes()
   .enableUserTransformableViewport(transformOptions)
   .enableResizeReactiveNodes()
