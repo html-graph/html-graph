@@ -28,8 +28,14 @@ export class Canvas {
 
   private readonly defaults: Defaults;
 
+  /**
+   * provides api for accessing graph model
+   */
   public readonly graph: Graph;
 
+  /**
+   * provides api for accessing viewport state
+   */
   public readonly viewport: Viewport;
 
   public constructor(
@@ -41,18 +47,28 @@ export class Canvas {
     this.viewport = controller.viewport;
   }
 
+  /**
+   * attaches canvas to given element
+   * detaches element first when canvas is attached
+   */
   public attach(element: HTMLElement): Canvas {
     this.controller.attach(element);
 
     return this;
   }
 
+  /**
+   * detaches canvas from element when attached
+   */
   public detach(): Canvas {
     this.controller.detach();
 
     return this;
   }
 
+  /**
+   * adds node to graph
+   */
   public addNode(request: AddNodeRequest): Canvas {
     const id = this.nodeIdGenerator.create(request.id);
 
@@ -81,6 +97,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * updates node parameters
+   */
   public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
     const node = this.graph.getNode(nodeId);
 
@@ -93,6 +112,11 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * removes node from graph
+   * all the ports of node get unmarked
+   * all the edges adjacent to node get removed
+   */
   public removeNode(nodeId: unknown): Canvas {
     if (this.graph.getNode(nodeId) === null) {
       throw new HtmlGraphError("failed to remove nonexisting node");
@@ -103,6 +127,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * marks element as port of node
+   */
   public markPort(request: MarkPortRequest): Canvas {
     const id = this.portIdGenerator.create(request.id);
 
@@ -124,6 +151,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * updates port and attached edges
+   */
   public updatePort(portId: unknown, request?: UpdatePortRequest): Canvas {
     const port = this.graph.getPort(portId);
 
@@ -136,6 +166,10 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * ummarks element as port of node
+   * all the edges adjacent to port get removed
+   */
   public unmarkPort(portId: unknown): Canvas {
     if (this.graph.getPort(portId) === null) {
       throw new HtmlGraphError("failed to unset nonexisting port");
@@ -146,6 +180,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * adds edge to graph
+   */
   public addEdge(request: AddEdgeRequest): Canvas {
     const id = this.edgeIdGenerator.create(request.id);
 
@@ -172,6 +209,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * updates edge
+   */
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
     const edge = this.graph.getEdge(edgeId);
 
@@ -184,6 +224,9 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * removes edge from graph
+   */
   public removeEdge(edgeId: unknown): Canvas {
     if (this.graph.getEdge(edgeId) === null) {
       throw new HtmlGraphError("failed to remove nonexisting edge");
@@ -194,18 +237,28 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * applies transformation for viewport
+   */
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.controller.patchViewportMatrix(request);
 
     return this;
   }
 
+  /**
+   * applies transformation for content
+   */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.controller.patchContentMatrix(request);
 
     return this;
   }
 
+  /**
+   * clears canvas from nodes and edges
+   * canvas gets rolled back to initial state and can be reused
+   */
   public clear(): Canvas {
     this.controller.clear();
 
@@ -216,6 +269,10 @@ export class Canvas {
     return this;
   }
 
+  /**
+   * destroys canvas
+   * canvas element gets rolled back to initial state, and can not be reused
+   */
   public destroy(): void {
     this.controller.destroy();
   }
