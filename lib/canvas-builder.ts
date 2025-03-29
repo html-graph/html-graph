@@ -34,7 +34,7 @@ export class CanvasBuilder {
     undefined;
 
   /**
-   * specifies options for fundamental aspects of visualization
+   * specifies default values for graph entities
    */
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
