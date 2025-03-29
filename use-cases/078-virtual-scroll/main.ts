@@ -2,7 +2,7 @@ import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvas: Canvas = new CanvasBuilder()
-  .setOptions({
+  .setDefaults({
     edges: {
       shape: {
         type: "horizontal",

@@ -45,7 +45,7 @@ const dragOptions: DragOptions = {
   moveOnTop: false,
 };
 
-builder.setOptions(coreOptions).enableUserDraggableNodes(dragOptions);
+builder.setDefaults(coreOptions).enableUserDraggableNodes(dragOptions);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

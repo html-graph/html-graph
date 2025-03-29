@@ -17,7 +17,7 @@ const coreOptions: CanvasDefaults = {
   },
 };
 
-builder.setOptions(coreOptions);
+builder.setDefaults(coreOptions);
 
 builder.enableUserDraggableNodes();
 

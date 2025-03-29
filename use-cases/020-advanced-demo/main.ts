@@ -48,7 +48,7 @@ const transformOptions: TransformOptions = {
 const builder = new CanvasBuilder();
 
 const canvas = builder
-  .setOptions(coreOptions)
+  .setDefaults(coreOptions)
   .enableUserDraggableNodes()
   .enableUserTransformableViewport(transformOptions)
   .enableResizeReactiveNodes()

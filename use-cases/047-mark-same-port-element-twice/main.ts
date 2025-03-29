@@ -59,7 +59,7 @@ const coreOptions: CanvasDefaults = {
   },
 };
 
-builder.setOptions(coreOptions);
+builder.setDefaults(coreOptions);
 
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;

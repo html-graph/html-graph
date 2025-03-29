@@ -48,7 +48,7 @@ export function createNode(params: {
 }
 
 const builder: CanvasBuilder = new CanvasBuilder();
-builder.setOptions({
+builder.setDefaults({
   edges: {
     shape: {
       hasTargetArrow: true,

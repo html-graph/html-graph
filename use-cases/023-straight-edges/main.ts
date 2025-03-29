@@ -19,7 +19,7 @@ const coreOptions: CanvasDefaults = {
 };
 
 builder
-  .setOptions(coreOptions)
+  .setDefaults(coreOptions)
   .enableUserTransformableViewport()
   .enableUserDraggableNodes();
 
