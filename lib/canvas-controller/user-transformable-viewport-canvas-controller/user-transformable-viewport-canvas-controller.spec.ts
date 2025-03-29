@@ -6,77 +6,13 @@ import { EdgeShapeMock } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView } from "@/html-view";
-import { createElement } from "@/test-utils";
-
-const wait = (timeout: number): Promise<void> => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      res(undefined);
-    }, timeout);
-  });
-};
-
-const createMouseMoveEvent = (params: {
-  movementX?: number;
-  movementY?: number;
-  clientX?: number;
-  clientY?: number;
-}): MouseEvent => {
-  const moveEvent = new MouseEvent("mousemove", {
-    clientX: params.clientX,
-    clientY: params.clientX,
-  });
-
-  Object.defineProperty(moveEvent, "movementX", {
-    get() {
-      return params.movementX ?? 0;
-    },
-  });
-
-  Object.defineProperty(moveEvent, "movementY", {
-    get() {
-      return params.movementY ?? 0;
-    },
-  });
-
-  return moveEvent;
-};
-
-const createMouseWheelEvent = (params: {
-  clientX?: number;
-  clientY?: number;
-  deltaY?: number;
-}): MouseEvent => {
-  const wheelEvent = new MouseEvent("wheel", {
-    clientX: params.clientX,
-    clientY: params.clientX,
-  });
-
-  Object.defineProperty(wheelEvent, "deltaY", {
-    get() {
-      return params.deltaY ?? 0;
-    },
-  });
-
-  return wheelEvent;
-};
-
-const createTouch = (params: { clientX: number; clientY: number }): Touch => {
-  return {
-    clientX: params.clientX,
-    clientY: params.clientY,
-    force: 0,
-    identifier: 0,
-    pageX: 0,
-    pageY: 0,
-    radiusX: 0,
-    radiusY: 0,
-    rotationAngle: 0,
-    screenX: 0,
-    screenY: 0,
-    target: document.createElement("div"),
-  };
-};
+import {
+  createElement,
+  createMouseMoveEvent,
+  createMouseWheelEvent,
+  createTouch,
+  wait,
+} from "@/test-utils";
 
 let innerWidth: number;
 let innerHeight: number;

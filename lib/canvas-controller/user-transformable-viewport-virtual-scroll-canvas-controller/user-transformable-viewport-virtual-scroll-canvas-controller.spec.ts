@@ -8,15 +8,13 @@ import { standardCenterFn } from "@/center-fn";
 import { EdgeShapeMock } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
-import { createElement } from "@/test-utils";
-
-const wait = (timeout: number): Promise<void> => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      res(undefined);
-    }, timeout);
-  });
-};
+import {
+  createElement,
+  createMouseMoveEvent,
+  createMouseWheelEvent,
+  triggerResizeFor,
+  wait,
+} from "@/test-utils";
 
 const create = (
   transformOptions?: TransformOptions,
@@ -49,51 +47,6 @@ const create = (
     },
   );
   return { canvas, coreCanvas };
-};
-
-const createMouseMoveEvent = (params: {
-  movementX?: number;
-  movementY?: number;
-  clientX?: number;
-  clientY?: number;
-}): MouseEvent => {
-  const moveEvent = new MouseEvent("mousemove", {
-    clientX: params.clientX,
-    clientY: params.clientX,
-  });
-
-  Object.defineProperty(moveEvent, "movementX", {
-    get() {
-      return params.movementX ?? 0;
-    },
-  });
-
-  Object.defineProperty(moveEvent, "movementY", {
-    get() {
-      return params.movementY ?? 0;
-    },
-  });
-
-  return moveEvent;
-};
-
-const createMouseWheelEvent = (params: {
-  clientX?: number;
-  clientY?: number;
-  deltaY?: number;
-}): MouseEvent => {
-  const wheelEvent = new MouseEvent("wheel", {
-    clientX: params.clientX,
-    clientY: params.clientX,
-  });
-
-  Object.defineProperty(wheelEvent, "deltaY", {
-    get() {
-      return params.deltaY ?? 0;
-    },
-  });
-
-  return wheelEvent;
 };
 
 const configureEdgeGraph = (canvas: CanvasController): void => {
@@ -160,11 +113,6 @@ const configureEdgeGraph = (canvas: CanvasController): void => {
     shape: new EdgeShapeMock(),
     priority: 0,
   });
-};
-
-const triggerResizeFor = (element: HTMLElement): void => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (global as any).triggerResizeFor(element);
 };
 
 describe("UserTransformableViewportVirtualScrollCanvasController", () => {

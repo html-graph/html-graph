@@ -4,46 +4,12 @@ import { standardCenterFn } from "./center-fn";
 import { BezierEdgeShape } from "./edges";
 import { EventSubject } from "./event-subject";
 import { RenderingBox } from "./html-view";
-import { createElement } from "./test-utils";
-
-const triggerResizeFor = (element: HTMLElement): void => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (global as any).triggerResizeFor(element);
-};
-
-const createMouseMoveEvent = (params: {
-  movementX?: number;
-  movementY?: number;
-  clientX?: number;
-  clientY?: number;
-}): MouseEvent => {
-  const moveEvent = new MouseEvent("mousemove", {
-    clientX: params.clientX,
-    clientY: params.clientX,
-  });
-
-  Object.defineProperty(moveEvent, "movementX", {
-    get() {
-      return params.movementX ?? 0;
-    },
-  });
-
-  Object.defineProperty(moveEvent, "movementY", {
-    get() {
-      return params.movementY ?? 0;
-    },
-  });
-
-  return moveEvent;
-};
-
-const wait = (timeout: number): Promise<void> => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      res(undefined);
-    }, timeout);
-  });
-};
+import {
+  createElement,
+  createMouseMoveEvent,
+  triggerResizeFor,
+  wait,
+} from "./test-utils";
 
 describe("CanvasBuilder", () => {
   it("should build canvas with specified defaults", () => {

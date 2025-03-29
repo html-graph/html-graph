@@ -6,11 +6,7 @@ import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView } from "@/html-view";
-
-const triggerResizeFor = (element: HTMLElement): void => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (global as any).triggerResizeFor(element);
-};
+import { triggerResizeFor } from "@/test-utils";
 
 const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
