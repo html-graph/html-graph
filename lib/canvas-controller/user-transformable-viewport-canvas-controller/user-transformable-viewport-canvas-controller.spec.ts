@@ -12,7 +12,7 @@ import {
   createMouseWheelEvent,
   createTouch,
   wait,
-} from "@/test-utils";
+} from "@/mocks";
 
 let innerWidth: number;
 let innerHeight: number;

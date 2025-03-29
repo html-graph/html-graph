@@ -8,7 +8,7 @@ import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView } from "@/html-view";
-import { createElement } from "@/test-utils";
+import { createElement } from "@/mocks";
 
 const createCanvasController = (): CoreCanvasController => {
   const graphStore = new GraphStore();

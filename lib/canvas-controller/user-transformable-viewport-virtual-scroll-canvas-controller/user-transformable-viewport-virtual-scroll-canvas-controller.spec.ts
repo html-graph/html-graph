@@ -14,7 +14,7 @@ import {
   createMouseWheelEvent,
   triggerResizeFor,
   wait,
-} from "@/test-utils";
+} from "@/mocks";
 
 const create = (
   transformOptions?: TransformOptions,

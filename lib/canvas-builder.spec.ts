@@ -9,7 +9,7 @@ import {
   createMouseMoveEvent,
   triggerResizeFor,
   wait,
-} from "./test-utils";
+} from "./mocks";
 
 describe("CanvasBuilder", () => {
   it("should build canvas with specified defaults", () => {

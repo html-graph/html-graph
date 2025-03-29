@@ -6,7 +6,7 @@ import { EdgeShapeMock } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, createMouseMoveEvent, createTouch } from "@/test-utils";
+import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 
 let innerWidth: number;
 let innerHeight: number;

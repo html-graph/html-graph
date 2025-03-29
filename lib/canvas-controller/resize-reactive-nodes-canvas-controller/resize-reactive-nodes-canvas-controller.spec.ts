@@ -6,7 +6,7 @@ import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { CoreHtmlView } from "@/html-view";
-import { triggerResizeFor } from "@/test-utils";
+import { triggerResizeFor } from "@/mocks";
 
 const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
