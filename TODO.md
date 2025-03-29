@@ -1,6 +1,5 @@
 # TODO
 
-- extract common logic from canvas controller to canvas
 - layouts
 - drag edge creation
 - background decorator
