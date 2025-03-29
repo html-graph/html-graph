@@ -1,7 +1,7 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
-  CoreOptions,
+  CanvasDefaults,
   CanvasBuilder,
   TransformOptions,
 } from "@html-graph/html-graph";
@@ -25,7 +25,7 @@ new ResizeObserver(() => {
   backgroundDrawingFn(ctx, canvas.viewport);
 }).observe(canvasElement);
 
-const coreOptions: CoreOptions = {
+const coreOptions: CanvasDefaults = {
   nodes: {
     centerFn: () => ({ x: 0, y: 0 }),
   },

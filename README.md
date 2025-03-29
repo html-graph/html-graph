@@ -50,7 +50,7 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
 }
 
 const canvas = new CanvasBuilder()
-  .setOptions({
+  .setDefaults({
     edges: {
       shape: {
         hasTargetArrow: true,

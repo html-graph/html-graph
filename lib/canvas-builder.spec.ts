@@ -65,6 +65,32 @@ const wait = (timeout: number): Promise<void> => {
 };
 
 describe("CanvasBuilder", () => {
+  it("should build canvas with specified defaults", () => {
+    const builder = new CanvasBuilder();
+
+    const canvas = builder
+      .setDefaults({
+        nodes: {
+          priority: () => 10,
+        },
+      })
+      .build();
+
+    const canvasElement = document.createElement("div");
+    canvas.attach(canvasElement);
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const container = canvasElement.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.zIndex).toBe("10");
+  });
+
   it("should build canvas with specified options", () => {
     const builder = new CanvasBuilder();
 

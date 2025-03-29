@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  CoreOptions,
+  CanvasDefaults,
   CanvasBuilder,
   PriorityFn,
 } from "@html-graph/html-graph";
@@ -30,7 +30,7 @@ const customEdgePriority: PriorityFn = () => {
   return i;
 };
 
-const coreOptions: CoreOptions = {
+const coreOptions: CanvasDefaults = {
   nodes: {
     priority: customNodePriority,
   },

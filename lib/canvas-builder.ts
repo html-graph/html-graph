@@ -11,12 +11,12 @@ import {
 } from "./canvas-controller";
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
-import { Canvas, CanvasOptions } from "./canvas";
+import { Canvas, CanvasDefaults } from "./canvas";
 import { GraphStore } from "./graph-store";
 import { ViewportTransformer } from "./viewport-transformer";
 
 export class CanvasBuilder {
-  private canvasOptions: CanvasOptions = {};
+  private canvasDefaults: CanvasDefaults = {};
 
   private dragOptions: DragOptions | undefined = undefined;
 
@@ -36,8 +36,18 @@ export class CanvasBuilder {
   /**
    * specifies options for fundamental aspects of visualization
    */
-  public setOptions(options: CanvasOptions): CanvasBuilder {
-    this.canvasOptions = options;
+  public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
+    this.canvasDefaults = defaults;
+
+    return this;
+  }
+
+  /**
+   * @deprecated
+   * use setDefaults instead
+   */
+  public setOptions(options: CanvasDefaults): CanvasBuilder {
+    this.setDefaults(options);
 
     return this;
   }
@@ -140,7 +150,7 @@ export class CanvasBuilder {
       );
     }
 
-    const canvas = new Canvas(controller, this.canvasOptions);
+    const canvas = new Canvas(controller, this.canvasDefaults);
 
     this.reset();
 
@@ -148,7 +158,7 @@ export class CanvasBuilder {
   }
 
   private reset(): void {
-    this.canvasOptions = {};
+    this.canvasDefaults = {};
     this.dragOptions = undefined;
     this.transformOptions = undefined;
     this.virtualScrollOptions = undefined;

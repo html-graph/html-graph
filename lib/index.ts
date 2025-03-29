@@ -11,7 +11,12 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
-  CanvasOptions as CoreOptions,
+  /**
+   * @deprecated
+   * use CanvasDefaults instead
+   */
+  CanvasDefaults as CoreOptions,
+  CanvasDefaults,
 } from "./canvas";
 
 export type {

@@ -2,7 +2,7 @@ import { CenterFn } from "@/center-fn";
 import { EdgeShapeConfig } from "./edge-shape-config";
 import { Priority } from "../create-defaults";
 
-export interface CanvasOptions {
+export interface CanvasDefaults {
   /**
    * nodes related behavior
    */

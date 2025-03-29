@@ -4,7 +4,7 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportTransformer } from "@/viewport-transformer";
 import { Canvas } from "./canvas";
 import { AddNodeRequest } from "./add-node-request";
-import { CanvasOptions } from "./options";
+import { CanvasDefaults } from "./options";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { UpdateNodeRequest } from "./update-node-request";
@@ -12,7 +12,7 @@ import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
 
 const createCanvas = (
-  options: CanvasOptions,
+  options: CanvasDefaults,
 ): {
   canvas: Canvas;
   controller: CanvasController;

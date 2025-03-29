@@ -3,14 +3,14 @@ import {
   AddNodeRequest,
   BezierEdgeShape,
   Canvas,
-  CoreOptions,
+  CanvasDefaults,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 
-const coreOptions: CoreOptions = {
+const coreOptions: CanvasDefaults = {
   edges: {
     shape: () =>
       new BezierEdgeShape({

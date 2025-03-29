@@ -10,8 +10,8 @@ import { Graph } from "@/graph";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
 import { CanvasController } from "@/canvas-controller";
-import { CanvasOptions } from "./options";
-import { createDefaults, GraphDefaults } from "./create-defaults";
+import { CanvasDefaults } from "./options";
+import { createDefaults, Defaults } from "./create-defaults";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -26,7 +26,7 @@ export class Canvas {
     (edgeId) => this.graph.getEdge(edgeId) !== null,
   );
 
-  private readonly defaults: GraphDefaults;
+  private readonly defaults: Defaults;
 
   public readonly graph: Graph;
 
@@ -34,7 +34,7 @@ export class Canvas {
 
   public constructor(
     private readonly controller: CanvasController,
-    options: CanvasOptions,
+    options: CanvasDefaults,
   ) {
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
