@@ -1,4 +1,8 @@
 import { Viewport } from "@/viewport";
+import { Graph } from "@/graph";
+import { IdGenerator } from "@/id-generator";
+import { HtmlGraphError } from "@/error";
+import { CanvasController } from "@/canvas-controller";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
@@ -6,10 +10,6 @@ import { PatchMatrixRequest } from "./patch-matrix-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { Graph } from "@/graph";
-import { IdGenerator } from "@/id-generator";
-import { HtmlGraphError } from "@/error";
-import { CanvasController } from "@/canvas-controller";
 import { CanvasDefaults } from "./options";
 import { createDefaults, Defaults } from "./create-defaults";
 

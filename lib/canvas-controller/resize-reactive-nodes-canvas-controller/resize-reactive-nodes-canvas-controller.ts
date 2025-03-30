@@ -1,4 +1,5 @@
 import { Viewport } from "@/viewport";
+import { Graph } from "@/graph";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -7,7 +8,6 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { TwoWayMap } from "./two-way-map";
-import { Graph } from "@/graph";
 import { CanvasController } from "../canvas-controller";
 
 export class ResizeReactiveNodesCanvasController implements CanvasController {

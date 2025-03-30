@@ -1,3 +1,5 @@
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
 import { AddEdgeRequest } from "../add-edge-request";
@@ -7,8 +9,6 @@ import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { Graph } from "@/graph";
-import { Viewport } from "@/viewport";
 import { CanvasController } from "../canvas-controller";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";

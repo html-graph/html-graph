@@ -1,4 +1,8 @@
 import { ViewportStore } from "@/viewport-store";
+import { HtmlView } from "@/html-view";
+import { Graph } from "@/graph";
+import { GraphStore } from "@/graph-store";
+import { Viewport } from "@/viewport";
 import { CanvasController } from "../canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
@@ -7,10 +11,6 @@ import { UpdateEdgeRequest } from "../update-edge-request";
 import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
-import { HtmlView } from "@/html-view";
-import { Graph } from "@/graph";
-import { GraphStore } from "@/graph-store";
-import { Viewport } from "@/viewport";
 
 export class CoreCanvasController implements CanvasController {
   public readonly viewport: Viewport;
