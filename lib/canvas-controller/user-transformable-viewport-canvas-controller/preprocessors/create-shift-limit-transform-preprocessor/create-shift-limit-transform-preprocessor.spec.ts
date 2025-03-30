@@ -1,4 +1,4 @@
-import { TransformState } from "@/viewport-transformer";
+import { TransformState } from "@/viewport-store";
 import { createShiftLimitTransformPreprocessor } from "./create-shift-limit-transform-preprocessor";
 
 describe("createShiftLimitTransformPreprocessor", () => {

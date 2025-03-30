@@ -6,13 +6,13 @@ import { standardCenterFn } from "@/center-fn";
 import { AddEdgeRequest } from "../add-edge-request";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement } from "@/mocks";
 
 const createCanvasController = (): CoreCanvasController => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportTransformer();
+  const viewportTransformer = new ViewportStore();
 
   return new CoreCanvasController(
     graphStore,

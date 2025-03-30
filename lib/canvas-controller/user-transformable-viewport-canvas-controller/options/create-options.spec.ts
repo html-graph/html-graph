@@ -1,4 +1,4 @@
-import { TransformState } from "@/viewport-transformer";
+import { TransformState } from "@/viewport-store";
 import {
   TransformPayload,
   TransformPreprocessorParams,

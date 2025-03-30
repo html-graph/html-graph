@@ -5,17 +5,17 @@ import {
   GraphStore,
 } from "@/graph-store";
 import { CoreHtmlView } from "./core-html-view";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
 import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
 
 const createHtmlController = (params?: {
-  transformer?: ViewportTransformer;
+  transformer?: ViewportStore;
   store?: GraphStore;
 }): CoreHtmlView => {
   return new CoreHtmlView(
     params?.store ?? new GraphStore(),
-    params?.transformer ?? new ViewportTransformer(),
+    params?.transformer ?? new ViewportStore(),
   );
 };
 
@@ -101,7 +101,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should apply transform to container", () => {
-    const transformer = new ViewportTransformer();
+    const transformer = new ViewportStore();
 
     const htmlView = createHtmlController({ transformer });
     const div = document.createElement("div");

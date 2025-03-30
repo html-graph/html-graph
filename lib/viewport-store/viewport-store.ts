@@ -7,7 +7,7 @@ import { PatchTransformRequest } from "./patch-transform-request";
 /**
  * This entity is responsible for storing viewport transformation
  */
-export class ViewportTransformer {
+export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;
 
   private contentMatrix: TransformState = initialMatrix;

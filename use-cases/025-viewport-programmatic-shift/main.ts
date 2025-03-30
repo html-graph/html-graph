@@ -38,7 +38,7 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-class ViewportTransformer {
+class ViewportStore {
   private isGrabbed = false;
 
   public constructor(
@@ -70,4 +70,4 @@ class ViewportTransformer {
   }
 }
 
-new ViewportTransformer(canvasElement, canvas);
+new ViewportStore(canvasElement, canvas);

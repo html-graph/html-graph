@@ -1,7 +1,7 @@
 import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { Point } from "@/point";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
 
@@ -27,7 +27,7 @@ export class CoreHtmlView implements HtmlView {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: ViewportTransformer,
+    private readonly viewportTransformer: ViewportStore,
   ) {
     this.host.appendChild(this.container);
 

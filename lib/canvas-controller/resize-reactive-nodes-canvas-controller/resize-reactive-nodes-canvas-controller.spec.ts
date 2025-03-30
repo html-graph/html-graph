@@ -4,13 +4,13 @@ import { CoreCanvasController } from "../core-canvas-controller";
 import { CanvasController } from "../canvas-controller";
 import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { triggerResizeFor } from "@/mocks";
 
 const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportTransformer();
+  const viewportTransformer = new ViewportStore();
 
   return new CoreCanvasController(
     graphStore,

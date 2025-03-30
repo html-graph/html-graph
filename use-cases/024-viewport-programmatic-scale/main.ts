@@ -38,7 +38,7 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-class ViewportTransformer {
+class ViewportStore {
   private readonly scaleVelocity = 1.2;
 
   public constructor(
@@ -73,4 +73,4 @@ class ViewportTransformer {
   }
 }
 
-new ViewportTransformer(canvasElement, canvas);
+new ViewportStore(canvasElement, canvas);

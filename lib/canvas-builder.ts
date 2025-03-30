@@ -13,7 +13,7 @@ import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
 import { EventSubject } from "./event-subject";
 import { Canvas, CanvasDefaults } from "./canvas";
 import { GraphStore } from "./graph-store";
-import { ViewportTransformer } from "./viewport-transformer";
+import { ViewportStore } from "./viewport-store";
 
 export class CanvasBuilder {
   private canvasDefaults: CanvasDefaults = {};
@@ -111,7 +111,7 @@ export class CanvasBuilder {
     }
 
     const graphStore = new GraphStore();
-    const viewportTransformer = new ViewportTransformer();
+    const viewportTransformer = new ViewportStore();
 
     let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportTransformer);
 

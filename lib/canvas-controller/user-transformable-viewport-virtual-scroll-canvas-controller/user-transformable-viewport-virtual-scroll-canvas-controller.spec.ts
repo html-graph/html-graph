@@ -7,7 +7,7 @@ import { TransformOptions } from "../user-transformable-viewport-canvas-controll
 import { standardCenterFn } from "@/center-fn";
 import { EdgeShapeMock } from "@/edges";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import {
   createElement,
   createMouseMoveEvent,
@@ -24,7 +24,7 @@ const create = (
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportTransformer();
+  const viewportTransformer = new ViewportStore();
   const coreCanvas = new CoreCanvasController(
     graphStore,
     viewportTransformer,

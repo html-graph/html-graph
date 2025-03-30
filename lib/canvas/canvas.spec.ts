@@ -1,7 +1,7 @@
 import { CanvasController, CoreCanvasController } from "@/canvas-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { AddNodeRequest } from "./add-node-request";
 import { CanvasDefaults } from "./options";
@@ -18,7 +18,7 @@ const createCanvas = (
   controller: CanvasController;
 } => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportTransformer();
+  const viewportTransformer = new ViewportStore();
 
   const controller = new CoreCanvasController(
     graphStore,

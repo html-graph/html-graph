@@ -4,7 +4,7 @@ import { CoreCanvasController } from "../core-canvas-controller";
 import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
 import { EdgeShapeMock } from "@/edges";
 import { GraphStore } from "@/graph-store";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 
@@ -13,7 +13,7 @@ let innerHeight: number;
 
 const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportTransformer();
+  const viewportTransformer = new ViewportStore();
 
   return new CoreCanvasController(
     graphStore,

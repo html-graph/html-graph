@@ -1,4 +1,4 @@
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { CanvasController } from "../canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
@@ -19,7 +19,7 @@ export class CoreCanvasController implements CanvasController {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: ViewportTransformer,
+    private readonly viewportTransformer: ViewportStore,
     private readonly htmlView: HtmlView,
   ) {
     this.graph = new Graph(this.graphStore);

@@ -1,6 +1,6 @@
 import { AddNodeRequest, GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "../core-html-view";
-import { ViewportTransformer } from "@/viewport-transformer";
+import { ViewportStore } from "@/viewport-store";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "./rendering-box";
 import { BoxHtmlView } from "./box-html-view";
@@ -15,7 +15,7 @@ const create = (): {
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const store = new GraphStore();
-  const transformer = new ViewportTransformer();
+  const transformer = new ViewportStore();
   const coreView = new CoreHtmlView(store, transformer);
   const boxView = new BoxHtmlView(coreView, store, trigger);
 
