@@ -84,14 +84,16 @@ export class Canvas {
       priority: request.priority ?? this.defaults.nodes.priorityFn(),
     });
 
-    Array.from(request.ports ?? []).forEach((port) => {
-      this.markPort({
-        id: port.id,
-        element: port.element,
-        nodeId: id,
-        direction: port.direction,
-      });
-    });
+    if (request.ports !== undefined) {
+      for (const port of request.ports) {
+        this.markPort({
+          id: port.id,
+          element: port.element,
+          nodeId: id,
+          direction: port.direction,
+        });
+      }
+    }
 
     return this;
   }
