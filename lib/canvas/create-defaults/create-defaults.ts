@@ -2,7 +2,7 @@ import { standardCenterFn } from "@/center-fn";
 import { resolvePriority } from "./resolve-priority";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { Defaults } from "./graph-defaults";
-import { CanvasDefaults } from "..";
+import { CanvasDefaults } from "./canvas-defaults";
 
 export const createDefaults: (
   canvasDefaults: CanvasDefaults | undefined,
