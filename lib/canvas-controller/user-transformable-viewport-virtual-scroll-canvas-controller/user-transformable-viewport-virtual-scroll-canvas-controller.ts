@@ -6,7 +6,7 @@ import { MarkPortRequest } from "../mark-port-request";
 import { UpdatePortRequest } from "../update-port-request";
 import { PatchMatrixRequest } from "../patch-matrix-request";
 import { Graph } from "@/graph";
-import { TransformState, Viewport } from "@/viewport-transformer";
+import { TransformState } from "@/viewport-transformer";
 import { CanvasController } from "../canvas-controller";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "@/html-view";
@@ -15,6 +15,7 @@ import {
   TransformOptions,
   UserTransformableViewportCanvasController,
 } from "../user-transformable-viewport-canvas-controller";
+import { Viewport } from "@/viewport";
 
 export class UserTransformableViewportVirtualScrollCanvasController
   implements CanvasController

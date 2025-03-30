@@ -1,5 +1,4 @@
-import { TransformState } from "../transform-state";
-import { ViewportTransformer } from "../viewport-transformer";
+import { ViewportTransformer, TransformState } from "../viewport-transformer";
 
 /**
  * This entity is responsible for providing viewport transformation state to the

@@ -1,4 +1,4 @@
-import { TransformState } from "../transform-state";
+import { TransformState } from "./transform-state";
 import { ViewportTransformer } from "./viewport-transformer";
 
 describe("ViewportTransformer", () => {

@@ -7,7 +7,7 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { DragOptions } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { Graph } from "@/graph";
-import { Viewport } from "@/viewport-transformer";
+import { Viewport } from "@/viewport";
 import { CanvasController } from "../canvas-controller";
 import { UpdatePortRequest } from "../update-port-request";
 import { NodeState } from "./node-state";

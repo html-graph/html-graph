@@ -50,7 +50,7 @@ export type { Point } from "./point";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 
-export type { Viewport } from "./viewport-transformer";
+export type { Viewport } from "./viewport";
 
 export type { CenterFn } from "./center-fn";
 

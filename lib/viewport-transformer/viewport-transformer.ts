@@ -1,7 +1,7 @@
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { calculateReverseMatrix } from "../calculate-reverse-matrix";
-import { initialMatrix } from "../initial-matrix";
-import { TransformState } from "../transform-state";
+import { calculateReverseMatrix } from "./calculate-reverse-matrix";
+import { initialMatrix } from "./initial-matrix";
+import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
 
 /**

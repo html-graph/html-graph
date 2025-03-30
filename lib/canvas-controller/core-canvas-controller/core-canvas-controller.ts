@@ -1,4 +1,4 @@
-import { Viewport, ViewportTransformer } from "@/viewport-transformer";
+import { ViewportTransformer } from "@/viewport-transformer";
 import { CanvasController } from "../canvas-controller";
 import { AddNodeRequest } from "../add-node-request";
 import { UpdateNodeRequest } from "../update-node-request";
@@ -10,6 +10,7 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { HtmlView } from "@/html-view";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
+import { Viewport } from "@/viewport";
 
 export class CoreCanvasController implements CanvasController {
   public readonly viewport: Viewport;

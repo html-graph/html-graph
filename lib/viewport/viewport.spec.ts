@@ -1,6 +1,5 @@
-import { TransformState } from "../transform-state";
-import { ViewportTransformer } from "../viewport-transformer";
-import { Viewport } from "./public-viewport-transformer";
+import { ViewportTransformer, TransformState } from "../viewport-transformer";
+import { Viewport } from "./viewport";
 
 describe("Viewport", () => {
   it("should return initial viewport matrix", () => {

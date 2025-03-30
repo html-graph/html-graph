@@ -1,4 +1,4 @@
-import { Viewport } from "@/viewport-transformer";
+import { Viewport } from "@/viewport";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";

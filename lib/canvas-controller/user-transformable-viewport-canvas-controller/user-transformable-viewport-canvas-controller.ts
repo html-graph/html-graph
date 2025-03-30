@@ -8,7 +8,7 @@ import { PatchMatrixRequest } from "../patch-matrix-request";
 import { TransformOptions } from "./options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { Graph } from "@/graph";
-import { Viewport } from "@/viewport-transformer";
+import { Viewport } from "@/viewport";
 import { CanvasController } from "../canvas-controller";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
