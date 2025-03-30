@@ -4,7 +4,7 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { AddNodeRequest } from "./add-node-request";
-import { CanvasDefaults } from "./options";
+import { CanvasDefaults } from "./create-defaults";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { UpdateNodeRequest } from "./update-node-request";

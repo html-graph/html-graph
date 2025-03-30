@@ -10,8 +10,7 @@ import { PatchMatrixRequest } from "./patch-matrix-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { CanvasDefaults } from "./options";
-import { createDefaults, Defaults } from "./create-defaults";
+import { CanvasDefaults, createDefaults, Defaults } from "./create-defaults";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
