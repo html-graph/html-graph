@@ -5,7 +5,7 @@ import {
   VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShapeFactory } from "../edge-shape-factory";
-import { EdgeShapeConfig } from "..";
+import { EdgeShapeConfig } from "../edge-shape-config";
 
 export const resolveEdgeShapeFactory: (
   options: EdgeShapeConfig,
