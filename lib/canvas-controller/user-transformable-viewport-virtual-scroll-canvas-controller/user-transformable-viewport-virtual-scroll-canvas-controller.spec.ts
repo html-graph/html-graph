@@ -24,12 +24,12 @@ const create = (
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportStore();
+  const viewportStore = new ViewportStore();
   const coreCanvas = new CoreCanvasController(
     graphStore,
-    viewportTransformer,
+    viewportStore,
     new BoxHtmlView(
-      new CoreHtmlView(graphStore, viewportTransformer),
+      new CoreHtmlView(graphStore, viewportStore),
       graphStore,
       trigger,
     ),

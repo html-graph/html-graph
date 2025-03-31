@@ -111,9 +111,9 @@ export class CanvasBuilder {
     }
 
     const graphStore = new GraphStore();
-    const viewportTransformer = new ViewportStore();
+    const viewportStore = new ViewportStore();
 
-    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportTransformer);
+    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore);
 
     if (trigger !== undefined) {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
@@ -121,7 +121,7 @@ export class CanvasBuilder {
 
     let controller: CanvasController = new CoreCanvasController(
       graphStore,
-      viewportTransformer,
+      viewportStore,
       htmlView,
     );
 

@@ -19,12 +19,12 @@ let innerHeight: number;
 
 const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportStore();
+  const viewportStore = new ViewportStore();
 
   return new CoreCanvasController(
     graphStore,
-    viewportTransformer,
-    new CoreHtmlView(graphStore, viewportTransformer),
+    viewportStore,
+    new CoreHtmlView(graphStore, viewportStore),
   );
 };
 

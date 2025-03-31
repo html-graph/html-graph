@@ -20,18 +20,18 @@ export class CoreHtmlView implements HtmlView {
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
   private readonly applyTransform = (): void => {
-    const m = this.viewportTransformer.getContentMatrix();
+    const m = this.viewportStore.getContentMatrix();
 
     this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
   };
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: ViewportStore,
+    private readonly viewportStore: ViewportStore,
   ) {
     this.host.appendChild(this.container);
 
-    this.viewportTransformer.onAfterUpdate.subscribe(this.applyTransform);
+    this.viewportStore.onAfterUpdate.subscribe(this.applyTransform);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -102,7 +102,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public destroy(): void {
-    this.viewportTransformer.onAfterUpdate.unsubscribe(this.applyTransform);
+    this.viewportStore.onAfterUpdate.unsubscribe(this.applyTransform);
 
     this.clear();
     this.detach();
@@ -114,7 +114,7 @@ export class CoreHtmlView implements HtmlView {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const node = this.graphStore.getNode(nodeId)!;
     const { width, height } = node.element.getBoundingClientRect();
-    const viewportScale = this.viewportTransformer.getViewportMatrix().scale;
+    const viewportScale = this.viewportStore.getViewportMatrix().scale;
     const center = node.centerFn(width, height);
 
     const x = node.x - viewportScale * center.x;
@@ -149,7 +149,7 @@ export class CoreHtmlView implements HtmlView {
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
-    const viewportMatrix = this.viewportTransformer.getViewportMatrix();
+    const viewportMatrix = this.viewportStore.getViewportMatrix();
 
     const from: Point = {
       x: viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.x,

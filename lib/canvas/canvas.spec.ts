@@ -18,12 +18,12 @@ const createCanvas = (
   controller: CanvasController;
 } => {
   const graphStore = new GraphStore();
-  const viewportTransformer = new ViewportStore();
+  const viewportStore = new ViewportStore();
 
   const controller = new CoreCanvasController(
     graphStore,
-    viewportTransformer,
-    new CoreHtmlView(graphStore, viewportTransformer),
+    viewportStore,
+    new CoreHtmlView(graphStore, viewportStore),
   );
 
   const canvas = new Canvas(controller, options);

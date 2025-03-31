@@ -19,11 +19,11 @@ export class CoreCanvasController implements CanvasController {
 
   public constructor(
     private readonly graphStore: GraphStore,
-    private readonly viewportTransformer: ViewportStore,
+    private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
   ) {
     this.graph = new Graph(this.graphStore);
-    this.viewport = new Viewport(this.viewportTransformer);
+    this.viewport = new Viewport(this.viewportStore);
   }
 
   public attach(element: HTMLElement): void {
@@ -127,11 +127,11 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {
-    this.viewportTransformer.patchViewportMatrix(request);
+    this.viewportStore.patchViewportMatrix(request);
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): void {
-    this.viewportTransformer.patchContentMatrix(request);
+    this.viewportStore.patchContentMatrix(request);
   }
 
   public clear(): void {
