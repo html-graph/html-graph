@@ -1,7 +1,7 @@
 # TODO
 
 - layouts
-  - implement asyncronous canvas
+  - implement asyncronous controller
   - implement default coordinates calculation
   - make node coordinates optional
   - provide trigger for applying commands queue
