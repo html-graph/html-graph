@@ -1,6 +1,10 @@
 # TODO
 
 - layouts
+  - separate graph topology from graph geometry
+  - make node coordinates optional
+  - make coordinates calculation asyncronous
+  - provide default algorithm for coordinates calculation
 - drag edge creation
 - background decorator
 - arrows customization
