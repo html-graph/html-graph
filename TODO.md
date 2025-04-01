@@ -1,6 +1,7 @@
 # TODO
 
 - layouts
+  - remove graphStore dependency from htmlView
   - make DOM rendering asyncronous
   - separate graph topology from graph geometry
   - make node coordinates optional
