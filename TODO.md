@@ -4,7 +4,7 @@
   - implement asyncronous canvas
   - implement default coordinates calculation
   - make node coordinates optional
-  - provide trigger for layout calculation and DOM rendering
+  - provide trigger for applying commands queue
 - drag edge creation
 - background decorator
 - arrows customization
