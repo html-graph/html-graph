@@ -1,6 +1,7 @@
 # TODO
 
 - layouts
+  - separate graph topology from graph geometry
   - implement asyncronous controller
   - implement default coordinates calculation
   - make node coordinates optional
