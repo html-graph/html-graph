@@ -2,5 +2,5 @@ services:
   html-graph-idle:
     extends:
       file: docker-compose.yml
-      service: html-graph-idle
+      service: html-graph
     command: tail -f /dev/null
