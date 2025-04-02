@@ -5,6 +5,14 @@
   - implement default coordinates calculation
   - make node coordinates optional
   - provide trigger for applying commands queue
+stages:
+1. initialize topological model
+2. calculate coordinates based on topology
+3. apply calculated coordinated on canvas
+
+
+
+
 - drag edge creation
 - background decorator
 - arrows customization
