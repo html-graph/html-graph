@@ -15,8 +15,6 @@ export class GraphStore {
 
   private readonly nodePorts = new Map<unknown, Map<unknown, HTMLElement>>();
 
-  private readonly portNodeId = new Map<unknown, unknown>();
-
   private readonly edges = new Map<unknown, EdgePayload>();
 
   private readonly incommingEdges = new Map<unknown, Set<unknown>>();
@@ -55,12 +53,12 @@ export class GraphStore {
     this.ports.set(request.id, {
       element: request.element,
       direction: request.direction,
+      nodeId: request.nodeId,
     });
 
     this.cycleEdges.set(request.id, new Set());
     this.incommingEdges.set(request.id, new Set());
     this.outcommingEdges.set(request.id, new Set());
-    this.portNodeId.set(request.id, request.nodeId);
 
     this.nodePorts.get(request.nodeId)!.set(request.id, request.element);
   }
@@ -83,14 +81,8 @@ export class GraphStore {
     return undefined;
   }
 
-  public getPortNodeId(portId: unknown): unknown | undefined {
-    return this.portNodeId.get(portId);
-  }
-
   public removePort(portId: unknown): void {
-    const node = this.portNodeId.get(portId)!;
-
-    this.portNodeId.delete(portId);
+    const node = this.ports.get(portId)!.nodeId;
 
     this.nodePorts.get(node)!.delete(portId);
 
@@ -170,7 +162,6 @@ export class GraphStore {
 
     this.ports.clear();
     this.nodePorts.clear();
-    this.portNodeId.clear();
 
     this.nodes.clear();
   }

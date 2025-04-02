@@ -1,7 +1,8 @@
 # TODO
 
+- view is too dependent on model
 - layouts
-  - implement asyncronous controller
+  - asyncronous html view
   - implement default coordinates calculation
   - make node coordinates optional
   - provide trigger for applying commands queue
@@ -11,6 +12,7 @@
 2. calculate coordinates based on topology
 3. apply calculated coordinated on canvas
 
+- update edges after attach
 - drag edge creation
 - background decorator
 - arrows customization

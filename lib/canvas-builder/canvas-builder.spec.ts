@@ -1,15 +1,15 @@
-import { AddEdgeRequest, AddNodeRequest } from "./canvas";
-import { CanvasBuilder } from "./canvas-builder";
-import { standardCenterFn } from "./center-fn";
-import { BezierEdgeShape } from "./edges";
-import { EventSubject } from "./event-subject";
-import { RenderingBox } from "./html-view";
+import { AddEdgeRequest, AddNodeRequest } from "@/canvas";
+import { CanvasBuilder } from "@/canvas-builder";
+import { standardCenterFn } from "@/center-fn";
+import { BezierEdgeShape } from "@/edges";
+import { EventSubject } from "@/event-subject";
+import { RenderingBox } from "@/html-view";
 import {
   createElement,
   createMouseMoveEvent,
   triggerResizeFor,
   wait,
-} from "./mocks";
+} from "@/mocks";
 
 describe("CanvasBuilder", () => {
   it("should build canvas with specified defaults", () => {

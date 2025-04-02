@@ -65,10 +65,9 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public detachNode(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId)!;
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
 
-    wrapper.removeChild(node.element);
+    wrapper.removeChild(wrapper.children[0]);
 
     this.container.removeChild(wrapper);
     this.nodeIdToWrapperElementMap.delete(nodeId);
@@ -85,9 +84,9 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public detachEdge(edgeId: unknown): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
+    const svg = this.edgeIdToElementMap.get(edgeId)!;
 
-    this.container.removeChild(edge.shape.svg);
+    this.container.removeChild(svg);
     this.edgeIdToElementMap.delete(edgeId);
   }
 
@@ -168,7 +167,7 @@ export class CoreHtmlView implements HtmlView {
       height: rectFrom.height * viewportMatrix.scale,
       direction: portFrom.direction,
       portId: edge.from,
-      nodeId: this.graphStore.getPortNodeId(edge.from),
+      nodeId: portFrom.nodeId,
     };
 
     const target: EdgeRenderPort = {
@@ -178,7 +177,7 @@ export class CoreHtmlView implements HtmlView {
       height: rectTo.height * viewportMatrix.scale,
       direction: portTo.direction,
       portId: edge.to,
-      nodeId: this.graphStore.getPortNodeId(edge.to),
+      nodeId: portTo.nodeId,
     };
 
     edge.shape.render({

@@ -37,8 +37,8 @@ export class BoxHtmlView implements HtmlView {
       const isInViewport = this.renderingBox.hasEdge(edgeId);
       const wasInViewport = this.attachedEdges.has(edgeId);
       const edge = this.graphStore.getEdge(edgeId)!;
-      const fromNodeId = this.graphStore.getPortNodeId(edge.from);
-      const toNodeId = this.graphStore.getPortNodeId(edge.to);
+      const fromNodeId = this.graphStore.getPort(edge.from)!.nodeId;
+      const toNodeId = this.graphStore.getPort(edge.to)!.nodeId;
 
       if (isInViewport) {
         if (!this.renderingBox.hasNode(fromNodeId)) {
@@ -173,8 +173,8 @@ export class BoxHtmlView implements HtmlView {
 
   private attachEdgeEntities(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPortNodeId(edge.from)!;
-    const nodeToId = this.graphStore.getPortNodeId(edge.to)!;
+    const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
+    const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;
 
     if (!this.attachedNodes.has(nodeFromId)) {
       this.handleAttachNode(nodeFromId);
