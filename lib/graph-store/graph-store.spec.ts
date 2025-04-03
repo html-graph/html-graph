@@ -5,6 +5,7 @@ import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
 import { PortPayload } from "./port-payload";
+import { NodePayload } from "./node-payload";
 
 const node1Request: AddNodeRequest = {
   id: "node-1",
@@ -61,18 +62,21 @@ describe("GraphStore", () => {
     expect(store.getNode(1)).toBe(undefined);
   });
 
-  it("should return specidied node for existing node", () => {
+  it("should return specified node for existing node", () => {
     const store = new GraphStore();
 
     store.addNode(node1Request);
 
-    expect(store.getNode(node1Request.id)).toEqual({
+    const expected: NodePayload = {
       element: node1Request.element,
       x: node1Request.x,
       y: node1Request.y,
       centerFn: node1Request.centerFn,
       priority: node1Request.priority,
-    });
+      ports: new Map(),
+    };
+
+    expect(store.getNode(node1Request.id)).toEqual(expected);
   });
 
   it("should return all added node ids", () => {
@@ -98,7 +102,7 @@ describe("GraphStore", () => {
     expect(store.getPort(1)).toBe(undefined);
   });
 
-  it("should return specidied port for existing port", () => {
+  it("should return specified port for existing port", () => {
     const store = new GraphStore();
 
     store.addNode(node1Request);
