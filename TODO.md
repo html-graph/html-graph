@@ -1,6 +1,7 @@
 # TODO
 
 - layouts
+
   - implement graph topology store
   - implement default coordinates calculation
   - implement Canvas wrapper with optional coordinates
