@@ -4,6 +4,8 @@ import { EdgeShapeMock } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
+import { PortPayload } from "./port-payload";
+import { NodePayload } from "./node-payload";
 
 const node1Request: AddNodeRequest = {
   id: "node-1",
@@ -60,18 +62,21 @@ describe("GraphStore", () => {
     expect(store.getNode(1)).toBe(undefined);
   });
 
-  it("should return specidied node for existing node", () => {
+  it("should return specified node for existing node", () => {
     const store = new GraphStore();
 
     store.addNode(node1Request);
 
-    expect(store.getNode(node1Request.id)).toEqual({
+    const expected: NodePayload = {
       element: node1Request.element,
       x: node1Request.x,
       y: node1Request.y,
       centerFn: node1Request.centerFn,
       priority: node1Request.priority,
-    });
+      ports: new Map(),
+    };
+
+    expect(store.getNode(node1Request.id)).toEqual(expected);
   });
 
   it("should return all added node ids", () => {
@@ -97,16 +102,19 @@ describe("GraphStore", () => {
     expect(store.getPort(1)).toBe(undefined);
   });
 
-  it("should return specidied port for existing port", () => {
+  it("should return specified port for existing port", () => {
     const store = new GraphStore();
 
     store.addNode(node1Request);
     store.addPort(port1Request);
 
-    expect(store.getPort(port1Request.id)).toEqual({
+    const expected: PortPayload = {
       element: port1Request.element,
       direction: port1Request.direction,
-    });
+      nodeId: node1Request.id,
+    };
+
+    expect(store.getPort(port1Request.id)).toEqual(expected);
   });
 
   it("should return all added port ids", () => {
@@ -131,12 +139,6 @@ describe("GraphStore", () => {
     store.addPort(port1Request);
 
     expect(store.getNodePortIds(node1Request.id)).toEqual([port1Request.id]);
-  });
-
-  it("should return undefined when getting node id of non-existing port", () => {
-    const store = new GraphStore();
-
-    expect(store.getPortNodeId(1)).toBe(undefined);
   });
 
   it("should remove node port", () => {
@@ -224,16 +226,6 @@ describe("GraphStore", () => {
     store.clear();
 
     expect(store.getNodePortIds(node1Request.id)).toEqual(undefined);
-  });
-
-  it("should clear port node id", () => {
-    const store = new GraphStore();
-
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.clear();
-
-    expect(store.getPortNodeId(port1Request.id)).toEqual(undefined);
   });
 
   it("should clear edge", () => {

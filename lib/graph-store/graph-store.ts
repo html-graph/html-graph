@@ -13,10 +13,6 @@ export class GraphStore {
 
   private readonly ports = new Map<unknown, PortPayload>();
 
-  private readonly nodePorts = new Map<unknown, Map<unknown, HTMLElement>>();
-
-  private readonly portNodeId = new Map<unknown, unknown>();
-
   private readonly edges = new Map<unknown, EdgePayload>();
 
   private readonly incommingEdges = new Map<unknown, Set<unknown>>();
@@ -26,15 +22,18 @@ export class GraphStore {
   private readonly cycleEdges = new Map<unknown, Set<unknown>>();
 
   public addNode(request: AddNodeRequest): void {
-    this.nodes.set(request.id, {
+    const ports = new Map<unknown, HTMLElement>();
+
+    const node: NodePayload = {
       element: request.element,
       x: request.x,
       y: request.y,
       centerFn: request.centerFn,
       priority: request.priority,
-    });
+      ports,
+    };
 
-    this.nodePorts.set(request.id, new Map<string, HTMLElement>());
+    this.nodes.set(request.id, node);
   }
 
   public getAllNodeIds(): readonly unknown[] {
@@ -47,22 +46,20 @@ export class GraphStore {
 
   public removeNode(nodeId: unknown): void {
     this.nodes.delete(nodeId);
-
-    this.nodePorts.delete(nodeId);
   }
 
   public addPort(request: AddPortRequest): void {
     this.ports.set(request.id, {
       element: request.element,
       direction: request.direction,
+      nodeId: request.nodeId,
     });
 
     this.cycleEdges.set(request.id, new Set());
     this.incommingEdges.set(request.id, new Set());
     this.outcommingEdges.set(request.id, new Set());
-    this.portNodeId.set(request.id, request.nodeId);
 
-    this.nodePorts.get(request.nodeId)!.set(request.id, request.element);
+    this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
   }
 
   public getPort(portId: unknown): PortPayload | undefined {
@@ -74,26 +71,19 @@ export class GraphStore {
   }
 
   public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
-    const ports = this.nodePorts.get(nodeId);
+    const node = this.nodes.get(nodeId);
 
-    if (ports !== undefined) {
-      return Array.from(ports.keys());
+    if (node !== undefined) {
+      return Array.from(node.ports.keys());
     }
 
     return undefined;
   }
 
-  public getPortNodeId(portId: unknown): unknown | undefined {
-    return this.portNodeId.get(portId);
-  }
-
   public removePort(portId: unknown): void {
-    const node = this.portNodeId.get(portId)!;
+    const nodeId = this.ports.get(portId)!.nodeId;
 
-    this.portNodeId.delete(portId);
-
-    this.nodePorts.get(node)!.delete(portId);
-
+    this.nodes.get(nodeId)!.ports.delete(portId);
     this.ports.delete(portId);
   }
 
@@ -163,15 +153,12 @@ export class GraphStore {
   }
 
   public clear(): void {
-    this.edges.clear();
     this.incommingEdges.clear();
     this.outcommingEdges.clear();
     this.cycleEdges.clear();
 
+    this.edges.clear();
     this.ports.clear();
-    this.nodePorts.clear();
-    this.portNodeId.clear();
-
     this.nodes.clear();
   }
 
@@ -196,7 +183,7 @@ export class GraphStore {
   }
 
   public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] {
-    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
+    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
@@ -207,7 +194,7 @@ export class GraphStore {
   }
 
   public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] {
-    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
+    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
@@ -218,7 +205,7 @@ export class GraphStore {
   }
 
   public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] {
-    const ports = Array.from(this.nodePorts.get(nodeId)!.keys());
+    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {

@@ -8,12 +8,12 @@ import {
   CoreCanvasController,
   UserTransformableViewportVirtualScrollCanvasController,
   VirtualScrollOptions,
-} from "./canvas-controller";
-import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "./html-view";
-import { EventSubject } from "./event-subject";
-import { Canvas, CanvasDefaults } from "./canvas";
-import { GraphStore } from "./graph-store";
-import { ViewportStore } from "./viewport-store";
+} from "@/canvas-controller";
+import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
+import { EventSubject } from "@/event-subject";
+import { Canvas, CanvasDefaults } from "@/canvas";
+import { GraphStore } from "@/graph-store";
+import { ViewportStore } from "@/viewport-store";
 
 export class CanvasBuilder {
   private canvasDefaults: CanvasDefaults = {};

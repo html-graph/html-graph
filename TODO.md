@@ -1,16 +1,13 @@
 # TODO
 
 - layouts
-  - implement asyncronous controller
+
+  - implement graph topology store
   - implement default coordinates calculation
-  - make node coordinates optional
+  - implement Canvas wrapper with optional coordinates
   - provide trigger for applying commands queue
-    stages:
 
-1. initialize topological model
-2. calculate coordinates based on topology
-3. apply calculated coordinated on canvas
-
+- update edges after attach
 - drag edge creation
 - background decorator
 - arrows customization

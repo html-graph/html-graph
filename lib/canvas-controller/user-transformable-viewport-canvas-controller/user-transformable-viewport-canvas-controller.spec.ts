@@ -672,7 +672,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(499);
+    await wait(100);
     element.dispatchEvent(wheelEvent);
     await wait(500);
 
@@ -698,7 +698,7 @@ describe("UserTransformableViewportCanvasController", () => {
     });
 
     element.dispatchEvent(wheelEvent);
-    await wait(499);
+    await wait(100);
     element.dispatchEvent(wheelEvent);
     await wait(500);
 

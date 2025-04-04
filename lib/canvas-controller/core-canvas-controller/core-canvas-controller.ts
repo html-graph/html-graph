@@ -47,9 +47,9 @@ export class CoreCanvasController implements CanvasController {
     node.centerFn = request.centerFn ?? node.centerFn;
 
     this.htmlView.updateNodeCoordinates(nodeId);
-    const edges = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
-    edges.forEach((edge) => {
+    edgeIds.forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
 
@@ -64,8 +64,8 @@ export class CoreCanvasController implements CanvasController {
       this.unmarkPort(portId);
     });
 
-    this.htmlView.detachNode(nodeId);
     this.graphStore.removeNode(nodeId);
+    this.htmlView.detachNode(nodeId);
   }
 
   public markPort(request: MarkPortRequest): void {
@@ -77,9 +77,9 @@ export class CoreCanvasController implements CanvasController {
 
     port.direction = request.direction ?? port.direction;
 
-    const edges = this.graphStore.getPortAdjacentEdgeIds(portId);
+    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
 
-    edges.forEach((edge) => {
+    edgeIds.forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
   }
@@ -122,8 +122,8 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public removeEdge(edgeId: unknown): void {
-    this.htmlView.detachEdge(edgeId);
     this.graphStore.removeEdge(edgeId);
+    this.htmlView.detachEdge(edgeId);
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {

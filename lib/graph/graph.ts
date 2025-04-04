@@ -54,8 +54,12 @@ export class Graph {
     return this.graphStore.getNodePortIds(nodeId)!;
   }
 
+  /**
+   * @deprecated
+   * use graph.getPort()?.nodeId ?? null instead
+   */
   public getPortNodeId(portId: unknown): unknown | null {
-    return this.graphStore.getPortNodeId(portId) ?? null;
+    return this.graphStore.getPort(portId)?.nodeId ?? null;
   }
 
   public getAllEdgeIds(): readonly unknown[] {
