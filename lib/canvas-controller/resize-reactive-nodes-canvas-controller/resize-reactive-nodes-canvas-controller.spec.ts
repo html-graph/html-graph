@@ -1,5 +1,5 @@
 import { ResizeReactiveNodesCanvasController } from "./resize-reactive-nodes-canvas-controller";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 import { CoreCanvasController } from "../core-canvas-controller";
 import { CanvasController } from "../canvas-controller";
 import { standardCenterFn } from "@/center-fn";
@@ -210,7 +210,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -241,7 +241,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -276,7 +276,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -434,7 +434,7 @@ describe("ResizeReactiveNodesCanvasController", () => {
       direction: 0,
     });
 
-    const shape = new EdgeShapeMock();
+    const shape = new BezierEdgeShape();
 
     canvas.addEdge({
       id: "edge-1",

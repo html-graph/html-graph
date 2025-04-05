@@ -1,4 +1,4 @@
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 import {
   AddEdgeRequest,
   AddNodeRequest,
@@ -44,7 +44,7 @@ const addEdgeRequest12: AddEdgeRequest = {
   id: "edge-1-2",
   from: "port-1",
   to: "port-2",
-  shape: new EdgeShapeMock(),
+  shape: new BezierEdgeShape(),
   priority: 0,
 };
 
@@ -52,7 +52,7 @@ const addEdgeRequest11: AddEdgeRequest = {
   id: "edge-1-1",
   from: "port-1",
   to: "port-1",
-  shape: new EdgeShapeMock(),
+  shape: new BezierEdgeShape(),
   priority: 0,
 };
 

@@ -5,7 +5,7 @@ import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "./rendering-box";
 import { BoxHtmlView } from "./box-html-view";
 import { standardCenterFn } from "@/center-fn";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 
 const create = (): {
   trigger: EventSubject<RenderingBox>;
@@ -68,7 +68,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
     from: "port-1",
     to: "port-2",
     id: "edge-1",
-    shape: new EdgeShapeMock(),
+    shape: new BezierEdgeShape(),
     priority: 0,
   });
 };

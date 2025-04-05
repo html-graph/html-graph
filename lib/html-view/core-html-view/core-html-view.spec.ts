@@ -7,7 +7,7 @@ import {
 import { CoreHtmlView } from "./core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
-import { EdgeShapeMock, EdgeRenderParams } from "@/edges";
+import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
 
 const createHtmlController = (params?: {
   transformer?: ViewportStore;
@@ -65,7 +65,7 @@ const addEdgeRequest12: AddEdgeRequest = {
   id: "edge-12",
   from: "port-1",
   to: "port-2",
-  shape: new EdgeShapeMock(),
+  shape: new BezierEdgeShape(),
   priority: 0,
 };
 
@@ -302,7 +302,7 @@ describe("CoreHtmlView", () => {
 
     const edge = store.getEdge(addEdgeRequest12.id)!;
 
-    const newShape = new EdgeShapeMock();
+    const newShape = new BezierEdgeShape();
     edge.shape = newShape;
 
     htmlView.updateEdgeShape(addEdgeRequest12.id);
