@@ -9,4 +9,3 @@ export { StraightEdgeShape } from "./straight";
 export type { StraightEdgeParams } from "./straight";
 export { VerticalEdgeShape } from "./vertical";
 export type { VerticalEdgeParams } from "./vertical";
-export { EdgeShapeMock } from "./edge-shape.mock";

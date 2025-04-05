@@ -1,7 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import { RenderingBoxState } from "./rendering-box-state";
 import { standardCenterFn } from "@/center-fn";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 
 const create = (): {
   graphStore: GraphStore;
@@ -50,7 +50,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
     from: "port-1",
     to: "port-2",
     id: "edge-1",
-    shape: new EdgeShapeMock(),
+    shape: new BezierEdgeShape(),
     priority: 0,
   });
 };

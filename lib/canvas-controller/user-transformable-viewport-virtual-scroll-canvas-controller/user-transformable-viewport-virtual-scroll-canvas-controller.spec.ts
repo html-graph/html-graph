@@ -5,7 +5,7 @@ import { CanvasController } from "../canvas-controller";
 import { CoreCanvasController } from "../core-canvas-controller";
 import { TransformOptions } from "../user-transformable-viewport-canvas-controller";
 import { standardCenterFn } from "@/center-fn";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
@@ -102,7 +102,7 @@ const configureEdgeGraph = (canvas: CanvasController): void => {
     id: "edge-1",
     from: "port-1",
     to: "port-2",
-    shape: new EdgeShapeMock(),
+    shape: new BezierEdgeShape(),
     priority: 0,
   });
 
@@ -110,7 +110,7 @@ const configureEdgeGraph = (canvas: CanvasController): void => {
     id: "edge-2",
     from: "port-2",
     to: "port-3",
-    shape: new EdgeShapeMock(),
+    shape: new BezierEdgeShape(),
     priority: 0,
   });
 };
@@ -295,7 +295,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -325,7 +325,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -359,7 +359,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 

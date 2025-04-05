@@ -2,7 +2,7 @@ import { standardCenterFn } from "@/center-fn";
 import { CanvasController } from "../canvas-controller";
 import { CoreCanvasController } from "../core-canvas-controller";
 import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
@@ -228,7 +228,7 @@ describe("UserTransformableViewportCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -259,7 +259,7 @@ describe("UserTransformableViewportCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 
@@ -294,7 +294,7 @@ describe("UserTransformableViewportCanvasController", () => {
       id: "edge-1",
       from: "port-1",
       to: "port-1",
-      shape: new EdgeShapeMock(),
+      shape: new BezierEdgeShape(),
       priority: 0,
     });
 

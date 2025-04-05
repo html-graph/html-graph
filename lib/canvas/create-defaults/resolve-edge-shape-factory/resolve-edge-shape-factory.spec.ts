@@ -2,7 +2,6 @@ import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import {
   BezierEdgeShape,
   EdgeShape,
-  EdgeShapeMock,
   HorizontalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
@@ -18,7 +17,7 @@ describe("resolveEdgeShapeFactory", () => {
   });
 
   it("should set specified functions for custom type", () => {
-    const factoryFn = (): EdgeShape => new EdgeShapeMock();
+    const factoryFn = (): EdgeShape => new BezierEdgeShape();
 
     const factory = resolveEdgeShapeFactory(factoryFn);
 

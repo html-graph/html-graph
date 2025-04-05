@@ -1,6 +1,6 @@
 import { Point } from "@/point";
 import { GraphStore } from "./graph-store";
-import { EdgeShapeMock } from "@/edges";
+import { BezierEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
@@ -43,7 +43,7 @@ const edge1to2Request: AddEdgeRequest = {
   id: "edge-1",
   from: "port-1",
   to: "port-2",
-  shape: new EdgeShapeMock(),
+  shape: new BezierEdgeShape(),
   priority: 0,
 };
 
@@ -51,7 +51,7 @@ const edge1to1Request: AddEdgeRequest = {
   id: "edge-2",
   from: "port-1",
   to: "port-1",
-  shape: new EdgeShapeMock(),
+  shape: new BezierEdgeShape(),
   priority: 0,
 };
 
