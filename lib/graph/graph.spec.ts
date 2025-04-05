@@ -106,6 +106,7 @@ describe("Graph", () => {
     expect(publicStore.getPort(addPortRequest1.id)).toStrictEqual({
       element: addPortRequest1.element,
       direction: addPortRequest1.direction,
+      nodeId: addNodeRequest1.id,
     });
   });
 

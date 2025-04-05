@@ -39,6 +39,7 @@ export class Graph {
     return {
       element: port.element,
       direction: port.direction,
+      nodeId: port.nodeId,
     };
   }
 
