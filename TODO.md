@@ -18,4 +18,3 @@
   - implement default coordinates calculation
   - implement Canvas wrapper with optional coordinates
   - provide trigger for applying commands queue
-
