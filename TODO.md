@@ -1,15 +1,8 @@
 # TODO
 
-- layouts
-
-  - implement graph topology store
-  - implement default coordinates calculation
-  - implement Canvas wrapper with optional coordinates
-  - provide trigger for applying commands queue
-
 - update edges after attach
-- drag edge creation
-- background decorator
+- built in drag edge creation
+- built in background
 - arrows customization
 - sankey connections
 - generics for identifiers
@@ -18,3 +11,11 @@
 - node drag handle example
 - snap nodes to grid
 - node creation factory function?
+
+- layouts
+
+  - implement graph topology store
+  - implement default coordinates calculation
+  - implement Canvas wrapper with optional coordinates
+  - provide trigger for applying commands queue
+
