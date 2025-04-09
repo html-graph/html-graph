@@ -48,11 +48,7 @@ export class Graph {
   }
 
   public getNodePortIds(nodeId: unknown): readonly unknown[] | null {
-    if (this.graphStore.getNode(nodeId) === undefined) {
-      return null;
-    }
-
-    return this.graphStore.getNodePortIds(nodeId)!;
+    return this.graphStore.getNodePortIds(nodeId) ?? null;
   }
 
   /**

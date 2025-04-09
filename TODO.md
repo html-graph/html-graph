@@ -1,8 +1,7 @@
 # TODO
 
-- update edges after attach
-- built in drag edge creation
-- built in background
+- built-in drag edge creation
+- built-in background
 - arrows customization
 - sankey connections
 - generics for identifiers

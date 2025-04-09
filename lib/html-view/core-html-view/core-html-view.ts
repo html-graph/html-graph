@@ -39,6 +39,10 @@ export class CoreHtmlView implements HtmlView {
 
     this.canvasWrapper = canvasWrapper;
     this.canvasWrapper.appendChild(this.host);
+
+    this.graphStore.getAllEdgeIds().forEach((edgeId) => {
+      this.renderEdge(edgeId);
+    });
   }
 
   public detach(): void {
