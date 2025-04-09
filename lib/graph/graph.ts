@@ -7,7 +7,7 @@ import { GraphPort } from "./graph-port";
  * This entity is responsible for providing access to end user in a safe way
  */
 export class Graph {
-  public constructor(private readonly graphStore: GraphStore) { }
+  public constructor(private readonly graphStore: GraphStore) {}
 
   public getNode(nodeId: unknown): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);
