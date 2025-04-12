@@ -42,6 +42,14 @@ canvas.graph.onAfterNodeAdded.subscribe((nodeId) => {
   updateLog(`Node added ${nodeId}`);
 });
 
+canvas.graph.onAfterNodeCoordinatesUpdated.subscribe((nodeId) => {
+  updateLog(`Node coordinates updated ${nodeId}`);
+});
+
+canvas.graph.onAfterNodePriorityUpdated.subscribe((nodeId) => {
+  updateLog(`Node priority updated ${nodeId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
