@@ -60,10 +60,15 @@ canvas.graph.onAfterPortAdded.subscribe((portId) => {
   updateLog(`Port added ${portId}`);
 });
 
+canvas.graph.onAfterPortDirectionUpdated.subscribe((portId) => {
+  updateLog(`Port added ${portId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest)
   .updateNode("node-1", { x: 100, y: 150, priority: 10 })
+  .updatePort("node-1-out", { direction: Math.PI })
   .removeNode("node-1");
