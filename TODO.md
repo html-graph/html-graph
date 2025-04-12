@@ -5,6 +5,7 @@
 - built-in drag edge creation
 - built-in background
 - arrows customization
+- implement edges with label when specified manually
 - sankey connections
 - generics for identifiers
 - transformable canvas shift limit when scaling ?
