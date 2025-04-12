@@ -64,6 +64,10 @@ canvas.graph.onAfterPortDirectionUpdated.subscribe((portId) => {
   updateLog(`Port added ${portId}`);
 });
 
+canvas.graph.onBeforePortRemoved.subscribe((portId) => {
+  updateLog(`Port removed ${portId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
