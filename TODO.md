@@ -1,5 +1,6 @@
 # TODO
 
+- make entities creation and removal consistent for canvas controller decorators
 - built-in drag edge creation
 - built-in background
 - arrows customization
