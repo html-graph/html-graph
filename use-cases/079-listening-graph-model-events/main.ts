@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  HorizontalEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -68,11 +69,25 @@ canvas.graph.onBeforePortRemoved.subscribe((portId) => {
   updateLog(`Port removed ${portId}`);
 });
 
+canvas.graph.onAfterEdgeAdded.subscribe((edgeId) => {
+  updateLog(`Edge added ${edgeId}`);
+});
+
+canvas.graph.onAfterEdgeShapeUpdated.subscribe((edgeId) => {
+  updateLog(`Edge shape updated ${edgeId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest)
+  .updateEdge("edge-1", {
+    from: "node-2-in",
+    to: "node-1-out",
+    shape: new HorizontalEdgeShape(),
+    priority: 10,
+  })
   .updateNode("node-1", { x: 100, y: 150, priority: 10 })
   .updatePort("node-1-out", { direction: Math.PI })
   .removeNode("node-1");
