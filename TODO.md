@@ -1,5 +1,6 @@
 # TODO
 
+- add viewport event
 - listen to events in CanvasCoreController
 - built-in drag edge creation
 - built-in background
