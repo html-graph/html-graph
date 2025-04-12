@@ -1,6 +1,6 @@
 # TODO
 
-- add graph store events
+- listen to events in CanvasCoreController
 - built-in drag edge creation
 - built-in background
 - arrows customization
