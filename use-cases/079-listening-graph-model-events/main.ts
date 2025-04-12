@@ -37,6 +37,7 @@ const addNode2Request: AddNodeRequest = createInOutNode({
 });
 
 const addEdgeRequest: AddEdgeRequest = {
+  id: "edge-1",
   from: "node-1-out",
   to: "node-2-in",
 };
