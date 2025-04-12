@@ -7,52 +7,64 @@ import { AddEdgeRequest } from "./add-edge-request";
 import { PortPayload } from "./port-payload";
 import { NodePayload } from "./node-payload";
 
-const node1Request: AddNodeRequest = {
-  id: "node-1",
-  element: document.createElement("div"),
-  x: 0,
-  y: 0,
-  centerFn: (): Point => ({ x: 0, y: 0 }),
-  priority: 0,
+const createAddNodeRequest1 = (): AddNodeRequest => {
+  return {
+    id: "node-1",
+    element: document.createElement("div"),
+    x: 0,
+    y: 0,
+    centerFn: (): Point => ({ x: 0, y: 0 }),
+    priority: 0,
+  };
 };
 
-const port1Request: AddPortRequest = {
-  id: "port-1",
-  nodeId: "node-1",
-  element: document.createElement("div"),
-  direction: 0,
+const createAddNodeRequest2 = (): AddNodeRequest => {
+  return {
+    id: "node-2",
+    element: document.createElement("div"),
+    x: 0,
+    y: 0,
+    centerFn: (): Point => ({ x: 0, y: 0 }),
+    priority: 0,
+  };
 };
 
-const node2Request: AddNodeRequest = {
-  id: "node-2",
-  element: document.createElement("div"),
-  x: 0,
-  y: 0,
-  centerFn: (): Point => ({ x: 0, y: 0 }),
-  priority: 0,
+const createAddPortRequest1 = (): AddPortRequest => {
+  return {
+    id: "port-1",
+    nodeId: "node-1",
+    element: document.createElement("div"),
+    direction: 0,
+  };
 };
 
-const port2Request: AddPortRequest = {
-  id: "port-2",
-  nodeId: "node-2",
-  element: document.createElement("div"),
-  direction: 0,
+const createAddPortRequest2 = (): AddPortRequest => {
+  return {
+    id: "port-2",
+    nodeId: "node-2",
+    element: document.createElement("div"),
+    direction: 0,
+  };
 };
 
-const edge1to2Request: AddEdgeRequest = {
-  id: "edge-1",
-  from: "port-1",
-  to: "port-2",
-  shape: new BezierEdgeShape(),
-  priority: 0,
+const createAddEdgeRequest12 = (): AddEdgeRequest => {
+  return {
+    id: "edge-1",
+    from: "port-1",
+    to: "port-2",
+    shape: new BezierEdgeShape(),
+    priority: 0,
+  };
 };
 
-const edge1to1Request: AddEdgeRequest = {
-  id: "edge-2",
-  from: "port-1",
-  to: "port-1",
-  shape: new BezierEdgeShape(),
-  priority: 0,
+const createAddEdgeRequest11 = (): AddEdgeRequest => {
+  return {
+    id: "edge-2",
+    from: "port-1",
+    to: "port-1",
+    shape: new BezierEdgeShape(),
+    priority: 0,
+  };
 };
 
 describe("GraphStore", () => {
@@ -65,35 +77,39 @@ describe("GraphStore", () => {
   it("should return specified node for existing node", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
 
     const expected: NodePayload = {
-      element: node1Request.element,
-      x: node1Request.x,
-      y: node1Request.y,
-      centerFn: node1Request.centerFn,
-      priority: node1Request.priority,
+      element: addNodeRequest1.element,
+      x: addNodeRequest1.x,
+      y: addNodeRequest1.y,
+      centerFn: addNodeRequest1.centerFn,
+      priority: addNodeRequest1.priority,
       ports: new Map(),
     };
 
-    expect(store.getNode(node1Request.id)).toEqual(expected);
+    expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
   });
 
   it("should return all added node ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    store.addNode(addNodeRequest1);
 
-    expect(store.getAllNodeIds()).toEqual([node1Request.id]);
+    expect(store.getAllNodeIds()).toEqual([addNodeRequest1.id]);
   });
 
   it("should remove node", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.removeNode(node1Request.id);
+    const addNodeRequest1 = createAddNodeRequest1();
+    store.addNode(addNodeRequest1);
+    store.removeNode(addNodeRequest1.id);
 
-    expect(store.getNode(node1Request.id)).toBe(undefined);
+    expect(store.getNode(addNodeRequest1.id)).toBe(undefined);
   });
 
   it("should return undefined for non-existing port", () => {
@@ -105,25 +121,29 @@ describe("GraphStore", () => {
   it("should return specified port for existing port", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
 
     const expected: PortPayload = {
-      element: port1Request.element,
-      direction: port1Request.direction,
-      nodeId: node1Request.id,
+      element: addPortRequest1.element,
+      direction: addPortRequest1.direction,
+      nodeId: addNodeRequest1.id,
     };
 
-    expect(store.getPort(port1Request.id)).toEqual(expected);
+    expect(store.getPort(addPortRequest1.id)).toEqual(expected);
   });
 
   it("should return all added port ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
 
-    expect(store.getAllPortIds()).toEqual([port1Request.id]);
+    expect(store.getAllPortIds()).toEqual([addPortRequest1.id]);
   });
 
   it("should return undefined when getting ports of non-existing node", () => {
@@ -135,20 +155,26 @@ describe("GraphStore", () => {
   it("should return node port id for existing node", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
 
-    expect(store.getNodePortIds(node1Request.id)).toEqual([port1Request.id]);
+    expect(store.getNodePortIds(addNodeRequest1.id)).toEqual([
+      addPortRequest1.id,
+    ]);
   });
 
   it("should remove node port", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.removePort(port1Request.id);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.removePort(addPortRequest1.id);
 
-    expect(store.getPort(port1Request.id)).toEqual(undefined);
+    expect(store.getPort(addPortRequest1.id)).toEqual(undefined);
   });
 
   it("should return undefined when getting non-existing id", () => {
@@ -160,276 +186,363 @@ describe("GraphStore", () => {
   it("should return specified edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getEdge(edge1to2Request.id)).toEqual({
-      from: edge1to2Request.from,
-      to: edge1to2Request.to,
-      shape: edge1to2Request.shape,
-      priority: edge1to2Request.priority,
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+      from: addEdgeRequest12.from,
+      to: addEdgeRequest12.to,
+      shape: addEdgeRequest12.shape,
+      priority: addEdgeRequest12.priority,
     });
   });
 
   it("should return all edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getAllEdgeIds()).toEqual([edge1to2Request.id]);
+    expect(store.getAllEdgeIds()).toEqual([addEdgeRequest12.id]);
   });
 
   it("should remove edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
-    store.removeEdge(edge1to2Request.id);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+    store.removeEdge(addEdgeRequest12.id);
 
-    expect(store.getEdge(edge1to2Request.id)).toEqual(undefined);
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual(undefined);
   });
 
   it("should clear node", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    store.addNode(addNodeRequest1);
     store.clear();
 
-    expect(store.getNode(node1Request.id)).toEqual(undefined);
+    expect(store.getNode(addNodeRequest1.id)).toEqual(undefined);
   });
 
   it("should clear port", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
     store.clear();
 
-    expect(store.getPort(port1Request.id)).toEqual(undefined);
+    expect(store.getPort(addPortRequest1.id)).toEqual(undefined);
   });
 
   it("should clear node ports", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
     store.clear();
 
-    expect(store.getNodePortIds(node1Request.id)).toEqual(undefined);
+    expect(store.getNodePortIds(addNodeRequest1.id)).toEqual(undefined);
   });
 
   it("should clear edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
     store.clear();
 
-    expect(store.getEdge(edge1to2Request.id)).toEqual(undefined);
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual(undefined);
   });
 
   it("should return port incoming edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getPortIncomingEdgeIds(port2Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getPortIncomingEdgeIds(addPortRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return port outcoming edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getPortOutcomingEdgeIds(port1Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return port cycle edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addEdge(addEdgeRequest11);
 
-    expect(store.getPortCycleEdgeIds(port1Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getPortCycleEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
   it("should return port incoming edge ids as adjacent edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return port outcoming edge ids as adjacent edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getPortAdjacentEdgeIds(port1Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getPortAdjacentEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return port cycle edge ids as adjacent edge", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addEdge(addEdgeRequest11);
 
-    expect(store.getPortAdjacentEdgeIds(port1Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getPortAdjacentEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
   it("should return node incoming edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getNodeIncomingEdgeIds(node2Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getNodeIncomingEdgeIds(addNodeRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return node outcoming edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getNodeOutcomingEdgeIds(node1Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return node cycle edge ids", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addEdge(addEdgeRequest11);
 
-    expect(store.getNodeCycleEdgeIds(node1Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getNodeCycleEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
   it("should return node incoming edge ids as adjacent edges", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getNodeAdjacentEdgeIds(node2Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getNodeAdjacentEdgeIds(addNodeRequest2.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return node outcoming edge ids as adjacent edges", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addNode(node2Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to2Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
 
-    expect(store.getNodeAdjacentEdgeIds(node1Request.id)).toEqual([
-      edge1to2Request.id,
+    expect(store.getNodeAdjacentEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest12.id,
     ]);
   });
 
   it("should return node cycle edge ids as adjacent edges", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addPort(port1Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addEdge(addEdgeRequest11);
 
-    expect(store.getNodeAdjacentEdgeIds(node1Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getNodeAdjacentEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
   it("should update edge from", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addNode(node2Request);
-    store.addPort(port1Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeFrom(edge1to1Request.id, port2Request.id);
+    store.updateEdgeFrom(addEdgeRequest11.id, addPortRequest2.id);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 
   it("should update edge to", () => {
     const store = new GraphStore();
 
-    store.addNode(node1Request);
-    store.addNode(node2Request);
-    store.addPort(port1Request);
-    store.addPort(port2Request);
-    store.addEdge(edge1to1Request);
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeTo(edge1to1Request.id, port2Request.id);
+    store.updateEdgeTo(addEdgeRequest11.id, addPortRequest2.id);
 
-    expect(store.getPortAdjacentEdgeIds(port2Request.id)).toEqual([
-      edge1to1Request.id,
+    expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
+      addEdgeRequest11.id,
     ]);
   });
 });

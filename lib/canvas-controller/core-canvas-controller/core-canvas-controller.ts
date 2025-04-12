@@ -40,23 +40,24 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    const node = this.graphStore.getNode(nodeId)!;
-
-    node.x = request?.x ?? node.x;
-    node.y = request?.y ?? node.y;
-    node.centerFn = request.centerFn ?? node.centerFn;
+    this.graphStore.updateNodeCoordinatesRequest(nodeId, {
+      x: request.x,
+      y: request.y,
+      centerFn: request.centerFn,
+    });
 
     this.htmlView.updateNodeCoordinates(nodeId);
+
+    if (request.priority !== undefined) {
+      this.graphStore.updateNodePriority(nodeId, request.priority);
+      this.htmlView.updateNodePriority(nodeId);
+    }
+
     const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
 
     edgeIds.forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
-
-    if (request.priority !== undefined) {
-      node.priority = request.priority;
-      this.htmlView.updateNodePriority(nodeId);
-    }
   }
 
   public removeNode(nodeId: unknown): void {
@@ -73,9 +74,9 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    const port = this.graphStore.getPort(portId)!;
-
-    port.direction = request.direction ?? port.direction;
+    if (request.direction !== undefined) {
+      this.graphStore.updatePortDirection(portId, request.direction);
+    }
 
     const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
 
@@ -98,10 +99,8 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
-
     if (request.shape !== undefined) {
-      edge.shape = request.shape;
+      this.graphStore.updateEdgeShape(edgeId, request.shape);
       this.htmlView.updateEdgeShape(edgeId);
     }
 
@@ -116,7 +115,7 @@ export class CoreCanvasController implements CanvasController {
     this.htmlView.renderEdge(edgeId);
 
     if (request.priority !== undefined) {
-      edge.priority = request.priority;
+      this.graphStore.updateEdgePriority(edgeId, request.priority);
       this.htmlView.updateEdgePriority(edgeId);
     }
   }
