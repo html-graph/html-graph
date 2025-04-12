@@ -6,6 +6,13 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
+const log: string[] = [];
+
+const updateLog = (msg: string): void => {
+  log.push(msg);
+  console.log(log);
+};
+
 const builder: CanvasBuilder = new CanvasBuilder();
 const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -30,6 +37,10 @@ const addEdgeRequest: AddEdgeRequest = {
   from: "node-1-out",
   to: "node-2-in",
 };
+
+canvas.graph.onAfterNodeAdded.subscribe((nodeId) => {
+  updateLog(`Node added ${nodeId}`);
+});
 
 canvas
   .attach(canvasElement)
