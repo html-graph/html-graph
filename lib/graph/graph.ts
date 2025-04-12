@@ -1,3 +1,4 @@
+import { EventHandler } from "@/event-subject";
 import { GraphStore } from "../graph-store";
 import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
@@ -7,7 +8,64 @@ import { GraphPort } from "./graph-port";
  * This entity is responsible for providing access to end user in a safe way
  */
 export class Graph {
-  public constructor(private readonly graphStore: GraphStore) {}
+  public readonly onAfterNodeAdded: EventHandler<unknown>;
+
+  public readonly onAfterNodeCoordinatesUpdated: EventHandler<unknown>;
+
+  public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
+
+  public readonly onBeforeNodeRemoved: EventHandler<unknown>;
+
+  public readonly onAfterPortAdded: EventHandler<unknown>;
+
+  public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
+
+  public readonly onBeforePortRemoved: EventHandler<unknown>;
+
+  public readonly onAfterEdgeAdded: EventHandler<unknown>;
+
+  public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
+
+  public readonly onAfterEdgeAdjacentPortsUpdated: EventHandler<unknown>;
+
+  public readonly onAfterEdgePriorityUpdated: EventHandler<unknown>;
+
+  public readonly onBeforeEdgeRemoved: EventHandler<unknown>;
+
+  public readonly onBeforeClear: EventHandler<void>;
+
+  public constructor(private readonly graphStore: GraphStore) {
+    this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
+
+    this.onAfterNodeCoordinatesUpdated =
+      this.graphStore.onAfterNodeCoordinatesUpdated;
+
+    this.onAfterNodePriorityUpdated =
+      this.graphStore.onAfterNodePriorityUpdated;
+
+    this.onBeforeNodeRemoved = this.graphStore.onBeforeNodeRemoved;
+
+    this.onAfterPortAdded = this.graphStore.onAfterPortAdded;
+
+    this.onAfterPortDirectionUpdated =
+      this.graphStore.onAfterPortDirectionUpdated;
+
+    this.onBeforePortRemoved = this.graphStore.onBeforePortRemoved;
+
+    this.onAfterEdgeAdded = this.graphStore.onAfterEdgeAdded;
+
+    this.onAfterEdgeShapeUpdated = this.graphStore.onAfterEdgeShapeUpdated;
+
+    this.onAfterEdgeAdjacentPortsUpdated =
+      this.graphStore.onAfterEdgeAdjacentPortsUpdated;
+
+    this.onAfterEdgePriorityUpdated =
+      this.graphStore.onAfterEdgePriorityUpdated;
+
+    this.onBeforeEdgeRemoved = this.graphStore.onBeforeEdgeRemoved;
+
+    this.onBeforeClear = this.graphStore.onBeforeClear;
+  }
 
   public getNode(nodeId: unknown): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);
