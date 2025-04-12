@@ -146,12 +146,10 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
-
     store.updateNodeCoordinates(addNodeRequest1.id, {
-      x: 100,
-      y: 100,
-      centerFn,
+      x: undefined,
+      y: undefined,
+      centerFn: undefined,
     });
 
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
