@@ -1,11 +1,12 @@
 import { Point } from "@/point";
 import { GraphStore } from "./graph-store";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
 import { PortPayload } from "./port-payload";
 import { NodePayload } from "./node-payload";
+import { CenterFn } from "@/center-fn";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
   return {
@@ -93,6 +94,54 @@ describe("GraphStore", () => {
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
   });
 
+  it("should update node coordinates", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
+
+    store.updateNodeCoordinates(addNodeRequest1.id, {
+      x: 100,
+      y: 100,
+      centerFn,
+    });
+
+    const expected: NodePayload = {
+      element: addNodeRequest1.element,
+      x: 100,
+      y: 100,
+      centerFn,
+      priority: addNodeRequest1.priority,
+      ports: new Map(),
+    };
+
+    expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
+  });
+
+  it("should update node priority", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    store.updateNodePriority(addNodeRequest1.id, 10);
+
+    const expected: NodePayload = {
+      element: addNodeRequest1.element,
+      x: addNodeRequest1.x,
+      y: addNodeRequest1.y,
+      centerFn: addNodeRequest1.centerFn,
+      priority: 10,
+      ports: new Map(),
+    };
+
+    expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
+  });
+
   it("should return all added node ids", () => {
     const store = new GraphStore();
 
@@ -129,6 +178,25 @@ describe("GraphStore", () => {
     const expected: PortPayload = {
       element: addPortRequest1.element,
       direction: addPortRequest1.direction,
+      nodeId: addNodeRequest1.id,
+    };
+
+    expect(store.getPort(addPortRequest1.id)).toEqual(expected);
+  });
+
+  it("should update port direction", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    store.updatePortDirection(addPortRequest1.id, Math.PI);
+
+    const expected: PortPayload = {
+      element: addPortRequest1.element,
+      direction: Math.PI,
       nodeId: addNodeRequest1.id,
     };
 
@@ -202,6 +270,56 @@ describe("GraphStore", () => {
       to: addEdgeRequest12.to,
       shape: addEdgeRequest12.shape,
       priority: addEdgeRequest12.priority,
+    });
+  });
+
+  it("should update edge shape", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    const shape = new HorizontalEdgeShape();
+
+    store.updateEdgeShape(addEdgeRequest12.id, shape);
+
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+      from: addEdgeRequest12.from,
+      to: addEdgeRequest12.to,
+      shape: shape,
+      priority: addEdgeRequest12.priority,
+    });
+  });
+
+  it("should update edge priority", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    store.updateEdgePriority(addEdgeRequest12.id, 10);
+
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+      from: addEdgeRequest12.from,
+      to: addEdgeRequest12.to,
+      shape: addEdgeRequest12.shape,
+      priority: 10,
     });
   });
 

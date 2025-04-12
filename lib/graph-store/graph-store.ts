@@ -46,7 +46,7 @@ export class GraphStore {
     return this.nodes.get(nodeId);
   }
 
-  public updateNodeCoordinatesRequest(
+  public updateNodeCoordinates(
     nodeId: unknown,
     request: UpdateNodeCoordinatesRequest,
   ): void {
@@ -85,6 +85,12 @@ export class GraphStore {
     return this.ports.get(portId);
   }
 
+  public updatePortDirection(portId: unknown, direction: number): void {
+    const port = this.ports.get(portId)!;
+
+    port.direction = direction;
+  }
+
   public getAllPortIds(): readonly unknown[] {
     return Array.from(this.ports.keys());
   }
@@ -97,12 +103,6 @@ export class GraphStore {
     }
 
     return undefined;
-  }
-
-  public updatePortDirection(portId: unknown, direction: number): void {
-    const port = this.ports.get(portId)!;
-
-    port.direction = direction;
   }
 
   public removePort(portId: unknown): void {

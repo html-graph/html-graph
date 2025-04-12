@@ -40,7 +40,7 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    this.graphStore.updateNodeCoordinatesRequest(nodeId, {
+    this.graphStore.updateNodeCoordinates(nodeId, {
       x: request.x,
       y: request.y,
       centerFn: request.centerFn,
