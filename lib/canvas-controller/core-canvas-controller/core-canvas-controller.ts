@@ -99,17 +99,16 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
+    if (request.from !== undefined || request.to !== undefined) {
+      this.graphStore.updateEdgeAdjacentPorts(edgeId, {
+        from: request.from,
+        to: request.to,
+      });
+    }
+
     if (request.shape !== undefined) {
       this.graphStore.updateEdgeShape(edgeId, request.shape);
       this.htmlView.updateEdgeShape(edgeId);
-    }
-
-    if (request.from !== undefined) {
-      this.graphStore.updateEdgeFrom(edgeId, request.from);
-    }
-
-    if (request.to !== undefined) {
-      this.graphStore.updateEdgeTo(edgeId, request.to);
     }
 
     this.htmlView.renderEdge(edgeId);

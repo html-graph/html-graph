@@ -94,6 +94,20 @@ describe("GraphStore", () => {
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
   });
 
+  it("should emit event after node added", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterNodeAdded.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
+  });
+
   it("should update node coordinates", () => {
     const store = new GraphStore();
 
@@ -121,6 +135,26 @@ describe("GraphStore", () => {
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
   });
 
+  it("should emit event after updating node coordinates", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterNodeCoordinatesUpdated.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    store.updateNodeCoordinates(addNodeRequest1.id, {
+      x: undefined,
+      y: undefined,
+      centerFn: undefined,
+    });
+
+    expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
+  });
+
   it("should update node priority", () => {
     const store = new GraphStore();
 
@@ -142,6 +176,22 @@ describe("GraphStore", () => {
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
   });
 
+  it("should emit event after updating node priority", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterNodePriorityUpdated.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    store.updateNodePriority(addNodeRequest1.id, 10);
+
+    expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
+  });
+
   it("should return all added node ids", () => {
     const store = new GraphStore();
 
@@ -159,6 +209,22 @@ describe("GraphStore", () => {
     store.removeNode(addNodeRequest1.id);
 
     expect(store.getNode(addNodeRequest1.id)).toBe(undefined);
+  });
+
+  it("should emit before node removed", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onBeforeNodeRemoved.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    store.removeNode(addNodeRequest1.id);
+
+    expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
   it("should return undefined for non-existing port", () => {
@@ -184,6 +250,22 @@ describe("GraphStore", () => {
     expect(store.getPort(addPortRequest1.id)).toEqual(expected);
   });
 
+  it("should emit after port added", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterPortAdded.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
+  });
+
   it("should update port direction", () => {
     const store = new GraphStore();
 
@@ -201,6 +283,24 @@ describe("GraphStore", () => {
     };
 
     expect(store.getPort(addPortRequest1.id)).toEqual(expected);
+  });
+
+  it("should emit after port direction updated", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterPortDirectionUpdated.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    store.updatePortDirection(addPortRequest1.id, Math.PI);
+
+    expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
   });
 
   it("should return all added port ids", () => {
@@ -245,6 +345,23 @@ describe("GraphStore", () => {
     expect(store.getPort(addPortRequest1.id)).toEqual(undefined);
   });
 
+  it("should emit before port removed", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onBeforePortRemoved.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.removePort(addPortRequest1.id);
+
+    expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
+  });
+
   it("should return undefined when getting non-existing id", () => {
     const store = new GraphStore();
 
@@ -273,6 +390,27 @@ describe("GraphStore", () => {
     });
   });
 
+  it("should emit event after edge added", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterEdgeAdded.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
+  });
+
   it("should update edge shape", () => {
     const store = new GraphStore();
 
@@ -299,6 +437,31 @@ describe("GraphStore", () => {
     });
   });
 
+  it("should emit event after edge shape updated", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterEdgeShapeUpdated.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    const shape = new HorizontalEdgeShape();
+
+    store.updateEdgeShape(addEdgeRequest12.id, shape);
+
+    expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
+  });
+
   it("should update edge priority", () => {
     const store = new GraphStore();
 
@@ -321,6 +484,29 @@ describe("GraphStore", () => {
       shape: addEdgeRequest12.shape,
       priority: 10,
     });
+  });
+
+  it("should emit event after edge priority updated", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onAfterEdgePriorityUpdated.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    store.updateEdgePriority(addEdgeRequest12.id, 10);
+
+    expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
 
   it("should return all edge ids", () => {
@@ -358,6 +544,29 @@ describe("GraphStore", () => {
     expect(store.getEdge(addEdgeRequest12.id)).toEqual(undefined);
   });
 
+  it("should emit event before edge removed", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onBeforeEdgeRemoved.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1 = createAddPortRequest1();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    store.removeEdge(addEdgeRequest12.id);
+
+    expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
+  });
+
   it("should clear node", () => {
     const store = new GraphStore();
 
@@ -366,6 +575,20 @@ describe("GraphStore", () => {
     store.clear();
 
     expect(store.getNode(addNodeRequest1.id)).toEqual(undefined);
+  });
+
+  it("should emit event before clear", () => {
+    const store = new GraphStore();
+
+    const handler = jest.fn();
+
+    store.onBeforeClear.subscribe(handler);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    store.addNode(addNodeRequest1);
+    store.clear();
+
+    expect(handler).toHaveBeenCalled();
   });
 
   it("should clear port", () => {
@@ -636,7 +859,10 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeFrom(addEdgeRequest11.id, addPortRequest2.id);
+    store.updateEdgeAdjacentPorts(addEdgeRequest11.id, {
+      from: addPortRequest2.id,
+      to: undefined,
+    });
 
     expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
       addEdgeRequest11.id,
@@ -657,7 +883,10 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeTo(addEdgeRequest11.id, addPortRequest2.id);
+    store.updateEdgeAdjacentPorts(addEdgeRequest11.id, {
+      from: undefined,
+      to: addPortRequest2.id,
+    });
 
     expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
       addEdgeRequest11.id,
