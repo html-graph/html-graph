@@ -78,6 +78,14 @@ canvas.graph.onAfterEdgeShapeUpdated.subscribe((edgeId) => {
   updateLog(`Edge shape updated ${edgeId}`);
 });
 
+canvas.graph.onAfterEdgeAdjacentPortsUpdated.subscribe((edgeId) => {
+  updateLog(`Edge adjacent ports updated ${edgeId}`);
+});
+
+canvas.graph.onAfterEdgePriorityUpdated.subscribe((edgeId) => {
+  updateLog(`Edge priority updated ${edgeId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
