@@ -4,6 +4,8 @@ import { PortPayload } from "./port-payload";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
+import { UpdateNodeCoordinatesRequest } from "./update-node-coordinates-request";
+import { EdgeShape } from "@/edges";
 
 /**
  * This entity is responsible for storing state of graph
@@ -44,6 +46,23 @@ export class GraphStore {
     return this.nodes.get(nodeId);
   }
 
+  public updateNodeCoordinates(
+    nodeId: unknown,
+    request: UpdateNodeCoordinatesRequest,
+  ): void {
+    const node = this.nodes.get(nodeId)!;
+
+    node.x = request?.x ?? node.x;
+    node.y = request?.y ?? node.y;
+    node.centerFn = request.centerFn ?? node.centerFn;
+  }
+
+  public updateNodePriority(nodeId: unknown, priority: number): void {
+    const node = this.nodes.get(nodeId)!;
+
+    node.priority = priority;
+  }
+
   public removeNode(nodeId: unknown): void {
     this.nodes.delete(nodeId);
   }
@@ -64,6 +83,12 @@ export class GraphStore {
 
   public getPort(portId: unknown): PortPayload | undefined {
     return this.ports.get(portId);
+  }
+
+  public updatePortDirection(portId: unknown, direction: number): void {
+    const port = this.ports.get(portId)!;
+
+    port.direction = direction;
   }
 
   public getAllPortIds(): readonly unknown[] {
@@ -127,6 +152,18 @@ export class GraphStore {
       shape: edge.shape,
       priority: edge.priority,
     });
+  }
+
+  public updateEdgeShape(edgeId: unknown, shape: EdgeShape): void {
+    const edge = this.edges.get(edgeId)!;
+
+    edge.shape = shape;
+  }
+
+  public updateEdgePriority(edgeId: unknown, priority: number): void {
+    const edge = this.edges.get(edgeId)!;
+
+    edge.priority = priority;
   }
 
   public getAllEdgeIds(): readonly unknown[] {
