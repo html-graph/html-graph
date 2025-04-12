@@ -8,10 +8,11 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const log: string[] = [];
+const logElement = document.getElementById("log")!;
 
 const updateLog = (msg: string): void => {
   log.push(msg);
-  console.log(log);
+  logElement.innerText = log.join("\n");
 };
 
 const builder: CanvasBuilder = new CanvasBuilder();
@@ -63,7 +64,7 @@ canvas.graph.onAfterPortAdded.subscribe((portId) => {
 });
 
 canvas.graph.onAfterPortDirectionUpdated.subscribe((portId) => {
-  updateLog(`Port added ${portId}`);
+  updateLog(`Port direction updated ${portId}`);
 });
 
 canvas.graph.onBeforePortRemoved.subscribe((portId) => {
