@@ -52,9 +52,14 @@ canvas.graph.onAfterNodePriorityUpdated.subscribe((nodeId) => {
   updateLog(`Node priority updated ${nodeId}`);
 });
 
+canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+  updateLog(`Node removed ${nodeId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest)
-  .updateNode("node-1", { x: 100, y: 150, priority: 10 });
+  .updateNode("node-1", { x: 100, y: 150, priority: 10 })
+  .removeNode("node-1");
