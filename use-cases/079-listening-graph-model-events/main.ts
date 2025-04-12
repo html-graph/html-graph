@@ -18,6 +18,7 @@ const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const addNode1Request: AddNodeRequest = createInOutNode({
+  id: "node-1",
   name: "Node 1",
   x: 200,
   y: 400,
@@ -26,6 +27,7 @@ const addNode1Request: AddNodeRequest = createInOutNode({
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
+  id: "node-2",
   name: "Node 2",
   x: 500,
   y: 500,
@@ -54,4 +56,5 @@ canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
-  .addEdge(addEdgeRequest);
+  .addEdge(addEdgeRequest)
+  .updateNode("node-1", { x: 100, y: 150, priority: 10 });
