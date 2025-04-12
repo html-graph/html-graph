@@ -87,6 +87,10 @@ canvas.graph.onAfterEdgePriorityUpdated.subscribe((edgeId) => {
   updateLog(`Edge priority updated ${edgeId}`);
 });
 
+canvas.graph.onBeforeEdgeRemoved.subscribe((edgeId) => {
+  updateLog(`Edge removed ${edgeId}`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
