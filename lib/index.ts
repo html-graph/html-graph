@@ -59,5 +59,6 @@ export type { PriorityFn } from "./priority";
 export { HtmlGraphError } from "./error";
 
 export { EventSubject } from "./event-subject";
+export type { EventEmitter, EventHandler } from "./event-subject";
 
 export type { RenderingBox } from "./html-view";
