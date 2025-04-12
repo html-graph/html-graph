@@ -91,6 +91,10 @@ canvas.graph.onBeforeEdgeRemoved.subscribe((edgeId) => {
   updateLog(`Edge removed ${edgeId}`);
 });
 
+canvas.graph.onBeforeClear.subscribe(() => {
+  updateLog(`Canvas cleared`);
+});
+
 canvas
   .attach(canvasElement)
   .addNode(addNode1Request)
@@ -104,4 +108,5 @@ canvas
   })
   .updateNode("node-1", { x: 100, y: 150, priority: 10 })
   .updatePort("node-1-out", { direction: Math.PI })
-  .removeNode("node-1");
+  .removeNode("node-1")
+  .clear();
