@@ -141,7 +141,7 @@ describe("GraphStore", () => {
 
     const handler = jest.fn();
 
-    store.onAfterNodePositionUpdated.subscribe(handler);
+    store.onAfterNodeUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
 

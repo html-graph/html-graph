@@ -86,7 +86,7 @@ export class CoreCanvasController implements CanvasController {
   ) {
     this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
 
-    this.graphStore.onAfterNodePositionUpdated.subscribe(
+    this.graphStore.onAfterNodeUpdated.subscribe(
       this.onAfterNodePositionUpdated,
     );
 
@@ -182,7 +182,7 @@ export class CoreCanvasController implements CanvasController {
   public destroy(): void {
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
-    this.graphStore.onAfterNodePositionUpdated.unsubscribe(
+    this.graphStore.onAfterNodeUpdated.unsubscribe(
       this.onAfterNodePositionUpdated,
     );
 

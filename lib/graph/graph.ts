@@ -44,7 +44,7 @@ export class Graph {
     this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
 
     this.onAfterNodePositionUpdated =
-      this.graphStore.onAfterNodePositionUpdated;
+      this.graphStore.onAfterNodeUpdated;
 
     this.onAfterNodeCoordinatesUpdated = this.onAfterNodePositionUpdated;
 
