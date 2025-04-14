@@ -59,7 +59,7 @@ canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
   updateLog(`Node removed ${nodeId}`);
 });
 
-canvas.graph.onAfterPortAdded.subscribe((portId) => {
+canvas.graph.onAfterPortMarked.subscribe((portId) => {
   updateLog(`Port added ${portId}`);
 });
 
@@ -67,7 +67,7 @@ canvas.graph.onAfterPortUpdated.subscribe((portId) => {
   updateLog(`Port updated ${portId}`);
 });
 
-canvas.graph.onBeforePortRemoved.subscribe((portId) => {
+canvas.graph.onBeforePortUnmarked.subscribe((portId) => {
   updateLog(`Port removed ${portId}`);
 });
 

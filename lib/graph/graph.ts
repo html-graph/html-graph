@@ -22,6 +22,12 @@ export class Graph {
 
   public readonly onBeforeNodeRemoved: EventHandler<unknown>;
 
+  public readonly onAfterPortMarked: EventHandler<unknown>;
+
+  /**
+   * @deprecated
+   * use onAfterPortMarked instead
+   */
   public readonly onAfterPortAdded: EventHandler<unknown>;
 
   public readonly onAfterPortUpdated: EventHandler<unknown>;
@@ -32,6 +38,12 @@ export class Graph {
    */
   public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
 
+  public readonly onBeforePortUnmarked: EventHandler<unknown>;
+
+  /**
+   * @deprecated
+   * use onBeforePortUnmarked instead
+   */
   public readonly onBeforePortRemoved: EventHandler<unknown>;
 
   public readonly onAfterEdgeAdded: EventHandler<unknown>;
@@ -64,13 +76,17 @@ export class Graph {
 
     this.onBeforeNodeRemoved = this.graphStore.onBeforeNodeRemoved;
 
-    this.onAfterPortAdded = this.graphStore.onAfterPortAdded;
+    this.onAfterPortMarked = this.graphStore.onAfterPortAdded;
+
+    this.onAfterPortAdded = this.onAfterPortMarked;
 
     this.onAfterPortUpdated = this.graphStore.onAfterPortUpdated;
 
     this.onAfterPortDirectionUpdated = this.onAfterPortUpdated;
 
-    this.onBeforePortRemoved = this.graphStore.onBeforePortRemoved;
+    this.onBeforePortUnmarked = this.graphStore.onBeforePortRemoved;
+
+    this.onBeforePortRemoved = this.onBeforePortUnmarked;
 
     this.onAfterEdgeAdded = this.graphStore.onAfterEdgeAdded;
 
