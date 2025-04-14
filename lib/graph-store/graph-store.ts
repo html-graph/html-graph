@@ -45,7 +45,7 @@ export class GraphStore {
 
   public readonly onAfterPortAdded: EventHandler<unknown>;
 
-  private readonly onAfterPortDirectionUpdatedEmitter: EventEmitter<unknown>;
+  private readonly onAfterPortUpdatedEmitter: EventEmitter<unknown>;
 
   public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
 
@@ -61,7 +61,7 @@ export class GraphStore {
 
   public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
 
-  private readonly onAfterEdgeAdjacentPortsUpdatedEmitter: EventEmitter<unknown>;
+  private readonly onAfterEdgeUpdatedEmitter: EventEmitter<unknown>;
 
   public readonly onAfterEdgeAdjacentPortsUpdated: EventHandler<unknown>;
 
@@ -90,10 +90,8 @@ export class GraphStore {
 
     [this.onAfterPortAddedEmitter, this.onAfterPortAdded] = createPair();
 
-    [
-      this.onAfterPortDirectionUpdatedEmitter,
-      this.onAfterPortDirectionUpdated,
-    ] = createPair();
+    [this.onAfterPortUpdatedEmitter, this.onAfterPortDirectionUpdated] =
+      createPair();
 
     [this.onBeforePortRemovedEmitter, this.onBeforePortRemoved] = createPair();
 
@@ -101,10 +99,8 @@ export class GraphStore {
 
     [this.onAfterEdgeShapeUpdatedEmitter, this.onAfterEdgeShapeUpdated] =
       createPair();
-    [
-      this.onAfterEdgeAdjacentPortsUpdatedEmitter,
-      this.onAfterEdgeAdjacentPortsUpdated,
-    ] = createPair();
+    [this.onAfterEdgeUpdatedEmitter, this.onAfterEdgeAdjacentPortsUpdated] =
+      createPair();
 
     [this.onAfterEdgePriorityUpdatedEmitter, this.onAfterEdgePriorityUpdated] =
       createPair();
@@ -179,12 +175,11 @@ export class GraphStore {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    if (request.direction !== undefined) {
-      const port = this.ports.get(portId)!;
+    const port = this.ports.get(portId)!;
 
-      port.direction = request.direction;
-      this.onAfterPortDirectionUpdatedEmitter.emit(portId);
-    }
+    port.direction = request.direction ?? port.direction;
+
+    this.onAfterPortUpdatedEmitter.emit(portId);
   }
 
   public getAllPortIds(): readonly unknown[] {
@@ -217,7 +212,6 @@ export class GraphStore {
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     const edge = this.edges.get(edgeId)!;
 
-    // FIX DOUBLE RENDER!!!
     if (request.from !== undefined || request.to !== undefined) {
       this.removeEdgeInternal(edgeId);
       this.addEdgeInternal({
@@ -228,7 +222,15 @@ export class GraphStore {
         priority: request.priority ?? edge.priority,
       });
 
-      this.onAfterEdgeAdjacentPortsUpdatedEmitter.emit(edgeId);
+      if (request.shape !== undefined) {
+        this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
+      }
+
+      if (request.priority !== undefined) {
+        this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+      }
+
+      this.onAfterEdgeUpdatedEmitter.emit(edgeId);
     } else {
       if (request.shape !== undefined) {
         edge.shape = request.shape;
@@ -239,6 +241,8 @@ export class GraphStore {
         edge.priority = request.priority;
         this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
       }
+
+      this.onAfterEdgeUpdatedEmitter.emit(edgeId);
     }
   }
 
