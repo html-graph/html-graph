@@ -12,11 +12,11 @@ export class Graph {
 
   /**
    * @deprecated
-   * use onAfterNodePositionUpdated instead
+   * use onAfterNodeUpdated instead
    */
   public readonly onAfterNodeCoordinatesUpdated: EventHandler<unknown>;
 
-  public readonly onAfterNodePositionUpdated: EventHandler<unknown>;
+  public readonly onAfterNodeUpdated: EventHandler<unknown>;
 
   public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
 
@@ -24,6 +24,12 @@ export class Graph {
 
   public readonly onAfterPortAdded: EventHandler<unknown>;
 
+  public readonly onAfterPortUpdated: EventHandler<unknown>;
+
+  /**
+   * @deprecated
+   * use onAfterNodeUpdated instead
+   */
   public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
 
   public readonly onBeforePortRemoved: EventHandler<unknown>;
@@ -32,6 +38,12 @@ export class Graph {
 
   public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
 
+  public readonly onAfterEdgeUpdated: EventHandler<unknown>;
+
+  /**
+   * @deprecated
+   * use onAfterEdgeUpdated instead
+   */
   public readonly onAfterEdgeAdjacentPortsUpdated: EventHandler<unknown>;
 
   public readonly onAfterEdgePriorityUpdated: EventHandler<unknown>;
@@ -43,10 +55,9 @@ export class Graph {
   public constructor(private readonly graphStore: GraphStore) {
     this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
 
-    this.onAfterNodePositionUpdated =
-      this.graphStore.onAfterNodeUpdated;
+    this.onAfterNodeUpdated = this.graphStore.onAfterNodeUpdated;
 
-    this.onAfterNodeCoordinatesUpdated = this.onAfterNodePositionUpdated;
+    this.onAfterNodeCoordinatesUpdated = this.onAfterNodeUpdated;
 
     this.onAfterNodePriorityUpdated =
       this.graphStore.onAfterNodePriorityUpdated;
@@ -55,8 +66,9 @@ export class Graph {
 
     this.onAfterPortAdded = this.graphStore.onAfterPortAdded;
 
-    this.onAfterPortDirectionUpdated =
-      this.graphStore.onAfterPortUpdated;
+    this.onAfterPortUpdated = this.graphStore.onAfterPortUpdated;
+
+    this.onAfterPortDirectionUpdated = this.onAfterPortUpdated;
 
     this.onBeforePortRemoved = this.graphStore.onBeforePortRemoved;
 
@@ -64,8 +76,9 @@ export class Graph {
 
     this.onAfterEdgeShapeUpdated = this.graphStore.onAfterEdgeShapeUpdated;
 
-    this.onAfterEdgeAdjacentPortsUpdated =
-      this.graphStore.onAfterEdgeUpdated;
+    this.onAfterEdgeUpdated = this.graphStore.onAfterEdgeUpdated;
+
+    this.onAfterEdgeAdjacentPortsUpdated = this.onAfterEdgeUpdated;
 
     this.onAfterEdgePriorityUpdated =
       this.graphStore.onAfterEdgePriorityUpdated;

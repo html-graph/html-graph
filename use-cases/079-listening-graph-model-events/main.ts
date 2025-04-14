@@ -47,7 +47,7 @@ canvas.graph.onAfterNodeAdded.subscribe((nodeId) => {
   updateLog(`Node added ${nodeId}`);
 });
 
-canvas.graph.onAfterNodePositionUpdated.subscribe((nodeId) => {
+canvas.graph.onAfterNodeUpdated.subscribe((nodeId) => {
   updateLog(`Node coordinates updated ${nodeId}`);
 });
 
@@ -63,7 +63,7 @@ canvas.graph.onAfterPortAdded.subscribe((portId) => {
   updateLog(`Port added ${portId}`);
 });
 
-canvas.graph.onAfterPortDirectionUpdated.subscribe((portId) => {
+canvas.graph.onAfterPortUpdated.subscribe((portId) => {
   updateLog(`Port direction updated ${portId}`);
 });
 
@@ -79,7 +79,7 @@ canvas.graph.onAfterEdgeShapeUpdated.subscribe((edgeId) => {
   updateLog(`Edge shape updated ${edgeId}`);
 });
 
-canvas.graph.onAfterEdgeAdjacentPortsUpdated.subscribe((edgeId) => {
+canvas.graph.onAfterEdgeUpdated.subscribe((edgeId) => {
   updateLog(`Edge adjacent ports updated ${edgeId}`);
 });
 

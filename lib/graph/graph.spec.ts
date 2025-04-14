@@ -114,7 +114,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterNodePositionUpdated.subscribe(handler);
+    graph.onAfterNodeUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
 
@@ -228,7 +228,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterPortDirectionUpdated.subscribe(handler);
+    graph.onAfterPortUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
