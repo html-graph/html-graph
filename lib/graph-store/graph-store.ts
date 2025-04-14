@@ -221,29 +221,25 @@ export class GraphStore {
         shape: request.shape ?? edge.shape,
         priority: request.priority ?? edge.priority,
       });
-
-      if (request.shape !== undefined) {
-        this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
-      }
-
-      if (request.priority !== undefined) {
-        this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
-      }
-
-      this.onAfterEdgeUpdatedEmitter.emit(edgeId);
     } else {
       if (request.shape !== undefined) {
         edge.shape = request.shape;
-        this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
       }
 
       if (request.priority !== undefined) {
         edge.priority = request.priority;
-        this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
       }
-
-      this.onAfterEdgeUpdatedEmitter.emit(edgeId);
     }
+
+    if (request.shape !== undefined) {
+      this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
+    }
+
+    if (request.priority !== undefined) {
+      this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+    }
+
+    this.onAfterEdgeUpdatedEmitter.emit(edgeId);
   }
 
   public getAllEdgeIds(): readonly unknown[] {
