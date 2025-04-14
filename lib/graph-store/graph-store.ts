@@ -142,8 +142,8 @@ export class GraphStore {
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
     const node = this.nodes.get(nodeId)!;
 
-    node.x = request?.x ?? node.x;
-    node.y = request?.y ?? node.y;
+    node.x = request.x ?? node.x;
+    node.y = request.y ?? node.y;
     node.centerFn = request.centerFn ?? node.centerFn;
 
     this.onAfterNodePositionUpdatedEmitter.emit(nodeId);
@@ -179,9 +179,9 @@ export class GraphStore {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    const port = this.ports.get(portId)!;
-
     if (request.direction !== undefined) {
+      const port = this.ports.get(portId)!;
+
       port.direction = request.direction;
       this.onAfterPortDirectionUpdatedEmitter.emit(portId);
     }
@@ -217,28 +217,28 @@ export class GraphStore {
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     const edge = this.edges.get(edgeId)!;
 
-    // FIX DOUNBLE RENDER!!!
+    // FIX DOUBLE RENDER!!!
     if (request.from !== undefined || request.to !== undefined) {
       this.removeEdgeInternal(edgeId);
       this.addEdgeInternal({
         id: edgeId,
         from: request.from ?? edge.from,
         to: request.to ?? edge.to,
-        shape: edge.shape,
-        priority: edge.priority,
+        shape: request.shape ?? edge.shape,
+        priority: request.priority ?? edge.priority,
       });
 
       this.onAfterEdgeAdjacentPortsUpdatedEmitter.emit(edgeId);
-    }
+    } else {
+      if (request.shape !== undefined) {
+        edge.shape = request.shape;
+        this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
+      }
 
-    if (request.shape !== undefined) {
-      edge.shape = request.shape;
-      this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
-    }
-
-    if (request.priority !== undefined) {
-      edge.priority = request.priority;
-      this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+      if (request.priority !== undefined) {
+        edge.priority = request.priority;
+        this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+      }
     }
   }
 

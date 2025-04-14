@@ -1,8 +1,8 @@
 import { EdgeShape } from "@/edges";
 
 export interface UpdateEdgeRequest {
-  readonly from: unknown | undefined;
-  readonly to: unknown | undefined;
-  readonly shape: EdgeShape | undefined;
-  readonly priority: number | undefined;
+  readonly from?: unknown;
+  readonly to?: unknown;
+  readonly shape?: EdgeShape;
+  readonly priority?: number;
 }

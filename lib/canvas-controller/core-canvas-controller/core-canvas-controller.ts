@@ -62,7 +62,7 @@ export class CoreCanvasController implements CanvasController {
   };
 
   private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
-    this.htmlView.renderEdge(edgeId);
+    this.htmlView.updateEdgeShape(edgeId);
   };
 
   private readonly onAfterEdgeAdjacentPortsUpdated = (
@@ -135,12 +135,7 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    this.graphStore.updateNode(nodeId, {
-      x: request.x,
-      y: request.y,
-      centerFn: request.centerFn,
-      priority: request.priority,
-    });
+    this.graphStore.updateNode(nodeId, request);
   }
 
   public removeNode(nodeId: unknown): void {
@@ -152,9 +147,7 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    this.graphStore.updatePort(portId, {
-      direction: request.direction,
-    });
+    this.graphStore.updatePort(portId, request);
   }
 
   public unmarkPort(portId: unknown): void {
@@ -166,17 +159,11 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    this.graphStore.updateEdge(edgeId, {
-      from: request.from,
-      to: request.to,
-      shape: request.shape,
-      priority: request.priority,
-    });
+    this.graphStore.updateEdge(edgeId, request);
   }
 
   public removeEdge(edgeId: unknown): void {
     this.graphStore.removeEdge(edgeId);
-    this.htmlView.detachEdge(edgeId);
   }
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {
