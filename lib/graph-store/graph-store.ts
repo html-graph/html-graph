@@ -47,7 +47,7 @@ export class GraphStore {
 
   private readonly onAfterPortUpdatedEmitter: EventEmitter<unknown>;
 
-  public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
+  public readonly onAfterPortUpdated: EventHandler<unknown>;
 
   private readonly onBeforePortRemovedEmitter: EventEmitter<unknown>;
 
@@ -63,7 +63,7 @@ export class GraphStore {
 
   private readonly onAfterEdgeUpdatedEmitter: EventEmitter<unknown>;
 
-  public readonly onAfterEdgeAdjacentPortsUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgeUpdated: EventHandler<unknown>;
 
   private readonly onAfterEdgePriorityUpdatedEmitter: EventEmitter<unknown>;
 
@@ -90,8 +90,7 @@ export class GraphStore {
 
     [this.onAfterPortAddedEmitter, this.onAfterPortAdded] = createPair();
 
-    [this.onAfterPortUpdatedEmitter, this.onAfterPortDirectionUpdated] =
-      createPair();
+    [this.onAfterPortUpdatedEmitter, this.onAfterPortUpdated] = createPair();
 
     [this.onBeforePortRemovedEmitter, this.onBeforePortRemoved] = createPair();
 
@@ -99,8 +98,7 @@ export class GraphStore {
 
     [this.onAfterEdgeShapeUpdatedEmitter, this.onAfterEdgeShapeUpdated] =
       createPair();
-    [this.onAfterEdgeUpdatedEmitter, this.onAfterEdgeAdjacentPortsUpdated] =
-      createPair();
+    [this.onAfterEdgeUpdatedEmitter, this.onAfterEdgeUpdated] = createPair();
 
     [this.onAfterEdgePriorityUpdatedEmitter, this.onAfterEdgePriorityUpdated] =
       createPair();

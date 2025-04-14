@@ -96,7 +96,7 @@ export class CoreCanvasController implements CanvasController {
 
     this.graphStore.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
 
-    this.graphStore.onAfterPortDirectionUpdated.subscribe(
+    this.graphStore.onAfterPortUpdated.subscribe(
       this.onAfterPortDirectionUpdated,
     );
 
@@ -108,7 +108,7 @@ export class CoreCanvasController implements CanvasController {
       this.onAfterEdgeShapeUpdated,
     );
 
-    this.graphStore.onAfterEdgeAdjacentPortsUpdated.subscribe(
+    this.graphStore.onAfterEdgeUpdated.subscribe(
       this.onAfterEdgeAdjacentPortsUpdated,
     );
 
@@ -192,7 +192,7 @@ export class CoreCanvasController implements CanvasController {
 
     this.graphStore.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
 
-    this.graphStore.onAfterPortDirectionUpdated.unsubscribe(
+    this.graphStore.onAfterPortUpdated.unsubscribe(
       this.onAfterPortDirectionUpdated,
     );
 
@@ -204,7 +204,7 @@ export class CoreCanvasController implements CanvasController {
       this.onAfterEdgeShapeUpdated,
     );
 
-    this.graphStore.onAfterEdgeAdjacentPortsUpdated.unsubscribe(
+    this.graphStore.onAfterEdgeUpdated.unsubscribe(
       this.onAfterEdgeAdjacentPortsUpdated,
     );
 

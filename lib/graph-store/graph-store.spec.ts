@@ -304,7 +304,7 @@ describe("GraphStore", () => {
 
     const handler = jest.fn();
 
-    store.onAfterPortDirectionUpdated.subscribe(handler);
+    store.onAfterPortUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
