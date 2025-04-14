@@ -62,7 +62,7 @@ export class CoreHtmlView implements HtmlView {
     this.container.appendChild(wrapper);
     this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
 
-    this.updateNodeCoordinates(nodeId);
+    this.updateNodePosition(nodeId);
     this.updateNodePriority(nodeId);
 
     wrapper.style.visibility = "visible";
@@ -113,7 +113,7 @@ export class CoreHtmlView implements HtmlView {
     this.host.removeChild(this.container);
   }
 
-  public updateNodeCoordinates(nodeId: unknown): void {
+  public updateNodePosition(nodeId: unknown): void {
     const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const node = this.graphStore.getNode(nodeId)!;
     const { width, height } = node.element.getBoundingClientRect();

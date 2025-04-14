@@ -117,10 +117,11 @@ describe("GraphStore", () => {
 
     const centerFn: CenterFn = () => ({ x: 0, y: 0 });
 
-    store.updateNodeCoordinates(addNodeRequest1.id, {
+    store.updateNode(addNodeRequest1.id, {
       x: 100,
       y: 100,
       centerFn,
+      priority: undefined,
     });
 
     const expected: NodePayload = {
@@ -146,10 +147,11 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    store.updateNodeCoordinates(addNodeRequest1.id, {
+    store.updateNode(addNodeRequest1.id, {
       x: undefined,
       y: undefined,
       centerFn: undefined,
+      priority: undefined,
     });
 
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
@@ -162,7 +164,12 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    store.updateNodePriority(addNodeRequest1.id, 10);
+    store.updateNode(addNodeRequest1.id, {
+      x: undefined,
+      y: undefined,
+      centerFn: undefined,
+      priority: 10,
+    });
 
     const expected: NodePayload = {
       element: addNodeRequest1.element,
@@ -187,7 +194,12 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    store.updateNodePriority(addNodeRequest1.id, 10);
+    store.updateNode(addNodeRequest1.id, {
+      x: undefined,
+      y: undefined,
+      centerFn: undefined,
+      priority: 10,
+    });
 
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
@@ -274,7 +286,9 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    store.updatePortDirection(addPortRequest1.id, Math.PI);
+    store.updatePort(addPortRequest1.id, {
+      direction: Math.PI,
+    });
 
     const expected: PortPayload = {
       element: addPortRequest1.element,
@@ -298,7 +312,9 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    store.updatePortDirection(addPortRequest1.id, Math.PI);
+    store.updatePort(addPortRequest1.id, {
+      direction: Math.PI,
+    });
 
     expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
   });
@@ -427,7 +443,12 @@ describe("GraphStore", () => {
 
     const shape = new HorizontalEdgeShape();
 
-    store.updateEdgeShape(addEdgeRequest12.id, shape);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape,
+      priority: undefined,
+    });
 
     expect(store.getEdge(addEdgeRequest12.id)).toEqual({
       from: addEdgeRequest12.from,
@@ -457,7 +478,12 @@ describe("GraphStore", () => {
 
     const shape = new HorizontalEdgeShape();
 
-    store.updateEdgeShape(addEdgeRequest12.id, shape);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape,
+      priority: undefined,
+    });
 
     expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
@@ -476,7 +502,12 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    store.updateEdgePriority(addEdgeRequest12.id, 10);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape: undefined,
+      priority: 10,
+    });
 
     expect(store.getEdge(addEdgeRequest12.id)).toEqual({
       from: addEdgeRequest12.from,
@@ -504,7 +535,12 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    store.updateEdgePriority(addEdgeRequest12.id, 10);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape: undefined,
+      priority: 10,
+    });
 
     expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
@@ -859,9 +895,11 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeAdjacentPorts(addEdgeRequest11.id, {
+    store.updateEdge(addEdgeRequest11.id, {
       from: addPortRequest2.id,
       to: undefined,
+      shape: undefined,
+      priority: undefined,
     });
 
     expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([
@@ -883,9 +921,11 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest11);
 
-    store.updateEdgeAdjacentPorts(addEdgeRequest11.id, {
+    store.updateEdge(addEdgeRequest11.id, {
       from: undefined,
       to: addPortRequest2.id,
+      shape: undefined,
+      priority: undefined,
     });
 
     expect(store.getPortAdjacentEdgeIds(addPortRequest2.id)).toEqual([

@@ -121,9 +121,9 @@ export class BoxHtmlView implements HtmlView {
     }
   }
 
-  public updateNodeCoordinates(nodeId: unknown): void {
+  public updateNodePosition(nodeId: unknown): void {
     if (this.attachedNodes.has(nodeId)) {
-      this.htmlView.updateNodeCoordinates(nodeId);
+      this.htmlView.updateNodePosition(nodeId);
     } else {
       if (this.renderingBox.hasNode(nodeId)) {
         this.handleAttachNode(nodeId);

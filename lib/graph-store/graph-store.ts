@@ -4,10 +4,10 @@ import { PortPayload } from "./port-payload";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { UpdateNodeCoordinatesRequest } from "./update-node-coordinates-request";
+import { UpdateNodeRequest } from "./update-node-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { UpdateEdgeAdjacentPortsRequest } from "./update-edge-adjacent-port-request";
-import { EdgeShape } from "@/edges";
+import { UpdateEdgeRequest } from "./update-edge-request";
+import { UpdatePortRequest } from "./update-port-request";
 
 /**
  * This entity is responsible for storing state of graph
@@ -139,10 +139,7 @@ export class GraphStore {
     return this.nodes.get(nodeId);
   }
 
-  public updateNodeCoordinates(
-    nodeId: unknown,
-    request: UpdateNodeCoordinatesRequest,
-  ): void {
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
     const node = this.nodes.get(nodeId)!;
 
     node.x = request?.x ?? node.x;
@@ -150,13 +147,11 @@ export class GraphStore {
     node.centerFn = request.centerFn ?? node.centerFn;
 
     this.onAfterNodePositionUpdatedEmitter.emit(nodeId);
-  }
 
-  public updateNodePriority(nodeId: unknown, priority: number): void {
-    const node = this.nodes.get(nodeId)!;
-
-    node.priority = priority;
-    this.onAfterNodePriorityUpdatedEmitter.emit(nodeId);
+    if (request.priority !== undefined) {
+      node.priority = request.priority;
+      this.onAfterNodePriorityUpdatedEmitter.emit(nodeId);
+    }
   }
 
   public removeNode(nodeId: unknown): void {
@@ -183,11 +178,13 @@ export class GraphStore {
     return this.ports.get(portId);
   }
 
-  public updatePortDirection(portId: unknown, direction: number): void {
+  public updatePort(portId: unknown, request: UpdatePortRequest): void {
     const port = this.ports.get(portId)!;
 
-    port.direction = direction;
-    this.onAfterPortDirectionUpdatedEmitter.emit(portId);
+    if (request.direction !== undefined) {
+      port.direction = request.direction;
+      this.onAfterPortDirectionUpdatedEmitter.emit(portId);
+    }
   }
 
   public getAllPortIds(): readonly unknown[] {
@@ -217,36 +214,32 @@ export class GraphStore {
     this.onAfterEdgeAddedEmitter.emit(request.id);
   }
 
-  public updateEdgeShape(edgeId: unknown, shape: EdgeShape): void {
+  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     const edge = this.edges.get(edgeId)!;
 
-    edge.shape = shape;
-    this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
-  }
+    // FIX DOUNBLE RENDER!!!
+    if (request.from !== undefined || request.to !== undefined) {
+      this.removeEdgeInternal(edgeId);
+      this.addEdgeInternal({
+        id: edgeId,
+        from: request.from ?? edge.from,
+        to: request.to ?? edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
 
-  public updateEdgeAdjacentPorts(
-    edgeId: unknown,
-    request: UpdateEdgeAdjacentPortsRequest,
-  ): void {
-    const edge = this.edges.get(edgeId)!;
+      this.onAfterEdgeAdjacentPortsUpdatedEmitter.emit(edgeId);
+    }
 
-    this.removeEdgeInternal(edgeId);
-    this.addEdgeInternal({
-      id: edgeId,
-      from: request.from ?? edge.from,
-      to: request.to ?? edge.to,
-      shape: edge.shape,
-      priority: edge.priority,
-    });
-    this.onAfterEdgeAdjacentPortsUpdatedEmitter.emit(edgeId);
-  }
+    if (request.shape !== undefined) {
+      edge.shape = request.shape;
+      this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
+    }
 
-  public updateEdgePriority(edgeId: unknown, priority: number): void {
-    const edge = this.edges.get(edgeId)!;
-
-    edge.priority = priority;
-
-    this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+    if (request.priority !== undefined) {
+      edge.priority = request.priority;
+      this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
+    }
   }
 
   public getAllEdgeIds(): readonly unknown[] {

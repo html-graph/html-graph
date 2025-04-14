@@ -17,11 +17,107 @@ export class CoreCanvasController implements CanvasController {
 
   public readonly graph: Graph;
 
+  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+    this.htmlView.attachNode(nodeId);
+  };
+
+  private readonly onAfterNodePositionUpdated = (nodeId: unknown): void => {
+    this.htmlView.updateNodePosition(nodeId);
+
+    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+
+    edgeIds.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+  };
+
+  private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
+    this.htmlView.updateNodePriority(nodeId);
+  };
+
+  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
+      this.unmarkPort(portId);
+    });
+
+    this.htmlView.detachNode(nodeId);
+  };
+
+  private readonly onAfterPortDirectionUpdated = (portId: unknown): void => {
+    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+    edgeIds.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+  };
+
+  private readonly onBeforePortUnmarked = (portId: unknown): void => {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+  };
+
+  private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
+    this.htmlView.attachEdge(edgeId);
+  };
+
+  private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
+    this.htmlView.renderEdge(edgeId);
+  };
+
+  private readonly onAfterEdgeAdjacentPortsUpdated = (
+    edgeId: unknown,
+  ): void => {
+    this.htmlView.renderEdge(edgeId);
+  };
+
+  private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
+    this.htmlView.updateEdgePriority(edgeId);
+  };
+
+  private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
+    this.htmlView.detachEdge(edgeId);
+  };
+
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
   ) {
+    this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+
+    this.graphStore.onAfterNodePositionUpdated.subscribe(
+      this.onAfterNodePositionUpdated,
+    );
+
+    this.graphStore.onAfterNodePriorityUpdated.subscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
+
+    this.graphStore.onAfterPortDirectionUpdated.subscribe(
+      this.onAfterPortDirectionUpdated,
+    );
+
+    this.graphStore.onBeforePortRemoved.subscribe(this.onBeforePortUnmarked);
+
+    this.graphStore.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
+
+    this.graphStore.onAfterEdgeShapeUpdated.subscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+
+    this.graphStore.onAfterEdgeAdjacentPortsUpdated.subscribe(
+      this.onAfterEdgeAdjacentPortsUpdated,
+    );
+
+    this.graphStore.onAfterEdgePriorityUpdated.subscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeEdgeRemoved.subscribe(this.onBeforeEdgeRemoved);
+
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
   }
@@ -36,37 +132,19 @@ export class CoreCanvasController implements CanvasController {
 
   public addNode(request: AddNodeRequest): void {
     this.graphStore.addNode(request);
-    this.htmlView.attachNode(request.id);
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    this.graphStore.updateNodeCoordinates(nodeId, {
+    this.graphStore.updateNode(nodeId, {
       x: request.x,
       y: request.y,
       centerFn: request.centerFn,
-    });
-
-    this.htmlView.updateNodeCoordinates(nodeId);
-
-    if (request.priority !== undefined) {
-      this.graphStore.updateNodePriority(nodeId, request.priority);
-      this.htmlView.updateNodePriority(nodeId);
-    }
-
-    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-    edgeIds.forEach((edge) => {
-      this.htmlView.renderEdge(edge);
+      priority: request.priority,
     });
   }
 
   public removeNode(nodeId: unknown): void {
-    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
-      this.unmarkPort(portId);
-    });
-
     this.graphStore.removeNode(nodeId);
-    this.htmlView.detachNode(nodeId);
   }
 
   public markPort(request: MarkPortRequest): void {
@@ -74,49 +152,26 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    if (request.direction !== undefined) {
-      this.graphStore.updatePortDirection(portId, request.direction);
-    }
-
-    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-    edgeIds.forEach((edge) => {
-      this.htmlView.renderEdge(edge);
+    this.graphStore.updatePort(portId, {
+      direction: request.direction,
     });
   }
 
   public unmarkPort(portId: unknown): void {
-    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-
     this.graphStore.removePort(portId);
   }
 
   public addEdge(request: AddEdgeRequest): void {
     this.graphStore.addEdge(request);
-    this.htmlView.attachEdge(request.id);
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    if (request.from !== undefined || request.to !== undefined) {
-      this.graphStore.updateEdgeAdjacentPorts(edgeId, {
-        from: request.from,
-        to: request.to,
-      });
-    }
-
-    if (request.shape !== undefined) {
-      this.graphStore.updateEdgeShape(edgeId, request.shape);
-      this.htmlView.updateEdgeShape(edgeId);
-    }
-
-    this.htmlView.renderEdge(edgeId);
-
-    if (request.priority !== undefined) {
-      this.graphStore.updateEdgePriority(edgeId, request.priority);
-      this.htmlView.updateEdgePriority(edgeId);
-    }
+    this.graphStore.updateEdge(edgeId, {
+      from: request.from,
+      to: request.to,
+      shape: request.shape,
+      priority: request.priority,
+    });
   }
 
   public removeEdge(edgeId: unknown): void {
@@ -138,6 +193,40 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public destroy(): void {
+    this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
+
+    this.graphStore.onAfterNodePositionUpdated.unsubscribe(
+      this.onAfterNodePositionUpdated,
+    );
+
+    this.graphStore.onAfterNodePriorityUpdated.unsubscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
+
+    this.graphStore.onAfterPortDirectionUpdated.unsubscribe(
+      this.onAfterPortDirectionUpdated,
+    );
+
+    this.graphStore.onBeforePortRemoved.unsubscribe(this.onBeforePortUnmarked);
+
+    this.graphStore.onAfterEdgeAdded.unsubscribe(this.onAfterEdgeAdded);
+
+    this.graphStore.onAfterEdgeShapeUpdated.unsubscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+
+    this.graphStore.onAfterEdgeAdjacentPortsUpdated.unsubscribe(
+      this.onAfterEdgeAdjacentPortsUpdated,
+    );
+
+    this.graphStore.onAfterEdgePriorityUpdated.unsubscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeEdgeRemoved.unsubscribe(this.onBeforeEdgeRemoved);
+
     this.clear();
     this.htmlView.destroy();
   }
