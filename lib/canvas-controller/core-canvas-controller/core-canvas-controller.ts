@@ -21,7 +21,7 @@ export class CoreCanvasController implements CanvasController {
     this.htmlView.attachNode(nodeId);
   };
 
-  private readonly onAfterNodePositionUpdated = (nodeId: unknown): void => {
+  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
     this.htmlView.updateNodePosition(nodeId);
 
     const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
@@ -43,7 +43,7 @@ export class CoreCanvasController implements CanvasController {
     this.htmlView.detachNode(nodeId);
   };
 
-  private readonly onAfterPortDirectionUpdated = (portId: unknown): void => {
+  private readonly onAfterPortUpdated = (portId: unknown): void => {
     const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
 
     edgeIds.forEach((edge) => {
@@ -65,9 +65,7 @@ export class CoreCanvasController implements CanvasController {
     this.htmlView.updateEdgeShape(edgeId);
   };
 
-  private readonly onAfterEdgeAdjacentPortsUpdated = (
-    edgeId: unknown,
-  ): void => {
+  private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
     this.htmlView.renderEdge(edgeId);
   };
 
@@ -86,9 +84,7 @@ export class CoreCanvasController implements CanvasController {
   ) {
     this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
 
-    this.graphStore.onAfterNodeUpdated.subscribe(
-      this.onAfterNodePositionUpdated,
-    );
+    this.graphStore.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
 
     this.graphStore.onAfterNodePriorityUpdated.subscribe(
       this.onAfterNodePriorityUpdated,
@@ -96,9 +92,7 @@ export class CoreCanvasController implements CanvasController {
 
     this.graphStore.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
 
-    this.graphStore.onAfterPortUpdated.subscribe(
-      this.onAfterPortDirectionUpdated,
-    );
+    this.graphStore.onAfterPortUpdated.subscribe(this.onAfterPortUpdated);
 
     this.graphStore.onBeforePortRemoved.subscribe(this.onBeforePortUnmarked);
 
@@ -108,9 +102,7 @@ export class CoreCanvasController implements CanvasController {
       this.onAfterEdgeShapeUpdated,
     );
 
-    this.graphStore.onAfterEdgeUpdated.subscribe(
-      this.onAfterEdgeAdjacentPortsUpdated,
-    );
+    this.graphStore.onAfterEdgeUpdated.subscribe(this.onAfterEdgeUpdated);
 
     this.graphStore.onAfterEdgePriorityUpdated.subscribe(
       this.onAfterEdgePriorityUpdated,
@@ -182,9 +174,7 @@ export class CoreCanvasController implements CanvasController {
   public destroy(): void {
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
-    this.graphStore.onAfterNodeUpdated.unsubscribe(
-      this.onAfterNodePositionUpdated,
-    );
+    this.graphStore.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
 
     this.graphStore.onAfterNodePriorityUpdated.unsubscribe(
       this.onAfterNodePriorityUpdated,
@@ -192,9 +182,7 @@ export class CoreCanvasController implements CanvasController {
 
     this.graphStore.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
 
-    this.graphStore.onAfterPortUpdated.unsubscribe(
-      this.onAfterPortDirectionUpdated,
-    );
+    this.graphStore.onAfterPortUpdated.unsubscribe(this.onAfterPortUpdated);
 
     this.graphStore.onBeforePortRemoved.unsubscribe(this.onBeforePortUnmarked);
 
@@ -204,9 +192,7 @@ export class CoreCanvasController implements CanvasController {
       this.onAfterEdgeShapeUpdated,
     );
 
-    this.graphStore.onAfterEdgeUpdated.unsubscribe(
-      this.onAfterEdgeAdjacentPortsUpdated,
-    );
+    this.graphStore.onAfterEdgeUpdated.unsubscribe(this.onAfterEdgeUpdated);
 
     this.graphStore.onAfterEdgePriorityUpdated.unsubscribe(
       this.onAfterEdgePriorityUpdated,
