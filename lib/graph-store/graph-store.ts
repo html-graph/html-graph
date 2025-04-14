@@ -210,32 +210,28 @@ export class GraphStore {
   }
 
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    const edge = this.edges.get(edgeId)!;
-
     if (request.from !== undefined || request.to !== undefined) {
+      const edge = this.edges.get(edgeId)!;
+
       this.removeEdgeInternal(edgeId);
       this.addEdgeInternal({
         id: edgeId,
         from: request.from ?? edge.from,
         to: request.to ?? edge.to,
-        shape: request.shape ?? edge.shape,
-        priority: request.priority ?? edge.priority,
+        shape: edge.shape,
+        priority: edge.priority,
       });
-    } else {
-      if (request.shape !== undefined) {
-        edge.shape = request.shape;
-      }
-
-      if (request.priority !== undefined) {
-        edge.priority = request.priority;
-      }
     }
 
+    const edge = this.edges.get(edgeId)!;
+
     if (request.shape !== undefined) {
+      edge.shape = request.shape;
       this.onAfterEdgeShapeUpdatedEmitter.emit(edgeId);
     }
 
     if (request.priority !== undefined) {
+      edge.priority = request.priority;
       this.onAfterEdgePriorityUpdatedEmitter.emit(edgeId);
     }
 
