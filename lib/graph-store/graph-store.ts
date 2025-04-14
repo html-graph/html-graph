@@ -29,9 +29,9 @@ export class GraphStore {
 
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 
-  private readonly onAfterNodeCoordinatesUpdatedEmitter: EventEmitter<unknown>;
+  private readonly onAfterNodePositionUpdatedEmitter: EventEmitter<unknown>;
 
-  public readonly onAfterNodeCoordinatesUpdated: EventHandler<unknown>;
+  public readonly onAfterNodePositionUpdated: EventHandler<unknown>;
 
   private readonly onAfterNodePriorityUpdatedEmitter: EventEmitter<unknown>;
 
@@ -80,10 +80,8 @@ export class GraphStore {
   public constructor() {
     [this.onAfterNodeAddedEmitter, this.onAfterNodeAdded] = createPair();
 
-    [
-      this.onAfterNodeCoordinatesUpdatedEmitter,
-      this.onAfterNodeCoordinatesUpdated,
-    ] = createPair();
+    [this.onAfterNodePositionUpdatedEmitter, this.onAfterNodePositionUpdated] =
+      createPair();
 
     [this.onAfterNodePriorityUpdatedEmitter, this.onAfterNodePriorityUpdated] =
       createPair();
@@ -151,7 +149,7 @@ export class GraphStore {
     node.y = request?.y ?? node.y;
     node.centerFn = request.centerFn ?? node.centerFn;
 
-    this.onAfterNodeCoordinatesUpdatedEmitter.emit(nodeId);
+    this.onAfterNodePositionUpdatedEmitter.emit(nodeId);
   }
 
   public updateNodePriority(nodeId: unknown, priority: number): void {
