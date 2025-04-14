@@ -1,6 +1,5 @@
 # TODO
 
-- improve update API
 - add viewport event
 - listen to events in CanvasCoreController
 - built-in drag edge creation
