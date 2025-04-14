@@ -114,7 +114,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterNodeCoordinatesUpdated.subscribe(handler);
+    graph.onAfterNodePositionUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
 

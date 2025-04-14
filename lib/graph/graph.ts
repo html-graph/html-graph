@@ -10,7 +10,13 @@ import { GraphPort } from "./graph-port";
 export class Graph {
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 
+  /**
+   * @deprecated
+   * use onAfterNodePositionUpdated instead
+   */
   public readonly onAfterNodeCoordinatesUpdated: EventHandler<unknown>;
+
+  public readonly onAfterNodePositionUpdated: EventHandler<unknown>;
 
   public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
 
@@ -37,8 +43,10 @@ export class Graph {
   public constructor(private readonly graphStore: GraphStore) {
     this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
 
-    this.onAfterNodeCoordinatesUpdated =
-      this.graphStore.onAfterNodeCoordinatesUpdated;
+    this.onAfterNodePositionUpdated =
+      this.graphStore.onAfterNodePositionUpdated;
+
+    this.onAfterNodeCoordinatesUpdated = this.onAfterNodePositionUpdated;
 
     this.onAfterNodePriorityUpdated =
       this.graphStore.onAfterNodePriorityUpdated;

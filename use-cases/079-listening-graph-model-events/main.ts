@@ -47,7 +47,7 @@ canvas.graph.onAfterNodeAdded.subscribe((nodeId) => {
   updateLog(`Node added ${nodeId}`);
 });
 
-canvas.graph.onAfterNodeCoordinatesUpdated.subscribe((nodeId) => {
+canvas.graph.onAfterNodePositionUpdated.subscribe((nodeId) => {
   updateLog(`Node coordinates updated ${nodeId}`);
 });
 
