@@ -305,8 +305,8 @@ describe("BoxHtmlView", () => {
     node.x = 11;
     node.y = 11;
 
-    const spy = jest.spyOn(coreView, "updateNodeCoordinates");
-    boxView.updateNodeCoordinates(addNodeRequest.id);
+    const spy = jest.spyOn(coreView, "updateNodePosition");
+    boxView.updateNodePosition(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
@@ -321,7 +321,7 @@ describe("BoxHtmlView", () => {
     node.y = 2;
 
     const spy = jest.spyOn(coreView, "attachNode");
-    boxView.updateNodeCoordinates(addNodeRequest.id);
+    boxView.updateNodePosition(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
@@ -336,7 +336,7 @@ describe("BoxHtmlView", () => {
     node.y = 12;
 
     const spy = jest.spyOn(coreView, "attachEdge");
-    boxView.updateNodeCoordinates("node-1");
+    boxView.updateNodePosition("node-1");
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 

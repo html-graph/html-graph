@@ -15,7 +15,7 @@ export interface HtmlView {
 
   destroy(): void;
 
-  updateNodeCoordinates(nodeId: unknown): void;
+  updateNodePosition(nodeId: unknown): void;
 
   updateNodePriority(nodeId: unknown): void;
 

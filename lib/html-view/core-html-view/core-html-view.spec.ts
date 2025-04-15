@@ -294,7 +294,7 @@ describe("CoreHtmlView", () => {
     node.x = 100;
     node.y = 100;
 
-    htmlView.updateNodeCoordinates(addNodeRequest1.id);
+    htmlView.updateNodePosition(addNodeRequest1.id);
 
     const container = div.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;

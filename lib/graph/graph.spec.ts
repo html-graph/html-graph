@@ -114,16 +114,17 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterNodePositionUpdated.subscribe(handler);
+    graph.onAfterNodeUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
 
     store.addNode(addNodeRequest1);
 
-    store.updateNodeCoordinates(addNodeRequest1.id, {
+    store.updateNode(addNodeRequest1.id, {
       x: undefined,
       y: undefined,
       centerFn: undefined,
+      priority: undefined,
     });
 
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
@@ -141,7 +142,12 @@ describe("Graph", () => {
 
     store.addNode(addNodeRequest1);
 
-    store.updateNodePriority(addNodeRequest1.id, 10);
+    store.updateNode(addNodeRequest1.id, {
+      x: undefined,
+      y: undefined,
+      centerFn: undefined,
+      priority: 10,
+    });
 
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
@@ -205,7 +211,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterPortAdded.subscribe(handler);
+    graph.onAfterPortMarked.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -222,7 +228,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onAfterPortDirectionUpdated.subscribe(handler);
+    graph.onAfterPortUpdated.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -230,7 +236,9 @@ describe("Graph", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    store.updatePortDirection(addPortRequest1.id, Math.PI);
+    store.updatePort(addPortRequest1.id, {
+      direction: Math.PI,
+    });
 
     expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
   });
@@ -278,7 +286,7 @@ describe("Graph", () => {
 
     const handler = jest.fn();
 
-    graph.onBeforePortRemoved.subscribe(handler);
+    graph.onBeforePortUnmarked.subscribe(handler);
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -353,7 +361,12 @@ describe("Graph", () => {
 
     const shape = new HorizontalEdgeShape();
 
-    store.updateEdgeShape(addEdgeRequest12.id, shape);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape,
+      priority: undefined,
+    });
 
     expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
@@ -377,7 +390,12 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    store.updateEdgePriority(addEdgeRequest12.id, 10);
+    store.updateEdge(addEdgeRequest12.id, {
+      from: undefined,
+      to: undefined,
+      shape: undefined,
+      priority: 10,
+    });
 
     expect(handler).toHaveBeenCalledWith(addEdgeRequest12.id);
   });
