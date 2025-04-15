@@ -3,14 +3,14 @@ import { Viewport } from "./viewport";
 
 describe("Viewport", () => {
   it("should return initial viewport matrix", () => {
-    const transformer = new ViewportStore();
+    const viewportStore = new ViewportStore();
     jest
-      .spyOn(transformer, "getViewportMatrix")
+      .spyOn(viewportStore, "getViewportMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
-    const publicTransformer = new Viewport(transformer);
+    const viewport = new Viewport(viewportStore);
 
-    const viewportMatrix = publicTransformer.getViewportMatrix();
+    const viewportMatrix = viewport.getViewportMatrix();
 
     const expected: TransformState = {
       scale: 2,
@@ -22,14 +22,14 @@ describe("Viewport", () => {
   });
 
   it("should return initial content matrix", () => {
-    const transformer = new ViewportStore();
+    const viewportStore = new ViewportStore();
     jest
-      .spyOn(transformer, "getContentMatrix")
+      .spyOn(viewportStore, "getContentMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
 
-    const publicTransformer = new Viewport(transformer);
+    const viewport = new Viewport(viewportStore);
 
-    const viewportMatrix = publicTransformer.getContentMatrix();
+    const viewportMatrix = viewport.getContentMatrix();
 
     const expected: TransformState = {
       scale: 2,
@@ -41,36 +41,64 @@ describe("Viewport", () => {
   });
 
   it("should return viewport matrix as a new object", () => {
-    const transformer = new ViewportStore();
+    const viewportStore = new ViewportStore();
     const matrix: TransformState = {
       scale: 2,
       x: 1,
       y: 1,
     };
 
-    jest.spyOn(transformer, "getViewportMatrix").mockReturnValue(matrix);
+    jest.spyOn(viewportStore, "getViewportMatrix").mockReturnValue(matrix);
 
-    const publicTransformer = new Viewport(transformer);
+    const viewport = new Viewport(viewportStore);
 
-    const viewportMatrix = publicTransformer.getViewportMatrix();
+    const viewportMatrix = viewport.getViewportMatrix();
 
     expect(viewportMatrix).not.toBe(matrix);
   });
 
   it("should return content matrix as a new object", () => {
-    const transformer = new ViewportStore();
+    const viewportStore = new ViewportStore();
     const matrix: TransformState = {
       scale: 2,
       x: 1,
       y: 1,
     };
 
-    jest.spyOn(transformer, "getContentMatrix").mockReturnValue(matrix);
+    jest.spyOn(viewportStore, "getContentMatrix").mockReturnValue(matrix);
 
-    const publicTransformer = new Viewport(transformer);
+    const viewport = new Viewport(viewportStore);
 
-    const viewportMatrix = publicTransformer.getContentMatrix();
+    const viewportMatrix = viewport.getContentMatrix();
 
     expect(viewportMatrix).not.toBe(matrix);
+  });
+
+  it("should call callback before viewpoprt update", () => {
+    const viewportStore = new ViewportStore();
+
+    const viewport = new Viewport(viewportStore);
+
+    const onBeforeUpdate = jest.fn();
+
+    viewport.onBeforeUpdate.subscribe(onBeforeUpdate);
+
+    viewportStore.patchViewportMatrix({});
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
+  });
+
+  it("should call callback after viewpoprt update", () => {
+    const viewportStore = new ViewportStore();
+
+    const viewport = new Viewport(viewportStore);
+
+    const onAfterUpdate = jest.fn();
+
+    viewport.onAfterUpdate.subscribe(onAfterUpdate);
+
+    viewportStore.patchViewportMatrix({});
+
+    expect(onAfterUpdate).toHaveBeenCalled();
   });
 });

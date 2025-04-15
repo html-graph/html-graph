@@ -177,4 +177,24 @@ describe("ViewportStore", () => {
 
     expect(onAfterUpdate).toHaveBeenCalled();
   });
+
+  it("should call before update callback after patching content matrix", () => {
+    const transformer = new ViewportStore();
+    const onBeforeUpdate = jest.fn();
+    transformer.onBeforeUpdate.subscribe(onBeforeUpdate);
+
+    transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
+  });
+
+  it("should call before update callback after patching viewport matrix", () => {
+    const transformer = new ViewportStore();
+    const onBeforeUpdate = jest.fn();
+    transformer.onBeforeUpdate.subscribe(onBeforeUpdate);
+
+    transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
+  });
 });
