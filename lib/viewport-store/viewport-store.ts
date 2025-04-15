@@ -12,12 +12,12 @@ export class ViewportStore {
 
   private contentMatrix: TransformState = initialMatrix;
 
-  private readonly emitter: EventEmitter<void>;
+  private readonly afterUpdateEmitter: EventEmitter<void>;
 
   public readonly onAfterUpdate: EventHandler<void>;
 
   public constructor() {
-    [this.emitter, this.onAfterUpdate] = createPair<void>();
+    [this.afterUpdateEmitter, this.onAfterUpdate] = createPair<void>();
   }
 
   public getViewportMatrix(): TransformState {
@@ -36,7 +36,7 @@ export class ViewportStore {
     };
 
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
-    this.emitter.emit();
+    this.afterUpdateEmitter.emit();
   }
 
   public patchContentMatrix(matrix: PatchTransformRequest): void {
@@ -47,6 +47,6 @@ export class ViewportStore {
     };
 
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);
-    this.emitter.emit();
+    this.afterUpdateEmitter.emit();
   }
 }
