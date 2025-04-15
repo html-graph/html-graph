@@ -14,15 +14,15 @@ export class ViewportStore {
 
   private readonly afterUpdateEmitter: EventEmitter<void>;
 
-  public readonly onAfterUpdate: EventHandler<void>;
+  public readonly onAfterUpdated: EventHandler<void>;
 
   private readonly beforeUpdateEmitter: EventEmitter<void>;
 
-  public readonly onBeforeUpdate: EventHandler<void>;
+  public readonly onBeforeUpdated: EventHandler<void>;
 
   public constructor() {
-    [this.afterUpdateEmitter, this.onAfterUpdate] = createPair<void>();
-    [this.beforeUpdateEmitter, this.onBeforeUpdate] = createPair<void>();
+    [this.afterUpdateEmitter, this.onAfterUpdated] = createPair<void>();
+    [this.beforeUpdateEmitter, this.onBeforeUpdated] = createPair<void>();
   }
 
   public getViewportMatrix(): TransformState {

@@ -31,7 +31,7 @@ export class CoreHtmlView implements HtmlView {
   ) {
     this.host.appendChild(this.container);
 
-    this.viewportStore.onAfterUpdate.subscribe(this.applyTransform);
+    this.viewportStore.onAfterUpdated.subscribe(this.applyTransform);
   }
 
   public attach(canvasWrapper: HTMLElement): void {
@@ -105,7 +105,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public destroy(): void {
-    this.viewportStore.onAfterUpdate.unsubscribe(this.applyTransform);
+    this.viewportStore.onAfterUpdated.unsubscribe(this.applyTransform);
 
     this.clear();
     this.detach();

@@ -161,7 +161,7 @@ describe("ViewportStore", () => {
   it("should call callback after patching content matrix", () => {
     const transformer = new ViewportStore();
     const onAfterUpdate = jest.fn();
-    transformer.onAfterUpdate.subscribe(onAfterUpdate);
+    transformer.onAfterUpdated.subscribe(onAfterUpdate);
 
     transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -171,7 +171,7 @@ describe("ViewportStore", () => {
   it("should call callback after patching viewport matrix", () => {
     const transformer = new ViewportStore();
     const onAfterUpdate = jest.fn();
-    transformer.onAfterUpdate.subscribe(onAfterUpdate);
+    transformer.onAfterUpdated.subscribe(onAfterUpdate);
 
     transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -181,7 +181,7 @@ describe("ViewportStore", () => {
   it("should call before update callback after patching content matrix", () => {
     const transformer = new ViewportStore();
     const onBeforeUpdate = jest.fn();
-    transformer.onBeforeUpdate.subscribe(onBeforeUpdate);
+    transformer.onBeforeUpdated.subscribe(onBeforeUpdate);
 
     transformer.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -191,7 +191,7 @@ describe("ViewportStore", () => {
   it("should call before update callback after patching viewport matrix", () => {
     const transformer = new ViewportStore();
     const onBeforeUpdate = jest.fn();
-    transformer.onBeforeUpdate.subscribe(onBeforeUpdate);
+    transformer.onBeforeUpdated.subscribe(onBeforeUpdate);
 
     transformer.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 

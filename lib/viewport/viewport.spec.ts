@@ -81,7 +81,7 @@ describe("Viewport", () => {
 
     const onBeforeUpdate = jest.fn();
 
-    viewport.onBeforeUpdate.subscribe(onBeforeUpdate);
+    viewport.onBeforeUpdated.subscribe(onBeforeUpdate);
 
     viewportStore.patchViewportMatrix({});
 
@@ -95,7 +95,7 @@ describe("Viewport", () => {
 
     const onAfterUpdate = jest.fn();
 
-    viewport.onAfterUpdate.subscribe(onAfterUpdate);
+    viewport.onAfterUpdated.subscribe(onAfterUpdate);
 
     viewportStore.patchViewportMatrix({});
 

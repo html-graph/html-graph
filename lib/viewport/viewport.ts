@@ -5,14 +5,14 @@ import { ViewportStore, TransformState } from "../viewport-store";
  * This entity is responsible for providing viewport API
  */
 export class Viewport {
-  public readonly onBeforeUpdate: EventHandler<void>;
+  public readonly onBeforeUpdated: EventHandler<void>;
 
-  public readonly onAfterUpdate: EventHandler<void>;
+  public readonly onAfterUpdated: EventHandler<void>;
 
   public constructor(private readonly transformer: ViewportStore) {
-    this.onBeforeUpdate = this.transformer.onBeforeUpdate;
+    this.onBeforeUpdated = this.transformer.onBeforeUpdated;
 
-    this.onAfterUpdate = this.transformer.onAfterUpdate;
+    this.onAfterUpdated = this.transformer.onAfterUpdated;
   }
 
   public getViewportMatrix(): TransformState {
