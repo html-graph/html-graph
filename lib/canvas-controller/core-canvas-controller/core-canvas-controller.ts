@@ -77,6 +77,10 @@ export class CoreCanvasController implements CanvasController {
     this.htmlView.detachEdge(edgeId);
   };
 
+  private readonly onBeforeClear = (): void => {
+    this.htmlView.clear();
+  };
+
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
@@ -109,6 +113,8 @@ export class CoreCanvasController implements CanvasController {
     );
 
     this.graphStore.onBeforeEdgeRemoved.subscribe(this.onBeforeEdgeRemoved);
+
+    this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
 
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
@@ -199,6 +205,8 @@ export class CoreCanvasController implements CanvasController {
     );
 
     this.graphStore.onBeforeEdgeRemoved.unsubscribe(this.onBeforeEdgeRemoved);
+
+    this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
 
     this.clear();
     this.htmlView.destroy();
