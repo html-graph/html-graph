@@ -1,7 +1,6 @@
 # TODO
 
-- add viewport event
-- listen to events in CanvasCoreController
+- refactor canvas controller decorators
 - built-in drag edge creation
 - built-in background
 - arrows customization
