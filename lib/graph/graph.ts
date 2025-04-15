@@ -34,7 +34,7 @@ export class Graph {
 
   /**
    * @deprecated
-   * use onAfterNodeUpdated instead
+   * use onAfterPortUpdated instead
    */
   public readonly onAfterPortDirectionUpdated: EventHandler<unknown>;
 
