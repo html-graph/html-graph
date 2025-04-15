@@ -173,7 +173,6 @@ export class CoreCanvasController implements CanvasController {
   }
 
   public clear(): void {
-    this.htmlView.clear();
     this.graphStore.clear();
   }
 
