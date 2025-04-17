@@ -11,6 +11,7 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { CanvasDefaults, createDefaults, Defaults } from "./create-defaults";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
@@ -37,10 +38,15 @@ export class Canvas {
    */
   public readonly viewport: Viewport;
 
+  public readonly onBeforeDestroy: EventHandler<void>;
+
+  private readonly beforeDestroyEmitter: EventEmitter<void>;
+
   public constructor(
     private readonly controller: CanvasController,
     options: CanvasDefaults,
   ) {
+    [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
@@ -275,6 +281,7 @@ export class Canvas {
    * canvas element gets rolled back to initial state, and can not be reused
    */
   public destroy(): void {
+    this.beforeDestroyEmitter.emit();
     this.controller.destroy();
   }
 }

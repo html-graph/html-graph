@@ -724,4 +724,16 @@ describe("Canvas", () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it("should emit event before destroy", () => {
+    const { canvas } = createCanvas({});
+
+    const onBeforeDestroy = jest.fn();
+
+    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
+
+    canvas.destroy();
+
+    expect(onBeforeDestroy).toHaveBeenCalled();
+  });
 });
