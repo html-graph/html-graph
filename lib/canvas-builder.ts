@@ -4,7 +4,6 @@ import {
   DragOptions,
   UserTransformableViewportCanvasController,
   TransformOptions,
-  ResizeReactiveNodesCanvasController,
   CoreCanvasController,
   UserTransformableViewportVirtualScrollCanvasController,
   VirtualScrollOptions,
@@ -14,6 +13,7 @@ import { EventSubject } from "@/event-subject";
 import { Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
+import { ResizeReactiveNodesConfigurator } from "./configurators";
 
 export class CanvasBuilder {
   private canvasDefaults: CanvasDefaults = {};
@@ -125,10 +125,6 @@ export class CanvasBuilder {
       htmlView,
     );
 
-    if (this.hasResizeReactiveNodes) {
-      controller = new ResizeReactiveNodesCanvasController(controller);
-    }
-
     if (this.hasDraggableNode) {
       controller = new UserDraggableNodesCanvasController(
         controller,
@@ -151,6 +147,10 @@ export class CanvasBuilder {
     }
 
     const canvas = new Canvas(controller, this.canvasDefaults);
+
+    if (this.hasResizeReactiveNodes) {
+      ResizeReactiveNodesConfigurator.configure(canvas);
+    }
 
     this.reset();
 
