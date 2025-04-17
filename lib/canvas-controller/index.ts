@@ -22,6 +22,5 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
 } from "./user-transformable-viewport-canvas-controller";
-export { ResizeReactiveNodesCanvasController } from "./resize-reactive-nodes-canvas-controller";
 export { UserTransformableViewportVirtualScrollCanvasController } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
 export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
