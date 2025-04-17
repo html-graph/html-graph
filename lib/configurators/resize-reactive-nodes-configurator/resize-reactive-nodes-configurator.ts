@@ -1,28 +1,34 @@
 import { Canvas } from "@/canvas";
-import { TwoWayMap } from "./two-way-map";
 
 export class ResizeReactiveNodesConfigurator {
-  private readonly nodes = new TwoWayMap<unknown, Element>();
+  private readonly elementToNodeId = new Map<Element, unknown>();
 
   private readonly nodesResizeObserver: ResizeObserver;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     const node = this.canvas.graph.getNode(nodeId)!;
 
-    this.nodes.set(nodeId, node.element);
+    this.elementToNodeId.set(node.element, nodeId);
     this.nodesResizeObserver.observe(node.element);
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
-    const element = this.nodes.getByKey(nodeId)!;
+    const node = this.canvas.graph.getNode(nodeId)!;
 
-    this.nodes.deleteByKey(nodeId);
-    this.nodesResizeObserver.unobserve(element);
+    this.elementToNodeId.delete(node.element);
+    this.nodesResizeObserver.unobserve(node.element);
   };
 
   private readonly onBeforeClear = (): void => {
     this.nodesResizeObserver.disconnect();
-    this.nodes.clear();
+    this.elementToNodeId.clear();
+  };
+
+  private readonly onBeforeDestroy = (): void => {
+    this.canvas.graph.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
+    this.canvas.graph.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
+    this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
+    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
   };
 
   private constructor(private readonly canvas: Canvas) {
@@ -37,6 +43,7 @@ export class ResizeReactiveNodesConfigurator {
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
+    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
   public static configure(canvas: Canvas): void {
@@ -44,9 +51,9 @@ export class ResizeReactiveNodesConfigurator {
   }
 
   private handleNodeResize(element: HTMLElement): void {
-    const nodeId = this.nodes.getByValue(element)!;
+    const nodeId = this.elementToNodeId.get(element)!;
 
-    this.canvas.updateNode(nodeId, {});
+    this.canvas.updateNode(nodeId);
 
     const edges = this.canvas.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
