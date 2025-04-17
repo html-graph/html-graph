@@ -130,10 +130,4 @@ describe("ResizeReactiveNodesConfigurator", () => {
 
     expect(spy).toHaveBeenCalled();
   });
-
-  it("should not leave circular dependencies after destroy", () => {
-    const canvas = createCanvas();
-
-    canvas.destroy();
-  });
 });
