@@ -21,8 +21,8 @@ export function createNode(params: {
 const builder: CanvasBuilder = new CanvasBuilder();
 builder.enableUserTransformableViewport();
 
-const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const canvas: Canvas = builder.attach(canvasElement).build();
 canvas.attach(canvasElement);
 
 const addNodeRequests: AddNodeRequest[] = [];

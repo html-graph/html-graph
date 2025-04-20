@@ -29,13 +29,14 @@ const transformOptions: TransformOptions = {
   },
 };
 
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+
 const canvas: Canvas = builder
   .enableUserTransformableViewport(transformOptions)
+  .attach(canvasElement)
   .build();
 
 let angle = 0;
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 canvas.attach(canvasElement);
 

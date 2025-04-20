@@ -27,6 +27,7 @@ const canvas = new CanvasBuilder()
       },
     },
   })
+  .attach(canvasElement)
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({

@@ -7,6 +7,7 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const trigger = new EventSubject<RenderingBox>();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const canvas: Canvas = new CanvasBuilder()
   .setDefaults({
@@ -26,6 +27,7 @@ const canvas: Canvas = new CanvasBuilder()
   })
   .enableBoxAreaRendering(trigger)
   .enableUserDraggableNodes()
+  .attach(canvasElement)
   .build();
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;
@@ -68,8 +70,6 @@ map.forEach((_value, id) => {
   updateRectangle();
   boundsElement.style.visibility = "visible";
 });
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 canvas.attach(canvasElement);
 
