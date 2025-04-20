@@ -10,8 +10,17 @@ import {
   triggerResizeFor,
   wait,
 } from "@/mocks";
+import { HtmlGraphError } from "./error";
 
 describe("CanvasBuilder", () => {
+  it("should throw error when attach element not specified", () => {
+    const builder = new CanvasBuilder();
+
+    expect(() => {
+      builder.build();
+    }).toThrow(HtmlGraphError);
+  });
+
   it("should build canvas with specified defaults", () => {
     const builder = new CanvasBuilder();
     const canvasElement = document.createElement("div");

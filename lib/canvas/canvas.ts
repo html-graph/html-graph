@@ -63,7 +63,7 @@ export class Canvas {
 
   /**
    * @deprecated
-   * destroy and recreate canvas instead
+   * attach canvas once instead, then reattach wrapper element
    * detaches canvas from element when attached
    */
   public detach(): Canvas {
