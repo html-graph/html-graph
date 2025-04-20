@@ -66,10 +66,10 @@ const canvas = new CanvasBuilder()
     },
   })
   .enableResizeReactiveNodes()
+  .attach(document.getElementById("canvas"))
   .build();
 
 canvas
-  .attach(document.getElementById("canvas"))
   .addNode(
     createNode({
       name: "Node 1",
