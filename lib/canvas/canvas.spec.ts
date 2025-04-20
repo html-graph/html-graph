@@ -26,7 +26,9 @@ const createCanvas = (
     new CoreHtmlView(graphStore, viewportStore),
   );
 
-  const canvas = new Canvas(controller, options);
+  const element = document.createElement("div");
+
+  const canvas = new Canvas(element, controller, options);
 
   return { canvas, controller };
 };

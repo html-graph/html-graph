@@ -38,8 +38,8 @@ export function createNode(params: {
 const builder: CanvasBuilder = new CanvasBuilder();
 builder.enableResizeReactiveNodes();
 
-const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const canvas: Canvas = builder.attach(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createNode({
   id: "node-1",
@@ -60,7 +60,7 @@ const addEdgeRequest: AddEdgeRequest = {
   to: "node-2-in",
 };
 
-canvas.attach(canvasElement).addNode(addNode1Request).addNode(addNode2Request);
+canvas.addNode(addNode1Request).addNode(addNode2Request);
 
 const markPort1InRequest: MarkPortRequest = {
   id: "node-1-in",

@@ -27,6 +27,7 @@ const canvas = new CanvasBuilder()
       },
     },
   })
+  .attach(canvasElement)
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
@@ -62,7 +63,6 @@ const addNode4Request: AddNodeRequest = createInOutNode({
 });
 
 canvas
-  .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addNode(addNode3Request)

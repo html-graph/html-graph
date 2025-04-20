@@ -1,6 +1,8 @@
 import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+
 const canvas: Canvas = new CanvasBuilder()
   .setDefaults({
     edges: {
@@ -22,11 +24,8 @@ const canvas: Canvas = new CanvasBuilder()
       vertical: 25,
     },
   })
+  .attach(canvasElement)
   .build();
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-
-canvas.attach(canvasElement);
 
 let cnt = 0;
 

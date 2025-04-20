@@ -19,8 +19,8 @@ const canvasDefaults: CanvasDefaults = {
 
 builder.setDefaults(canvasDefaults);
 
-const canvas: Canvas = builder.build();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const canvas: Canvas = builder.attach(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
@@ -35,4 +35,4 @@ const addEdge1Request: AddEdgeRequest = {
   to: "node-1-in",
 };
 
-canvas.attach(canvasElement).addNode(addNode1Request).addEdge(addEdge1Request);
+canvas.addNode(addNode1Request).addEdge(addEdge1Request);

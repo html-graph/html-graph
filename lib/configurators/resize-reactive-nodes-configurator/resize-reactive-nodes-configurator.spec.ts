@@ -18,7 +18,9 @@ const createCanvas = (): Canvas => {
     new CoreHtmlView(graphStore, viewportStore),
   );
 
-  const canvas = new Canvas(controller, {});
+  const element = document.createElement("div");
+
+  const canvas = new Canvas(element, controller, {});
 
   ResizeReactiveNodesConfigurator.configure(canvas);
 

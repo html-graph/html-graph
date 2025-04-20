@@ -38,15 +38,20 @@ export class Canvas {
   public readonly viewport: Viewport;
 
   public constructor(
+    public readonly element: HTMLElement,
     private readonly controller: CanvasController,
     options: CanvasDefaults,
   ) {
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
+
+    this.attach(this.element);
   }
 
   /**
+   * @deprecated
+   * use CanvasBuilder.attach instead
    * attaches canvas to given element
    * detaches element first when canvas is attached
    */
@@ -57,6 +62,8 @@ export class Canvas {
   }
 
   /**
+   * @deprecated
+   * attach canvas once instead, then reattach wrapper element
    * detaches canvas from element when attached
    */
   public detach(): Canvas {

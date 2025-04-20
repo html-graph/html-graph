@@ -66,7 +66,7 @@ const transformOptions: TransformOptions = {
 
 builder.enableUserTransformableViewport(transformOptions);
 
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder.attach(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
@@ -90,7 +90,6 @@ const addEdgeRequest: AddEdgeRequest = {
 };
 
 canvas
-  .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
