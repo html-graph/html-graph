@@ -14,6 +14,7 @@ import {
 describe("CanvasBuilder", () => {
   it("should build canvas with specified defaults", () => {
     const builder = new CanvasBuilder();
+    const canvasElement = document.createElement("div");
 
     const canvas = builder
       .setDefaults({
@@ -21,9 +22,9 @@ describe("CanvasBuilder", () => {
           priority: () => 10,
         },
       })
+      .attach(canvasElement)
       .build();
 
-    const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
     canvas.addNode({
@@ -40,6 +41,7 @@ describe("CanvasBuilder", () => {
 
   it("should build canvas with specified options", () => {
     const builder = new CanvasBuilder();
+    const canvasElement = document.createElement("div");
 
     const canvas = builder
       .setOptions({
@@ -47,9 +49,9 @@ describe("CanvasBuilder", () => {
           priority: () => 10,
         },
       })
+      .attach(canvasElement)
       .build();
 
-    const canvasElement = document.createElement("div");
     canvas.attach(canvasElement);
 
     canvas.addNode({
@@ -67,9 +69,12 @@ describe("CanvasBuilder", () => {
   it("should build resize reactive canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.enableResizeReactiveNodes().build();
-
     const canvasElement = document.createElement("div");
+    const canvas = builder
+      .enableResizeReactiveNodes()
+      .attach(canvasElement)
+      .build();
+
     canvas.attach(canvasElement);
 
     const nodeRequest1: AddNodeRequest = {
@@ -118,9 +123,11 @@ describe("CanvasBuilder", () => {
   it("should build user draggable nodes canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.enableUserDraggableNodes().build();
-
     const canvasElement = createElement({ width: 1000, height: 1000 });
+    const canvas = builder
+      .enableUserDraggableNodes()
+      .attach(canvasElement)
+      .build();
 
     canvas.attach(canvasElement);
 
@@ -150,9 +157,11 @@ describe("CanvasBuilder", () => {
   it("should build user transformable canvas", () => {
     const builder = new CanvasBuilder();
 
-    const canvas = builder.enableUserTransformableViewport().build();
-
     const element = createElement({ width: 1000, height: 1000 });
+    const canvas = builder
+      .enableUserTransformableViewport()
+      .attach(element)
+      .build();
 
     canvas.attach(element);
 
@@ -171,9 +180,12 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder();
     const trigger = new EventSubject<RenderingBox>();
 
-    const canvas = builder.enableBoxAreaRendering(trigger).build();
-
     const canvasElement = document.createElement("div");
+    const canvas = builder
+      .enableBoxAreaRendering(trigger)
+      .attach(canvasElement)
+      .build();
+
     canvas.attach(canvasElement);
 
     canvas.addNode({
@@ -192,6 +204,7 @@ describe("CanvasBuilder", () => {
 
   it("should build canvas with virtual scroll", async () => {
     const builder = new CanvasBuilder();
+    const canvasElement = createElement({ width: 100, height: 100 });
 
     const canvas = builder
       .enableVirtualScroll({
@@ -200,9 +213,9 @@ describe("CanvasBuilder", () => {
           horizontal: 10,
         },
       })
+      .attach(canvasElement)
       .build();
 
-    const canvasElement = createElement({ width: 100, height: 100 });
     canvas.attach(canvasElement);
 
     canvas.addNode({

@@ -13,8 +13,14 @@ export interface CanvasController {
 
   readonly viewport: Viewport;
 
+  /**
+   * @deprecated
+   */
   attach(element: HTMLElement): void;
 
+  /**
+   * @deprecated
+   */
   detach(): void;
 
   addNode(node: AddNodeRequest): void;

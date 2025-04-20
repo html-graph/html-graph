@@ -38,6 +38,7 @@ export class Canvas {
   public readonly viewport: Viewport;
 
   public constructor(
+    public readonly element: HTMLElement,
     private readonly controller: CanvasController,
     options: CanvasDefaults,
   ) {

@@ -14,8 +14,11 @@ import { Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { ResizeReactiveNodesConfigurator } from "./configurators";
+import { HtmlGraphError } from "./error";
 
 export class CanvasBuilder {
+  private element: HTMLElement | null = null;
+
   private canvasDefaults: CanvasDefaults = {};
 
   private dragOptions: DragOptions | undefined = undefined;
@@ -32,6 +35,12 @@ export class CanvasBuilder {
 
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
+
+  public attach(element: HTMLElement): CanvasBuilder {
+    this.element = element;
+
+    return this;
+  }
 
   /**
    * specifies default values for graph entities
@@ -104,6 +113,12 @@ export class CanvasBuilder {
    * builds final canvas
    */
   public build(): Canvas {
+    if (this.element === null) {
+      throw new HtmlGraphError(
+        "unable to build canvas when no attach element specified",
+      );
+    }
+
     let trigger = this.boxRenderingTrigger;
 
     if (this.virtualScrollOptions !== undefined && trigger === undefined) {
@@ -146,7 +161,7 @@ export class CanvasBuilder {
       );
     }
 
-    const canvas = new Canvas(controller, this.canvasDefaults);
+    const canvas = new Canvas(this.element, controller, this.canvasDefaults);
 
     if (this.hasResizeReactiveNodes) {
       ResizeReactiveNodesConfigurator.configure(canvas);
@@ -158,6 +173,7 @@ export class CanvasBuilder {
   }
 
   private reset(): void {
+    this.element = null;
     this.canvasDefaults = {};
     this.dragOptions = undefined;
     this.transformOptions = undefined;
