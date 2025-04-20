@@ -47,6 +47,8 @@ export class Canvas {
   }
 
   /**
+   * @deprecated
+   * use CanvasBuilder.attach instead
    * attaches canvas to given element
    * detaches element first when canvas is attached
    */
@@ -57,6 +59,8 @@ export class Canvas {
   }
 
   /**
+   * @deprecated
+   * destroy and recreate canvas instead
    * detaches canvas from element when attached
    */
   public detach(): Canvas {
