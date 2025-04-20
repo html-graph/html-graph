@@ -37,7 +37,7 @@ builder
 
 const canvasElement = document.getElementById("canvas")!;
 const canvas: Canvas = builder.attach(canvasElement).build();
-canvas.attach(canvasElement);
+
 canvas.patchViewportMatrix({ scale: 4, x: -1000, y: -1000 });
 
 let angle = 0;

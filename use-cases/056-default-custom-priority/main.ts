@@ -95,7 +95,6 @@ const addEdge3Request: AddEdgeRequest = {
 };
 
 canvas
-  .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addNode(addNode3Request)

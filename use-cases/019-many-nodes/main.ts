@@ -39,7 +39,6 @@ builder
 
 const canvasElement = document.getElementById("canvas")!;
 const canvas: Canvas = builder.attach(canvasElement).build();
-canvas.attach(canvasElement);
 
 let offset = 300;
 const total = 1000;

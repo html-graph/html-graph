@@ -37,7 +37,6 @@ const addEdgeRequest: AddEdgeRequest = {
 };
 
 canvas
-  .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);

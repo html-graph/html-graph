@@ -38,8 +38,6 @@ const canvas: Canvas = builder
 
 let angle = 0;
 
-canvas.attach(canvasElement);
-
 const createNode: () => void = () => {
   const node = document.createElement("div");
   node.classList.add("node");

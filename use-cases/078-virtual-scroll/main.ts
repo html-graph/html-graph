@@ -27,8 +27,6 @@ const canvas: Canvas = new CanvasBuilder()
   .attach(canvasElement)
   .build();
 
-canvas.attach(canvasElement);
-
 let cnt = 0;
 
 let prevPortId: unknown | null = null;

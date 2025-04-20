@@ -63,7 +63,6 @@ const addNode4Request: AddNodeRequest = createInOutNode({
 });
 
 canvas
-  .attach(canvasElement)
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addNode(addNode3Request)

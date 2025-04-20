@@ -23,7 +23,6 @@ builder.enableUserTransformableViewport();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = builder.attach(canvasElement).build();
-canvas.attach(canvasElement);
 
 const addNodeRequests: AddNodeRequest[] = [];
 

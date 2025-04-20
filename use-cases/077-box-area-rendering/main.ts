@@ -71,8 +71,6 @@ map.forEach((_value, id) => {
   boundsElement.style.visibility = "visible";
 });
 
-canvas.attach(canvasElement);
-
 let cnt = 0;
 
 let prevPortId: unknown | null = null;

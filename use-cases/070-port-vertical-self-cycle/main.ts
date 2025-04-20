@@ -39,4 +39,4 @@ const addEdge1Request: AddEdgeRequest = {
   to: "node-1-out",
 };
 
-canvas.attach(canvasElement).addNode(addNode1Request).addEdge(addEdge1Request);
+canvas.addNode(addNode1Request).addEdge(addEdge1Request);
