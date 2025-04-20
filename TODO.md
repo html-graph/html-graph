@@ -1,5 +1,6 @@
 # TODO
 
+- refactor attach/detach API
 - refactor canvas controller decorators
 - built-in drag edge creation
 - built-in background
