@@ -405,23 +405,22 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should load elements around viewport on next tick after resize", async () => {
-    const { canvas } = create();
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
+    const element = createElement({ width: 100, height: 100 });
+    const { canvas } = create({ element });
 
     configureEdgeGraph(canvas);
 
     await wait(0);
 
-    canvasElement.getBoundingClientRect = (): DOMRect => {
+    element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(0, 0, 200, 200);
     };
 
-    triggerResizeFor(canvasElement);
+    triggerResizeFor(element);
 
     await wait(0);
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
   });
 
