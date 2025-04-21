@@ -16,7 +16,8 @@ const create = (): {
   const trigger = new EventSubject<RenderingBox>();
   const store = new GraphStore();
   const transformer = new ViewportStore();
-  const coreView = new CoreHtmlView(store, transformer);
+  const element = document.createElement("div");
+  const coreView = new CoreHtmlView(store, transformer, element);
   const boxView = new BoxHtmlView(coreView, store, trigger);
 
   return { trigger, store, coreView, boxView };

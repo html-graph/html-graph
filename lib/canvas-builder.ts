@@ -128,7 +128,11 @@ export class CanvasBuilder {
     const graphStore = new GraphStore();
     const viewportStore = new ViewportStore();
 
-    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore);
+    let htmlView: HtmlView = new CoreHtmlView(
+      graphStore,
+      viewportStore,
+      this.element,
+    );
 
     if (trigger !== undefined) {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);

@@ -28,6 +28,7 @@ export class CoreHtmlView implements HtmlView {
   public constructor(
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
+    private readonly element: HTMLElement,
   ) {
     this.host.appendChild(this.container);
 

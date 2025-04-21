@@ -12,10 +12,12 @@ import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
 const createHtmlController = (params?: {
   transformer?: ViewportStore;
   store?: GraphStore;
+  element?: HTMLElement;
 }): CoreHtmlView => {
   return new CoreHtmlView(
     params?.store ?? new GraphStore(),
     params?.transformer ?? new ViewportStore(),
+    params?.element ?? document.createElement("div"),
   );
 };
 
