@@ -1,7 +1,4 @@
 import { standardCenterFn } from "@/center-fn";
-import { CanvasController } from "../controller-controller";
-import { CoreCanvasController } from "../core-controller-controller";
-import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-controller-controller";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
@@ -13,6 +10,8 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
+import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
+import { CoreCanvasController } from "../core-canvas-controller";
 
 let innerWidth: number;
 let innerHeight: number;
