@@ -49,7 +49,7 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
   };
 }
 
-const element = document.getElementById("canvas")
+const element = document.getElementById("canvas");
 
 const canvas = new CanvasBuilder()
   .setDefaults({
