@@ -730,19 +730,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not dispatch onTransformStarted for next touch", () => {
-    const coreController = createController();
     const onTransformStarted = jest.fn();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
-        events: {
-          onTransformStarted: onTransformStarted,
-        },
-      },
-    );
     const element = createElement({ width: 1000, height: 1000 });
 
-    controller.attach(element);
+    createController({
+      element,
+      transformOptions: {
+        events: {
+          onTransformStarted,
+        },
+      },
+    });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
