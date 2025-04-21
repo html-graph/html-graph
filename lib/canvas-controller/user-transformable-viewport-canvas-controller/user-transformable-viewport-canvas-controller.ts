@@ -22,8 +22,6 @@ export class UserTransformableViewportCanvasController
 
   public readonly viewport: Viewport;
 
-  private element: HTMLElement | null = null;
-
   private prevTouches: TouchState | null = null;
 
   private window = window;
@@ -193,36 +191,18 @@ export class UserTransformableViewportCanvasController
 
   public constructor(
     private readonly canvas: CanvasController,
+    private readonly element: HTMLElement,
     transformOptions?: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
 
     this.viewport = this.canvas.viewport;
     this.graph = this.canvas.graph;
-  }
 
-  public attach(element: HTMLElement): void {
-    this.detach();
-    this.element = element;
     this.observer.observe(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
     this.element.addEventListener("wheel", this.onWheelScroll);
     this.element.addEventListener("touchstart", this.onTouchStart);
-
-    this.canvas.attach(this.element);
-  }
-
-  public detach(): void {
-    this.canvas.detach();
-
-    if (this.element !== null) {
-      this.observer.unobserve(this.element);
-      this.element.removeEventListener("mousedown", this.onMouseDown);
-      this.element.removeEventListener("wheel", this.onWheelScroll);
-      this.element.removeEventListener("touchstart", this.onTouchStart);
-
-      this.element = null;
-    }
   }
 
   public addNode(node: AddNodeRequest): void {
@@ -274,10 +254,13 @@ export class UserTransformableViewportCanvasController
   }
 
   public destroy(): void {
-    this.detach();
-
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
+
+    this.observer.unobserve(this.element);
+    this.element.removeEventListener("mousedown", this.onMouseDown);
+    this.element.removeEventListener("wheel", this.onWheelScroll);
+    this.element.removeEventListener("touchstart", this.onTouchStart);
 
     this.canvas.destroy();
   }
