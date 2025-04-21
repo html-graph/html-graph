@@ -393,20 +393,21 @@ describe("UserDraggableNodesCanvasController", () => {
   it("should change cursor back on node release", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const { controller } = createController({ element });
+    const nodeElement = createElement();
 
     controller.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
       priority: 0,
     });
 
-    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
-    expect(element.style.cursor).toBe("");
+    expect(nodeElement.style.cursor).toBe("");
   });
 
   it("should not change cursor back on node release for other than left mouse button", () => {
