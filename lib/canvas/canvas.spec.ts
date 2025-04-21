@@ -48,26 +48,6 @@ const createNode = (portId: unknown): AddNodeRequest => {
 };
 
 describe("Canvas", () => {
-  it("should attach controller", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "attach");
-
-    canvas.attach(document.createElement("div"));
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should detach controller", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "detach");
-
-    canvas.detach();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should add node on controller with specified element", () => {
     const { canvas, controller } = createCanvas({});
 

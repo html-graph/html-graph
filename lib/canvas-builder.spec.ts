@@ -34,8 +34,6 @@ describe("CanvasBuilder", () => {
       .setElement(canvasElement)
       .build();
 
-    canvas.attach(canvasElement);
-
     canvas.addNode({
       element: document.createElement("div"),
       x: 0,
@@ -61,8 +59,6 @@ describe("CanvasBuilder", () => {
       .setElement(canvasElement)
       .build();
 
-    canvas.attach(canvasElement);
-
     canvas.addNode({
       element: document.createElement("div"),
       x: 0,
@@ -83,8 +79,6 @@ describe("CanvasBuilder", () => {
       .enableResizeReactiveNodes()
       .setElement(canvasElement)
       .build();
-
-    canvas.attach(canvasElement);
 
     const nodeRequest1: AddNodeRequest = {
       id: "node-1",
@@ -138,8 +132,6 @@ describe("CanvasBuilder", () => {
       .setElement(canvasElement)
       .build();
 
-    canvas.attach(canvasElement);
-
     const element = createElement();
 
     canvas.addNode({
@@ -167,12 +159,8 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder();
 
     const element = createElement({ width: 1000, height: 1000 });
-    const canvas = builder
-      .enableUserTransformableViewport()
-      .setElement(element)
-      .build();
 
-    canvas.attach(element);
+    builder.enableUserTransformableViewport().setElement(element).build();
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -194,8 +182,6 @@ describe("CanvasBuilder", () => {
       .enableBoxAreaRendering(trigger)
       .setElement(canvasElement)
       .build();
-
-    canvas.attach(canvasElement);
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -224,8 +210,6 @@ describe("CanvasBuilder", () => {
       })
       .setElement(canvasElement)
       .build();
-
-    canvas.attach(canvasElement);
 
     canvas.addNode({
       element: document.createElement("div"),
