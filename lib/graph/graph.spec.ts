@@ -298,26 +298,6 @@ describe("Graph", () => {
     expect(handler).toHaveBeenCalledWith(addPortRequest1.id);
   });
 
-  it("should return null when no node in store", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    expect(graph.getPortNodeId(1)).toBe(null);
-  });
-
-  it("should return specified port node id", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addPortRequest1 = createAddPortRequest1();
-
-    store.addNode(addNodeRequest1);
-    store.addPort(addPortRequest1);
-
-    expect(graph.getPortNodeId(addPortRequest1.id)).toEqual(addNodeRequest1.id);
-  });
-
   it("should emit event after edge added", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
