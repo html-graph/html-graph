@@ -16,13 +16,15 @@ import { CoreCanvasController } from "../core-canvas-controller";
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (): {
+const createController = (params: {
+  element: HTMLElement;
+}): {
   controller: UserTransformableViewportCanvasController;
   coreController: CoreCanvasController;
 } => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = document.createElement("div");
+  const element = params.element ?? document.createElement("div");
 
   const coreController = new CoreCanvasController(
     graphStore,
@@ -132,10 +134,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updatePort on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -161,10 +160,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call unmarkPort on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -189,10 +185,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call addEdge on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -223,10 +216,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updateEdge on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -260,10 +250,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call removeEdge on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -297,10 +284,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call patchViewportMatrix on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     const spy = jest.spyOn(coreController, "patchViewportMatrix");
 
@@ -310,10 +294,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call patchContentMatrix on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     const spy = jest.spyOn(coreController, "patchContentMatrix");
 
@@ -323,10 +304,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call clear on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     const spy = jest.spyOn(coreController, "clear");
 
@@ -336,10 +314,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call destroy on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     const spy = jest.spyOn(coreController, "destroy");
 
@@ -348,27 +323,9 @@ describe("UserTransformableViewportCanvasController", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should call detach on destroy controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
-
-    const spy = jest.spyOn(controller, "detach");
-
-    controller.destroy();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should set cursor on mouse down", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement();
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown"));
 
