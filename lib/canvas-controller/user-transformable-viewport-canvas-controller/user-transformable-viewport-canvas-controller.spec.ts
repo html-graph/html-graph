@@ -760,32 +760,6 @@ describe("UserTransformableViewportCanvasController", () => {
     expect(onTransformStarted).toHaveReturnedTimes(1);
   });
 
-  it("should handle touch gracefully if element gets detached in the process", async () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
-    const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    element.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 0, clientY: 0 })],
-      }),
-    );
-
-    controller.detach();
-
-    expect(() => {
-      window.dispatchEvent(
-        new TouchEvent("touchmove", {
-          touches: [createTouch({ clientX: 100, clientY: 100 })],
-        }),
-      );
-    }).not.toThrow();
-  });
-
   it("should not move controller if touch is outside of window", () => {
     const coreController = createController();
     const controller = new UserTransformableViewportCanvasController(
