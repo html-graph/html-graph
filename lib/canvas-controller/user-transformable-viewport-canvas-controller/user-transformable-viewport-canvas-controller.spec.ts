@@ -361,16 +361,16 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should call onBeforeTransformChange for move with mouse", () => {
     const onBeforeTransformChange = jest.fn((): void => {});
+    const element = createElement({ width: 1000, height: 1000 });
 
     createController({
+      element,
       transformOptions: {
         events: {
           onBeforeTransformChange,
         },
       },
     });
-
-    const element = createElement({ width: 1000, height: 1000 });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -383,16 +383,16 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should call onTransformChange for move with mouse", () => {
     const onTransformChange = jest.fn((): void => {});
+    const element = createElement({ width: 1000, height: 1000 });
 
     createController({
+      element,
       transformOptions: {
         events: {
           onTransformChange,
         },
       },
     });
-
-    const element = createElement({ width: 1000, height: 1000 });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -404,21 +404,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should unset cursor after move with mouse finished", () => {
-    const coreController = createController();
     const onTransformFinished = jest.fn((): void => {});
-
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
-        events: {
-          onTransformChange: onTransformFinished,
-        },
-      },
-    );
-
     const element = createElement({ width: 1000, height: 1000 });
 
-    controller.attach(element);
+    createController({
+      element,
+      transformOptions: {
+        events: {
+          onTransformFinished,
+        },
+      },
+    });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
