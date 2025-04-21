@@ -52,16 +52,6 @@ export class CanvasBuilder {
   }
 
   /**
-   * @deprecated
-   * use setDefaults instead
-   */
-  public setOptions(options: CanvasDefaults): CanvasBuilder {
-    this.setDefaults(options);
-
-    return this;
-  }
-
-  /**
    * enables nodes draggable by user
    */
   public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {

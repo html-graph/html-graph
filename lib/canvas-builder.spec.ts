@@ -46,31 +46,6 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should build canvas with specified options", () => {
-    const builder = new CanvasBuilder();
-    const canvasElement = document.createElement("div");
-
-    const canvas = builder
-      .setOptions({
-        nodes: {
-          priority: () => 10,
-        },
-      })
-      .setElement(canvasElement)
-      .build();
-
-    canvas.addNode({
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    });
-
-    const container = canvasElement.children[0].children[0];
-    const nodeWrapper = container.children[0] as HTMLElement;
-
-    expect(nodeWrapper.style.zIndex).toBe("10");
-  });
-
   it("should build resize reactive canvas", () => {
     const builder = new CanvasBuilder();
 
