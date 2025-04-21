@@ -106,13 +106,12 @@ const createEdgeRequest = (): AddEdgeRequest => {
 
 describe("CoreCanvasController", () => {
   it("should create node", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(1);
   });
 
