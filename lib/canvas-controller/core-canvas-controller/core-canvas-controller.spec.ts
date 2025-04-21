@@ -375,10 +375,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should remove edge", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -392,10 +391,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should mark port", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
 
@@ -405,10 +403,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update port direction", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
 
@@ -444,10 +441,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should unmark port", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
     canvas.unmarkPort("port-1");
@@ -458,10 +454,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should remove edge when port gest unmarked", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -475,9 +470,8 @@ describe("CoreCanvasController", () => {
   });
 
   it("should patch viewport matrix", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
-    canvas.attach(element);
+    const canvas = createCanvasController({ element });
 
     canvas.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -486,9 +480,8 @@ describe("CoreCanvasController", () => {
   });
 
   it("should patch content matrix", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
-    canvas.attach(element);
+    const canvas = createCanvasController({ element });
 
     canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
@@ -497,10 +490,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should clear canvas", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -514,8 +506,8 @@ describe("CoreCanvasController", () => {
   });
 
   it("should clear canvas on destroy", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
