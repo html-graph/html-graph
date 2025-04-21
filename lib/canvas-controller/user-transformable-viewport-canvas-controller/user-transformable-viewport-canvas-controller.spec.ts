@@ -490,12 +490,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should scale controller on mouse wheel scroll", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-    controller.attach(element);
+    createController({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -514,12 +510,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should scale down controller on mouse wheel scroll backward", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-    controller.attach(element);
+    createController({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -538,12 +530,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should prevent default event of wheel scroll", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-    controller.attach(element);
+    createController({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
