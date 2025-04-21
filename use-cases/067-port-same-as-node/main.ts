@@ -48,7 +48,7 @@ const dragOptions: DragOptions = {
 builder.setDefaults(canvasDefaults).enableUserDraggableNodes(dragOptions);
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.attach(canvasElement).build();
+const canvas: Canvas = builder.setElement(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",

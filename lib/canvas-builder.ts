@@ -36,7 +36,7 @@ export class CanvasBuilder {
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
 
-  public attach(element: HTMLElement): CanvasBuilder {
+  public setElement(element: HTMLElement): CanvasBuilder {
     this.element = element;
 
     return this;

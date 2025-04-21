@@ -10,7 +10,7 @@ const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = builder
   .enableUserDraggableNodes()
-  .attach(canvasElement)
+  .setElement(canvasElement)
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({

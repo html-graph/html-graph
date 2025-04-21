@@ -31,7 +31,7 @@ describe("CanvasBuilder", () => {
           priority: () => 10,
         },
       })
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);
@@ -58,7 +58,7 @@ describe("CanvasBuilder", () => {
           priority: () => 10,
         },
       })
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);
@@ -81,7 +81,7 @@ describe("CanvasBuilder", () => {
     const canvasElement = document.createElement("div");
     const canvas = builder
       .enableResizeReactiveNodes()
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);
@@ -135,7 +135,7 @@ describe("CanvasBuilder", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
     const canvas = builder
       .enableUserDraggableNodes()
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);
@@ -169,7 +169,7 @@ describe("CanvasBuilder", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = builder
       .enableUserTransformableViewport()
-      .attach(element)
+      .setElement(element)
       .build();
 
     canvas.attach(element);
@@ -192,7 +192,7 @@ describe("CanvasBuilder", () => {
     const canvasElement = document.createElement("div");
     const canvas = builder
       .enableBoxAreaRendering(trigger)
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);
@@ -222,7 +222,7 @@ describe("CanvasBuilder", () => {
           horizontal: 10,
         },
       })
-      .attach(canvasElement)
+      .setElement(canvasElement)
       .build();
 
     canvas.attach(canvasElement);

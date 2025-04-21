@@ -38,7 +38,7 @@ builder
   .enableUserTransformableViewport();
 
 const canvasElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.attach(canvasElement).build();
+const canvas: Canvas = builder.setElement(canvasElement).build();
 
 let offset = 300;
 const total = 1000;

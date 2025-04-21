@@ -45,7 +45,7 @@ class NodesDragHandler {
   public constructor(private readonly element: HTMLElement) {
     const builder: CanvasBuilder = new CanvasBuilder();
     const canvasElement: HTMLElement = document.getElementById("canvas")!;
-    const canvas: Canvas = builder.attach(canvasElement).build();
+    const canvas: Canvas = builder.setElement(canvasElement).build();
 
     this.nodes.forEach((value, key) => {
       const addNodeRequest: AddNodeRequest = createInOutNode({

@@ -66,7 +66,7 @@ const transformOptions: TransformOptions = {
 
 builder.enableUserTransformableViewport(transformOptions);
 
-const canvas: Canvas = builder.attach(canvasElement).build();
+const canvas: Canvas = builder.setElement(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
