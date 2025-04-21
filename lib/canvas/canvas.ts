@@ -45,8 +45,6 @@ export class Canvas {
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
-
-    this.controller.attach(element);
   }
 
   /**
