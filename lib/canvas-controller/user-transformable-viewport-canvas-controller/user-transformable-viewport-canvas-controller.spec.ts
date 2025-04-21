@@ -17,16 +17,18 @@ import {
 let innerWidth: number;
 let innerHeight: number;
 
-const createCanvas = (): CanvasController => {
+const createCanvas = (): { controller: CanvasController } => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
 
-  return new CoreCanvasController(
+  const controller = new CoreCanvasController(
     graphStore,
     viewportStore,
     new CoreHtmlView(graphStore, viewportStore, element),
   );
+
+  return { controller };
 };
 
 describe("UserTransformableViewportCanvasController", () => {
