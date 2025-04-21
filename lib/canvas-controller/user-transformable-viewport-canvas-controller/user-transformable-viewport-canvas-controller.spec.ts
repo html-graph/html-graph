@@ -571,19 +571,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call finish event on mouse wheel scroll", async () => {
-    const coreController = createController();
-
     const onTransformFinished = jest.fn();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
+    const element = createElement({ width: 1000, height: 1000 });
+
+    createController({
+      element,
+      transformOptions: {
         events: {
-          onTransformFinished: onTransformFinished,
+          onTransformFinished,
         },
       },
-    );
-    const element = createElement({ width: 1000, height: 1000 });
-    controller.attach(element);
+    });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
