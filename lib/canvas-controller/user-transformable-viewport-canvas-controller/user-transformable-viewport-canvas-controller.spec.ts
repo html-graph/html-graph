@@ -12,12 +12,14 @@ import {
 } from "@/mocks";
 import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
 import { CoreCanvasController } from "../core-canvas-controller";
+import { TransformOptions } from "./options";
 
 let innerWidth: number;
 let innerHeight: number;
 
 const createController = (params?: {
-  element: HTMLElement;
+  element?: HTMLElement;
+  transformOptions?: TransformOptions;
 }): {
   controller: UserTransformableViewportCanvasController;
   coreController: CoreCanvasController;
@@ -35,6 +37,7 @@ const createController = (params?: {
   const controller = new UserTransformableViewportCanvasController(
     coreController,
     element,
+    params?.transformOptions,
   );
 
   return { coreController, controller };
