@@ -22,11 +22,13 @@ const createCanvas = (): CanvasController => {
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
 
-  return new CoreCanvasController(
+  const controller = new CoreCanvasController(
     graphStore,
     viewportStore,
     new CoreHtmlView(graphStore, viewportStore, element),
   );
+
+  return new UserTransformableViewportCanvasController(controller, element);
 };
 
 describe("UserTransformableViewportCanvasController", () => {
@@ -44,12 +46,11 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call addNode on canvas", () => {
-    const coreCanvas = createCanvas();
-    const canvas = new UserTransformableViewportCanvasController(coreCanvas);
+    const controller = createCanvas();
 
-    const spy = jest.spyOn(coreCanvas, "addNode");
+    const spy = jest.spyOn(controller, "addNode");
 
-    canvas.addNode({
+    controller.addNode({
       id: "node-1",
       element: document.createElement("div"),
       x: 0,
