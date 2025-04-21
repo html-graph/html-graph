@@ -367,17 +367,18 @@ describe("UserDraggableNodesCanvasController", () => {
   it("should move grabbed node with mouse", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const { controller } = createController({ element });
+    const nodeElement = createElement();
 
     controller.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
       priority: 0,
     });
 
-    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     window.dispatchEvent(
       createMouseMoveEvent({ movementX: 100, movementY: 100 }),
