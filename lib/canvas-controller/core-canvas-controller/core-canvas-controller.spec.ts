@@ -13,11 +13,12 @@ import { createElement } from "@/mocks";
 const createCanvasController = (): CoreCanvasController => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const element = document.createElement("div");
 
   return new CoreCanvasController(
     graphStore,
     viewportStore,
-    new CoreHtmlView(graphStore, viewportStore),
+    new CoreHtmlView(graphStore, viewportStore, element),
   );
 };
 

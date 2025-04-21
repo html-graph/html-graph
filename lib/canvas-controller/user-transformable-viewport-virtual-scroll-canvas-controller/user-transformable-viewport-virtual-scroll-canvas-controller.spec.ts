@@ -25,11 +25,13 @@ const create = (
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const element = document.createElement("div");
+
   const coreCanvas = new CoreCanvasController(
     graphStore,
     viewportStore,
     new BoxHtmlView(
-      new CoreHtmlView(graphStore, viewportStore),
+      new CoreHtmlView(graphStore, viewportStore, element),
       graphStore,
       trigger,
     ),
