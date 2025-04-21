@@ -21,7 +21,7 @@ const createController = (): { coreController: CoreCanvasController } => {
     new CoreHtmlView(graphStore, viewportStore, element),
   );
 
-  return coreController;
+  return { coreController };
 };
 
 describe("UserDraggableNodesCanvasController", () => {
