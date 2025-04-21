@@ -17,18 +17,16 @@ import {
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (): CanvasController => {
+const createCanvas = (): CanvasController => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
 
-  const controller = new CoreCanvasController(
+  return new CoreCanvasController(
     graphStore,
     viewportStore,
     new CoreHtmlView(graphStore, viewportStore, element),
   );
-
-  return new UserTransformableViewportCanvasController(controller, element);
 };
 
 describe("UserTransformableViewportCanvasController", () => {
@@ -46,11 +44,12 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call addNode on canvas", () => {
-    const controller = createController();
+    const coreCanvas = createCanvas();
+    const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
-    const spy = jest.spyOn(controller, "addNode");
+    const spy = jest.spyOn(coreCanvas, "addNode");
 
-    controller.addNode({
+    canvas.addNode({
       id: "node-1",
       element: document.createElement("div"),
       x: 0,
@@ -63,7 +62,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updateNode on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -83,7 +82,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call removeNode on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -103,7 +102,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call markPort on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -128,7 +127,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updatePort on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -155,7 +154,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call unmarkPort on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -181,7 +180,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call addEdge on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -213,7 +212,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updateEdge on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -248,7 +247,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call removeEdge on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     canvas.addNode({
@@ -283,7 +282,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call patchViewportMatrix on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     const spy = jest.spyOn(coreCanvas, "patchViewportMatrix");
@@ -294,7 +293,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call patchContentMatrix on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     const spy = jest.spyOn(coreCanvas, "patchContentMatrix");
@@ -305,7 +304,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call clear on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     const spy = jest.spyOn(coreCanvas, "clear");
@@ -316,7 +315,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call destroy on canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     const spy = jest.spyOn(coreCanvas, "destroy");
@@ -327,7 +326,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call detach on destroy canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
 
     const spy = jest.spyOn(canvas, "detach");
@@ -338,7 +337,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should set cursor on mouse down", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement();
 
@@ -350,7 +349,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not set cursor on right mouse button down", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement();
 
@@ -362,7 +361,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should move canvas with mouse", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -380,7 +379,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onBeforeTransformChange for move with mouse", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onBeforeTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -403,7 +402,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onTransformChange for move with mouse", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -426,7 +425,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should unset cursor after move with mouse finished", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformFinished = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -450,7 +449,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not move canvas with mouse when pointer is outside of window", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -473,7 +472,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not move canvas with mouse when pointer is inside window but outside of element", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -496,7 +495,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not unset cursor left mouse button was not releaseed", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformChange = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -520,7 +519,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should scale canvas on mouse wheel scroll", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
     canvas.attach(element);
@@ -542,7 +541,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should scale down canvas on mouse wheel scroll backward", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
     canvas.attach(element);
@@ -564,7 +563,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should prevent default event of wheel scroll", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
     canvas.attach(element);
@@ -583,7 +582,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call start event on mouse wheel scroll", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onTransformStarted = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -606,7 +605,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call finish event on mouse wheel scroll", async () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onTransformFinished = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -630,7 +629,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call finish after 500ms span without events", async () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onTransformFinished = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -657,7 +656,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call start before finish on wheel scale", async () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onTransformStarted = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -683,7 +682,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should move canvas with touch", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -707,7 +706,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should stop movement on touchend", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -739,7 +738,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should stop movement on touchcancel", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -771,7 +770,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not dispatch onTransformStarted for next touch", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformStarted = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
       events: {
@@ -801,7 +800,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should handle touch gracefully if element gets detached in the process", async () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -825,7 +824,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not move canvas if touch is outside of window", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -849,7 +848,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not move canvas if touch is outside of canvas", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -873,7 +872,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should move and scale canvas with two touches", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -903,7 +902,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should keep moving canvas after move touches ended", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas);
     const element = createElement({ width: 1000, height: 1000 });
 
@@ -936,7 +935,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onTransformStarted for move with mouse", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformStarted = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -955,7 +954,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onTransformStarted for move with touch", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformStarted = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -978,7 +977,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onTransformFinished on finish move with mouse", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformFinished = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -998,7 +997,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onTransformFinished on finish move with touch", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const onTransformFinished = jest.fn((): void => {});
 
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -1023,7 +1022,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not scale canvas if mouse wheel event not valid", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
       scale: {
         mouseWheelEventVerifier: (event: WheelEvent): boolean => event.ctrlKey,
@@ -1046,7 +1045,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call resize start event on host element resize", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onResizeTransformStarted = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
@@ -1062,7 +1061,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call resize finish event on host element resize", () => {
-    const coreCanvas = createController();
+    const coreCanvas = createCanvas();
 
     const onResizeTransformFinished = jest.fn();
     const canvas = new UserTransformableViewportCanvasController(coreCanvas, {
