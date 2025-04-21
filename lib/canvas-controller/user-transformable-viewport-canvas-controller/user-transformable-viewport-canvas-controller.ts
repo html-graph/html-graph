@@ -56,7 +56,7 @@ export class UserTransformableViewportCanvasController
     const deltaViewX = -event.movementX;
     const deltaViewY = -event.movementY;
 
-    this.moveViewport(this.element, deltaViewX, deltaViewY);
+    this.moveViewport(deltaViewX, deltaViewY);
   };
 
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
@@ -78,7 +78,7 @@ export class UserTransformableViewportCanvasController
 
     event.preventDefault();
 
-    const { left, top } = this.element!.getBoundingClientRect();
+    const { left, top } = this.element.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
     const deltaScale =
@@ -91,7 +91,7 @@ export class UserTransformableViewportCanvasController
       this.options.onTransformStarted();
     }
 
-    this.scaleViewport(this.element!, deltaViewScale, centerX, centerY);
+    this.scaleViewport(deltaViewScale, centerX, centerY);
 
     if (this.wheelFinishTimer !== null) {
       clearTimeout(this.wheelFinishTimer);
@@ -121,17 +121,11 @@ export class UserTransformableViewportCanvasController
   private readonly onWindowTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
-    const element = this.element;
-
-    if (element === null) {
-      return;
-    }
-
     const currentTouches = processTouch(event);
 
     const isEvery = currentTouches.touches.every(
       (t) =>
-        isPointOnElement(element, t[0], t[1]) &&
+        isPointOnElement(this.element, t[0], t[1]) &&
         isPointOnWindow(this.window, t[0], t[1]),
     );
 
@@ -142,20 +136,19 @@ export class UserTransformableViewportCanvasController
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
-        element,
         -(currentTouches.x - this.prevTouches!.x),
         -(currentTouches.y - this.prevTouches!.y),
       );
     }
 
     if (currentTouches.touchesCnt === 2) {
-      const { left, top } = element.getBoundingClientRect();
+      const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches!.x - left;
       const y = this.prevTouches!.y - top;
       const deltaScale = currentTouches.scale / this.prevTouches!.scale;
       const deltaViewScale = 1 / deltaScale;
 
-      this.scaleViewport(element, deltaViewScale, x, y);
+      this.scaleViewport(deltaViewScale, x, y);
     }
 
     this.prevTouches = currentTouches;
@@ -265,10 +258,10 @@ export class UserTransformableViewportCanvasController
     this.canvas.destroy();
   }
 
-  private moveViewport(element: HTMLElement, dx: number, dy: number): void {
+  private moveViewport(dx: number, dy: number): void {
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
-    const { width, height } = element.getBoundingClientRect();
+    const { width, height } = this.element.getBoundingClientRect();
 
     const transform = this.options.transformPreprocessor({
       prevTransform,
@@ -280,15 +273,10 @@ export class UserTransformableViewportCanvasController
     this.performTransform(transform);
   }
 
-  private scaleViewport(
-    element: HTMLElement,
-    s2: number,
-    cx: number,
-    cy: number,
-  ): void {
+  private scaleViewport(s2: number, cx: number, cy: number): void {
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
-    const { width, height } = element.getBoundingClientRect();
+    const { width, height } = this.element.getBoundingClientRect();
 
     const transform = this.options.transformPreprocessor({
       prevTransform,
@@ -301,9 +289,7 @@ export class UserTransformableViewportCanvasController
   }
 
   private stopMouseDrag(): void {
-    if (this.element !== null) {
-      setCursor(this.element, null);
-    }
+    setCursor(this.element, null);
 
     this.removeMouseDragListeners();
     this.options.onTransformFinished();

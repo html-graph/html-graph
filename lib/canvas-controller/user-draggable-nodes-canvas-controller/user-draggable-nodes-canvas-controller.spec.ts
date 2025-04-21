@@ -728,7 +728,14 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should not move node with mouse if drag is not allowed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller } = createController({ element });
+    const { controller } = createController({
+      element,
+      dragOptions: {
+        events: {
+          onBeforeNodeDrag: (): boolean => false,
+        },
+      },
+    });
     const nodeElement = createElement();
 
     controller.addNode({
