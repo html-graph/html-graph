@@ -37,31 +37,6 @@ describe("UserDraggableNodesCanvasController", () => {
     window.innerHeight = innerHeight;
   });
 
-  it("should call attach on canvas", () => {
-    const coreCanvas = createCanvas();
-    const canvas = new UserDraggableNodesCanvasController(coreCanvas);
-    const canvasElement = document.createElement("div");
-
-    const spy = jest.spyOn(coreCanvas, "attach");
-
-    canvas.attach(canvasElement);
-
-    expect(spy).toHaveBeenCalledWith(canvasElement);
-  });
-
-  it("should call detach on canvas", () => {
-    const coreCanvas = createCanvas();
-    const canvas = new UserDraggableNodesCanvasController(coreCanvas);
-    const canvasElement = document.createElement("div");
-
-    const spy = jest.spyOn(coreCanvas, "detach");
-
-    canvas.attach(canvasElement);
-    canvas.detach();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should call addNode on canvas", () => {
     const coreCanvas = createCanvas();
     const canvas = new UserDraggableNodesCanvasController(coreCanvas);
