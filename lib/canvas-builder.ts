@@ -157,10 +157,12 @@ export class CanvasBuilder {
         trigger!,
         this.transformOptions,
         this.virtualScrollOptions,
+        this.element,
       );
     } else if (this.hasTransformableViewport) {
       controller = new UserTransformableViewportCanvasController(
         controller,
+        this.element,
         this.transformOptions,
       );
     }
