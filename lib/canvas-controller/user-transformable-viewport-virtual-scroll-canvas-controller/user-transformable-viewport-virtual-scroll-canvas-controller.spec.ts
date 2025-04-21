@@ -453,15 +453,14 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should load elements around viewport after translate viewport finish on next tick", async () => {
-    const { canvas } = create();
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
+    const element = createElement({ width: 100, height: 100 });
+    const { canvas } = create({ element });
 
     configureEdgeGraph(canvas);
 
     await wait(0);
 
-    canvasElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     const moveEvent = createMouseMoveEvent({
       movementX: -100,
@@ -473,19 +472,20 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     await wait(0);
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
   });
 
   it("should load elements around viewport on wheel scale when reached outside of viewport on next tick", async () => {
+    const element = createElement({ width: 100, height: 100 });
     const { canvas } = create({
-      scale: {
-        mouseWheelSensitivity: 10,
+      transformOptions: {
+        scale: {
+          mouseWheelSensitivity: 10,
+        },
       },
+      element,
     });
-
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
 
     configureEdgeGraph(canvas);
 
@@ -497,25 +497,26 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       deltaY: 1,
     });
 
-    canvasElement.dispatchEvent(wheelEvent);
+    element.dispatchEvent(wheelEvent);
 
     await wait(0);
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
   });
 
   it("should call specifined onTransformChange", async () => {
     const onTransformChange = jest.fn();
+    const element = createElement({ width: 100, height: 100 });
 
     const { canvas } = create({
-      events: {
-        onTransformChange: onTransformChange,
+      transformOptions: {
+        events: {
+          onTransformChange: onTransformChange,
+        },
       },
+      element,
     });
-
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
 
     configureEdgeGraph(canvas);
 
@@ -527,7 +528,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       deltaY: 1,
     });
 
-    canvasElement.dispatchEvent(wheelEvent);
+    element.dispatchEvent(wheelEvent);
 
     expect(onTransformChange).toHaveBeenCalled();
   });
