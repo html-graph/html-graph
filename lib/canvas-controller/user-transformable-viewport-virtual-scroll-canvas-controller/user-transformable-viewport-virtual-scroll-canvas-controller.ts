@@ -110,6 +110,7 @@ export class UserTransformableViewportVirtualScrollCanvasController
 
     this.canvas = new UserTransformableViewportCanvasController(
       canvas,
+      this.element,
       patchedTransformOptions,
     );
 
