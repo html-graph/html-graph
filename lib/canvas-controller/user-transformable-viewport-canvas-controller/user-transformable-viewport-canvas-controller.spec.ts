@@ -333,13 +333,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not set cursor on right mouse button down", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement();
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 1 }));
 
@@ -347,13 +342,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should move controller with mouse", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
