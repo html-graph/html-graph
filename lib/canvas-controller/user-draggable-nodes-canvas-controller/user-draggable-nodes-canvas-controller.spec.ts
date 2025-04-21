@@ -328,11 +328,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should change cursor on node grab", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller, coreController } = createController({ element });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -349,13 +345,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not change cursor on other than left mouse button", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -372,13 +363,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should move grabbed node with mouse", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -402,13 +388,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should change cursor back on node release", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -426,13 +407,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not change cursor back on node release for other than left mouse button", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -450,17 +426,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should change cursor on node grab on specified", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController, {
-      mouse: {
-        dragCursor: "crosshair",
-      },
-    });
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -477,13 +444,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should move grabbed node with touch", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -513,13 +475,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not move grabbed node with mouse when pointer is out of controller", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -541,13 +498,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not move grabbed node with mouse when pointer is out of window", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -569,13 +521,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not move grabbed node with touch if more than one touches", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -608,13 +555,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not move grabbed node when touch out of controller", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
@@ -644,13 +586,8 @@ describe("UserDraggableNodesCanvasController", () => {
   });
 
   it("should not move grabbed node when touch out of window", () => {
-    const coreController = createController();
-    const controller = new UserDraggableNodesCanvasController(coreController);
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
-
-    const element = createElement();
+    const { controller } = createController({ element });
 
     controller.addNode({
       id: "node-1",
