@@ -467,21 +467,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not unset cursor left mouse button was not releaseed", () => {
-    const coreController = createController();
+    const element = createElement({ width: 1000, height: 1000 });
     const onTransformChange = jest.fn((): void => {});
 
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
+    createController({
+      element,
+      transformOptions: {
         events: {
-          onTransformChange: onTransformChange,
+          onTransformChange,
         },
       },
-    );
-
-    const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
