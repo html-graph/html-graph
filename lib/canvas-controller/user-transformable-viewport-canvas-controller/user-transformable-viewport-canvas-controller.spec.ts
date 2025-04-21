@@ -16,7 +16,7 @@ import { CoreCanvasController } from "../core-canvas-controller";
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (params: {
+const createController = (params?: {
   element: HTMLElement;
 }): {
   controller: UserTransformableViewportCanvasController;
@@ -24,7 +24,7 @@ const createController = (params: {
 } => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = params.element ?? document.createElement("div");
+  const element = params?.element ?? document.createElement("div");
 
   const coreController = new CoreCanvasController(
     graphStore,
