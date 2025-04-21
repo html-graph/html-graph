@@ -10,7 +10,10 @@ import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canva
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (): { coreController: CoreCanvasController } => {
+const createController = (): {
+  coreController: CoreCanvasController;
+  controller: UserDraggableNodesCanvasController;
+} => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
@@ -21,7 +24,12 @@ const createController = (): { coreController: CoreCanvasController } => {
     new CoreHtmlView(graphStore, viewportStore, element),
   );
 
-  return { coreController };
+  const controller = new UserDraggableNodesCanvasController(
+    coreController,
+    element,
+  );
+
+  return { coreController, controller };
 };
 
 describe("UserDraggableNodesCanvasController", () => {
