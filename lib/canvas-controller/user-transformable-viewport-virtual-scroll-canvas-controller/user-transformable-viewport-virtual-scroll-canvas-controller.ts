@@ -26,8 +26,6 @@ export class UserTransformableViewportVirtualScrollCanvasController
 
   private readonly canvas: CanvasController;
 
-  private element: HTMLElement | null = null;
-
   private readonly canvasResizeObserver: ResizeObserver;
 
   private readonly window = window;
@@ -68,6 +66,7 @@ export class UserTransformableViewportVirtualScrollCanvasController
     private readonly trigger: EventSubject<RenderingBox>,
     transformOptions: TransformOptions | undefined,
     private readonly virtualScrollOptions: VirtualScrollOptions,
+    private readonly element: HTMLElement,
   ) {
     this.nodeHorizontal =
       this.virtualScrollOptions.nodeContainingRadius.horizontal;
@@ -120,25 +119,7 @@ export class UserTransformableViewportVirtualScrollCanvasController
     this.graph = this.canvas.graph;
 
     this.trigger.subscribe(this.updateLoadedArea);
-  }
-
-  public attach(element: HTMLElement): void {
-    this.detach();
-
-    this.element = element;
     this.canvasResizeObserver.observe(this.element);
-    this.canvas.attach(element);
-  }
-
-  public detach(): void {
-    if (this.element !== null) {
-      this.canvasResizeObserver.unobserve(this.element);
-      this.element = null;
-      this.viewportWidth = 0;
-      this.viewportHeight = 0;
-    }
-
-    this.canvas.detach();
   }
 
   public addNode(node: AddNodeRequest): void {
@@ -195,6 +176,8 @@ export class UserTransformableViewportVirtualScrollCanvasController
 
   public destroy(): void {
     this.trigger.unsubscribe(this.updateLoadedArea);
+
+    this.canvasResizeObserver.unobserve(this.element);
     this.canvas.destroy();
   }
 
