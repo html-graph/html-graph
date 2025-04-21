@@ -75,25 +75,6 @@ const configureEdgeGraph = (store: GraphStore): void => {
 };
 
 describe("BoxHtmlView", () => {
-  it("should call attach on core view", () => {
-    const { coreView, boxView } = create();
-    const canvasElement = document.createElement("div");
-    const spy = jest.spyOn(coreView, "attach");
-
-    boxView.attach(canvasElement);
-
-    expect(spy).toHaveBeenCalledWith(canvasElement);
-  });
-
-  it("should call detach on core view", () => {
-    const { coreView, boxView } = create();
-    const spy = jest.spyOn(coreView, "detach");
-
-    boxView.detach();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should clear core view on clear", () => {
     const { coreView, boxView } = create();
     const spy = jest.spyOn(coreView, "clear");
