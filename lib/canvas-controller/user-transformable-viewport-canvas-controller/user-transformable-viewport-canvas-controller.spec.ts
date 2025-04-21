@@ -53,10 +53,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call addNode on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     const spy = jest.spyOn(coreController, "addNode");
 
@@ -73,10 +70,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call updateNode on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -95,10 +89,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call removeNode on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
@@ -117,10 +108,7 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call markPort on controller", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
+    const { coreController, controller } = createController();
 
     controller.addNode({
       id: "node-1",
