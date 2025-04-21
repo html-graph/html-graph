@@ -395,7 +395,6 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   it("should load elements around viewport on next tick", async () => {
     const element = createElement({ width: 100, height: 100 });
     const { canvas } = create({ element });
-    canvas.attach(element);
 
     configureEdgeGraph(canvas);
 
