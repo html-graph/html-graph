@@ -447,13 +447,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should not move controller with mouse when pointer is inside window but outside of element", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
