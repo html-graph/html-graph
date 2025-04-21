@@ -253,10 +253,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update edge target", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -290,10 +289,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update edge priority", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -310,10 +308,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update edge without arguments", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -333,10 +330,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update port without arguments", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -357,10 +353,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update node without arguments", () => {
-    const canvas = createCanvasController();
     const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(element);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
