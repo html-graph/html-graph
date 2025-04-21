@@ -651,13 +651,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should move controller with touch", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
