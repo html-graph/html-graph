@@ -10,13 +10,15 @@ import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canva
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (): {
+const createController = (params?: {
+  element: HTMLElement;
+}): {
   coreController: CoreCanvasController;
   controller: UserDraggableNodesCanvasController;
 } => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = document.createElement("div");
+  const element = params?.element ?? document.createElement("div");
 
   const coreController = new CoreCanvasController(
     graphStore,
@@ -326,7 +328,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should change cursor on node grab", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller, coreController } = createController();
+    const { controller, coreController } = createController({ element });
 
     controller.attach(element);
 
