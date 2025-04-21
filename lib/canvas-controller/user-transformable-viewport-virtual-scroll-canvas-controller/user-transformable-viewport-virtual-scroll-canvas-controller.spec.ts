@@ -425,9 +425,8 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should load elements around viewport after patch viewport matrix", async () => {
-    const { canvas } = create();
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
+    const element = createElement({ width: 100, height: 100 });
+    const { canvas } = create({ element });
 
     configureEdgeGraph(canvas);
 
@@ -435,14 +434,13 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     canvas.patchViewportMatrix({ x: 250, y: 250 });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
   });
 
   it("should load elements around viewport after patch content matrix", async () => {
-    const { canvas } = create();
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
+    const element = createElement({ width: 100, height: 100 });
+    const { canvas } = create({ element });
 
     configureEdgeGraph(canvas);
 
@@ -450,7 +448,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     canvas.patchContentMatrix({ x: -250, y: -250 });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
   });
 
