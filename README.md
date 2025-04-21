@@ -52,6 +52,7 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
 const element = document.getElementById("canvas");
 
 const canvas = new CanvasBuilder()
+  .setElement(element)
   .setDefaults({
     edges: {
       shape: {
@@ -61,7 +62,6 @@ const canvas = new CanvasBuilder()
   })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
-  .setElement(element)
   .build();
 
 canvas
