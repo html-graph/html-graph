@@ -624,19 +624,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call start before finish on wheel scale", async () => {
-    const coreController = createController();
-
     const onTransformStarted = jest.fn();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
+    const element = createElement({ width: 1000, height: 1000 });
+
+    createController({
+      element,
+      transformOptions: {
         events: {
-          onTransformStarted: onTransformStarted,
+          onTransformStarted,
         },
       },
-    );
-    const element = createElement({ width: 1000, height: 1000 });
-    controller.attach(element);
+    });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
