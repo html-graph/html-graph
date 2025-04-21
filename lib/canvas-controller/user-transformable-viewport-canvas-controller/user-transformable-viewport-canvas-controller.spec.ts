@@ -672,13 +672,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should stop movement on touchend", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -706,13 +701,8 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should stop movement on touchcancel", () => {
-    const coreController = createController();
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-    );
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
+    createController({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
