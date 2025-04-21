@@ -49,6 +49,8 @@ function createNode({ name, x, y, frontPortId, backPortId }) {
   };
 }
 
+const element = document.getElementById("canvas")
+
 const canvas = new CanvasBuilder()
   .setDefaults({
     edges: {
@@ -59,14 +61,7 @@ const canvas = new CanvasBuilder()
   })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
-  .enableVirtualScroll({
-    nodeContainingRadius: {
-      horizontal: 25,
-      vertical: 25,
-    },
-  })
-  .enableResizeReactiveNodes()
-  .attach(document.getElementById("canvas"))
+  .setElement(element)
   .build();
 
 canvas
