@@ -4,23 +4,24 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { CanvasController } from "../canvas-controller";
 import { CoreCanvasController } from "../core-canvas-controller";
 import { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
 
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (): CanvasController => {
+const createController = (): { coreController: CoreCanvasController } => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
 
-  return new CoreCanvasController(
+  const coreController = new CoreCanvasController(
     graphStore,
     viewportStore,
     new CoreHtmlView(graphStore, viewportStore, element),
   );
+
+  return coreController;
 };
 
 describe("UserDraggableNodesCanvasController", () => {
