@@ -535,15 +535,16 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
   it("should call specifined onTransformFinished", async () => {
     const onTransformFinished = jest.fn();
+    const element = createElement({ width: 100, height: 100 });
 
     const { canvas } = create({
-      events: {
-        onTransformFinished: onTransformFinished,
+      transformOptions: {
+        events: {
+          onTransformFinished: onTransformFinished,
+        },
       },
+      element,
     });
-
-    const canvasElement = createElement({ width: 100, height: 100 });
-    canvas.attach(canvasElement);
 
     configureEdgeGraph(canvas);
 
@@ -555,7 +556,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
       deltaY: 1,
     });
 
-    canvasElement.dispatchEvent(wheelEvent);
+    element.dispatchEvent(wheelEvent);
 
     await wait(500);
 
