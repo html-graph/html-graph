@@ -10,10 +10,12 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement } from "@/mocks";
 
-const createCanvasController = (): CoreCanvasController => {
+const createCanvasController = (params?: {
+  element: HTMLElement;
+}): CoreCanvasController => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = document.createElement("div");
+  const element = params?.element ?? document.createElement("div");
 
   return new CoreCanvasController(
     graphStore,
