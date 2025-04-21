@@ -87,14 +87,6 @@ export class BoxHtmlView implements HtmlView {
     this.trigger.subscribe(this.updateViewport);
   }
 
-  public attach(canvasWrapper: HTMLElement): void {
-    this.htmlView.attach(canvasWrapper);
-  }
-
-  public detach(): void {
-    this.htmlView.detach();
-  }
-
   public attachNode(nodeId: unknown): void {
     if (this.renderingBox.hasNode(nodeId)) {
       this.handleAttachNode(nodeId);
