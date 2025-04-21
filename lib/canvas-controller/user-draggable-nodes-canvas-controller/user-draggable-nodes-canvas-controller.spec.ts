@@ -500,10 +500,11 @@ describe("UserDraggableNodesCanvasController", () => {
   it("should not move grabbed node with mouse when pointer is out of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const { controller } = createController({ element });
+    const nodeElement = createElement();
 
     controller.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
@@ -524,9 +525,11 @@ describe("UserDraggableNodesCanvasController", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const { controller } = createController({ element });
 
+    const nodeElement = createElement();
+
     controller.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
