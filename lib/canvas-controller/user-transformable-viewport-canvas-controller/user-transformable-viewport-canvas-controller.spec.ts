@@ -360,21 +360,17 @@ describe("UserTransformableViewportCanvasController", () => {
   });
 
   it("should call onBeforeTransformChange for move with mouse", () => {
-    const coreController = createController();
     const onBeforeTransformChange = jest.fn((): void => {});
 
-    const controller = new UserTransformableViewportCanvasController(
-      coreController,
-      {
+    createController({
+      transformOptions: {
         events: {
           onBeforeTransformChange: onBeforeTransformChange,
         },
       },
-    );
+    });
 
     const element = createElement({ width: 1000, height: 1000 });
-
-    controller.attach(element);
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
