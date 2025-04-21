@@ -31,6 +31,7 @@ const createController = (params?: {
   const controller = new UserDraggableNodesCanvasController(
     coreController,
     element,
+    params?.dragOptions,
   );
 
   return { coreController, controller };
@@ -344,7 +345,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
-    expect(nodeElement.style.cursor).toBe("grab");
+    expect(element.style.cursor).toBe("grab");
   });
 
   it("should not change cursor on other than left mouse button", () => {
@@ -434,7 +435,14 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should change cursor on node grab on specified", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller } = createController({ element });
+    const { controller } = createController({
+      element,
+      dragOptions: {
+        mouse: {
+          dragCursor: "crosshair",
+        },
+      },
+    });
     const nodeElement = createElement();
 
     controller.addNode({
@@ -744,7 +752,14 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should not move node with touch if drag is not allowed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller } = createController({ element });
+    const { controller } = createController({
+      element,
+      dragOptions: {
+        events: {
+          onBeforeNodeDrag: (): boolean => false,
+        },
+      },
+    });
     const nodeElement = createElement();
 
     controller.addNode({
@@ -862,7 +877,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     controller.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
@@ -879,7 +894,12 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should not move node on top when move on top disabled", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller } = createController({ element });
+    const { controller } = createController({
+      element,
+      dragOptions: {
+        moveOnTop: false,
+      },
+    });
     const nodeElement = createElement();
 
     controller.addNode({
@@ -982,7 +1002,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     expect(onNodeDragFinished).toHaveBeenCalledWith({
       nodeId: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
     });
@@ -1026,7 +1046,7 @@ describe("UserDraggableNodesCanvasController", () => {
 
     expect(onNodeDragFinished).toHaveBeenCalledWith({
       nodeId: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
     });
@@ -1034,7 +1054,15 @@ describe("UserDraggableNodesCanvasController", () => {
 
   it("should not start drag when mouse down validator not passed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const { controller } = createController({ element });
+    const { controller } = createController({
+      element,
+      dragOptions: {
+        mouse: {
+          mouseDownEventVerifier: (event: MouseEvent): boolean =>
+            event.button === 0 && event.ctrlKey,
+        },
+      },
+    });
 
     const nodeElement = createElement();
 
@@ -1082,7 +1110,7 @@ describe("UserDraggableNodesCanvasController", () => {
       priority: 0,
     });
 
-    element.dispatchEvent(
+    nodeElement.dispatchEvent(
       new MouseEvent("mousedown", { button: 0, ctrlKey: true }),
     );
 

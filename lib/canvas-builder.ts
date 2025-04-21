@@ -147,6 +147,7 @@ export class CanvasBuilder {
     if (this.hasDraggableNode) {
       controller = new UserDraggableNodesCanvasController(
         controller,
+        this.element,
         this.dragOptions,
       );
     }

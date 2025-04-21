@@ -566,6 +566,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   it("should not load elements around viewport on wheel scale when not reached outside of viewport on next tick", async () => {
     const element = createElement({ width: 100, height: 100 });
     const { canvas } = create({
+      element,
       transformOptions: {
         scale: {
           mouseWheelSensitivity: 1.1,
