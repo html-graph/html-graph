@@ -9,8 +9,6 @@ import { HtmlView } from "../html-view";
  * This entity is responsible for HTML modifications
  */
 export class CoreHtmlView implements HtmlView {
-  private canvasWrapper: HTMLElement | null = null;
-
   private readonly host = createHost();
 
   private readonly container = createContainer();
@@ -30,27 +28,10 @@ export class CoreHtmlView implements HtmlView {
     private readonly viewportStore: ViewportStore,
     private readonly element: HTMLElement,
   ) {
+    this.element.appendChild(this.host);
     this.host.appendChild(this.container);
 
     this.viewportStore.onAfterUpdated.subscribe(this.applyTransform);
-  }
-
-  public attach(canvasWrapper: HTMLElement): void {
-    this.detach();
-
-    this.canvasWrapper = canvasWrapper;
-    this.canvasWrapper.appendChild(this.host);
-
-    this.graphStore.getAllEdgeIds().forEach((edgeId) => {
-      this.renderEdge(edgeId);
-    });
-  }
-
-  public detach(): void {
-    if (this.canvasWrapper !== null) {
-      this.canvasWrapper.removeChild(this.host);
-      this.canvasWrapper = null;
-    }
   }
 
   public attachNode(nodeId: unknown): void {
@@ -109,8 +90,8 @@ export class CoreHtmlView implements HtmlView {
     this.viewportStore.onAfterUpdated.unsubscribe(this.applyTransform);
 
     this.clear();
-    this.detach();
 
+    this.element.removeChild(this.host);
     this.host.removeChild(this.container);
   }
 
