@@ -24,7 +24,7 @@ const canvas: Canvas = new CanvasBuilder()
       vertical: 25,
     },
   })
-  .attach(canvasElement)
+  .setElement(canvasElement)
   .build();
 
 let cnt = 0;

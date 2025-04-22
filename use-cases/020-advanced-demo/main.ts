@@ -52,7 +52,7 @@ const canvas = builder
   .enableUserDraggableNodes()
   .enableUserTransformableViewport(transformOptions)
   .enableResizeReactiveNodes()
-  .attach(canvasElement)
+  .setElement(canvasElement)
   .build();
 
 const helper = new AdvancedDemoHelper();

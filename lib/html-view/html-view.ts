@@ -1,8 +1,4 @@
 export interface HtmlView {
-  attach(canvasWrapper: HTMLElement): void;
-
-  detach(): void;
-
   attachNode(nodeId: unknown): void;
 
   detachNode(nodeId: unknown): void;

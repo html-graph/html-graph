@@ -33,7 +33,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const canvas: Canvas = builder
   .enableUserTransformableViewport(transformOptions)
-  .attach(canvasElement)
+  .setElement(canvasElement)
   .build();
 
 let angle = 0;

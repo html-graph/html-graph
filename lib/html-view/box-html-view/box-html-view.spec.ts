@@ -16,7 +16,8 @@ const create = (): {
   const trigger = new EventSubject<RenderingBox>();
   const store = new GraphStore();
   const transformer = new ViewportStore();
-  const coreView = new CoreHtmlView(store, transformer);
+  const element = document.createElement("div");
+  const coreView = new CoreHtmlView(store, transformer, element);
   const boxView = new BoxHtmlView(coreView, store, trigger);
 
   return { trigger, store, coreView, boxView };
@@ -74,25 +75,6 @@ const configureEdgeGraph = (store: GraphStore): void => {
 };
 
 describe("BoxHtmlView", () => {
-  it("should call attach on core view", () => {
-    const { coreView, boxView } = create();
-    const canvasElement = document.createElement("div");
-    const spy = jest.spyOn(coreView, "attach");
-
-    boxView.attach(canvasElement);
-
-    expect(spy).toHaveBeenCalledWith(canvasElement);
-  });
-
-  it("should call detach on core view", () => {
-    const { coreView, boxView } = create();
-    const spy = jest.spyOn(coreView, "detach");
-
-    boxView.detach();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should clear core view on clear", () => {
     const { coreView, boxView } = create();
     const spy = jest.spyOn(coreView, "clear");

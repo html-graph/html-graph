@@ -62,7 +62,7 @@ const canvasDefaults: CanvasDefaults = {
 builder.setDefaults(canvasDefaults);
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.attach(canvasElement).build();
+const canvas: Canvas = builder.setElement(canvasElement).build();
 
 const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",

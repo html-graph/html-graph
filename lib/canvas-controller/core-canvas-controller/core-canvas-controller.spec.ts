@@ -10,14 +10,17 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement } from "@/mocks";
 
-const createCanvasController = (): CoreCanvasController => {
+const createCanvasController = (params?: {
+  element: HTMLElement;
+}): CoreCanvasController => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const element = params?.element ?? document.createElement("div");
 
   return new CoreCanvasController(
     graphStore,
     viewportStore,
-    new CoreHtmlView(graphStore, viewportStore),
+    new CoreHtmlView(graphStore, viewportStore, element),
   );
 };
 
@@ -102,67 +105,44 @@ const createEdgeRequest = (): AddEdgeRequest => {
 };
 
 describe("CoreCanvasController", () => {
-  it("should attach canvas", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
-
-    canvas.attach(canvasElement);
-
-    expect(canvasElement.children.length).toBe(1);
-  });
-
-  it("should detach canvas", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
-
-    canvas.attach(canvasElement);
-    canvas.detach();
-
-    expect(canvasElement.children.length).toBe(0);
-  });
-
   it("should create node", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(1);
   });
 
   it("should update node coordinates", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.updateNode("node-1", { x: 100, y: 100 });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
   it("should update node priority", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.updateNode("node-1", { priority: 10 });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
   it("should update node centerFn", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode({
       id: "node-1",
       element: createElement({ width: 100, height: 100 }),
@@ -173,28 +153,26 @@ describe("CoreCanvasController", () => {
     });
     canvas.updateNode("node-1", { centerFn: () => ({ x: 0, y: 0 }) });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
     expect(nodeWrapper.style.transform).toBe("translate(0px, 0px)");
   });
 
   it("should remove node", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.removeNode("node-1");
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(0);
   });
 
   it("should unmark port when removing node", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
 
@@ -206,25 +184,23 @@ describe("CoreCanvasController", () => {
   });
 
   it("should create edge", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
     canvas.markPort(createPortRequest2());
     canvas.addEdge(createEdge12());
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(3);
   });
 
   it("should update edge shape", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -235,16 +211,15 @@ describe("CoreCanvasController", () => {
 
     canvas.updateEdge("edge-1", { shape });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const edgeSvg = container.children[2];
     expect(edgeSvg).toBe(shape.svg);
   });
 
   it("should update edge source", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -278,10 +253,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update edge target", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -315,10 +289,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update edge priority", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -329,16 +302,15 @@ describe("CoreCanvasController", () => {
       priority: 10,
     });
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
     expect(edgeSvg.style.zIndex).toBe("10");
   });
 
   it("should update edge without arguments", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -352,16 +324,15 @@ describe("CoreCanvasController", () => {
 
     canvas.updateEdge("edge-1", {});
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
     expect(edgeSvg.style.width).toBe("200px");
   });
 
   it("should update port without arguments", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -375,17 +346,16 @@ describe("CoreCanvasController", () => {
 
     canvas.updatePort("port-2", {});
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
 
     expect(edgeSvg.style.width).toBe("200px");
   });
 
   it("should update node without arguments", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -399,16 +369,15 @@ describe("CoreCanvasController", () => {
 
     canvas.updateNode("node-2", {});
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     const edgeSvg = container.children[2] as SVGSVGElement;
     expect(edgeSvg.style.width).toBe("200px");
   });
 
   it("should remove edge", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -417,15 +386,14 @@ describe("CoreCanvasController", () => {
 
     canvas.removeEdge("edge-1");
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(2);
   });
 
   it("should mark port", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
 
@@ -435,10 +403,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should update port direction", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
 
@@ -474,10 +441,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should unmark port", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest());
     canvas.markPort(createPortRequest());
     canvas.unmarkPort("port-1");
@@ -488,10 +454,9 @@ describe("CoreCanvasController", () => {
   });
 
   it("should remove edge when port gest unmarked", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -500,37 +465,34 @@ describe("CoreCanvasController", () => {
 
     canvas.unmarkPort("port-1");
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(2);
   });
 
   it("should patch viewport matrix", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
-    canvas.attach(canvasElement);
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
     canvas.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
-    const container = canvasElement.children[0].children[0] as HTMLElement;
+    const container = element.children[0].children[0] as HTMLElement;
     expect(container.style.transform).toBe("matrix(0.5, 0, 0, 0.5, -1, -1)");
   });
 
   it("should patch content matrix", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
-    canvas.attach(canvasElement);
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
     canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
-    const container = canvasElement.children[0].children[0] as HTMLElement;
+    const container = element.children[0].children[0] as HTMLElement;
     expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
   });
 
   it("should clear canvas", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
-    canvas.attach(canvasElement);
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
     canvas.addNode(createNodeRequest2());
@@ -539,13 +501,13 @@ describe("CoreCanvasController", () => {
 
     canvas.clear();
 
-    const container = canvasElement.children[0].children[0];
+    const container = element.children[0].children[0];
     expect(container.children.length).toBe(0);
   });
 
   it("should clear canvas on destroy", () => {
-    const canvas = createCanvasController();
-    const canvasElement = document.createElement("div");
+    const element = document.createElement("div");
+    const canvas = createCanvasController({ element });
 
     canvas.addNode(createNodeRequest1());
     canvas.markPort(createPortRequest1());
@@ -555,6 +517,6 @@ describe("CoreCanvasController", () => {
 
     canvas.destroy();
 
-    expect(canvasElement.children.length).toBe(0);
+    expect(element.children.length).toBe(0);
   });
 });

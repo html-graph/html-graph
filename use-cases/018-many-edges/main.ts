@@ -36,7 +36,7 @@ builder
   .enableUserTransformableViewport();
 
 const canvasElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.attach(canvasElement).build();
+const canvas: Canvas = builder.setElement(canvasElement).build();
 
 canvas.patchViewportMatrix({ scale: 4, x: -1000, y: -1000 });
 

@@ -36,7 +36,7 @@ export class CanvasBuilder {
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
 
-  public attach(element: HTMLElement): CanvasBuilder {
+  public setElement(element: HTMLElement): CanvasBuilder {
     this.element = element;
 
     return this;
@@ -47,16 +47,6 @@ export class CanvasBuilder {
    */
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
-
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * use setDefaults instead
-   */
-  public setOptions(options: CanvasDefaults): CanvasBuilder {
-    this.setDefaults(options);
 
     return this;
   }
@@ -128,7 +118,11 @@ export class CanvasBuilder {
     const graphStore = new GraphStore();
     const viewportStore = new ViewportStore();
 
-    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore);
+    let htmlView: HtmlView = new CoreHtmlView(
+      graphStore,
+      viewportStore,
+      this.element,
+    );
 
     if (trigger !== undefined) {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
@@ -143,6 +137,7 @@ export class CanvasBuilder {
     if (this.hasDraggableNode) {
       controller = new UserDraggableNodesCanvasController(
         controller,
+        this.element,
         this.dragOptions,
       );
     }
@@ -153,10 +148,12 @@ export class CanvasBuilder {
         trigger!,
         this.transformOptions,
         this.virtualScrollOptions,
+        this.element,
       );
     } else if (this.hasTransformableViewport) {
       controller = new UserTransformableViewportCanvasController(
         controller,
+        this.element,
         this.transformOptions,
       );
     }

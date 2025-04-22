@@ -45,31 +45,6 @@ export class Canvas {
     this.defaults = createDefaults(options);
     this.graph = controller.graph;
     this.viewport = controller.viewport;
-
-    this.attach(this.element);
-  }
-
-  /**
-   * @deprecated
-   * use CanvasBuilder.attach instead
-   * attaches canvas to given element
-   * detaches element first when canvas is attached
-   */
-  public attach(element: HTMLElement): Canvas {
-    this.controller.attach(element);
-
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * attach canvas once instead, then reattach wrapper element
-   * detaches canvas from element when attached
-   */
-  public detach(): Canvas {
-    this.controller.detach();
-
-    return this;
   }
 
   /**

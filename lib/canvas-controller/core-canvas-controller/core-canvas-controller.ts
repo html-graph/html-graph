@@ -120,14 +120,6 @@ export class CoreCanvasController implements CanvasController {
     this.viewport = new Viewport(this.viewportStore);
   }
 
-  public attach(element: HTMLElement): void {
-    this.htmlView.attach(element);
-  }
-
-  public detach(): void {
-    this.htmlView.detach();
-  }
-
   public addNode(request: AddNodeRequest): void {
     this.graphStore.addNode(request);
   }

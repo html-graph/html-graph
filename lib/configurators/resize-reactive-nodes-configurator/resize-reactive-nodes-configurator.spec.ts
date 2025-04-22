@@ -11,14 +11,13 @@ import { CoreCanvasController } from "@/canvas-controller";
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const element = document.createElement("div");
 
   const controller = new CoreCanvasController(
     graphStore,
     viewportStore,
-    new CoreHtmlView(graphStore, viewportStore),
+    new CoreHtmlView(graphStore, viewportStore, element),
   );
-
-  const element = document.createElement("div");
 
   const canvas = new Canvas(element, controller, {});
 

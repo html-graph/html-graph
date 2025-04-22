@@ -25,15 +25,12 @@ export class UserDraggableNodesCanvasController implements CanvasController {
 
   private grabbedNodeId: unknown | null = null;
 
-  private element: HTMLElement | null = null;
-
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
     if (
-      this.element !== null &&
-      (!isPointOnElement(this.element, event.clientX, event.clientY) ||
-        !isPointOnWindow(this.window, event.clientX, event.clientY))
+      !isPointOnElement(this.element, event.clientX, event.clientY) ||
+      !isPointOnWindow(this.window, event.clientX, event.clientY)
     ) {
       this.cancelMouseDrag();
       return;
@@ -64,9 +61,8 @@ export class UserDraggableNodesCanvasController implements CanvasController {
     const t = event.touches[0];
 
     if (
-      this.element !== null &&
-      (!isPointOnElement(this.element, t.clientX, t.clientY) ||
-        !isPointOnWindow(this.window, t.clientX, t.clientY))
+      !isPointOnElement(this.element, t.clientX, t.clientY) ||
+      !isPointOnWindow(this.window, t.clientX, t.clientY)
     ) {
       this.cancelTouchDrag();
       return;
@@ -97,6 +93,7 @@ export class UserDraggableNodesCanvasController implements CanvasController {
 
   public constructor(
     private readonly canvas: CanvasController,
+    private readonly element: HTMLElement,
     dragOptions?: DragOptions,
   ) {
     this.viewport = this.canvas.viewport;
@@ -105,31 +102,13 @@ export class UserDraggableNodesCanvasController implements CanvasController {
     this.options = createOptions(dragOptions ?? {});
   }
 
-  public attach(element: HTMLElement): void {
-    this.detach();
-    this.element = element;
-
-    this.canvas.attach(this.element);
-  }
-
-  public detach(): void {
-    this.canvas.detach();
-
-    if (this.element !== null) {
-      this.element = null;
-    }
-  }
-
   public addNode(request: AddNodeRequest): void {
     this.canvas.addNode(request);
 
     this.updateMaxNodePriority(request.id);
 
     const onMouseDown: (event: MouseEvent) => void = (event: MouseEvent) => {
-      if (
-        this.element === null ||
-        !this.options.mouseDownEventVerifier(event)
-      ) {
+      if (!this.options.mouseDownEventVerifier(event)) {
         return;
       }
 
@@ -259,7 +238,6 @@ export class UserDraggableNodesCanvasController implements CanvasController {
   }
 
   public destroy(): void {
-    this.detach();
     this.clear();
 
     this.removeMouseDragListeners();
@@ -332,9 +310,7 @@ export class UserDraggableNodesCanvasController implements CanvasController {
 
     this.grabbedNodeId = null;
 
-    if (this.element !== null) {
-      setCursor(this.element, null);
-    }
+    setCursor(this.element, null);
 
     this.removeMouseDragListeners();
   }
