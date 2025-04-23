@@ -20,6 +20,7 @@ export class UserDraggableNodesConfigurator {
   private readonly element: HTMLElement;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+    this.updateMaxNodePriority(nodeId);
     const node = this.graph.getNode(nodeId)!;
 
     this.nodeIds.set(node.element, nodeId);
@@ -29,9 +30,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
-    const priority = this.graph.getNode(nodeId)!.priority;
-
-    this.maxNodePriority = Math.max(this.maxNodePriority, priority);
+    this.updateMaxNodePriority(nodeId);
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
@@ -289,5 +288,11 @@ export class UserDraggableNodesConfigurator {
     this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchFinish);
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
+  }
+
+  private updateMaxNodePriority(nodeId: unknown): void {
+    const priority = this.graph.getNode(nodeId)!.priority;
+
+    this.maxNodePriority = Math.max(this.maxNodePriority, priority);
   }
 }
