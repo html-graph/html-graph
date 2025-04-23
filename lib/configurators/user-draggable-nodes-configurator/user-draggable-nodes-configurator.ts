@@ -2,6 +2,7 @@ import { Canvas } from "@/canvas";
 import { createOptions, DragOptions, Options } from "./create-options";
 import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { Point } from "@/point";
+import { Graph } from "@/graph";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNodeId: unknown | null = null;
@@ -14,8 +15,12 @@ export class UserDraggableNodesConfigurator {
 
   private readonly window = window;
 
+  private readonly graph: Graph;
+
+  private readonly element: HTMLElement;
+
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     this.nodeIds.set(node.element, nodeId);
 
@@ -24,13 +29,13 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
-    const priority = this.canvas.graph.getNode(nodeId)!.priority;
+    const priority = this.graph.getNode(nodeId)!.priority;
 
     this.maxNodePriority = Math.max(this.maxNodePriority, priority);
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     this.nodeIds.delete(node.element);
 
@@ -39,10 +44,10 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onBeforeDestroy = (): void => {
-    this.canvas.graph.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
-    this.canvas.graph.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
-    this.canvas.graph.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
-    this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
+    this.graph.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
+    this.graph.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
+    this.graph.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
+    this.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
 
     this.removeMouseDragListeners();
@@ -66,7 +71,7 @@ export class UserDraggableNodesConfigurator {
 
     const element = event.currentTarget as HTMLElement;
     const nodeId = this.nodeIds.get(element);
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.options.onBeforeNodeDrag({
       nodeId,
@@ -81,7 +86,7 @@ export class UserDraggableNodesConfigurator {
 
     event.stopImmediatePropagation();
     this.grabbedNodeId = nodeId;
-    setCursor(this.canvas.element, this.options.dragCursor);
+    setCursor(this.element, this.options.dragCursor);
     this.moveNodeOnTop(nodeId);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
@@ -103,7 +108,7 @@ export class UserDraggableNodesConfigurator {
 
     const element = event.currentTarget as HTMLElement;
     const nodeId = this.nodeIds.get(element);
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.options.onBeforeNodeDrag({
       nodeId: nodeId,
@@ -126,7 +131,7 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
     if (
-      !isPointOnElement(this.canvas.element, event.clientX, event.clientY) ||
+      !isPointOnElement(this.element, event.clientX, event.clientY) ||
       !isPointOnWindow(this.window, event.clientX, event.clientY)
     ) {
       this.cancelMouseDrag();
@@ -153,7 +158,7 @@ export class UserDraggableNodesConfigurator {
     const t = event.touches[0];
 
     if (
-      !isPointOnElement(this.canvas.element, t.clientX, t.clientY) ||
+      !isPointOnElement(this.element, t.clientX, t.clientY) ||
       !isPointOnWindow(this.window, t.clientX, t.clientY)
     ) {
       this.cancelTouchDrag();
@@ -185,11 +190,13 @@ export class UserDraggableNodesConfigurator {
     dragOptions: DragOptions,
   ) {
     this.options = createOptions(dragOptions);
+    this.graph = canvas.graph;
+    this.element = canvas.element;
 
-    this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
-    this.canvas.graph.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
-    this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
-    this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
+    this.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+    this.graph.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
+    this.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
+    this.graph.onBeforeClear.subscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
@@ -198,7 +205,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId)!;
 
     if (node === null) {
       return;
@@ -233,7 +240,7 @@ export class UserDraggableNodesConfigurator {
 
     const edgePriority = this.maxNodePriority - 1;
 
-    const edges = this.canvas.graph.getNodeAdjacentEdgeIds(nodeId)!;
+    const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
     edges.forEach((edgeId) => {
       this.canvas.updateEdge(edgeId, { priority: edgePriority });
@@ -241,7 +248,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private cancelMouseDrag(): void {
-    const node = this.canvas.graph.getNode(this.grabbedNodeId);
+    const node = this.graph.getNode(this.grabbedNodeId);
     if (node !== null) {
       this.options.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
@@ -263,7 +270,7 @@ export class UserDraggableNodesConfigurator {
 
   private cancelTouchDrag(): void {
     this.previousTouchCoords = null;
-    const node = this.canvas.graph.getNode(this.grabbedNodeId);
+    const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {
       this.options.onNodeDragFinished({
