@@ -239,7 +239,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const canvas = createCanvas({
       transformOptions: {
         events: {
-          onTransformChange: onTransformChange,
+          onTransformChange,
         },
       },
       element,
@@ -267,7 +267,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const canvas = createCanvas({
       transformOptions: {
         events: {
-          onTransformFinished: onTransformFinished,
+          onTransformFinished,
         },
       },
       element,

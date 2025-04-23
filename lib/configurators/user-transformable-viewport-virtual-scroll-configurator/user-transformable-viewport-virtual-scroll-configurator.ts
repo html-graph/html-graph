@@ -64,12 +64,14 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     this.nodeHorizontal =
       this.virtualScrollOptions.nodeContainingRadius.horizontal;
     this.nodeVertical = this.virtualScrollOptions.nodeContainingRadius.vertical;
+
     this.canvasResizeObserver = new this.window.ResizeObserver((entries) => {
       const entry = entries[0];
       this.viewportWidth = entry.contentRect.width;
       this.viewportHeight = entry.contentRect.height;
       this.scheduleLoadAreaAroundViewport();
     });
+
     this.viewport = canvas.viewport;
     this.element = canvas.element;
 
@@ -85,9 +87,11 @@ export class UserTransformableViewportVirtualScrollConfigurator {
         onTransformChange: () => {
           const viewportMatrix = this.viewportMatrix;
           this.viewportMatrix = this.viewport.getViewportMatrix();
+
           if (viewportMatrix.scale !== this.viewportMatrix.scale) {
             this.scheduleEnsureViewportAreaLoaded();
           }
+
           onTransformChange();
         },
         onTransformFinished: () => {
@@ -133,17 +137,20 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       this.viewportWidth * this.viewportMatrix.scale;
     const absoluteViewportHeight =
       this.viewportHeight * this.viewportMatrix.scale;
+
     const xViewportFrom = this.viewportMatrix.x - this.nodeHorizontal;
     const yViewportFrom = this.viewportMatrix.y - this.nodeVertical;
     const xViewportTo =
       this.viewportMatrix.x + absoluteViewportWidth + this.nodeHorizontal;
     const yViewportTo =
       this.viewportMatrix.y + absoluteViewportHeight + this.nodeVertical;
+
     const isLoaded =
       this.loadedArea.xFrom < xViewportFrom &&
       this.loadedArea.xTo > xViewportTo &&
       this.loadedArea.yFrom < yViewportFrom &&
       this.loadedArea.yTo > yViewportTo;
+
     if (!isLoaded) {
       this.scheduleLoadAreaAroundViewport();
     }
@@ -154,12 +161,14 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       this.viewportWidth * this.viewportMatrix.scale;
     const absoluteViewportHeight =
       this.viewportHeight * this.viewportMatrix.scale;
+
     const x =
       this.viewportMatrix.x - absoluteViewportWidth - this.nodeHorizontal;
     const y =
       this.viewportMatrix.y - absoluteViewportHeight - this.nodeVertical;
     const width = 3 * absoluteViewportWidth + 2 * this.nodeHorizontal;
     const height = 3 * absoluteViewportHeight + 2 * this.nodeVertical;
+
     this.trigger.emit({ x, y, width, height });
   }
 }

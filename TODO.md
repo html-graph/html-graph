@@ -1,7 +1,7 @@
 # TODO
 
-- refactor attach/detach API
-- refactor canvas controller decorators
+- fix transform finish when dragging
+- remove canvas controller
 - built-in drag edge creation
 - built-in background
 - arrows customization

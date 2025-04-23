@@ -20,7 +20,7 @@ export class CanvasBuilder {
 
   private canvasDefaults: CanvasDefaults = {};
 
-  private dragOptions: DragOptions | undefined = undefined;
+  private dragOptions: DragOptions = {};
 
   private transformOptions: TransformOptions = {};
 
@@ -55,7 +55,7 @@ export class CanvasBuilder {
    */
   public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
-    this.dragOptions = options;
+    this.dragOptions = options ?? {};
 
     return this;
   }
@@ -140,7 +140,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasDraggableNode) {
-      UserDraggableNodesConfigurator.configure(canvas, this.dragOptions ?? {});
+      UserDraggableNodesConfigurator.configure(canvas, this.dragOptions);
     }
 
     if (this.virtualScrollOptions !== undefined) {
@@ -165,7 +165,7 @@ export class CanvasBuilder {
   private reset(): void {
     this.element = null;
     this.canvasDefaults = {};
-    this.dragOptions = undefined;
+    this.dragOptions = {};
     this.transformOptions = {};
     this.virtualScrollOptions = undefined;
     this.hasDraggableNode = false;
