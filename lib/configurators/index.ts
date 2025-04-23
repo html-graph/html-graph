@@ -1,6 +1,17 @@
 export { ResizeReactiveNodesConfigurator } from "./resize-reactive-nodes-configurator";
+
 export { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 export type {
   DragOptions,
   NodeDragPayload,
 } from "./user-draggable-nodes-configurator";
+
+export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
+export type {
+  TransformOptions,
+  TransformPayload,
+  TransformPreprocessorFn,
+  TransformPreprocessorParams,
+  ShiftLimitPreprocessorParams,
+  ScaleLimitPreprocessorParams,
+} from "./user-transformable-viewport-configurator";
