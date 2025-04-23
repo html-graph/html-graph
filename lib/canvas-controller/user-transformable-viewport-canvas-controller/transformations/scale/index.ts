@@ -1,1 +1,0 @@
-export { scale } from "./scale";

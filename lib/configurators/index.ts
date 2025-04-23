@@ -15,3 +15,6 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
 } from "./user-transformable-viewport-configurator";
+
+export { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
+export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-configurator";

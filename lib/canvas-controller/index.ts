@@ -8,14 +8,3 @@ export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { CanvasController } from "./canvas-controller";
 export { CoreCanvasController } from "./core-canvas-controller";
-export { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
-export type {
-  TransformOptions,
-  TransformPayload,
-  TransformPreprocessorFn,
-  TransformPreprocessorParams,
-  ShiftLimitPreprocessorParams,
-  ScaleLimitPreprocessorParams,
-} from "./user-transformable-viewport-canvas-controller";
-export { UserTransformableViewportVirtualScrollCanvasController } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
-export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-canvas-controller";
