@@ -726,4 +726,10 @@ describe("UserTransformableViewportConfigurator", () => {
 
     expect(onResizeTransformFinished).toHaveBeenCalledTimes(1);
   });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
+  });
 });

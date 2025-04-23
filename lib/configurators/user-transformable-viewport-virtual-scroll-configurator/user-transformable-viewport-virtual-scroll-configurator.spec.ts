@@ -318,4 +318,10 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(3);
   });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
+  });
 });
