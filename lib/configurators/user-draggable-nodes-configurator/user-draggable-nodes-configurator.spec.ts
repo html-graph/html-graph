@@ -854,4 +854,10 @@ describe("UserDraggableNodesConfigurator", () => {
 
     expect(nodeWrapper.style.transform).toBe("translate(200px, 200px)");
   });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
+  });
 });
