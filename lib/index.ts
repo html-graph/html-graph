@@ -16,14 +16,14 @@ export type {
 
 export type {
   TransformOptions,
-  DragOptions,
-  NodeDragPayload,
   TransformPayload,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
 } from "./canvas-controller";
+
+export type { DragOptions, NodeDragPayload } from "./configurators";
 
 export {
   BezierEdgeShape,

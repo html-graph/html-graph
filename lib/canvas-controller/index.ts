@@ -8,11 +8,6 @@ export type { UpdateNodeRequest } from "./update-node-request";
 export type { UpdatePortRequest } from "./update-port-request";
 export type { CanvasController } from "./canvas-controller";
 export { CoreCanvasController } from "./core-canvas-controller";
-export { UserDraggableNodesCanvasController } from "./user-draggable-nodes-canvas-controller";
-export type {
-  DragOptions,
-  NodeDragPayload,
-} from "./user-draggable-nodes-canvas-controller";
 export { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
 export type {
   TransformOptions,
