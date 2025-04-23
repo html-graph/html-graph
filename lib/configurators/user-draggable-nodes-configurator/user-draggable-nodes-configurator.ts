@@ -64,7 +64,7 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    const element = event.target as HTMLElement;
+    const element = event.currentTarget as HTMLElement;
     const nodeId = this.nodeIds.get(element);
     const node = this.canvas.graph.getNode(nodeId)!;
 
@@ -101,7 +101,7 @@ export class UserDraggableNodesConfigurator {
       y: event.touches[0].clientY,
     };
 
-    const element = event.target as HTMLElement;
+    const element = event.currentTarget as HTMLElement;
     const nodeId = this.nodeIds.get(element);
     const node = this.canvas.graph.getNode(nodeId)!;
 
@@ -124,9 +124,7 @@ export class UserDraggableNodesConfigurator {
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
   };
 
-  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
+  private readonly onWindowMouseMove = (event: MouseEvent): void => {
     if (
       !isPointOnElement(this.canvas.element, event.clientX, event.clientY) ||
       !isPointOnWindow(this.window, event.clientX, event.clientY)
@@ -139,9 +137,7 @@ export class UserDraggableNodesConfigurator {
     }
   };
 
-  private readonly onWindowMouseUp: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
+  private readonly onWindowMouseUp = (event: MouseEvent): void => {
     if (!this.options.mouseUpEventVerifier(event)) {
       return;
     }
@@ -149,9 +145,7 @@ export class UserDraggableNodesConfigurator {
     this.cancelMouseDrag();
   };
 
-  private readonly onWindowTouchMove: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
+  private readonly onWindowTouchMove = (event: TouchEvent): void => {
     if (event.touches.length !== 1) {
       return;
     }
@@ -179,7 +173,7 @@ export class UserDraggableNodesConfigurator {
     }
   };
 
-  private readonly onWindowTouchFinish: (event: TouchEvent) => void = () => {
+  private readonly onWindowTouchFinish = (): void => {
     this.previousTouchCoords = null;
     this.cancelTouchDrag();
   };
@@ -199,7 +193,7 @@ export class UserDraggableNodesConfigurator {
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
-  public configure(canvas: Canvas, options: DragOptions): void {
+  public static configure(canvas: Canvas, options: DragOptions): void {
     new UserDraggableNodesConfigurator(canvas, options);
   }
 
