@@ -52,8 +52,20 @@ export class UserTransformableViewportVirtualScrollConfigurator {
   private readonly onBeforeDestroy = (): void => {
     this.trigger.unsubscribe(this.updateLoadedArea);
     this.canvasResizeObserver.unobserve(this.element);
+    this.canvas.viewport.onAfterUpdated.unsubscribe(
+      this.onAfterViewportUpdated,
+    );
     this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
   };
+
+  private readonly onAfterViewportUpdated = (): void => {
+    if (!this.userTransformInProgress) {
+      this.viewportMatrix = this.viewport.getViewportMatrix();
+      this.loadAreaAroundViewport();
+    }
+  };
+
+  private userTransformInProgress = false;
 
   public constructor(
     private readonly canvas: Canvas,
@@ -75,16 +87,35 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     this.viewport = canvas.viewport;
     this.element = canvas.element;
 
-    const onTransformFinished =
-      transformOptions?.events?.onTransformFinished ?? ((): void => {});
+    const onResizeTransformStarted =
+      transformOptions?.events?.onResizeTransformStarted ?? ((): void => {});
+    const onResizeTransformFinished =
+      transformOptions?.events?.onResizeTransformFinished ?? ((): void => {});
     const onTransformChange =
       transformOptions?.events?.onTransformChange ?? ((): void => {});
+    const onBeforeTransformChange =
+      transformOptions?.events?.onBeforeTransformChange ?? ((): void => {});
+    const onTransformFinished =
+      transformOptions?.events?.onTransformFinished ?? ((): void => {});
 
     const patchedTransformOptions: TransformOptions = {
       ...transformOptions,
       events: {
         ...transformOptions?.events,
+        onResizeTransformStarted: () => {
+          this.userTransformInProgress = true;
+          onResizeTransformStarted();
+        },
+        onResizeTransformFinished: () => {
+          this.userTransformInProgress = false;
+          onResizeTransformFinished();
+        },
+        onBeforeTransformChange: () => {
+          this.userTransformInProgress = true;
+          onBeforeTransformChange();
+        },
         onTransformChange: () => {
+          this.userTransformInProgress = false;
           const viewportMatrix = this.viewportMatrix;
           this.viewportMatrix = this.viewport.getViewportMatrix();
 
@@ -109,6 +140,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     this.viewportMatrix = this.viewport.getViewportMatrix();
     this.trigger.subscribe(this.updateLoadedArea);
     this.canvasResizeObserver.observe(this.element);
+    this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
 
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }

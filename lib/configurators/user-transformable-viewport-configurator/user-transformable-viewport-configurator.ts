@@ -94,6 +94,7 @@ export class UserTransformableViewportConfigurator {
       this.wheelFinishTimer = null;
     }, this.options.scaleWheelFinishTimeout);
   };
+
   private readonly onTouchStart: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
@@ -107,6 +108,7 @@ export class UserTransformableViewportConfigurator {
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
     this.options.onTransformStarted();
   };
+
   private readonly onWindowTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
@@ -136,6 +138,7 @@ export class UserTransformableViewportConfigurator {
     }
     this.prevTouches = currentTouches;
   };
+
   private readonly onWindowTouchFinish: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
@@ -195,6 +198,7 @@ export class UserTransformableViewportConfigurator {
       canvasWidth: width,
       canvasHeight: height,
     });
+
     this.performTransform(transform);
   }
 
@@ -208,6 +212,7 @@ export class UserTransformableViewportConfigurator {
       canvasWidth: width,
       canvasHeight: height,
     });
+
     this.performTransform(transform);
   }
 
