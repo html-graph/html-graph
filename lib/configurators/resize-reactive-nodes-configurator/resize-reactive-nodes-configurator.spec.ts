@@ -131,4 +131,10 @@ describe("ResizeReactiveNodesConfigurator", () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
+  });
 });
