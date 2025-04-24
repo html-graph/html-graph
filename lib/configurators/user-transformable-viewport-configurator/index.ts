@@ -1,4 +1,4 @@
-export { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
+export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 export type { TransformOptions } from "./options";
 export {
   createCombinedTransformPreprocessor,

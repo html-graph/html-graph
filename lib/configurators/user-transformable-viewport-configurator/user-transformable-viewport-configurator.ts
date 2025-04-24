@@ -1,32 +1,34 @@
-import { Graph } from "@/graph";
-import { Viewport } from "@/viewport";
-import { AddNodeRequest } from "../add-node-request";
-import { UpdateNodeRequest } from "../update-node-request";
-import { AddEdgeRequest } from "../add-edge-request";
-import { UpdateEdgeRequest } from "../update-edge-request";
-import { MarkPortRequest } from "../mark-port-request";
-import { UpdatePortRequest } from "../update-port-request";
-import { PatchMatrixRequest } from "../patch-matrix-request";
+import { Canvas, PatchMatrixRequest } from "@/canvas";
 import { TransformOptions } from "./options";
-import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
-import { CanvasController } from "../canvas-controller";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
-import { processTouch, TouchState } from "./process-touch";
+import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
+import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
+import { processTouch, TouchState } from "./process-touch";
 
-export class UserTransformableViewportCanvasController
-  implements CanvasController
-{
-  public readonly graph: Graph;
-
-  public readonly viewport: Viewport;
-
-  private prevTouches: TouchState | null = null;
+export class UserTransformableViewportConfigurator {
+  private readonly element: HTMLElement;
 
   private window = window;
 
+  private readonly viewport: Viewport;
+
+  private prevTouches: TouchState | null = null;
+
   private wheelFinishTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private transformInProgress = false;
+
+  private readonly onBeforeDestroy = (): void => {
+    this.removeMouseDragListeners();
+    this.removeTouchDragListeners();
+    this.observer.unobserve(this.element);
+    this.element.removeEventListener("mousedown", this.onMouseDown);
+    this.element.removeEventListener("wheel", this.onWheelScroll);
+    this.element.removeEventListener("touchstart", this.onTouchStart);
+    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
+  };
 
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
@@ -34,11 +36,10 @@ export class UserTransformableViewportCanvasController
     if (this.element === null || !this.options.mouseDownEventVerifier(event)) {
       return;
     }
-
     setCursor(this.element, this.options.shiftCursor);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
-    this.options.onTransformStarted();
+    this.startRegisteredTransform();
   };
 
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
@@ -85,6 +86,7 @@ export class UserTransformableViewportCanvasController
       event.deltaY < 0
         ? this.options.wheelSensitivity
         : 1 / this.options.wheelSensitivity;
+
     const deltaViewScale = 1 / deltaScale;
 
     if (this.wheelFinishTimer === null) {
@@ -98,7 +100,10 @@ export class UserTransformableViewportCanvasController
     }
 
     this.wheelFinishTimer = setTimeout(() => {
-      this.options.onTransformFinished();
+      if (!this.transformInProgress) {
+        this.options.onTransformFinished();
+      }
+
       this.wheelFinishTimer = null;
     }, this.options.scaleWheelFinishTimeout);
   };
@@ -110,47 +115,40 @@ export class UserTransformableViewportCanvasController
       this.prevTouches = processTouch(event);
       return;
     }
-
     this.prevTouches = processTouch(event);
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
-    this.options.onTransformStarted();
+    this.startRegisteredTransform();
   };
 
   private readonly onWindowTouchMove: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
     const currentTouches = processTouch(event);
-
     const isEvery = currentTouches.touches.every(
       (t) =>
         isPointOnElement(this.element, t[0], t[1]) &&
         isPointOnWindow(this.window, t[0], t[1]),
     );
-
     if (!isEvery) {
       this.stopTouchDrag();
       return;
     }
-
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
         -(currentTouches.x - this.prevTouches!.x),
         -(currentTouches.y - this.prevTouches!.y),
       );
     }
-
     if (currentTouches.touchesCnt === 2) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches!.x - left;
       const y = this.prevTouches!.y - top;
       const deltaScale = currentTouches.scale / this.prevTouches!.scale;
       const deltaViewScale = 1 / deltaScale;
-
       this.scaleViewport(deltaViewScale, x, y);
     }
-
     this.prevTouches = currentTouches;
   };
 
@@ -165,8 +163,7 @@ export class UserTransformableViewportCanvasController
   };
 
   private readonly observer = new ResizeObserver(() => {
-    const prevTransform = this.canvas.viewport.getViewportMatrix();
-
+    const prevTransform = this.viewport.getViewportMatrix();
     const { width, height } = this.element!.getBoundingClientRect();
     const transform = this.options.transformPreprocessor({
       prevTransform,
@@ -174,7 +171,6 @@ export class UserTransformableViewportCanvasController
       canvasWidth: width,
       canvasHeight: height,
     });
-
     this.options.onResizeTransformStarted();
     this.canvas.patchViewportMatrix(transform);
     this.options.onResizeTransformFinished();
@@ -183,86 +179,32 @@ export class UserTransformableViewportCanvasController
   private readonly options: Options;
 
   public constructor(
-    private readonly canvas: CanvasController,
-    private readonly element: HTMLElement,
-    transformOptions?: TransformOptions,
+    private readonly canvas: Canvas,
+    transformOptions: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
 
-    this.viewport = this.canvas.viewport;
-    this.graph = this.canvas.graph;
-
+    this.element = canvas.element;
+    this.viewport = canvas.viewport;
     this.observer.observe(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
     this.element.addEventListener("wheel", this.onWheelScroll);
     this.element.addEventListener("touchstart", this.onTouchStart);
+
+    canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
-  public addNode(node: AddNodeRequest): void {
-    this.canvas.addNode(node);
-  }
-
-  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    this.canvas.updateNode(nodeId, request);
-  }
-
-  public removeNode(nodeId: unknown): void {
-    this.canvas.removeNode(nodeId);
-  }
-
-  public markPort(port: MarkPortRequest): void {
-    this.canvas.markPort(port);
-  }
-
-  public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    this.canvas.updatePort(portId, request);
-  }
-
-  public unmarkPort(portId: unknown): void {
-    this.canvas.unmarkPort(portId);
-  }
-
-  public addEdge(edge: AddEdgeRequest): void {
-    this.canvas.addEdge(edge);
-  }
-
-  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
-    this.canvas.updateEdge(edgeId, request);
-  }
-
-  public removeEdge(edgeId: unknown): void {
-    this.canvas.removeEdge(edgeId);
-  }
-
-  public patchViewportMatrix(request: PatchMatrixRequest): void {
-    this.canvas.patchViewportMatrix(request);
-  }
-
-  public patchContentMatrix(request: PatchMatrixRequest): void {
-    this.canvas.patchContentMatrix(request);
-  }
-
-  public clear(): void {
-    this.canvas.clear();
-  }
-
-  public destroy(): void {
-    this.removeMouseDragListeners();
-    this.removeTouchDragListeners();
-
-    this.observer.unobserve(this.element);
-    this.element.removeEventListener("mousedown", this.onMouseDown);
-    this.element.removeEventListener("wheel", this.onWheelScroll);
-    this.element.removeEventListener("touchstart", this.onTouchStart);
-
-    this.canvas.destroy();
+  public static configure(
+    canvas: Canvas,
+    transformOptions: TransformOptions,
+  ): void {
+    new UserTransformableViewportConfigurator(canvas, transformOptions);
   }
 
   private moveViewport(dx: number, dy: number): void {
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = this.element.getBoundingClientRect();
-
     const transform = this.options.transformPreprocessor({
       prevTransform,
       nextTransform,
@@ -277,7 +219,6 @@ export class UserTransformableViewportCanvasController
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = this.element.getBoundingClientRect();
-
     const transform = this.options.transformPreprocessor({
       prevTransform,
       nextTransform,
@@ -290,9 +231,8 @@ export class UserTransformableViewportCanvasController
 
   private stopMouseDrag(): void {
     setCursor(this.element, null);
-
     this.removeMouseDragListeners();
-    this.options.onTransformFinished();
+    this.finishRegisteredTransform();
   }
 
   private removeMouseDragListeners(): void {
@@ -303,7 +243,7 @@ export class UserTransformableViewportCanvasController
   private stopTouchDrag(): void {
     this.prevTouches = null;
     this.removeTouchDragListeners();
-    this.options.onTransformFinished();
+    this.finishRegisteredTransform();
   }
 
   private removeTouchDragListeners(): void {
@@ -316,5 +256,15 @@ export class UserTransformableViewportCanvasController
     this.options.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(viewportTransform);
     this.options.onTransformChange();
+  }
+
+  private startRegisteredTransform(): void {
+    this.transformInProgress = true;
+    this.options.onTransformStarted();
+  }
+
+  private finishRegisteredTransform(): void {
+    this.transformInProgress = false;
+    this.options.onTransformFinished();
   }
 }

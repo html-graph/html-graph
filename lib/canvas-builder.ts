@@ -1,11 +1,4 @@
-import {
-  CanvasController,
-  UserTransformableViewportCanvasController,
-  TransformOptions,
-  CoreCanvasController,
-  UserTransformableViewportVirtualScrollCanvasController,
-  VirtualScrollOptions,
-} from "@/canvas-controller";
+import { CoreCanvasController } from "@/canvas-controller";
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
 import { Canvas, CanvasDefaults } from "@/canvas";
@@ -14,7 +7,11 @@ import { ViewportStore } from "@/viewport-store";
 import {
   DragOptions,
   ResizeReactiveNodesConfigurator,
+  TransformOptions,
   UserDraggableNodesConfigurator,
+  UserTransformableViewportConfigurator,
+  UserTransformableViewportVirtualScrollConfigurator,
+  VirtualScrollOptions,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 
@@ -23,9 +20,9 @@ export class CanvasBuilder {
 
   private canvasDefaults: CanvasDefaults = {};
 
-  private dragOptions: DragOptions | undefined = undefined;
+  private dragOptions: DragOptions = {};
 
-  private transformOptions: TransformOptions | undefined = undefined;
+  private transformOptions: TransformOptions = {};
 
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
@@ -58,7 +55,7 @@ export class CanvasBuilder {
    */
   public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
     this.hasDraggableNode = true;
-    this.dragOptions = options;
+    this.dragOptions = options ?? {};
 
     return this;
   }
@@ -70,7 +67,7 @@ export class CanvasBuilder {
     options?: TransformOptions,
   ): CanvasBuilder {
     this.hasTransformableViewport = true;
-    this.transformOptions = options;
+    this.transformOptions = options ?? {};
 
     return this;
   }
@@ -130,27 +127,11 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
-    let controller: CanvasController = new CoreCanvasController(
+    const controller = new CoreCanvasController(
       graphStore,
       viewportStore,
       htmlView,
     );
-
-    if (this.virtualScrollOptions !== undefined) {
-      controller = new UserTransformableViewportVirtualScrollCanvasController(
-        controller,
-        trigger!,
-        this.transformOptions,
-        this.virtualScrollOptions,
-        this.element,
-      );
-    } else if (this.hasTransformableViewport) {
-      controller = new UserTransformableViewportCanvasController(
-        controller,
-        this.element,
-        this.transformOptions,
-      );
-    }
 
     const canvas = new Canvas(this.element, controller, this.canvasDefaults);
 
@@ -159,7 +140,21 @@ export class CanvasBuilder {
     }
 
     if (this.hasDraggableNode) {
-      UserDraggableNodesConfigurator.configure(canvas, this.dragOptions ?? {});
+      UserDraggableNodesConfigurator.configure(canvas, this.dragOptions);
+    }
+
+    if (this.virtualScrollOptions !== undefined) {
+      UserTransformableViewportVirtualScrollConfigurator.configure(
+        canvas,
+        this.transformOptions,
+        trigger!,
+        this.virtualScrollOptions,
+      );
+    } else if (this.hasTransformableViewport) {
+      UserTransformableViewportConfigurator.configure(
+        canvas,
+        this.transformOptions,
+      );
     }
 
     this.reset();
@@ -170,8 +165,8 @@ export class CanvasBuilder {
   private reset(): void {
     this.element = null;
     this.canvasDefaults = {};
-    this.dragOptions = undefined;
-    this.transformOptions = undefined;
+    this.dragOptions = {};
+    this.transformOptions = {};
     this.virtualScrollOptions = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;

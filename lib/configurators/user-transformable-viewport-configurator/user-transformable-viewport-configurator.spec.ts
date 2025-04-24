@@ -1,5 +1,3 @@
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
@@ -10,20 +8,18 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
-import { UserTransformableViewportCanvasController } from "./user-transformable-viewport-canvas-controller";
-import { CoreCanvasController } from "../core-canvas-controller";
 import { TransformOptions } from "./options";
+import { Canvas } from "@/canvas";
+import { CoreCanvasController } from "@/canvas-controller";
+import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 
 let innerWidth: number;
 let innerHeight: number;
 
-const createController = (params?: {
+const createCanvas = (params?: {
   element?: HTMLElement;
   transformOptions?: TransformOptions;
-}): {
-  controller: UserTransformableViewportCanvasController;
-  coreController: CoreCanvasController;
-} => {
+}): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = params?.element ?? document.createElement("div");
@@ -34,16 +30,17 @@ const createController = (params?: {
     new CoreHtmlView(graphStore, viewportStore, element),
   );
 
-  const controller = new UserTransformableViewportCanvasController(
-    coreController,
-    element,
-    params?.transformOptions,
+  const canvas = new Canvas(element, coreController, {});
+
+  UserTransformableViewportConfigurator.configure(
+    canvas,
+    params?.transformOptions ?? {},
   );
 
-  return { coreController, controller };
+  return canvas;
 };
 
-describe("UserTransformableViewportCanvasController", () => {
+describe("UserTransformableViewportConfigurator", () => {
   beforeEach(() => {
     innerWidth = window.innerWidth;
     innerHeight = window.innerHeight;
@@ -57,278 +54,9 @@ describe("UserTransformableViewportCanvasController", () => {
     window.innerHeight = innerHeight;
   });
 
-  it("should call addNode on controller", () => {
-    const { coreController, controller } = createController();
-
-    const spy = jest.spyOn(coreController, "addNode");
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call updateNode on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "updateNode");
-
-    controller.updateNode("node-1", {});
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call removeNode on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "removeNode");
-
-    controller.removeNode("node-1");
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call markPort on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "markPort");
-
-    controller.markPort({
-      id: "port-1",
-      element: document.createElement("div"),
-      nodeId: "node-1",
-      direction: 0,
-    });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call updatePort on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    controller.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "updatePort");
-
-    controller.updatePort("port-1", {});
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call unmarkPort on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    controller.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    });
-    const spy = jest.spyOn(coreController, "unmarkPort");
-
-    controller.unmarkPort("port-1");
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call addEdge on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    controller.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    });
-    const spy = jest.spyOn(coreController, "addEdge");
-
-    controller.addEdge({
-      id: "edge-1",
-      from: "port-1",
-      to: "port-1",
-      shape: new BezierEdgeShape(),
-      priority: 0,
-    });
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call updateEdge on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    controller.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    });
-
-    controller.addEdge({
-      id: "edge-1",
-      from: "port-1",
-      to: "port-1",
-      shape: new BezierEdgeShape(),
-      priority: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "updateEdge");
-
-    controller.updateEdge("edge-1", {});
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call removeEdge on controller", () => {
-    const { coreController, controller } = createController();
-
-    controller.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    controller.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: document.createElement("div"),
-      direction: 0,
-    });
-
-    controller.addEdge({
-      id: "edge-1",
-      from: "port-1",
-      to: "port-1",
-      shape: new BezierEdgeShape(),
-      priority: 0,
-    });
-
-    const spy = jest.spyOn(coreController, "removeEdge");
-
-    controller.removeEdge("edge-1");
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call patchViewportMatrix on controller", () => {
-    const { coreController, controller } = createController();
-
-    const spy = jest.spyOn(coreController, "patchViewportMatrix");
-
-    controller.patchViewportMatrix({});
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call patchContentMatrix on controller", () => {
-    const { coreController, controller } = createController();
-
-    const spy = jest.spyOn(coreController, "patchContentMatrix");
-
-    controller.patchContentMatrix({});
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call clear on controller", () => {
-    const { coreController, controller } = createController();
-
-    const spy = jest.spyOn(coreController, "clear");
-
-    controller.clear();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should call destroy on controller", () => {
-    const { coreController, controller } = createController();
-
-    const spy = jest.spyOn(coreController, "destroy");
-
-    controller.destroy();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should set cursor on mouse down", () => {
     const element = createElement();
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown"));
 
@@ -337,7 +65,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should not set cursor on right mouse button down", () => {
     const element = createElement();
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 1 }));
 
@@ -346,7 +74,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should move controller with mouse", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -363,7 +91,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onBeforeTransformChange = jest.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -385,7 +113,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformChange = jest.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -407,7 +135,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformFinished = jest.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -428,7 +156,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should not move controller with mouse when pointer is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -448,7 +176,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should not move controller with mouse when pointer is inside window but outside of element", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -470,7 +198,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const onTransformChange = jest.fn((): void => {});
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -491,7 +219,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should scale controller on mouse wheel scroll", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -511,7 +239,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should scale down controller on mouse wheel scroll backward", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -531,7 +259,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should prevent default event of wheel scroll", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -550,7 +278,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformStarted = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -574,7 +302,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformFinished = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -599,7 +327,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformFinished = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -627,7 +355,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformStarted = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -652,7 +380,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should move controller with touch", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -673,7 +401,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should stop movement on touchend", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -702,7 +430,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should stop movement on touchcancel", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -733,7 +461,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformStarted = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -762,7 +490,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should not move controller if touch is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -783,7 +511,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should not move controller if touch is outside of controller", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -804,7 +532,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should move and scale controller with two touches", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -831,7 +559,7 @@ describe("UserTransformableViewportCanvasController", () => {
 
   it("should keep moving controller after move touches ended", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createController({ element });
+    createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -863,7 +591,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformStarted = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -881,7 +609,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformStarted = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -903,7 +631,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformFinished = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -922,7 +650,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onTransformFinished = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -945,7 +673,7 @@ describe("UserTransformableViewportCanvasController", () => {
   it("should not scale controller if mouse wheel event not valid", () => {
     const element = createElement({ width: 1000, height: 1000 });
 
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         scale: {
@@ -971,7 +699,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onResizeTransformStarted = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -987,7 +715,7 @@ describe("UserTransformableViewportCanvasController", () => {
     const onResizeTransformFinished = jest.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
-    createController({
+    createCanvas({
       element,
       transformOptions: {
         events: {
@@ -997,5 +725,39 @@ describe("UserTransformableViewportCanvasController", () => {
     });
 
     expect(onResizeTransformFinished).toHaveBeenCalledTimes(1);
+  });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
+  });
+
+  it("should not call onTransformFinished while scaling with wheel but also dragging in progress", async () => {
+    const onTransformFinished = jest.fn((): void => {});
+
+    const element = createElement({ width: 1000, height: 1000 });
+    createCanvas({
+      element,
+      transformOptions: {
+        events: {
+          onTransformFinished,
+        },
+      },
+    });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await wait(1000);
+
+    expect(onTransformFinished).not.toHaveBeenCalled();
   });
 });
