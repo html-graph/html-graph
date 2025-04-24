@@ -324,4 +324,68 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     canvas.destroy();
   });
+
+  it("should call specified onResizeTransformStarted", async () => {
+    const onResizeTransformStarted = jest.fn();
+    const element = createElement({ width: 100, height: 100 });
+
+    createCanvas({
+      transformOptions: {
+        events: {
+          onResizeTransformStarted,
+        },
+      },
+      element,
+    });
+
+    triggerResizeFor(element);
+
+    expect(onResizeTransformStarted).toHaveBeenCalled();
+  });
+
+  it("should call specified onResizeTransformFinished", async () => {
+    const onResizeTransformFinished = jest.fn();
+    const element = createElement({ width: 100, height: 100 });
+
+    createCanvas({
+      transformOptions: {
+        events: {
+          onResizeTransformFinished,
+        },
+      },
+      element,
+    });
+
+    triggerResizeFor(element);
+
+    expect(onResizeTransformFinished).toHaveBeenCalled();
+  });
+
+  it("should call specified onBeforeTransformChange", async () => {
+    const onBeforeTransformChange = jest.fn();
+    const element = createElement({ width: 100, height: 100 });
+
+    const canvas = createCanvas({
+      transformOptions: {
+        events: {
+          onBeforeTransformChange,
+        },
+      },
+      element,
+    });
+
+    configureEdgeGraph(canvas);
+
+    await wait(0);
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    expect(onBeforeTransformChange).toHaveBeenCalled();
+  });
 });

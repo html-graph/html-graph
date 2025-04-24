@@ -18,6 +18,8 @@ export class UserTransformableViewportConfigurator {
 
   private wheelFinishTimer: ReturnType<typeof setTimeout> | null = null;
 
+  private transformInProgress = false;
+
   private readonly onBeforeDestroy = (): void => {
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
@@ -37,7 +39,7 @@ export class UserTransformableViewportConfigurator {
     setCursor(this.element, this.options.shiftCursor);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
-    this.options.onTransformStarted();
+    this.startRegisteredTransform();
   };
 
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
@@ -64,6 +66,7 @@ export class UserTransformableViewportConfigurator {
     if (this.element === null || !this.options.mouseUpEventVerifier(event)) {
       return;
     }
+
     this.stopMouseDrag();
   };
 
@@ -73,7 +76,9 @@ export class UserTransformableViewportConfigurator {
     if (!this.options.mouseWheelEventVerifier(event)) {
       return;
     }
+
     event.preventDefault();
+
     const { left, top } = this.element.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
@@ -81,16 +86,24 @@ export class UserTransformableViewportConfigurator {
       event.deltaY < 0
         ? this.options.wheelSensitivity
         : 1 / this.options.wheelSensitivity;
+
     const deltaViewScale = 1 / deltaScale;
+
     if (this.wheelFinishTimer === null) {
       this.options.onTransformStarted();
     }
+
     this.scaleViewport(deltaViewScale, centerX, centerY);
+
     if (this.wheelFinishTimer !== null) {
       clearTimeout(this.wheelFinishTimer);
     }
+
     this.wheelFinishTimer = setTimeout(() => {
-      this.options.onTransformFinished();
+      if (!this.transformInProgress) {
+        this.options.onTransformFinished();
+      }
+
       this.wheelFinishTimer = null;
     }, this.options.scaleWheelFinishTimeout);
   };
@@ -106,7 +119,7 @@ export class UserTransformableViewportConfigurator {
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
-    this.options.onTransformStarted();
+    this.startRegisteredTransform();
   };
 
   private readonly onWindowTouchMove: (event: TouchEvent) => void = (
@@ -219,7 +232,7 @@ export class UserTransformableViewportConfigurator {
   private stopMouseDrag(): void {
     setCursor(this.element, null);
     this.removeMouseDragListeners();
-    this.options.onTransformFinished();
+    this.finishRegisteredTransform();
   }
 
   private removeMouseDragListeners(): void {
@@ -230,7 +243,7 @@ export class UserTransformableViewportConfigurator {
   private stopTouchDrag(): void {
     this.prevTouches = null;
     this.removeTouchDragListeners();
-    this.options.onTransformFinished();
+    this.finishRegisteredTransform();
   }
 
   private removeTouchDragListeners(): void {
@@ -243,5 +256,15 @@ export class UserTransformableViewportConfigurator {
     this.options.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(viewportTransform);
     this.options.onTransformChange();
+  }
+
+  private startRegisteredTransform(): void {
+    this.transformInProgress = true;
+    this.options.onTransformStarted();
+  }
+
+  private finishRegisteredTransform(): void {
+    this.transformInProgress = false;
+    this.options.onTransformFinished();
   }
 }

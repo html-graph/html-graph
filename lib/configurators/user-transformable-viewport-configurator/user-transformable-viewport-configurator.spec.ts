@@ -732,4 +732,32 @@ describe("UserTransformableViewportConfigurator", () => {
 
     canvas.destroy();
   });
+
+  it("should not call onTransformFinished while scaling with wheel but also dragging in progress", async () => {
+    const onTransformFinished = jest.fn((): void => {});
+
+    const element = createElement({ width: 1000, height: 1000 });
+    createCanvas({
+      element,
+      transformOptions: {
+        events: {
+          onTransformFinished,
+        },
+      },
+    });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    element.dispatchEvent(wheelEvent);
+
+    await wait(1000);
+
+    expect(onTransformFinished).not.toHaveBeenCalled();
+  });
 });
