@@ -1,6 +1,5 @@
 # TODO
 
-- fix transform finish when dragging
 - remove canvas controller
 - built-in drag edge creation
 - built-in background
