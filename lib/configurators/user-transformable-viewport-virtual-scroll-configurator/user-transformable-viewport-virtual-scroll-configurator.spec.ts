@@ -14,7 +14,6 @@ import {
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformOptions } from "../user-transformable-viewport-configurator";
-import { CoreCanvasController } from "@/canvas-controller";
 
 const createCanvas = (params?: {
   element?: HTMLElement;
@@ -25,17 +24,13 @@ const createCanvas = (params?: {
   const viewportStore = new ViewportStore();
   const element = params?.element ?? document.createElement("div");
 
-  const coreCanvas = new CoreCanvasController(
+  const htmlView = new BoxHtmlView(
+    new CoreHtmlView(graphStore, viewportStore, element),
     graphStore,
-    viewportStore,
-    new BoxHtmlView(
-      new CoreHtmlView(graphStore, viewportStore, element),
-      graphStore,
-      trigger,
-    ),
+    trigger,
   );
 
-  const canvas = new Canvas(element, coreCanvas, {});
+  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
 
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,

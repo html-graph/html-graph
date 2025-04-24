@@ -2,7 +2,6 @@ import { Viewport } from "@/viewport";
 import { Graph } from "@/graph";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
-import { CanvasController } from "@/canvas-controller";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
@@ -12,8 +11,23 @@ import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { CanvasDefaults, createDefaults, Defaults } from "./create-defaults";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { GraphStore } from "@/graph-store";
+import { ViewportStore } from "@/viewport-store";
+import { HtmlView } from "@/html-view";
 
 export class Canvas {
+  /**
+   * provides api for accessing graph model
+   */
+  public readonly graph: Graph;
+
+  /**
+   * provides api for accessing viewport state
+   */
+  public readonly viewport: Viewport;
+
+  private readonly defaults: Defaults;
+
   private readonly nodeIdGenerator = new IdGenerator(
     (nodeId) => this.graph.getNode(nodeId) !== null,
   );
@@ -26,17 +40,69 @@ export class Canvas {
     (edgeId) => this.graph.getEdge(edgeId) !== null,
   );
 
-  private readonly defaults: Defaults;
+  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+    this.htmlView.attachNode(nodeId);
+  };
 
-  /**
-   * provides api for accessing graph model
-   */
-  public readonly graph: Graph;
+  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
+    this.htmlView.updateNodePosition(nodeId);
 
-  /**
-   * provides api for accessing viewport state
-   */
-  public readonly viewport: Viewport;
+    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
+
+    edgeIds.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+  };
+
+  private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
+    this.htmlView.updateNodePriority(nodeId);
+  };
+
+  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
+      this.unmarkPort(portId);
+    });
+
+    this.htmlView.detachNode(nodeId);
+  };
+
+  private readonly onAfterPortUpdated = (portId: unknown): void => {
+    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
+
+    edgeIds.forEach((edge) => {
+      this.htmlView.renderEdge(edge);
+    });
+  };
+
+  private readonly onBeforePortUnmarked = (portId: unknown): void => {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+  };
+
+  private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
+    this.htmlView.attachEdge(edgeId);
+  };
+
+  private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
+    this.htmlView.updateEdgeShape(edgeId);
+  };
+
+  private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
+    this.htmlView.renderEdge(edgeId);
+  };
+
+  private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
+    this.htmlView.updateEdgePriority(edgeId);
+  };
+
+  private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
+    this.htmlView.detachEdge(edgeId);
+  };
+
+  private readonly onBeforeClear = (): void => {
+    this.htmlView.clear();
+  };
 
   private readonly onBeforeDestroyEmitter: EventEmitter<void>;
 
@@ -44,12 +110,44 @@ export class Canvas {
 
   public constructor(
     public readonly element: HTMLElement,
-    private readonly controller: CanvasController,
+    private readonly graphStore: GraphStore,
+    private readonly viewportStore: ViewportStore,
+    private readonly htmlView: HtmlView,
     options: CanvasDefaults,
   ) {
     this.defaults = createDefaults(options);
-    this.graph = controller.graph;
-    this.viewport = controller.viewport;
+    this.graph = new Graph(this.graphStore);
+    this.viewport = new Viewport(this.viewportStore);
+
+    this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
+
+    this.graphStore.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
+
+    this.graphStore.onAfterNodePriorityUpdated.subscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
+
+    this.graphStore.onAfterPortUpdated.subscribe(this.onAfterPortUpdated);
+
+    this.graphStore.onBeforePortRemoved.subscribe(this.onBeforePortUnmarked);
+
+    this.graphStore.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
+
+    this.graphStore.onAfterEdgeShapeUpdated.subscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+
+    this.graphStore.onAfterEdgeUpdated.subscribe(this.onAfterEdgeUpdated);
+
+    this.graphStore.onAfterEdgePriorityUpdated.subscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeEdgeRemoved.subscribe(this.onBeforeEdgeRemoved);
+
+    this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
 
     [this.onBeforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
@@ -64,7 +162,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to add node with existing id");
     }
 
-    this.controller.addNode({
+    this.graphStore.addNode({
       id,
       element: request.element,
       x: request.x,
@@ -97,7 +195,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to update nonexisting node");
     }
 
-    this.controller.updateNode(nodeId, request ?? {});
+    this.graphStore.updateNode(nodeId, request ?? {});
 
     return this;
   }
@@ -112,7 +210,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to remove nonexisting node");
     }
 
-    this.controller.removeNode(nodeId);
+    this.graphStore.removeNode(nodeId);
 
     return this;
   }
@@ -131,7 +229,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to set port on nonexisting node");
     }
 
-    this.controller.markPort({
+    this.graphStore.addPort({
       id,
       element: request.element,
       nodeId: request.nodeId,
@@ -151,7 +249,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to unset nonexisting port");
     }
 
-    this.controller.updatePort(portId, request ?? {});
+    this.graphStore.updatePort(portId, request ?? {});
 
     return this;
   }
@@ -165,7 +263,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to unset nonexisting port");
     }
 
-    this.controller.unmarkPort(portId);
+    this.graphStore.removePort(portId);
 
     return this;
   }
@@ -188,7 +286,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to add edge to nonexisting port");
     }
 
-    this.controller.addEdge({
+    this.graphStore.addEdge({
       id,
       from: request.from,
       to: request.to,
@@ -209,7 +307,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to update nonexisting edge");
     }
 
-    this.controller.updateEdge(edgeId, request ?? {});
+    this.graphStore.updateEdge(edgeId, request ?? {});
 
     return this;
   }
@@ -222,7 +320,7 @@ export class Canvas {
       throw new HtmlGraphError("failed to remove nonexisting edge");
     }
 
-    this.controller.removeEdge(edgeId);
+    this.graphStore.removeEdge(edgeId);
 
     return this;
   }
@@ -231,7 +329,7 @@ export class Canvas {
    * applies transformation for viewport
    */
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
-    this.controller.patchViewportMatrix(request);
+    this.viewportStore.patchViewportMatrix(request);
 
     return this;
   }
@@ -240,7 +338,7 @@ export class Canvas {
    * applies transformation for content
    */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
-    this.controller.patchContentMatrix(request);
+    this.viewportStore.patchContentMatrix(request);
 
     return this;
   }
@@ -250,7 +348,7 @@ export class Canvas {
    * canvas gets rolled back to initial state and can be reused
    */
   public clear(): Canvas {
-    this.controller.clear();
+    this.graphStore.clear();
 
     this.nodeIdGenerator.reset();
     this.portIdGenerator.reset();
@@ -265,6 +363,38 @@ export class Canvas {
    */
   public destroy(): void {
     this.onBeforeDestroyEmitter.emit();
-    this.controller.destroy();
+
+    this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
+
+    this.graphStore.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
+
+    this.graphStore.onAfterNodePriorityUpdated.unsubscribe(
+      this.onAfterNodePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
+
+    this.graphStore.onAfterPortUpdated.unsubscribe(this.onAfterPortUpdated);
+
+    this.graphStore.onBeforePortRemoved.unsubscribe(this.onBeforePortUnmarked);
+
+    this.graphStore.onAfterEdgeAdded.unsubscribe(this.onAfterEdgeAdded);
+
+    this.graphStore.onAfterEdgeShapeUpdated.unsubscribe(
+      this.onAfterEdgeShapeUpdated,
+    );
+
+    this.graphStore.onAfterEdgeUpdated.unsubscribe(this.onAfterEdgeUpdated);
+
+    this.graphStore.onAfterEdgePriorityUpdated.unsubscribe(
+      this.onAfterEdgePriorityUpdated,
+    );
+
+    this.graphStore.onBeforeEdgeRemoved.unsubscribe(this.onBeforeEdgeRemoved);
+
+    this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
+
+    this.clear();
+    this.htmlView.destroy();
   }
 }
