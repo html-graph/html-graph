@@ -1,7 +1,7 @@
 # TODO
 
-- built-in drag edge creation
 - built-in background
+- built-in drag edge creation
 - arrows customization
 - implement edges with label when specified manually
 - sankey connections
