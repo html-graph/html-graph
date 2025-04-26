@@ -230,7 +230,7 @@ export class Canvas {
     }
 
     if (this.graph.getNode(request.nodeId) === null) {
-      throw new HtmlGraphError("failed to set port on nonexisting node");
+      throw new HtmlGraphError("failed to mark port for nonexisting node");
     }
 
     this.graphStore.addPort({
@@ -250,7 +250,7 @@ export class Canvas {
     const port = this.graph.getPort(portId);
 
     if (port === null) {
-      throw new HtmlGraphError("failed to unset nonexisting port");
+      throw new HtmlGraphError("failed to update nonexisting port");
     }
 
     this.graphStore.updatePort(portId, request ?? {});
@@ -264,7 +264,7 @@ export class Canvas {
    */
   public unmarkPort(portId: unknown): Canvas {
     if (this.graph.getPort(portId) === null) {
-      throw new HtmlGraphError("failed to unset nonexisting port");
+      throw new HtmlGraphError("failed to unmark nonexisting port");
     }
 
     this.graphStore.removePort(portId);

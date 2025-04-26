@@ -460,6 +460,15 @@ describe("Canvas", () => {
     expect(port.direction).toBe(Math.PI);
   });
 
+  it("should throw error when trying to update nonexisting port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    expect(() => {
+      canvas.updatePort("port-1");
+    }).toThrow(HtmlGraphError);
+  });
+
   it("should unmark port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
@@ -1079,5 +1088,111 @@ describe("Canvas", () => {
     canvas.destroy();
 
     expect(onBeforeDestroy).toHaveBeenCalled();
+  });
+
+  it("should rerender adjacent edges when updating node", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const shape = new BezierEdgeShape();
+    const spy = jest.spyOn(shape, "render");
+
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.updateNode("node-1");
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should unmark ports before node removal", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const spy = jest.spyOn(canvas, "unmarkPort");
+
+    canvas.removeNode("node-1");
+
+    expect(spy).toHaveBeenCalledWith("port-1");
+  });
+
+  it("should rerender adjacent edges when updating port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const shape = new BezierEdgeShape();
+    const spy = jest.spyOn(shape, "render");
+
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.updatePort("port-1");
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should remove adjacent edges before port unmark", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    const spy = jest.spyOn(canvas, "removeEdge");
+
+    canvas.unmarkPort("port-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
   });
 });
