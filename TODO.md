@@ -1,6 +1,5 @@
 # TODO
 
-- remove canvas controller
 - built-in drag edge creation
 - built-in background
 - arrows customization
