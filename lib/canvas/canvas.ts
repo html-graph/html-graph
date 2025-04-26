@@ -101,6 +101,10 @@ export class Canvas {
   };
 
   private readonly onBeforeClear = (): void => {
+    this.nodeIdGenerator.reset();
+    this.portIdGenerator.reset();
+    this.edgeIdGenerator.reset();
+
     this.htmlView.clear();
   };
 
@@ -349,10 +353,6 @@ export class Canvas {
    */
   public clear(): Canvas {
     this.graphStore.clear();
-
-    this.nodeIdGenerator.reset();
-    this.portIdGenerator.reset();
-    this.edgeIdGenerator.reset();
 
     return this;
   }

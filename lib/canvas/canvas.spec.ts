@@ -7,6 +7,8 @@ import { createElement } from "@/mocks";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { AddNodeRequest } from "./add-node-request";
+import { MarkPortRequest } from "./mark-port-request";
+import { BezierEdgeShape } from "@/edges";
 
 const createCanvas = (params?: {
   options?: CanvasDefaults;
@@ -312,5 +314,770 @@ describe("Canvas", () => {
     expect(() => {
       canvas.removeNode("node-1");
     }).toThrow(HtmlGraphError);
+  });
+
+  it("should mark port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(canvas.graph.getAllPortIds().length).toBe(1);
+  });
+
+  it("should mark port with specified id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(canvas.graph.getPort("port-1")).not.toBe(null);
+  });
+
+  it("should throw error when trying to mark port with existing id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    const markPortRequest: MarkPortRequest = {
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    };
+
+    canvas.markPort(markPortRequest);
+
+    expect(() => {
+      canvas.markPort(markPortRequest);
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should throw error when trying to mark port to nonexisting node", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    expect(() => {
+      canvas.markPort({ nodeId: "node-1", element: createElement() });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should mark port with specified default port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({
+      element,
+      options: { ports: { direction: Math.PI } },
+    });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
+  });
+
+  it("should mark port with specified port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+      direction: Math.PI,
+    });
+
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
+  });
+
+  it("should update port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.updatePort("port-1", { direction: Math.PI });
+
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
+  });
+
+  it("should unmark port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.unmarkPort("port-1");
+
+    expect(canvas.graph.getAllPortIds().length).toBe(0);
+  });
+
+  it("should throw error when trying to unmark nonmarked port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    expect(() => {
+      canvas.unmarkPort("port-1");
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should add edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ from: "port-1", to: "port-1" });
+
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(2);
+  });
+
+  it("should add edge with specified id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    expect(canvas.graph.getEdge("edge-1")).not.toBe(null);
+  });
+
+  it("should add edge with specified default shape", () => {
+    const element = document.createElement("div");
+    const shape = new BezierEdgeShape();
+    const canvas = createCanvas({
+      element,
+      options: { edges: { shape: () => shape } },
+    });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1];
+
+    expect(edgeSvg).toBe(shape.svg);
+  });
+
+  it("should add edge with specified shape", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    const shape = new BezierEdgeShape();
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1", shape });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1];
+
+    expect(edgeSvg).toBe(shape.svg);
+  });
+
+  it("should add edge with specified default priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({
+      element,
+      options: { edges: { priority: 10 } },
+    });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ from: "port-1", to: "port-1" });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should add edge with specified priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      priority: 10,
+    });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should not add edge with existing id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    expect(() => {
+      canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should not add edge from nonexisting port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(() => {
+      canvas.addEdge({ id: "edge-1", from: "port-2", to: "port-1" });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should not add edge to nonexisting port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(() => {
+      canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should update edge without parameters", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    const portElement = createElement();
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: portElement,
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    portElement.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(100, 100, 0, 0);
+    };
+
+    canvas.updateEdge("edge-1");
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.transform).toBe("translate(100px, 100px)");
+  });
+
+  it("should update edge source", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    canvas.updateEdge("edge-1", { from: "port-2" });
+
+    const edge = canvas.graph.getEdge("edge-1")!;
+
+    expect(edge.from).toBe("port-2");
+  });
+
+  it("should update edge target", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    canvas.updateEdge("edge-1", { to: "port-1" });
+
+    const edge = canvas.graph.getEdge("edge-1")!;
+
+    expect(edge.to).toBe("port-1");
+  });
+
+  it("should update edge priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    canvas.updateEdge("edge-1", { priority: 10 });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should update edge shape", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const newShape = new BezierEdgeShape();
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    canvas.updateEdge("edge-1", { shape: newShape });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg).toBe(newShape.svg);
+  });
+
+  it("should throw error when trying to update nonexisting edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    expect(() => {
+      canvas.updateEdge("edge-1");
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should remove edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    canvas.removeEdge("edge-1");
+
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(1);
+  });
+
+  it("should throw error when trying to remove nonexisting edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    expect(() => {
+      canvas.removeEdge("edge-1");
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should patch viewport matrix", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.patchViewportMatrix({ scale: 2, x: 3, y: 4 });
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(0.5, 0, 0, 0.5, -1.5, -2)");
+  });
+
+  it("should patch content matrix", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
+
+    const container = element.children[0].children[0] as HTMLElement;
+
+    expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
+  });
+
+  it("should clear canvas from elements", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.clear();
+
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(0);
+  });
+
+  it("should reset node id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.clear();
+
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    expect(canvas.graph.getAllNodeIds()).toEqual([0]);
+  });
+
+  it("should reset port id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const addNode = (): void => {
+      canvas.addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            element: createElement(),
+          },
+        ],
+      });
+    };
+
+    addNode();
+    addNode();
+    canvas.clear();
+    addNode();
+
+    expect(canvas.graph.getAllPortIds()).toEqual([0]);
+  });
+
+  it("should reset edge id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const addElements = (): void => {
+      canvas.addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement(),
+          },
+        ],
+      });
+
+      canvas.addEdge({ from: "port-1", to: "port-1" });
+    };
+
+    addElements();
+    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.clear();
+    addElements();
+
+    expect(canvas.graph.getAllEdgeIds()).toEqual([0]);
+  });
+
+  it("should clear before destroy", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const spy = jest.spyOn(canvas, "clear");
+
+    canvas.destroy();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should clear html on destroy", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.destroy();
+
+    expect(element.children.length).toBe(0);
+  });
+
+  it("should emit event before destroy", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const onBeforeDestroy = jest.fn();
+
+    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
+
+    canvas.destroy();
+
+    expect(onBeforeDestroy).toHaveBeenCalled();
   });
 });
