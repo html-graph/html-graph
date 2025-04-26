@@ -1,4 +1,3 @@
-import { CoreCanvasController } from "@/canvas-controller";
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
 import { Canvas, CanvasDefaults } from "@/canvas";
@@ -127,13 +126,13 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
-    const controller = new CoreCanvasController(
+    const canvas = new Canvas(
+      this.element,
       graphStore,
       viewportStore,
       htmlView,
+      this.canvasDefaults,
     );
-
-    const canvas = new Canvas(this.element, controller, this.canvasDefaults);
 
     if (this.hasResizeReactiveNodes) {
       ResizeReactiveNodesConfigurator.configure(canvas);

@@ -1,179 +1,74 @@
-import { CanvasController, CoreCanvasController } from "@/canvas-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
-import { AddNodeRequest } from "./add-node-request";
 import { CanvasDefaults } from "./create-defaults";
+import { createElement } from "@/mocks";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
-import { UpdateNodeRequest } from "./update-node-request";
+import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
 
-const createCanvas = (
-  options: CanvasDefaults,
-): {
-  canvas: Canvas;
-  controller: CanvasController;
-} => {
+const createCanvas = (params?: {
+  options?: CanvasDefaults;
+  element?: HTMLElement;
+}): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = document.createElement("div");
+  const element = params?.element ?? document.createElement("div");
+  const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const controller = new CoreCanvasController(
+  const canvas = new Canvas(
+    element,
     graphStore,
     viewportStore,
-    new CoreHtmlView(graphStore, viewportStore, element),
+    htmlView,
+    params?.options ?? {},
   );
 
-  const canvas = new Canvas(element, controller, options);
-
-  return { canvas, controller };
-};
-
-const createNode = (portId: unknown): AddNodeRequest => {
-  return {
-    element: document.createElement("div"),
-    x: 0,
-    y: 0,
-    ports: [
-      {
-        id: portId,
-        element: document.createElement("div"),
-      },
-    ],
-  };
+  return canvas;
 };
 
 describe("Canvas", () => {
-  it("should add node on controller with specified element", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "addNode");
-
+  it("should add node", () => {
     const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const addNodeRequest: AddNodeRequest = {
-      element,
+    canvas.addNode({
+      element: createElement(),
       x: 0,
       y: 0,
-    };
+    });
 
-    canvas.addNode(addNodeRequest);
+    const container = element.children[0].children[0];
 
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ element }));
+    expect(container.children.length).toBe(1);
   });
 
-  it("should add node on controller with specified coordinates", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should add node with specified id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
-      element: document.createElement("div"),
-      x: 10,
-      y: 20,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ x: 10, y: 20 }));
-  });
-
-  it("should add node on controller with specified id", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-    };
+    });
 
-    canvas.addNode(addNodeRequest);
+    const node = canvas.graph.getNode("node-1")!;
 
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ id: "node-1" }));
-  });
-
-  it("should add node on controller with default center fn when none specified", () => {
-    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
-
-    const { canvas, controller } = createCanvas({ nodes: { centerFn } });
-
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ centerFn }));
-  });
-
-  it("should add node on controller with specified center fn", () => {
-    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
-
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ centerFn }));
-  });
-
-  it("should add node on controller with default priority when none specified", () => {
-    const { canvas, controller } = createCanvas({ nodes: { priority: 10 } });
-
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ priority: 10 }));
-  });
-
-  it("should add node on controller with specified priority", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const spy = jest.spyOn(controller, "addNode");
-
-    const addNodeRequest: AddNodeRequest = {
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      priority: 10,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ priority: 10 }));
+    expect(node).not.toBe(null);
   });
 
   it("should throw error when trying to add node with existing id", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     const addNodeRequest: AddNodeRequest = {
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
     };
@@ -185,53 +80,209 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should update node without parameters", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should add node with specified default centerFn", () => {
+    const element = document.createElement("div");
+    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
 
-    const addNodeRequest: AddNodeRequest = {
+    const canvas = createCanvas({
+      element,
+      options: {
+        nodes: {
+          centerFn,
+        },
+      },
+    });
+
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement({ width: 100, height: 100 }),
       x: 0,
       y: 0,
+    });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should add node with specified centerFn", () => {
+    const element = document.createElement("div");
+    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
+
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement({ width: 100, height: 100 }),
+      x: 0,
+      y: 0,
+      centerFn,
+    });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should add node with specified default priority", () => {
+    const element = document.createElement("div");
+
+    const canvas = createCanvas({
+      element,
+      options: {
+        nodes: {
+          priority: 10,
+        },
+      },
+    });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.zIndex).toBe("10");
+  });
+
+  it("should add node with specified priority", () => {
+    const element = document.createElement("div");
+
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      priority: 10,
+    });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.zIndex).toBe("10");
+  });
+
+  it("should mark specified ports when adding node", () => {
+    const element = document.createElement("div");
+
+    const canvas = createCanvas({ element });
+
+    const spy = jest.spyOn(canvas, "markPort");
+
+    const portElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: portElement,
+        },
+      ],
+    });
+
+    expect(spy).toHaveBeenCalledWith({
+      id: "port-1",
+      nodeId: "node-1",
+      element: portElement,
+    });
+  });
+
+  it("should update node without arguments", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(0, 0, 100, 100);
     };
-
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "updateNode");
 
     canvas.updateNode("node-1");
 
-    expect(spy).toHaveBeenCalledWith("node-1", {});
+    const container = element.children[0].children[0];
+    const nodeElementWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeElementWrapper.style.transform).toBe("translate(-50px, -50px)");
   });
 
-  it("should update node with spcified parameters", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should update node coordinates", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-    };
+    });
 
-    canvas.addNode(addNodeRequest);
+    canvas.updateNode("node-1", { x: 100, y: 100 });
 
-    const spy = jest.spyOn(controller, "updateNode");
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
 
-    const updateNodeRequest: UpdateNodeRequest = {
-      x: 10,
-      y: 20,
-      centerFn: () => ({ x: 0, y: 0 }),
-      priority: 10,
-    };
+    expect(nodeElement.style.transform).toBe("translate(100px, 100px)");
+  });
 
-    canvas.updateNode("node-1", updateNodeRequest);
+  it("should update node centerFn", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    expect(spy).toHaveBeenCalledWith("node-1", updateNodeRequest);
+    canvas.addNode({
+      id: "node-1",
+      element: createElement({ width: 100, height: 100 }),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.updateNode("node-1", { centerFn: () => ({ x: 0, y: 0 }) });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should update node priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.updateNode("node-1", { priority: 10 });
+
+    const container = element.children[0].children[0];
+    const nodeElement = container.children[0] as HTMLElement;
+
+    expect(nodeElement.style.zIndex).toBe("10");
   });
 
   it("should throw error when trying to update nonexisting node", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.updateNode("node-1");
@@ -239,109 +290,88 @@ describe("Canvas", () => {
   });
 
   it("should remove node", () => {
-    const { canvas, controller } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "removeNode");
+    });
 
     canvas.removeNode("node-1");
 
-    expect(spy).toHaveBeenCalledWith("node-1");
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(0);
   });
 
   it("should throw error when trying to remove nonexisting node", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.removeNode("node-1");
     }).toThrow(HtmlGraphError);
   });
 
-  it("should mark specified port on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should mark port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const portElement = document.createElement("div");
-
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-    };
-
-    const markPortRequest: MarkPortRequest = {
-      nodeId: "node-1",
-      element: portElement,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "markPort");
-
-    canvas.markPort(markPortRequest);
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({ nodeId: "node-1", element: portElement }),
-    );
-  });
-
-  it("should mark specified port with default direction when none specified", () => {
-    const { canvas, controller } = createCanvas({
-      ports: { direction: Math.PI },
     });
 
-    const portElement = document.createElement("div");
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    };
-
-    const markPortRequest: MarkPortRequest = {
+    canvas.markPort({
       nodeId: "node-1",
-      element: portElement,
-    };
+      element: createElement(),
+    });
 
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "markPort");
-
-    canvas.markPort(markPortRequest);
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({ direction: Math.PI }),
-    );
+    expect(canvas.graph.getAllPortIds().length).toBe(1);
   });
 
-  it("should throw error when trying to add port with existing id", () => {
-    const { canvas } = createCanvas({});
+  it("should mark port with specified id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const portElement = document.createElement("div");
-
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-    };
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(canvas.graph.getPort("port-1")).not.toBe(null);
+  });
+
+  it("should throw error when trying to mark port with existing id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
 
     const markPortRequest: MarkPortRequest = {
       id: "port-1",
       nodeId: "node-1",
-      element: portElement,
+      element: createElement(),
     };
 
-    canvas.addNode(addNodeRequest);
     canvas.markPort(markPortRequest);
 
     expect(() => {
@@ -349,365 +379,707 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should throw error when trying to add port to nonexisting node", () => {
-    const { canvas } = createCanvas({});
-
-    const portElement = document.createElement("div");
-
-    const markPortRequest: MarkPortRequest = {
-      nodeId: "node-1",
-      element: portElement,
-    };
+  it("should throw error when trying to mark port to nonexisting node", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
-      canvas.markPort(markPortRequest);
+      canvas.markPort({ nodeId: "node-1", element: createElement() });
     }).toThrow(HtmlGraphError);
   });
 
-  it("should mark specified ports when adding node", () => {
-    const { canvas } = createCanvas({});
+  it("should mark port with specified default port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({
+      element,
+      options: { ports: { direction: Math.PI } },
+    });
 
-    const portElement = document.createElement("div");
-
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement,
-          direction: Math.PI,
-        },
-      ],
-    };
+    });
 
-    const spy = jest.spyOn(canvas, "markPort");
-
-    canvas.addNode(addNodeRequest);
-
-    expect(spy).toHaveBeenCalledWith({
+    canvas.markPort({
       id: "port-1",
-      element: portElement,
       nodeId: "node-1",
+      element: createElement(),
+    });
+
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
+  });
+
+  it("should mark port with specified port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
       direction: Math.PI,
     });
+
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
   });
 
-  it("should update port without parameters", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should update port direction", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
-    };
+    });
 
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "updatePort");
-
-    canvas.updatePort("port-1");
-    expect(spy).toHaveBeenCalledWith("port-1", {});
-  });
-
-  it("should update port with specified parameters", () => {
-    const { canvas, controller } = createCanvas({});
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "updatePort");
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
 
     canvas.updatePort("port-1", { direction: Math.PI });
 
-    expect(spy).toHaveBeenCalledWith("port-1", { direction: Math.PI });
+    const port = canvas.graph.getPort("port-1")!;
+
+    expect(port.direction).toBe(Math.PI);
   });
 
   it("should throw error when trying to update nonexisting port", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.updatePort("port-1");
     }).toThrow(HtmlGraphError);
   });
 
-  it("should unmark port on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should unmark port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const addNodeRequest: AddNodeRequest = {
+    canvas.addNode({
       id: "node-1",
-      element: document.createElement("div"),
+      element: createElement(),
       x: 0,
       y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
-    };
+    });
 
-    canvas.addNode(addNodeRequest);
-
-    const spy = jest.spyOn(controller, "unmarkPort");
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
 
     canvas.unmarkPort("port-1");
 
-    expect(spy).toHaveBeenCalledWith("port-1");
+    expect(canvas.graph.getAllPortIds().length).toBe(0);
   });
 
-  it("should throw error when trying to unmark nonexisting port", () => {
-    const { canvas } = createCanvas({});
+  it("should throw error when trying to unmark nonmarked port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.unmarkPort("port-1");
     }).toThrow(HtmlGraphError);
   });
 
-  it("should add edge on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should add edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-
-    const spy = jest.spyOn(controller, "addEdge");
-
-    canvas.addEdge({ from: "port-1", to: "port-2" });
-
-    expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({ from: "port-1", to: "port-2" }),
-    );
-  });
-
-  it("should add edge on controller with default shape when none specified", () => {
-    const shape = new BezierEdgeShape();
-
-    const { canvas, controller } = createCanvas({
-      edges: {
-        shape: () => shape,
-      },
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
     });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-
-    const spy = jest.spyOn(controller, "addEdge");
-
-    canvas.addEdge({ from: "port-1", to: "port-2" });
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ shape }));
-  });
-
-  it("should add edge on controller with specified shape", () => {
-    const shape = new BezierEdgeShape();
-
-    const { canvas, controller } = createCanvas({});
-
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-
-    const spy = jest.spyOn(controller, "addEdge");
-
-    canvas.addEdge({ from: "port-1", to: "port-2", shape });
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ shape }));
-  });
-
-  it("should add edge on controller with default priority when none specified", () => {
-    const { canvas, controller } = createCanvas({
-      edges: {
-        priority: 10,
-      },
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
     });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
+    canvas.addEdge({ from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(controller, "addEdge");
+    const container = element.children[0].children[0];
 
-    canvas.addEdge({ from: "port-1", to: "port-2" });
-
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ priority: 10 }));
+    expect(container.children.length).toBe(2);
   });
 
-  it("should add edge on controller with specified priority", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should add edge with specified id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
 
-    const spy = jest.spyOn(controller, "addEdge");
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
 
-    canvas.addEdge({ from: "port-1", to: "port-2", priority: 10 });
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ priority: 10 }));
+    expect(canvas.graph.getEdge("edge-1")).not.toBe(null);
   });
 
-  it("should throw error when trying to add edge with existing id", () => {
-    const { canvas } = createCanvas({});
+  it("should add edge with specified default shape", () => {
+    const element = document.createElement("div");
+    const shape = new BezierEdgeShape();
+    const canvas = createCanvas({
+      element,
+      options: { edges: { shape: () => shape } },
+    });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1];
+
+    expect(edgeSvg).toBe(shape.svg);
+  });
+
+  it("should add edge with specified shape", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    const shape = new BezierEdgeShape();
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1", shape });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1];
+
+    expect(edgeSvg).toBe(shape.svg);
+  });
+
+  it("should add edge with specified default priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({
+      element,
+      options: { edges: { priority: 10 } },
+    });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ from: "port-1", to: "port-1" });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should add edge with specified priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      priority: 10,
+    });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should not add edge with existing id", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    expect(() => {
+      canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should not add edge from nonexisting port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
+
+    expect(() => {
+      canvas.addEdge({ id: "edge-1", from: "port-2", to: "port-1" });
+    }).toThrow(HtmlGraphError);
+  });
+
+  it("should not add edge to nonexisting port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: createElement(),
+    });
 
     expect(() => {
       canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
     }).toThrow(HtmlGraphError);
   });
 
-  it("should throw error when trying to add edge to nonexisting source", () => {
-    const { canvas } = createCanvas({});
-
-    canvas.addNode(createNode("port-2"));
-
-    expect(() => {
-      canvas.addEdge({ from: "port-1", to: "port-2" });
-    }).toThrow(HtmlGraphError);
-  });
-
-  it("should throw error when trying to add edge to nonexisting target", () => {
-    const { canvas } = createCanvas({});
-
-    canvas.addNode(createNode("port-1"));
-
-    expect(() => {
-      canvas.addEdge({ from: "port-1", to: "port-2" });
-    }).toThrow(HtmlGraphError);
-  });
-
   it("should update edge without parameters", () => {
-    const { canvas, controller } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
 
-    const spy = jest.spyOn(controller, "updateEdge");
+    const portElement = createElement();
+
+    canvas.markPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: portElement,
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    portElement.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(100, 100, 0, 0);
+    };
 
     canvas.updateEdge("edge-1");
 
-    expect(spy).toHaveBeenCalledWith("edge-1", {});
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.transform).toBe("translate(100px, 100px)");
   });
 
-  it("should update edge with specified parameters", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should update edge source", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: createElement(),
+        },
+      ],
+    });
+
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
 
-    const spy = jest.spyOn(controller, "updateEdge");
+    canvas.updateEdge("edge-1", { from: "port-2" });
 
-    const shape = new BezierEdgeShape();
+    const edge = canvas.graph.getEdge("edge-1")!;
 
-    canvas.updateEdge("edge-1", {
-      from: "port-2",
-      to: "port-1",
-      shape,
-      priority: 10,
+    expect(edge.from).toBe("port-2");
+  });
+
+  it("should update edge target", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
     });
 
-    expect(spy).toHaveBeenCalledWith("edge-1", {
-      from: "port-2",
-      to: "port-1",
-      shape,
-      priority: 10,
+    canvas.addNode({
+      id: "node-2",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: createElement(),
+        },
+      ],
     });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+
+    canvas.updateEdge("edge-1", { to: "port-1" });
+
+    const edge = canvas.graph.getEdge("edge-1")!;
+
+    expect(edge.to).toBe("port-1");
+  });
+
+  it("should update edge priority", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    canvas.updateEdge("edge-1", { priority: 10 });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg.style.zIndex).toBe("10");
+  });
+
+  it("should update edge shape", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const newShape = new BezierEdgeShape();
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    canvas.updateEdge("edge-1", { shape: newShape });
+
+    const container = element.children[0].children[0];
+    const edgeSvg = container.children[1] as SVGSVGElement;
+
+    expect(edgeSvg).toBe(newShape.svg);
   });
 
   it("should throw error when trying to update nonexisting edge", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.updateEdge("edge-1");
     }).toThrow(HtmlGraphError);
   });
 
-  it("should remove edge on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should remove edge", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    canvas.addNode(createNode("port-1"));
-    canvas.addNode(createNode("port-2"));
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
 
-    const spy = jest.spyOn(controller, "removeEdge");
-
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
     canvas.removeEdge("edge-1");
 
-    expect(spy).toHaveBeenCalledWith("edge-1");
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(1);
   });
 
   it("should throw error when trying to remove nonexisting edge", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     expect(() => {
       canvas.removeEdge("edge-1");
     }).toThrow(HtmlGraphError);
   });
 
-  it("should patch viewport matrix on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should patch viewport matrix", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(controller, "patchViewportMatrix");
+    canvas.patchViewportMatrix({ scale: 2, x: 3, y: 4 });
 
-    canvas.patchViewportMatrix({ scale: 2 });
+    const container = element.children[0].children[0] as HTMLElement;
 
-    expect(spy).toHaveBeenCalledWith({ scale: 2 });
+    expect(container.style.transform).toBe("matrix(0.5, 0, 0, 0.5, -1.5, -2)");
   });
 
-  it("should patch content matrix on controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should patch content matrix", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(controller, "patchContentMatrix");
+    canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
-    canvas.patchContentMatrix({ scale: 2 });
+    const container = element.children[0].children[0] as HTMLElement;
 
-    expect(spy).toHaveBeenCalledWith({ scale: 2 });
+    expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
   });
 
-  it("should clear controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should clear canvas from elements", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(controller, "clear");
+    canvas.addNode({
+      id: "node-1",
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
 
     canvas.clear();
 
-    expect(spy).toHaveBeenCalled();
+    const container = element.children[0].children[0];
+
+    expect(container.children.length).toBe(0);
   });
 
-  it("should destroy controller", () => {
-    const { canvas, controller } = createCanvas({});
+  it("should reset node id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(controller, "destroy");
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.clear();
+
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+    });
+
+    expect(canvas.graph.getAllNodeIds()).toEqual([0]);
+  });
+
+  it("should reset port id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const addNode = (): void => {
+      canvas.addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            element: createElement(),
+          },
+        ],
+      });
+    };
+
+    addNode();
+    addNode();
+    canvas.clear();
+    addNode();
+
+    expect(canvas.graph.getAllPortIds()).toEqual([0]);
+  });
+
+  it("should reset edge id generator", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const addElements = (): void => {
+      canvas.addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement(),
+          },
+        ],
+      });
+
+      canvas.addEdge({ from: "port-1", to: "port-1" });
+    };
+
+    addElements();
+    canvas.addEdge({ from: "port-1", to: "port-1" });
+    canvas.clear();
+    addElements();
+
+    expect(canvas.graph.getAllEdgeIds()).toEqual([0]);
+  });
+
+  it("should clear before destroy", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const spy = jest.spyOn(canvas, "clear");
 
     canvas.destroy();
 
     expect(spy).toHaveBeenCalled();
   });
 
+  it("should clear html on destroy", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    canvas.destroy();
+
+    expect(element.children.length).toBe(0);
+  });
+
   it("should emit event before destroy", () => {
-    const { canvas } = createCanvas({});
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
 
     const onBeforeDestroy = jest.fn();
 
@@ -716,5 +1088,111 @@ describe("Canvas", () => {
     canvas.destroy();
 
     expect(onBeforeDestroy).toHaveBeenCalled();
+  });
+
+  it("should rerender adjacent edges when updating node", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const shape = new BezierEdgeShape();
+    const spy = jest.spyOn(shape, "render");
+
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.updateNode("node-1");
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should unmark ports before node removal", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const spy = jest.spyOn(canvas, "unmarkPort");
+
+    canvas.removeNode("node-1");
+
+    expect(spy).toHaveBeenCalledWith("port-1");
+  });
+
+  it("should rerender adjacent edges when updating port", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    const shape = new BezierEdgeShape();
+    const spy = jest.spyOn(shape, "render");
+
+    canvas.addEdge({ from: "port-1", to: "port-1", shape });
+    canvas.updatePort("port-1");
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should remove adjacent edges before port unmark", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: createElement(),
+        },
+      ],
+    });
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    const spy = jest.spyOn(canvas, "removeEdge");
+
+    canvas.unmarkPort("port-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
   });
 });

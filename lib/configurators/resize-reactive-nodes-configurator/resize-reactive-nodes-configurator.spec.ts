@@ -6,20 +6,14 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { triggerResizeFor } from "@/mocks";
 import { Canvas } from "@/canvas";
-import { CoreCanvasController } from "@/canvas-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
+  const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const controller = new CoreCanvasController(
-    graphStore,
-    viewportStore,
-    new CoreHtmlView(graphStore, viewportStore, element),
-  );
-
-  const canvas = new Canvas(element, controller, {});
+  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
 
   ResizeReactiveNodesConfigurator.configure(canvas);
 

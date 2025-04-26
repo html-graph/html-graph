@@ -6,7 +6,6 @@ import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 import { DragOptions } from "./create-options";
 import { Canvas } from "@/canvas";
-import { CoreCanvasController } from "@/canvas-controller";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 
 let innerWidth: number;
@@ -19,14 +18,9 @@ const createCanvas = (params?: {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = params?.element ?? document.createElement("div");
+  const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const coreController = new CoreCanvasController(
-    graphStore,
-    viewportStore,
-    new CoreHtmlView(graphStore, viewportStore, element),
-  );
-
-  const canvas = new Canvas(element, coreController, {});
+  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
 
   UserDraggableNodesConfigurator.configure(canvas, params?.dragOptions ?? {});
 
