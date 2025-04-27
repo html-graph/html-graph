@@ -1,7 +1,7 @@
 import { TransformPreprocessorFn } from "../preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 
-describe("olveransformPreprocessor", () => {
+describe("resolveTransformPreprocessor", () => {
   it("should resolve custom transform preprocessor", () => {
     const preprocessorFn: TransformPreprocessorFn = (params) => {
       return params.nextTransform;

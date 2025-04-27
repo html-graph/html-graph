@@ -9,29 +9,31 @@ export const createCycleCirclePath = (params: {
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
 }): string => {
-  const r = params.smallRadius;
-  const R = params.radius;
-  const len = Math.sqrt(r * r + R * R);
-  const g = r + R;
-  const px = params.arrowLength + len * (1 - R / g);
-  const py = (r * R) / g;
+  const smallRadius = params.smallRadius;
+  const radius = params.radius;
+  const distance = Math.sqrt(smallRadius * smallRadius + radius * radius);
+  const g = smallRadius + radius;
+  const jointX = params.arrowLength + distance * (1 - radius / g);
+  const jointY = (smallRadius * radius) / g;
 
   const points: Point[] = [
     { x: params.arrowLength, y: zero.y },
-    { x: px, y: py },
-    { x: px, y: -py },
+    { x: jointX, y: jointY },
+    { x: jointX, y: -jointY },
   ];
 
-  const rp = points.map((p) => createRotatedPoint(p, params.fromVector, zero));
+  const rotatedPoints = points.map((p) =>
+    createRotatedPoint(p, params.fromVector, zero),
+  );
 
   const c = [
-    `M ${rp[0].x} ${rp[0].y}`,
-    `A ${r} ${r} 0 0 1 ${rp[1].x} ${rp[1].y}`,
-    `A ${R} ${R} 0 1 0 ${rp[2].x} ${rp[2].y}`,
-    `A ${r} ${r} 0 0 1 ${rp[0].x} ${rp[0].y}`,
+    `M ${rotatedPoints[0].x} ${rotatedPoints[0].y}`,
+    `A ${smallRadius} ${smallRadius} 0 0 1 ${rotatedPoints[1].x} ${rotatedPoints[1].y}`,
+    `A ${radius} ${radius} 0 1 0 ${rotatedPoints[2].x} ${rotatedPoints[2].y}`,
+    `A ${smallRadius} ${smallRadius} 0 0 1 ${rotatedPoints[0].x} ${rotatedPoints[0].y}`,
   ].join(" ");
 
-  const preLine = `M ${0} ${0} L ${rp[0].x} ${rp[0].y} `;
+  const preLine = `M ${0} ${0} L ${rotatedPoints[0].x} ${rotatedPoints[0].y} `;
 
   return `${params.hasSourceArrow || params.hasTargetArrow ? "" : preLine}${c}`;
 };

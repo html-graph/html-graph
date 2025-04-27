@@ -19,9 +19,9 @@ export class GraphStore {
 
   private readonly edges = new Map<unknown, EdgePayload>();
 
-  private readonly incommingEdges = new Map<unknown, Set<unknown>>();
+  private readonly incomingEdges = new Map<unknown, Set<unknown>>();
 
-  private readonly outcommingEdges = new Map<unknown, Set<unknown>>();
+  private readonly outcomingEdges = new Map<unknown, Set<unknown>>();
 
   private readonly cycleEdges = new Map<unknown, Set<unknown>>();
 
@@ -160,8 +160,8 @@ export class GraphStore {
     });
 
     this.cycleEdges.set(request.id, new Set());
-    this.incommingEdges.set(request.id, new Set());
-    this.outcommingEdges.set(request.id, new Set());
+    this.incomingEdges.set(request.id, new Set());
+    this.outcomingEdges.set(request.id, new Set());
 
     this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
     this.afterPortAddedEmitter.emit(request.id);
@@ -250,8 +250,8 @@ export class GraphStore {
 
   public clear(): void {
     this.beforeClearEmitter.emit();
-    this.incommingEdges.clear();
-    this.outcommingEdges.clear();
+    this.incomingEdges.clear();
+    this.outcomingEdges.clear();
     this.cycleEdges.clear();
 
     this.edges.clear();
@@ -260,11 +260,11 @@ export class GraphStore {
   }
 
   public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] {
-    return Array.from(this.incommingEdges.get(portId)!);
+    return Array.from(this.incomingEdges.get(portId)!);
   }
 
   public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] {
-    return Array.from(this.outcommingEdges.get(portId)!);
+    return Array.from(this.outcomingEdges.get(portId)!);
   }
 
   public getPortCycleEdgeIds(portId: unknown): readonly unknown[] {
@@ -329,8 +329,8 @@ export class GraphStore {
     });
 
     if (request.from !== request.to) {
-      this.outcommingEdges.get(request.from)!.add(request.id);
-      this.incommingEdges.get(request.to)!.add(request.id);
+      this.outcomingEdges.get(request.from)!.add(request.id);
+      this.incomingEdges.get(request.to)!.add(request.id);
     } else {
       this.cycleEdges.get(request.from)!.add(request.id);
     }
@@ -343,10 +343,10 @@ export class GraphStore {
 
     this.cycleEdges.get(portFromId)!.delete(edgeId);
     this.cycleEdges.get(portToId)!.delete(edgeId);
-    this.incommingEdges.get(portFromId)!.delete(edgeId);
-    this.incommingEdges.get(portToId)!.delete(edgeId);
-    this.outcommingEdges.get(portFromId)!.delete(edgeId);
-    this.outcommingEdges.get(portToId)!.delete(edgeId);
+    this.incomingEdges.get(portFromId)!.delete(edgeId);
+    this.incomingEdges.get(portToId)!.delete(edgeId);
+    this.outcomingEdges.get(portFromId)!.delete(edgeId);
+    this.outcomingEdges.get(portToId)!.delete(edgeId);
 
     this.edges.delete(edgeId);
   }

@@ -6,8 +6,8 @@ export const move = (
   dy: number,
 ): TransformPayload => {
   /**
-   * dx2 - traslate x
-   * dy2 - traslate y
+   * dx2 - translate x
+   * dy2 - translate y
    *
    * direct transform
    *  s1  0   dx1     1   0   dx2

@@ -74,7 +74,7 @@ describe("Viewport", () => {
     expect(viewportMatrix).not.toBe(matrix);
   });
 
-  it("should call callback before viewpoprt update", () => {
+  it("should call callback before viewport update", () => {
     const viewportStore = new ViewportStore();
 
     const viewport = new Viewport(viewportStore);
@@ -88,7 +88,7 @@ describe("Viewport", () => {
     expect(onBeforeUpdate).toHaveBeenCalled();
   });
 
-  it("should call callback after viewpoprt update", () => {
+  it("should call callback after viewport update", () => {
     const viewportStore = new ViewportStore();
 
     const viewport = new Viewport(viewportStore);

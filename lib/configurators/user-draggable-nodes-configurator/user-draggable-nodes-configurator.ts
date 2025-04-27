@@ -9,7 +9,7 @@ export class UserDraggableNodesConfigurator {
 
   private maxNodePriority = 0;
 
-  private previousTouchCoords: Point | null = null;
+  private previousTouchCoordinates: Point | null = null;
 
   private readonly nodeIds = new Map<HTMLElement, unknown>();
 
@@ -100,7 +100,7 @@ export class UserDraggableNodesConfigurator {
 
     event.stopImmediatePropagation();
 
-    this.previousTouchCoords = {
+    this.previousTouchCoordinates = {
       x: event.touches[0].clientX,
       y: event.touches[0].clientY,
     };
@@ -164,13 +164,13 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    if (this.grabbedNodeId !== null && this.previousTouchCoords !== null) {
-      const dx = t.clientX - this.previousTouchCoords.x;
-      const dy = t.clientY - this.previousTouchCoords.y;
+    if (this.grabbedNodeId !== null && this.previousTouchCoordinates !== null) {
+      const dx = t.clientX - this.previousTouchCoordinates.x;
+      const dy = t.clientY - this.previousTouchCoordinates.y;
 
       this.dragNode(this.grabbedNodeId, dx, dy);
 
-      this.previousTouchCoords = {
+      this.previousTouchCoordinates = {
         x: event.touches[0].clientX,
         y: event.touches[0].clientY,
       };
@@ -178,7 +178,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowTouchFinish = (): void => {
-    this.previousTouchCoords = null;
+    this.previousTouchCoordinates = null;
     this.cancelTouchDrag();
   };
 
@@ -268,7 +268,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private cancelTouchDrag(): void {
-    this.previousTouchCoords = null;
+    this.previousTouchCoordinates = null;
     const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {

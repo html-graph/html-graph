@@ -188,7 +188,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should not unset cursor left mouse button was not releaseed", () => {
+  it("should not unset cursor left mouse button was not released", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const onTransformChange = jest.fn((): void => {});
 

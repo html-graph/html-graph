@@ -12,14 +12,14 @@ export const createHorizontalLinePath = (params: {
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
 }): string => {
-  const pba: Point = params.hasSourceArrow
+  const beginArrow: Point = params.hasSourceArrow
     ? createRotatedPoint(
         { x: params.arrowLength, y: zero.y },
         params.fromVector,
         zero,
       )
     : zero;
-  const pea: Point = params.hasTargetArrow
+  const endArrow: Point = params.hasTargetArrow
     ? createRotatedPoint(
         { x: params.to.x - params.arrowLength, y: params.to.y },
         params.toVector,
@@ -28,30 +28,37 @@ export const createHorizontalLinePath = (params: {
     : params.to;
 
   const gap = params.arrowLength + params.arrowOffset;
-  const gapr = gap - params.roundness;
+  const gapRoundness = gap - params.roundness;
 
-  const pbl = createRotatedPoint(
-    { x: gapr, y: zero.y },
+  const beginLine = createRotatedPoint(
+    { x: gapRoundness, y: zero.y },
     params.fromVector,
     zero,
   );
-  const pel = createRotatedPoint(
-    { x: params.to.x - gapr, y: params.to.y },
+
+  const endLine = createRotatedPoint(
+    { x: params.to.x - gapRoundness, y: params.to.y },
     params.toVector,
     params.to,
   );
-  const halfW = Math.max((pbl.x + pel.x) / 2, gap);
-  const halfH = params.to.y / 2;
-  const pb1: Point = { x: params.flipX > 0 ? halfW : -gap, y: pbl.y };
-  const pb2: Point = { x: pb1.x, y: halfH };
-  const pe1: Point = {
-    x: params.flipX > 0 ? params.to.x - halfW : params.to.x + gap,
-    y: pel.y,
+
+  const halfWidth = Math.max((beginLine.x + endLine.x) / 2, gap);
+  const halfHeight = params.to.y / 2;
+
+  const begin1: Point = {
+    x: params.flipX > 0 ? halfWidth : -gap,
+    y: beginLine.y,
   };
-  const pe2: Point = { x: pe1.x, y: halfH };
+  const begin2: Point = { x: begin1.x, y: halfHeight };
+
+  const end1: Point = {
+    x: params.flipX > 0 ? params.to.x - halfWidth : params.to.x + gap,
+    y: endLine.y,
+  };
+  const end2: Point = { x: end1.x, y: halfHeight };
 
   return createRoundedPath(
-    [pba, pbl, pb1, pb2, pe2, pe1, pel, pea],
+    [beginArrow, beginLine, begin1, begin2, end2, end1, endLine, endArrow],
     params.roundness,
   );
 };

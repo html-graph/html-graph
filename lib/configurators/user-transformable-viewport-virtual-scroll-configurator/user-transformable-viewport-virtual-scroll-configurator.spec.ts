@@ -227,7 +227,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     expect(container.children.length).toBe(5);
   });
 
-  it("should call specifined onTransformChange", async () => {
+  it("should call specified onTransformChange", async () => {
     const onTransformChange = jest.fn();
     const element = createElement({ width: 100, height: 100 });
 
@@ -255,7 +255,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     expect(onTransformChange).toHaveBeenCalled();
   });
 
-  it("should call specifined onTransformFinished", async () => {
+  it("should call specified onTransformFinished", async () => {
     const onTransformFinished = jest.fn();
     const element = createElement({ width: 100, height: 100 });
 

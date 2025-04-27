@@ -19,7 +19,7 @@ describe("createVerticalLinePath", () => {
     );
   });
 
-  it("should create fliped vertical line path without arrows", () => {
+  it("should create flipped vertical line path without arrows", () => {
     const path = createVerticalLinePath({
       to: { x: 100, y: 200 },
       fromVector: { x: 1, y: 0 },
