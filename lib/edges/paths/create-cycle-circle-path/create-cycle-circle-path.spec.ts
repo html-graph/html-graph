@@ -3,7 +3,7 @@ import { createCycleCirclePath } from "./create-cycle-circle-path";
 describe("createCycleCirclePath", () => {
   it("should create cycle circle path without arrows", () => {
     const path = createCycleCirclePath({
-      fromVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
@@ -18,7 +18,7 @@ describe("createCycleCirclePath", () => {
 
   it("should create cycle circle path with source arrow", () => {
     const path = createCycleCirclePath({
-      fromVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
@@ -33,7 +33,7 @@ describe("createCycleCirclePath", () => {
 
   it("should create cycle circle path with target arrow", () => {
     const path = createCycleCirclePath({
-      fromVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,

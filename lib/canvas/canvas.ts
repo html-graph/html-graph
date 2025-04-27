@@ -230,7 +230,7 @@ export class Canvas {
     }
 
     if (this.graph.getNode(request.nodeId) === null) {
-      throw new HtmlGraphError("failed to mark port for nonexisting node");
+      throw new HtmlGraphError("failed to mark port for nonexistent node");
     }
 
     this.graphStore.addPort({
@@ -250,7 +250,7 @@ export class Canvas {
     const port = this.graph.getPort(portId);
 
     if (port === null) {
-      throw new HtmlGraphError("failed to update nonexisting port");
+      throw new HtmlGraphError("failed to update nonexistent port");
     }
 
     this.graphStore.updatePort(portId, request ?? {});
@@ -283,11 +283,11 @@ export class Canvas {
     }
 
     if (this.graph.getPort(request.from) === null) {
-      throw new HtmlGraphError("failed to add edge from nonexisting port");
+      throw new HtmlGraphError("failed to add edge from nonexistent port");
     }
 
     if (this.graph.getPort(request.to) === null) {
-      throw new HtmlGraphError("failed to add edge to nonexisting port");
+      throw new HtmlGraphError("failed to add edge to nonexistent port");
     }
 
     this.graphStore.addEdge({
@@ -308,7 +308,7 @@ export class Canvas {
     const edge = this.graph.getEdge(edgeId);
 
     if (edge === null) {
-      throw new HtmlGraphError("failed to update nonexisting edge");
+      throw new HtmlGraphError("failed to update nonexistent edge");
     }
 
     this.graphStore.updateEdge(edgeId, request ?? {});
@@ -321,7 +321,7 @@ export class Canvas {
    */
   public removeEdge(edgeId: unknown): Canvas {
     if (this.graph.getEdge(edgeId) === null) {
-      throw new HtmlGraphError("failed to remove nonexisting edge");
+      throw new HtmlGraphError("failed to remove nonexistent edge");
     }
 
     this.graphStore.removeEdge(edgeId);

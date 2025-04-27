@@ -4,8 +4,8 @@ describe("createDetourBezierPath", () => {
   it("should create detour bezier path without flip", () => {
     const path = createDetourBezierPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
@@ -24,8 +24,8 @@ describe("createDetourBezierPath", () => {
   it("should create detour bezier path with flip", () => {
     const path = createDetourBezierPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: -1,
       flipY: -1,
       arrowLength: 10,
@@ -44,8 +44,8 @@ describe("createDetourBezierPath", () => {
   it("should create detour bezier path with source arrow", () => {
     const path = createDetourBezierPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
@@ -64,8 +64,8 @@ describe("createDetourBezierPath", () => {
   it("should create detour bezier path with target arrow", () => {
     const path = createDetourBezierPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,

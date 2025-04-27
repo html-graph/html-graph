@@ -3,8 +3,8 @@ import { createRotatedPoint } from "../../utils";
 
 export const createBezierLinePath = (params: {
   readonly to: Point;
-  readonly fromVect: Point;
-  readonly toVect: Point;
+  readonly fromVector: Point;
+  readonly toVector: Point;
   readonly arrowLength: number;
   readonly curvature: number;
   readonly hasSourceArrow: boolean;
@@ -12,24 +12,24 @@ export const createBezierLinePath = (params: {
 }): string => {
   const pb = createRotatedPoint(
     { x: params.arrowLength, y: zero.y },
-    params.fromVect,
+    params.fromVector,
     zero,
   );
 
   const pe = createRotatedPoint(
     { x: params.to.x - params.arrowLength, y: params.to.y },
-    params.toVect,
+    params.toVector,
     params.to,
   );
 
   const bpb: Point = {
-    x: pb.x + params.fromVect.x * params.curvature,
-    y: pb.y + params.fromVect.y * params.curvature,
+    x: pb.x + params.fromVector.x * params.curvature,
+    y: pb.y + params.fromVector.y * params.curvature,
   };
 
   const bpe: Point = {
-    x: pe.x - params.toVect.x * params.curvature,
-    y: pe.y - params.toVect.y * params.curvature,
+    x: pe.x - params.toVector.x * params.curvature,
+    y: pe.y - params.toVector.y * params.curvature,
   };
 
   const lcurve = `M ${pb.x} ${pb.y} C ${bpb.x} ${bpb.y}, ${bpe.x} ${bpe.y}, ${pe.x} ${pe.y}`;

@@ -307,7 +307,7 @@ describe("Canvas", () => {
     expect(container.children.length).toBe(0);
   });
 
-  it("should throw error when trying to remove nonexisting node", () => {
+  it("should throw error when trying to remove nonexistent node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -379,7 +379,7 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should throw error when trying to mark port to nonexisting node", () => {
+  it("should throw error when trying to mark port to nonexistent node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -460,7 +460,7 @@ describe("Canvas", () => {
     expect(port.direction).toBe(Math.PI);
   });
 
-  it("should throw error when trying to update nonexisting port", () => {
+  it("should throw error when trying to update nonexistent port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -684,7 +684,7 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should not add edge from nonexisting port", () => {
+  it("should not add edge from nonexistent port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -706,7 +706,7 @@ describe("Canvas", () => {
     }).toThrow(HtmlGraphError);
   });
 
-  it("should not add edge to nonexisting port", () => {
+  it("should not add edge to nonexistent port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -895,7 +895,7 @@ describe("Canvas", () => {
     expect(edgeSvg).toBe(newShape.svg);
   });
 
-  it("should throw error when trying to update nonexisting edge", () => {
+  it("should throw error when trying to update nonexistent edge", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -929,7 +929,7 @@ describe("Canvas", () => {
     expect(container.children.length).toBe(1);
   });
 
-  it("should throw error when trying to remove nonexisting edge", () => {
+  it("should throw error when trying to remove nonexistent edge", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -1142,7 +1142,7 @@ describe("Canvas", () => {
     expect(spy).toHaveBeenCalledWith("port-1");
   });
 
-  it("should rerender adjacent edges when updating port", () => {
+  it("should render adjacent edges when updating port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
     const nodeElement = createElement();

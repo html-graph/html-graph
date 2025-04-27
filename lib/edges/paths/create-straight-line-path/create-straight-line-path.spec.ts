@@ -4,8 +4,8 @@ describe("createStraightLinePath", () => {
   it("should create straight line path without arrows", () => {
     const path = createStraightLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -21,8 +21,8 @@ describe("createStraightLinePath", () => {
   it("should create straight line path with source arrow", () => {
     const path = createStraightLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -38,8 +38,8 @@ describe("createStraightLinePath", () => {
   it("should create straight line path with target arrow", () => {
     const path = createStraightLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,

@@ -4,8 +4,8 @@ describe("createHorizontalLinePath", () => {
   it("should create horizontal line path without arrows", () => {
     const path = createHorizontalLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -19,11 +19,11 @@ describe("createHorizontalLinePath", () => {
     );
   });
 
-  it("should create fliped horizontal line path without arrows", () => {
+  it("should create flipped horizontal line path without arrows", () => {
     const path = createHorizontalLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -40,8 +40,8 @@ describe("createHorizontalLinePath", () => {
   it("should create horizontal line path with source arrow", () => {
     const path = createHorizontalLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -58,8 +58,8 @@ describe("createHorizontalLinePath", () => {
   it("should create horizontal line path with target arrow", () => {
     const path = createHorizontalLinePath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,

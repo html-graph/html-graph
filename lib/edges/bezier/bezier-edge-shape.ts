@@ -109,7 +109,7 @@ export class BezierEdgeShape implements EdgeShape {
 
     if (params.from.portId === params.to.portId) {
       linePath = createCycleCirclePath({
-        fromVect,
+        fromVector: fromVect,
         radius: this.portCycleRadius,
         smallRadius: this.portCycleSmallRadius,
         arrowLength: this.arrowLength,
@@ -121,8 +121,8 @@ export class BezierEdgeShape implements EdgeShape {
     } else if (params.from.nodeId === params.to.nodeId) {
       linePath = createDetourBezierPath({
         to,
-        fromVect,
-        toVect,
+        fromVector: fromVect,
+        toVector: toVect,
         flipX,
         flipY,
         arrowLength: this.arrowLength,
@@ -135,8 +135,8 @@ export class BezierEdgeShape implements EdgeShape {
     } else {
       linePath = createBezierLinePath({
         to,
-        fromVect,
-        toVect,
+        fromVector: fromVect,
+        toVector: toVect,
         arrowLength: this.arrowLength,
         curvature: this.curvature,
         hasSourceArrow: this.hasSourceArrow,

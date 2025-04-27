@@ -117,7 +117,7 @@ export class VerticalEdgeShape implements EdgeShape {
 
     if (params.from.portId === params.to.portId) {
       linePath = createCycleSquarePath({
-        fromVect,
+        fromVector: fromVect,
         arrowLength: this.arrowLength,
         side: this.cycleSquareSide,
         arrowOffset: this.arrowOffset,
@@ -130,8 +130,8 @@ export class VerticalEdgeShape implements EdgeShape {
     } else if (params.from.nodeId === params.to.nodeId) {
       linePath = createDetourStraightPath({
         to,
-        fromVect,
-        toVect,
+        fromVector: fromVect,
+        toVector: toVect,
         flipX,
         flipY,
         arrowLength: this.arrowLength,
@@ -145,8 +145,8 @@ export class VerticalEdgeShape implements EdgeShape {
     } else {
       linePath = createVerticalLinePath({
         to,
-        fromVect,
-        toVect,
+        fromVector: fromVect,
+        toVector: toVect,
         flipY,
         arrowLength: this.arrowLength,
         arrowOffset: this.arrowOffset,

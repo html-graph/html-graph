@@ -4,8 +4,8 @@ describe("createDetourStraightPath", () => {
   it("should create detour straight path without flip", () => {
     const path = createDetourStraightPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
@@ -25,8 +25,8 @@ describe("createDetourStraightPath", () => {
   it("should create detour straight path with flip", () => {
     const path = createDetourStraightPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: -1,
       flipY: -1,
       arrowLength: 10,
@@ -46,8 +46,8 @@ describe("createDetourStraightPath", () => {
   it("should create detour straight path with source arrow", () => {
     const path = createDetourStraightPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
@@ -67,8 +67,8 @@ describe("createDetourStraightPath", () => {
   it("should create detour straight path with target arrow", () => {
     const path = createDetourStraightPath({
       to: { x: 100, y: 200 },
-      fromVect: { x: 1, y: 0 },
-      toVect: { x: 1, y: 0 },
+      fromVector: { x: 1, y: 0 },
+      toVector: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
