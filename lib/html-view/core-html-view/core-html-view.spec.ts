@@ -220,7 +220,7 @@ describe("CoreHtmlView", () => {
     expect(container.children.length).toBe(0);
   });
 
-  it("should remove subelements on destroy", () => {
+  it("should remove child elements on destroy", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ element });
 

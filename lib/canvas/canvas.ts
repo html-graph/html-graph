@@ -196,7 +196,7 @@ export class Canvas {
     const node = this.graph.getNode(nodeId);
 
     if (node === null) {
-      throw new HtmlGraphError("failed to update nonexisting node");
+      throw new HtmlGraphError("failed to update non existing node");
     }
 
     this.graphStore.updateNode(nodeId, request ?? {});
@@ -211,7 +211,7 @@ export class Canvas {
    */
   public removeNode(nodeId: unknown): Canvas {
     if (this.graph.getNode(nodeId) === null) {
-      throw new HtmlGraphError("failed to remove nonexisting node");
+      throw new HtmlGraphError("failed to remove non existing node");
     }
 
     this.graphStore.removeNode(nodeId);
@@ -259,12 +259,12 @@ export class Canvas {
   }
 
   /**
-   * ummarks element as port of node
+   * unmarks element as port of node
    * all the edges adjacent to port get removed
    */
   public unmarkPort(portId: unknown): Canvas {
     if (this.graph.getPort(portId) === null) {
-      throw new HtmlGraphError("failed to unmark nonexisting port");
+      throw new HtmlGraphError("failed to unmark non existing port");
     }
 
     this.graphStore.removePort(portId);

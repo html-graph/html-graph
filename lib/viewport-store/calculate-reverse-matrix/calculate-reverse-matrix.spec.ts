@@ -2,7 +2,7 @@ import { TransformState } from "../transform-state";
 import { calculateReverseMatrix } from "./calculate-reverse-matrix";
 
 describe("createReverseMatrix", () => {
-  it("should return inversed matrix", () => {
+  it("should return inverse matrix", () => {
     const matrix: TransformState = { scale: 2, x: 2, y: 2 };
 
     const reverse: TransformState = calculateReverseMatrix(matrix);

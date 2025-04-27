@@ -280,7 +280,7 @@ describe("Canvas", () => {
     expect(nodeElement.style.zIndex).toBe("10");
   });
 
-  it("should throw error when trying to update nonexisting node", () => {
+  it("should throw error when trying to update nonexistent node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -491,7 +491,7 @@ describe("Canvas", () => {
     expect(canvas.graph.getAllPortIds().length).toBe(0);
   });
 
-  it("should throw error when trying to unmark nonmarked port", () => {
+  it("should throw error when trying to unmark non marked port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
 
@@ -1090,7 +1090,7 @@ describe("Canvas", () => {
     expect(onBeforeDestroy).toHaveBeenCalled();
   });
 
-  it("should rerender adjacent edges when updating node", () => {
+  it("should render adjacent edges when updating node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
     const nodeElement = createElement();
