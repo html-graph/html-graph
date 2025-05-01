@@ -133,7 +133,7 @@ export class CanvasBuilder {
     let htmlView: HtmlView = new CoreHtmlView(
       graphStore,
       viewportStore,
-      layers.mainLayer,
+      layers.main,
     );
 
     if (trigger !== undefined) {
@@ -156,7 +156,7 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     if (this.hasBackground) {
-      BackgroundConfigurator.configure(canvas, layers.backgroundLayer);
+      BackgroundConfigurator.configure(canvas, layers.background);
     }
 
     if (this.hasResizeReactiveNodes) {
@@ -166,7 +166,7 @@ export class CanvasBuilder {
     if (this.hasDraggableNode) {
       UserDraggableNodesConfigurator.configure(
         canvas,
-        layers.mainLayer,
+        layers.main,
         this.dragOptions,
       );
     }
@@ -174,7 +174,7 @@ export class CanvasBuilder {
     if (this.virtualScrollOptions !== undefined) {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
-        layers.mainLayer,
+        layers.main,
         this.transformOptions,
         trigger!,
         this.virtualScrollOptions,
@@ -182,7 +182,7 @@ export class CanvasBuilder {
     } else if (this.hasTransformableViewport) {
       UserTransformableViewportConfigurator.configure(
         canvas,
-        layers.mainLayer,
+        layers.main,
         this.transformOptions,
       );
     }

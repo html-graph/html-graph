@@ -1,21 +1,21 @@
 import { createHost, createLayer } from "./utils";
 
 export class Layers {
-  public readonly backgroundLayer = createLayer();
+  public readonly background = createLayer();
 
-  public readonly mainLayer = createLayer();
+  public readonly main = createLayer();
 
   private readonly host = createHost();
 
   public constructor(private readonly element: HTMLElement) {
     this.element.appendChild(this.host);
-    this.host.appendChild(this.backgroundLayer);
-    this.host.appendChild(this.mainLayer);
+    this.host.appendChild(this.background);
+    this.host.appendChild(this.main);
   }
 
   public destroy(): void {
-    this.host.removeChild(this.mainLayer);
-    this.host.removeChild(this.backgroundLayer);
+    this.host.removeChild(this.main);
+    this.host.removeChild(this.background);
     this.element.removeChild(this.host);
   }
 }

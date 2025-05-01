@@ -263,7 +263,7 @@ export class UserDraggableNodesConfigurator {
     }
 
     this.grabbedNodeId = null;
-    setCursor(this.canvas.element, null);
+    setCursor(this.element, null);
     this.removeMouseDragListeners();
   }
 

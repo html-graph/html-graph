@@ -139,14 +139,14 @@ describe("CanvasBuilder", () => {
 
     builder.enableUserTransformableViewport().setElement(element).build();
 
-    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    const host = element.children[0].children[1];
+    host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
 
     window.dispatchEvent(moveEvent);
 
-    const container = element.children[0].children[1].children[0]
-      .children[0] as HTMLElement;
+    const container = host.children[0].children[0] as HTMLElement;
 
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });

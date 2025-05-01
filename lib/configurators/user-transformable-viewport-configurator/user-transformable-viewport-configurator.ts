@@ -186,7 +186,6 @@ export class UserTransformableViewportConfigurator {
   ) {
     this.options = createOptions(transformOptions);
 
-    this.element = canvas.element;
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
