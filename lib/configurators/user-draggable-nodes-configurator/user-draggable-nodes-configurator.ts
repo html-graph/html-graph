@@ -4,6 +4,9 @@ import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 
+/**
+ * Responsibility: Configures canvas to have nodes draggable by user
+ */
 export class UserDraggableNodesConfigurator {
   private grabbedNodeId: unknown | null = null;
 

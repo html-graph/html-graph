@@ -7,6 +7,9 @@ import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
 import { processTouch, TouchState } from "./process-touch";
 
+/**
+ * Responsibility: Configures canvas to have viewport transformable by user
+ */
 export class UserTransformableViewportConfigurator {
   private readonly element: HTMLElement;
 

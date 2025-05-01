@@ -1,6 +1,9 @@
 import { EventEmitter } from "./event-emitter";
 import { EventHandler } from "./event-handler";
 
+/**
+ * Responsibility: Connects events and event handlers
+ */
 export class EventSubject<T> implements EventEmitter<T>, EventHandler<T> {
   private readonly callbacks = new Set<(payload: T) => void>();
 

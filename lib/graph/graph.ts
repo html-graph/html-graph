@@ -5,7 +5,7 @@ import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
 
 /**
- * This entity is responsible for providing access to end user in a safe way
+ * Responsibility: Provides access to graph model for end user
  */
 export class Graph {
   public readonly onAfterNodeAdded: EventHandler<unknown>;

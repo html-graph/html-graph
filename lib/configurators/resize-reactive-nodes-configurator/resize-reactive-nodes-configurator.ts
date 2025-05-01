@@ -1,5 +1,8 @@
 import { Canvas } from "@/canvas";
 
+/**
+ * Responsibility: Configures canvas to updated edges on node resize
+ */
 export class ResizeReactiveNodesConfigurator {
   private readonly elementToNodeId = new Map<Element, unknown>();
 

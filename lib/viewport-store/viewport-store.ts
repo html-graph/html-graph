@@ -5,7 +5,7 @@ import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
 
 /**
- * This entity is responsible for storing viewport transformation
+ * Responsibility: Stores viewport transformation state
  */
 export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;

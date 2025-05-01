@@ -10,7 +10,7 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 
 /**
- * This entity is responsible for storing state of graph
+ * Responsibility: Stores stae of graph
  */
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();

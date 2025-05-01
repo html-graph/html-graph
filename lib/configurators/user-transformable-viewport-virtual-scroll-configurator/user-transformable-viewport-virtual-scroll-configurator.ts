@@ -9,6 +9,10 @@ import { VirtualScrollOptions } from "./virtual-scroll-options";
 import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport";
 
+/**
+ * Responsibility: Configures canvas have viewport transformable by user, while
+ * rendering only entities near viewport
+ */
 export class UserTransformableViewportVirtualScrollConfigurator {
   private readonly canvasResizeObserver: ResizeObserver;
 

@@ -1,5 +1,5 @@
 /**
- * This entity is responsible for generating node, port and edge IDs
+ * Responsibility: Generated IDs for graph entities
  */
 export class IdGenerator {
   private counter = 0;
