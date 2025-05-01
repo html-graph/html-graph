@@ -15,9 +15,12 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 
+/**
+ * Responsibility: provides graph rendering API for end user
+ */
 export class Canvas {
   /**
-   * provides api for accessing graph model
+   * provides api for accessing model of rendered graph
    */
   public readonly graph: Graph;
 
@@ -157,7 +160,7 @@ export class Canvas {
   }
 
   /**
-   * adds node to graph
+   * adds new node
    */
   public addNode(request: AddNodeRequest): Canvas {
     const id = this.nodeIdGenerator.create(request.id);
@@ -205,7 +208,7 @@ export class Canvas {
   }
 
   /**
-   * removes node from graph
+   * removes specified node
    * all the ports of node get unmarked
    * all the edges adjacent to node get removed
    */
@@ -220,7 +223,7 @@ export class Canvas {
   }
 
   /**
-   * marks element as port of node
+   * marks specified element as a port for specified node
    */
   public markPort(request: MarkPortRequest): Canvas {
     const id = this.portIdGenerator.create(request.id);
@@ -244,7 +247,7 @@ export class Canvas {
   }
 
   /**
-   * updates port and attached edges
+   * updates port and edges attached to it
    */
   public updatePort(portId: unknown, request?: UpdatePortRequest): Canvas {
     const port = this.graph.getPort(portId);
@@ -259,8 +262,8 @@ export class Canvas {
   }
 
   /**
-   * unmarks element as port of node
-   * all the edges adjacent to port get removed
+   * unmarks specified port
+   * all the edges adjacent to the port get removed
    */
   public unmarkPort(portId: unknown): Canvas {
     if (this.graph.getPort(portId) === null) {
@@ -273,7 +276,7 @@ export class Canvas {
   }
 
   /**
-   * adds edge to graph
+   * adds new edge
    */
   public addEdge(request: AddEdgeRequest): Canvas {
     const id = this.edgeIdGenerator.create(request.id);
@@ -302,7 +305,7 @@ export class Canvas {
   }
 
   /**
-   * updates edge
+   * updates specified edge
    */
   public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
     const edge = this.graph.getEdge(edgeId);
@@ -317,7 +320,7 @@ export class Canvas {
   }
 
   /**
-   * removes edge from graph
+   * removes specified edge
    */
   public removeEdge(edgeId: unknown): Canvas {
     if (this.graph.getEdge(edgeId) === null) {
@@ -330,7 +333,7 @@ export class Canvas {
   }
 
   /**
-   * applies transformation for viewport
+   * applies transformation for viewport matrix
    */
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.viewportStore.patchViewportMatrix(request);
@@ -339,7 +342,7 @@ export class Canvas {
   }
 
   /**
-   * applies transformation for content
+   * applies transformation for content matrix
    */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.viewportStore.patchContentMatrix(request);
