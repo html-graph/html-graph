@@ -7,15 +7,11 @@ import { createContent, createPattern, createRect, createSvg } from "./utils";
 export class BackgroundConfigurator {
   private readonly svg = createSvg();
 
-  private readonly rect = createRect();
+  private readonly patternRenderingRectangle = createRect();
 
   private readonly pattern = createPattern();
 
-  private readonly content = createContent();
-
-  private currentWidth = 0;
-
-  private currentHeight = 0;
+  private readonly patternContent = createContent();
 
   private readonly tileWidth = 25;
 
@@ -32,14 +28,11 @@ export class BackgroundConfigurator {
     this.svg.setAttribute("width", `${width}`);
     this.svg.setAttribute("height", `${height}`);
 
-    this.rect.setAttribute("width", `${width}`);
-    this.rect.setAttribute("height", `${height}`);
+    this.patternRenderingRectangle.setAttribute("width", `${width}`);
+    this.patternRenderingRectangle.setAttribute("height", `${height}`);
 
-    this.currentWidth = width;
-    this.currentHeight = height;
-
-    const patternWidth = this.tileWidth / this.currentWidth;
-    const patternHeight = this.tileHeight / this.currentHeight;
+    const patternWidth = this.tileWidth / width;
+    const patternHeight = this.tileHeight / height;
 
     this.pattern.setAttribute("width", `${patternWidth}`);
     this.pattern.setAttribute("height", `${patternHeight}`);
@@ -47,10 +40,8 @@ export class BackgroundConfigurator {
 
   private readonly onAfterTransformUpdated = (): void => {
     const m = this.canvas.viewport.getContentMatrix();
-    const dx = this.tileDx * m.scale;
-    const dy = this.tileDy * m.scale;
-    const x = m.x - dx;
-    const y = m.y - dy;
+    const x = m.x - this.tileDx * m.scale;
+    const y = m.y - this.tileDy * m.scale;
     const transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${x}, ${y})`;
 
     this.pattern.setAttribute("patternTransform", transform);
@@ -69,18 +60,18 @@ export class BackgroundConfigurator {
     private readonly canvas: Canvas,
     private readonly host: HTMLElement,
   ) {
-    const translate = `translate(${this.tileDx}, ${this.tileDy})`;
-    this.content.setAttribute("transform", translate);
+    const transform = `translate(${this.tileDx}, ${this.tileDy})`;
+    this.patternContent.setAttribute("transform", transform);
 
-    this.pattern.appendChild(this.content);
+    this.pattern.appendChild(this.patternContent);
 
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     defs.appendChild(this.pattern);
 
     this.svg.appendChild(defs);
-    this.svg.appendChild(this.rect);
+    this.svg.appendChild(this.patternRenderingRectangle);
 
-    this.host.prepend(this.svg);
+    this.host.appendChild(this.svg);
     this.resizeObserver.observe(this.host);
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
