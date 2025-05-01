@@ -22,7 +22,11 @@ const createCanvas = (params?: {
 
   const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
 
-  UserDraggableNodesConfigurator.configure(canvas, params?.dragOptions ?? {});
+  UserDraggableNodesConfigurator.configure(
+    canvas,
+    element,
+    params?.dragOptions ?? {},
+  );
 
   return canvas;
 };

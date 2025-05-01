@@ -40,7 +40,8 @@ describe("CanvasBuilder", () => {
       y: 0,
     });
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
 
     expect(nodeWrapper.style.zIndex).toBe("10");
@@ -124,7 +125,8 @@ describe("CanvasBuilder", () => {
       createMouseMoveEvent({ movementX: 100, movementY: 100 }),
     );
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
 
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
@@ -143,7 +145,8 @@ describe("CanvasBuilder", () => {
 
     window.dispatchEvent(moveEvent);
 
-    const container = element.children[0].children[0] as HTMLElement;
+    const container = element.children[0].children[1].children[0]
+      .children[0] as HTMLElement;
 
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
@@ -164,7 +167,9 @@ describe("CanvasBuilder", () => {
       y: 0,
     });
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+
     const elementsBefore = container.children.length;
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     const elementsAfter = container.children.length;
@@ -204,7 +209,9 @@ describe("CanvasBuilder", () => {
 
     await wait(0);
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+
     expect(container.children.length).toBe(1);
   });
 });

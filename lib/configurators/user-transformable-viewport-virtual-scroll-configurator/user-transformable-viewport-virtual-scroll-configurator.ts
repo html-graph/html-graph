@@ -24,8 +24,6 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   private readonly viewport: Viewport;
 
-  private readonly element: HTMLElement;
-
   private viewportWidth = 0;
 
   private viewportHeight = 0;
@@ -73,6 +71,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   public constructor(
     private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
     transformOptions: TransformOptions | undefined,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly virtualScrollOptions: VirtualScrollOptions,
@@ -89,7 +88,6 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     });
 
     this.viewport = canvas.viewport;
-    this.element = canvas.element;
 
     const onResizeTransformStarted =
       transformOptions?.events?.onResizeTransformStarted ?? ((): void => {});
@@ -138,6 +136,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
     UserTransformableViewportConfigurator.configure(
       canvas,
+      this.element,
       patchedTransformOptions,
     );
 
@@ -151,12 +150,14 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   public static configure(
     canvas: Canvas,
+    element: HTMLElement,
     transformOptions: TransformOptions,
     trigger: EventSubject<RenderingBox>,
     virtualScrollOptions: VirtualScrollOptions,
   ): void {
     new UserTransformableViewportVirtualScrollConfigurator(
       canvas,
+      element,
       transformOptions,
       trigger,
       virtualScrollOptions,

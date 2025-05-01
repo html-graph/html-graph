@@ -20,8 +20,6 @@ export class UserDraggableNodesConfigurator {
 
   private readonly graph: Graph;
 
-  private readonly element: HTMLElement;
-
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.updateMaxNodePriority(nodeId);
     const node = this.graph.getNode(nodeId)!;
@@ -189,11 +187,11 @@ export class UserDraggableNodesConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
     dragOptions: DragOptions,
   ) {
     this.options = createOptions(dragOptions);
     this.graph = canvas.graph;
-    this.element = canvas.element;
 
     this.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.graph.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
@@ -202,8 +200,12 @@ export class UserDraggableNodesConfigurator {
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
-  public static configure(canvas: Canvas, options: DragOptions): void {
-    new UserDraggableNodesConfigurator(canvas, options);
+  public static configure(
+    canvas: Canvas,
+    element: HTMLElement,
+    options: DragOptions,
+  ): void {
+    new UserDraggableNodesConfigurator(canvas, element, options);
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
