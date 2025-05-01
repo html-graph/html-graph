@@ -10,7 +10,7 @@ import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport";
 
 /**
- * Responsibility: Configures canvas have viewport transformable by user, while
+ * Responsibility: Configures canvas to have viewport transformable by user, while
  * rendering only entities near viewport
  */
 export class UserTransformableViewportVirtualScrollConfigurator {
