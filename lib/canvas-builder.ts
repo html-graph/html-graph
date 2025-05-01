@@ -5,6 +5,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
+  BackgroundOptions,
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
@@ -27,6 +28,8 @@ export class CanvasBuilder {
   private dragOptions: DragOptions = {};
 
   private transformOptions: TransformOptions = {};
+
+  private backgroundOptions: BackgroundOptions = {};
 
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
@@ -104,8 +107,9 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableBackground(): CanvasBuilder {
+  public enableBackground(options?: BackgroundOptions): CanvasBuilder {
     this.hasBackground = true;
+    this.backgroundOptions = options ?? {};
 
     return this;
   }
@@ -156,7 +160,11 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     if (this.hasBackground) {
-      BackgroundConfigurator.configure(canvas, layers.background);
+      BackgroundConfigurator.configure(
+        canvas,
+        this.backgroundOptions,
+        layers.background,
+      );
     }
 
     if (this.hasResizeReactiveNodes) {
@@ -197,6 +205,7 @@ export class CanvasBuilder {
     this.canvasDefaults = {};
     this.dragOptions = {};
     this.transformOptions = {};
+    this.backgroundOptions = {};
     this.virtualScrollOptions = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;

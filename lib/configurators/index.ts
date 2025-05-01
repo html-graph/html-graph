@@ -20,3 +20,4 @@ export { UserTransformableViewportVirtualScrollConfigurator } from "./user-trans
 export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-configurator";
 
 export { BackgroundConfigurator } from "./background-configurator";
+export type { BackgroundOptions } from "./background-configurator";

@@ -1,5 +1,6 @@
 import { Canvas } from "@/canvas";
-import { createContent, createPattern, createRect, createSvg } from "./utils";
+import { createPattern, createRect, createSvg } from "./utils";
+import { BackgroundOptions, createOptions } from "./options";
 
 /**
  * Responsibility: Configures background rendering behind graph
@@ -11,15 +12,19 @@ export class BackgroundConfigurator {
 
   private readonly pattern = createPattern();
 
-  private readonly patternContent = createContent();
+  private readonly patternContent: SVGElement;
 
-  private readonly tileWidth = 25;
+  private readonly tileWidth: number;
 
-  private readonly tileHeight = 25;
+  private readonly tileHeight: number;
 
-  private readonly tileDx = this.tileWidth / 2;
+  private readonly halfTileWidth: number;
 
-  private readonly tileDy = this.tileHeight / 2;
+  private readonly halfTileHeight: number;
+
+  private readonly maxViewportScale: number;
+
+  private visible = false;
 
   private readonly resizeObserver = new ResizeObserver((entries) => {
     const entry = entries[0];
@@ -40,11 +45,21 @@ export class BackgroundConfigurator {
 
   private readonly onAfterTransformUpdated = (): void => {
     const m = this.canvas.viewport.getContentMatrix();
-    const x = m.x - this.tileDx * m.scale;
-    const y = m.y - this.tileDy * m.scale;
+    const x = m.x - this.halfTileWidth * m.scale;
+    const y = m.y - this.halfTileHeight * m.scale;
     const transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${x}, ${y})`;
 
     this.pattern.setAttribute("patternTransform", transform);
+
+    const viewportScale = this.canvas.viewport.getViewportMatrix().scale;
+
+    if (viewportScale > this.maxViewportScale && this.visible) {
+      this.visible = false;
+      this.host.removeChild(this.svg);
+    } else if (viewportScale <= this.maxViewportScale && !this.visible) {
+      this.visible = true;
+      this.host.appendChild(this.svg);
+    }
   };
 
   private readonly onBeforeDestroy = (): void => {
@@ -58,9 +73,19 @@ export class BackgroundConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
+    backgroundOptions: BackgroundOptions,
     private readonly host: HTMLElement,
   ) {
-    const transform = `translate(${this.tileDx}, ${this.tileDy})`;
+    const options = createOptions(backgroundOptions);
+
+    this.tileWidth = options.tileWidth;
+    this.tileHeight = options.tileHeight;
+    this.halfTileWidth = this.tileWidth / 2;
+    this.halfTileHeight = this.tileHeight / 2;
+    this.patternContent = options.renderer;
+    this.maxViewportScale = options.maxViewportScale;
+
+    const transform = `translate(${this.halfTileWidth}, ${this.halfTileHeight})`;
     this.patternContent.setAttribute("transform", transform);
 
     this.pattern.appendChild(this.patternContent);
@@ -71,14 +96,17 @@ export class BackgroundConfigurator {
     this.svg.appendChild(defs);
     this.svg.appendChild(this.patternRenderingRectangle);
 
-    this.host.appendChild(this.svg);
     this.resizeObserver.observe(this.host);
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
-  public static configure(canvas: Canvas, host: HTMLElement): void {
-    new BackgroundConfigurator(canvas, host);
+  public static configure(
+    canvas: Canvas,
+    options: BackgroundOptions,
+    host: HTMLElement,
+  ): void {
+    new BackgroundConfigurator(canvas, options, host);
   }
 }

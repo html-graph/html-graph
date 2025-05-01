@@ -1,4 +1,7 @@
-export const createContent = (): SVGCircleElement => {
+export const createContent = (
+  radius: number,
+  color: string,
+): SVGCircleElement => {
   const content = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "circle",
@@ -6,8 +9,8 @@ export const createContent = (): SVGCircleElement => {
 
   content.setAttribute("cx", "0");
   content.setAttribute("cy", "0");
-  content.setAttribute("r", "1");
-  content.setAttribute("fill", "#AAAAAA");
+  content.setAttribute("r", `${radius}`);
+  content.setAttribute("fill", `${color}`);
 
   return content;
 };

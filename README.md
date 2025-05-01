@@ -62,6 +62,7 @@ const canvas = new CanvasBuilder()
   })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
+  .enableBackground()
   .build();
 
 canvas
