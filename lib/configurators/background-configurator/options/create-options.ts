@@ -8,9 +8,7 @@ export const createOptions = (
   const dimensions = backgroundOptions.tileDimensions;
   const width = dimensions?.width ?? 25;
   const height = dimensions?.height ?? 25;
-  const renderer = resolveRenderer(
-    backgroundOptions.renderer ?? { type: "dots" },
-  );
+  const renderer = resolveRenderer(backgroundOptions.renderer ?? {});
 
   return {
     tileWidth: width,

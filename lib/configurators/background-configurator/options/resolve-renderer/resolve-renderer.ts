@@ -1,5 +1,5 @@
-import { createContent } from "../utils";
-import { DotsRenderer } from "./dots-renderer";
+import { createContent } from "./create-content";
+import { DotsRenderer } from "../dots-renderer";
 
 export const resolveRenderer = (
   rendererOption: DotsRenderer | SVGElement,
