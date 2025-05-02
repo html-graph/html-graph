@@ -200,6 +200,10 @@ export class CanvasBuilder {
     return canvas;
   }
 
+  /**
+   * @deprecated
+   * CanvasBuilder should be single use object
+   */
   private reset(): void {
     this.element = null;
     this.canvasDefaults = {};
