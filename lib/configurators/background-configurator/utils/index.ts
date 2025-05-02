@@ -1,3 +1,3 @@
 export { createSvg } from "./create-svg";
-export { createRect } from "./create-rect";
+export { createPatternFilledRectangle } from "./create-pattern-filled-rectangle";
 export { createPattern } from "./create-pattern";

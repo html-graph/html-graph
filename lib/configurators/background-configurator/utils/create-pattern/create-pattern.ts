@@ -4,8 +4,6 @@ export const createPattern = (): SVGPatternElement => {
     "pattern",
   );
   pattern.setAttribute("id", "pattern");
-  pattern.setAttribute("x", "0");
-  pattern.setAttribute("y", "0");
 
   return pattern;
 };

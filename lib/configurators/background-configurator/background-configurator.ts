@@ -1,5 +1,9 @@
 import { Canvas } from "@/canvas";
-import { createPattern, createRect, createSvg } from "./utils";
+import {
+  createPattern,
+  createPatternFilledRectangle,
+  createSvg,
+} from "./utils";
 import { BackgroundOptions, createOptions } from "./options";
 
 /**
@@ -8,7 +12,7 @@ import { BackgroundOptions, createOptions } from "./options";
 export class BackgroundConfigurator {
   private readonly svg = createSvg();
 
-  private readonly patternRenderingRectangle = createRect();
+  private readonly patternRenderingRectangle = createPatternFilledRectangle();
 
   private readonly pattern = createPattern();
 
