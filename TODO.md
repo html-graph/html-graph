@@ -1,6 +1,5 @@
 # TODO
 
-- built-in background
 - built-in drag edge creation
 - arrows customization
 
