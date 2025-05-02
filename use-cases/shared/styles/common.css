@@ -29,8 +29,7 @@ input[type="range"] {
 }
 
 .canvas,
-.canvas-wrapper,
-.background {
+.canvas-wrapper {
   position: absolute;
   inset: 0;
   overflow: hidden;
