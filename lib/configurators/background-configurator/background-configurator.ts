@@ -55,15 +55,7 @@ export class BackgroundConfigurator {
 
     this.pattern.setAttribute("patternTransform", transform);
 
-    const viewportScale = this.canvas.viewport.getViewportMatrix().scale;
-
-    if (viewportScale > this.maxViewportScale && this.visible) {
-      this.visible = false;
-      this.host.removeChild(this.svg);
-    } else if (viewportScale <= this.maxViewportScale && !this.visible) {
-      this.visible = true;
-      this.host.appendChild(this.svg);
-    }
+    this.updateVisibility();
   };
 
   private readonly onBeforeDestroy = (): void => {
@@ -103,6 +95,8 @@ export class BackgroundConfigurator {
     this.resizeObserver.observe(this.host);
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
+    this.onAfterTransformUpdated();
+
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
@@ -112,5 +106,18 @@ export class BackgroundConfigurator {
     host: HTMLElement,
   ): void {
     new BackgroundConfigurator(canvas, options, host);
+  }
+
+  private updateVisibility(): void {
+    const viewportScale = this.canvas.viewport.getViewportMatrix().scale;
+    const scaleReached = viewportScale > this.maxViewportScale;
+
+    if (scaleReached && this.visible) {
+      this.visible = false;
+      this.host.removeChild(this.svg);
+    } else if (!scaleReached && !this.visible) {
+      this.visible = true;
+      this.host.appendChild(this.svg);
+    }
   }
 }

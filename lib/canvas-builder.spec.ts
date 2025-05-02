@@ -21,6 +21,17 @@ describe("CanvasBuilder", () => {
     }).toThrow(HtmlGraphError);
   });
 
+  it("should remove all children before destroy", () => {
+    const builder = new CanvasBuilder();
+    const canvasElement = document.createElement("div");
+
+    const canvas = builder.setElement(canvasElement).build();
+
+    canvas.destroy();
+
+    expect(canvasElement.children.length).toBe(0);
+  });
+
   it("should build canvas with specified defaults", () => {
     const builder = new CanvasBuilder();
     const canvasElement = document.createElement("div");
@@ -213,5 +224,16 @@ describe("CanvasBuilder", () => {
       canvasElement.children[0].children[1].children[0].children[0];
 
     expect(container.children.length).toBe(1);
+  });
+
+  it("should build canvas with background", async () => {
+    const builder = new CanvasBuilder();
+    const canvasElement = createElement({ width: 100, height: 100 });
+
+    builder.setElement(canvasElement).enableBackground().build();
+
+    const svg = canvasElement.children[0].children[0].children[0];
+
+    expect(svg.tagName).toBe("svg");
   });
 });

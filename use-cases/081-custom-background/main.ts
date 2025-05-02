@@ -8,11 +8,28 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+
+const backgroundRenderer = document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "path",
+);
+
+backgroundRenderer.setAttribute("d", "M -25 0 L 25 0 M 0 25 L 0 -25");
+backgroundRenderer.setAttribute("stroke-width", "1");
+backgroundRenderer.setAttribute("stroke", "#CCCCFF");
+
 const canvas: Canvas = builder
   .setElement(canvasElement)
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
-  .enableBackground()
+  .enableBackground({
+    tileDimensions: {
+      width: 50,
+      height: 50,
+    },
+    renderer: backgroundRenderer,
+    maxViewportScale: 30,
+  })
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
