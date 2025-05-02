@@ -9,6 +9,7 @@ import {
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
+  UserConnectablePortsConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
@@ -40,6 +41,8 @@ export class CanvasBuilder {
   private hasResizeReactiveNodes = false;
 
   private hasBackground = false;
+
+  private hasUserConnectablePorts = false;
 
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
@@ -114,6 +117,12 @@ export class CanvasBuilder {
     return this;
   }
 
+  public enableUserDraggableEdges(): CanvasBuilder {
+    this.hasUserConnectablePorts = true;
+
+    return this;
+  }
+
   /**
    * builds final canvas
    */
@@ -179,6 +188,10 @@ export class CanvasBuilder {
       );
     }
 
+    if (this.hasUserConnectablePorts) {
+      UserConnectablePortsConfigurator.configure(canvas, layers.main);
+    }
+
     if (this.virtualScrollOptions !== undefined) {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
@@ -216,5 +229,6 @@ export class CanvasBuilder {
     this.hasResizeReactiveNodes = false;
     this.hasBackground = false;
     this.boxRenderingTrigger = undefined;
+    this.hasUserConnectablePorts = false;
   }
 }

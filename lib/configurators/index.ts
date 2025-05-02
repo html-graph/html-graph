@@ -21,3 +21,5 @@ export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual
 
 export { BackgroundConfigurator } from "./background-configurator";
 export type { BackgroundOptions } from "./background-configurator";
+
+export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";

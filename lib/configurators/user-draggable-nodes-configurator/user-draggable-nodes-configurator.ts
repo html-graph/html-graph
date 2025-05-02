@@ -155,19 +155,19 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    const t = event.touches[0];
+    const touch = event.touches[0];
 
     if (
-      !isPointOnElement(this.element, t.clientX, t.clientY) ||
-      !isPointOnWindow(this.window, t.clientX, t.clientY)
+      !isPointOnElement(this.element, touch.clientX, touch.clientY) ||
+      !isPointOnWindow(this.window, touch.clientX, touch.clientY)
     ) {
       this.cancelTouchDrag();
       return;
     }
 
     if (this.grabbedNodeId !== null && this.previousTouchCoordinates !== null) {
-      const dx = t.clientX - this.previousTouchCoordinates.x;
-      const dy = t.clientY - this.previousTouchCoordinates.y;
+      const dx = touch.clientX - this.previousTouchCoordinates.x;
+      const dy = touch.clientY - this.previousTouchCoordinates.y;
 
       this.dragNode(this.grabbedNodeId, dx, dy);
 

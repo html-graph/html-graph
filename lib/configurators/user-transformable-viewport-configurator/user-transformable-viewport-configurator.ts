@@ -132,16 +132,19 @@ export class UserTransformableViewportConfigurator {
         isPointOnElement(this.element, t[0], t[1]) &&
         isPointOnWindow(this.window, t[0], t[1]),
     );
+
     if (!isEvery) {
       this.stopTouchDrag();
       return;
     }
+
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
         -(currentTouches.x - this.prevTouches!.x),
         -(currentTouches.y - this.prevTouches!.y),
       );
     }
+
     if (currentTouches.touchesCnt === 2) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches!.x - left;
@@ -150,6 +153,7 @@ export class UserTransformableViewportConfigurator {
       const deltaViewScale = 1 / deltaScale;
       this.scaleViewport(deltaViewScale, x, y);
     }
+
     this.prevTouches = currentTouches;
   };
 
