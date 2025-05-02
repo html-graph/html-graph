@@ -117,7 +117,7 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableUserDraggableEdges(): CanvasBuilder {
+  public enableUserConnectablePorts(): CanvasBuilder {
     this.hasUserConnectablePorts = true;
 
     return this;
@@ -189,7 +189,11 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserConnectablePorts) {
-      UserConnectablePortsConfigurator.configure(canvas, layers.main);
+      UserConnectablePortsConfigurator.configure(
+        canvas,
+        layers.main,
+        layers.overlay,
+      );
     }
 
     if (this.virtualScrollOptions !== undefined) {

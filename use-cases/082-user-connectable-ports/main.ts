@@ -14,7 +14,7 @@ const canvas: Canvas = builder
     },
   })
   .enableUserDraggableNodes()
-  .enableUserDraggableEdges()
+  .enableUserConnectablePorts()
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
