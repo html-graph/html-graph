@@ -4,6 +4,8 @@ import { Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
+  BackgroundConfigurator,
+  BackgroundOptions,
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
@@ -13,6 +15,7 @@ import {
   VirtualScrollOptions,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
+import { Layers } from "./layers";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration
@@ -26,6 +29,8 @@ export class CanvasBuilder {
 
   private transformOptions: TransformOptions = {};
 
+  private backgroundOptions: BackgroundOptions = {};
+
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
   private hasDraggableNode = false;
@@ -33,6 +38,8 @@ export class CanvasBuilder {
   private hasTransformableViewport = false;
 
   private hasResizeReactiveNodes = false;
+
+  private hasBackground = false;
 
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
@@ -100,6 +107,13 @@ export class CanvasBuilder {
     return this;
   }
 
+  public enableBackground(options?: BackgroundOptions): CanvasBuilder {
+    this.hasBackground = true;
+    this.backgroundOptions = options ?? {};
+
+    return this;
+  }
+
   /**
    * builds final canvas
    */
@@ -118,11 +132,12 @@ export class CanvasBuilder {
 
     const graphStore = new GraphStore();
     const viewportStore = new ViewportStore();
+    const layers = new Layers(this.element);
 
     let htmlView: HtmlView = new CoreHtmlView(
       graphStore,
       viewportStore,
-      this.element,
+      layers.main,
     );
 
     if (trigger !== undefined) {
@@ -137,17 +152,37 @@ export class CanvasBuilder {
       this.canvasDefaults,
     );
 
+    const onBeforeDestroy = (): void => {
+      layers.destroy();
+      canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
+    };
+
+    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
+
+    if (this.hasBackground) {
+      BackgroundConfigurator.configure(
+        canvas,
+        this.backgroundOptions,
+        layers.background,
+      );
+    }
+
     if (this.hasResizeReactiveNodes) {
       ResizeReactiveNodesConfigurator.configure(canvas);
     }
 
     if (this.hasDraggableNode) {
-      UserDraggableNodesConfigurator.configure(canvas, this.dragOptions);
+      UserDraggableNodesConfigurator.configure(
+        canvas,
+        layers.main,
+        this.dragOptions,
+      );
     }
 
     if (this.virtualScrollOptions !== undefined) {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
+        layers.main,
         this.transformOptions,
         trigger!,
         this.virtualScrollOptions,
@@ -155,6 +190,7 @@ export class CanvasBuilder {
     } else if (this.hasTransformableViewport) {
       UserTransformableViewportConfigurator.configure(
         canvas,
+        layers.main,
         this.transformOptions,
       );
     }
@@ -164,15 +200,21 @@ export class CanvasBuilder {
     return canvas;
   }
 
+  /**
+   * @deprecated
+   * CanvasBuilder should be single use object
+   */
   private reset(): void {
     this.element = null;
     this.canvasDefaults = {};
     this.dragOptions = {};
     this.transformOptions = {};
+    this.backgroundOptions = {};
     this.virtualScrollOptions = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;
     this.hasResizeReactiveNodes = false;
+    this.hasBackground = false;
     this.boxRenderingTrigger = undefined;
   }
 }

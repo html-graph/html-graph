@@ -21,6 +21,17 @@ describe("CanvasBuilder", () => {
     }).toThrow(HtmlGraphError);
   });
 
+  it("should remove all children before destroy", () => {
+    const builder = new CanvasBuilder();
+    const canvasElement = document.createElement("div");
+
+    const canvas = builder.setElement(canvasElement).build();
+
+    canvas.destroy();
+
+    expect(canvasElement.children.length).toBe(0);
+  });
+
   it("should build canvas with specified defaults", () => {
     const builder = new CanvasBuilder();
     const canvasElement = document.createElement("div");
@@ -40,7 +51,8 @@ describe("CanvasBuilder", () => {
       y: 0,
     });
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
 
     expect(nodeWrapper.style.zIndex).toBe("10");
@@ -124,7 +136,8 @@ describe("CanvasBuilder", () => {
       createMouseMoveEvent({ movementX: 100, movementY: 100 }),
     );
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
 
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
@@ -137,13 +150,14 @@ describe("CanvasBuilder", () => {
 
     builder.enableUserTransformableViewport().setElement(element).build();
 
-    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    const host = element.children[0].children[1];
+    host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
 
     window.dispatchEvent(moveEvent);
 
-    const container = element.children[0].children[0] as HTMLElement;
+    const container = host.children[0].children[0] as HTMLElement;
 
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
@@ -164,7 +178,9 @@ describe("CanvasBuilder", () => {
       y: 0,
     });
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+
     const elementsBefore = container.children.length;
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     const elementsAfter = container.children.length;
@@ -204,7 +220,20 @@ describe("CanvasBuilder", () => {
 
     await wait(0);
 
-    const container = canvasElement.children[0].children[0];
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+
     expect(container.children.length).toBe(1);
+  });
+
+  it("should build canvas with background", async () => {
+    const builder = new CanvasBuilder();
+    const canvasElement = createElement({ width: 100, height: 100 });
+
+    builder.setElement(canvasElement).enableBackground().build();
+
+    const svg = canvasElement.children[0].children[0].children[0];
+
+    expect(svg.tagName).toBe("svg");
   });
 });

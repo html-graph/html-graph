@@ -116,6 +116,9 @@ export class Canvas {
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
+    /**
+     * @deprecated access element directly instead
+     */
     public readonly element: HTMLElement,
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,

@@ -11,8 +11,6 @@ import { processTouch, TouchState } from "./process-touch";
  * Responsibility: Configures canvas to have viewport transformable by user
  */
 export class UserTransformableViewportConfigurator {
-  private readonly element: HTMLElement;
-
   private window = window;
 
   private readonly viewport: Viewport;
@@ -183,11 +181,11 @@ export class UserTransformableViewportConfigurator {
 
   public constructor(
     private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
     transformOptions: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
 
-    this.element = canvas.element;
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);
     this.element.addEventListener("mousedown", this.onMouseDown);
@@ -199,9 +197,14 @@ export class UserTransformableViewportConfigurator {
 
   public static configure(
     canvas: Canvas,
+    element: HTMLElement,
     transformOptions: TransformOptions,
   ): void {
-    new UserTransformableViewportConfigurator(canvas, transformOptions);
+    new UserTransformableViewportConfigurator(
+      canvas,
+      element,
+      transformOptions,
+    );
   }
 
   private moveViewport(dx: number, dy: number): void {

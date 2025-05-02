@@ -3,27 +3,10 @@ import {
   AddNodeRequest,
   CanvasDefaults,
   CanvasBuilder,
-  TransformOptions,
 } from "@html-graph/html-graph";
-import { backgroundDrawingFn } from "../shared/background-drawing-fn";
 import { AdvancedDemoHelper } from "./advanced-demo-helper";
 
 const canvasElement = document.getElementById("canvas")!;
-
-const backgroundElement = document.getElementById(
-  "background",
-)! as HTMLCanvasElement;
-
-const ctx = backgroundElement.getContext("2d")!;
-
-new ResizeObserver(() => {
-  const { width, height } = canvasElement.getBoundingClientRect();
-
-  ctx.canvas.width = width;
-  ctx.canvas.height = height;
-
-  backgroundDrawingFn(ctx, canvas.viewport);
-}).observe(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   nodes: {
@@ -37,20 +20,13 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-const transformOptions: TransformOptions = {
-  events: {
-    onTransformChange: () => {
-      backgroundDrawingFn(ctx, canvas.viewport);
-    },
-  },
-};
-
 const builder = new CanvasBuilder();
 
 const canvas = builder
   .setDefaults(canvasDefaults)
+  .enableBackground()
   .enableUserDraggableNodes()
-  .enableUserTransformableViewport(transformOptions)
+  .enableUserTransformableViewport()
   .enableResizeReactiveNodes()
   .setElement(canvasElement)
   .build();

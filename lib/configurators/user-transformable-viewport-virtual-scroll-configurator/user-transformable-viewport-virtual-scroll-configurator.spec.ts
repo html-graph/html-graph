@@ -34,6 +34,7 @@ const createCanvas = (params?: {
 
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,
+    element,
     params?.transformOptions ?? {},
     trigger,
     {

@@ -1,33 +1,12 @@
 import { CanvasBuilder, AddNodeRequest } from "@html-graph/html-graph";
-import { backgroundDrawingFn } from "../shared/background-drawing-fn";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const backgroundElement = document.getElementById(
-  "background",
-)! as HTMLCanvasElement;
-
-const ctx = backgroundElement.getContext("2d")!;
-
-new ResizeObserver(() => {
-  const { width, height } = canvasElement.getBoundingClientRect();
-
-  ctx.canvas.width = width;
-  ctx.canvas.height = height;
-
-  backgroundDrawingFn(ctx, canvas.viewport);
-}).observe(canvasElement);
-
 const canvas = new CanvasBuilder()
-  .enableUserTransformableViewport({
-    events: {
-      onTransformChange: () => {
-        backgroundDrawingFn(ctx, canvas.viewport);
-      },
-    },
-  })
   .setElement(canvasElement)
+  .enableBackground()
+  .enableUserTransformableViewport()
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
