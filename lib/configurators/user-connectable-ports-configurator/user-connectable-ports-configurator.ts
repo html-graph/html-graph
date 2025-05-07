@@ -1,22 +1,44 @@
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasDefaults } from "@/canvas";
+import { GraphStore } from "@/graph-store";
+import { CoreHtmlView, HtmlView } from "@/html-view";
+import { ViewportStore } from "@/viewport-store";
 import { isPointOnElement, isPointOnWindow } from "../utils";
 import { Point } from "@/point";
-import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
 
 /**
  * Responsibility: Configuring ports connectable via drag
  */
 export class UserConnectablePortsConfigurator {
-  private readonly ports = new Map<HTMLElement, unknown>();
+  private readonly graphStore: GraphStore;
 
-  private readonly window = window;
+  private readonly htmlView: HtmlView;
+
+  private readonly overlayCanvas: Canvas;
+
+  private readonly ports = new Map<HTMLElement, unknown>();
 
   private previousTouchCoordinates: Point | null = null;
 
   private sourcePort: unknown | null = null;
 
+  private readonly onAfterPortMarked = (portId: unknown): void => {
+    const port = this.canvas.graph.getPort(portId)!;
+
+    this.hookPortElement(port.element);
+
+    this.ports.set(port.element, portId);
+  };
+
+  private readonly onBeforePortUnmarked = (portId: unknown): void => {
+    const port = this.canvas.graph.getPort(portId)!;
+
+    this.unhookPortElement(port.element);
+
+    this.ports.delete(port.element);
+  };
+
   private readonly onPortMouseDown = (event: MouseEvent): void => {
-    event.stopImmediatePropagation();
+    event.stopPropagation();
 
     this.grabPort(event.currentTarget as HTMLElement);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
@@ -25,7 +47,7 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
     if (
-      !isPointOnElement(this.mainLayer, event.clientX, event.clientY) ||
+      !isPointOnElement(this.overlayLayer, event.clientX, event.clientY) ||
       !isPointOnWindow(this.window, event.clientX, event.clientY)
     ) {
       this.stopMouseDrag();
@@ -45,7 +67,7 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    event.stopImmediatePropagation();
+    event.stopPropagation();
 
     this.previousTouchCoordinates = {
       x: event.touches[0].clientX,
@@ -62,7 +84,7 @@ export class UserConnectablePortsConfigurator {
     const touch = event.touches[0];
 
     if (
-      !isPointOnElement(this.mainLayer, touch.clientX, touch.clientY) ||
+      !isPointOnElement(this.overlayLayer, touch.clientX, touch.clientY) ||
       !isPointOnWindow(this.window, touch.clientX, touch.clientY)
     ) {
       this.stopMouseDrag();
@@ -75,22 +97,6 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onWindowTouchFinish = (): void => {
     this.stopTouchDrag();
-  };
-
-  private readonly onAfterPortMarked = (portId: unknown): void => {
-    const port = this.canvas.graph.getPort(portId)!;
-
-    this.hookPortElement(port.element);
-
-    this.ports.set(port.element, portId);
-  };
-
-  private readonly onBeforePortUnmarked = (portId: unknown): void => {
-    const port = this.canvas.graph.getPort(portId)!;
-
-    this.unhookPortElement(port.element);
-
-    this.ports.delete(port.element);
   };
 
   private readonly onBeforeClear = (): void => {
@@ -114,22 +120,102 @@ export class UserConnectablePortsConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    private readonly mainLayer: HTMLElement,
     private readonly overlayLayer: HTMLElement,
+    private readonly viewportStore: ViewportStore,
+    private readonly window: Window,
+    defaults: CanvasDefaults,
   ) {
-    console.log(this.overlayLayer);
+    this.graphStore = new GraphStore();
+
+    this.htmlView = new CoreHtmlView(
+      this.graphStore,
+      this.viewportStore,
+      this.overlayLayer,
+    );
+
+    this.overlayCanvas = new Canvas(
+      this.overlayLayer,
+      this.graphStore,
+      this.viewportStore,
+      this.htmlView,
+      defaults,
+    );
+
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.subscribe(this.onBeforePortUnmarked);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
+    console.log(this.overlayCanvas);
   }
 
   public static configure(
     canvas: Canvas,
-    mainLayer: HTMLElement,
     overlayLayer: HTMLElement,
+    viewportStore: ViewportStore,
+    win: Window,
+    options: CanvasDefaults,
   ): void {
-    new UserConnectablePortsConfigurator(canvas, mainLayer, overlayLayer);
+    new UserConnectablePortsConfigurator(
+      canvas,
+      overlayLayer,
+      viewportStore,
+      win,
+      options,
+    );
+  }
+
+  private grabPort(portElement: HTMLElement): void {
+    const portId = this.ports.get(portElement)!;
+
+    this.sourcePort = portId;
+
+    const rect = portElement.getBoundingClientRect();
+
+    const portX = rect.x + rect.width / 2;
+    const portY = rect.y + rect.height / 2;
+
+    const canvasRect = this.overlayLayer.getBoundingClientRect();
+
+    const portViewCoords: Point = {
+      x: portX - canvasRect.x,
+      y: portY - canvasRect.y,
+    };
+    const m = this.canvas.viewport.getViewportMatrix();
+
+    const portContentCoords: Point = {
+      x: m.scale * portViewCoords.x + m.x,
+      y: m.scale * portViewCoords.y + m.y,
+    };
+
+    const element = document.createElement("div");
+
+    this.overlayCanvas.addNode({
+      id: "begin",
+      element,
+      x: portContentCoords.x,
+      y: portContentCoords.y,
+      ports: [
+        {
+          id: "begin",
+          element,
+        },
+      ],
+    });
+
+    this.overlayCanvas.addNode({
+      id: "end",
+      element,
+      x: portContentCoords.x,
+      y: portContentCoords.y,
+      ports: [
+        {
+          id: "end",
+          element,
+        },
+      ],
+    });
+
+    this.overlayCanvas.addEdge({ from: "begin", to: "end" });
   }
 
   private hookPortElement(element: HTMLElement): void {
@@ -140,38 +226,6 @@ export class UserConnectablePortsConfigurator {
   private unhookPortElement(element: HTMLElement): void {
     element.removeEventListener("mousedown", this.onPortMouseDown);
     element.removeEventListener("touchstart", this.onPortTouchStart);
-  }
-
-  private grabPort(portElement: HTMLElement): void {
-    const portId = this.ports.get(portElement)!;
-    const { x, y, width, height } = portElement.getBoundingClientRect();
-
-    const edge = new BezierEdgeShape();
-
-    const params: EdgeRenderParams = {
-      from: {
-        x,
-        y,
-        width,
-        height,
-        direction: 0,
-        portId,
-        nodeId: 0,
-      },
-      to: {
-        x,
-        y,
-        width,
-        height,
-        direction: 0,
-        portId,
-        nodeId: 0,
-      },
-    };
-
-    edge.render(params);
-
-    this.sourcePort = portId;
   }
 
   private stopMouseDrag(): void {

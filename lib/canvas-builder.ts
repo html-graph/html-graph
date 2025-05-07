@@ -47,6 +47,8 @@ export class CanvasBuilder {
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
 
+  private readonly window = window;
+
   public setElement(element: HTMLElement): CanvasBuilder {
     this.element = element;
 
@@ -191,8 +193,10 @@ export class CanvasBuilder {
     if (this.hasUserConnectablePorts) {
       UserConnectablePortsConfigurator.configure(
         canvas,
-        layers.main,
         layers.overlay,
+        viewportStore,
+        this.window,
+        this.canvasDefaults,
       );
     }
 
