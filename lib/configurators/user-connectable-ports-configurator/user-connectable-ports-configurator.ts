@@ -17,8 +17,6 @@ export class UserConnectablePortsConfigurator {
 
   private readonly ports = new Map<HTMLElement, unknown>();
 
-  private previousTouchCoordinates: Point | null = null;
-
   private sourcePort: unknown | null = null;
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
@@ -54,30 +52,11 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    const canvasRect = this.overlayLayer.getBoundingClientRect();
-
-    const nodeViewCoords: Point = {
-      x: event.clientX - canvasRect.x,
-      y: event.clientY - canvasRect.y,
-    };
-
-    console.log(nodeViewCoords);
-    const m = this.canvas.viewport.getViewportMatrix();
-
-    const nodeContentCoords: Point = {
-      x: m.scale * nodeViewCoords.x + m.x,
-      y: m.scale * nodeViewCoords.y + m.y,
-    };
-
-    this.overlayCanvas.updateNode("end", {
-      x: nodeContentCoords.x,
-      y: nodeContentCoords.y,
-    });
-
-    console.log(this.sourcePort);
+    this.moveEndNode({ x: event.clientX, y: event.clientY });
   };
 
-  private readonly onWindowMouseUp = (): void => {
+  private readonly onWindowMouseUp = (event: MouseEvent): void => {
+    this.tryCreateConnection({ x: event.clientX, y: event.clientY });
     this.stopMouseDrag();
   };
 
@@ -88,11 +67,6 @@ export class UserConnectablePortsConfigurator {
     }
 
     event.stopPropagation();
-
-    this.previousTouchCoordinates = {
-      x: event.touches[0].clientX,
-      y: event.touches[0].clientY,
-    };
 
     this.grabPort(event.currentTarget as HTMLElement);
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
@@ -111,11 +85,12 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    console.log(this.previousTouchCoordinates);
-    console.log(this.sourcePort);
+    this.moveEndNode({ x: touch.clientX, y: touch.clientY });
   };
 
-  private readonly onWindowTouchFinish = (): void => {
+  private readonly onWindowTouchFinish = (event: TouchEvent): void => {
+    const touch = event.changedTouches[0];
+    this.tryCreateConnection({ x: touch.clientX, y: touch.clientY });
     this.stopTouchDrag();
   };
 
@@ -165,7 +140,6 @@ export class UserConnectablePortsConfigurator {
     this.canvas.graph.onBeforePortUnmarked.subscribe(this.onBeforePortUnmarked);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
-    console.log(this.overlayCanvas);
   }
 
   public static configure(
@@ -226,8 +200,8 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addNode({
       id: "end",
       element: elementEnd,
-      x: portContentCoords.x + 1,
-      y: portContentCoords.y + 1,
+      x: portContentCoords.x,
+      y: portContentCoords.y,
       ports: [
         {
           id: "end",
@@ -257,7 +231,6 @@ export class UserConnectablePortsConfigurator {
 
   private stopTouchDrag(): void {
     this.resetDragState();
-    this.previousTouchCoordinates = null;
     this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchFinish);
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
@@ -266,5 +239,42 @@ export class UserConnectablePortsConfigurator {
   private resetDragState(): void {
     this.sourcePort = null;
     this.overlayCanvas.clear();
+  }
+
+  private tryCreateConnection(cursor: Point): void {
+    const element = document.elementFromPoint(cursor.x, cursor.y);
+
+    if (element === null || !(element instanceof HTMLElement)) {
+      return;
+    }
+
+    const targetPort = this.ports.get(element);
+
+    if (targetPort === undefined) {
+      return;
+    }
+
+    this.canvas.addEdge({ from: this.sourcePort, to: targetPort });
+  }
+
+  private moveEndNode(to: Point): void {
+    const canvasRect = this.overlayLayer.getBoundingClientRect();
+
+    const nodeViewCoords: Point = {
+      x: to.x - canvasRect.x,
+      y: to.y - canvasRect.y,
+    };
+
+    const m = this.canvas.viewport.getViewportMatrix();
+
+    const nodeContentCoords: Point = {
+      x: m.scale * nodeViewCoords.x + m.x,
+      y: m.scale * nodeViewCoords.y + m.y,
+    };
+
+    this.overlayCanvas.updateNode("end", {
+      x: nodeContentCoords.x,
+      y: nodeContentCoords.y,
+    });
   }
 }
