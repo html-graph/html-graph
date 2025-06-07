@@ -54,6 +54,26 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
+    const canvasRect = this.overlayLayer.getBoundingClientRect();
+
+    const nodeViewCoords: Point = {
+      x: event.clientX - canvasRect.x,
+      y: event.clientY - canvasRect.y,
+    };
+
+    console.log(nodeViewCoords);
+    const m = this.canvas.viewport.getViewportMatrix();
+
+    const nodeContentCoords: Point = {
+      x: m.scale * nodeViewCoords.x + m.x,
+      y: m.scale * nodeViewCoords.y + m.y,
+    };
+
+    this.overlayCanvas.updateNode("end", {
+      x: nodeContentCoords.x,
+      y: nodeContentCoords.y,
+    });
+
     console.log(this.sourcePort);
   };
 
@@ -187,30 +207,31 @@ export class UserConnectablePortsConfigurator {
       y: m.scale * portViewCoords.y + m.y,
     };
 
-    const element = document.createElement("div");
+    const elementBegin = document.createElement("div");
+    const elementEnd = document.createElement("div");
 
     this.overlayCanvas.addNode({
       id: "begin",
-      element,
+      element: elementBegin,
       x: portContentCoords.x,
       y: portContentCoords.y,
       ports: [
         {
           id: "begin",
-          element,
+          element: elementBegin,
         },
       ],
     });
 
     this.overlayCanvas.addNode({
       id: "end",
-      element,
-      x: portContentCoords.x,
-      y: portContentCoords.y,
+      element: elementEnd,
+      x: portContentCoords.x + 1,
+      y: portContentCoords.y + 1,
       ports: [
         {
           id: "end",
-          element,
+          element: elementEnd,
         },
       ],
     });
@@ -244,5 +265,6 @@ export class UserConnectablePortsConfigurator {
 
   private resetDragState(): void {
     this.sourcePort = null;
+    this.overlayCanvas.clear();
   }
 }
