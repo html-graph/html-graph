@@ -186,6 +186,7 @@ export class CanvasBuilder {
       UserDraggableNodesConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.dragOptions,
       );
     }
@@ -204,6 +205,7 @@ export class CanvasBuilder {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.transformOptions,
         trigger!,
         this.virtualScrollOptions,
@@ -212,6 +214,7 @@ export class CanvasBuilder {
       UserTransformableViewportConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.transformOptions,
       );
     }

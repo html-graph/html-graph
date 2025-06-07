@@ -16,8 +16,6 @@ export class UserDraggableNodesConfigurator {
 
   private readonly nodeIds = new Map<HTMLElement, unknown>();
 
-  private readonly window = window;
-
   private readonly graph: Graph;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
@@ -88,8 +86,8 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     setCursor(this.element, this.options.dragCursor);
     this.moveNodeOnTop(nodeId);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp);
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.win.addEventListener("mouseup", this.onWindowMouseUp);
+    this.win.addEventListener("mousemove", this.onWindowMouseMove);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -124,15 +122,15 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     this.moveNodeOnTop(nodeId);
 
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
-    this.window.addEventListener("touchend", this.onWindowTouchFinish);
-    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.win.addEventListener("touchmove", this.onWindowTouchMove);
+    this.win.addEventListener("touchend", this.onWindowTouchFinish);
+    this.win.addEventListener("touchcancel", this.onWindowTouchFinish);
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
     if (
       !isPointOnElement(this.element, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.window, event.clientX, event.clientY)
+      !isPointOnWindow(this.win, event.clientX, event.clientY)
     ) {
       this.cancelMouseDrag();
       return;
@@ -159,7 +157,7 @@ export class UserDraggableNodesConfigurator {
 
     if (
       !isPointOnElement(this.element, touch.clientX, touch.clientY) ||
-      !isPointOnWindow(this.window, touch.clientX, touch.clientY)
+      !isPointOnWindow(this.win, touch.clientX, touch.clientY)
     ) {
       this.cancelTouchDrag();
       return;
@@ -188,6 +186,7 @@ export class UserDraggableNodesConfigurator {
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
+    private readonly win: Window,
     dragOptions: DragOptions,
   ) {
     this.options = createOptions(dragOptions);
@@ -203,9 +202,10 @@ export class UserDraggableNodesConfigurator {
   public static configure(
     canvas: Canvas,
     element: HTMLElement,
+    win: Window,
     options: DragOptions,
   ): void {
-    new UserDraggableNodesConfigurator(canvas, element, options);
+    new UserDraggableNodesConfigurator(canvas, element, win, options);
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
@@ -268,8 +268,8 @@ export class UserDraggableNodesConfigurator {
   }
 
   private removeMouseDragListeners(): void {
-    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
-    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.win.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.win.removeEventListener("mousemove", this.onWindowMouseMove);
   }
 
   private cancelTouchDrag(): void {
@@ -290,9 +290,9 @@ export class UserDraggableNodesConfigurator {
   }
 
   private removeTouchDragListeners(): void {
-    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
-    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
-    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
+    this.win.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.win.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.win.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 
   private updateMaxNodePriority(nodeId: unknown): void {

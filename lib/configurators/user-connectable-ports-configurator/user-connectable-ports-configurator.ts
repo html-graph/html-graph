@@ -22,7 +22,7 @@ export class UserConnectablePortsConfigurator {
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
 
-    this.hookPortElement(port.element);
+    this.hookPortEvents(port.element);
 
     this.ports.set(port.element, portId);
   };
@@ -30,7 +30,7 @@ export class UserConnectablePortsConfigurator {
   private readonly onBeforePortUnmarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
 
-    this.unhookPortElement(port.element);
+    this.unhookPortEvents(port.element);
 
     this.ports.delete(port.element);
   };
@@ -96,7 +96,7 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onBeforeClear = (): void => {
     this.ports.forEach((_portId, element) => {
-      this.unhookPortElement(element);
+      this.unhookPortEvents(element);
     });
 
     this.ports.clear();
@@ -147,14 +147,14 @@ export class UserConnectablePortsConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
-    options: CanvasDefaults,
+    defaults: CanvasDefaults,
   ): void {
     new UserConnectablePortsConfigurator(
       canvas,
       overlayLayer,
       viewportStore,
       win,
-      options,
+      defaults,
     );
   }
 
@@ -213,12 +213,12 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addEdge({ from: "begin", to: "end" });
   }
 
-  private hookPortElement(element: HTMLElement): void {
+  private hookPortEvents(element: HTMLElement): void {
     element.addEventListener("mousedown", this.onPortMouseDown);
     element.addEventListener("touchstart", this.onPortTouchStart);
   }
 
-  private unhookPortElement(element: HTMLElement): void {
+  private unhookPortEvents(element: HTMLElement): void {
     element.removeEventListener("mousedown", this.onPortMouseDown);
     element.removeEventListener("touchstart", this.onPortTouchStart);
   }
