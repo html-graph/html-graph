@@ -11,7 +11,7 @@ class ReleaseNextVersion {
 
     const version = pkg.version;
 
-    const reg = /(\d+)\.(\d+)\.(\d+)/;
+    const reg = /^(\d+)\.(\d+)\.(\d+)$/;
 
     const result = version.match(reg);
 

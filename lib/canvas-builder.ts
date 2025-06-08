@@ -106,12 +106,19 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables built-in virtual scroll behavior, when only nodes and edges close
+   * to viewport are rendered
+   */
   public enableVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
     this.virtualScrollOptions = options;
 
     return this;
   }
 
+  /**
+   * enables built-in background rendering
+   */
   public enableBackground(options?: BackgroundOptions): CanvasBuilder {
     this.hasBackground = true;
     this.backgroundOptions = options ?? {};
@@ -119,6 +126,9 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables edge creation by dragging one port to another
+   */
   public enableUserConnectablePorts(): CanvasBuilder {
     this.hasUserConnectablePorts = true;
 

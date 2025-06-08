@@ -70,7 +70,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
-    private readonly win: Window,
+    private readonly window: Window,
     transformOptions: TransformOptions | undefined,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly virtualScrollOptions: VirtualScrollOptions,
@@ -136,7 +136,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     UserTransformableViewportConfigurator.configure(
       canvas,
       this.element,
-      this.win,
+      this.window,
       patchedTransformOptions,
     );
 
@@ -171,6 +171,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       this.loadAreaAroundViewport();
     });
   }
+
   private scheduleEnsureViewportAreaLoaded(): void {
     const absoluteViewportWidth =
       this.viewportWidth * this.viewportMatrix.scale;

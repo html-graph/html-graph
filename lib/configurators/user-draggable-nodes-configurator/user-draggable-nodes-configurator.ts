@@ -86,8 +86,8 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     setCursor(this.element, this.options.dragCursor);
     this.moveNodeOnTop(nodeId);
-    this.win.addEventListener("mouseup", this.onWindowMouseUp);
-    this.win.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("mouseup", this.onWindowMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -122,14 +122,14 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     this.moveNodeOnTop(nodeId);
 
-    this.win.addEventListener("touchmove", this.onWindowTouchMove);
-    this.win.addEventListener("touchend", this.onWindowTouchFinish);
-    this.win.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove);
+    this.window.addEventListener("touchend", this.onWindowTouchFinish);
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
     const isInside = isPointInside(
-      this.win,
+      this.window,
       this.element,
       event.clientX,
       event.clientY,
@@ -139,6 +139,7 @@ export class UserDraggableNodesConfigurator {
       this.cancelMouseDrag();
       return;
     }
+
     if (this.grabbedNodeId !== null) {
       this.dragNode(this.grabbedNodeId, event.movementX, event.movementY);
     }
@@ -160,7 +161,7 @@ export class UserDraggableNodesConfigurator {
     const touch = event.touches[0];
 
     const isInside = isPointInside(
-      this.win,
+      this.window,
       this.element,
       touch.clientX,
       touch.clientY,
@@ -194,7 +195,7 @@ export class UserDraggableNodesConfigurator {
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
-    private readonly win: Window,
+    private readonly window: Window,
     dragOptions: DragOptions,
   ) {
     this.options = createOptions(dragOptions);
@@ -261,6 +262,7 @@ export class UserDraggableNodesConfigurator {
 
   private cancelMouseDrag(): void {
     const node = this.graph.getNode(this.grabbedNodeId);
+
     if (node !== null) {
       this.options.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
@@ -276,8 +278,8 @@ export class UserDraggableNodesConfigurator {
   }
 
   private removeMouseDragListeners(): void {
-    this.win.removeEventListener("mouseup", this.onWindowMouseUp);
-    this.win.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
   }
 
   private cancelTouchDrag(): void {
@@ -298,9 +300,9 @@ export class UserDraggableNodesConfigurator {
   }
 
   private removeTouchDragListeners(): void {
-    this.win.removeEventListener("touchmove", this.onWindowTouchMove);
-    this.win.removeEventListener("touchend", this.onWindowTouchFinish);
-    this.win.removeEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 
   private updateMaxNodePriority(nodeId: unknown): void {

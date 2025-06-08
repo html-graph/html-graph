@@ -36,8 +36,8 @@ export class UserTransformableViewportConfigurator {
       return;
     }
     setCursor(this.element, this.options.shiftCursor);
-    this.win.addEventListener("mousemove", this.onWindowMouseMove);
-    this.win.addEventListener("mouseup", this.onWindowMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("mouseup", this.onWindowMouseUp);
     this.startRegisteredTransform();
   };
 
@@ -45,7 +45,7 @@ export class UserTransformableViewportConfigurator {
     event: MouseEvent,
   ) => {
     const isInside = isPointInside(
-      this.win,
+      this.window,
       this.element,
       event.clientX,
       event.clientY,
@@ -118,9 +118,9 @@ export class UserTransformableViewportConfigurator {
       return;
     }
     this.prevTouches = processTouch(event);
-    this.win.addEventListener("touchmove", this.onWindowTouchMove);
-    this.win.addEventListener("touchend", this.onWindowTouchFinish);
-    this.win.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove);
+    this.window.addEventListener("touchend", this.onWindowTouchFinish);
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
     this.startRegisteredTransform();
   };
 
@@ -129,7 +129,7 @@ export class UserTransformableViewportConfigurator {
   ) => {
     const currentTouches = processTouch(event);
     const isEvery = currentTouches.touches.every((t) =>
-      isPointInside(this.win, this.element, t[0], t[1]),
+      isPointInside(this.window, this.element, t[0], t[1]),
     );
 
     if (!isEvery) {
@@ -185,7 +185,7 @@ export class UserTransformableViewportConfigurator {
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
-    private readonly win: Window,
+    private readonly window: Window,
     transformOptions: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
@@ -248,8 +248,8 @@ export class UserTransformableViewportConfigurator {
   }
 
   private removeMouseDragListeners(): void {
-    this.win.removeEventListener("mousemove", this.onWindowMouseMove);
-    this.win.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
   }
 
   private stopTouchDrag(): void {
@@ -259,9 +259,9 @@ export class UserTransformableViewportConfigurator {
   }
 
   private removeTouchDragListeners(): void {
-    this.win.removeEventListener("touchmove", this.onWindowTouchMove);
-    this.win.removeEventListener("touchend", this.onWindowTouchFinish);
-    this.win.removeEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 
   private performTransform(viewportTransform: PatchMatrixRequest): void {

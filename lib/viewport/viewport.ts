@@ -9,17 +9,17 @@ export class Viewport {
 
   public readonly onAfterUpdated: EventHandler<void>;
 
-  public constructor(private readonly transformer: ViewportStore) {
-    this.onBeforeUpdated = this.transformer.onBeforeUpdated;
+  public constructor(private readonly viewportStore: ViewportStore) {
+    this.onBeforeUpdated = this.viewportStore.onBeforeUpdated;
 
-    this.onAfterUpdated = this.transformer.onAfterUpdated;
+    this.onAfterUpdated = this.viewportStore.onAfterUpdated;
   }
 
   public getViewportMatrix(): TransformState {
-    return { ...this.transformer.getViewportMatrix() };
+    return { ...this.viewportStore.getViewportMatrix() };
   }
 
   public getContentMatrix(): TransformState {
-    return { ...this.transformer.getContentMatrix() };
+    return { ...this.viewportStore.getContentMatrix() };
   }
 }
