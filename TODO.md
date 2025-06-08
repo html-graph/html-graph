@@ -1,6 +1,8 @@
 # TODO
 
 - built-in drag edge creation
+- rename lib to src
+- rename options to configuration
 - arrows customization
 - snap nodes to grid
 - single responsibility for error

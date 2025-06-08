@@ -6,6 +6,7 @@ import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
   BackgroundOptions,
+  ConnectablePortsOptions,
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
@@ -31,6 +32,8 @@ export class CanvasBuilder {
   private transformOptions: TransformOptions = {};
 
   private backgroundOptions: BackgroundOptions = {};
+
+  private connectablePortsOptions: ConnectablePortsOptions = {};
 
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
@@ -129,7 +132,10 @@ export class CanvasBuilder {
   /**
    * enables edge creation by dragging one port to another
    */
-  public enableUserConnectablePorts(): CanvasBuilder {
+  public enableUserConnectablePorts(
+    options?: ConnectablePortsOptions,
+  ): CanvasBuilder {
+    this.connectablePortsOptions = options ?? {};
     this.hasUserConnectablePorts = true;
 
     return this;
@@ -208,6 +214,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.canvasDefaults,
+        this.connectablePortsOptions,
       );
     }
 

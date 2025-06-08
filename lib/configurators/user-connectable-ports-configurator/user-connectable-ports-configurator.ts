@@ -4,11 +4,14 @@ import { CoreHtmlView, HtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { isPointInside } from "../utils";
 import { Point } from "@/point";
+import { ConnectablePortsOptions, createOptions, Options } from "./options";
 
 /**
  * Responsibility: Configuring ports connectable via drag
  */
 export class UserConnectablePortsConfigurator {
+  private readonly options: Options;
+
   private readonly graphStore: GraphStore;
 
   private readonly htmlView: HtmlView;
@@ -17,7 +20,7 @@ export class UserConnectablePortsConfigurator {
 
   private readonly ports = new Map<HTMLElement, unknown>();
 
-  private sourcePort: unknown | null = null;
+  private staticPort: unknown | null = null;
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
@@ -56,7 +59,7 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    this.moveEndNode({ x: event.clientX, y: event.clientY });
+    this.moveDraggingNode({ x: event.clientX, y: event.clientY });
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
@@ -93,7 +96,7 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    this.moveEndNode({ x: touch.clientX, y: touch.clientY });
+    this.moveDraggingNode({ x: touch.clientX, y: touch.clientY });
   };
 
   private readonly onWindowTouchFinish = (event: TouchEvent): void => {
@@ -127,8 +130,12 @@ export class UserConnectablePortsConfigurator {
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
     defaults: CanvasDefaults,
+    options: ConnectablePortsOptions,
   ) {
+    this.options = createOptions(options);
     this.graphStore = new GraphStore();
+
+    console.log(this.options);
 
     this.htmlView = new CoreHtmlView(
       this.graphStore,
@@ -156,6 +163,7 @@ export class UserConnectablePortsConfigurator {
     viewportStore: ViewportStore,
     win: Window,
     defaults: CanvasDefaults,
+    options: ConnectablePortsOptions,
   ): void {
     new UserConnectablePortsConfigurator(
       canvas,
@@ -163,13 +171,15 @@ export class UserConnectablePortsConfigurator {
       viewportStore,
       win,
       defaults,
+      options,
     );
   }
 
   private grabPort(portElement: HTMLElement): void {
     const portId = this.ports.get(portElement)!;
+    const port = this.canvas.graph.getPort(portId)!;
 
-    this.sourcePort = portId;
+    this.staticPort = portId;
 
     const rect = portElement.getBoundingClientRect();
 
@@ -190,35 +200,40 @@ export class UserConnectablePortsConfigurator {
     };
 
     const elementBegin = document.createElement("div");
-    const elementEnd = document.createElement("div");
+
+    const beginId = "begin";
+    const endId = "end";
 
     this.overlayCanvas.addNode({
-      id: "begin",
+      id: beginId,
       element: elementBegin,
       x: portContentCoords.x,
       y: portContentCoords.y,
       ports: [
         {
-          id: "begin",
+          id: beginId,
           element: elementBegin,
+          direction: port.direction,
         },
       ],
     });
 
+    const elementEnd = document.createElement("div");
+
     this.overlayCanvas.addNode({
-      id: "end",
+      id: endId,
       element: elementEnd,
       x: portContentCoords.x,
       y: portContentCoords.y,
       ports: [
         {
-          id: "end",
+          id: endId,
           element: elementEnd,
         },
       ],
     });
 
-    this.overlayCanvas.addEdge({ from: "begin", to: "end" });
+    this.overlayCanvas.addEdge({ from: beginId, to: endId });
   }
 
   private hookPortEvents(element: HTMLElement): void {
@@ -245,7 +260,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private resetDragState(): void {
-    this.sourcePort = null;
+    this.staticPort = null;
     this.overlayCanvas.clear();
   }
 
@@ -256,21 +271,21 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    const targetPort = this.ports.get(element);
+    const draggingPort = this.ports.get(element);
 
-    if (targetPort === undefined) {
+    if (draggingPort === undefined) {
       return;
     }
 
-    this.canvas.addEdge({ from: this.sourcePort, to: targetPort });
+    this.canvas.addEdge({ from: this.staticPort, to: draggingPort });
   }
 
-  private moveEndNode(to: Point): void {
+  private moveDraggingNode(dragPoint: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeViewCoords: Point = {
-      x: to.x - canvasRect.x,
-      y: to.y - canvasRect.y,
+      x: dragPoint.x - canvasRect.x,
+      y: dragPoint.y - canvasRect.y,
     };
 
     const m = this.canvas.viewport.getViewportMatrix();
