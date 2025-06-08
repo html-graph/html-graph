@@ -2,7 +2,7 @@ import { Canvas, PatchMatrixRequest } from "@/canvas";
 import { TransformOptions } from "./options";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
-import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
+import { isPointInside, setCursor } from "../utils";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
 import { processTouch, TouchState } from "./process-touch";
@@ -44,11 +44,14 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (
-      this.element === null ||
-      !isPointOnElement(this.element, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.win, event.clientX, event.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.win,
+      this.element,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (this.element === null || !isInside) {
       this.stopMouseDrag();
       return;
     }
@@ -125,10 +128,8 @@ export class UserTransformableViewportConfigurator {
     event: TouchEvent,
   ) => {
     const currentTouches = processTouch(event);
-    const isEvery = currentTouches.touches.every(
-      (t) =>
-        isPointOnElement(this.element, t[0], t[1]) &&
-        isPointOnWindow(this.win, t[0], t[1]),
+    const isEvery = currentTouches.touches.every((t) =>
+      isPointInside(this.win, this.element, t[0], t[1]),
     );
 
     if (!isEvery) {

@@ -2,7 +2,7 @@ import { Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView, HtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
-import { isPointOnElement, isPointOnWindow } from "../utils";
+import { isPointInside } from "../utils";
 import { Point } from "@/point";
 
 /**
@@ -44,10 +44,14 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
-    if (
-      !isPointOnElement(this.overlayLayer, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.window, event.clientX, event.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.window,
+      this.overlayLayer,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (!isInside) {
       this.stopMouseDrag();
       return;
     }
@@ -77,10 +81,14 @@ export class UserConnectablePortsConfigurator {
   private readonly onWindowTouchMove = (event: TouchEvent): void => {
     const touch = event.touches[0];
 
-    if (
-      !isPointOnElement(this.overlayLayer, touch.clientX, touch.clientY) ||
-      !isPointOnWindow(this.window, touch.clientX, touch.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.window,
+      this.overlayLayer,
+      touch.clientX,
+      touch.clientY,
+    );
+
+    if (!isInside) {
       this.stopMouseDrag();
       return;
     }

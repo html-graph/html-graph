@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { createOptions, DragOptions, Options } from "./create-options";
-import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
+import { isPointInside, setCursor } from "../utils";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 
@@ -128,10 +128,14 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
-    if (
-      !isPointOnElement(this.element, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.win, event.clientX, event.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.win,
+      this.element,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (!isInside) {
       this.cancelMouseDrag();
       return;
     }
@@ -155,10 +159,14 @@ export class UserDraggableNodesConfigurator {
 
     const touch = event.touches[0];
 
-    if (
-      !isPointOnElement(this.element, touch.clientX, touch.clientY) ||
-      !isPointOnWindow(this.win, touch.clientX, touch.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.win,
+      this.element,
+      touch.clientX,
+      touch.clientY,
+    );
+
+    if (!isInside) {
       this.cancelTouchDrag();
       return;
     }

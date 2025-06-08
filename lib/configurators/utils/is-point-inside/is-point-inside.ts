@@ -1,5 +1,5 @@
-import { isPointOnElement } from "../is-point-on-element";
-import { isPointOnWindow } from "../is-point-on-window";
+import { isPointOnElement } from "./is-point-on-element";
+import { isPointOnWindow } from "./is-point-on-window";
 
 export const isPointInside = (
   win: Window,
