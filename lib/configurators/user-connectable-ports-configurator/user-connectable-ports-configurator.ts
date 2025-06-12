@@ -20,6 +20,10 @@ export class UserConnectablePortsConfigurator {
 
   private readonly ports = new Map<HTMLElement, unknown>();
 
+  private readonly staticId = "static";
+
+  private readonly draggingId = "dragging";
+
   private staticPortId: unknown | null = null;
 
   private overlaySourceId: unknown | null = null;
@@ -193,8 +197,8 @@ export class UserConnectablePortsConfigurator {
 
     const isDirect = portType === "direct";
 
-    this.overlaySourceId = isDirect ? "static" : "dragging";
-    this.overlayTargetId = isDirect ? "dragging" : "static";
+    this.overlaySourceId = isDirect ? this.staticId : this.draggingId;
+    this.overlayTargetId = isDirect ? this.draggingId : this.staticId;
 
     const rect = portElement.getBoundingClientRect();
 
@@ -276,36 +280,22 @@ export class UserConnectablePortsConfigurator {
 
   private resetDragState(): void {
     this.staticPortId = null;
+    this.overlaySourceId = null;
+    this.overlayTargetId = null;
     this.overlayCanvas.clear();
   }
 
   private tryCreateConnection(cursor: Point): void {
-    let element = document.elementFromPoint(cursor.x, cursor.y);
+    const draggingPortId = this.getPortAtPoint(cursor);
 
-    if (element === null || !(element instanceof HTMLElement)) {
+    if (draggingPortId === null) {
       return;
     }
 
-    let draggingPort: unknown | undefined = undefined;
+    const isStaticSource = this.overlaySourceId === this.staticId;
 
-    while (element !== null) {
-      draggingPort = this.ports.get(element as HTMLElement);
-
-      if (draggingPort !== undefined) {
-        break;
-      }
-
-      element = element!.parentElement;
-    }
-
-    if (draggingPort === undefined) {
-      return;
-    }
-
-    const isStaticSource = this.overlaySourceId === "static";
-
-    const sourceId = isStaticSource ? this.staticPortId : draggingPort;
-    const targetId = isStaticSource ? draggingPort : this.staticPortId;
+    const sourceId = isStaticSource ? this.staticPortId : draggingPortId;
+    const targetId = isStaticSource ? draggingPortId : this.staticPortId;
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 
@@ -331,9 +321,31 @@ export class UserConnectablePortsConfigurator {
       y: m.scale * nodeViewCoords.y + m.y,
     };
 
-    this.overlayCanvas.updateNode("dragging", {
+    this.overlayCanvas.updateNode(this.draggingId, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });
+  }
+
+  private getPortAtPoint(point: Point): unknown | null {
+    let element = document.elementFromPoint(point.x, point.y);
+
+    if (element === null || !(element instanceof HTMLElement)) {
+      return null;
+    }
+
+    let draggingPortId: unknown | null = null;
+
+    while (element !== null) {
+      draggingPortId = this.ports.get(element as HTMLElement) ?? null;
+
+      if (draggingPortId !== null) {
+        break;
+      }
+
+      element = element.parentElement;
+    }
+
+    return draggingPortId;
   }
 }
