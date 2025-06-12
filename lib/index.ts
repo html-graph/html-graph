@@ -26,6 +26,7 @@ export type {
   ConnectablePortsOptions,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
+  MouseEventVerifier,
 } from "./configurators";
 
 export {

@@ -2,7 +2,7 @@ import { Canvas, PatchMatrixRequest } from "@/canvas";
 import { TransformOptions } from "./options";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
-import { isPointInside, setCursor } from "../utils";
+import { isPointInside, setCursor } from "../shared";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
 import { processTouch, TouchState } from "./process-touch";

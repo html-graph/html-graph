@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { createOptions, DragOptions, Options } from "./create-options";
-import { isPointInside, setCursor } from "../utils";
+import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 

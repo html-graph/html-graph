@@ -2,7 +2,7 @@ import { AddEdgeRequest, Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView, HtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
-import { isPointInside } from "../utils";
+import { isPointInside } from "../shared";
 import { Point } from "@/point";
 import { ConnectablePortsOptions, createOptions, Options } from "./options";
 
@@ -91,10 +91,12 @@ export class UserConnectablePortsConfigurator {
     event.stopPropagation();
 
     const touch = event.touches[0];
+
     this.grabPort(event.currentTarget as HTMLElement, {
       x: touch.clientX,
       y: touch.clientY,
     });
+
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
@@ -350,22 +352,36 @@ export class UserConnectablePortsConfigurator {
   }
 
   private getPortAtPoint(point: Point): unknown | null {
-    let element = document.elementFromPoint(point.x, point.y);
+    const elements = document.elementsFromPoint(point.x, point.y);
 
-    if (element === null || !(element instanceof HTMLElement)) {
+    for (const element of elements) {
+      const draggingPortId = this.findDraggingPortId(element);
+
+      if (draggingPortId !== null) {
+        return draggingPortId;
+      }
+    }
+
+    return null;
+  }
+
+  private findDraggingPortId(element: Element): unknown | null {
+    let elementBuf: Element | null = element;
+
+    if (elementBuf === null || !(elementBuf instanceof HTMLElement)) {
       return null;
     }
 
     let draggingPortId: unknown | null = null;
 
-    while (element !== null) {
-      draggingPortId = this.ports.get(element as HTMLElement) ?? null;
+    while (elementBuf !== null) {
+      draggingPortId = this.ports.get(elementBuf as HTMLElement) ?? null;
 
       if (draggingPortId !== null) {
         break;
       }
 
-      element = element.parentElement;
+      elementBuf = elementBuf.parentElement;
     }
 
     return draggingPortId;

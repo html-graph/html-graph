@@ -28,3 +28,5 @@ export type {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
 } from "./user-connectable-ports-configurator";
+
+export type { MouseEventVerifier } from "./shared";
