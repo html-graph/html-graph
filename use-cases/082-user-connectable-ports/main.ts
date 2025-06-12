@@ -1,5 +1,4 @@
 import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
-import { createInOutNode } from "../shared/create-in-out-node";
 
 const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -44,6 +43,54 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
+
+function createPortElement(): HTMLElement {
+  const port = document.createElement("div");
+  port.classList.add("node-port");
+
+  const grabArea = document.createElement("div");
+  grabArea.classList.add("node-port-grab-area");
+
+  port.appendChild(grabArea);
+
+  const pin = document.createElement("div");
+  pin.classList.add("node-port-pin");
+
+  grabArea.appendChild(pin);
+
+  return port;
+}
+
+function createInOutNode(params: {
+  name: string;
+  x: number;
+  y: number;
+  frontPortId: string;
+  backPortId: string;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+
+  const frontPort = createPortElement();
+  node.appendChild(frontPort);
+
+  const text = document.createElement("div");
+  text.innerText = params.name;
+  node.appendChild(text);
+
+  const backPort = createPortElement();
+  node.appendChild(backPort);
+
+  return {
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [
+      { id: params.frontPortId, element: frontPort },
+      { id: params.backPortId, element: backPort },
+    ],
+  };
+}
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

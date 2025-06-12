@@ -280,13 +280,23 @@ export class UserConnectablePortsConfigurator {
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const element = document.elementFromPoint(cursor.x, cursor.y);
+    let element = document.elementFromPoint(cursor.x, cursor.y);
 
     if (element === null || !(element instanceof HTMLElement)) {
       return;
     }
 
-    const draggingPort = this.ports.get(element);
+    let draggingPort: unknown | undefined = undefined;
+
+    while (element !== null) {
+      draggingPort = this.ports.get(element as HTMLElement);
+
+      if (draggingPort !== undefined) {
+        break;
+      }
+
+      element = element!.parentElement;
+    }
 
     if (draggingPort === undefined) {
       return;
