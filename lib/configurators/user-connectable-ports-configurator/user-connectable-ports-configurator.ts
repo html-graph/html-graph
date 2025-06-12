@@ -53,7 +53,10 @@ export class UserConnectablePortsConfigurator {
 
     event.stopPropagation();
 
-    this.grabPort(event.currentTarget as HTMLElement);
+    this.grabPort(event.currentTarget as HTMLElement, {
+      x: event.clientX,
+      y: event.clientY,
+    });
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
   };
@@ -87,7 +90,11 @@ export class UserConnectablePortsConfigurator {
 
     event.stopPropagation();
 
-    this.grabPort(event.currentTarget as HTMLElement);
+    const touch = event.touches[0];
+    this.grabPort(event.currentTarget as HTMLElement, {
+      x: touch.clientX,
+      y: touch.clientY,
+    });
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
@@ -185,7 +192,7 @@ export class UserConnectablePortsConfigurator {
     );
   }
 
-  private grabPort(portElement: HTMLElement): void {
+  private grabPort(portElement: HTMLElement, cursor: Point): void {
     const portId = this.ports.get(portElement)!;
     const port = this.canvas.graph.getPort(portId)!;
 
@@ -211,15 +218,26 @@ export class UserConnectablePortsConfigurator {
 
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
+    const m = this.canvas.viewport.getViewportMatrix();
+
     const portViewCoords: Point = {
       x: portX - canvasRect.x,
       y: portY - canvasRect.y,
     };
-    const m = this.canvas.viewport.getViewportMatrix();
 
     const portContentCoords: Point = {
       x: m.scale * portViewCoords.x + m.x,
       y: m.scale * portViewCoords.y + m.y,
+    };
+
+    const cursorViewCoords: Point = {
+      x: cursor.x - canvasRect.x,
+      y: cursor.y - canvasRect.y,
+    };
+
+    const cursorContentCoords: Point = {
+      x: m.scale * cursorViewCoords.x + m.x,
+      y: m.scale * cursorViewCoords.y + m.y,
     };
 
     const elementBegin = document.createElement("div");
@@ -227,8 +245,8 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addNode({
       id: this.overlaySourceId,
       element: elementBegin,
-      x: portContentCoords.x,
-      y: portContentCoords.y,
+      x: isDirect ? portContentCoords.x : cursorContentCoords.x,
+      y: isDirect ? portContentCoords.y : cursorContentCoords.y,
       ports: [
         {
           id: this.overlaySourceId,
@@ -243,8 +261,8 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addNode({
       id: this.overlayTargetId,
       element: elementEnd,
-      x: portContentCoords.x,
-      y: portContentCoords.y,
+      x: isDirect ? cursorContentCoords.x : portContentCoords.x,
+      y: isDirect ? cursorContentCoords.y : portContentCoords.y,
       ports: [
         {
           id: this.overlayTargetId,
