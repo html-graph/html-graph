@@ -1,3 +1,3 @@
 export type ConnectionTypeResolver = (
   portId: unknown,
-) => "begin" | "end" | null;
+) => "direct" | "reverse" | null;

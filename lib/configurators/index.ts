@@ -23,4 +23,8 @@ export { BackgroundConfigurator } from "./background-configurator";
 export type { BackgroundOptions } from "./background-configurator";
 
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
-export type { ConnectablePortsOptions } from "./user-connectable-ports-configurator";
+export type {
+  ConnectablePortsOptions,
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
+} from "./user-connectable-ports-configurator";

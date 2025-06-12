@@ -1,2 +1,6 @@
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
-export type { ConnectablePortsOptions } from "./options";
+export type {
+  ConnectablePortsOptions,
+  ConnectionTypeResolver,
+  ConnectionPreprocessor,
+} from "./options";

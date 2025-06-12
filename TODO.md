@@ -1,8 +1,10 @@
 # TODO
 
 - built-in drag edge creation
+  - handle port element recursive
 - rename lib to src
 - rename options to configuration
+- pass element info builder constructor, make builder single use object
 - arrows customization
 - snap nodes to grid
 - single responsibility for error

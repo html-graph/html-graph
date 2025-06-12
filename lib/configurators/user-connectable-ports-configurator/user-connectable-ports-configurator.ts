@@ -1,4 +1,4 @@
-import { Canvas, CanvasDefaults } from "@/canvas";
+import { AddEdgeRequest, Canvas, CanvasDefaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView, HtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -20,7 +20,11 @@ export class UserConnectablePortsConfigurator {
 
   private readonly ports = new Map<HTMLElement, unknown>();
 
-  private staticPort: unknown | null = null;
+  private staticPortId: unknown | null = null;
+
+  private overlaySourceId: unknown | null = null;
+
+  private overlayTargetId: unknown | null = null;
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
@@ -135,8 +139,6 @@ export class UserConnectablePortsConfigurator {
     this.options = createOptions(options);
     this.graphStore = new GraphStore();
 
-    console.log(this.options);
-
     this.htmlView = new CoreHtmlView(
       this.graphStore,
       this.viewportStore,
@@ -179,7 +181,20 @@ export class UserConnectablePortsConfigurator {
     const portId = this.ports.get(portElement)!;
     const port = this.canvas.graph.getPort(portId)!;
 
-    this.staticPort = portId;
+    this.staticPortId = portId;
+
+    const portType = this.options.connectionTypeResolver(this.staticPortId);
+
+    if (portType === null) {
+      this.stopMouseDrag();
+      this.stopTouchDrag();
+      return;
+    }
+
+    const isDirect = portType === "direct";
+
+    this.overlaySourceId = isDirect ? "static" : "dragging";
+    this.overlayTargetId = isDirect ? "dragging" : "static";
 
     const rect = portElement.getBoundingClientRect();
 
@@ -201,17 +216,14 @@ export class UserConnectablePortsConfigurator {
 
     const elementBegin = document.createElement("div");
 
-    const beginId = "begin";
-    const endId = "end";
-
     this.overlayCanvas.addNode({
-      id: beginId,
+      id: this.overlaySourceId,
       element: elementBegin,
       x: portContentCoords.x,
       y: portContentCoords.y,
       ports: [
         {
-          id: beginId,
+          id: this.overlaySourceId,
           element: elementBegin,
           direction: port.direction,
         },
@@ -221,19 +233,22 @@ export class UserConnectablePortsConfigurator {
     const elementEnd = document.createElement("div");
 
     this.overlayCanvas.addNode({
-      id: endId,
+      id: this.overlayTargetId,
       element: elementEnd,
       x: portContentCoords.x,
       y: portContentCoords.y,
       ports: [
         {
-          id: endId,
+          id: this.overlayTargetId,
           element: elementEnd,
         },
       ],
     });
 
-    this.overlayCanvas.addEdge({ from: beginId, to: endId });
+    this.overlayCanvas.addEdge({
+      from: this.overlaySourceId,
+      to: this.overlayTargetId,
+    });
   }
 
   private hookPortEvents(element: HTMLElement): void {
@@ -260,7 +275,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private resetDragState(): void {
-    this.staticPort = null;
+    this.staticPortId = null;
     this.overlayCanvas.clear();
   }
 
@@ -277,7 +292,18 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    this.canvas.addEdge({ from: this.staticPort, to: draggingPort });
+    const isStaticSource = this.overlaySourceId === "static";
+
+    const sourceId = isStaticSource ? this.staticPortId : draggingPort;
+    const targetId = isStaticSource ? draggingPort : this.staticPortId;
+
+    const request: AddEdgeRequest = { from: sourceId, to: targetId };
+
+    const processedRequest = this.options.connectionPreprocessor(request);
+
+    if (processedRequest !== null) {
+      this.canvas.addEdge(processedRequest);
+    }
   }
 
   private moveDraggingNode(dragPoint: Point): void {
@@ -295,7 +321,7 @@ export class UserConnectablePortsConfigurator {
       y: m.scale * nodeViewCoords.y + m.y,
     };
 
-    this.overlayCanvas.updateNode("end", {
+    this.overlayCanvas.updateNode("dragging", {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });

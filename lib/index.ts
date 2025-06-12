@@ -23,6 +23,9 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
+  ConnectablePortsOptions,
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
 } from "./configurators";
 
 export {
