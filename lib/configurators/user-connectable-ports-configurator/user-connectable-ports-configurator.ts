@@ -47,6 +47,10 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onPortMouseDown = (event: MouseEvent): void => {
+    if (!this.options.mouseDownEventVerifier(event)) {
+      return;
+    }
+
     event.stopPropagation();
 
     this.grabPort(event.currentTarget as HTMLElement);

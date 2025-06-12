@@ -33,7 +33,7 @@ export const createOptions = (dragOptions: DragOptions): Options => {
   return {
     freezePriority,
     dragCursor,
-    mouseDownEventVerifier: mouseDownEventVerifier,
+    mouseDownEventVerifier,
     mouseUpEventVerifier,
     onNodeDrag,
     onBeforeNodeDrag,

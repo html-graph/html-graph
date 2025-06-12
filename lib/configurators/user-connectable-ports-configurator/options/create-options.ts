@@ -7,8 +7,12 @@ export const createOptions = (
   connectablePortsOptions: ConnectablePortsOptions,
 ): Options => {
   const defaultConnectionResolver: ConnectionTypeResolver = () => "direct";
+
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
     request;
+
+  const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
+    event.button === 0;
 
   return {
     connectionTypeResolver:
@@ -17,5 +21,8 @@ export const createOptions = (
     connectionPreprocessor:
       connectablePortsOptions.connectionPreprocessor ??
       defaultConnectionPreprocessor,
+    mouseDownEventVerifier:
+      connectablePortsOptions.mouseDownEventVerifier ??
+      defaultMouseEventVerifier,
   };
 };
