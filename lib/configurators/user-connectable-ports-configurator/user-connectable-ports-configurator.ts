@@ -5,7 +5,7 @@ import {
   CanvasDefaults,
 } from "@/canvas";
 import { GraphStore } from "@/graph-store";
-import { CoreHtmlView, HtmlView } from "@/html-view";
+import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { isPointInside, transformPoint } from "../shared";
 import { Point } from "@/point";
@@ -17,10 +17,6 @@ import { PortPayload } from "./port-payload";
  */
 export class UserConnectablePortsConfigurator {
   private readonly options: Options;
-
-  private readonly graphStore: GraphStore;
-
-  private readonly htmlView: HtmlView;
 
   private readonly overlayCanvas: Canvas;
 
@@ -55,13 +51,13 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onPortMouseDown = (event: MouseEvent): void => {
-    if (!this.options.mouseDownEventVerifier(event)) {
-      return;
-    }
-
     const target = event.currentTarget as HTMLElement;
 
-    if (!this.isPortConnectionAllowed(target)) {
+    const ignoreEvent =
+      !this.options.mouseDownEventVerifier(event) ||
+      !this.isPortConnectionAllowed(target);
+
+    if (ignoreEvent) {
       return;
     }
 
@@ -95,14 +91,12 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onPortTouchStart = (event: TouchEvent): void => {
-    if (event.touches.length !== 1) {
-      this.stopTouchDrag();
-      return;
-    }
-
     const target = event.currentTarget as HTMLElement;
 
-    if (!this.isPortConnectionAllowed(target)) {
+    const ignoreEvent =
+      event.touches.length !== 1 || !this.isPortConnectionAllowed(target);
+
+    if (ignoreEvent) {
       return;
     }
 
@@ -128,7 +122,7 @@ export class UserConnectablePortsConfigurator {
     );
 
     if (!isInside) {
-      this.stopMouseDrag();
+      this.stopTouchDrag();
       return;
     }
 
@@ -150,14 +144,15 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onBeforeDestroy = (): void => {
+    this.stopMouseDrag();
+    this.stopTouchDrag();
+
     this.canvas.graph.onAfterPortMarked.unsubscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.unsubscribe(
       this.onBeforePortUnmarked,
     );
     this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
-    this.stopMouseDrag();
-    this.stopTouchDrag();
   };
 
   private constructor(
@@ -169,19 +164,19 @@ export class UserConnectablePortsConfigurator {
     options: ConnectablePortsOptions,
   ) {
     this.options = createOptions(options);
-    this.graphStore = new GraphStore();
+    const graphStore = new GraphStore();
 
-    this.htmlView = new CoreHtmlView(
-      this.graphStore,
+    const htmlView = new CoreHtmlView(
+      graphStore,
       this.viewportStore,
       this.overlayLayer,
     );
 
     this.overlayCanvas = new Canvas(
       this.overlayLayer,
-      this.graphStore,
+      graphStore,
       this.viewportStore,
-      this.htmlView,
+      htmlView,
       defaults,
     );
 
@@ -279,11 +274,12 @@ export class UserConnectablePortsConfigurator {
 
   private resetDragState(): void {
     this.staticPortId = null;
+    this.isDirect = true;
     this.overlayCanvas.clear();
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const draggingPortId = this.getPortAtPoint(cursor);
+    const draggingPortId = this.findPortAtPoint(cursor);
 
     if (draggingPortId === null) {
       return;
@@ -311,12 +307,8 @@ export class UserConnectablePortsConfigurator {
       y: dragPoint.y - canvasRect.y,
     };
 
-    const m = this.canvas.viewport.getViewportMatrix();
-
-    const nodeContentCoords: Point = {
-      x: m.scale * nodeViewCoords.x + m.x,
-      y: m.scale * nodeViewCoords.y + m.y,
-    };
+    const matrix = this.canvas.viewport.getViewportMatrix();
+    const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
 
     this.overlayCanvas.updateNode(this.draggingOverlayPortId, {
       x: nodeContentCoords.x,
@@ -324,11 +316,11 @@ export class UserConnectablePortsConfigurator {
     });
   }
 
-  private getPortAtPoint(point: Point): unknown | null {
+  private findPortAtPoint(point: Point): unknown | null {
     const elements = document.elementsFromPoint(point.x, point.y);
 
     for (const element of elements) {
-      const draggingPortId = this.findDraggingPortId(element);
+      const draggingPortId = this.findPortAtElement(element);
 
       if (draggingPortId !== null) {
         return draggingPortId;
@@ -338,7 +330,7 @@ export class UserConnectablePortsConfigurator {
     return null;
   }
 
-  private findDraggingPortId(element: Element): unknown | null {
+  private findPortAtElement(element: Element): unknown | null {
     let elementBuf: Element | null = element;
 
     if (elementBuf === null || !(elementBuf instanceof HTMLElement)) {
