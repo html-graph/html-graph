@@ -49,11 +49,11 @@ export class UserConnectablePortsConfigurator {
   private readonly onPortMouseDown = (event: MouseEvent): void => {
     const target = event.currentTarget as HTMLElement;
 
-    const ignoreEvent =
-      !this.options.mouseDownEventVerifier(event) ||
-      !this.isPortConnectionAllowed(target);
+    const isValidEvent =
+      this.options.mouseDownEventVerifier(event) &&
+      this.isPortConnectionAllowed(target);
 
-    if (ignoreEvent) {
+    if (!isValidEvent) {
       return;
     }
 
@@ -89,10 +89,10 @@ export class UserConnectablePortsConfigurator {
   private readonly onPortTouchStart = (event: TouchEvent): void => {
     const target = event.currentTarget as HTMLElement;
 
-    const ignoreEvent =
-      event.touches.length !== 1 || !this.isPortConnectionAllowed(target);
+    const isValidEvent =
+      event.touches.length === 1 && this.isPortConnectionAllowed(target);
 
-    if (ignoreEvent) {
+    if (!isValidEvent) {
       return;
     }
 
@@ -278,6 +278,40 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.clear();
   }
 
+  private createOverlayGraph(
+    sourcePayload: PortPayload,
+    targetPayload: PortPayload,
+  ): void {
+    const addSourceRequest = this.createAddNodeRequest(sourcePayload);
+    this.overlayCanvas.addNode(addSourceRequest);
+
+    const addTargetRequest = this.createAddNodeRequest(targetPayload);
+    this.overlayCanvas.addNode(addTargetRequest);
+
+    this.overlayCanvas.addEdge({
+      from: sourcePayload.overlayId,
+      to: targetPayload.overlayId,
+    });
+  }
+
+  private createAddNodeRequest(payload: PortPayload): AddNodeRequest {
+    const element = document.createElement("div");
+
+    return {
+      id: payload.overlayId,
+      element,
+      x: payload.portCoords.x,
+      y: payload.portCoords.y,
+      ports: [
+        {
+          id: payload.overlayId,
+          element: element,
+          direction: payload.portDirection,
+        },
+      ],
+    };
+  }
+
   private tryCreateConnection(cursor: Point): void {
     const draggingPortId = this.findPortAtPoint(cursor);
 
@@ -356,39 +390,5 @@ export class UserConnectablePortsConfigurator {
     const portId = this.ports.get(portElement)!;
 
     return this.options.connectionTypeResolver(portId) !== null;
-  }
-
-  private createOverlayGraph(
-    sourcePayload: PortPayload,
-    targetPayload: PortPayload,
-  ): void {
-    const addSourceRequest = this.createAddNodeRequest(sourcePayload);
-    this.overlayCanvas.addNode(addSourceRequest);
-
-    const addTargetRequest = this.createAddNodeRequest(targetPayload);
-    this.overlayCanvas.addNode(addTargetRequest);
-
-    this.overlayCanvas.addEdge({
-      from: sourcePayload.overlayId,
-      to: targetPayload.overlayId,
-    });
-  }
-
-  private createAddNodeRequest(payload: PortPayload): AddNodeRequest {
-    const element = document.createElement("div");
-
-    return {
-      id: payload.overlayId,
-      element,
-      x: payload.portCoords.x,
-      y: payload.portCoords.y,
-      ports: [
-        {
-          id: payload.overlayId,
-          element: element,
-          direction: payload.portDirection,
-        },
-      ],
-    };
   }
 }
