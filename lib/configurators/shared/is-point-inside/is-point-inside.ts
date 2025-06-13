@@ -7,11 +7,5 @@ export const isPointInside = (
   x: number,
   y: number,
 ): boolean => {
-  // console.log(
-  //   isPointOnElement(element, x, y),
-  //   x,
-  //   y,
-  //   element.getBoundingClientRect(),
-  // );
   return isPointOnElement(element, x, y) && isPointOnWindow(win, x, y);
 };

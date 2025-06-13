@@ -1,12 +1,10 @@
 # TODO
 
-- built-in drag edge creation
-  - mouse grab event verifier
-  - handle port element recursive
-- use Element instead of HTMLElement
 - rename lib to src
 - rename options to configuration
 - pass element info builder constructor, make builder single use object
+- user draggable edges
+- user deletable edges
 - arrows customization
 - snap nodes to grid
 - single responsibility for error
