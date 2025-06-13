@@ -135,20 +135,24 @@ export class CoreHtmlView implements HtmlView {
     const rectTo = portTo.element.getBoundingClientRect();
     const rect = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportStore.getViewportMatrix();
+    const viewportFromX = rectFrom.left - rect.left;
+    const viewportFromY = rectFrom.top - rect.top;
+    const viewportToX = rectTo.left - rect.left;
+    const viewportToY = rectTo.top - rect.top;
 
-    const from: Point = {
-      x: viewportMatrix.scale * (rectFrom.left - rect.left) + viewportMatrix.x,
-      y: viewportMatrix.scale * (rectFrom.top - rect.top) + viewportMatrix.y,
+    const contentFrom: Point = {
+      x: viewportMatrix.scale * viewportFromX + viewportMatrix.x,
+      y: viewportMatrix.scale * viewportFromY + viewportMatrix.y,
     };
 
-    const to: Point = {
-      x: viewportMatrix.scale * (rectTo.left - rect.left) + viewportMatrix.x,
-      y: viewportMatrix.scale * (rectTo.top - rect.top) + viewportMatrix.y,
+    const contentTo: Point = {
+      x: viewportMatrix.scale * viewportToX + viewportMatrix.x,
+      y: viewportMatrix.scale * viewportToY + viewportMatrix.y,
     };
 
-    const source: EdgeRenderPort = {
-      x: from.x,
-      y: from.y,
+    const from: EdgeRenderPort = {
+      x: contentFrom.x,
+      y: contentFrom.y,
       width: rectFrom.width * viewportMatrix.scale,
       height: rectFrom.height * viewportMatrix.scale,
       direction: portFrom.direction,
@@ -156,9 +160,9 @@ export class CoreHtmlView implements HtmlView {
       nodeId: portFrom.nodeId,
     };
 
-    const target: EdgeRenderPort = {
-      x: to.x,
-      y: to.y,
+    const to: EdgeRenderPort = {
+      x: contentTo.x,
+      y: contentTo.y,
       width: rectTo.width * viewportMatrix.scale,
       height: rectTo.height * viewportMatrix.scale,
       direction: portTo.direction,
@@ -166,10 +170,7 @@ export class CoreHtmlView implements HtmlView {
       nodeId: portTo.nodeId,
     };
 
-    edge.shape.render({
-      from: source,
-      to: target,
-    });
+    edge.shape.render({ from, to });
   }
 
   public updateEdgePriority(edgeId: unknown): void {

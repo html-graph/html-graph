@@ -23,6 +23,10 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
+  ConnectablePortsOptions,
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
+  MouseEventVerifier,
 } from "./configurators";
 
 export {

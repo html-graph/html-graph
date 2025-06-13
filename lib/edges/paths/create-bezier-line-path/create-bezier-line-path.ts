@@ -1,5 +1,5 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../../utils";
+import { createRotatedPoint } from "../../shared";
 
 export const createBezierLinePath = (params: {
   readonly to: Point;

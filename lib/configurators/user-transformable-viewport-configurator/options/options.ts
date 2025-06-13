@@ -1,4 +1,5 @@
 import { TransformPreprocessorFn } from "../preprocessors";
+import { MouseEventVerifier } from "../../shared";
 
 export interface Options {
   readonly wheelSensitivity: number;
@@ -10,8 +11,8 @@ export interface Options {
   readonly onResizeTransformFinished: () => void;
   readonly transformPreprocessor: TransformPreprocessorFn;
   readonly shiftCursor: string | null;
-  readonly mouseDownEventVerifier: (event: MouseEvent) => boolean;
-  readonly mouseUpEventVerifier: (event: MouseEvent) => boolean;
+  readonly mouseDownEventVerifier: MouseEventVerifier;
+  readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly mouseWheelEventVerifier: (event: WheelEvent) => boolean;
   readonly scaleWheelFinishTimeout: number;
 }

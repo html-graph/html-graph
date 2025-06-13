@@ -1,4 +1,5 @@
 import { TransformPreprocessorOption } from "./transform-preprocessor-option";
+import { MouseEventVerifier } from "../../shared";
 
 export interface TransformOptions {
   readonly scale?: {
@@ -8,8 +9,8 @@ export interface TransformOptions {
   };
   readonly shift?: {
     readonly cursor?: string | null;
-    readonly mouseDownEventVerifier?: (event: MouseEvent) => boolean;
-    readonly mouseUpEventVerifier?: (event: MouseEvent) => boolean;
+    readonly mouseDownEventVerifier?: MouseEventVerifier;
+    readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
   readonly transformPreprocessor?:
     | TransformPreprocessorOption

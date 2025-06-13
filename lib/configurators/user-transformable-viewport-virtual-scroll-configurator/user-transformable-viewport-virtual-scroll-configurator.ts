@@ -16,8 +16,6 @@ import { Viewport } from "@/viewport";
 export class UserTransformableViewportVirtualScrollConfigurator {
   private readonly canvasResizeObserver: ResizeObserver;
 
-  private readonly window = window;
-
   private readonly nodeHorizontal: number;
 
   private readonly nodeVertical: number;
@@ -72,6 +70,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
+    private readonly window: Window,
     transformOptions: TransformOptions | undefined,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly virtualScrollOptions: VirtualScrollOptions,
@@ -80,7 +79,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       this.virtualScrollOptions.nodeContainingRadius.horizontal;
     this.nodeVertical = this.virtualScrollOptions.nodeContainingRadius.vertical;
 
-    this.canvasResizeObserver = new this.window.ResizeObserver((entries) => {
+    this.canvasResizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
       this.viewportWidth = entry.contentRect.width;
       this.viewportHeight = entry.contentRect.height;
@@ -137,6 +136,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     UserTransformableViewportConfigurator.configure(
       canvas,
       this.element,
+      this.window,
       patchedTransformOptions,
     );
 
@@ -151,6 +151,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
   public static configure(
     canvas: Canvas,
     element: HTMLElement,
+    win: Window,
     transformOptions: TransformOptions,
     trigger: EventSubject<RenderingBox>,
     virtualScrollOptions: VirtualScrollOptions,
@@ -158,6 +159,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     new UserTransformableViewportVirtualScrollConfigurator(
       canvas,
       element,
+      win,
       transformOptions,
       trigger,
       virtualScrollOptions,
@@ -169,6 +171,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       this.loadAreaAroundViewport();
     });
   }
+
   private scheduleEnsureViewportAreaLoaded(): void {
     const absoluteViewportWidth =
       this.viewportWidth * this.viewportMatrix.scale;

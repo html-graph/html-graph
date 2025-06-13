@@ -6,16 +6,18 @@ import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
   BackgroundOptions,
+  ConnectablePortsOptions,
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
+  UserConnectablePortsConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
   VirtualScrollOptions,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
-import { Layers } from "./layers";
+import { Layers } from "@/layers";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration
@@ -31,6 +33,8 @@ export class CanvasBuilder {
 
   private backgroundOptions: BackgroundOptions = {};
 
+  private connectablePortsOptions: ConnectablePortsOptions = {};
+
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
   private hasDraggableNode = false;
@@ -41,8 +45,12 @@ export class CanvasBuilder {
 
   private hasBackground = false;
 
+  private hasUserConnectablePorts = false;
+
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
+
+  private readonly window = window;
 
   public setElement(element: HTMLElement): CanvasBuilder {
     this.element = element;
@@ -101,15 +109,34 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables built-in virtual scroll behavior, when only nodes and edges close
+   * to viewport are rendered
+   */
   public enableVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
     this.virtualScrollOptions = options;
 
     return this;
   }
 
+  /**
+   * enables built-in background rendering
+   */
   public enableBackground(options?: BackgroundOptions): CanvasBuilder {
     this.hasBackground = true;
     this.backgroundOptions = options ?? {};
+
+    return this;
+  }
+
+  /**
+   * enables edge creation by dragging one port to another
+   */
+  public enableUserConnectablePorts(
+    options?: ConnectablePortsOptions,
+  ): CanvasBuilder {
+    this.connectablePortsOptions = options ?? {};
+    this.hasUserConnectablePorts = true;
 
     return this;
   }
@@ -175,7 +202,19 @@ export class CanvasBuilder {
       UserDraggableNodesConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.dragOptions,
+      );
+    }
+
+    if (this.hasUserConnectablePorts) {
+      UserConnectablePortsConfigurator.configure(
+        canvas,
+        layers.overlay,
+        viewportStore,
+        this.window,
+        this.canvasDefaults,
+        this.connectablePortsOptions,
       );
     }
 
@@ -183,6 +222,7 @@ export class CanvasBuilder {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.transformOptions,
         trigger!,
         this.virtualScrollOptions,
@@ -191,6 +231,7 @@ export class CanvasBuilder {
       UserTransformableViewportConfigurator.configure(
         canvas,
         layers.main,
+        this.window,
         this.transformOptions,
       );
     }
@@ -216,5 +257,6 @@ export class CanvasBuilder {
     this.hasResizeReactiveNodes = false;
     this.hasBackground = false;
     this.boxRenderingTrigger = undefined;
+    this.hasUserConnectablePorts = false;
   }
 }

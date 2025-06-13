@@ -21,3 +21,12 @@ export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual
 
 export { BackgroundConfigurator } from "./background-configurator";
 export type { BackgroundOptions } from "./background-configurator";
+
+export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
+export type {
+  ConnectablePortsOptions,
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
+} from "./user-connectable-ports-configurator";
+
+export type { MouseEventVerifier } from "./shared";

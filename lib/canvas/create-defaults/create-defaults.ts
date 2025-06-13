@@ -5,23 +5,23 @@ import { Defaults } from "./defaults";
 import { CanvasDefaults } from "./canvas-defaults";
 
 export const createDefaults: (
-  canvasDefaults: CanvasDefaults | undefined,
-) => Defaults = (apiOptions: CanvasDefaults | undefined) => {
+  defaults: CanvasDefaults | undefined,
+) => Defaults = (defaults: CanvasDefaults | undefined) => {
   const priorities = resolvePriority(
-    apiOptions?.nodes?.priority,
-    apiOptions?.edges?.priority,
+    defaults?.nodes?.priority,
+    defaults?.edges?.priority,
   );
 
   return {
     nodes: {
-      centerFn: apiOptions?.nodes?.centerFn ?? standardCenterFn,
+      centerFn: defaults?.nodes?.centerFn ?? standardCenterFn,
       priorityFn: priorities.nodesPriorityFn,
     },
     ports: {
-      direction: apiOptions?.ports?.direction ?? 0,
+      direction: defaults?.ports?.direction ?? 0,
     },
     edges: {
-      shapeFactory: resolveEdgeShapeFactory(apiOptions?.edges?.shape ?? {}),
+      shapeFactory: resolveEdgeShapeFactory(defaults?.edges?.shape ?? {}),
       priorityFn: priorities.edgesPriorityFn,
     },
   };

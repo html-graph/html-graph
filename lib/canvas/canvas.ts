@@ -113,6 +113,9 @@ export class Canvas {
 
   private readonly onBeforeDestroyEmitter: EventEmitter<void>;
 
+  /**
+   * emits event just before destruction of canvas
+   */
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
@@ -123,9 +126,9 @@ export class Canvas {
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
-    options: CanvasDefaults,
+    defaults: CanvasDefaults,
   ) {
-    this.defaults = createDefaults(options);
+    this.defaults = createDefaults(defaults);
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
 
@@ -370,6 +373,8 @@ export class Canvas {
   public destroy(): void {
     this.onBeforeDestroyEmitter.emit();
 
+    this.clear();
+
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
     this.graphStore.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
@@ -400,7 +405,6 @@ export class Canvas {
 
     this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
 
-    this.clear();
     this.htmlView.destroy();
   }
 }

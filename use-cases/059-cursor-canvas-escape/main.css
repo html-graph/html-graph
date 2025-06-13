@@ -2,6 +2,10 @@ body {
   overflow: hidden;
 }
 
+.overlay {
+  user-select: none;
+}
+
 .canvas {
   top: 150px;
   left: 100px;

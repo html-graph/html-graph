@@ -25,6 +25,7 @@ const createCanvas = (params?: {
   UserDraggableNodesConfigurator.configure(
     canvas,
     element,
+    window,
     params?.dragOptions ?? {},
   );
 

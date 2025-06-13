@@ -2,7 +2,7 @@ import { Canvas, PatchMatrixRequest } from "@/canvas";
 import { TransformOptions } from "./options";
 import { createOptions } from "./options/create-options";
 import { Options } from "./options/options";
-import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
+import { isPointInside, setCursor } from "../shared";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
 import { processTouch, TouchState } from "./process-touch";
@@ -11,8 +11,6 @@ import { processTouch, TouchState } from "./process-touch";
  * Responsibility: Configures canvas to have viewport transformable by user
  */
 export class UserTransformableViewportConfigurator {
-  private window = window;
-
   private readonly viewport: Viewport;
 
   private prevTouches: TouchState | null = null;
@@ -46,11 +44,14 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (
-      this.element === null ||
-      !isPointOnElement(this.element, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.window, event.clientX, event.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.window,
+      this.element,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (this.element === null || !isInside) {
       this.stopMouseDrag();
       return;
     }
@@ -127,21 +128,22 @@ export class UserTransformableViewportConfigurator {
     event: TouchEvent,
   ) => {
     const currentTouches = processTouch(event);
-    const isEvery = currentTouches.touches.every(
-      (t) =>
-        isPointOnElement(this.element, t[0], t[1]) &&
-        isPointOnWindow(this.window, t[0], t[1]),
+    const isEvery = currentTouches.touches.every((t) =>
+      isPointInside(this.window, this.element, t[0], t[1]),
     );
+
     if (!isEvery) {
       this.stopTouchDrag();
       return;
     }
+
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
       this.moveViewport(
         -(currentTouches.x - this.prevTouches!.x),
         -(currentTouches.y - this.prevTouches!.y),
       );
     }
+
     if (currentTouches.touchesCnt === 2) {
       const { left, top } = this.element.getBoundingClientRect();
       const x = this.prevTouches!.x - left;
@@ -150,6 +152,7 @@ export class UserTransformableViewportConfigurator {
       const deltaViewScale = 1 / deltaScale;
       this.scaleViewport(deltaViewScale, x, y);
     }
+
     this.prevTouches = currentTouches;
   };
 
@@ -182,6 +185,7 @@ export class UserTransformableViewportConfigurator {
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
+    private readonly window: Window,
     transformOptions: TransformOptions,
   ) {
     this.options = createOptions(transformOptions);
@@ -198,11 +202,13 @@ export class UserTransformableViewportConfigurator {
   public static configure(
     canvas: Canvas,
     element: HTMLElement,
+    win: Window,
     transformOptions: TransformOptions,
   ): void {
     new UserTransformableViewportConfigurator(
       canvas,
       element,
+      win,
       transformOptions,
     );
   }

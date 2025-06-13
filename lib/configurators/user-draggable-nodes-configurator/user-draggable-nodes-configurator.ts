@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { createOptions, DragOptions, Options } from "./create-options";
-import { isPointOnElement, isPointOnWindow, setCursor } from "../utils";
+import { isPointInside, setCursor, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 
@@ -15,8 +15,6 @@ export class UserDraggableNodesConfigurator {
   private previousTouchCoordinates: Point | null = null;
 
   private readonly nodeIds = new Map<HTMLElement, unknown>();
-
-  private readonly window = window;
 
   private readonly graph: Graph;
 
@@ -130,13 +128,18 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
-    if (
-      !isPointOnElement(this.element, event.clientX, event.clientY) ||
-      !isPointOnWindow(this.window, event.clientX, event.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.window,
+      this.element,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (!isInside) {
       this.cancelMouseDrag();
       return;
     }
+
     if (this.grabbedNodeId !== null) {
       this.dragNode(this.grabbedNodeId, event.movementX, event.movementY);
     }
@@ -155,19 +158,23 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    const t = event.touches[0];
+    const touch = event.touches[0];
 
-    if (
-      !isPointOnElement(this.element, t.clientX, t.clientY) ||
-      !isPointOnWindow(this.window, t.clientX, t.clientY)
-    ) {
+    const isInside = isPointInside(
+      this.window,
+      this.element,
+      touch.clientX,
+      touch.clientY,
+    );
+
+    if (!isInside) {
       this.cancelTouchDrag();
       return;
     }
 
     if (this.grabbedNodeId !== null && this.previousTouchCoordinates !== null) {
-      const dx = t.clientX - this.previousTouchCoordinates.x;
-      const dy = t.clientY - this.previousTouchCoordinates.y;
+      const dx = touch.clientX - this.previousTouchCoordinates.x;
+      const dy = touch.clientY - this.previousTouchCoordinates.y;
 
       this.dragNode(this.grabbedNodeId, dx, dy);
 
@@ -188,6 +195,7 @@ export class UserDraggableNodesConfigurator {
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
+    private readonly window: Window,
     dragOptions: DragOptions,
   ) {
     this.options = createOptions(dragOptions);
@@ -203,9 +211,10 @@ export class UserDraggableNodesConfigurator {
   public static configure(
     canvas: Canvas,
     element: HTMLElement,
+    win: Window,
     options: DragOptions,
   ): void {
-    new UserDraggableNodesConfigurator(canvas, element, options);
+    new UserDraggableNodesConfigurator(canvas, element, win, options);
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
@@ -216,21 +225,25 @@ export class UserDraggableNodesConfigurator {
     }
 
     const contentMatrix = this.canvas.viewport.getContentMatrix();
-    const viewportX = contentMatrix.scale * node.x + contentMatrix.x;
-    const viewportY = contentMatrix.scale * node.y + contentMatrix.y;
-    const newViewportX = viewportX + dx;
-    const newViewportY = viewportY + dy;
-    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
-    const contentX = viewportMatrix.scale * newViewportX + viewportMatrix.x;
-    const contentY = viewportMatrix.scale * newViewportY + viewportMatrix.y;
+    const viewportCoords = transformPoint(contentMatrix, {
+      x: node.x,
+      y: node.y,
+    });
+    const newViewportCoords = transformPoint(
+      { scale: 1, x: dx, y: dy },
+      viewportCoords,
+    );
 
-    this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
+    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
+    const contentCoords = transformPoint(viewportMatrix, newViewportCoords);
+
+    this.canvas.updateNode(nodeId, { x: contentCoords.x, y: contentCoords.y });
 
     this.options.onNodeDrag({
       nodeId,
       element: node.element,
-      x: contentX,
-      y: contentY,
+      x: contentCoords.x,
+      y: contentCoords.y,
     });
   }
 
@@ -253,6 +266,7 @@ export class UserDraggableNodesConfigurator {
 
   private cancelMouseDrag(): void {
     const node = this.graph.getNode(this.grabbedNodeId);
+
     if (node !== null) {
       this.options.onNodeDragFinished({
         nodeId: this.grabbedNodeId,

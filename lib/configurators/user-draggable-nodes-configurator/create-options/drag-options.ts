@@ -1,11 +1,12 @@
 import { NodeDragPayload } from "../node-drag-payload";
+import { MouseEventVerifier } from "../../shared";
 
 export interface DragOptions {
   readonly moveOnTop?: boolean;
   readonly mouse?: {
     readonly dragCursor?: string | null;
-    readonly mouseDownEventVerifier?: (event: MouseEvent) => boolean;
-    readonly mouseUpEventVerifier?: (event: MouseEvent) => boolean;
+    readonly mouseDownEventVerifier?: MouseEventVerifier;
+    readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
   readonly events?: {
     readonly onNodeDrag?: (payload: NodeDragPayload) => void;

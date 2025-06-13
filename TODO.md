@@ -1,7 +1,13 @@
 # TODO
 
-- built-in drag edge creation
+- rename lib to src
+- rename options to configuration
+- pass element info builder constructor, make builder single use object
+- user draggable edges
+- user deletable edges
 - arrows customization
+- snap nodes to grid
+- single responsibility for error
 
 - layouts
 
@@ -10,7 +16,6 @@
   - implement Canvas wrapper with optional coordinates
   - provide trigger for applying commands queue
 
-- snap nodes to grid
 - implement edges with label when specified manually
 - generics for identifiers
 - transformable canvas shift limit when scaling ?

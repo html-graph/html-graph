@@ -29,6 +29,7 @@ const createCanvas = (params?: {
   UserTransformableViewportConfigurator.configure(
     canvas,
     element,
+    window,
     params?.transformOptions ?? {},
   );
 

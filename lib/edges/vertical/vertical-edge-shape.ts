@@ -8,7 +8,7 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../utils";
+} from "../shared";
 import {
   createCycleSquarePath,
   createDetourStraightPath,
@@ -95,8 +95,8 @@ export class VerticalEdgeShape implements EdgeShape {
     );
 
     this.svg.style.transform = `translate(${x}px, ${y}px)`;
-    this.svg.style.width = `${width}px`;
-    this.svg.style.height = `${height}px`;
+    this.svg.style.width = `${Math.max(width, 1)}px`;
+    this.svg.style.height = `${Math.max(height, 1)}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = createFlipDirectionVector(
