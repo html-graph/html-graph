@@ -30,10 +30,6 @@ export class UserConnectablePortsConfigurator {
 
   private isDirect: boolean = true;
 
-  private readonly onEdgeCreated = (edgeId: unknown): void => {
-    this.options.onEdgeCreated(edgeId);
-  };
-
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
 
@@ -153,6 +149,10 @@ export class UserConnectablePortsConfigurator {
     );
     this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
     this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
+  };
+
+  private readonly onEdgeCreated = (edgeId: unknown): void => {
+    this.options.onEdgeCreated(edgeId);
   };
 
   private constructor(
