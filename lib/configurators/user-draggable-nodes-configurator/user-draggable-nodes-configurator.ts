@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { createOptions, DragOptions, Options } from "./create-options";
-import { isPointInside, setCursor } from "../shared";
+import { isPointInside, setCursor, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 
@@ -225,21 +225,25 @@ export class UserDraggableNodesConfigurator {
     }
 
     const contentMatrix = this.canvas.viewport.getContentMatrix();
-    const viewportX = contentMatrix.scale * node.x + contentMatrix.x;
-    const viewportY = contentMatrix.scale * node.y + contentMatrix.y;
-    const newViewportX = viewportX + dx;
-    const newViewportY = viewportY + dy;
-    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
-    const contentX = viewportMatrix.scale * newViewportX + viewportMatrix.x;
-    const contentY = viewportMatrix.scale * newViewportY + viewportMatrix.y;
+    const viewportCoords = transformPoint(contentMatrix, {
+      x: node.x,
+      y: node.y,
+    });
+    const newViewportCoords = transformPoint(
+      { scale: 1, x: dx, y: dy },
+      viewportCoords,
+    );
 
-    this.canvas.updateNode(nodeId, { x: contentX, y: contentY });
+    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
+    const contentCoords = transformPoint(viewportMatrix, newViewportCoords);
+
+    this.canvas.updateNode(nodeId, { x: contentCoords.x, y: contentCoords.y });
 
     this.options.onNodeDrag({
       nodeId,
       element: node.element,
-      x: contentX,
-      y: contentY,
+      x: contentCoords.x,
+      y: contentCoords.y,
     });
   }
 

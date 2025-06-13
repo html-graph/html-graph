@@ -39,6 +39,11 @@ const canvas: Canvas = builder
 
       return null;
     },
+    events: {
+      onEdgeCreated: (edgeId) => {
+        console.info(`created edge ${edgeId}`);
+      },
+    },
   })
   .enableUserTransformableViewport()
   .enableBackground()

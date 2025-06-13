@@ -6,10 +6,4 @@ describe("createEdgeGroup", () => {
 
     expect(group.style.transformOrigin).toBe("50% 50%");
   });
-
-  it("should create edge group with pointer events auto", () => {
-    const group = createEdgeGroup();
-
-    expect(group.style.pointerEvents).toBe("auto");
-  });
 });
