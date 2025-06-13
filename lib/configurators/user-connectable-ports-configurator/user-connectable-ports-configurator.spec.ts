@@ -41,6 +41,7 @@ const createCanvas = (params?: {
 
 const createNode = (canvas: Canvas, portElement: HTMLElement): void => {
   const nodeElement = document.createElement("div");
+  nodeElement.appendChild(portElement);
 
   canvas.addNode({
     element: nodeElement,
@@ -51,6 +52,10 @@ const createNode = (canvas: Canvas, portElement: HTMLElement): void => {
 };
 
 describe("UserConnectablePortsConfigurator", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
   it("should create overlay graph on port mouse grab", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ overlayElement });
@@ -328,5 +333,225 @@ describe("UserConnectablePortsConfigurator", () => {
     );
 
     expect(overlayElement.children[0].children[0].children.length).toBe(0);
+  });
+
+  it("should create connection on mouse release", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ overlayElement, mainElement });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(1);
+  });
+
+  it("should create connection on touch end", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ overlayElement, mainElement });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchend", {
+        changedTouches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(1);
+  });
+
+  it("should not create connection on mouse release outside of port", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ overlayElement, mainElement });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 110, clientY: 110 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 110, clientY: 110 }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(0);
+  });
+
+  it("should create reverse connection", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      connectOptions: { connectionTypeResolver: () => "reverse" },
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(canvas.graph.getEdge(0)).toStrictEqual(
+      expect.objectContaining({ from: 1, to: 0 }),
+    );
+  });
+
+  it("should remove port listeners on port remove", () => {
+    const canvas = createCanvas();
+
+    const port = document.createElement("div");
+    createNode(canvas, port);
+
+    canvas.removeNode(0);
+
+    expect(() => {
+      port.dispatchEvent(new MouseEvent("mousedown"));
+    }).not.toThrow();
+  });
+
+  it("should remove port listeners on canvas clear", () => {
+    const canvas = createCanvas();
+
+    const port = document.createElement("div");
+    createNode(canvas, port);
+
+    canvas.clear();
+
+    expect(() => {
+      port.dispatchEvent(new MouseEvent("mousedown"));
+    }).not.toThrow();
+  });
+
+  it("should call specified callback after edge creation", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onAfterEdgeCreated = (): void => {};
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      connectOptions: { events: { onAfterEdgeCreated } },
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(1);
+  });
+
+  it("should unsubscribe before destroy", () => {
+    const canvas = createCanvas();
+
+    canvas.destroy();
   });
 });

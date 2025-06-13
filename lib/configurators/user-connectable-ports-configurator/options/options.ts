@@ -6,5 +6,5 @@ export interface Options {
   readonly connectionTypeResolver: ConnectionTypeResolver;
   readonly connectionPreprocessor: ConnectionPreprocessor;
   readonly mouseDownEventVerifier: MouseEventVerifier;
-  readonly onEdgeCreated: (edgeId: unknown) => void;
+  readonly onAfterEdgeCreated: (edgeId: unknown) => void;
 }

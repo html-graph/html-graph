@@ -4,7 +4,7 @@ import { createOptions } from "./create-options";
 import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
 import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
 import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
-import { defaultOnEdgeCreated } from "./default-on-edge-created";
+import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 
 describe("createOptions", () => {
   it("should return direct connection type resolver by default", () => {
@@ -49,16 +49,16 @@ describe("createOptions", () => {
   it("should return default edge created callback", () => {
     const options = createOptions({});
 
-    expect(options.onEdgeCreated).toBe(defaultOnEdgeCreated);
+    expect(options.onAfterEdgeCreated).toBe(defaultOnAfterEdgeCreated);
   });
 
   it("should return specified edge created callback", () => {
     const onEdgeCreated = (): void => {};
 
     const options = createOptions({
-      events: { onEdgeCreated },
+      events: { onAfterEdgeCreated: onEdgeCreated },
     });
 
-    expect(options.onEdgeCreated).toBe(onEdgeCreated);
+    expect(options.onAfterEdgeCreated).toBe(onEdgeCreated);
   });
 });

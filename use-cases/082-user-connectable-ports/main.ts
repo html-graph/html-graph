@@ -40,7 +40,7 @@ const canvas: Canvas = builder
       return null;
     },
     events: {
-      onEdgeCreated: (edgeId) => {
+      onAfterEdgeCreated: (edgeId) => {
         console.info(`created edge ${edgeId}`);
       },
     },

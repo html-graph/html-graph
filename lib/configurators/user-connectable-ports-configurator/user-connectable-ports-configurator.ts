@@ -152,7 +152,7 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onEdgeCreated = (edgeId: unknown): void => {
-    this.options.onEdgeCreated(edgeId);
+    this.options.onAfterEdgeCreated(edgeId);
   };
 
   private constructor(
@@ -366,11 +366,6 @@ export class UserConnectablePortsConfigurator {
 
   private findPortAtElement(element: Element): unknown | null {
     let elementBuf: Element | null = element;
-
-    if (elementBuf === null || !(elementBuf instanceof HTMLElement)) {
-      return null;
-    }
-
     let draggingPortId: unknown | null = null;
 
     while (elementBuf !== null) {

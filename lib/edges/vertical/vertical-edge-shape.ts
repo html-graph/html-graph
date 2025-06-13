@@ -8,7 +8,7 @@ import {
   createEdgeSvg,
   createEdgeLine,
   createEdgeRectangle,
-} from "../utils";
+} from "../shared";
 import {
   createCycleSquarePath,
   createDetourStraightPath,

@@ -2,7 +2,7 @@ import { ConnectablePortsOptions } from "./connectable-ports-options";
 import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
 import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
 import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
-import { defaultOnEdgeCreated } from "./default-on-edge-created";
+import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 import { Options } from "./options";
 
 export const createOptions = (
@@ -18,7 +18,8 @@ export const createOptions = (
     mouseDownEventVerifier:
       connectablePortsOptions.mouseDownEventVerifier ??
       defaultMouseDownEventVerifier,
-    onEdgeCreated:
-      connectablePortsOptions.events?.onEdgeCreated ?? defaultOnEdgeCreated,
+    onAfterEdgeCreated:
+      connectablePortsOptions.events?.onAfterEdgeCreated ??
+      defaultOnAfterEdgeCreated,
   };
 };

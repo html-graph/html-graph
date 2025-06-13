@@ -12,7 +12,17 @@ import {
 } from "@/mocks";
 import { HtmlGraphError } from "./error";
 
+const setLayersDimensions = (element: HTMLElement): void => {
+  for (const child of element.children[0].children) {
+    child.getBoundingClientRect = element.getBoundingClientRect;
+  }
+};
+
 describe("CanvasBuilder", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
+
   it("should throw error when attach element not specified", () => {
     const builder = new CanvasBuilder();
 
@@ -58,7 +68,7 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should build resize reactive canvas", () => {
+  it("should build canvas with resize reactive nodes", () => {
     const builder = new CanvasBuilder();
 
     const canvasElement = document.createElement("div");
@@ -110,7 +120,7 @@ describe("CanvasBuilder", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should build user draggable nodes canvas", () => {
+  it("should build canvas with user draggable nodes", () => {
     const builder = new CanvasBuilder();
 
     const canvasElement = createElement({ width: 1000, height: 1000 });
@@ -143,7 +153,7 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
-  it("should build user transformable canvas", () => {
+  it("should build canvas with user transformable viewport", () => {
     const builder = new CanvasBuilder();
 
     const element = createElement({ width: 1000, height: 1000 });
@@ -235,5 +245,68 @@ describe("CanvasBuilder", () => {
     const svg = canvasElement.children[0].children[0].children[0];
 
     expect(svg.tagName).toBe("svg");
+  });
+
+  it("should build canvas with user connectable ports", () => {
+    const builder = new CanvasBuilder();
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    document.body.appendChild(canvasElement);
+
+    const canvas = builder
+      .setElement(canvasElement)
+      .enableUserConnectablePorts()
+      .build();
+
+    setLayersDimensions(canvasElement);
+
+    const sourcePortElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+
+    const sourceNodeElement = document.createElement("div");
+    sourceNodeElement.appendChild(sourcePortElement);
+
+    canvas.addNode({
+      element: sourceNodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          element: sourcePortElement,
+        },
+      ],
+    });
+
+    const targetPortElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+
+    const targetNodeElement = document.createElement("div");
+    targetNodeElement.appendChild(targetPortElement);
+
+    canvas.addNode({
+      element: targetNodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          element: targetPortElement,
+        },
+      ],
+    });
+
+    sourcePortElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(1);
   });
 });

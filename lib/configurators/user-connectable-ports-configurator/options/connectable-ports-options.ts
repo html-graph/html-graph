@@ -7,6 +7,6 @@ export interface ConnectablePortsOptions {
   readonly connectionPreprocessor?: ConnectionPreprocessor;
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly events?: {
-    readonly onEdgeCreated?: (edgeId: unknown) => void;
+    readonly onAfterEdgeCreated?: (edgeId: unknown) => void;
   };
 }

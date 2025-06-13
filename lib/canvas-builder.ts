@@ -17,7 +17,7 @@ import {
   VirtualScrollOptions,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
-import { Layers } from "./layers";
+import { Layers } from "@/layers";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration

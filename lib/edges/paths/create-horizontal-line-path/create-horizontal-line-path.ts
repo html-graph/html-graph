@@ -1,5 +1,5 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint, createRoundedPath } from "../../utils";
+import { createRotatedPoint, createRoundedPath } from "../../shared";
 
 export const createHorizontalLinePath = (params: {
   readonly to: Point;

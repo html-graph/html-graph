@@ -83,3 +83,33 @@ global.DOMRect = class {
     return JSON.stringify(this);
   }
 };
+
+const processElement = (element: Element, x: number, y: number): Element[] => {
+  let res: Element[] = [];
+  const rect = element.getBoundingClientRect();
+
+  if (
+    rect.x <= x &&
+    rect.x + rect.width >= x &&
+    rect.y <= y &&
+    rect.y + rect.height >= y
+  ) {
+    res.push(element);
+  }
+
+  for (const child of element.children) {
+    res = [...res, ...processElement(child, x, y)];
+  }
+
+  return res;
+};
+
+document.elementsFromPoint = (x: number, y: number): Element[] => {
+  let res: Element[] = [];
+
+  for (const element of window.document.children) {
+    res = [...res, ...processElement(element, x, y)];
+  }
+
+  return res;
+};
