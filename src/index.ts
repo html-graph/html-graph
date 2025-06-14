@@ -18,12 +18,18 @@ export type {
   DragOptions,
   NodeDragPayload,
   TransformOptions,
+  BackgroundConfig,
   TransformPayload,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
-  ConnectablePortsOptions,
+  /**
+   * @deprecated
+   * use ConnectablePortsConfig instead
+   */
+  ConnectablePortsConfig as ConnectablePortsOptions,
+  ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,

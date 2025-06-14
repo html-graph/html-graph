@@ -1,6 +1,6 @@
 import { DotsRenderer } from "./dots-renderer";
 
-export interface BackgroundOptions {
+export interface BackgroundConfig {
   readonly tileDimensions?: {
     readonly width?: number;
     readonly height?: number;

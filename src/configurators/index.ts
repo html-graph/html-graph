@@ -20,11 +20,11 @@ export { UserTransformableViewportVirtualScrollConfigurator } from "./user-trans
 export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-configurator";
 
 export { BackgroundConfigurator } from "./background-configurator";
-export type { BackgroundOptions } from "./background-configurator";
+export type { BackgroundConfig } from "./background-configurator";
 
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 export type {
-  ConnectablePortsOptions,
+  ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
 } from "./user-connectable-ports-configurator";

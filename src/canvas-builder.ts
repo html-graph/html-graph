@@ -5,8 +5,8 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  BackgroundOptions,
-  ConnectablePortsOptions,
+  BackgroundConfig,
+  ConnectablePortsConfig,
   DragOptions,
   ResizeReactiveNodesConfigurator,
   TransformOptions,
@@ -31,9 +31,9 @@ export class CanvasBuilder {
 
   private transformOptions: TransformOptions = {};
 
-  private backgroundOptions: BackgroundOptions = {};
+  private backgroundConfig: BackgroundConfig = {};
 
-  private connectablePortsOptions: ConnectablePortsOptions = {};
+  private connectablePortsConfig: ConnectablePortsConfig = {};
 
   private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
 
@@ -122,9 +122,9 @@ export class CanvasBuilder {
   /**
    * enables built-in background rendering
    */
-  public enableBackground(options?: BackgroundOptions): CanvasBuilder {
+  public enableBackground(config?: BackgroundConfig): CanvasBuilder {
     this.hasBackground = true;
-    this.backgroundOptions = options ?? {};
+    this.backgroundConfig = config ?? {};
 
     return this;
   }
@@ -133,9 +133,9 @@ export class CanvasBuilder {
    * enables edge creation by dragging one port to another
    */
   public enableUserConnectablePorts(
-    options?: ConnectablePortsOptions,
+    config?: ConnectablePortsConfig,
   ): CanvasBuilder {
-    this.connectablePortsOptions = options ?? {};
+    this.connectablePortsConfig = config ?? {};
     this.hasUserConnectablePorts = true;
 
     return this;
@@ -189,7 +189,7 @@ export class CanvasBuilder {
     if (this.hasBackground) {
       BackgroundConfigurator.configure(
         canvas,
-        this.backgroundOptions,
+        this.backgroundConfig,
         layers.background,
       );
     }
@@ -214,7 +214,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.canvasDefaults,
-        this.connectablePortsOptions,
+        this.connectablePortsConfig,
       );
     }
 
@@ -250,7 +250,7 @@ export class CanvasBuilder {
     this.canvasDefaults = {};
     this.dragOptions = {};
     this.transformOptions = {};
-    this.backgroundOptions = {};
+    this.backgroundConfig = {};
     this.virtualScrollOptions = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;

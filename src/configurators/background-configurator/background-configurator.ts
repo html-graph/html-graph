@@ -4,7 +4,7 @@ import {
   createPatternFilledRectangle,
   createSvg,
 } from "./utils";
-import { BackgroundOptions, createOptions } from "./options";
+import { BackgroundConfig, createConfig } from "./config";
 
 /**
  * Responsibility: Configures background rendering behind graph
@@ -69,17 +69,17 @@ export class BackgroundConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    backgroundOptions: BackgroundOptions,
+    backgroundConfig: BackgroundConfig,
     private readonly host: HTMLElement,
   ) {
-    const options = createOptions(backgroundOptions);
+    const config = createConfig(backgroundConfig);
 
-    this.tileWidth = options.tileWidth;
-    this.tileHeight = options.tileHeight;
+    this.tileWidth = config.tileWidth;
+    this.tileHeight = config.tileHeight;
     this.halfTileWidth = this.tileWidth / 2;
     this.halfTileHeight = this.tileHeight / 2;
-    this.patternContent = options.renderer;
-    this.maxViewportScale = options.maxViewportScale;
+    this.patternContent = config.renderer;
+    this.maxViewportScale = config.maxViewportScale;
 
     const transform = `translate(${this.halfTileWidth}, ${this.halfTileHeight})`;
     this.patternContent.setAttribute("transform", transform);
@@ -102,10 +102,10 @@ export class BackgroundConfigurator {
 
   public static configure(
     canvas: Canvas,
-    options: BackgroundOptions,
+    config: BackgroundConfig,
     host: HTMLElement,
   ): void {
-    new BackgroundConfigurator(canvas, options, host);
+    new BackgroundConfigurator(canvas, config, host);
   }
 
   private updateVisibility(): void {

@@ -4,12 +4,12 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { ConnectablePortsOptions } from "./options";
+import { ConnectablePortsConfig } from "./config";
 
 const createCanvas = (params?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
-  connectOptions?: ConnectablePortsOptions;
+  connectConfig?: ConnectablePortsConfig;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
@@ -33,7 +33,7 @@ const createCanvas = (params?: {
     viewportStore,
     window,
     {},
-    params?.connectOptions ?? {},
+    params?.connectConfig ?? {},
   );
 
   return canvas;
@@ -72,7 +72,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectOptions: {
+      connectConfig: {
         mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
       },
     });
@@ -89,7 +89,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectOptions: {
+      connectConfig: {
         connectionTypeResolver: () => null,
       },
     });
@@ -141,7 +141,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectOptions: {
+      connectConfig: {
         connectionTypeResolver: () => null,
       },
     });
@@ -225,7 +225,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectOptions: {
+      connectConfig: {
         connectionTypeResolver: () => "reverse",
       },
     });
@@ -245,7 +245,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectOptions: {
+      connectConfig: {
         connectionTypeResolver: () => "reverse",
       },
     });
@@ -451,7 +451,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectOptions: { connectionTypeResolver: () => "reverse" },
+      connectConfig: { connectionTypeResolver: () => "reverse" },
     });
 
     document.body.appendChild(mainElement);
@@ -518,7 +518,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectOptions: { events: { onAfterEdgeCreated } },
+      connectConfig: { events: { onAfterEdgeCreated } },
     });
 
     document.body.appendChild(mainElement);
