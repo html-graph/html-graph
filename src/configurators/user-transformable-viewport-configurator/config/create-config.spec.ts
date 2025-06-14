@@ -3,18 +3,18 @@ import {
   TransformPayload,
   TransformPreprocessorParams,
 } from "../preprocessors";
-import { createOptions } from "./create-options";
-import { TransformOptions } from "./transform-options";
+import { createConfig } from "./create-config";
+import { ViewportTransformConfig } from "./viewport-transform-config";
 
-describe("createOptions", () => {
+describe("createConfig", () => {
   it("should set default wheel velocity if not specified", () => {
-    const res = createOptions(undefined);
+    const res = createConfig(undefined);
 
     expect(res.wheelSensitivity).toBe(1.2);
   });
 
   it("should set specified wheel velocity", () => {
-    const res = createOptions({
+    const res = createConfig({
       scale: {
         mouseWheelSensitivity: 1.5,
       },
@@ -24,7 +24,7 @@ describe("createOptions", () => {
   });
 
   it("should set noop transform preprocessor if not specified", () => {
-    const res = createOptions(undefined);
+    const res = createConfig(undefined);
 
     const preprocessor = res.transformPreprocessor;
 
@@ -53,7 +53,7 @@ describe("createOptions", () => {
 
     const fn = jest.fn(transformPreprocessor);
 
-    const res = createOptions({
+    const res = createConfig({
       transformPreprocessor: fn,
     });
 
@@ -78,7 +78,7 @@ describe("createOptions", () => {
 
     const fn = jest.fn(transformPreprocessor);
 
-    const res = createOptions({
+    const res = createConfig({
       transformPreprocessor: [fn, fn],
     });
 
@@ -95,13 +95,13 @@ describe("createOptions", () => {
   });
 
   it("should set default shift cursor if not specified", () => {
-    const res = createOptions(undefined);
+    const res = createConfig(undefined);
 
     expect(res.shiftCursor).toBe("grab");
   });
 
   it("should set specified shift cursor", () => {
-    const res = createOptions({
+    const res = createConfig({
       shift: {
         cursor: "crosshair",
       },
@@ -113,7 +113,7 @@ describe("createOptions", () => {
   it("should set specified onBeforeTransformChange", () => {
     const onBeforeTransformChange = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onBeforeTransformChange,
       },
@@ -125,7 +125,7 @@ describe("createOptions", () => {
   it("should set specified onTransformChange", () => {
     const onTransformChange = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onTransformChange,
       },
@@ -137,7 +137,7 @@ describe("createOptions", () => {
   it("should set specified onTransformStarted", () => {
     const onTransformStarted = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onTransformStarted,
       },
@@ -149,7 +149,7 @@ describe("createOptions", () => {
   it("should set specified onTransformFinished", () => {
     const onTransformFinished = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onTransformFinished,
       },
@@ -161,13 +161,13 @@ describe("createOptions", () => {
   it("should set default mouse down event validator", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
-    const transformOptions: TransformOptions = {
+    const transformOptions: ViewportTransformConfig = {
       shift: {
         mouseDownEventVerifier,
       },
     };
 
-    const options = createOptions(transformOptions);
+    const options = createConfig(transformOptions);
 
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
@@ -175,13 +175,13 @@ describe("createOptions", () => {
   it("should set default mouse up event validator", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
-    const transformOptions: TransformOptions = {
+    const transformOptions: ViewportTransformConfig = {
       shift: {
         mouseUpEventVerifier,
       },
     };
 
-    const options = createOptions(transformOptions);
+    const options = createConfig(transformOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
@@ -189,19 +189,19 @@ describe("createOptions", () => {
   it("should set default mouse wheel event validator", () => {
     const mouseWheelEventVerifier = (): boolean => false;
 
-    const transformOptions: TransformOptions = {
+    const transformOptions: ViewportTransformConfig = {
       scale: {
         mouseWheelEventVerifier,
       },
     };
 
-    const options = createOptions(transformOptions);
+    const options = createConfig(transformOptions);
 
     expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
 
   it("should set default scale wheel timeout", () => {
-    const res = createOptions(undefined);
+    const res = createConfig(undefined);
 
     expect(res.scaleWheelFinishTimeout).toBe(500);
   });
@@ -209,7 +209,7 @@ describe("createOptions", () => {
   it("should set specified onResizeTransformStarted", () => {
     const onResizeTransformStarted = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onResizeTransformStarted,
       },
@@ -221,7 +221,7 @@ describe("createOptions", () => {
   it("should set specified onResizeTransformFinished", () => {
     const onResizeTransformFinished = (): void => {};
 
-    const res = createOptions({
+    const res = createConfig({
       events: {
         onResizeTransformFinished,
       },

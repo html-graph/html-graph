@@ -4,7 +4,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { DragConfig } from "./create-options";
+import { DraggableNodesConfig } from "./create-config";
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 
@@ -13,7 +13,7 @@ let innerHeight: number;
 
 const createCanvas = (params?: {
   element?: HTMLElement;
-  dragOptions?: DragConfig;
+  dragConfig?: DraggableNodesConfig;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
@@ -26,7 +26,7 @@ const createCanvas = (params?: {
     canvas,
     element,
     window,
-    params?.dragOptions ?? {},
+    params?.dragConfig ?? {},
   );
 
   return canvas;
@@ -154,7 +154,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         mouse: {
           dragCursor: "crosshair",
         },
@@ -447,7 +447,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         events: {
           onBeforeNodeDrag: (): boolean => false,
         },
@@ -478,7 +478,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         events: {
           onBeforeNodeDrag: (): boolean => false,
         },
@@ -620,7 +620,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         moveOnTop: false,
       },
     });
@@ -703,7 +703,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         events: {
           onNodeDragFinished,
         },
@@ -738,7 +738,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         events: {
           onNodeDragFinished,
         },
@@ -780,7 +780,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         mouse: {
           mouseDownEventVerifier: (event: MouseEvent): boolean =>
             event.button === 0 && event.ctrlKey,
@@ -815,7 +815,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragOptions: {
+      dragConfig: {
         mouse: {
           mouseUpEventVerifier: (event: MouseEvent): boolean =>
             event.button === 0 && event.ctrlKey,

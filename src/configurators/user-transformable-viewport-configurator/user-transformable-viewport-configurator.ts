@@ -1,7 +1,5 @@
 import { Canvas, PatchMatrixRequest } from "@/canvas";
-import { TransformOptions } from "./options";
-import { createOptions } from "./options/create-options";
-import { Options } from "./options/options";
+import { Config, createConfig, ViewportTransformConfig } from "./config";
 import { isPointInside, setCursor } from "../shared";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
@@ -32,10 +30,10 @@ export class UserTransformableViewportConfigurator {
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.options.mouseDownEventVerifier(event)) {
+    if (this.element === null || !this.config.mouseDownEventVerifier(event)) {
       return;
     }
-    setCursor(this.element, this.options.shiftCursor);
+    setCursor(this.element, this.config.shiftCursor);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
     this.startRegisteredTransform();
@@ -65,7 +63,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.options.mouseUpEventVerifier(event)) {
+    if (this.element === null || !this.config.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -75,7 +73,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWheelScroll: (event: WheelEvent) => void = (
     event: WheelEvent,
   ) => {
-    if (!this.options.mouseWheelEventVerifier(event)) {
+    if (!this.config.mouseWheelEventVerifier(event)) {
       return;
     }
 
@@ -86,13 +84,13 @@ export class UserTransformableViewportConfigurator {
     const centerY = event.clientY - top;
     const deltaScale =
       event.deltaY < 0
-        ? this.options.wheelSensitivity
-        : 1 / this.options.wheelSensitivity;
+        ? this.config.wheelSensitivity
+        : 1 / this.config.wheelSensitivity;
 
     const deltaViewScale = 1 / deltaScale;
 
     if (this.wheelFinishTimer === null) {
-      this.options.onTransformStarted();
+      this.config.onTransformStarted();
     }
 
     this.scaleViewport(deltaViewScale, centerX, centerY);
@@ -103,11 +101,11 @@ export class UserTransformableViewportConfigurator {
 
     this.wheelFinishTimer = setTimeout(() => {
       if (!this.transformInProgress) {
-        this.options.onTransformFinished();
+        this.config.onTransformFinished();
       }
 
       this.wheelFinishTimer = null;
-    }, this.options.scaleWheelFinishTimeout);
+    }, this.config.scaleWheelFinishTimeout);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -117,6 +115,7 @@ export class UserTransformableViewportConfigurator {
       this.prevTouches = processTouch(event);
       return;
     }
+
     this.prevTouches = processTouch(event);
     this.window.addEventListener("touchmove", this.onWindowTouchMove);
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
@@ -169,26 +168,26 @@ export class UserTransformableViewportConfigurator {
   private readonly observer = new ResizeObserver(() => {
     const prevTransform = this.viewport.getViewportMatrix();
     const { width, height } = this.element!.getBoundingClientRect();
-    const transform = this.options.transformPreprocessor({
+    const transform = this.config.transformPreprocessor({
       prevTransform,
       nextTransform: prevTransform,
       canvasWidth: width,
       canvasHeight: height,
     });
-    this.options.onResizeTransformStarted();
+    this.config.onResizeTransformStarted();
     this.canvas.patchViewportMatrix(transform);
-    this.options.onResizeTransformFinished();
+    this.config.onResizeTransformFinished();
   });
 
-  private readonly options: Options;
+  private readonly config: Config;
 
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    transformOptions: TransformOptions,
+    viewportTransformConfig: ViewportTransformConfig,
   ) {
-    this.options = createOptions(transformOptions);
+    this.config = createConfig(viewportTransformConfig);
 
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);
@@ -203,13 +202,13 @@ export class UserTransformableViewportConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    transformOptions: TransformOptions,
+    transformConfig: ViewportTransformConfig,
   ): void {
     new UserTransformableViewportConfigurator(
       canvas,
       element,
       win,
-      transformOptions,
+      transformConfig,
     );
   }
 
@@ -217,7 +216,7 @@ export class UserTransformableViewportConfigurator {
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = this.element.getBoundingClientRect();
-    const transform = this.options.transformPreprocessor({
+    const transform = this.config.transformPreprocessor({
       prevTransform,
       nextTransform,
       canvasWidth: width,
@@ -231,7 +230,7 @@ export class UserTransformableViewportConfigurator {
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = this.element.getBoundingClientRect();
-    const transform = this.options.transformPreprocessor({
+    const transform = this.config.transformPreprocessor({
       prevTransform,
       nextTransform,
       canvasWidth: width,
@@ -265,18 +264,18 @@ export class UserTransformableViewportConfigurator {
   }
 
   private performTransform(viewportTransform: PatchMatrixRequest): void {
-    this.options.onBeforeTransformChange();
+    this.config.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(viewportTransform);
-    this.options.onTransformChange();
+    this.config.onTransformChange();
   }
 
   private startRegisteredTransform(): void {
     this.transformInProgress = true;
-    this.options.onTransformStarted();
+    this.config.onTransformStarted();
   }
 
   private finishRegisteredTransform(): void {
     this.transformInProgress = false;
-    this.options.onTransformFinished();
+    this.config.onTransformFinished();
   }
 }

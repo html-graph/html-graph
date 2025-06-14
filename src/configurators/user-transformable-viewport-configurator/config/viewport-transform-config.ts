@@ -1,7 +1,7 @@
-import { TransformPreprocessorOption } from "./transform-preprocessor-option";
+import { TransformPreprocessorConfig } from "./transform-preprocessor-config";
 import { MouseEventVerifier } from "../../shared";
 
-export interface TransformOptions {
+export interface ViewportTransformConfig {
   readonly scale?: {
     readonly mouseWheelSensitivity?: number;
     readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
@@ -13,8 +13,8 @@ export interface TransformOptions {
     readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
   readonly transformPreprocessor?:
-    | TransformPreprocessorOption
-    | TransformPreprocessorOption[];
+    | TransformPreprocessorConfig
+    | TransformPreprocessorConfig[];
   readonly events?: {
     readonly onTransformStarted?: () => void;
     readonly onTransformFinished?: () => void;

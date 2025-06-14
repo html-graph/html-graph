@@ -1,5 +1,5 @@
 export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
-export type { TransformOptions } from "./options";
+export type { ViewportTransformConfig } from "./config";
 export {
   createCombinedTransformPreprocessor,
   createScaleLimitTransformPreprocessor,

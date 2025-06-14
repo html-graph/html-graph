@@ -2,10 +2,10 @@ import { Canvas } from "@/canvas";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "@/html-view";
 import {
-  TransformOptions,
+  ViewportTransformConfig,
   UserTransformableViewportConfigurator,
 } from "../user-transformable-viewport-configurator";
-import { VirtualScrollOptions } from "./virtual-scroll-options";
+import { VirtualScrollConfig } from "./virtual-scroll-options";
 import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport";
 
@@ -71,9 +71,9 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    transformOptions: TransformOptions | undefined,
+    transformOptions: ViewportTransformConfig | undefined,
     private readonly trigger: EventSubject<RenderingBox>,
-    private readonly virtualScrollOptions: VirtualScrollOptions,
+    private readonly virtualScrollOptions: VirtualScrollConfig,
   ) {
     this.nodeHorizontal =
       this.virtualScrollOptions.nodeContainingRadius.horizontal;
@@ -99,7 +99,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     const onTransformFinished =
       transformOptions?.events?.onTransformFinished ?? ((): void => {});
 
-    const patchedTransformOptions: TransformOptions = {
+    const patchedViewportTransformConfig: ViewportTransformConfig = {
       ...transformOptions,
       events: {
         ...transformOptions?.events,
@@ -137,7 +137,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       canvas,
       this.element,
       this.window,
-      patchedTransformOptions,
+      patchedViewportTransformConfig,
     );
 
     this.viewportMatrix = this.viewport.getViewportMatrix();
@@ -152,9 +152,9 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    transformOptions: TransformOptions,
+    transformOptions: ViewportTransformConfig,
     trigger: EventSubject<RenderingBox>,
-    virtualScrollOptions: VirtualScrollOptions,
+    virtualScrollOptions: VirtualScrollConfig,
   ): void {
     new UserTransformableViewportVirtualScrollConfigurator(
       canvas,

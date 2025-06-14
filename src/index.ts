@@ -17,12 +17,17 @@ export type {
 export type {
   /**
    * @deprecated
-   * use DragConfig instead
+   * use DraggableNodesConfig instead
    */
-  DragConfig as DragOptions,
-  DragConfig,
+  DraggableNodesConfig as DragOptions,
+  DraggableNodesConfig,
   NodeDragPayload,
-  TransformOptions,
+  ViewportTransformConfig,
+  /**
+   * @deprecated
+   * use ViewportTransformConfig instead
+   */
+  ViewportTransformConfig as TransformOptions,
   BackgroundConfig,
   TransformPayload,
   TransformPreprocessorFn,
@@ -34,6 +39,7 @@ export type {
    * use ConnectablePortsConfig instead
    */
   ConnectablePortsConfig as ConnectablePortsOptions,
+  VirtualScrollConfig,
   ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,

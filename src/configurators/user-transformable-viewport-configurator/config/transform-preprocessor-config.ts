@@ -1,6 +1,6 @@
 import { TransformPreprocessorFn } from "../preprocessors";
 
-export type TransformPreprocessorOption =
+export type TransformPreprocessorConfig =
   | {
       readonly type: "scale-limit";
       readonly minContentScale?: number;

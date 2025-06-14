@@ -1,4 +1,4 @@
-import { TransformPreprocessorOption } from "../options";
+import { TransformPreprocessorConfig } from "../config";
 import {
   createScaleLimitTransformPreprocessor,
   createShiftLimitTransformPreprocessor,
@@ -6,8 +6,8 @@ import {
 } from "../preprocessors";
 
 export const resolveTransformPreprocessor: (
-  option: TransformPreprocessorOption,
-) => TransformPreprocessorFn = (option: TransformPreprocessorOption) => {
+  option: TransformPreprocessorConfig,
+) => TransformPreprocessorFn = (option: TransformPreprocessorConfig) => {
   if (typeof option === "function") {
     return option;
   }

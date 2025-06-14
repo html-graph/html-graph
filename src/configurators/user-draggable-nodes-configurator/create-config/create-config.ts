@@ -1,7 +1,7 @@
-import { DragConfig } from "./drag-config";
+import { DraggableNodesConfig } from "./draggable-nodes-config";
 import { Config } from "./config";
 
-export const createConfig = (dragConfig: DragConfig): Config => {
+export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
   const onNodeDrag = dragConfig?.events?.onNodeDrag ?? ((): void => {});
 
   const onBeforeNodeDrag =

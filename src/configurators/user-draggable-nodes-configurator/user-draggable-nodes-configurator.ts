@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { createConfig, DragConfig, Config } from "./create-config";
+import { createConfig, DraggableNodesConfig, Config } from "./create-config";
 import { isPointInside, setCursor, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
@@ -196,9 +196,9 @@ export class UserDraggableNodesConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    dragConfig: DragConfig,
+    draggableNodesConfig: DraggableNodesConfig,
   ) {
-    this.config = createConfig(dragConfig);
+    this.config = createConfig(draggableNodesConfig);
     this.graph = canvas.graph;
 
     this.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
@@ -212,7 +212,7 @@ export class UserDraggableNodesConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    config: DragConfig,
+    config: DraggableNodesConfig,
   ): void {
     new UserDraggableNodesConfigurator(canvas, element, win, config);
   }

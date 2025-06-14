@@ -1,16 +1,16 @@
 import { createConfig } from "./create-config";
-import { DragConfig } from "./drag-config";
+import { DraggableNodesConfig } from "./draggable-nodes-config";
 
 describe("createConfig", () => {
   it("should not freeze priority by default", () => {
-    const dragOptions: DragConfig = {};
+    const dragOptions: DraggableNodesConfig = {};
 
     const options = createConfig(dragOptions);
 
     expect(options.freezePriority).toBe(false);
   });
   it("should freeze priority when specified", () => {
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       moveOnTop: false,
     };
 
@@ -22,7 +22,7 @@ describe("createConfig", () => {
   it("should set specified onNodeDrag", () => {
     const onNodeDrag = (): boolean => true;
 
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       events: {
         onNodeDrag,
       },
@@ -36,7 +36,7 @@ describe("createConfig", () => {
   it("should set specified onBeforeNodeDrag", () => {
     const onBeforeNodeDrag = (): boolean => true;
 
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       events: {
         onBeforeNodeDrag,
       },
@@ -50,7 +50,7 @@ describe("createConfig", () => {
   it("should set specified onNodeDragFinished", () => {
     const onNodeDragFinished = (): boolean => true;
 
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       events: {
         onNodeDragFinished,
       },
@@ -62,7 +62,7 @@ describe("createConfig", () => {
   });
 
   it("should set specified dragCursor", () => {
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       mouse: {
         dragCursor: "crosshair",
       },
@@ -76,7 +76,7 @@ describe("createConfig", () => {
   it("should set default mouse down event validator", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       mouse: {
         mouseDownEventVerifier,
       },
@@ -90,7 +90,7 @@ describe("createConfig", () => {
   it("should set default mouse up event validator", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
-    const dragOptions: DragConfig = {
+    const dragOptions: DraggableNodesConfig = {
       mouse: {
         mouseUpEventVerifier,
       },
