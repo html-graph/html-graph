@@ -6,23 +6,23 @@ import checker from "vite-plugin-checker";
 export default defineConfig({
   resolve: {
     alias: [
-      { find: "@", replacement: resolve(__dirname, "lib") },
+      { find: "@", replacement: resolve(__dirname, "src") },
       {
         find: "@html-graph/html-graph",
-        replacement: resolve(__dirname, "lib"),
+        replacement: resolve(__dirname, "src"),
       },
     ],
   },
   plugins: [
     dts({
-      include: ["lib"],
+      include: ["src"],
       rollupTypes: true,
     }),
     checker({ typescript: true }),
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, "lib/index.ts"),
+      entry: resolve(__dirname, "src/index.ts"),
       formats: ["es", "umd"],
       fileName: "html-graph",
       name: "HtmlGraph",

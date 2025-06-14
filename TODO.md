@@ -1,6 +1,5 @@
 # TODO
 
-- rename lib to src
 - rename options to configuration
 - pass element info builder constructor, make builder single use object
 - user draggable edges
