@@ -24,7 +24,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ["../../lib/**"],
+              group: ["../../src/**"],
             },
             {
               group: ["@/**"],

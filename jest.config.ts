@@ -6,17 +6,17 @@ import { compilerOptions } from "./tsconfig.json";
 
 const config: Config = {
   preset: "ts-jest",
-  roots: ["lib"],
+  roots: ["src"],
   testEnvironment: "jsdom",
   setupFiles: ["./setup-jest.ts"],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "/lib/.*\\.mock\\.ts$",
+    "/src/.*\\.mock\\.ts$",
     "/index\\.ts$",
   ],
-  collectCoverageFrom: ["./lib/**/*.ts"],
+  collectCoverageFrom: ["./src/**/*.ts"],
   coverageThreshold: {
     global: {
       branches: 100,
