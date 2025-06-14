@@ -9,14 +9,14 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { isPointInside, transformPoint } from "../shared";
 import { Point } from "@/point";
-import { ConnectablePortsOptions, createOptions, Options } from "./options";
+import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
 
 /**
  * Responsibility: Configuring ports connectable via drag
  */
 export class UserConnectablePortsConfigurator {
-  private readonly options: Options;
+  private readonly config: Config;
 
   private readonly overlayCanvas: Canvas;
 
@@ -50,7 +50,7 @@ export class UserConnectablePortsConfigurator {
     const target = event.currentTarget as HTMLElement;
 
     const isValidEvent =
-      this.options.mouseDownEventVerifier(event) &&
+      this.config.mouseDownEventVerifier(event) &&
       this.isPortConnectionAllowed(target);
 
     if (!isValidEvent) {
@@ -152,7 +152,7 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onEdgeCreated = (edgeId: unknown): void => {
-    this.options.onAfterEdgeCreated(edgeId);
+    this.config.onAfterEdgeCreated(edgeId);
   };
 
   private constructor(
@@ -161,9 +161,9 @@ export class UserConnectablePortsConfigurator {
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
     defaults: CanvasDefaults,
-    options: ConnectablePortsOptions,
+    config: ConnectablePortsConfig,
   ) {
-    this.options = createOptions(options);
+    this.config = createConfig(config);
     const graphStore = new GraphStore();
 
     const htmlView = new CoreHtmlView(
@@ -192,7 +192,7 @@ export class UserConnectablePortsConfigurator {
     viewportStore: ViewportStore,
     win: Window,
     defaults: CanvasDefaults,
-    options: ConnectablePortsOptions,
+    config: ConnectablePortsConfig,
   ): void {
     new UserConnectablePortsConfigurator(
       canvas,
@@ -200,7 +200,7 @@ export class UserConnectablePortsConfigurator {
       viewportStore,
       win,
       defaults,
-      options,
+      config,
     );
   }
 
@@ -210,7 +210,7 @@ export class UserConnectablePortsConfigurator {
 
     this.staticPortId = portId;
 
-    const portType = this.options.connectionTypeResolver(this.staticPortId);
+    const portType = this.config.connectionTypeResolver(this.staticPortId);
 
     const portRect = portElement.getBoundingClientRect();
     const portX = portRect.x + portRect.width / 2;
@@ -324,7 +324,7 @@ export class UserConnectablePortsConfigurator {
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 
-    const processedRequest = this.options.connectionPreprocessor(request);
+    const processedRequest = this.config.connectionPreprocessor(request);
 
     if (processedRequest !== null) {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
@@ -384,6 +384,6 @@ export class UserConnectablePortsConfigurator {
   private isPortConnectionAllowed(portElement: HTMLElement): boolean {
     const portId = this.ports.get(portElement)!;
 
-    return this.options.connectionTypeResolver(portId) !== null;
+    return this.config.connectionTypeResolver(portId) !== null;
   }
 }

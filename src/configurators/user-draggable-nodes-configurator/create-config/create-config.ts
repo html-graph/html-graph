@@ -1,29 +1,29 @@
-import { DragOptions } from "./drag-options";
-import { Options } from "./options";
+import { DraggableNodesConfig } from "./draggable-nodes-config";
+import { Config } from "./config";
 
-export const createOptions = (dragOptions: DragOptions): Options => {
-  const onNodeDrag = dragOptions?.events?.onNodeDrag ?? ((): void => {});
+export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
+  const onNodeDrag = dragConfig?.events?.onNodeDrag ?? ((): void => {});
 
   const onBeforeNodeDrag =
-    dragOptions?.events?.onBeforeNodeDrag ?? ((): boolean => true);
+    dragConfig?.events?.onBeforeNodeDrag ?? ((): boolean => true);
 
   const onNodeDragFinished =
-    dragOptions?.events?.onNodeDragFinished ?? ((): void => {});
+    dragConfig?.events?.onNodeDragFinished ?? ((): void => {});
 
-  const freezePriority = dragOptions?.moveOnTop === false;
+  const freezePriority = dragConfig?.moveOnTop === false;
 
-  const cursor = dragOptions?.mouse?.dragCursor;
+  const cursor = dragConfig?.mouse?.dragCursor;
   const dragCursor = cursor !== undefined ? cursor : "grab";
 
   const defaultMouseDownEventVerifier =
-    dragOptions?.mouse?.mouseDownEventVerifier;
+    dragConfig?.mouse?.mouseDownEventVerifier;
 
   const mouseDownEventVerifier =
     defaultMouseDownEventVerifier !== undefined
       ? defaultMouseDownEventVerifier
       : (event: MouseEvent): boolean => event.button === 0;
 
-  const defaultMouseUpEventVerifier = dragOptions?.mouse?.mouseUpEventVerifier;
+  const defaultMouseUpEventVerifier = dragConfig?.mouse?.mouseUpEventVerifier;
 
   const mouseUpEventVerifier =
     defaultMouseUpEventVerifier !== undefined

@@ -1,7 +1,6 @@
 # TODO
 
-- rename options to configuration
-- pass element info builder constructor, make builder single use object
+- pass element into builder constructor, make builder single use object
 - mouse up verifier for user connectable ports
 - port direction for user connectable ports?
 - user draggable edges

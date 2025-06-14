@@ -8,7 +8,7 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
-import { TransformOptions } from "./options";
+import { ViewportTransformConfig } from "./config";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 
@@ -17,7 +17,7 @@ let innerHeight: number;
 
 const createCanvas = (params?: {
   element?: HTMLElement;
-  transformOptions?: TransformOptions;
+  transformOptions?: ViewportTransformConfig;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();

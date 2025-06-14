@@ -15,15 +15,32 @@ export type {
 } from "./canvas";
 
 export type {
-  DragOptions,
+  /**
+   * @deprecated
+   * use DraggableNodesConfig instead
+   */
+  DraggableNodesConfig as DragOptions,
+  DraggableNodesConfig,
   NodeDragPayload,
-  TransformOptions,
+  ViewportTransformConfig,
+  /**
+   * @deprecated
+   * use ViewportTransformConfig instead
+   */
+  ViewportTransformConfig as TransformOptions,
+  BackgroundConfig,
   TransformPayload,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
-  ConnectablePortsOptions,
+  /**
+   * @deprecated
+   * use ConnectablePortsConfig instead
+   */
+  ConnectablePortsConfig as ConnectablePortsOptions,
+  VirtualScrollConfig,
+  ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,

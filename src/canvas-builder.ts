@@ -5,16 +5,16 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  BackgroundOptions,
-  ConnectablePortsOptions,
-  DragOptions,
+  BackgroundConfig,
+  ConnectablePortsConfig,
+  DraggableNodesConfig,
   ResizeReactiveNodesConfigurator,
-  TransformOptions,
+  ViewportTransformConfig,
   UserConnectablePortsConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
-  VirtualScrollOptions,
+  VirtualScrollConfig,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
@@ -27,15 +27,15 @@ export class CanvasBuilder {
 
   private canvasDefaults: CanvasDefaults = {};
 
-  private dragOptions: DragOptions = {};
+  private dragConfig: DraggableNodesConfig = {};
 
-  private transformOptions: TransformOptions = {};
+  private transformConfig: ViewportTransformConfig = {};
 
-  private backgroundOptions: BackgroundOptions = {};
+  private backgroundConfig: BackgroundConfig = {};
 
-  private connectablePortsOptions: ConnectablePortsOptions = {};
+  private connectablePortsConfig: ConnectablePortsConfig = {};
 
-  private virtualScrollOptions: VirtualScrollOptions | undefined = undefined;
+  private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
   private hasDraggableNode = false;
 
@@ -70,9 +70,11 @@ export class CanvasBuilder {
   /**
    * enables nodes draggable by user
    */
-  public enableUserDraggableNodes(options?: DragOptions): CanvasBuilder {
+  public enableUserDraggableNodes(
+    options?: DraggableNodesConfig,
+  ): CanvasBuilder {
     this.hasDraggableNode = true;
-    this.dragOptions = options ?? {};
+    this.dragConfig = options ?? {};
 
     return this;
   }
@@ -81,10 +83,10 @@ export class CanvasBuilder {
    * enables viewport transformable by user
    */
   public enableUserTransformableViewport(
-    options?: TransformOptions,
+    config?: ViewportTransformConfig,
   ): CanvasBuilder {
     this.hasTransformableViewport = true;
-    this.transformOptions = options ?? {};
+    this.transformConfig = config ?? {};
 
     return this;
   }
@@ -113,8 +115,8 @@ export class CanvasBuilder {
    * enables built-in virtual scroll behavior, when only nodes and edges close
    * to viewport are rendered
    */
-  public enableVirtualScroll(options: VirtualScrollOptions): CanvasBuilder {
-    this.virtualScrollOptions = options;
+  public enableVirtualScroll(config: VirtualScrollConfig): CanvasBuilder {
+    this.virtualScrollConfig = config;
 
     return this;
   }
@@ -122,9 +124,9 @@ export class CanvasBuilder {
   /**
    * enables built-in background rendering
    */
-  public enableBackground(options?: BackgroundOptions): CanvasBuilder {
+  public enableBackground(config?: BackgroundConfig): CanvasBuilder {
     this.hasBackground = true;
-    this.backgroundOptions = options ?? {};
+    this.backgroundConfig = config ?? {};
 
     return this;
   }
@@ -133,9 +135,9 @@ export class CanvasBuilder {
    * enables edge creation by dragging one port to another
    */
   public enableUserConnectablePorts(
-    options?: ConnectablePortsOptions,
+    config?: ConnectablePortsConfig,
   ): CanvasBuilder {
-    this.connectablePortsOptions = options ?? {};
+    this.connectablePortsConfig = config ?? {};
     this.hasUserConnectablePorts = true;
 
     return this;
@@ -153,7 +155,7 @@ export class CanvasBuilder {
 
     let trigger = this.boxRenderingTrigger;
 
-    if (this.virtualScrollOptions !== undefined && trigger === undefined) {
+    if (this.virtualScrollConfig !== undefined && trigger === undefined) {
       trigger = new EventSubject<RenderingBox>();
     }
 
@@ -189,7 +191,7 @@ export class CanvasBuilder {
     if (this.hasBackground) {
       BackgroundConfigurator.configure(
         canvas,
-        this.backgroundOptions,
+        this.backgroundConfig,
         layers.background,
       );
     }
@@ -203,7 +205,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        this.dragOptions,
+        this.dragConfig,
       );
     }
 
@@ -214,25 +216,25 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.canvasDefaults,
-        this.connectablePortsOptions,
+        this.connectablePortsConfig,
       );
     }
 
-    if (this.virtualScrollOptions !== undefined) {
+    if (this.virtualScrollConfig !== undefined) {
       UserTransformableViewportVirtualScrollConfigurator.configure(
         canvas,
         layers.main,
         this.window,
-        this.transformOptions,
+        this.transformConfig,
         trigger!,
-        this.virtualScrollOptions,
+        this.virtualScrollConfig,
       );
     } else if (this.hasTransformableViewport) {
       UserTransformableViewportConfigurator.configure(
         canvas,
         layers.main,
         this.window,
-        this.transformOptions,
+        this.transformConfig,
       );
     }
 
@@ -248,10 +250,10 @@ export class CanvasBuilder {
   private reset(): void {
     this.element = null;
     this.canvasDefaults = {};
-    this.dragOptions = {};
-    this.transformOptions = {};
-    this.backgroundOptions = {};
-    this.virtualScrollOptions = undefined;
+    this.dragConfig = {};
+    this.transformConfig = {};
+    this.backgroundConfig = {};
+    this.virtualScrollConfig = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;
     this.hasResizeReactiveNodes = false;

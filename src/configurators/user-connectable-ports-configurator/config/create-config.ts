@@ -1,25 +1,25 @@
-import { ConnectablePortsOptions } from "./connectable-ports-options";
+import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
 import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
 import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
 import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
-import { Options } from "./options";
+import { Config } from "./config";
 
-export const createOptions = (
-  connectablePortsOptions: ConnectablePortsOptions,
-): Options => {
+export const createConfig = (
+  connectablePortsConfig: ConnectablePortsConfig,
+): Config => {
   return {
     connectionTypeResolver:
-      connectablePortsOptions.connectionTypeResolver ??
+      connectablePortsConfig.connectionTypeResolver ??
       defaultConnectionTypeResolver,
     connectionPreprocessor:
-      connectablePortsOptions.connectionPreprocessor ??
+      connectablePortsConfig.connectionPreprocessor ??
       defaultConnectionPreprocessor,
     mouseDownEventVerifier:
-      connectablePortsOptions.mouseDownEventVerifier ??
+      connectablePortsConfig.mouseDownEventVerifier ??
       defaultMouseDownEventVerifier,
     onAfterEdgeCreated:
-      connectablePortsOptions.events?.onAfterEdgeCreated ??
+      connectablePortsConfig.events?.onAfterEdgeCreated ??
       defaultOnAfterEdgeCreated,
   };
 };

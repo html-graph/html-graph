@@ -2,13 +2,13 @@ export { ResizeReactiveNodesConfigurator } from "./resize-reactive-nodes-configu
 
 export { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 export type {
-  DragOptions,
+  DraggableNodesConfig,
   NodeDragPayload,
 } from "./user-draggable-nodes-configurator";
 
 export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 export type {
-  TransformOptions,
+  ViewportTransformConfig,
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
@@ -17,14 +17,14 @@ export type {
 } from "./user-transformable-viewport-configurator";
 
 export { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
-export type { VirtualScrollOptions } from "./user-transformable-viewport-virtual-scroll-configurator";
+export type { VirtualScrollConfig } from "./user-transformable-viewport-virtual-scroll-configurator";
 
 export { BackgroundConfigurator } from "./background-configurator";
-export type { BackgroundOptions } from "./background-configurator";
+export type { BackgroundConfig } from "./background-configurator";
 
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 export type {
-  ConnectablePortsOptions,
+  ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
 } from "./user-connectable-ports-configurator";

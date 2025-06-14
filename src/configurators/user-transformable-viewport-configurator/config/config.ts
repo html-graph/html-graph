@@ -1,7 +1,7 @@
 import { TransformPreprocessorFn } from "../preprocessors";
 import { MouseEventVerifier } from "../../shared";
 
-export interface Options {
+export interface Config {
   readonly wheelSensitivity: number;
   readonly onTransformStarted: () => void;
   readonly onTransformFinished: () => void;

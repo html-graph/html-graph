@@ -5,18 +5,17 @@ import {
   TransformPreprocessorParams,
 } from "../preprocessors";
 import { resolveTransformPreprocessor } from "../resolve-transform-preprocessor";
-import { Options } from "./options";
-import { TransformOptions } from "./transform-options";
+import { Config } from "./config";
+import { ViewportTransformConfig } from "./viewport-transform-config";
 
-export const createOptions = (
-  transformOptions: TransformOptions | undefined,
-): Options => {
-  const optionsWheelSensitivity =
-    transformOptions?.scale?.mouseWheelSensitivity;
+export const createConfig = (
+  transformConfig: ViewportTransformConfig | undefined,
+): Config => {
+  const configWheelSensitivity = transformConfig?.scale?.mouseWheelSensitivity;
   const wheelSensitivity =
-    optionsWheelSensitivity !== undefined ? optionsWheelSensitivity : 1.2;
+    configWheelSensitivity !== undefined ? configWheelSensitivity : 1.2;
 
-  const preprocessors = transformOptions?.transformPreprocessor;
+  const preprocessors = transformConfig?.transformPreprocessor;
 
   let transformPreprocessor: TransformPreprocessorFn;
 
@@ -39,18 +38,18 @@ export const createOptions = (
   }
 
   const shiftCursor =
-    transformOptions?.shift?.cursor !== undefined
-      ? transformOptions.shift.cursor
+    transformConfig?.shift?.cursor !== undefined
+      ? transformConfig.shift.cursor
       : "grab";
 
   const onBeforeTransformStarted =
-    transformOptions?.events?.onBeforeTransformChange ?? ((): void => {});
+    transformConfig?.events?.onBeforeTransformChange ?? ((): void => {});
 
   const onTransformFinished =
-    transformOptions?.events?.onTransformChange ?? ((): void => {});
+    transformConfig?.events?.onTransformChange ?? ((): void => {});
 
   const defaultMouseDownEventVerifier =
-    transformOptions?.shift?.mouseDownEventVerifier;
+    transformConfig?.shift?.mouseDownEventVerifier;
 
   const mouseDownEventVerifier =
     defaultMouseDownEventVerifier !== undefined
@@ -58,7 +57,7 @@ export const createOptions = (
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseUpEventVerifier =
-    transformOptions?.shift?.mouseUpEventVerifier;
+    transformConfig?.shift?.mouseUpEventVerifier;
 
   const mouseUpEventVerifier =
     defaultMouseUpEventVerifier !== undefined
@@ -66,7 +65,7 @@ export const createOptions = (
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseWheelEventVerifier =
-    transformOptions?.scale?.mouseWheelEventVerifier;
+    transformConfig?.scale?.mouseWheelEventVerifier;
 
   const mouseWheelEventVerifier =
     defaultMouseWheelEventVerifier !== undefined
@@ -76,9 +75,9 @@ export const createOptions = (
   return {
     wheelSensitivity: wheelSensitivity,
     onTransformStarted:
-      transformOptions?.events?.onTransformStarted ?? ((): void => {}),
+      transformConfig?.events?.onTransformStarted ?? ((): void => {}),
     onTransformFinished:
-      transformOptions?.events?.onTransformFinished ?? ((): void => {}),
+      transformConfig?.events?.onTransformFinished ?? ((): void => {}),
     onBeforeTransformChange: onBeforeTransformStarted,
     onTransformChange: onTransformFinished,
     transformPreprocessor,
@@ -86,10 +85,10 @@ export const createOptions = (
     mouseDownEventVerifier,
     mouseUpEventVerifier,
     mouseWheelEventVerifier,
-    scaleWheelFinishTimeout: transformOptions?.scale?.wheelFinishTimeout ?? 500,
+    scaleWheelFinishTimeout: transformConfig?.scale?.wheelFinishTimeout ?? 500,
     onResizeTransformStarted:
-      transformOptions?.events?.onResizeTransformStarted ?? ((): void => {}),
+      transformConfig?.events?.onResizeTransformStarted ?? ((): void => {}),
     onResizeTransformFinished:
-      transformOptions?.events?.onResizeTransformFinished ?? ((): void => {}),
+      transformConfig?.events?.onResizeTransformFinished ?? ((): void => {}),
   };
 };

@@ -13,11 +13,11 @@ import {
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
-import { TransformOptions } from "../user-transformable-viewport-configurator";
+import { ViewportTransformConfig } from "../user-transformable-viewport-configurator";
 
 const createCanvas = (params?: {
   element?: HTMLElement;
-  transformOptions?: TransformOptions;
+  transformOptions?: ViewportTransformConfig;
 }): Canvas => {
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();

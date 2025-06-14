@@ -1,3 +1,3 @@
 export { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
-export type { DragOptions } from "./create-options";
+export type { DraggableNodesConfig } from "./create-config";
 export type { NodeDragPayload } from "./node-drag-payload";
