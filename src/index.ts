@@ -15,7 +15,12 @@ export type {
 } from "./canvas";
 
 export type {
-  DragOptions,
+  /**
+   * @deprecated
+   * use DragConfig instead
+   */
+  DragConfig as DragOptions,
+  DragConfig,
   NodeDragPayload,
   TransformOptions,
   BackgroundConfig,

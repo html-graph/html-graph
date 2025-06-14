@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { createOptions, DragOptions, Options } from "./create-options";
+import { createConfig, DragConfig, Config } from "./create-config";
 import { isPointInside, setCursor, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
@@ -63,7 +63,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onMouseDown = (event: MouseEvent): void => {
-    if (!this.options.mouseDownEventVerifier(event)) {
+    if (!this.config.mouseDownEventVerifier(event)) {
       return;
     }
 
@@ -71,7 +71,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.nodeIds.get(element);
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.options.onBeforeNodeDrag({
+    const isDragAllowed = this.config.onBeforeNodeDrag({
       nodeId,
       element: node.element,
       x: node.x,
@@ -84,7 +84,7 @@ export class UserDraggableNodesConfigurator {
 
     event.stopImmediatePropagation();
     this.grabbedNodeId = nodeId;
-    setCursor(this.element, this.options.dragCursor);
+    setCursor(this.element, this.config.dragCursor);
     this.moveNodeOnTop(nodeId);
     this.window.addEventListener("mouseup", this.onWindowMouseUp);
     this.window.addEventListener("mousemove", this.onWindowMouseMove);
@@ -108,7 +108,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.nodeIds.get(element);
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.options.onBeforeNodeDrag({
+    const isDragAllowed = this.config.onBeforeNodeDrag({
       nodeId: nodeId,
       element: node.element,
       x: node.x,
@@ -146,7 +146,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
-    if (!this.options.mouseUpEventVerifier(event)) {
+    if (!this.config.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -190,15 +190,15 @@ export class UserDraggableNodesConfigurator {
     this.cancelTouchDrag();
   };
 
-  private readonly options: Options;
+  private readonly config: Config;
 
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    dragOptions: DragOptions,
+    dragConfig: DragConfig,
   ) {
-    this.options = createOptions(dragOptions);
+    this.config = createConfig(dragConfig);
     this.graph = canvas.graph;
 
     this.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
@@ -212,9 +212,9 @@ export class UserDraggableNodesConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    options: DragOptions,
+    config: DragConfig,
   ): void {
-    new UserDraggableNodesConfigurator(canvas, element, win, options);
+    new UserDraggableNodesConfigurator(canvas, element, win, config);
   }
 
   private dragNode(nodeId: unknown, dx: number, dy: number): void {
@@ -239,7 +239,7 @@ export class UserDraggableNodesConfigurator {
 
     this.canvas.updateNode(nodeId, { x: contentCoords.x, y: contentCoords.y });
 
-    this.options.onNodeDrag({
+    this.config.onNodeDrag({
       nodeId,
       element: node.element,
       x: contentCoords.x,
@@ -248,7 +248,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
-    if (this.options.freezePriority) {
+    if (this.config.freezePriority) {
       return;
     }
 
@@ -268,7 +268,7 @@ export class UserDraggableNodesConfigurator {
     const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {
-      this.options.onNodeDragFinished({
+      this.config.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
         element: node.element,
         x: node.x,
@@ -291,7 +291,7 @@ export class UserDraggableNodesConfigurator {
     const node = this.graph.getNode(this.grabbedNodeId);
 
     if (node !== null) {
-      this.options.onNodeDragFinished({
+      this.config.onNodeDragFinished({
         nodeId: this.grabbedNodeId,
         element: node.element,
         x: node.x,

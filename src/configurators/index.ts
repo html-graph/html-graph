@@ -2,7 +2,7 @@ export { ResizeReactiveNodesConfigurator } from "./resize-reactive-nodes-configu
 
 export { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 export type {
-  DragOptions,
+  DragConfig,
   NodeDragPayload,
 } from "./user-draggable-nodes-configurator";
 

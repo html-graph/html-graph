@@ -1,7 +1,7 @@
 import { MouseEventVerifier } from "../../shared";
 import { NodeDragPayload } from "../node-drag-payload";
 
-export interface Options {
+export interface Config {
   readonly freezePriority: boolean;
   readonly dragCursor: string | null;
   readonly mouseDownEventVerifier: MouseEventVerifier;
