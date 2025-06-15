@@ -81,10 +81,10 @@ export class CanvasBuilder {
    * enables nodes draggable by user
    */
   public enableUserDraggableNodes(
-    options?: DraggableNodesConfig,
+    config?: DraggableNodesConfig,
   ): CanvasBuilder {
     this.hasDraggableNode = true;
-    this.dragConfig = options ?? {};
+    this.dragConfig = config ?? {};
 
     return this;
   }
