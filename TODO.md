@@ -2,6 +2,7 @@
 
 - mouse up verifier for user connectable ports
 - port direction for user connectable ports?
+- improve onDestroy unit tests
 - make builder single use object
 - user selectable edges
 - user draggable edges
