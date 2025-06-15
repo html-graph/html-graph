@@ -12,7 +12,8 @@ const positions = new Map<unknown, { x: number; y: number }>();
 
 const nodesElement: HTMLElement = document.getElementById("nodes")!;
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const dragOptions: DragOptions = {
   events: {
@@ -25,8 +26,7 @@ const dragOptions: DragOptions = {
 
 builder.enableUserDraggableNodes(dragOptions);
 
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",

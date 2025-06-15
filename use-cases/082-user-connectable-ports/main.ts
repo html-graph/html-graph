@@ -1,10 +1,9 @@
 import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 
-const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvas: Canvas = builder
-  .setElement(canvasElement)
   .setDefaults({
     edges: {
       shape: {

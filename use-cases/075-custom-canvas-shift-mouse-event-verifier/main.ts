@@ -21,7 +21,8 @@ document.addEventListener("keyup", (event: KeyboardEvent) => {
   }
 });
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const transformOptions: TransformOptions = {
   shift: {
@@ -32,8 +33,7 @@ const transformOptions: TransformOptions = {
 
 builder.enableUserTransformableViewport(transformOptions);
 
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

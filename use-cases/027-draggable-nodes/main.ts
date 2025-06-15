@@ -7,7 +7,9 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
 builder.enableUserDraggableNodes({
   events: {
     onNodeDrag: (payload: NodeDragPayload) => {
@@ -20,8 +22,7 @@ builder.enableUserDraggableNodes({
     },
   },
 });
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

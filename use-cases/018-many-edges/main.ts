@@ -22,7 +22,8 @@ export function createNode(params: {
   };
 }
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 builder
   .setDefaults({
@@ -35,8 +36,7 @@ builder
   })
   .enableUserTransformableViewport();
 
-const canvasElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 canvas.patchViewportMatrix({ scale: 4, x: -1000, y: -1000 });
 

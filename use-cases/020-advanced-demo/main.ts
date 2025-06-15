@@ -6,8 +6,6 @@ import {
 } from "@html-graph/html-graph";
 import { AdvancedDemoHelper } from "./advanced-demo-helper";
 
-const canvasElement = document.getElementById("canvas")!;
-
 const canvasDefaults: CanvasDefaults = {
   nodes: {
     centerFn: () => ({ x: 0, y: 0 }),
@@ -20,7 +18,8 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-const builder = new CanvasBuilder();
+const canvasElement = document.getElementById("canvas")!;
+const builder = new CanvasBuilder(canvasElement);
 
 const canvas = builder
   .setDefaults(canvasDefaults)
@@ -28,7 +27,6 @@ const canvas = builder
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableResizeReactiveNodes()
-  .setElement(canvasElement)
   .build();
 
 const helper = new AdvancedDemoHelper();

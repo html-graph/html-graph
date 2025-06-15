@@ -3,7 +3,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const canvas: Canvas = new CanvasBuilder()
+const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
       shape: {
@@ -24,7 +24,6 @@ const canvas: Canvas = new CanvasBuilder()
       vertical: 25,
     },
   })
-  .setElement(canvasElement)
   .build();
 
 let cnt = 0;

@@ -6,12 +6,10 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder
-  .enableUserDraggableNodes()
-  .setElement(canvasElement)
-  .build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const canvas: Canvas = builder.enableUserDraggableNodes().build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",

@@ -3,8 +3,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement = document.getElementById("canvas")!;
 
-const canvas = new CanvasBuilder()
-  .setElement(canvasElement)
+const canvas = new CanvasBuilder(canvasElement)
   .enableBackground()
   .enableUserTransformableViewport()
   .build();

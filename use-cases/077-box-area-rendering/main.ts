@@ -9,7 +9,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const trigger = new EventSubject<RenderingBox>();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const canvas: Canvas = new CanvasBuilder()
+const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
       shape: {
@@ -27,7 +27,6 @@ const canvas: Canvas = new CanvasBuilder()
   })
   .enableBoxAreaRendering(trigger)
   .enableUserDraggableNodes()
-  .setElement(canvasElement)
   .build();
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;

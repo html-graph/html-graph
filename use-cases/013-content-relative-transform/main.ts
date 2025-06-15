@@ -33,7 +33,7 @@ const sliderY: HTMLInputElement = document.getElementById(
 
 const yValue: HTMLElement = document.getElementById("y-value")!;
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const boundsContainerElement = document.getElementById(
   "bounds-container",
 )! as HTMLElement;
@@ -66,7 +66,7 @@ const transformOptions: TransformOptions = {
 
 builder.enableUserTransformableViewport(transformOptions);
 
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

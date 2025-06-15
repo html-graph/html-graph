@@ -26,7 +26,8 @@ export function createNode(params: {
   };
 }
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
@@ -47,8 +48,7 @@ const dragOptions: DragOptions = {
 
 builder.setDefaults(canvasDefaults).enableUserDraggableNodes(dragOptions);
 
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",

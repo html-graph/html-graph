@@ -6,8 +6,8 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const backgroundRenderer = document.createElementNS(
   "http://www.w3.org/2000/svg",
@@ -19,7 +19,6 @@ backgroundRenderer.setAttribute("stroke-width", "1");
 backgroundRenderer.setAttribute("stroke", "#CCCCFF");
 
 const canvas: Canvas = builder
-  .setElement(canvasElement)
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground({

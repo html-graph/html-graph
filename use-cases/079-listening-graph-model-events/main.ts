@@ -15,10 +15,10 @@ const updateLog = (msg: string): void => {
   logElement.innerText = log.join("\n");
 };
 
-const builder: CanvasBuilder = new CanvasBuilder();
-
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",

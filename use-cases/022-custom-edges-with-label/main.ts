@@ -7,10 +7,12 @@ import {
 import { createInOutNode } from "../shared/create-in-out-node";
 import { EdgeWithLabelShape } from "./edge-with-label-shape";
 
-const builder: CanvasBuilder = new CanvasBuilder();
-builder.enableUserDraggableNodes().enableUserTransformableViewport();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+builder.enableUserDraggableNodes().enableUserTransformableViewport();
+
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
