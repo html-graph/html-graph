@@ -4,7 +4,7 @@ import {
   Canvas,
   CanvasBuilder,
   PatchMatrixRequest,
-  TransformOptions,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -56,7 +56,7 @@ const updateRectangleSize = (): void => {
   boundsElement.style.height = `${height - 10}px`;
 };
 
-const transformOptions: TransformOptions = {
+const transformOptions: ViewportTransformConfig = {
   events: {
     onTransformChange: () => {
       updateRectangleTransform();

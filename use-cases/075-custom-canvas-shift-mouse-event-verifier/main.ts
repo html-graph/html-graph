@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  TransformOptions,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -24,7 +24,7 @@ document.addEventListener("keyup", (event: KeyboardEvent) => {
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: TransformOptions = {
+const transformOptions: ViewportTransformConfig = {
   shift: {
     mouseDownEventVerifier: (event: MouseEvent) =>
       event.button === 0 && isSpacePressed,

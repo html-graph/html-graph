@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  CanvasDefaults,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
@@ -50,13 +51,15 @@ export function createNode(params: {
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-builder.setDefaults({
+const defaults: CanvasDefaults = {
   edges: {
     shape: {
       hasTargetArrow: true,
     },
   },
-});
+};
+
+builder.setDefaults(defaults);
 
 const canvas: Canvas = builder.build();
 

@@ -10,15 +10,15 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-builder.enableUserDraggableNodes({
-  events: {
-    onBeforeNodeDrag: (payload: NodeDragPayload) => {
-      return payload.nodeId !== "node-1";
+const canvas: Canvas = builder
+  .enableUserDraggableNodes({
+    events: {
+      onBeforeNodeDrag: (payload: NodeDragPayload) => {
+        return payload.nodeId !== "node-1";
+      },
     },
-  },
-});
-
-const canvas: Canvas = builder.build();
+  })
+  .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",

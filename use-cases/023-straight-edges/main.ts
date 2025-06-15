@@ -10,7 +10,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const canvasDefaults: CanvasDefaults = {
+const defaults: CanvasDefaults = {
   edges: {
     shape: {
       type: "straight",
@@ -20,7 +20,7 @@ const canvasDefaults: CanvasDefaults = {
 };
 
 builder
-  .setDefaults(canvasDefaults)
+  .setDefaults(defaults)
   .enableUserTransformableViewport()
   .enableUserDraggableNodes();
 

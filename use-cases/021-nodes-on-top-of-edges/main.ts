@@ -3,22 +3,22 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  CanvasDefaults,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-
-builder.setDefaults({
+const defaults: CanvasDefaults = {
   edges: {
     priority: 0,
   },
   nodes: {
     priority: 1,
   },
-});
+};
 
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder.setDefaults(defaults).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

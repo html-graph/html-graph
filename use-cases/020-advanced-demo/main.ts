@@ -6,7 +6,7 @@ import {
 } from "@html-graph/html-graph";
 import { AdvancedDemoHelper } from "./advanced-demo-helper";
 
-const canvasDefaults: CanvasDefaults = {
+const defaults: CanvasDefaults = {
   nodes: {
     centerFn: () => ({ x: 0, y: 0 }),
   },
@@ -22,7 +22,7 @@ const canvasElement = document.getElementById("canvas")!;
 const builder = new CanvasBuilder(canvasElement);
 
 const canvas = builder
-  .setDefaults(canvasDefaults)
+  .setDefaults(defaults)
   .enableBackground()
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()

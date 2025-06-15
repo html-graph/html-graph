@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasDefaults,
-  DragOptions,
+  DraggableNodesConfig,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 
@@ -42,7 +42,7 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-const dragOptions: DragOptions = {
+const dragOptions: DraggableNodesConfig = {
   moveOnTop: false,
 };
 

@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  DragOptions,
+  DraggableNodesConfig,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -24,7 +24,7 @@ document.addEventListener("keyup", (event: KeyboardEvent) => {
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const dragOptions: DragOptions = {
+const dragOptions: DraggableNodesConfig = {
   mouse: {
     mouseDownEventVerifier: (event: MouseEvent) =>
       event.button === 0 && isSpacePressed,
