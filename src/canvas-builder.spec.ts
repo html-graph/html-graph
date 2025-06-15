@@ -67,6 +67,32 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
+  it("should set element with legacy method", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder();
+
+    const canvas = builder
+      .setElement(canvasElement)
+      .setDefaults({
+        nodes: {
+          priority: () => 10,
+        },
+      })
+      .build();
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.zIndex).toBe("10");
+  });
+
   it("should build canvas with resize reactive nodes", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
