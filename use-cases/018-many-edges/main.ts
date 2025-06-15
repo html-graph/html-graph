@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  CanvasDefaults,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
@@ -22,21 +23,22 @@ export function createNode(params: {
   };
 }
 
-const builder: CanvasBuilder = new CanvasBuilder();
-
-builder
-  .setDefaults({
-    edges: {
-      priority: 0,
-    },
-    nodes: {
-      priority: 1,
-    },
-  })
-  .enableUserTransformableViewport();
-
 const canvasElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const defaults: CanvasDefaults = {
+  edges: {
+    priority: 0,
+  },
+  nodes: {
+    priority: 1,
+  },
+};
+
+const canvas: Canvas = builder
+  .setDefaults(defaults)
+  .enableUserTransformableViewport()
+  .build();
 
 canvas.patchViewportMatrix({ scale: 4, x: -1000, y: -1000 });
 

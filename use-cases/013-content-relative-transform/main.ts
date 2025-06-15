@@ -4,7 +4,7 @@ import {
   Canvas,
   CanvasBuilder,
   PatchMatrixRequest,
-  TransformOptions,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -33,7 +33,7 @@ const sliderY: HTMLInputElement = document.getElementById(
 
 const yValue: HTMLElement = document.getElementById("y-value")!;
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const boundsContainerElement = document.getElementById(
   "bounds-container",
 )! as HTMLElement;
@@ -56,7 +56,7 @@ const updateRectangleSize = (): void => {
   boundsElement.style.height = `${height - 10}px`;
 };
 
-const transformOptions: TransformOptions = {
+const transformOptions: ViewportTransformConfig = {
   events: {
     onTransformChange: () => {
       updateRectangleTransform();
@@ -66,7 +66,7 @@ const transformOptions: TransformOptions = {
 
 builder.enableUserTransformableViewport(transformOptions);
 
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

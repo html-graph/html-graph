@@ -32,10 +32,10 @@ describe("CanvasBuilder", () => {
   });
 
   it("should remove all children before destroy", () => {
-    const builder = new CanvasBuilder();
     const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
 
-    const canvas = builder.setElement(canvasElement).build();
+    const canvas = builder.build();
 
     canvas.destroy();
 
@@ -43,8 +43,8 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with specified defaults", () => {
-    const builder = new CanvasBuilder();
     const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
 
     const canvas = builder
       .setDefaults({
@@ -52,7 +52,32 @@ describe("CanvasBuilder", () => {
           priority: () => 10,
         },
       })
+      .build();
+
+    canvas.addNode({
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const container =
+      canvasElement.children[0].children[1].children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.zIndex).toBe("10");
+  });
+
+  it("should set element with legacy method", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder();
+
+    const canvas = builder
       .setElement(canvasElement)
+      .setDefaults({
+        nodes: {
+          priority: () => 10,
+        },
+      })
       .build();
 
     canvas.addNode({
@@ -69,13 +94,10 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with resize reactive nodes", () => {
-    const builder = new CanvasBuilder();
-
     const canvasElement = document.createElement("div");
-    const canvas = builder
-      .enableResizeReactiveNodes()
-      .setElement(canvasElement)
-      .build();
+    const builder = new CanvasBuilder(canvasElement);
+
+    const canvas = builder.enableResizeReactiveNodes().build();
 
     const nodeRequest1: AddNodeRequest = {
       id: "node-1",
@@ -121,13 +143,10 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with user draggable nodes", () => {
-    const builder = new CanvasBuilder();
-
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const canvas = builder
-      .enableUserDraggableNodes()
-      .setElement(canvasElement)
-      .build();
+    const builder = new CanvasBuilder(canvasElement);
+
+    const canvas = builder.enableUserDraggableNodes().build();
 
     const element = createElement();
 
@@ -154,11 +173,10 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with user transformable viewport", () => {
-    const builder = new CanvasBuilder();
-
     const element = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(element);
 
-    builder.enableUserTransformableViewport().setElement(element).build();
+    builder.enableUserTransformableViewport().build();
 
     const host = element.children[0].children[1];
     host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -173,14 +191,11 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with specified rendering trigger", () => {
-    const builder = new CanvasBuilder();
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
     const trigger = new EventSubject<RenderingBox>();
 
-    const canvasElement = document.createElement("div");
-    const canvas = builder
-      .enableBoxAreaRendering(trigger)
-      .setElement(canvasElement)
-      .build();
+    const canvas = builder.enableBoxAreaRendering(trigger).build();
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -199,8 +214,8 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with virtual scroll", async () => {
-    const builder = new CanvasBuilder();
     const canvasElement = createElement({ width: 100, height: 100 });
+    const builder = new CanvasBuilder(canvasElement);
 
     const canvas = builder
       .enableVirtualScroll({
@@ -209,7 +224,6 @@ describe("CanvasBuilder", () => {
           horizontal: 10,
         },
       })
-      .setElement(canvasElement)
       .build();
 
     canvas.addNode({
@@ -237,10 +251,10 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with background", async () => {
-    const builder = new CanvasBuilder();
     const canvasElement = createElement({ width: 100, height: 100 });
+    const builder = new CanvasBuilder(canvasElement);
 
-    builder.setElement(canvasElement).enableBackground().build();
+    builder.enableBackground().build();
 
     const svg = canvasElement.children[0].children[0].children[0];
 
@@ -248,14 +262,11 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with user connectable ports", () => {
-    const builder = new CanvasBuilder();
     const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
     document.body.appendChild(canvasElement);
 
-    const canvas = builder
-      .setElement(canvasElement)
-      .enableUserConnectablePorts()
-      .build();
+    const canvas = builder.enableUserConnectablePorts().build();
 
     setLayersDimensions(canvasElement);
 

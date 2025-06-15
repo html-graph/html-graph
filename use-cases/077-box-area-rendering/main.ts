@@ -1,33 +1,38 @@
 import {
   Canvas,
   CanvasBuilder,
+  CanvasDefaults,
   EventSubject,
   RenderingBox,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const trigger = new EventSubject<RenderingBox>();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const canvas: Canvas = new CanvasBuilder()
-  .setDefaults({
-    edges: {
-      shape: {
-        type: "horizontal",
-        hasTargetArrow: true,
-      },
+const defaults: CanvasDefaults = {
+  edges: {
+    shape: {
+      type: "horizontal",
+      hasTargetArrow: true,
     },
-  })
-  .enableUserTransformableViewport({
-    events: {
-      onTransformChange: () => {
-        updateRectangle();
-      },
+  },
+};
+
+const transformOptions: ViewportTransformConfig = {
+  events: {
+    onTransformChange: () => {
+      updateRectangle();
     },
-  })
+  },
+};
+
+const canvas: Canvas = new CanvasBuilder(canvasElement)
+  .setDefaults(defaults)
+  .enableUserTransformableViewport(transformOptions)
   .enableBoxAreaRendering(trigger)
   .enableUserDraggableNodes()
-  .setElement(canvasElement)
   .build();
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;

@@ -1,50 +1,59 @@
-import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import {
+  AddNodeRequest,
+  Canvas,
+  CanvasBuilder,
+  CanvasDefaults,
+  ConnectablePortsConfig,
+} from "@html-graph/html-graph";
 
-const builder: CanvasBuilder = new CanvasBuilder();
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const defaults: CanvasDefaults = {
+  edges: {
+    shape: {
+      hasTargetArrow: true,
+    },
+  },
+};
+
+const connectablePortConfig: ConnectablePortsConfig = {
+  connectionTypeResolver: (portId: unknown) => {
+    const idStr = portId as string;
+
+    return idStr.endsWith("-out") ? "direct" : "reverse";
+  },
+  connectionPreprocessor: (request) => {
+    const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
+      const edge = canvas.graph.getEdge(edgeId)!;
+
+      return edge.from === request.from && edge.to === request.to;
+    });
+
+    if (existingEdge !== undefined) {
+      return null;
+    }
+
+    const strFrom = request.from as string;
+    const strTo = request.to as string;
+
+    if (strFrom.endsWith("-out") && strTo.endsWith("-in")) {
+      return request;
+    }
+
+    return null;
+  },
+  events: {
+    onAfterEdgeCreated: (edgeId) => {
+      console.info(`created edge ${edgeId}`);
+    },
+  },
+};
 
 const canvas: Canvas = builder
-  .setElement(canvasElement)
-  .setDefaults({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
+  .setDefaults(defaults)
   .enableUserDraggableNodes()
-  .enableUserConnectablePorts({
-    connectionTypeResolver: (portId: unknown) => {
-      const idStr = portId as string;
-
-      return idStr.endsWith("-out") ? "direct" : "reverse";
-    },
-    connectionPreprocessor: (request) => {
-      const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
-        const edge = canvas.graph.getEdge(edgeId)!;
-
-        return edge.from === request.from && edge.to === request.to;
-      });
-
-      if (existingEdge !== undefined) {
-        return null;
-      }
-
-      const strFrom = request.from as string;
-      const strTo = request.to as string;
-
-      if (strFrom.endsWith("-out") && strTo.endsWith("-in")) {
-        return request;
-      }
-
-      return null;
-    },
-    events: {
-      onAfterEdgeCreated: (edgeId) => {
-        console.info(`created edge ${edgeId}`);
-      },
-    },
-  })
+  .enableUserConnectablePorts(connectablePortConfig)
   .enableUserTransformableViewport()
   .enableBackground()
   .build();

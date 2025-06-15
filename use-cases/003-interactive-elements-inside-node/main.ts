@@ -2,15 +2,16 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  TransformOptions,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 
 let transformInProgress: boolean = false;
 let preventClick: boolean = false;
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: TransformOptions = {
+const transformOptions: ViewportTransformConfig = {
   events: {
     onTransformStarted: () => {
       transformInProgress = true;
@@ -29,11 +30,8 @@ const transformOptions: TransformOptions = {
   },
 };
 
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-
 const canvas: Canvas = builder
   .enableUserTransformableViewport(transformOptions)
-  .setElement(canvasElement)
   .build();
 
 let angle = 0;

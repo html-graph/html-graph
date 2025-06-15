@@ -7,18 +7,18 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
-
-builder.enableUserDraggableNodes({
-  events: {
-    onBeforeNodeDrag: (payload: NodeDragPayload) => {
-      return payload.nodeId !== "node-1";
-    },
-  },
-});
-
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const canvas: Canvas = builder
+  .enableUserDraggableNodes({
+    events: {
+      onBeforeNodeDrag: (payload: NodeDragPayload) => {
+        return payload.nodeId !== "node-1";
+      },
+    },
+  })
+  .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",

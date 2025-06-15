@@ -3,13 +3,14 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  TransformOptions,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: TransformOptions = {
+const transformOptions: ViewportTransformConfig = {
   transformPreprocessor: (params) => {
     if (params.nextTransform.scale > 1) {
       return params.prevTransform;
@@ -23,10 +24,9 @@ const transformOptions: TransformOptions = {
   },
 };
 
-builder.enableUserTransformableViewport(transformOptions);
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder
+  .enableUserTransformableViewport(transformOptions)
+  .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

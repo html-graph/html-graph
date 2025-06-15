@@ -3,15 +3,17 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  DraggableNodesConfig,
   NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const current = document.getElementById("current") as HTMLElement;
 
-builder.enableUserDraggableNodes({
+const dragConfig: DraggableNodesConfig = {
   events: {
     onBeforeNodeDrag: (payload: NodeDragPayload) => {
       current.innerText = `before drag triggered for ${JSON.stringify(payload)}`;
@@ -25,10 +27,9 @@ builder.enableUserDraggableNodes({
       current.innerText = `drag finished triggered for ${JSON.stringify(payload)}`;
     },
   },
-});
+};
 
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.enableUserDraggableNodes(dragConfig).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

@@ -1,30 +1,41 @@
-import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import {
+  Canvas,
+  CanvasBuilder,
+  CanvasDefaults,
+  ViewportTransformConfig,
+  VirtualScrollConfig,
+} from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
-const canvas: Canvas = new CanvasBuilder()
-  .setDefaults({
-    edges: {
-      shape: {
-        type: "horizontal",
-        hasTargetArrow: true,
-      },
+const defaults: CanvasDefaults = {
+  edges: {
+    shape: {
+      type: "horizontal",
+      hasTargetArrow: true,
     },
-  })
-  .enableUserTransformableViewport({
-    transformPreprocessor: {
-      type: "scale-limit",
-      minContentScale: 0.3,
-    },
-  })
-  .enableVirtualScroll({
-    nodeContainingRadius: {
-      horizontal: 25,
-      vertical: 25,
-    },
-  })
-  .setElement(canvasElement)
+  },
+};
+
+const transformConfig: ViewportTransformConfig = {
+  transformPreprocessor: {
+    type: "scale-limit",
+    minContentScale: 0.3,
+  },
+};
+
+const virtualScrollCOnfig: VirtualScrollConfig = {
+  nodeContainingRadius: {
+    horizontal: 25,
+    vertical: 25,
+  },
+};
+
+const canvas: Canvas = new CanvasBuilder(canvasElement)
+  .setDefaults(defaults)
+  .enableUserTransformableViewport(transformConfig)
+  .enableVirtualScroll(virtualScrollCOnfig)
   .build();
 
 let cnt = 0;

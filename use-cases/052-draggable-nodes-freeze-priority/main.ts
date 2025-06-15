@@ -3,17 +3,18 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  DraggableNodesConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
-
-builder.enableUserDraggableNodes({
-  moveOnTop: false,
-});
-
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const dragConfig: DraggableNodesConfig = {
+  moveOnTop: false,
+};
+
+const canvas: Canvas = builder.enableUserDraggableNodes(dragConfig).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

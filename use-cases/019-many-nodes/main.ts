@@ -1,4 +1,10 @@
-import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import {
+  AddNodeRequest,
+  Canvas,
+  CanvasBuilder,
+  CanvasDefaults,
+  DraggableNodesConfig,
+} from "@html-graph/html-graph";
 
 export function createNode(params: {
   portId: unknown;
@@ -17,28 +23,32 @@ export function createNode(params: {
   };
 }
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const defaults: CanvasDefaults = {
+  edges: {
+    priority: 0,
+    shape: {
+      type: "bezier",
+      curvature: 200,
+    },
+  },
+  nodes: {
+    priority: 1,
+  },
+};
+
+const dragConfig: DraggableNodesConfig = {
+  moveOnTop: false,
+};
 
 builder
-  .setDefaults({
-    edges: {
-      priority: 0,
-      shape: {
-        type: "bezier",
-        curvature: 200,
-      },
-    },
-    nodes: {
-      priority: 1,
-    },
-  })
-  .enableUserDraggableNodes({
-    moveOnTop: false,
-  })
+  .setDefaults(defaults)
+  .enableUserDraggableNodes(dragConfig)
   .enableUserTransformableViewport();
 
-const canvasElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.build();
 
 let offset = 300;
 const total = 1000;

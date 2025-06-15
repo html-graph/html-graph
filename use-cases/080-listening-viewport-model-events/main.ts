@@ -6,11 +6,10 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
-builder.enableUserTransformableViewport();
-
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+
+const canvas: Canvas = builder.enableUserTransformableViewport().build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

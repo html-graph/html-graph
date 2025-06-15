@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasDefaults,
-  DragOptions,
+  DraggableNodesConfig,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 
@@ -26,7 +26,8 @@ export function createNode(params: {
   };
 }
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
@@ -41,14 +42,14 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-const dragOptions: DragOptions = {
+const dragOptions: DraggableNodesConfig = {
   moveOnTop: false,
 };
 
-builder.setDefaults(canvasDefaults).enableUserDraggableNodes(dragOptions);
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder
+  .setDefaults(canvasDefaults)
+  .enableUserDraggableNodes(dragOptions)
+  .build();
 
 const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",

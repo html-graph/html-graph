@@ -52,6 +52,16 @@ export class CanvasBuilder {
 
   private readonly window = window;
 
+  public constructor(element?: HTMLElement) {
+    if (element !== undefined) {
+      this.element = element;
+    }
+  }
+
+  /**
+   * @deprecated
+   * use `new CanvasBuilder(element);` instead
+   */
   public setElement(element: HTMLElement): CanvasBuilder {
     this.element = element;
 

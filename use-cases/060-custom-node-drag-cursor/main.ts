@@ -2,23 +2,21 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  DragOptions,
+  DraggableNodesConfig,
   CanvasBuilder,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const dragOptions: DragOptions = {
+const dragOptions: DraggableNodesConfig = {
   mouse: {
     dragCursor: "crosshair",
   },
 };
 
-builder.enableUserDraggableNodes(dragOptions);
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.enableUserDraggableNodes(dragOptions).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

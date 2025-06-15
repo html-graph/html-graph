@@ -2,7 +2,7 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   Canvas,
-  DragOptions,
+  DraggableNodesConfig,
   CanvasBuilder,
   NodeDragPayload,
 } from "@html-graph/html-graph";
@@ -12,9 +12,10 @@ const positions = new Map<unknown, { x: number; y: number }>();
 
 const nodesElement: HTMLElement = document.getElementById("nodes")!;
 
-const builder: CanvasBuilder = new CanvasBuilder();
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const dragOptions: DragOptions = {
+const dragOptions: DraggableNodesConfig = {
   events: {
     onNodeDrag: (payload: NodeDragPayload) => {
       positions.set(payload.nodeId, { x: payload.x, y: payload.y });
@@ -23,10 +24,7 @@ const dragOptions: DragOptions = {
   },
 };
 
-builder.enableUserDraggableNodes(dragOptions);
-
-const canvasElement: HTMLElement = document.getElementById("canvas")!;
-const canvas: Canvas = builder.setElement(canvasElement).build();
+const canvas: Canvas = builder.enableUserDraggableNodes(dragOptions).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   id: "node-1",
