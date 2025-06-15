@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  ViewportTransformConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -11,7 +12,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const stateElement: HTMLElement = document.getElementById("state")!;
 
-builder.enableUserTransformableViewport({
+const transformConfig: ViewportTransformConfig = {
   events: {
     onTransformStarted: () => {
       stateElement.innerHTML = "STARTED";
@@ -20,9 +21,11 @@ builder.enableUserTransformableViewport({
       stateElement.innerHTML = "FINISHED";
     },
   },
-});
+};
 
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder
+  .enableUserTransformableViewport(transformConfig)
+  .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

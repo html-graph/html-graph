@@ -16,9 +16,7 @@ const dragOptions: DraggableNodesConfig = {
   },
 };
 
-builder.enableUserDraggableNodes(dragOptions);
-
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder.enableUserDraggableNodes(dragOptions).build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

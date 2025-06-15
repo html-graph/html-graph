@@ -4,6 +4,9 @@ import {
   Canvas,
   CanvasBuilder,
   HorizontalEdgeShape,
+  UpdateEdgeRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -96,17 +99,29 @@ canvas.graph.onBeforeClear.subscribe(() => {
   updateLog(`Canvas cleared`);
 });
 
+const updateEdgeRequest: UpdateEdgeRequest = {
+  from: "node-2-in",
+  to: "node-1-out",
+  shape: new HorizontalEdgeShape(),
+  priority: 10,
+};
+
+const updateNodeRequest: UpdateNodeRequest = {
+  x: 100,
+  y: 150,
+  priority: 10,
+};
+
+const updatePortRequest: UpdatePortRequest = {
+  direction: Math.PI,
+};
+
 canvas
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest)
-  .updateEdge("edge-1", {
-    from: "node-2-in",
-    to: "node-1-out",
-    shape: new HorizontalEdgeShape(),
-    priority: 10,
-  })
-  .updateNode("node-1", { x: 100, y: 150, priority: 10 })
-  .updatePort("node-1-out", { direction: Math.PI })
+  .updateEdge("edge-1", updateEdgeRequest)
+  .updateNode("node-1", updateNodeRequest)
+  .updatePort("node-1-out", updatePortRequest)
   .removeNode("node-1")
   .clear();

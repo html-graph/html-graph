@@ -60,9 +60,7 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-builder.setDefaults(canvasDefaults);
-
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder.setDefaults(canvasDefaults).build();
 
 const addNode1Request: AddNodeRequest = createNode({
   name: "Node 1",

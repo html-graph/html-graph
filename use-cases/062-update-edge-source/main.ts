@@ -18,9 +18,10 @@ const canvasDefaults: CanvasDefaults = {
   },
 };
 
-builder.setDefaults(canvasDefaults).enableUserDraggableNodes();
-
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder
+  .setDefaults(canvasDefaults)
+  .enableUserDraggableNodes()
+  .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
