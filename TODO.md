@@ -1,5 +1,6 @@
 # TODO
 
+- multiple ports with the same element for connectable ports
 - port assumed direction for user connectable ports
 - connection preview for connectable ports
 - virtual scroll node events
