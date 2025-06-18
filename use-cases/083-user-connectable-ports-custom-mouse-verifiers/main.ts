@@ -9,6 +9,20 @@ import {
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
+let isSpacePressed = false;
+
+document.addEventListener("keydown", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = true;
+  }
+});
+
+document.addEventListener("keyup", (event: KeyboardEvent) => {
+  if (event.code === "Space") {
+    isSpacePressed = false;
+  }
+});
+
 const defaults: CanvasDefaults = {
   edges: {
     shape: {
@@ -18,6 +32,8 @@ const defaults: CanvasDefaults = {
 };
 
 const connectablePortConfig: ConnectablePortsConfig = {
+  mouseDownEventVerifier: (event) => event.button === 0 && isSpacePressed,
+  mouseUpEventVerifier: (event) => event.button === 0 && isSpacePressed,
   connectionTypeResolver: (portId: unknown) => {
     const idStr = portId as string;
 
@@ -47,9 +63,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
 const canvas: Canvas = builder
   .setDefaults(defaults)
-  .enableUserDraggableNodes()
   .enableUserConnectablePorts(connectablePortConfig)
-  .enableUserTransformableViewport()
   .enableBackground()
   .build();
 
