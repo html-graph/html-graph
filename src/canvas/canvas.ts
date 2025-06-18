@@ -371,9 +371,9 @@ export class Canvas {
    * canvas element gets rolled back to initial state, and can not be reused
    */
   public destroy(): void {
-    this.onBeforeDestroyEmitter.emit();
-
     this.clear();
+
+    this.onBeforeDestroyEmitter.emit();
 
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
