@@ -58,11 +58,5 @@ export class ResizeReactiveNodesConfigurator {
     const nodeId = this.elementToNodeId.get(element)!;
 
     this.canvas.updateNode(nodeId);
-
-    const edges = this.canvas.graph.getNodeAdjacentEdgeIds(nodeId)!;
-
-    edges.forEach((edge) => {
-      this.canvas.updateEdge(edge);
-    });
   }
 }
