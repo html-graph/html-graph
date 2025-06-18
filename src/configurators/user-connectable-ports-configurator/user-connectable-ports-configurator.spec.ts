@@ -72,9 +72,6 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectConfig: {
-        mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
-      },
     });
 
     const portElement = document.createElement("div");
@@ -440,6 +437,39 @@ describe("UserConnectablePortsConfigurator", () => {
     window.dispatchEvent(createMouseMoveEvent({ clientX: 110, clientY: 110 }));
     window.dispatchEvent(
       new MouseEvent("mouseup", { clientX: 110, clientY: 110 }),
+    );
+
+    expect(canvas.graph.getAllEdgeIds().length).toBe(0);
+  });
+
+  it("should not create connection on mouse release when verifier fails", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ overlayElement, mainElement });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 110, clientY: 110 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { button: 1, clientX: 100, clientY: 100 }),
     );
 
     expect(canvas.graph.getAllEdgeIds().length).toBe(0);

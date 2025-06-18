@@ -4,6 +4,7 @@ import { createConfig } from "./create-config";
 import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
 import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
 import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
+import { defaultMouseUpEventVerifier } from "./default-mouse-up-event-verifier";
 import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 
 describe("createOptions", () => {
@@ -44,6 +45,19 @@ describe("createOptions", () => {
     const options = createConfig({ mouseDownEventVerifier: verifier });
 
     expect(options.mouseDownEventVerifier).toBe(verifier);
+  });
+
+  it("should return LMB mouse up event verifier by default", () => {
+    const options = createConfig({});
+
+    expect(options.mouseUpEventVerifier).toBe(defaultMouseUpEventVerifier);
+  });
+
+  it("should return specified mouse up event verifier", () => {
+    const verifier: (event: MouseEvent) => boolean = () => false;
+    const options = createConfig({ mouseUpEventVerifier: verifier });
+
+    expect(options.mouseUpEventVerifier).toBe(verifier);
   });
 
   it("should return default edge created callback", () => {
