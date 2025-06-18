@@ -1,6 +1,8 @@
 # TODO
 
-- port direction for user connectable ports?
+- port assumed direction for user connectable ports
+- connection preview for connectable ports
+- virtual scroll node events
 - improve onDestroy unit tests
 - make builder single use object
 - user selectable edges
