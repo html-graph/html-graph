@@ -82,6 +82,10 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
+    if (!this.config.mouseUpEventVerifier(event)) {
+      return;
+    }
+
     this.tryCreateConnection({ x: event.clientX, y: event.clientY });
     this.stopMouseDrag();
   };

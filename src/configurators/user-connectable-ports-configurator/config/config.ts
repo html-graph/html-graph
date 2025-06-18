@@ -6,5 +6,6 @@ export interface Config {
   readonly connectionTypeResolver: ConnectionTypeResolver;
   readonly connectionPreprocessor: ConnectionPreprocessor;
   readonly mouseDownEventVerifier: MouseEventVerifier;
+  readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly onAfterEdgeCreated: (edgeId: unknown) => void;
 }
