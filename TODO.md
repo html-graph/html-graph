@@ -6,8 +6,9 @@
 - virtual scroll node events
 - improve onDestroy unit tests
 - make builder single use object
+- used draggable edges via ports
 - user selectable edges
-- user draggable edges
+- user draggable edges based on selection
 - user deletable edges
 - user selectable nodes? lasso selection? multiselection?
 - arrows customization
