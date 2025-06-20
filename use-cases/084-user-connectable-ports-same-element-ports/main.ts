@@ -23,26 +23,6 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return idStr.endsWith("-out") ? "direct" : "reverse";
   },
-  connectionPreprocessor: (request) => {
-    const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
-      const edge = canvas.graph.getEdge(edgeId)!;
-
-      return edge.from === request.from && edge.to === request.to;
-    });
-
-    if (existingEdge !== undefined) {
-      return null;
-    }
-
-    const strFrom = request.from as string;
-    const strTo = request.to as string;
-
-    if (strFrom.endsWith("-out") && strTo.endsWith("-in")) {
-      return request;
-    }
-
-    return null;
-  },
 };
 
 const canvas: Canvas = builder
