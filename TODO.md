@@ -1,7 +1,7 @@
 # TODO
 
-- improve onDestroy unit tests
 - user selectable edges
+- improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object
 - user draggable edges via ports
