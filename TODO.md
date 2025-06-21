@@ -1,6 +1,5 @@
 # TODO
 
-- passive listeners
 - port assumed direction for user connectable ports
 - connectable ports handler on unable to add edge
 - connection preview for connectable ports
