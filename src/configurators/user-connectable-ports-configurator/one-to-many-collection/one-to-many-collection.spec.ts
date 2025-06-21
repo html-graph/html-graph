@@ -106,4 +106,45 @@ describe("OneToManyCollection", () => {
 
     expect(multi).toBe(undefined);
   });
+
+  it("should iterate over single values", () => {
+    const spy = jest.fn();
+    const collection = new OneToManyCollection<string, string>();
+
+    collection.addRecord("single-1", "multi-1");
+
+    collection.forEachSingle((single) => {
+      spy(single);
+    });
+
+    expect(spy).toHaveBeenCalledWith("single-1");
+  });
+
+  it("should check nonexisting single value", () => {
+    const collection = new OneToManyCollection<string, string>();
+
+    expect(collection.hasSingle("single-1")).toBe(false);
+  });
+
+  it("should check existing single value", () => {
+    const collection = new OneToManyCollection<string, string>();
+
+    collection.addRecord("single-1", "multi-1");
+
+    expect(collection.hasSingle("single-1")).toBe(true);
+  });
+
+  it("should check nonexisting multi value", () => {
+    const collection = new OneToManyCollection<string, string>();
+
+    expect(collection.hasMulti("multi-1")).toBe(false);
+  });
+
+  it("should check existing multi value", () => {
+    const collection = new OneToManyCollection<string, string>();
+
+    collection.addRecord("single-1", "multi-1");
+
+    expect(collection.hasMulti("multi-1")).toBe(true);
+  });
 });

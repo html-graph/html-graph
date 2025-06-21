@@ -58,4 +58,18 @@ export class OneToManyCollection<S, M> {
     this.singleToMultiMap.clear();
     this.multiToSingleMap.clear();
   }
+
+  public forEachSingle(callback: (single: S) => void): void {
+    this.singleToMultiMap.forEach((_multi, single) => {
+      callback(single);
+    });
+  }
+
+  public hasSingle(single: S): boolean {
+    return this.singleToMultiMap.get(single) !== undefined;
+  }
+
+  public hasMulti(multi: M): boolean {
+    return this.multiToSingleMap.get(multi) !== undefined;
+  }
 }
