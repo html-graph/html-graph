@@ -49,7 +49,7 @@ npx jest --coverage
 ## Release next version
 
 ```
-npm run release-next-version // next patch version
+npm run release-next-version:patch // next patch version
 npm run release-next-version:minor // next minor version
 npm run release-next-version:major // next major version
 ```

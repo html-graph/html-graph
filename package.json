@@ -36,7 +36,7 @@
     "build": "tsc --p ./tsconfig-build-library.json && vite build",
     "preview": "vite preview",
     "before-build": "npm run check-formatting && npm run lint && npm run test:ci",
-    "release-next-version": "tsx ./scripts/release-next-version.ts",
+    "release-next-version:patch": "tsx ./scripts/release-next-version.ts",
     "release-next-version:minor": "tsx ./scripts/release-next-version.ts -- --minor",
     "release-next-version:major": "tsx ./scripts/release-next-version.ts -- --major",
     "make-deps-graph": "npx depcruise src --include-only \"^src\" --output-type dot > ./deps-graph/deps-graph.dot",
