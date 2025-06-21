@@ -296,7 +296,6 @@ export class UserConnectablePortsConfigurator {
   }
 
   private resetDragState(): void {
-    this.config.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
     this.staticPortId = null;
     this.isDirect = true;
     this.overlayCanvas.clear();
@@ -340,6 +339,7 @@ export class UserConnectablePortsConfigurator {
     const draggingPortId = this.findPortAtPoint(cursor);
 
     if (draggingPortId === null) {
+      this.config.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
       return;
     }
 
