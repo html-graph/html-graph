@@ -1,5 +1,4 @@
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 import { Config } from "./config";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "./connection-preprocessor";
@@ -14,6 +13,12 @@ export const createConfig = (
 
   const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
     event.button === 0;
+
+  const defaultOnAfterEdgeCreated: (edgeId: unknown) => void = () => {};
+
+  const defaultOnAfterEdgeConnectionPrevented = (): void => {};
+
+  const defaultOnAfterEdgeConnectionInterrupted = (): void => {};
 
   return {
     connectionTypeResolver:
@@ -30,6 +35,12 @@ export const createConfig = (
     onAfterEdgeCreated:
       connectablePortsConfig.events?.onAfterEdgeCreated ??
       defaultOnAfterEdgeCreated,
+    onEdgeCreationInterrupted:
+      connectablePortsConfig.events?.onEdgeCreationInterrupted ??
+      defaultOnAfterEdgeConnectionInterrupted,
+    onEdgeCreationPrevented:
+      connectablePortsConfig.events?.onEdgeCreationPrevented ??
+      defaultOnAfterEdgeConnectionPrevented,
     dragPortDirection: connectablePortsConfig.dragPortDirection ?? undefined,
   };
 };

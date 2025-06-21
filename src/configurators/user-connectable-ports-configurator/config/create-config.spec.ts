@@ -2,7 +2,6 @@ import { AddEdgeRequest } from "@/canvas";
 import { ConnectionPreprocessor } from "./connection-preprocessor";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { createConfig } from "./create-config";
-import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 
 describe("createOptions", () => {
   it("should return direct connection type resolver by default", () => {
@@ -76,7 +75,9 @@ describe("createOptions", () => {
   it("should return default edge created callback", () => {
     const options = createConfig({});
 
-    expect(options.onAfterEdgeCreated).toBe(defaultOnAfterEdgeCreated);
+    expect(() => {
+      options.onAfterEdgeCreated("123");
+    }).not.toThrow();
   });
 
   it("should return specified edge created callback", () => {
@@ -99,5 +100,37 @@ describe("createOptions", () => {
     const options = createConfig({ dragPortDirection: Math.PI });
 
     expect(options.dragPortDirection).toBe(Math.PI);
+  });
+
+  it("should return default edge creation interrupted callback", () => {
+    const options = createConfig({});
+
+    expect(() => {
+      options.onEdgeCreationInterrupted("123", true);
+    }).not.toThrow();
+  });
+
+  it("should return specified edge creation interrupted callback", () => {
+    const onEdgeCreationInterrupted = (): void => {};
+
+    const options = createConfig({ events: { onEdgeCreationInterrupted } });
+
+    expect(options.onEdgeCreationInterrupted).toBe(onEdgeCreationInterrupted);
+  });
+
+  it("should return default edge creation prevented callback", () => {
+    const options = createConfig({});
+
+    expect(() => {
+      options.onEdgeCreationPrevented({ from: "123", to: "456" });
+    }).not.toThrow();
+  });
+
+  it("should return specified edge creation interrupted callback", () => {
+    const onEdgeCreationPrevented = (): void => {};
+
+    const options = createConfig({ events: { onEdgeCreationPrevented } });
+
+    expect(options.onEdgeCreationPrevented).toBe(onEdgeCreationPrevented);
   });
 });

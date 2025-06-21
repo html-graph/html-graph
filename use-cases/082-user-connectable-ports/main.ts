@@ -43,6 +43,16 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return null;
   },
+  events: {
+    onEdgeCreationPrevented: (request) => {
+      console.log(`prevented edge creation`);
+      console.log(request);
+    },
+    onEdgeCreationInterrupted: (staticPortId, isDirect) => {
+      console.log(`interrupted edge creation`);
+      console.log(staticPortId, isDirect);
+    },
+  },
 };
 
 const canvas: Canvas = builder

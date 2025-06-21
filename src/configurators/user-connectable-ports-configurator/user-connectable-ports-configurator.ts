@@ -296,6 +296,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private resetDragState(): void {
+    this.config.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
     this.staticPortId = null;
     this.isDirect = true;
     this.overlayCanvas.clear();
@@ -353,6 +354,8 @@ export class UserConnectablePortsConfigurator {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeCreated);
+    } else {
+      this.config.onEdgeCreationPrevented(request);
     }
   }
 
