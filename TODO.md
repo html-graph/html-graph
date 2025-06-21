@@ -1,6 +1,5 @@
 # TODO
 
-- connectable ports handler on unable to add edge
 - connection preview for connectable ports
 - virtual scroll node events
 - improve onDestroy unit tests
