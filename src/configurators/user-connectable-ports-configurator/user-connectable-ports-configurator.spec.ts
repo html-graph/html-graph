@@ -544,7 +544,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onAfterEdgeCreated = (): void => {};
+    const onAfterEdgeCreated = jest.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -576,7 +576,88 @@ describe("UserConnectablePortsConfigurator", () => {
       new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
     );
 
-    expect(canvas.graph.getAllEdgeIds().length).toBe(1);
+    expect(onAfterEdgeCreated).toHaveBeenCalledWith(0);
+  });
+
+  it("should call specified callback on edge creation interruption", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeCreationInterrupted = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      connectConfig: { events: { onEdgeCreationInterrupted } },
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 50, clientY: 50 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 50, clientY: 50 }),
+    );
+
+    expect(onEdgeCreationInterrupted).toHaveBeenCalledWith(0, true);
+  });
+
+  it("should call specified callback on edge creation prevention", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeCreationPrevented = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      connectConfig: {
+        events: { onEdgeCreationPrevented },
+        connectionPreprocessor: () => null,
+      },
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onEdgeCreationPrevented).toHaveBeenCalledWith({ from: 0, to: 1 });
   });
 
   it("should unsubscribe before destroy", () => {

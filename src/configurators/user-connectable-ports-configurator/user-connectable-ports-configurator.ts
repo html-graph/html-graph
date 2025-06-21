@@ -339,6 +339,7 @@ export class UserConnectablePortsConfigurator {
     const draggingPortId = this.findPortAtPoint(cursor);
 
     if (draggingPortId === null) {
+      this.config.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
       return;
     }
 
@@ -353,6 +354,8 @@ export class UserConnectablePortsConfigurator {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeCreated);
+    } else {
+      this.config.onEdgeCreationPrevented(request);
     }
   }
 

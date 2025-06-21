@@ -1,15 +1,14 @@
 # TODO
 
-- connectable ports handler on unable to add edge
-- connection preview for connectable ports
 - virtual scroll node events
 - improve onDestroy unit tests
-- make builder single use object
-- used draggable edges via ports
 - user selectable edges
+- make builder single use object
+- user draggable edges via ports
 - user draggable edges based on selection
 - user deletable edges
 - user selectable nodes? lasso selection? multiselection?
+- connection preview for connectable ports
 - arrows customization
 - snap nodes to grid
 - single responsibility for error
