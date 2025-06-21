@@ -8,4 +8,5 @@ export interface Config {
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly onAfterEdgeCreated: (edgeId: unknown) => void;
+  readonly dragPortDirection: number | undefined;
 }

@@ -257,7 +257,7 @@ export class UserConnectablePortsConfigurator {
     const draggingPayload: PortPayload = {
       overlayId: this.draggingOverlayPortId,
       portCoords: cursorCoords,
-      portDirection: undefined,
+      portDirection: this.config.dragPortDirection,
     };
 
     this.isDirect = portType === "direct";
