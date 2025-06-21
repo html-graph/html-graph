@@ -1,17 +1,14 @@
+import { AddEdgeRequest } from "@/canvas";
 import { ConnectionPreprocessor } from "./connection-preprocessor";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { createConfig } from "./create-config";
-import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
-import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
-import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
-import { defaultMouseUpEventVerifier } from "./default-mouse-up-event-verifier";
 import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 
 describe("createOptions", () => {
   it("should return direct connection type resolver by default", () => {
     const options = createConfig({});
 
-    expect(options.connectionTypeResolver).toBe(defaultConnectionTypeResolver);
+    expect(options.connectionTypeResolver("123")).toBe("direct");
   });
 
   it("should return specified connection type resolver", () => {
@@ -21,10 +18,12 @@ describe("createOptions", () => {
     expect(options.connectionTypeResolver).toBe(resolver);
   });
 
-  it("should return idempotent connection preprocessor by default", () => {
+  it("should return default connection preprocessor", () => {
     const options = createConfig({});
 
-    expect(options.connectionPreprocessor).toBe(defaultConnectionPreprocessor);
+    const request: AddEdgeRequest = { from: "1", to: "2" };
+
+    expect(options.connectionPreprocessor(request)).toBe(request);
   });
 
   it("should return specified connection preprocessor", () => {
@@ -36,8 +35,15 @@ describe("createOptions", () => {
 
   it("should return LMB mouse down event verifier by default", () => {
     const options = createConfig({});
+    const pass = options.mouseDownEventVerifier(
+      new MouseEvent("mousedown", { button: 0 }),
+    );
 
-    expect(options.mouseDownEventVerifier).toBe(defaultMouseDownEventVerifier);
+    const fail = options.mouseDownEventVerifier(
+      new MouseEvent("mousedown", { button: 1 }),
+    );
+
+    expect([pass, fail]).toEqual([true, false]);
   });
 
   it("should return specified mouse down event verifier", () => {
@@ -49,8 +55,15 @@ describe("createOptions", () => {
 
   it("should return LMB mouse up event verifier by default", () => {
     const options = createConfig({});
+    const pass = options.mouseDownEventVerifier(
+      new MouseEvent("mousedown", { button: 0 }),
+    );
 
-    expect(options.mouseUpEventVerifier).toBe(defaultMouseUpEventVerifier);
+    const fail = options.mouseDownEventVerifier(
+      new MouseEvent("mousedown", { button: 1 }),
+    );
+
+    expect([pass, fail]).toEqual([true, false]);
   });
 
   it("should return specified mouse up event verifier", () => {
@@ -74,5 +87,17 @@ describe("createOptions", () => {
     });
 
     expect(options.onAfterEdgeCreated).toBe(onEdgeCreated);
+  });
+
+  it("should return default drag port direction", () => {
+    const options = createConfig({});
+
+    expect(options.dragPortDirection).toBe(undefined);
+  });
+
+  it("should return specified drag port direction", () => {
+    const options = createConfig({ dragPortDirection: Math.PI });
+
+    expect(options.dragPortDirection).toBe(Math.PI);
   });
 });

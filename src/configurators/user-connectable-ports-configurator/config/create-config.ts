@@ -1,14 +1,20 @@
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { defaultConnectionTypeResolver } from "./default-connectio-type-resolver";
-import { defaultConnectionPreprocessor } from "./default-connection-preprocessor";
-import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
 import { defaultOnAfterEdgeCreated } from "./default-on-after-edge-created";
 import { Config } from "./config";
-import { defaultMouseUpEventVerifier } from "./default-mouse-up-event-verifier";
+import { ConnectionTypeResolver } from "./connection-type-resolver";
+import { ConnectionPreprocessor } from "./connection-preprocessor";
 
 export const createConfig = (
   connectablePortsConfig: ConnectablePortsConfig,
 ): Config => {
+  const defaultConnectionTypeResolver: ConnectionTypeResolver = () => "direct";
+
+  const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
+    request;
+
+  const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
+    event.button === 0;
+
   return {
     connectionTypeResolver:
       connectablePortsConfig.connectionTypeResolver ??
@@ -18,12 +24,12 @@ export const createConfig = (
       defaultConnectionPreprocessor,
     mouseDownEventVerifier:
       connectablePortsConfig.mouseDownEventVerifier ??
-      defaultMouseDownEventVerifier,
+      defaultMouseEventVerifier,
     mouseUpEventVerifier:
-      connectablePortsConfig.mouseUpEventVerifier ??
-      defaultMouseUpEventVerifier,
+      connectablePortsConfig.mouseUpEventVerifier ?? defaultMouseEventVerifier,
     onAfterEdgeCreated:
       connectablePortsConfig.events?.onAfterEdgeCreated ??
       defaultOnAfterEdgeCreated,
+    dragPortDirection: connectablePortsConfig.dragPortDirection ?? undefined,
   };
 };
