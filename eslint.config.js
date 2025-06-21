@@ -14,6 +14,7 @@ export default tseslint.config(
       "@typescript-eslint/explicit-member-accessibility": "error",
       "@typescript-eslint/explicit-function-return-type": "error",
       eqeqeq: "error",
+      "lines-between-class-members": "error",
     },
   },
   {
