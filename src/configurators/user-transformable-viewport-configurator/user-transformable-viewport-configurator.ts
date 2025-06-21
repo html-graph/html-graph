@@ -35,8 +35,12 @@ export class UserTransformableViewportConfigurator {
       return;
     }
     setCursor(this.element, this.config.shiftCursor);
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
     this.startRegisteredTransform();
   };
 
@@ -119,8 +123,12 @@ export class UserTransformableViewportConfigurator {
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
     });
-    this.window.addEventListener("touchend", this.onWindowTouchFinish);
-    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+      passive: true,
+    });
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+      passive: true,
+    });
     this.startRegisteredTransform();
   };
 
@@ -192,7 +200,9 @@ export class UserTransformableViewportConfigurator {
     private readonly window: Window,
     viewportTransformConfig: ViewportTransformConfig,
   ) {
-    this.element.addEventListener("wheel", this.preventWheelScaleListener);
+    this.element.addEventListener("wheel", this.preventWheelScaleListener, {
+      passive: false,
+    });
 
     this.config = createConfig(viewportTransformConfig);
 

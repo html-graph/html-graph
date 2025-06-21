@@ -88,16 +88,24 @@ const markPort2OutRequest: MarkPortRequest = {
 
 const markPortsBtn = document.getElementById("mark-ports")!;
 
-markPortsBtn.addEventListener("click", () => {
-  canvas
-    .markPort(markPort1InRequest)
-    .markPort(markPort1OutRequest)
-    .markPort(markPort2InRequest)
-    .markPort(markPort2OutRequest);
-});
+markPortsBtn.addEventListener(
+  "click",
+  () => {
+    canvas
+      .markPort(markPort1InRequest)
+      .markPort(markPort1OutRequest)
+      .markPort(markPort2InRequest)
+      .markPort(markPort2OutRequest);
+  },
+  { passive: true },
+);
 
 const addEdgeBtn = document.getElementById("create-edge")!;
 
-addEdgeBtn.addEventListener("click", () => {
-  canvas.addEdge(addEdgeRequest);
-});
+addEdgeBtn.addEventListener(
+  "click",
+  () => {
+    canvas.addEdge(addEdgeRequest);
+  },
+  { passive: true },
+);

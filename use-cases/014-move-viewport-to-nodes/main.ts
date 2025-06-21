@@ -56,24 +56,28 @@ canvas
 
 const navigateBtn: HTMLElement = document.getElementById("navigate")!;
 
-navigateBtn.addEventListener("click", () => {
-  const nodes = [
-    canvas.graph.getNode("node-2")!,
-    canvas.graph.getNode("node-3")!,
-  ];
+navigateBtn.addEventListener(
+  "click",
+  () => {
+    const nodes = [
+      canvas.graph.getNode("node-2")!,
+      canvas.graph.getNode("node-3")!,
+    ];
 
-  const [x, y] = nodes.reduce(
-    (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
-    [0, 0],
-  );
+    const [x, y] = nodes.reduce(
+      (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
+      [0, 0],
+    );
 
-  const avgX = x / nodes.length;
-  const avgY = y / nodes.length;
-  const rect = canvasElement.getBoundingClientRect();
-  const viewportScale = canvas.viewport.getViewportMatrix().scale;
+    const avgX = x / nodes.length;
+    const avgY = y / nodes.length;
+    const rect = canvasElement.getBoundingClientRect();
+    const viewportScale = canvas.viewport.getViewportMatrix().scale;
 
-  const targetX = avgX - (viewportScale * rect.width) / 2;
-  const targetY = avgY - (viewportScale * rect.height) / 2;
+    const targetX = avgX - (viewportScale * rect.width) / 2;
+    const targetY = avgY - (viewportScale * rect.height) / 2;
 
-  canvas.patchViewportMatrix({ x: targetX, y: targetY });
-});
+    canvas.patchViewportMatrix({ x: targetX, y: targetY });
+  },
+  { passive: true },
+);

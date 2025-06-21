@@ -110,40 +110,65 @@ export class AdvancedDemoHelper {
   }
 
   private prepareNodeInputElement(element: HTMLElement): void {
-    element.addEventListener("mousemove", (event: Event) => {
-      if (document.activeElement === event.target) {
-        event.stopPropagation();
-      }
-    });
+    element.addEventListener(
+      "mousemove",
+      (event: Event) => {
+        if (document.activeElement === event.target) {
+          event.stopPropagation();
+        }
+      },
+      { passive: true },
+    );
   }
 
   private prepareNodeTextareaElement(element: HTMLElement): void {
     let hover = false;
     let down = false;
 
-    element.addEventListener("mouseover", () => {
-      hover = true;
-    });
+    element.addEventListener(
+      "mouseover",
+      () => {
+        hover = true;
+      },
+      { passive: true },
+    );
 
-    element.addEventListener("mouseleave", () => {
-      hover = false;
-    });
+    element.addEventListener(
+      "mouseleave",
+      () => {
+        hover = false;
+      },
 
-    element.addEventListener("mousedown", (event: Event) => {
-      event.stopPropagation();
+      { passive: true },
+    );
 
-      down = true;
-    });
-
-    element.addEventListener("mouseup", () => {
-      down = false;
-    });
-
-    element.addEventListener("mousemove", (event: MouseEvent) => {
-      if (down) {
+    element.addEventListener(
+      "mousedown",
+      (event: Event) => {
         event.stopPropagation();
-      }
-    });
+
+        down = true;
+      },
+      { passive: true },
+    );
+
+    element.addEventListener(
+      "mouseup",
+      () => {
+        down = false;
+      },
+      { passive: true },
+    );
+
+    element.addEventListener(
+      "mousemove",
+      (event: MouseEvent) => {
+        if (down) {
+          event.stopPropagation();
+        }
+      },
+      { passive: true },
+    );
 
     element.addEventListener(
       "wheel",

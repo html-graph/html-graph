@@ -39,6 +39,10 @@ canvas
 
 const btn = document.getElementById("unmark-port")!;
 
-btn.addEventListener("click", () => {
-  canvas.unmarkPort("node-2-in");
-});
+btn.addEventListener(
+  "click",
+  () => {
+    canvas.unmarkPort("node-2-in");
+  },
+  { passive: true },
+);

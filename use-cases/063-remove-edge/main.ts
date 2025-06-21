@@ -40,6 +40,10 @@ canvas
 
 const btn = document.getElementById("remove-edge")!;
 
-btn.addEventListener("click", () => {
-  canvas.removeEdge("edge-1");
-});
+btn.addEventListener(
+  "click",
+  () => {
+    canvas.removeEdge("edge-1");
+  },
+  { passive: true },
+);

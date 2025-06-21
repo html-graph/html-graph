@@ -42,13 +42,17 @@ const createNode: () => void = () => {
 
   const btn = document.createElement("button");
   btn.innerText = "Add Node";
-  btn.addEventListener("click", () => {
-    if (preventClick) {
-      return;
-    }
+  btn.addEventListener(
+    "click",
+    () => {
+      if (preventClick) {
+        return;
+      }
 
-    createNode();
-  });
+      createNode();
+    },
+    { passive: true },
+  );
 
   node.appendChild(btn);
 

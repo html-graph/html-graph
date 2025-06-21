@@ -63,12 +63,16 @@ const btn = document.getElementById("update-source")!;
 
 let i = 0;
 
-btn.addEventListener("click", () => {
-  i++;
+btn.addEventListener(
+  "click",
+  () => {
+    i++;
 
-  if (i % 2) {
-    canvas.updateEdge("con-1", { from: "node-3-out" });
-  } else {
-    canvas.updateEdge("con-1", { from: "node-1-out" });
-  }
-});
+    if (i % 2) {
+      canvas.updateEdge("con-1", { from: "node-3-out" });
+    } else {
+      canvas.updateEdge("con-1", { from: "node-1-out" });
+    }
+  },
+  { passive: true },
+);

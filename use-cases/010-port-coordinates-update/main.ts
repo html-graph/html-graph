@@ -54,17 +54,21 @@ const updateBtn: HTMLElement = document.getElementById(
 
 let i = 0;
 
-updateBtn.addEventListener("click", () => {
-  const element = addNode2Request.element.children[0] as HTMLElement;
+updateBtn.addEventListener(
+  "click",
+  () => {
+    const element = addNode2Request.element.children[0] as HTMLElement;
 
-  if (i % 2) {
-    element.style.marginTop = "0";
-    element.style.marginBottom = "auto";
-  } else {
-    element.style.marginBottom = "0";
-    element.style.marginTop = "auto";
-  }
+    if (i % 2) {
+      element.style.marginTop = "0";
+      element.style.marginBottom = "auto";
+    } else {
+      element.style.marginBottom = "0";
+      element.style.marginTop = "auto";
+    }
 
-  canvas.updatePort("node-2-in");
-  i++;
-});
+    canvas.updatePort("node-2-in");
+    i++;
+  },
+  { passive: true },
+);

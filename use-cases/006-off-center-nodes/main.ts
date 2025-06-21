@@ -45,23 +45,37 @@ const topLeftBtn: HTMLElement = document.getElementById("top-left")!;
 const centerBtn: HTMLElement = document.getElementById("center")!;
 const bottomRightBtn: HTMLElement = document.getElementById("bottom-right")!;
 
-topLeftBtn.addEventListener("click", () => {
-  const centerFn: CenterFn = (): Point => ({ x: 0, y: 0 });
-  const updateRequest: UpdateNodeRequest = { centerFn };
+topLeftBtn.addEventListener(
+  "click",
+  () => {
+    const centerFn: CenterFn = (): Point => ({ x: 0, y: 0 });
+    const updateRequest: UpdateNodeRequest = { centerFn };
 
-  canvas.updateNode("node-1", updateRequest);
-});
+    canvas.updateNode("node-1", updateRequest);
+  },
 
-centerBtn.addEventListener("click", () => {
-  const centerFn: CenterFn = (w, h): Point => ({ x: w / 2, y: h / 2 });
-  const updateRequest: UpdateNodeRequest = { centerFn };
+  { passive: true },
+);
 
-  canvas.updateNode("node-1", updateRequest);
-});
+centerBtn.addEventListener(
+  "click",
+  () => {
+    const centerFn: CenterFn = (w, h): Point => ({ x: w / 2, y: h / 2 });
+    const updateRequest: UpdateNodeRequest = { centerFn };
 
-bottomRightBtn.addEventListener("click", () => {
-  const centerFn: CenterFn = (w, h): Point => ({ x: w, y: h });
-  const updateRequest: UpdateNodeRequest = { centerFn };
+    canvas.updateNode("node-1", updateRequest);
+  },
+  { passive: true },
+);
 
-  canvas.updateNode("node-1", updateRequest);
-});
+bottomRightBtn.addEventListener(
+  "click",
+  () => {
+    const centerFn: CenterFn = (w, h): Point => ({ x: w, y: h });
+    const updateRequest: UpdateNodeRequest = { centerFn };
+
+    canvas.updateNode("node-1", updateRequest);
+  },
+
+  { passive: true },
+);

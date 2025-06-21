@@ -63,12 +63,16 @@ const btn = document.getElementById("update-target")!;
 
 let i = 0;
 
-btn.addEventListener("click", () => {
-  i++;
+btn.addEventListener(
+  "click",
+  () => {
+    i++;
 
-  if (i % 2) {
-    canvas.updateEdge("con-1", { to: "node-3-in" });
-  } else {
-    canvas.updateEdge("con-1", { to: "node-2-in" });
-  }
-});
+    if (i % 2) {
+      canvas.updateEdge("con-1", { to: "node-3-in" });
+    } else {
+      canvas.updateEdge("con-1", { to: "node-2-in" });
+    }
+  },
+  { passive: true },
+);

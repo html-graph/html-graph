@@ -62,20 +62,24 @@ const redShape = new BezierEdgeShape(redParams);
 
 const greenShape = new BezierEdgeShape(greenParams);
 
-updateBtn.addEventListener("click", () => {
-  if (i % 2) {
-    const request: UpdateEdgeRequest = {
-      shape: redShape,
-    };
+updateBtn.addEventListener(
+  "click",
+  () => {
+    if (i % 2) {
+      const request: UpdateEdgeRequest = {
+        shape: redShape,
+      };
 
-    canvas.updateEdge("con-1", request);
-  } else {
-    const request: UpdateEdgeRequest = {
-      shape: greenShape,
-    };
+      canvas.updateEdge("con-1", request);
+    } else {
+      const request: UpdateEdgeRequest = {
+        shape: greenShape,
+      };
 
-    canvas.updateEdge("con-1", request);
-  }
+      canvas.updateEdge("con-1", request);
+    }
 
-  i++;
-});
+    i++;
+  },
+  { passive: true },
+);

@@ -41,6 +41,10 @@ canvas
 
 const btn = document.getElementById("clear")!;
 
-btn.addEventListener("click", () => {
-  canvas.clear();
-});
+btn.addEventListener(
+  "click",
+  () => {
+    canvas.clear();
+  },
+  { passive: true },
+);
