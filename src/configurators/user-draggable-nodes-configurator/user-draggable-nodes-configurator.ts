@@ -25,7 +25,9 @@ export class UserDraggableNodesConfigurator {
     this.nodeIds.set(node.element, nodeId);
 
     node.element.addEventListener("mousedown", this.onMouseDown);
-    node.element.addEventListener("touchstart", this.onTouchStart);
+    node.element.addEventListener("touchstart", this.onTouchStart, {
+      passive: true,
+    });
   };
 
   private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
@@ -122,7 +124,9 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     this.moveNodeOnTop(nodeId);
 
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
   };

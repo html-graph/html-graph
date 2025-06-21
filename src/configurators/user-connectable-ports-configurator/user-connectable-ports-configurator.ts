@@ -111,7 +111,9 @@ export class UserConnectablePortsConfigurator {
 
     this.grabPort(target, { x: touch.clientX, y: touch.clientY });
 
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
     this.window.addEventListener("touchend", this.onWindowTouchFinish);
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
   };
@@ -260,7 +262,9 @@ export class UserConnectablePortsConfigurator {
 
   private hookPortEvents(element: HTMLElement): void {
     element.addEventListener("mousedown", this.onPortMouseDown);
-    element.addEventListener("touchstart", this.onPortTouchStart);
+    element.addEventListener("touchstart", this.onPortTouchStart, {
+      passive: true,
+    });
   }
 
   private unhookPortEvents(element: HTMLElement): void {

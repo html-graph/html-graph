@@ -145,10 +145,14 @@ export class AdvancedDemoHelper {
       }
     });
 
-    element.addEventListener("wheel", (event: WheelEvent) => {
-      if (hover) {
-        event.stopPropagation();
-      }
-    });
+    element.addEventListener(
+      "wheel",
+      (event: WheelEvent) => {
+        if (hover) {
+          event.stopPropagation();
+        }
+      },
+      { passive: true },
+    );
   }
 }
