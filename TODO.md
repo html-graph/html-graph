@@ -1,5 +1,6 @@
 # TODO
 
+- connectable ports handler on unable to add edge
 - multiple ports with the same element for connectable ports
 - port assumed direction for user connectable ports
 - connection preview for connectable ports
