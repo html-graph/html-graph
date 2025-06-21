@@ -1,8 +1,7 @@
 # TODO
 
-- connectable ports handler on unable to add edge
-- multiple ports with the same element for connectable ports
 - port assumed direction for user connectable ports
+- connectable ports handler on unable to add edge
 - connection preview for connectable ports
 - virtual scroll node events
 - improve onDestroy unit tests
