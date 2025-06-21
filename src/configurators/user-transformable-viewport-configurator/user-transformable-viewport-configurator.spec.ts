@@ -253,6 +253,23 @@ describe("UserTransformableViewportConfigurator", () => {
     );
   });
 
+  it("should prevent default event of wheel scroll", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    createCanvas({ element });
+
+    const wheelEvent = createMouseWheelEvent({
+      clientX: 0,
+      clientY: 0,
+      deltaY: 1,
+    });
+
+    const spy = jest.spyOn(wheelEvent, "preventDefault");
+
+    element.dispatchEvent(wheelEvent);
+
+    expect(spy).toHaveBeenCalled();
+  });
+
   it("should call start event on mouse wheel scroll", () => {
     const onTransformStarted = jest.fn();
     const element = createElement({ width: 1000, height: 1000 });
