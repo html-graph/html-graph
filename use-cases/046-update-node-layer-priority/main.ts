@@ -53,6 +53,10 @@ canvas
 
 const priorityBtn: HTMLElement = document.getElementById("priority")!;
 
-priorityBtn.addEventListener("click", () => {
-  canvas.updateNode("node-1", { priority: 3 });
-});
+priorityBtn.addEventListener(
+  "click",
+  () => {
+    canvas.updateNode("node-1", { priority: 3 });
+  },
+  { passive: true },
+);

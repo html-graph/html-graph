@@ -42,9 +42,13 @@ const slider: HTMLInputElement = document.getElementById(
   "slider",
 ) as HTMLInputElement;
 
-slider.addEventListener("input", () => {
-  addNode1Request.element.style.width = `${slider.value}px`;
-  addNode1Request.element.style.height = `${slider.value}px`;
-  addNode2Request.element.style.width = `${slider.value}px`;
-  addNode2Request.element.style.height = `${slider.value}px`;
-});
+slider.addEventListener(
+  "input",
+  () => {
+    addNode1Request.element.style.width = `${slider.value}px`;
+    addNode1Request.element.style.height = `${slider.value}px`;
+    addNode2Request.element.style.width = `${slider.value}px`;
+    addNode2Request.element.style.height = `${slider.value}px`;
+  },
+  { passive: true },
+);

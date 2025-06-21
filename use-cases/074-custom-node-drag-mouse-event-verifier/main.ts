@@ -9,17 +9,25 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 let isSpacePressed = false;
 
-document.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.code === "Space") {
-    isSpacePressed = true;
-  }
-});
+document.addEventListener(
+  "keydown",
+  (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      isSpacePressed = true;
+    }
+  },
+  { passive: true },
+);
 
-document.addEventListener("keyup", (event: KeyboardEvent) => {
-  if (event.code === "Space") {
-    isSpacePressed = false;
-  }
-});
+document.addEventListener(
+  "keyup",
+  (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      isSpacePressed = false;
+    }
+  },
+  { passive: true },
+);
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);

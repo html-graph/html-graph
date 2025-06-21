@@ -42,12 +42,16 @@ const updateBtn: HTMLElement = document.getElementById("update-node-coords")!;
 
 let i = 0;
 
-updateBtn.addEventListener("click", () => {
-  if (i % 2) {
-    canvas.updateNode("node-2", { x: 500, y: 500 });
-  } else {
-    canvas.updateNode("node-2", { x: 700, y: 700 });
-  }
+updateBtn.addEventListener(
+  "click",
+  () => {
+    if (i % 2) {
+      canvas.updateNode("node-2", { x: 500, y: 500 });
+    } else {
+      canvas.updateNode("node-2", { x: 700, y: 700 });
+    }
 
-  i++;
-});
+    i++;
+  },
+  { passive: true },
+);

@@ -53,6 +53,10 @@ const slider: HTMLInputElement = document.getElementById(
   "direction",
 ) as HTMLInputElement;
 
-slider.addEventListener("input", () => {
-  canvas.updatePort("node-2-in", { direction: parseFloat(slider.value) });
-});
+slider.addEventListener(
+  "input",
+  () => {
+    canvas.updatePort("node-2-in", { direction: parseFloat(slider.value) });
+  },
+  { passive: true },
+);

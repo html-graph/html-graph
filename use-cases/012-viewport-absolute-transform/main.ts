@@ -94,35 +94,47 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-sliderScale.addEventListener("input", () => {
-  const patchRequest: PatchMatrixRequest = {
-    scale: parseFloat(sliderScale.value),
-  };
+sliderScale.addEventListener(
+  "input",
+  () => {
+    const patchRequest: PatchMatrixRequest = {
+      scale: parseFloat(sliderScale.value),
+    };
 
-  canvas.patchViewportMatrix(patchRequest);
-  scaleValue.innerText = sliderScale.value;
-  updateRectangleTransform();
-});
+    canvas.patchViewportMatrix(patchRequest);
+    scaleValue.innerText = sliderScale.value;
+    updateRectangleTransform();
+  },
+  { passive: true },
+);
 
-sliderX.addEventListener("input", () => {
-  const patchRequest: PatchMatrixRequest = {
-    x: parseFloat(sliderX.value),
-  };
+sliderX.addEventListener(
+  "input",
+  () => {
+    const patchRequest: PatchMatrixRequest = {
+      x: parseFloat(sliderX.value),
+    };
 
-  canvas.patchViewportMatrix(patchRequest);
-  xValue.innerText = sliderX.value;
-  updateRectangleTransform();
-});
+    canvas.patchViewportMatrix(patchRequest);
+    xValue.innerText = sliderX.value;
+    updateRectangleTransform();
+  },
+  { passive: true },
+);
 
-sliderY.addEventListener("input", () => {
-  const patchRequest: PatchMatrixRequest = {
-    y: parseFloat(sliderY.value),
-  };
+sliderY.addEventListener(
+  "input",
+  () => {
+    const patchRequest: PatchMatrixRequest = {
+      y: parseFloat(sliderY.value),
+    };
 
-  canvas.patchViewportMatrix(patchRequest);
-  yValue.innerText = sliderY.value;
-  updateRectangleTransform();
-});
+    canvas.patchViewportMatrix(patchRequest);
+    yValue.innerText = sliderY.value;
+    updateRectangleTransform();
+  },
+  { passive: true },
+);
 
 updateRectangleSize();
 updateRectangleTransform();

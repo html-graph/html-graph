@@ -57,10 +57,14 @@ class NodesDragHandler {
         backPortId: value.output,
       });
 
-      addNodeRequest.element.addEventListener("mousedown", () => {
-        this.element.style.cursor = "grab";
-        this.grabbedNode = key;
-      });
+      addNodeRequest.element.addEventListener(
+        "mousedown",
+        () => {
+          this.element.style.cursor = "grab";
+          this.grabbedNode = key;
+        },
+        { passive: true },
+      );
 
       canvas.addNode(addNodeRequest);
     });
@@ -72,34 +76,42 @@ class NodesDragHandler {
 
     canvas.addEdge(addEdgeRequest);
 
-    element.addEventListener("mousemove", (event: MouseEvent) => {
-      if (this.grabbedNode !== null) {
-        const node = this.nodes.get(this.grabbedNode);
+    element.addEventListener(
+      "mousemove",
+      (event: MouseEvent) => {
+        if (this.grabbedNode !== null) {
+          const node = this.nodes.get(this.grabbedNode);
 
-        if (node === undefined) {
-          throw new HtmlGraphError("failed to drag nonexistent node");
+          if (node === undefined) {
+            throw new HtmlGraphError("failed to drag nonexistent node");
+          }
+
+          const matrixContent = canvas.viewport.getContentMatrix();
+
+          const xViewport = matrixContent.scale * node.x + matrixContent.x;
+          const yViewport = matrixContent.scale * node.y + matrixContent.y;
+
+          const newNodeX = xViewport + event.movementX;
+          const newNodeY = yViewport + event.movementY;
+
+          const matrixViewport = canvas.viewport.getViewportMatrix();
+          node.x = matrixViewport.scale * newNodeX + matrixViewport.x;
+          node.y = matrixViewport.scale * newNodeY + matrixViewport.y;
+
+          canvas.updateNode(this.grabbedNode, { x: node.x, y: node.y });
         }
+      },
+      { passive: true },
+    );
 
-        const matrixContent = canvas.viewport.getContentMatrix();
-
-        const xViewport = matrixContent.scale * node.x + matrixContent.x;
-        const yViewport = matrixContent.scale * node.y + matrixContent.y;
-
-        const newNodeX = xViewport + event.movementX;
-        const newNodeY = yViewport + event.movementY;
-
-        const matrixViewport = canvas.viewport.getViewportMatrix();
-        node.x = matrixViewport.scale * newNodeX + matrixViewport.x;
-        node.y = matrixViewport.scale * newNodeY + matrixViewport.y;
-
-        canvas.updateNode(this.grabbedNode, { x: node.x, y: node.y });
-      }
-    });
-
-    element.addEventListener("mouseup", () => {
-      this.element.style.removeProperty("cursor");
-      this.grabbedNode = null;
-    });
+    element.addEventListener(
+      "mouseup",
+      () => {
+        this.element.style.removeProperty("cursor");
+        this.grabbedNode = null;
+      },
+      { passive: true },
+    );
   }
 }
 

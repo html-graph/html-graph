@@ -24,8 +24,12 @@ export class UserDraggableNodesConfigurator {
 
     this.nodeIds.set(node.element, nodeId);
 
-    node.element.addEventListener("mousedown", this.onMouseDown);
-    node.element.addEventListener("touchstart", this.onTouchStart);
+    node.element.addEventListener("mousedown", this.onMouseDown, {
+      passive: true,
+    });
+    node.element.addEventListener("touchstart", this.onTouchStart, {
+      passive: true,
+    });
   };
 
   private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
@@ -86,8 +90,12 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     setCursor(this.element, this.config.dragCursor);
     this.moveNodeOnTop(nodeId);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp);
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -122,9 +130,15 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     this.moveNodeOnTop(nodeId);
 
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
-    this.window.addEventListener("touchend", this.onWindowTouchFinish);
-    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+    this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+      passive: true,
+    });
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+      passive: true,
+    });
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {

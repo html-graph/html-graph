@@ -60,21 +60,26 @@ function updateRectangle(): void {
   boundsContainerElement.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y}) translate(${x - 5}px, ${y - 5}px) `;
 }
 
-map.forEach((_value, id) => {
-  const el: HTMLInputElement = document.getElementById(id)! as HTMLInputElement;
-  const valueEl: HTMLElement = document.getElementById(`${id}-value`)!;
+map.forEach(
+  (_value, id) => {
+    const el: HTMLInputElement = document.getElementById(
+      id,
+    )! as HTMLInputElement;
+    const valueEl: HTMLElement = document.getElementById(`${id}-value`)!;
 
-  valueEl.innerText = el.value;
-
-  el.addEventListener("input", () => {
-    map.set(id, parseFloat(el.value));
     valueEl.innerText = el.value;
-    updateRectangle();
-  });
 
-  updateRectangle();
-  boundsElement.style.visibility = "visible";
-});
+    el.addEventListener("input", () => {
+      map.set(id, parseFloat(el.value));
+      valueEl.innerText = el.value;
+      updateRectangle();
+    });
+
+    updateRectangle();
+    boundsElement.style.visibility = "visible";
+  },
+  { passive: true },
+);
 
 let cnt = 0;
 
@@ -115,9 +120,13 @@ function refresh(): void {
   trigger.emit({ x, y, width, height });
 }
 
-applyEl.addEventListener("click", () => {
-  refresh();
-});
+applyEl.addEventListener(
+  "click",
+  () => {
+    refresh();
+  },
+  { passive: true },
+);
 
 canvas.patchContentMatrix({ scale: 0.2, x: 250, y: 250 });
 

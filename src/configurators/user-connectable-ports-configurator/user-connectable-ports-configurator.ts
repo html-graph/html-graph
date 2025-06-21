@@ -66,8 +66,12 @@ export class UserConnectablePortsConfigurator {
 
     this.grabPort(target, { x: event.clientX, y: event.clientY });
 
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
@@ -111,9 +115,15 @@ export class UserConnectablePortsConfigurator {
 
     this.grabPort(target, { x: touch.clientX, y: touch.clientY });
 
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
-    this.window.addEventListener("touchend", this.onWindowTouchFinish);
-    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+    this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+      passive: true,
+    });
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+      passive: true,
+    });
   };
 
   private readonly onWindowTouchMove = (event: TouchEvent): void => {
@@ -259,8 +269,12 @@ export class UserConnectablePortsConfigurator {
   }
 
   private hookPortEvents(element: HTMLElement): void {
-    element.addEventListener("mousedown", this.onPortMouseDown);
-    element.addEventListener("touchstart", this.onPortTouchStart);
+    element.addEventListener("mousedown", this.onPortMouseDown, {
+      passive: true,
+    });
+    element.addEventListener("touchstart", this.onPortTouchStart, {
+      passive: true,
+    });
   }
 
   private unhookPortEvents(element: HTMLElement): void {

@@ -38,17 +38,20 @@ for (let i = 1; i <= 20; i++) {
   );
 }
 
-addNodeRequests.forEach((request) => {
-  canvas.addNode(request);
+addNodeRequests.forEach(
+  (request) => {
+    canvas.addNode(request);
 
-  request.element.addEventListener("focus", () => {
-    const node = canvas.graph.getNode(request.id)!;
-    const rect = canvasElement.getBoundingClientRect();
-    const sv = canvas.viewport.getViewportMatrix().scale;
+    request.element.addEventListener("focus", () => {
+      const node = canvas.graph.getNode(request.id)!;
+      const rect = canvasElement.getBoundingClientRect();
+      const sv = canvas.viewport.getViewportMatrix().scale;
 
-    const targetX = node.x - (sv * rect.width) / 2;
-    const targetY = node.y - (sv * rect.height) / 2;
+      const targetX = node.x - (sv * rect.width) / 2;
+      const targetY = node.y - (sv * rect.height) / 2;
 
-    canvas.patchViewportMatrix({ x: targetX, y: targetY });
-  });
-});
+      canvas.patchViewportMatrix({ x: targetX, y: targetY });
+    });
+  },
+  { passive: true },
+);

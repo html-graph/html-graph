@@ -12,17 +12,25 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 let isSpacePressed = false;
 
-document.addEventListener("keydown", (event: KeyboardEvent) => {
-  if (event.code === "Space") {
-    isSpacePressed = true;
-  }
-});
+document.addEventListener(
+  "keydown",
+  (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      isSpacePressed = true;
+    }
+  },
+  { passive: true },
+);
 
-document.addEventListener("keyup", (event: KeyboardEvent) => {
-  if (event.code === "Space") {
-    isSpacePressed = false;
-  }
-});
+document.addEventListener(
+  "keyup",
+  (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      isSpacePressed = false;
+    }
+  },
+  { passive: true },
+);
 
 const transformOptions: ViewportTransformConfig = {
   scale: {

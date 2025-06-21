@@ -44,15 +44,19 @@ class ViewportStore {
     private readonly element: HTMLElement,
     private readonly canvas: Canvas,
   ) {
-    this.element.addEventListener("wheel", (event) => {
-      const { left, top } = this.element.getBoundingClientRect();
-      const centerX = event.clientX - left;
-      const centerY = event.clientY - top;
+    this.element.addEventListener(
+      "wheel",
+      (event) => {
+        const { left, top } = this.element.getBoundingClientRect();
+        const centerX = event.clientX - left;
+        const centerY = event.clientY - top;
 
-      const velocity =
-        event.deltaY > 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
-      this.scaleViewport(velocity, centerX, centerY);
-    });
+        const velocity =
+          event.deltaY > 0 ? this.scaleVelocity : 1 / this.scaleVelocity;
+        this.scaleViewport(velocity, centerX, centerY);
+      },
+      { passive: true },
+    );
   }
 
   private scaleViewport(s2: number, cx: number, cy: number): void {

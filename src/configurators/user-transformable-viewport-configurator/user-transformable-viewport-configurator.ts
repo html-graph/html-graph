@@ -24,6 +24,7 @@ export class UserTransformableViewportConfigurator {
     this.element.removeEventListener("mousedown", this.onMouseDown);
     this.element.removeEventListener("wheel", this.onWheelScroll);
     this.element.removeEventListener("touchstart", this.onTouchStart);
+    this.element.removeEventListener("wheel", this.preventWheelScaleListener);
     this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
   };
 
@@ -34,8 +35,12 @@ export class UserTransformableViewportConfigurator {
       return;
     }
     setCursor(this.element, this.config.shiftCursor);
-    this.window.addEventListener("mousemove", this.onWindowMouseMove);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp);
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
     this.startRegisteredTransform();
   };
 
@@ -77,8 +82,6 @@ export class UserTransformableViewportConfigurator {
       return;
     }
 
-    event.preventDefault();
-
     const { left, top } = this.element.getBoundingClientRect();
     const centerX = event.clientX - left;
     const centerY = event.clientY - top;
@@ -117,9 +120,15 @@ export class UserTransformableViewportConfigurator {
     }
 
     this.prevTouches = processTouch(event);
-    this.window.addEventListener("touchmove", this.onWindowTouchMove);
-    this.window.addEventListener("touchend", this.onWindowTouchFinish);
-    this.window.addEventListener("touchcancel", this.onWindowTouchFinish);
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+    this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+      passive: true,
+    });
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+      passive: true,
+    });
     this.startRegisteredTransform();
   };
 
@@ -181,19 +190,33 @@ export class UserTransformableViewportConfigurator {
 
   private readonly config: Config;
 
+  private readonly preventWheelScaleListener = (event: WheelEvent): void => {
+    event.preventDefault();
+  };
+
   public constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
     viewportTransformConfig: ViewportTransformConfig,
   ) {
+    this.element.addEventListener("wheel", this.preventWheelScaleListener, {
+      passive: false,
+    });
+
     this.config = createConfig(viewportTransformConfig);
 
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);
-    this.element.addEventListener("mousedown", this.onMouseDown);
-    this.element.addEventListener("wheel", this.onWheelScroll);
-    this.element.addEventListener("touchstart", this.onTouchStart);
+    this.element.addEventListener("mousedown", this.onMouseDown, {
+      passive: true,
+    });
+    this.element.addEventListener("wheel", this.onWheelScroll, {
+      passive: true,
+    });
+    this.element.addEventListener("touchstart", this.onTouchStart, {
+      passive: true,
+    });
 
     canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }

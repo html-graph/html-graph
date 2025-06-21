@@ -41,6 +41,10 @@ canvas
 
 const btn = document.getElementById("remove-node")!;
 
-btn.addEventListener("click", () => {
-  canvas.removeNode("node-1");
-});
+btn.addEventListener(
+  "click",
+  () => {
+    canvas.removeNode("node-1");
+  },
+  { passive: true },
+);

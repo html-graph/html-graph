@@ -44,28 +44,40 @@ class ViewportStore {
     private readonly element: HTMLElement,
     private readonly canvas: Canvas,
   ) {
-    this.element.addEventListener("mousedown", () => {
-      this.element.style.cursor = "grab";
-      this.isGrabbed = true;
-    });
+    this.element.addEventListener(
+      "mousedown",
+      () => {
+        this.element.style.cursor = "grab";
+        this.isGrabbed = true;
+      },
+      { passive: true },
+    );
 
-    this.element.addEventListener("mouseup", () => {
-      this.element.style.removeProperty("cursor");
-      this.isGrabbed = false;
-    });
+    this.element.addEventListener(
+      "mouseup",
+      () => {
+        this.element.style.removeProperty("cursor");
+        this.isGrabbed = false;
+      },
+      { passive: true },
+    );
 
-    this.element.addEventListener("mousemove", (event) => {
-      if (this.isGrabbed) {
-        const matrixViewport = this.canvas.viewport.getViewportMatrix();
+    this.element.addEventListener(
+      "mousemove",
+      (event) => {
+        if (this.isGrabbed) {
+          const matrixViewport = this.canvas.viewport.getViewportMatrix();
 
-        const patchMatrixRequest: PatchMatrixRequest = {
-          x: matrixViewport.scale * -event.movementX + matrixViewport.x,
-          y: matrixViewport.scale * -event.movementY + matrixViewport.y,
-        };
+          const patchMatrixRequest: PatchMatrixRequest = {
+            x: matrixViewport.scale * -event.movementX + matrixViewport.x,
+            y: matrixViewport.scale * -event.movementY + matrixViewport.y,
+          };
 
-        this.canvas.patchViewportMatrix(patchMatrixRequest);
-      }
-    });
+          this.canvas.patchViewportMatrix(patchMatrixRequest);
+        }
+      },
+      { passive: true },
+    );
   }
 }
 

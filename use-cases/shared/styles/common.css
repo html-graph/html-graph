@@ -15,10 +15,10 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  font-family: Arial, sans-serif;
 }
 
 body {
+  font-family: Arial, sans-serif;
   position: relative;
   color: var(--color-text);
 }

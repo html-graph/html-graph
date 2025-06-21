@@ -65,6 +65,10 @@ canvas
 
 const priorityBtn: HTMLElement = document.getElementById("priority")!;
 
-priorityBtn.addEventListener("click", () => {
-  canvas.updateEdge("edge-1", { priority: 2 });
-});
+priorityBtn.addEventListener(
+  "click",
+  () => {
+    canvas.updateEdge("edge-1", { priority: 2 });
+  },
+  { passive: true },
+);
