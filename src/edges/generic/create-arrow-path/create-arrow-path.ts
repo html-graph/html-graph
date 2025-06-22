@@ -1,4 +1,4 @@
-import { createRotatedPoint } from "../create-rotated-point";
+import { createRotatedPoint } from "../../shared";
 import { Point, zero } from "@/point";
 
 export const createArrowPath = (

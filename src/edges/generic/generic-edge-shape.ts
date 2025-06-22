@@ -1,16 +1,14 @@
 import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
-import {
-  createArrowPath,
-  createFlipDirectionVector,
-  createEdgeArrow,
-  createEdgeGroup,
-  createEdgeSvg,
-  createEdgeLine,
-  createEdgeRectangle,
-} from "../shared";
 import { Point, zero } from "@/point";
 import { GenericEdgeParams } from "./generic-edge-params";
+import { createArrowPath } from "./create-arrow-path";
+import { createEdgeArrow } from "./create-edge-arrow";
+import { createEdgeGroup } from "./create-edge-group";
+import { createEdgeLine } from "./create-edge-line";
+import { createEdgeRectangle } from "./create-edge-rectangle";
+import { createEdgeSvg } from "./create-edge-svg";
+import { createFlipDirectionVector } from "./create-flip-direction-vector";
 
 export class GenericEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
