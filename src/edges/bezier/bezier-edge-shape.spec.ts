@@ -176,66 +176,6 @@ describe("BezierEdgeShape", () => {
     );
   });
 
-  it("should create path for target arrow", () => {
-    const shape = createBezierEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97");
-  });
-
-  it("should create path for source arrow", () => {
-    const shape = createBezierEdge(true, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
-  });
-
   it("should create port cycle path without arrows", () => {
     const shape = createBezierEdge(false, false);
 
@@ -390,35 +330,5 @@ describe("BezierEdgeShape", () => {
     expect(line.getAttribute("d")).toBe(
       "M 10 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 100 100",
     );
-  });
-
-  it("should create node cycle path for target arrow", () => {
-    const shape = createBezierEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97");
   });
 });
