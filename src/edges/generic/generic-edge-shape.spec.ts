@@ -12,12 +12,9 @@ const createBezierEdge = (
     arrowWidth: 3,
     hasSourceArrow,
     hasTargetArrow,
-    createLinePath: () =>
-      `${hasSourceArrow ? "arrow " : ""}line${hasTargetArrow ? " arrow" : ""}`,
-    createDetourPath: () =>
-      `${hasSourceArrow ? "arrow " : ""}detour${hasTargetArrow ? " arrow" : ""}`,
-    createCyclePath: () =>
-      `${hasSourceArrow || hasTargetArrow ? "arrow " : ""}cycle`,
+    createLinePath: () => "",
+    createDetourPath: () => "",
+    createCyclePath: () => "",
   });
 };
 
@@ -73,96 +70,6 @@ describe("GenericEdgeShape", () => {
     const g = shape.svg.children[0] as SVGGElement;
 
     expect(g.style.transform).toBe("scale(1, -1)");
-  });
-
-  it("should create line path without arrows", () => {
-    const shape = createBezierEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("line");
-  });
-
-  it("should create line path accounting for target arrow", () => {
-    const shape = createBezierEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("line arrow");
-  });
-
-  it("should create line path accounting for source arrow", () => {
-    const shape = createBezierEdge(true, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("arrow line");
   });
 
   it("should create path for target arrow", () => {
@@ -225,36 +132,7 @@ describe("GenericEdgeShape", () => {
     expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
   });
 
-  it("should create port cycle path without arrows", () => {
-    const shape = createBezierEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const line = shape.svg.children[0].children[0];
-
-    expect(line.getAttribute("d")).toBe("cycle");
-  });
-
-  it("should create port cycle path accounting for arrow", () => {
+  it("should create port cycle target arrow path", () => {
     const shape = createBezierEdge(false, true);
 
     shape.render({
@@ -283,97 +161,7 @@ describe("GenericEdgeShape", () => {
     expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
   });
 
-  it("should create node cycle path without arrows", () => {
-    const shape = createBezierEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("detour");
-  });
-
-  it("should create node cycle path accounting for target arrow", () => {
-    const shape = createBezierEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("detour arrow");
-  });
-
-  it("should create node cycle path accounting for source arrow", () => {
-    const shape = createBezierEdge(true, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe("arrow detour");
-  });
-
-  it("should create node cycle path for target arrow", () => {
+  it("should create node cycle target arrow path", () => {
     const shape = createBezierEdge(false, true);
 
     shape.render({

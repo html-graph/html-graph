@@ -94,12 +94,10 @@ export class BezierEdgeShape implements EdgeShape {
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
-    const color = params?.color ?? edgeConstants.color;
-    const width = params?.width ?? edgeConstants.width;
 
     this.genericShape = new GenericEdgeShape({
-      width,
-      color,
+      color: params?.color ?? edgeConstants.color,
+      width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
       arrowWidth: this.arrowWidth,
       hasSourceArrow: this.hasSourceArrow,
