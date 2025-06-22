@@ -1,14 +1,14 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../../shared";
+import { createRotatedPoint } from "../../create-rotated-point";
 
 export const createDetourBezierPath = (params: {
   readonly to: Point;
   readonly fromVector: Point;
   readonly toVector: Point;
   readonly flipX: number;
-  readonly flipY: number;
   readonly arrowLength: number;
   readonly detourDirection: number;
+  readonly flipY: number;
   readonly detourDistance: number;
   readonly curvature: number;
   readonly hasSourceArrow: boolean;
