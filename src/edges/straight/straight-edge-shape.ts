@@ -1,33 +1,17 @@
 import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import {
-  createArrowPath,
-  createFlipDirectionVector,
-  createEdgeArrow,
-  createEdgeGroup,
-  createEdgeSvg,
-  createEdgeLine,
-  createEdgeRectangle,
-} from "../shared";
-import {
   createCycleSquarePath,
   createDetourStraightPath,
   createStraightLinePath,
 } from "../paths";
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";
+import { GenericEdgeShape } from "../generic";
 
 export class StraightEdgeShape implements EdgeShape {
-  public readonly svg = createEdgeSvg();
-
-  private readonly group = createEdgeGroup();
-
-  private readonly line: SVGPathElement;
-
-  private readonly sourceArrow: SVGPathElement | null = null;
-
-  private readonly targetArrow: SVGPathElement | null = null;
+  public readonly svg: SVGSVGElement;
 
   private readonly arrowLength: number;
 
@@ -46,6 +30,57 @@ export class StraightEdgeShape implements EdgeShape {
   private readonly hasSourceArrow: boolean;
 
   private readonly hasTargetArrow: boolean;
+
+  private readonly genericShape: GenericEdgeShape;
+
+  private readonly createCyclePath = (fromDirection: Point): string =>
+    createCycleSquarePath({
+      fromVector: fromDirection,
+      arrowLength: this.arrowLength,
+      side: this.cycleSquareSide,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  private readonly createDetourPath = (
+    sourceDirection: Point,
+    targetDirection: Point,
+    to: Point,
+    flipX: number,
+    flipY: number,
+  ): string =>
+    createDetourStraightPath({
+      to,
+      fromVector: sourceDirection,
+      toVector: targetDirection,
+      flipX,
+      flipY,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      detourDirection: this.detourDirection,
+      detourDistance: this.detourDistance,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  private readonly createLinePath = (
+    sourceDirection: Point,
+    targetDirection: Point,
+    to: Point,
+  ): string =>
+    createStraightLinePath({
+      to,
+      fromVector: sourceDirection,
+      toVector: targetDirection,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
 
   public constructor(params?: StraightEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
@@ -72,113 +107,22 @@ export class StraightEdgeShape implements EdgeShape {
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    const color = params?.color ?? edgeConstants.color;
-    const width = params?.width ?? edgeConstants.width;
+    this.genericShape = new GenericEdgeShape({
+      color: params?.color ?? edgeConstants.color,
+      width: params?.width ?? edgeConstants.width,
+      arrowLength: this.arrowLength,
+      arrowWidth: this.arrowWidth,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+      createCyclePath: this.createCyclePath,
+      createDetourPath: this.createDetourPath,
+      createLinePath: this.createLinePath,
+    });
 
-    this.svg.appendChild(this.group);
-    this.line = createEdgeLine(color, width);
-    this.group.appendChild(this.line);
-
-    if (this.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(color);
-      this.group.appendChild(this.sourceArrow);
-    }
-
-    if (this.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(color);
-      this.group.appendChild(this.targetArrow);
-    }
+    this.svg = this.genericShape.svg;
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
-      params.from,
-      params.to,
-    );
-
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-    this.svg.style.width = `${Math.max(width, 1)}px`;
-    this.svg.style.height = `${Math.max(height, 1)}px`;
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
-
-    const fromVect = createFlipDirectionVector(
-      params.from.direction,
-      flipX,
-      flipY,
-    );
-    const toVect = createFlipDirectionVector(params.to.direction, flipX, flipY);
-
-    const to: Point = {
-      x: width,
-      y: height,
-    };
-
-    let linePath: string;
-    let targetVect = toVect;
-    let targetArrowLength = -this.arrowLength;
-
-    if (params.from.portId === params.to.portId) {
-      linePath = createCycleSquarePath({
-        fromVector: fromVect,
-        arrowLength: this.arrowLength,
-        side: this.cycleSquareSide,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        hasSourceArrow: this.hasSourceArrow,
-        hasTargetArrow: this.hasTargetArrow,
-      });
-      targetVect = fromVect;
-      targetArrowLength = this.arrowLength;
-    } else if (params.from.nodeId === params.to.nodeId) {
-      linePath = createDetourStraightPath({
-        to,
-        fromVector: fromVect,
-        toVector: toVect,
-        flipX,
-        flipY,
-        arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        detourDirection: this.detourDirection,
-        detourDistance: this.detourDistance,
-        hasSourceArrow: this.hasSourceArrow,
-        hasTargetArrow: this.hasTargetArrow,
-      });
-    } else {
-      linePath = createStraightLinePath({
-        to,
-        fromVector: fromVect,
-        toVector: toVect,
-        arrowLength: this.arrowLength,
-        arrowOffset: this.arrowOffset,
-        roundness: this.roundness,
-        hasSourceArrow: this.hasSourceArrow,
-        hasTargetArrow: this.hasTargetArrow,
-      });
-    }
-
-    this.line.setAttribute("d", linePath);
-
-    if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
-        fromVect,
-        zero,
-        this.arrowLength,
-        this.arrowWidth,
-      );
-
-      this.sourceArrow.setAttribute("d", arrowPath);
-    }
-
-    if (this.targetArrow) {
-      const arrowPath = createArrowPath(
-        targetVect,
-        to,
-        targetArrowLength,
-        this.arrowWidth,
-      );
-
-      this.targetArrow.setAttribute("d", arrowPath);
-    }
+    this.genericShape.render(params);
   }
 }

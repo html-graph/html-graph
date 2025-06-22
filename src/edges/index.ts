@@ -9,3 +9,5 @@ export { StraightEdgeShape } from "./straight";
 export type { StraightEdgeParams } from "./straight";
 export { VerticalEdgeShape } from "./vertical";
 export type { VerticalEdgeParams } from "./vertical";
+export { GenericEdgeShape } from "./generic";
+export type { GenericEdgeParams } from "./generic";

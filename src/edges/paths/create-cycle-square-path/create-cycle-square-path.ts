@@ -1,5 +1,6 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint, createRoundedPath } from "../../shared";
+import { createRotatedPoint } from "../../create-rotated-point";
+import { createRoundedPath } from "../create-rounded-path";
 
 export const createCycleSquarePath = (params: {
   readonly fromVector: Point;

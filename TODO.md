@@ -1,6 +1,9 @@
 # TODO
 
 - user selectable edges
+
+  - use clipPath and opacit path
+
 - improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object
