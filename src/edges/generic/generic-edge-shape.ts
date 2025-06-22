@@ -50,12 +50,17 @@ export class GenericEdgeShape implements EdgeShape {
     this.svg.style.height = `${Math.max(height, 1)}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const fromVect = createFlipDirectionVector(
+    const sourceDirection = createFlipDirectionVector(
       params.from.direction,
       flipX,
       flipY,
     );
-    const toVect = createFlipDirectionVector(params.to.direction, flipX, flipY);
+
+    const targetDirection = createFlipDirectionVector(
+      params.to.direction,
+      flipX,
+      flipY,
+    );
 
     const to: Point = {
       x: width,
@@ -63,24 +68,42 @@ export class GenericEdgeShape implements EdgeShape {
     };
 
     let linePath: string;
-    let targetVect = toVect;
+    let targetVect = targetDirection;
     let targetArrowLength = -this.params.arrowLength;
 
     if (params.from.portId === params.to.portId) {
-      linePath = this.params.createCyclePath(fromVect);
-      targetVect = fromVect;
+      linePath = this.params.createCyclePath(
+        sourceDirection,
+        targetDirection,
+        to,
+        flipX,
+        flipY,
+      );
+      targetVect = sourceDirection;
       targetArrowLength = this.params.arrowLength;
     } else if (params.from.nodeId === params.to.nodeId) {
-      linePath = this.params.createDetourPath(fromVect, toVect, to);
+      linePath = this.params.createDetourPath(
+        sourceDirection,
+        targetDirection,
+        to,
+        flipX,
+        flipY,
+      );
     } else {
-      linePath = this.params.createLinePath(fromVect, toVect, to);
+      linePath = this.params.createLinePath(
+        sourceDirection,
+        targetDirection,
+        to,
+        flipX,
+        flipY,
+      );
     }
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
-        fromVect,
+        sourceDirection,
         zero,
         this.params.arrowLength,
         this.params.arrowWidth,
