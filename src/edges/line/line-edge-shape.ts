@@ -1,7 +1,7 @@
 import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
-import { GenericEdgeParams } from "./generic-edge-params";
+import { LineEdgeParams } from "./line-edge-params";
 import { createArrowPath } from "./create-arrow-path";
 import { createEdgeArrow } from "./create-edge-arrow";
 import { createEdgeGroup } from "./create-edge-group";
@@ -10,7 +10,7 @@ import { createEdgeRectangle } from "./create-edge-rectangle";
 import { createEdgeSvg } from "./create-edge-svg";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 
-export class GenericEdgeShape implements EdgeShape {
+export class LineEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
 
   private readonly group = createEdgeGroup();
@@ -21,7 +21,7 @@ export class GenericEdgeShape implements EdgeShape {
 
   private readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(private readonly params: GenericEdgeParams) {
+  public constructor(private readonly params: LineEdgeParams) {
     this.svg.appendChild(this.group);
     this.line = createEdgeLine(params.color, params.width);
     this.group.appendChild(this.line);

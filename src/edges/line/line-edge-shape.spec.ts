@@ -1,11 +1,11 @@
 import { EdgeShape } from "../edge-shape";
-import { GenericEdgeShape } from "./generic-edge-shape";
+import { LineEdgeShape } from "./line-edge-shape";
 
 const createBezierEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): EdgeShape => {
-  return new GenericEdgeShape({
+  return new LineEdgeShape({
     color: "#FFFFFF",
     width: 2,
     arrowLength: 10,
@@ -18,7 +18,7 @@ const createBezierEdge = (
   });
 };
 
-describe("GenericEdgeShape", () => {
+describe("LineEdgeShape", () => {
   it("should have only line element", () => {
     const shape = createBezierEdge(false, false);
 
