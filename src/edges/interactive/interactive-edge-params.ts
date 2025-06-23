@@ -1,3 +1,4 @@
 export interface InteractiveEdgeParams {
-  readonly width: number;
+  readonly width?: number;
+  readonly onInteractionStart?: () => void;
 }

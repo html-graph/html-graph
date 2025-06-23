@@ -2,7 +2,9 @@
 
 - user selectable edges
 
-  - use event bypass
+  - use event bypass?
+  - use intersection library?
+  - use clipPath?
 
 - improve onDestroy unit tests
 - virtual scroll node events

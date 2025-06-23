@@ -14,10 +14,14 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shape: (edgeId) => {
       const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
 
-      const shape = new InteractiveEdgeShape(baseShape);
+      const shape = new InteractiveEdgeShape(baseShape, {
+        onInteractionStart: (): void => {
+          console.log(`interacting with ${edgeId}`);
+        },
+      });
 
       return shape;
     },
