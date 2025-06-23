@@ -1,4 +1,3 @@
-import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
 import { LineEdgeParams } from "./line-edge-params";
@@ -10,13 +9,14 @@ import { createEdgeRectangle } from "./create-edge-rectangle";
 import { createEdgeSvg } from "./create-edge-svg";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { CreatePathFn } from "./create-path-fn";
+import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class LineEdgeShape implements EdgeShape {
+export class LineEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 
-  private readonly group = createEdgeGroup();
+  public readonly group = createEdgeGroup();
 
-  private readonly line: SVGPathElement;
+  public readonly line: SVGPathElement;
 
   private readonly sourceArrow: SVGPathElement | null = null;
 
