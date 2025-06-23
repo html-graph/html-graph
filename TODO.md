@@ -2,7 +2,7 @@
 
 - user selectable edges
 
-  - use clipPath and opacit path
+  - use event bypass
 
 - improve onDestroy unit tests
 - virtual scroll node events

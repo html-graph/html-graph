@@ -17,7 +17,9 @@ const canvasDefaults: CanvasDefaults = {
     shape: () => {
       const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
 
-      return new InteractiveEdgeShape(baseShape);
+      const shape = new InteractiveEdgeShape(baseShape);
+
+      return shape;
     },
   },
 };

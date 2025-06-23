@@ -303,7 +303,7 @@ export class Canvas {
       id,
       from: request.from,
       to: request.to,
-      shape: request.shape ?? this.defaults.edges.shapeFactory(),
+      shape: request.shape ?? this.defaults.edges.shapeFactory(id),
       priority: request.priority ?? this.defaults.edges.priorityFn(),
     });
 

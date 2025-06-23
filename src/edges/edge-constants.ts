@@ -14,4 +14,5 @@ export const edgeConstants = Object.freeze({
   detourDirectionVertical: 0,
   smallCycleRadius: 15,
   curvature: 90,
+  interactiveWidth: 10,
 });

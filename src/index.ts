@@ -63,6 +63,7 @@ export type {
   HorizontalEdgeParams,
   VerticalEdgeParams,
   StraightEdgeParams,
+  InteractiveEdgeParams,
   LineEdgeParams,
   CreatePathFn,
 } from "./edges";
