@@ -9,6 +9,7 @@ import { createEdgeLine } from "./create-edge-line";
 import { createEdgeRectangle } from "./create-edge-rectangle";
 import { createEdgeSvg } from "./create-edge-svg";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
+import { CreatePathFn } from "./create-path-fn";
 
 export class LineEdgeShape implements EdgeShape {
   public readonly svg = createEdgeSvg();
@@ -65,37 +66,27 @@ export class LineEdgeShape implements EdgeShape {
       y: height,
     };
 
-    let linePath: string;
     let targetVect = targetDirection;
     let targetArrowLength = -this.params.arrowLength;
+    let createPathFn: CreatePathFn;
 
     if (params.from.portId === params.to.portId) {
-      linePath = this.params.createCyclePath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createCyclePath;
       targetVect = sourceDirection;
       targetArrowLength = this.params.arrowLength;
     } else if (params.from.nodeId === params.to.nodeId) {
-      linePath = this.params.createDetourPath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createDetourPath;
     } else {
-      linePath = this.params.createLinePath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createLinePath;
     }
+
+    const linePath = createPathFn(
+      sourceDirection,
+      targetDirection,
+      to,
+      flipX,
+      flipY,
+    );
 
     this.line.setAttribute("d", linePath);
 
