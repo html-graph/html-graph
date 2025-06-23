@@ -8,7 +8,7 @@ import {
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { GenericEdgeShape } from "../generic";
+import { CreatePathFn, LineEdgeShape } from "../line";
 
 export class BezierEdgeShape implements EdgeShape {
   public readonly svg: SVGSVGElement;
@@ -31,9 +31,11 @@ export class BezierEdgeShape implements EdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly genericShape: GenericEdgeShape;
+  private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath = (fromDirection: Point): string =>
+  private readonly createCyclePath: CreatePathFn = (
+    fromDirection: Point,
+  ): string =>
     createCycleCirclePath({
       fromVector: fromDirection,
       radius: this.portCycleRadius,
@@ -43,7 +45,7 @@ export class BezierEdgeShape implements EdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  private readonly createDetourPath = (
+  private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
@@ -64,7 +66,7 @@ export class BezierEdgeShape implements EdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  private readonly createLinePath = (
+  private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
@@ -95,7 +97,7 @@ export class BezierEdgeShape implements EdgeShape {
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    this.genericShape = new GenericEdgeShape({
+    this.lineShape = new LineEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
@@ -107,10 +109,10 @@ export class BezierEdgeShape implements EdgeShape {
       createLinePath: this.createLinePath,
     });
 
-    this.svg = this.genericShape.svg;
+    this.svg = this.lineShape.svg;
   }
 
   public render(params: EdgeRenderParams): void {
-    this.genericShape.render(params);
+    this.lineShape.render(params);
   }
 }
