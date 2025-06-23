@@ -1,16 +1,34 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import { StructuredEdgeShape } from "../structured-edge-shape";
+import { createEdgeGroup } from "./create-edge-group";
+import { createEdgeLine } from "./create-edge-line";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
-  public readonly svg = this.structuredEdge.svg;
+  public readonly svg: SVGSVGElement;
 
-  public readonly group = this.structuredEdge.group;
+  public readonly group: SVGGElement;
 
-  public readonly line = this.structuredEdge.line;
+  public readonly line: SVGPathElement;
 
-  public constructor(private readonly structuredEdge: StructuredEdgeShape) {}
+  private readonly interactiveGroup = createEdgeGroup();
+
+  private readonly interactiveLine = createEdgeLine(10);
+
+  public constructor(private readonly structuredEdge: StructuredEdgeShape) {
+    this.svg = this.structuredEdge.svg;
+    this.group = this.structuredEdge.group;
+    this.line = this.structuredEdge.line;
+
+    this.interactiveGroup.appendChild(this.interactiveLine);
+    this.group.appendChild(this.interactiveGroup);
+    this.interactiveLine.setAttribute("stroke", "red");
+    this.interactiveLine.setAttribute("stroke-opacity", "0.5");
+  }
 
   public render(params: EdgeRenderParams): void {
     this.structuredEdge.render(params);
+
+    const path = this.line.getAttribute("d")!;
+    this.interactiveLine.setAttribute("d", path);
   }
 }
