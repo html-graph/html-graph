@@ -53,7 +53,15 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
     if (nextElement !== undefined) {
       event.stopPropagation();
-      nextElement.dispatchEvent(new MouseEvent(event.type, event));
+
+      const newEvent = new TouchEvent(event.type, {
+        bubbles: event.bubbles,
+        touches: this.arrayFromTouches(event.touches),
+        targetTouches: this.arrayFromTouches(event.targetTouches),
+        changedTouches: this.arrayFromTouches(event.changedTouches),
+      });
+
+      nextElement.dispatchEvent(newEvent);
     }
   };
 
@@ -160,5 +168,15 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.circleSource.setAttribute("cy", "0");
     this.circleTarget.setAttribute("cx", `${this.svg.clientWidth}`);
     this.circleTarget.setAttribute("cy", `${this.svg.clientHeight}`);
+  }
+
+  private arrayFromTouches(touches: TouchList): Touch[] {
+    const res: Touch[] = [];
+
+    for (let i = 0; i < touches.length; i++) {
+      res.push(touches[i]);
+    }
+
+    return res;
   }
 }
