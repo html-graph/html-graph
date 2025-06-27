@@ -52,20 +52,18 @@ export {
   HorizontalEdgeShape,
   VerticalEdgeShape,
   LineEdgeShape,
-  InteractiveEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,
-  StructuredEdgeShape,
   EdgeRenderParams,
   EdgeRenderPort,
   BezierEdgeParams,
   HorizontalEdgeParams,
   VerticalEdgeParams,
   StraightEdgeParams,
-  InteractiveEdgeParams,
   LineEdgeParams,
   CreatePathFn,
+  StructuredEdgeShape,
 } from "./edges";
 
 export type { Point } from "./point";

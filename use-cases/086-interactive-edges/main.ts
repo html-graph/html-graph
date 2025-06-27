@@ -1,11 +1,10 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
-  BezierEdgeShape,
+  // BezierEdgeShape,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
-  InteractiveEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -14,17 +13,17 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: (edgeId) => {
-      const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
-
-      const shape = new InteractiveEdgeShape(baseShape, {
-        onInteractionStart: (): void => {
-          console.log(`interacting with ${edgeId}`);
-        },
-      });
-
-      return shape;
-    },
+    // shape: () => {
+    //   const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
+    //   const interactiveEdge = InteractiveEdgeConfigurator.configure(
+    //     baseShape,
+    //     canvas,
+    //     () => {
+    //       // select edge
+    //     },
+    //   );
+    //   return interactiveEdge;
+    // },
   },
 };
 

@@ -11,7 +11,7 @@ import { isPointInside, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
-import { OneToManyCollection } from "./one-to-many-collection";
+import { OneToManyCollection } from "@/one-to-many-collection";
 
 /**
  * Responsibility: Configuring ports connectable via drag

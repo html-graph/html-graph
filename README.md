@@ -23,65 +23,74 @@ npm i @html-graph/html-graph
 ```javascript
 import { CanvasBuilder } from "@html-graph/html-graph";
 
-function createNode({ name, x, y, frontPortId, backPortId }) {
-  const node = document.createElement("div");
-  const text = document.createElement("div");
-  const frontPort = document.createElement("div");
-  const backPort = document.createElement("div");
+class Application {
+  constructor(element) {
+    this.canvas = new CanvasBuilder(element)
+      .setDefaults({
+        edges: {
+          shape: {
+            hasTargetArrow: true,
+          },
+        },
+      })
+      .enableUserDraggableNodes()
+      .enableUserTransformableViewport()
+      .enableBackground()
+      .build();
+  }
 
-  node.classList.add("node");
-  frontPort.classList.add("port");
-  backPort.classList.add("port");
-  text.innerText = name;
+  initGraph() {
+    this.canvas
+      .addNode(
+        this.createNode({
+          name: "Node 1",
+          x: 200,
+          y: 400,
+          frontPortId: "node-1-in",
+          backPortId: "node-1-out",
+        }),
+      )
+      .addNode(
+        this.createNode({
+          name: "Node 2",
+          x: 600,
+          y: 500,
+          frontPortId: "node-2-in",
+          backPortId: "node-2-out",
+        }),
+      )
+    .addEdge({ from: "node-1-out", to: "node-2-in" });
+  }
 
-  node.appendChild(frontPort);
-  node.appendChild(text);
-  node.appendChild(backPort);
+  createNode({ name, x, y, frontPortId, backPortId }) {
+    const node = document.createElement("div");
+    const text = document.createElement("div");
+    const frontPort = document.createElement("div");
+    const backPort = document.createElement("div");
 
-  return {
-    element: node,
-    x: x,
-    y: y,
-    ports: [
-      { id: frontPortId, element: frontPort },
-      { id: backPortId, element: backPort },
-    ],
-  };
+    node.classList.add("node");
+    frontPort.classList.add("port");
+    backPort.classList.add("port");
+    text.innerText = name;
+
+    node.appendChild(frontPort);
+    node.appendChild(text);
+    node.appendChild(backPort);
+
+    return {
+      element: node,
+      x: x,
+      y: y,
+      ports: [
+        { id: frontPortId, element: frontPort },
+        { id: backPortId, element: backPort },
+      ],
+    };
+  }
 }
 
 const element = document.getElementById("canvas");
+const app = new Application(element);
 
-const canvas = new CanvasBuilder(element)
-  .setDefaults({
-    edges: {
-      shape: {
-        hasTargetArrow: true,
-      },
-    },
-  })
-  .enableUserDraggableNodes()
-  .enableUserTransformableViewport()
-  .enableBackground()
-  .build();
-
-canvas
-  .addNode(
-    createNode({
-      name: "Node 1",
-      x: 200,
-      y: 400,
-      frontPortId: "node-1-in",
-      backPortId: "node-1-out",
-    }),
-  )
-  .addNode(
-    createNode({
-      name: "Node 2",
-      x: 600,
-      y: 500,
-      frontPortId: "node-2-in",
-      backPortId: "node-2-out",
-    }),
-  )
-  .addEdge({ from: "node-1-out", to: "node-2-in" });
+app.initGraph();
 ```
