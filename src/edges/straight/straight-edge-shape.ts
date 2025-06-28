@@ -17,6 +17,10 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   public readonly line: SVGPathElement;
 
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
+
   private readonly arrowLength: number;
 
   private readonly arrowWidth: number;
@@ -128,6 +132,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     this.svg = this.lineShape.svg;
     this.group = this.lineShape.group;
     this.line = this.lineShape.line;
+    this.sourceArrow = this.lineShape.sourceArrow;
+    this.targetArrow = this.lineShape.targetArrow;
   }
 
   public render(params: EdgeRenderParams): void {

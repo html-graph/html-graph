@@ -18,9 +18,9 @@ export class LineEdgeShape implements StructuredEdgeShape {
 
   public readonly line: SVGPathElement;
 
-  private readonly sourceArrow: SVGPathElement | null = null;
+  public readonly sourceArrow: SVGPathElement | null = null;
 
-  private readonly targetArrow: SVGPathElement | null = null;
+  public readonly targetArrow: SVGPathElement | null = null;
 
   public constructor(private readonly params: LineEdgeParams) {
     this.svg.appendChild(this.group);

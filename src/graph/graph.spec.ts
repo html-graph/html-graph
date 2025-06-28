@@ -683,4 +683,19 @@ describe("Graph", () => {
 
     expect(handler).toHaveBeenCalled();
   });
+
+  it("should return marked port ids for element", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    expect(graph.getElementPortsIds(addPortRequest1.element)).toEqual([
+      addPortRequest1.id,
+    ]);
+  });
 });

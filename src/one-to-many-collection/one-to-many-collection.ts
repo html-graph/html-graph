@@ -15,16 +15,10 @@ export class OneToManyCollection<S, M> {
     this.multiToSingleMap.set(multi, single);
   }
 
-  public getFirstBySingle(single: S): M | undefined {
-    const set = this.singleToMultiMap.get(single);
+  public getMultiBySingle(single: S): readonly M[] {
+    const set = this.singleToMultiMap.get(single) ?? new Set();
 
-    if (set === undefined) {
-      return undefined;
-    }
-
-    const first = Array.from(set.values())[0];
-
-    return first;
+    return Array.from(set.values());
   }
 
   public removeByMulti(multi: M): void {

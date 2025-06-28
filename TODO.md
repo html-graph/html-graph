@@ -1,13 +1,7 @@
 # TODO
 
 - user selectable edges
-  - how to make interactive all edges APIwise
-  - how to make interactive some edges APIwise
-
-  - use event bypass?
-  - use intersection library?
-  - use clipPath?
-
+- refactor connectable ports
 - direct edges
 - improve onDestroy unit tests
 - virtual scroll node events
