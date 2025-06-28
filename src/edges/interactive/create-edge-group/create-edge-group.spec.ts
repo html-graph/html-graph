@@ -6,4 +6,10 @@ describe("createEdgeGroup", () => {
 
     expect(group.style.pointerEvents).toBe("auto");
   });
+
+  it("should create edge group with cursor pointer", () => {
+    const group = createEdgeGroup();
+
+    expect(group.style.cursor).toBe("pointer");
+  });
 });

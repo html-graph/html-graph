@@ -1,8 +1,11 @@
 # TODO
 
 - user selectable edges
+- user deletable edges
+- user movable edges
+- get element node id?
 - refactor connectable ports
-- direct edges
+- direct edge shape
 - improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object

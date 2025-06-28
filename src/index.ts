@@ -52,6 +52,7 @@ export {
   HorizontalEdgeShape,
   VerticalEdgeShape,
   LineEdgeShape,
+  InteractiveEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,
@@ -64,6 +65,7 @@ export type {
   LineEdgeParams,
   CreatePathFn,
   StructuredEdgeShape,
+  InteractiveEdgeParams,
 } from "./edges";
 
 export type { Point } from "./point";
@@ -82,5 +84,3 @@ export { EventSubject } from "./event-subject";
 export type { EventEmitter, EventHandler } from "./event-subject";
 
 export type { RenderingBox } from "./html-view";
-
-export { InteractiveEdgeConfigurator } from "./edges";

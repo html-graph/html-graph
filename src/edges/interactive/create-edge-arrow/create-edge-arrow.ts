@@ -4,9 +4,7 @@ export const createEdgeArrow = (width: number): SVGPathElement => {
   arrow.setAttribute("stroke-linejoin", "round");
   arrow.setAttribute("stroke-width", `${width}`);
   arrow.setAttribute("fill", "transparent");
-
-  arrow.setAttribute("stroke", "red");
-  arrow.setAttribute("stroke-opacity", "0.5");
+  arrow.setAttribute("stroke", "transparent");
 
   return arrow;
 };
