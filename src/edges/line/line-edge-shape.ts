@@ -11,6 +11,9 @@ import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { CreatePathFn } from "./create-path-fn";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
+/**
+ * Responsibility: Providing low level core for single line structured edges
+ */
 export class LineEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 

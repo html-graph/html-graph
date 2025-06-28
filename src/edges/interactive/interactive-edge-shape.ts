@@ -7,6 +7,10 @@ import { createEdgeArrow } from "./create-edge-arrow";
 import { edgeConstants } from "../edge-constants";
 import { InteractiveEdgeError } from "./interactive-edge-error";
 
+/**
+ * Responsibility: Providing handle for attaching interactive behavior to an
+ * edge
+ */
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
