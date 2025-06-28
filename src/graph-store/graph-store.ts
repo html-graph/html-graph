@@ -11,7 +11,7 @@ import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "@/one-to-many-collection";
 
 /**
- * Responsibility: Stores stae of graph
+ * Responsibility: Store state of graph
  */
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
