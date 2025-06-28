@@ -15,7 +15,9 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: (edgeId) => {
-      const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
+      const baseShape = new BezierEdgeShape({
+        hasTargetArrow: true,
+      });
 
       const interactiveEdge = configurator.configure(baseShape, {
         onInteraction: () => {

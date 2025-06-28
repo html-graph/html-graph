@@ -4,6 +4,7 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { createEdgeGroup } from "./create-edge-group";
 import { createEdgeLine } from "./create-edge-line";
 import { InteractiveEdgeParams } from "./interactive-edge-params";
+import { createEdgeArrow } from "./create-edge-arrow";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -87,39 +88,15 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.onInteraction = params.onInteraction;
 
     this.interactiveLine = createEdgeLine(params.width);
-    this.interactiveLine.setAttribute("stroke", "red");
-    this.interactiveLine.setAttribute("stroke-opacity", "0.5");
     this.interactiveGroup.appendChild(this.interactiveLine);
 
     if (this.sourceArrow) {
-      this.interactiveSourceArrow = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-      this.interactiveSourceArrow.setAttribute("stroke-linejoin", "bevel");
-      this.interactiveSourceArrow.setAttribute(
-        "stroke-width",
-        `${params.width}`,
-      );
-      this.interactiveSourceArrow.setAttribute("fill", "transparent");
-      this.interactiveSourceArrow.setAttribute("stroke", "red");
-      this.interactiveSourceArrow.setAttribute("stroke-opacity", "0.5");
+      this.interactiveSourceArrow = createEdgeArrow(params.width);
       this.interactiveGroup.appendChild(this.interactiveSourceArrow);
     }
 
     if (this.targetArrow) {
-      this.interactiveTargetArrow = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path",
-      );
-      this.interactiveTargetArrow.setAttribute("fill", "transparent");
-      this.interactiveTargetArrow.setAttribute("stroke-linejoin", "round");
-      this.interactiveTargetArrow.setAttribute(
-        "stroke-width",
-        `${params.width}`,
-      );
-      this.interactiveTargetArrow.setAttribute("stroke", "red");
-      this.interactiveTargetArrow.setAttribute("stroke-opacity", "0.5");
+      this.interactiveTargetArrow = createEdgeArrow(params.width);
       this.interactiveGroup.appendChild(this.interactiveTargetArrow);
     }
 

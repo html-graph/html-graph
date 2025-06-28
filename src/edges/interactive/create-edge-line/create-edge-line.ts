@@ -5,5 +5,8 @@ export const createEdgeLine = (width: number): SVGPathElement => {
   line.setAttribute("fill", "none");
   line.setAttribute("stroke-linecap", "round");
 
+  line.setAttribute("stroke", "red");
+  line.setAttribute("stroke-opacity", "0.5");
+
   return line;
 };
