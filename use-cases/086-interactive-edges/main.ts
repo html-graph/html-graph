@@ -17,7 +17,7 @@ const canvasDefaults: CanvasDefaults = {
     shape: (edgeId) => {
       const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
 
-      const interactiveEdge = InteractiveEdgeConfigurator.configure(baseShape, {
+      const interactiveEdge = configurator.configure(baseShape, {
         onInteraction: () => {
           console.log(edgeId);
         },
@@ -35,6 +35,8 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
+
+const configurator = new InteractiveEdgeConfigurator(canvas);
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",

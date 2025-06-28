@@ -12,4 +12,10 @@ describe("createEdgeLine", () => {
 
     expect(line.getAttribute("fill")).toBe("none");
   });
+
+  it("should create line with round linecap", () => {
+    const line = createEdgeLine(1);
+
+    expect(line.getAttribute("stroke-linecap")).toBe("round");
+  });
 });

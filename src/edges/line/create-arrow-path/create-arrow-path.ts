@@ -21,5 +21,5 @@ export const createArrowPath = (
   const line1 = `L ${p[1].x} ${p[1].y}`;
   const line2 = `L ${p[2].x} ${p[2].y}`;
 
-  return `${move} ${line1} ${line2}`;
+  return `${move} ${line1} ${line2} Z`;
 };

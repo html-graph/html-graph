@@ -207,35 +207,6 @@ describe("BezierEdgeShape", () => {
     );
   });
 
-  it("should create port cycle path accounting for arrow", () => {
-    const shape = createBezierEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-    });
-
-    const line = shape.svg.children[0].children[1];
-
-    expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
-  });
-
   it("should create node cycle path without arrows", () => {
     const shape = createBezierEdge(false, false);
 

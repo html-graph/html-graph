@@ -10,7 +10,7 @@ describe("createArrowPath", () => {
 
     const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
 
-    expect(path).toBe("M 0 0 L 10 5 L 10 -5");
+    expect(path).toBe("M 0 0 L 10 5 L 10 -5 Z");
   });
 
   it("should create rotated arrow path", () => {
@@ -21,7 +21,7 @@ describe("createArrowPath", () => {
 
     const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
 
-    expect(path).toBe("M 0 0 L -5 10 L 5 10");
+    expect(path).toBe("M 0 0 L -5 10 L 5 10 Z");
   });
 
   it("should create shifted arrow path", () => {
@@ -32,6 +32,6 @@ describe("createArrowPath", () => {
 
     const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
 
-    expect(path).toBe("M 5 10 L 15 15 L 15 5");
+    expect(path).toBe("M 5 10 L 15 15 L 15 5 Z");
   });
 });
