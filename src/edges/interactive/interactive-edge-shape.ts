@@ -26,10 +26,11 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   private readonly interactiveTargetArrow: SVGPathElement | null = null;
 
-  private readonly onInteraction: () => void;
+  private readonly onInteractionStart: () => void;
 
-  private mouseDownHandler = (event: MouseEvent): void => {
+  private readonly mouseDownHandler = (event: MouseEvent): void => {
     event.stopPropagation();
+
     const portElement = this.findPortElementForPoint({
       x: event.clientX,
       y: event.clientY,
@@ -38,11 +39,11 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     if (portElement !== null) {
       portElement.dispatchEvent(new MouseEvent(event.type, event));
     } else {
-      this.onInteraction();
+      this.onInteractionStart();
     }
   };
 
-  private touchStartHandler = (event: TouchEvent): void => {
+  private readonly touchStartHandler = (event: TouchEvent): void => {
     if (event.touches.length !== 1) {
       return;
     }
@@ -66,7 +67,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
       portElement.dispatchEvent(newEvent);
     } else {
-      this.onInteraction();
+      this.onInteractionStart();
     }
   };
 
@@ -81,7 +82,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.structuredEdge.sourceArrow;
     this.targetArrow = this.structuredEdge.targetArrow;
 
-    this.onInteraction = params.onInteraction;
+    this.onInteractionStart = params.onInteractionStart;
 
     this.interactiveLine = createEdgeLine(params.width);
     this.interactiveGroup.appendChild(this.interactiveLine);

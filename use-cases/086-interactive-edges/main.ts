@@ -20,10 +20,13 @@ const canvasDefaults: CanvasDefaults = {
       });
 
       const interactiveEdge = configurator.configure(baseShape, {
-        onInteraction: () => {
-          console.log(edgeId);
+        onInteractionStart: () => {
+          console.log(`start ${edgeId}`);
         },
-        width: 10,
+        onInteractionEnd: () => {
+          console.log(`end ${edgeId}`);
+        },
+        width: 0,
       });
 
       return interactiveEdge;
