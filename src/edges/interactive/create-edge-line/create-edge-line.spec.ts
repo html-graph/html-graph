@@ -1,6 +1,12 @@
 import { createEdgeLine } from "./create-edge-line";
 
 describe("createEdgeLine", () => {
+  it("should create line with transparent stroke", () => {
+    const line = createEdgeLine(1);
+
+    expect(line.getAttribute("stroke")).toBe("transparent");
+  });
+
   it("should create line with specified width", () => {
     const line = createEdgeLine(1);
 

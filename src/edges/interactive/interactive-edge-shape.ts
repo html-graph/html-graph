@@ -5,6 +5,7 @@ import { createEdgeGroup } from "./create-edge-group";
 import { createEdgeLine } from "./create-edge-line";
 import { InteractiveEdgeParams } from "./interactive-edge-params";
 import { createEdgeArrow } from "./create-edge-arrow";
+import { Point } from "@/point";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -27,51 +28,46 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   private readonly onInteraction: () => void;
 
-  private mouseDownHandler = (): void => {
-    console.log(this.canvas.graph);
-    // const elements = document.elementsFromPoint(event.clientX, event.clientY);
+  private mouseDownHandler = (event: MouseEvent): void => {
+    event.stopPropagation();
+    const portElement = this.findPortElementForPoint({
+      x: event.clientX,
+      y: event.clientY,
+    });
 
-    // const nextElement = elements.find(
-    //   (element) =>
-    //     element !== event.currentTarget && element !== this.interactiveLine,
-    // );
-
-    // if (nextElement !== undefined) {
-    //   event.stopPropagation();
-    //   nextElement.dispatchEvent(new MouseEvent(event.type, event));
-    // }
-
-    this.onInteraction();
+    if (portElement !== null) {
+      portElement.dispatchEvent(new MouseEvent(event.type, event));
+    } else {
+      this.onInteraction();
+    }
   };
 
-  private touchStartHandler = (): void => {
-    // console.log(this.canvas.graph);
-    // if (event.touches.length !== 1) {
-    //   return;
-    // }
+  private touchStartHandler = (event: TouchEvent): void => {
+    if (event.touches.length !== 1) {
+      return;
+    }
 
-    // const touch = event.touches[0];
-    // const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+    const touch = event.touches[0];
 
-    // const nextElement = elements.find(
-    //   (element) =>
-    //     element !== event.currentTarget && element !== this.interactiveLine,
-    // );
+    event.stopPropagation();
 
-    // if (nextElement !== undefined) {
-    //   event.stopPropagation();
+    const portElement = this.findPortElementForPoint({
+      x: touch.clientX,
+      y: touch.clientY,
+    });
 
-    //   const newEvent = new TouchEvent(event.type, {
-    //     bubbles: event.bubbles,
-    //     touches: this.arrayFromTouches(event.touches),
-    //     targetTouches: this.arrayFromTouches(event.targetTouches),
-    //     changedTouches: this.arrayFromTouches(event.changedTouches),
-    //   });
+    if (portElement !== null) {
+      const newEvent = new TouchEvent(event.type, {
+        bubbles: event.bubbles,
+        touches: this.arrayFromTouches(event.touches),
+        targetTouches: this.arrayFromTouches(event.targetTouches),
+        changedTouches: this.arrayFromTouches(event.changedTouches),
+      });
 
-    //   nextElement.dispatchEvent(newEvent);
-    // }
-
-    this.onInteraction();
+      portElement.dispatchEvent(newEvent);
+    } else {
+      this.onInteraction();
+    }
   };
 
   public constructor(
@@ -131,13 +127,45 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     }
   }
 
-  // private arrayFromTouches(touches: TouchList): Touch[] {
-  //   const res: Touch[] = [];
+  private findPortElementForPoint(point: Point): HTMLElement | null {
+    const elements = document.elementsFromPoint(point.x, point.y);
 
-  //   for (let i = 0; i < touches.length; i++) {
-  //     res.push(touches[i]);
-  //   }
+    for (const element of elements) {
+      const portElement = this.findPortElementForElement(
+        element as HTMLElement,
+      );
 
-  //   return res;
-  // }
+      if (portElement) {
+        return portElement;
+      }
+    }
+
+    return null;
+  }
+
+  private findPortElementForElement(element: HTMLElement): HTMLElement | null {
+    let elementBuf: HTMLElement | null = element;
+
+    while (elementBuf !== null) {
+      const portIds = this.canvas.graph.getElementPortsIds(elementBuf);
+
+      if (portIds.length > 0) {
+        return elementBuf;
+      }
+
+      elementBuf = elementBuf.parentElement;
+    }
+
+    return null;
+  }
+
+  private arrayFromTouches(touches: TouchList): Touch[] {
+    const res: Touch[] = [];
+
+    for (let i = 0; i < touches.length; i++) {
+      res.push(touches[i]);
+    }
+
+    return res;
+  }
 }

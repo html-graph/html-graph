@@ -1,6 +1,12 @@
 import { createEdgeArrow } from "./create-edge-arrow";
 
 describe("createEdgeArrow", () => {
+  it("should create arrow with transparent stroke", () => {
+    const line = createEdgeArrow(10);
+
+    expect(line.getAttribute("stroke")).toBe("transparent");
+  });
+
   it("should create edge arrow with specified width", () => {
     const arrow = createEdgeArrow(10);
 
