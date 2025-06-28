@@ -16,7 +16,7 @@ describe("createEdgeLine", () => {
   it("should create line without fill", () => {
     const line = createEdgeLine(1);
 
-    expect(line.getAttribute("fill")).toBe("transparent");
+    expect(line.getAttribute("fill")).toBe("none");
   });
 
   it("should create line with round linecap", () => {

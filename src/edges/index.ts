@@ -12,5 +12,5 @@ export type { VerticalEdgeParams } from "./vertical";
 export { LineEdgeShape } from "./line";
 export type { LineEdgeParams, CreatePathFn } from "./line";
 export type { StructuredEdgeShape } from "./structured-edge-shape";
-export { InteractiveEdgeShape } from "./interactive";
+export { InteractiveEdgeShape, InteractiveEdgeError } from "./interactive";
 export type { InteractiveEdgeParams } from "./interactive";

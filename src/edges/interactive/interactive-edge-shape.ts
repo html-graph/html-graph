@@ -4,6 +4,8 @@ import { createEdgeGroup } from "./create-edge-group";
 import { createEdgeLine } from "./create-edge-line";
 import { InteractiveEdgeParams } from "./interactive-edge-params";
 import { createEdgeArrow } from "./create-edge-arrow";
+import { edgeConstants } from "../edge-constants";
+import { InteractiveEdgeError } from "./interactive-edge-error";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -26,10 +28,12 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public constructor(
     private readonly structuredEdge: StructuredEdgeShape,
-    params: InteractiveEdgeParams,
+    params?: InteractiveEdgeParams,
   ) {
     if (structuredEdge instanceof InteractiveEdgeShape) {
-      throw new Error("interactive edge can be configured only once");
+      throw new InteractiveEdgeError(
+        "interactive edge can be configured only once",
+      );
     }
 
     this.svg = this.structuredEdge.svg;
@@ -38,16 +42,18 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.structuredEdge.sourceArrow;
     this.targetArrow = this.structuredEdge.targetArrow;
 
-    this.interactiveLine = createEdgeLine(params.width);
+    const width = params?.width ?? edgeConstants.interactiveWidth;
+
+    this.interactiveLine = createEdgeLine(width);
     this.handle.appendChild(this.interactiveLine);
 
     if (this.sourceArrow) {
-      this.interactiveSourceArrow = createEdgeArrow(params.width);
+      this.interactiveSourceArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveSourceArrow);
     }
 
     if (this.targetArrow) {
-      this.interactiveTargetArrow = createEdgeArrow(params.width);
+      this.interactiveTargetArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveTargetArrow);
     }
 

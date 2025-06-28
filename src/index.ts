@@ -53,6 +53,7 @@ export {
   VerticalEdgeShape,
   LineEdgeShape,
   InteractiveEdgeShape,
+  InteractiveEdgeError,
 } from "./edges";
 export type {
   EdgeShape,
