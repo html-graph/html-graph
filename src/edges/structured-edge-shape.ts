@@ -1,7 +1,7 @@
 import { EdgeShape } from "./edge-shape";
 
 /**
- * Responsibility: Attaching interactive behavior to an EdgeShape
+ * Responsibility: Specifying EdgeShape with a standard visual structure
  */
 export interface StructuredEdgeShape extends EdgeShape {
   readonly group: SVGGElement;

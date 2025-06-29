@@ -32,6 +32,16 @@ describe("InteractiveEdgeShape", () => {
     expect(interactiveShape.handle.children[0].nodeName).toBe("path");
   });
 
+  it("should create interactive group with line of default width when no parameters specified", () => {
+    const shape = new BezierEdgeShape();
+    const interactiveShape = new InteractiveEdgeShape(shape);
+
+    const width =
+      interactiveShape.handle.children[0].getAttribute("stroke-width");
+
+    expect(width).toBe("10");
+  });
+
   it("should create interactive group with line of default width", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape, {});
