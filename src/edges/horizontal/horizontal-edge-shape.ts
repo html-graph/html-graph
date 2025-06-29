@@ -1,4 +1,3 @@
-import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import {
   createCycleSquarePath,
@@ -9,9 +8,22 @@ import { Point } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
+import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class HorizontalEdgeShape implements EdgeShape {
+/**
+ * Responsibility: Providing edge shape connecting ports with horizontal angled
+ * line
+ */
+export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
+
+  public readonly group: SVGGElement;
+
+  public readonly line: SVGPathElement;
+
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
 
   private readonly arrowLength: number;
 
@@ -122,6 +134,10 @@ export class HorizontalEdgeShape implements EdgeShape {
     });
 
     this.svg = this.lineShape.svg;
+    this.group = this.lineShape.group;
+    this.line = this.lineShape.line;
+    this.sourceArrow = this.lineShape.sourceArrow;
+    this.targetArrow = this.lineShape.targetArrow;
   }
 
   public render(params: EdgeRenderParams): void {

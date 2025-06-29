@@ -1,4 +1,3 @@
-import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import {
   createBezierLinePath,
@@ -9,9 +8,21 @@ import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
+import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class BezierEdgeShape implements EdgeShape {
+/**
+ * Responsibility: Providing edge shape connecting ports with bezier line
+ */
+export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
+
+  public readonly group: SVGGElement;
+
+  public readonly line: SVGPathElement;
+
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
 
   private readonly arrowLength: number;
 
@@ -110,6 +121,10 @@ export class BezierEdgeShape implements EdgeShape {
     });
 
     this.svg = this.lineShape.svg;
+    this.group = this.lineShape.group;
+    this.line = this.lineShape.line;
+    this.sourceArrow = this.lineShape.sourceArrow;
+    this.targetArrow = this.lineShape.targetArrow;
   }
 
   public render(params: EdgeRenderParams): void {

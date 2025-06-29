@@ -77,7 +77,7 @@ describe("createOptions", () => {
 
   it("should return standard edges shape factory", () => {
     const options = createDefaults({});
-    const shape = options.edges.shapeFactory();
+    const shape = options.edges.shapeFactory("123");
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
@@ -91,7 +91,7 @@ describe("createOptions", () => {
       },
     });
 
-    const shape = options.edges.shapeFactory();
+    const shape = options.edges.shapeFactory("123");
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });

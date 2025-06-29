@@ -1,9 +1,11 @@
 # TODO
 
 - user selectable edges
-
-  - use clipPath and opacit path
-
+- user deletable edges
+- user movable edges
+- get element node id?
+- refactor connectable ports
+- direct edge shape
 - improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object

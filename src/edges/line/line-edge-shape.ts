@@ -1,4 +1,3 @@
-import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
 import { LineEdgeParams } from "./line-edge-params";
@@ -9,17 +8,22 @@ import { createEdgeLine } from "./create-edge-line";
 import { createEdgeRectangle } from "./create-edge-rectangle";
 import { createEdgeSvg } from "./create-edge-svg";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
+import { CreatePathFn } from "./create-path-fn";
+import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class LineEdgeShape implements EdgeShape {
+/**
+ * Responsibility: Providing low level core for single line structured edges
+ */
+export class LineEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 
-  private readonly group = createEdgeGroup();
+  public readonly group = createEdgeGroup();
 
-  private readonly line: SVGPathElement;
+  public readonly line: SVGPathElement;
 
-  private readonly sourceArrow: SVGPathElement | null = null;
+  public readonly sourceArrow: SVGPathElement | null = null;
 
-  private readonly targetArrow: SVGPathElement | null = null;
+  public readonly targetArrow: SVGPathElement | null = null;
 
   public constructor(private readonly params: LineEdgeParams) {
     this.svg.appendChild(this.group);
@@ -65,37 +69,27 @@ export class LineEdgeShape implements EdgeShape {
       y: height,
     };
 
-    let linePath: string;
     let targetVect = targetDirection;
     let targetArrowLength = -this.params.arrowLength;
+    let createPathFn: CreatePathFn;
 
     if (params.from.portId === params.to.portId) {
-      linePath = this.params.createCyclePath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createCyclePath;
       targetVect = sourceDirection;
       targetArrowLength = this.params.arrowLength;
     } else if (params.from.nodeId === params.to.nodeId) {
-      linePath = this.params.createDetourPath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createDetourPath;
     } else {
-      linePath = this.params.createLinePath(
-        sourceDirection,
-        targetDirection,
-        to,
-        flipX,
-        flipY,
-      );
+      createPathFn = this.params.createLinePath;
     }
+
+    const linePath = createPathFn(
+      sourceDirection,
+      targetDirection,
+      to,
+      flipX,
+      flipY,
+    );
 
     this.line.setAttribute("d", linePath);
 

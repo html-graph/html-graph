@@ -11,7 +11,7 @@ import { isPointInside, transformPoint } from "../shared";
 import { Point } from "@/point";
 import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
-import { OneToManyCollection } from "./one-to-many-collection";
+import { OneToManyCollection } from "@/one-to-many-collection";
 
 /**
  * Responsibility: Configuring ports connectable via drag
@@ -224,7 +224,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private grabPort(portElement: HTMLElement, cursor: Point): void {
-    const portId = this.ports.getFirstBySingle(portElement)!;
+    const portId = this.ports.getMultiBySingle(portElement)[0]!;
     const port = this.canvas.graph.getPort(portId)!;
 
     this.staticPortId = portId;
@@ -396,7 +396,7 @@ export class UserConnectablePortsConfigurator {
 
     while (elementBuf !== null) {
       draggingPortId =
-        this.ports.getFirstBySingle(elementBuf as HTMLElement) ?? null;
+        this.ports.getMultiBySingle(elementBuf as HTMLElement)[0] ?? null;
 
       if (draggingPortId !== null) {
         break;
@@ -409,7 +409,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private isPortConnectionAllowed(portElement: HTMLElement): boolean {
-    const portId = this.ports.getFirstBySingle(portElement)!;
+    const portId = this.ports.getMultiBySingle(portElement)[0]!;
 
     return this.config.connectionTypeResolver(portId) !== null;
   }

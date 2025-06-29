@@ -99,7 +99,7 @@ describe("LineEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97");
+    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
   });
 
   it("should create path for source arrow", () => {
@@ -129,7 +129,7 @@ describe("LineEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
+    expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3 Z");
   });
 
   it("should create port cycle target arrow path", () => {
@@ -158,7 +158,7 @@ describe("LineEdgeShape", () => {
 
     const line = shape.svg.children[0].children[1];
 
-    expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3");
+    expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3 Z");
   });
 
   it("should create node cycle target arrow path", () => {
@@ -188,6 +188,6 @@ describe("LineEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97");
+    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
   });
 });

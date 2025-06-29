@@ -51,6 +51,9 @@ export {
   StraightEdgeShape,
   HorizontalEdgeShape,
   VerticalEdgeShape,
+  LineEdgeShape,
+  InteractiveEdgeShape,
+  InteractiveEdgeError,
 } from "./edges";
 export type {
   EdgeShape,
@@ -60,6 +63,10 @@ export type {
   HorizontalEdgeParams,
   VerticalEdgeParams,
   StraightEdgeParams,
+  LineEdgeParams,
+  CreatePathFn,
+  StructuredEdgeShape,
+  InteractiveEdgeParams,
 } from "./edges";
 
 export type { Point } from "./point";

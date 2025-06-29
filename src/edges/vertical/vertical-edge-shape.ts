@@ -1,4 +1,3 @@
-import { EdgeShape } from "../edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import {
   createCycleSquarePath,
@@ -9,9 +8,22 @@ import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
+import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class VerticalEdgeShape implements EdgeShape {
+/**
+ * Responsibility: Providing edge shape connecting ports with vertical angled
+ * line
+ */
+export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
+
+  public readonly group: SVGGElement;
+
+  public readonly line: SVGPathElement;
+
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
 
   private readonly arrowLength: number;
 
@@ -123,6 +135,10 @@ export class VerticalEdgeShape implements EdgeShape {
     });
 
     this.svg = this.lineShape.svg;
+    this.group = this.lineShape.group;
+    this.line = this.lineShape.line;
+    this.sourceArrow = this.lineShape.sourceArrow;
+    this.targetArrow = this.lineShape.targetArrow;
   }
 
   public render(params: EdgeRenderParams): void {

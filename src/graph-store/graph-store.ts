@@ -8,9 +8,10 @@ import { UpdateNodeRequest } from "./update-node-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
+import { OneToManyCollection } from "@/one-to-many-collection";
 
 /**
- * Responsibility: Stores stae of graph
+ * Responsibility: Store state of graph
  */
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
@@ -24,6 +25,11 @@ export class GraphStore {
   private readonly outcomingEdges = new Map<unknown, Set<unknown>>();
 
   private readonly cycleEdges = new Map<unknown, Set<unknown>>();
+
+  private readonly elementPorts = new OneToManyCollection<
+    HTMLElement,
+    unknown
+  >();
 
   private readonly afterNodeAddedEmitter: EventEmitter<unknown>;
 
@@ -159,6 +165,8 @@ export class GraphStore {
       nodeId: request.nodeId,
     });
 
+    this.elementPorts.addRecord(request.element, request.id);
+
     this.cycleEdges.set(request.id, new Set());
     this.incomingEdges.set(request.id, new Set());
     this.outcomingEdges.set(request.id, new Set());
@@ -183,6 +191,10 @@ export class GraphStore {
     return Array.from(this.ports.keys());
   }
 
+  public getElementPortsIds(element: HTMLElement): readonly unknown[] {
+    return this.elementPorts.getMultiBySingle(element);
+  }
+
   public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
     const node = this.nodes.get(nodeId);
 
@@ -199,6 +211,7 @@ export class GraphStore {
     this.beforePortRemovedEmitter.emit(portId);
     this.nodes.get(nodeId)!.ports.delete(portId);
     this.ports.delete(portId);
+    this.elementPorts.removeByMulti(portId);
   }
 
   public addEdge(request: AddEdgeRequest): void {
