@@ -1,6 +1,5 @@
 # TODO
 
-- refactor canvas parameters parsing
 - remove wrapper for node element
 - get element node id
 - refactor connectable ports
