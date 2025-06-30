@@ -1,11 +1,11 @@
 # TODO
 
-- user selectable edges
-- user deletable edges
-- user movable edges
-- get element node id?
+- get element node id
 - refactor connectable ports
 - direct edge shape
+- user deletable edges
+- user movable edges
+- user selectable edges
 - improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object
