@@ -1,5 +1,6 @@
 # TODO
 
+- refactor canvas parameters parsing
 - get element node id
 - refactor connectable ports
 - direct edge shape
