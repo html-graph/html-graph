@@ -18,7 +18,7 @@ import {
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
-import { CanvasDefaults, createDefaults } from "./create-canvas-defaults";
+import { CanvasDefaults, createDefaults } from "@/create-canvas-defaults";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration
