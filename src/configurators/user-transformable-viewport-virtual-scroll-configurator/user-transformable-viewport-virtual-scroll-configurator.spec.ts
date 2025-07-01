@@ -14,6 +14,7 @@ import {
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { ViewportTransformConfig } from "../user-transformable-viewport-configurator";
+import { createDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (params?: {
   element?: HTMLElement;
@@ -30,7 +31,13 @@ const createCanvas = (params?: {
     trigger,
   );
 
-  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
+  const canvas = new Canvas(
+    element,
+    graphStore,
+    viewportStore,
+    htmlView,
+    createDefaults({}),
+  );
 
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,

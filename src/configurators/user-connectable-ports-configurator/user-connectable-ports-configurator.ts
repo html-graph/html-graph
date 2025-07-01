@@ -1,9 +1,4 @@
-import {
-  AddEdgeRequest,
-  AddNodeRequest,
-  Canvas,
-  CanvasDefaults,
-} from "@/canvas";
+import { AddEdgeRequest, AddNodeRequest, Canvas, Defaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -179,7 +174,7 @@ export class UserConnectablePortsConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
-    defaults: CanvasDefaults,
+    defaults: Defaults,
     config: ConnectablePortsConfig,
   ) {
     this.config = createConfig(config);
@@ -210,7 +205,7 @@ export class UserConnectablePortsConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
-    defaults: CanvasDefaults,
+    defaults: Defaults,
     config: ConnectablePortsConfig,
   ): void {
     new UserConnectablePortsConfigurator(

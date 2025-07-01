@@ -9,11 +9,11 @@ import { PatchMatrixRequest } from "./patch-matrix-request";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { CanvasDefaults, createDefaults, Defaults } from "./create-defaults";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
+import { Defaults } from "./defaults";
 
 /**
  * Responsibility: provides graph rendering API for end user
@@ -28,8 +28,6 @@ export class Canvas {
    * provides api for accessing viewport state
    */
   public readonly viewport: Viewport;
-
-  private readonly defaults: Defaults;
 
   private readonly nodeIdGenerator = new IdGenerator(
     (nodeId) => this.graph.getNode(nodeId) !== null,
@@ -126,9 +124,8 @@ export class Canvas {
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
-    defaults: CanvasDefaults,
+    private readonly defaults: Defaults,
   ) {
-    this.defaults = createDefaults(defaults);
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
 

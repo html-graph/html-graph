@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
+import { EdgeShapeFactory } from "@/create-canvas-defaults";
 import { PriorityFn } from "@/priority";
-import { EdgeShapeFactory } from "./edge-shape-factory";
 
 export interface Defaults {
   readonly nodes: {

@@ -1,6 +1,6 @@
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
-import { Canvas, CanvasDefaults } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
@@ -18,6 +18,7 @@ import {
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
+import { CanvasDefaults, createDefaults } from "@/create-canvas-defaults";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration
@@ -183,12 +184,14 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
+    const defaults = createDefaults(this.canvasDefaults);
+
     const canvas = new Canvas(
       this.element,
       graphStore,
       viewportStore,
       htmlView,
-      this.canvasDefaults,
+      defaults,
     );
 
     const onBeforeDestroy = (): void => {
@@ -225,7 +228,7 @@ export class CanvasBuilder {
         layers.overlay,
         viewportStore,
         this.window,
-        this.canvasDefaults,
+        defaults,
         this.connectablePortsConfig,
       );
     }

@@ -10,7 +10,7 @@ import {
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { HtmlGraphError } from "./error";
+import { HtmlGraphError } from "@/error";
 
 const setLayersDimensions = (element: HTMLElement): void => {
   for (const child of element.children[0].children) {

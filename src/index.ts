@@ -11,8 +11,9 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
-  CanvasDefaults,
 } from "./canvas";
+
+export type { CanvasDefaults } from "./create-canvas-defaults";
 
 export type {
   /**
