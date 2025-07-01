@@ -4,6 +4,7 @@ import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement } from "@/mocks";
+import { createDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore();
@@ -12,7 +13,13 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, {});
+  const canvas = new Canvas(
+    element,
+    graphStore,
+    viewportStore,
+    htmlView,
+    createDefaults({}),
+  );
 
   BackgroundConfigurator.configure(
     canvas,

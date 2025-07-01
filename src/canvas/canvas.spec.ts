@@ -2,13 +2,13 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
-import { CanvasDefaults } from "./create-defaults";
 import { createElement } from "@/mocks";
 import { CenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
+import { CanvasDefaults, createDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (params?: {
   options?: CanvasDefaults;
@@ -24,7 +24,7 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    params?.options ?? {},
+    createDefaults(params?.options ?? {}),
   );
 
   return canvas;
