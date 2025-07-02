@@ -698,4 +698,26 @@ describe("Graph", () => {
       addPortRequest1.id,
     ]);
   });
+
+  it("should return node id for element", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(graph.getElementNodeId(addNodeRequest1.element)).toEqual(
+      addNodeRequest1.id,
+    );
+  });
+
+  it("should return null when element is not a node", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const element = document.createElement("div");
+
+    expect(graph.getElementNodeId(element)).toEqual(null);
+  });
 });

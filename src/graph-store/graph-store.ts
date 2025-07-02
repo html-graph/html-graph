@@ -20,6 +20,8 @@ export class GraphStore {
 
   private readonly edges = new Map<unknown, EdgePayload>();
 
+  private readonly nodesElementsMap = new Map<HTMLElement, unknown>();
+
   private readonly incomingEdges = new Map<unknown, Set<unknown>>();
 
   private readonly outcomingEdges = new Map<unknown, Set<unknown>>();
@@ -126,6 +128,7 @@ export class GraphStore {
     };
 
     this.nodes.set(request.id, node);
+    this.nodesElementsMap.set(request.element, request.id);
 
     this.afterNodeAddedEmitter.emit(request.id);
   }
@@ -136,6 +139,10 @@ export class GraphStore {
 
   public getNode(nodeId: unknown): NodePayload | undefined {
     return this.nodes.get(nodeId);
+  }
+
+  public getElementNodeId(element: HTMLElement): unknown | undefined {
+    return this.nodesElementsMap.get(element);
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
@@ -155,6 +162,8 @@ export class GraphStore {
 
   public removeNode(nodeId: unknown): void {
     this.beforeNodeRemovedEmitter.emit(nodeId);
+    const node = this.nodes.get(nodeId)!;
+    this.nodesElementsMap.delete(node.element);
     this.nodes.delete(nodeId);
   }
 
@@ -266,6 +275,8 @@ export class GraphStore {
     this.incomingEdges.clear();
     this.outcomingEdges.clear();
     this.cycleEdges.clear();
+    this.elementPorts.clear();
+    this.nodesElementsMap.clear();
 
     this.edges.clear();
     this.ports.clear();

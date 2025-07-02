@@ -80,6 +80,10 @@ export class Graph {
     };
   }
 
+  public getElementNodeId(element: HTMLElement): unknown | null {
+    return this.graphStore.getElementNodeId(element) ?? null;
+  }
+
   // TODO: use Set in v4
   public getAllNodeIds(): readonly unknown[] {
     return this.graphStore.getAllNodeIds();
