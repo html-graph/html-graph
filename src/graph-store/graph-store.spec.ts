@@ -932,4 +932,91 @@ describe("GraphStore", () => {
       addEdgeRequest11.id,
     ]);
   });
+
+  it("should return element port ids", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = {
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    };
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([
+      "port-1",
+    ]);
+  });
+
+  it("should remove element port ids", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = {
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    };
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.removePort(addPortRequest1.id);
+
+    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([]);
+  });
+
+  it("should clear element port ids", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = {
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    };
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+    store.clear();
+
+    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([]);
+  });
+
+  it("should return element node id", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(store.getElementNodeId(addNodeRequest1.element)).toEqual("node-1");
+  });
+
+  it("should remove node element", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.removeNode(addNodeRequest1.id);
+
+    expect(store.getElementNodeId(addNodeRequest1.element)).toEqual(undefined);
+  });
+
+  it("should clear node elements", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.clear();
+
+    expect(store.getElementNodeId(addNodeRequest1.element)).toEqual(undefined);
+  });
 });
