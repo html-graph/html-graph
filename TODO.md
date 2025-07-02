@@ -2,6 +2,8 @@
 
 - remove wrapper for node element
 - get element node id
+- jsdoc comments
+- onBeforeNodeDrag move from events
 - refactor connectable ports
 - direct edge shape
 - user deletable edges
