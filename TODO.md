@@ -1,6 +1,5 @@
 # TODO
 
-- jsdoc comments
 - onBeforeNodeDrag move from events
 - refactor connectable ports
 - direct edge shape
