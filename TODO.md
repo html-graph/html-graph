@@ -1,6 +1,5 @@
 # TODO
 
-- remove wrapper for node element
 - jsdoc comments
 - onBeforeNodeDrag move from events
 - refactor connectable ports

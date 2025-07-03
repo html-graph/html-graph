@@ -1,4 +1,4 @@
-import { createContainer, createHost, createNodeWrapper } from "./utils";
+import { createContainer, createHost, prepareNodeElement } from "./utils";
 import { Point } from "@/point";
 import { GraphStore, PortPayload } from "@/graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
@@ -13,8 +13,6 @@ export class CoreHtmlView implements HtmlView {
   private readonly host = createHost();
 
   private readonly container = createContainer();
-
-  private readonly nodeIdToWrapperElementMap = new Map<unknown, HTMLElement>();
 
   private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
 
@@ -38,26 +36,20 @@ export class CoreHtmlView implements HtmlView {
   public attachNode(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId)!;
 
-    const wrapper = createNodeWrapper();
+    prepareNodeElement(node.element);
 
-    wrapper.appendChild(node.element);
-
-    this.container.appendChild(wrapper);
-    this.nodeIdToWrapperElementMap.set(nodeId, wrapper);
+    this.container.appendChild(node.element);
 
     this.updateNodePosition(nodeId);
     this.updateNodePriority(nodeId);
 
-    wrapper.style.visibility = "visible";
+    node.element.style.visibility = "visible";
   }
 
   public detachNode(nodeId: unknown): void {
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const node = this.graphStore.getNode(nodeId)!;
 
-    wrapper.removeChild(wrapper.firstChild!);
-
-    this.container.removeChild(wrapper);
-    this.nodeIdToWrapperElementMap.delete(nodeId);
+    this.container.removeChild(node.element);
   }
 
   public attachEdge(edgeId: unknown): void {
@@ -82,7 +74,7 @@ export class CoreHtmlView implements HtmlView {
       this.detachEdge(edgeId);
     });
 
-    this.nodeIdToWrapperElementMap.forEach((_element, nodeId) => {
+    this.graphStore.getAllNodeIds().forEach((nodeId) => {
       this.detachNode(nodeId);
     });
   }
@@ -97,7 +89,6 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: unknown): void {
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
     const node = this.graphStore.getNode(nodeId)!;
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
@@ -106,14 +97,13 @@ export class CoreHtmlView implements HtmlView {
     const x = node.x - viewportScale * center.x;
     const y = node.y - viewportScale * center.y;
 
-    wrapper.style.transform = `translate(${x}px, ${y}px)`;
+    node.element.style.transform = `translate(${x}px, ${y}px)`;
   }
 
   public updateNodePriority(nodeId: unknown): void {
-    const node = this.graphStore.getNode(nodeId);
-    const wrapper = this.nodeIdToWrapperElementMap.get(nodeId)!;
+    const node = this.graphStore.getNode(nodeId)!;
 
-    wrapper.style.zIndex = `${node!.priority}`;
+    node.element.style.zIndex = `${node.priority}`;
   }
 
   public updateEdgeShape(edgeId: unknown): void {
