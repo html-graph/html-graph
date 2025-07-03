@@ -1,1 +1,1 @@
-export { resetNodeElement as prepareNodeElement } from "./reset-node-element";
+export { resetNodeElement } from "./reset-node-element";
