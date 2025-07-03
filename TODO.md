@@ -1,6 +1,5 @@
 # TODO
 
-- onBeforeNodeDrag move from events
 - refactor connectable ports
 - direct edge shape
 - user deletable edges
@@ -18,6 +17,7 @@
 - snap nodes to grid
 - single responsibility for error
 - nodes without overlap
+- onBeforeNodeDrag move somewhere?
 
 - layouts
 
