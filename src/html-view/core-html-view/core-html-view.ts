@@ -169,16 +169,16 @@ export class CoreHtmlView implements HtmlView {
     rect: DOMRect,
     viewportMatrix: TransformState,
   ): EdgeRenderPort {
-    const viewportFrom: Point = {
+    const viewportPoint: Point = {
       x: rectPort.left - rect.left,
       y: rectPort.top - rect.top,
     };
 
-    const contentFrom: Point = transformPoint(viewportMatrix, viewportFrom);
+    const contentPoint: Point = transformPoint(viewportMatrix, viewportPoint);
 
     return {
-      x: contentFrom.x,
-      y: contentFrom.y,
+      x: contentPoint.x,
+      y: contentPoint.y,
       width: rectPort.width * viewportMatrix.scale,
       height: rectPort.height * viewportMatrix.scale,
       direction: port.direction,
