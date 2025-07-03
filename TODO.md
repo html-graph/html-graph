@@ -18,6 +18,7 @@
 - arrows customization
 - snap nodes to grid
 - single responsibility for error
+- nodes without overlap
 
 - layouts
 
