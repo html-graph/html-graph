@@ -5,7 +5,7 @@ import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 import { ConnectablePortsConfig } from "./config";
-import { createDefaults } from "@/create-canvas-defaults";
+import { createCanvasDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (params?: {
   mainElement?: HTMLElement;
@@ -19,7 +19,7 @@ const createCanvas = (params?: {
   const overlayElement =
     params?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
-  const defaults = createDefaults({});
+  const defaults = createCanvasDefaults({});
 
   const canvas = new Canvas(
     mainElement,

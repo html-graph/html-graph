@@ -18,7 +18,7 @@ import {
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
-import { CanvasDefaults, createDefaults } from "@/create-canvas-defaults";
+import { CanvasDefaults, createCanvasDefaults } from "@/create-canvas-defaults";
 
 /**
  * Responsibility: Constructs canvas based on specified configuration
@@ -184,7 +184,7 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
-    const defaults = createDefaults(this.canvasDefaults);
+    const defaults = createCanvasDefaults(this.canvasDefaults);
 
     const canvas = new Canvas(
       this.element,

@@ -4,7 +4,7 @@ import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import { CanvasDefaults } from "./canvas-defaults";
 import { Defaults } from "@/canvas";
 
-export const createDefaults: (defaults: CanvasDefaults) => Defaults = (
+export const createCanvasDefaults: (defaults: CanvasDefaults) => Defaults = (
   defaults: CanvasDefaults,
 ) => {
   const priorities = resolvePriority(
