@@ -6,7 +6,6 @@ import { isPointInside } from "../shared";
 import { Point } from "@/point";
 import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
-import { OneToManyCollection } from "@/one-to-many-collection";
 import { transformPoint } from "@/transform-point";
 
 /**
@@ -16,8 +15,6 @@ export class UserConnectablePortsConfigurator {
   private readonly config: Config;
 
   private readonly overlayCanvas: Canvas;
-
-  private readonly ports = new OneToManyCollection<HTMLElement, unknown>();
 
   private readonly staticOverlayPortId = "static";
 
@@ -29,20 +26,18 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
+    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
 
-    if (!this.ports.hasSingle(port.element)) {
+    if (elementPortIds.length === 1) {
       this.hookPortEvents(port.element);
     }
-
-    this.ports.addRecord(port.element, portId);
   };
 
   private readonly onBeforePortUnmarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
+    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
 
-    this.ports.removeByMulti(portId);
-
-    if (!this.ports.hasSingle(port.element)) {
+    if (elementPortIds.length === 1) {
       this.unhookPortEvents(port.element);
     }
   };
@@ -147,11 +142,10 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onBeforeClear = (): void => {
-    this.ports.forEachSingle((element) => {
-      this.unhookPortEvents(element);
+    this.canvas.graph.getAllPortIds().forEach((portId) => {
+      const port = this.canvas.graph.getPort(portId)!;
+      this.unhookPortEvents(port.element);
     });
-
-    this.ports.clear();
   };
 
   private readonly onBeforeDestroy = (): void => {
@@ -220,7 +214,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private grabPort(portElement: HTMLElement, cursor: Point): void {
-    const portId = this.ports.getMultiBySingle(portElement)[0]!;
+    const portId = this.canvas.graph.getElementPortsIds(portElement)[0]!;
     const port = this.canvas.graph.getPort(portId)!;
 
     this.staticPortId = portId;
@@ -392,7 +386,8 @@ export class UserConnectablePortsConfigurator {
 
     while (elementBuf !== null) {
       draggingPortId =
-        this.ports.getMultiBySingle(elementBuf as HTMLElement)[0] ?? null;
+        this.canvas.graph.getElementPortsIds(elementBuf as HTMLElement)[0] ??
+        null;
 
       if (draggingPortId !== null) {
         break;
@@ -405,7 +400,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private isPortConnectionAllowed(portElement: HTMLElement): boolean {
-    const portId = this.ports.getMultiBySingle(portElement)[0]!;
+    const portId = this.canvas.graph.getElementPortsIds(portElement)[0]!;
 
     return this.config.connectionTypeResolver(portId) !== null;
   }

@@ -15,15 +15,11 @@ export class UserDraggableNodesConfigurator {
 
   private previousTouchCoordinates: Point | null = null;
 
-  private readonly nodeIds = new Map<HTMLElement, unknown>();
-
   private readonly graph: Graph;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.updateMaxNodePriority(nodeId);
     const node = this.graph.getNode(nodeId)!;
-
-    this.nodeIds.set(node.element, nodeId);
 
     node.element.addEventListener("mousedown", this.onMouseDown, {
       passive: true,
@@ -39,8 +35,6 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
     const node = this.graph.getNode(nodeId)!;
-
-    this.nodeIds.delete(node.element);
 
     node.element.removeEventListener("mousedown", this.onMouseDown);
     node.element.removeEventListener("touchstart", this.onTouchStart);
@@ -58,12 +52,13 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onBeforeClear = (): void => {
-    this.nodeIds.forEach((_nodeId, element) => {
-      element.removeEventListener("mousedown", this.onMouseDown);
-      element.removeEventListener("touchstart", this.onTouchStart);
+    this.canvas.graph.getAllNodeIds().forEach((nodeId) => {
+      const node = this.canvas.graph.getNode(nodeId)!;
+
+      node.element.removeEventListener("mousedown", this.onMouseDown);
+      node.element.removeEventListener("touchstart", this.onTouchStart);
     });
 
-    this.nodeIds.clear();
     this.maxNodePriority = 0;
   };
 
@@ -73,7 +68,7 @@ export class UserDraggableNodesConfigurator {
     }
 
     const element = event.currentTarget as HTMLElement;
-    const nodeId = this.nodeIds.get(element);
+    const nodeId = this.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.config.onBeforeNodeDrag({
@@ -114,7 +109,7 @@ export class UserDraggableNodesConfigurator {
     };
 
     const element = event.currentTarget as HTMLElement;
-    const nodeId = this.nodeIds.get(element);
+    const nodeId = this.canvas.graph.getElementNodeId(element);
     const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.config.onBeforeNodeDrag({
