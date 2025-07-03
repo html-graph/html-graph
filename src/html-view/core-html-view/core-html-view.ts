@@ -134,14 +134,14 @@ export class CoreHtmlView implements HtmlView {
 
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
-    const rect = this.host.getBoundingClientRect();
+    const rectCanvas = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportStore.getViewportMatrix();
 
     const from = this.createEdgeRenderPort(
       edge.from,
       portFrom,
       rectFrom,
-      rect,
+      rectCanvas,
       viewportMatrix,
     );
 
@@ -149,7 +149,7 @@ export class CoreHtmlView implements HtmlView {
       edge.to,
       portTo,
       rectTo,
-      rect,
+      rectCanvas,
       viewportMatrix,
     );
 
@@ -166,12 +166,12 @@ export class CoreHtmlView implements HtmlView {
     portId: unknown,
     port: PortPayload,
     rectPort: DOMRect,
-    rect: DOMRect,
+    rectCanvas: DOMRect,
     viewportMatrix: TransformState,
   ): EdgeRenderPort {
     const viewportPoint: Point = {
-      x: rectPort.left - rect.left,
-      y: rectPort.top - rect.top,
+      x: rectPort.left - rectCanvas.left,
+      y: rectPort.top - rectCanvas.top,
     };
 
     const contentPoint: Point = transformPoint(viewportMatrix, viewportPoint);
