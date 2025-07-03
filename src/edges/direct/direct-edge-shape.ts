@@ -32,11 +32,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly sourceArrowOffset: number;
 
-  private readonly sourceLineOffset: number;
-
   private readonly targetArrowOffset: number;
-
-  private readonly targetLineOffset: number;
 
   public constructor(params: DirectEdgeParams) {
     this.color = params.color ?? edgeConstants.color;
@@ -47,18 +43,12 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       params.sourceArrowOffset ?? edgeConstants.preArrowOffset;
     this.targetArrowOffset =
       params.targetArrowOffset ?? edgeConstants.preArrowOffset;
-    this.sourceLineOffset =
-      params.sourceLineOffset ?? edgeConstants.preLineOffset;
-    this.targetLineOffset =
-      params.targetLineOffset ?? edgeConstants.preLineOffset;
 
     console.log(
       this.arrowLength,
       this.arrowWidth,
       this.sourceArrowOffset,
       this.targetArrowOffset,
-      this.sourceLineOffset,
-      this.targetLineOffset,
     );
 
     this.svg.appendChild(this.group);

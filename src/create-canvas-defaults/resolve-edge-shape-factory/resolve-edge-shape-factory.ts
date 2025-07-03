@@ -71,9 +71,7 @@ export const resolveEdgeShapeFactory: (
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           sourceArrowOffset: options.sourceArrowOffset,
-          sourceLineOffset: options.sourceLineOffset,
           targetArrowOffset: options.targetArrowOffset,
-          targetLineOffset: options.targetLineOffset,
         });
     default:
       return () =>

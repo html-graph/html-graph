@@ -7,6 +7,4 @@ export interface DirectEdgeParams {
   readonly hasTargetArrow?: boolean | undefined;
   readonly sourceArrowOffset?: number | undefined;
   readonly targetArrowOffset?: number | undefined;
-  readonly sourceLineOffset?: number | undefined;
-  readonly targetLineOffset?: number | undefined;
 }
