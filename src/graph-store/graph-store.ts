@@ -8,7 +8,7 @@ import { UpdateNodeRequest } from "./update-node-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
-import { OneToManyCollection } from "@/one-to-many-collection";
+import { OneToManyCollection } from "./one-to-many-collection";
 
 /**
  * Responsibility: Store state of graph

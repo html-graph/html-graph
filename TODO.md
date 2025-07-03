@@ -1,6 +1,5 @@
 # TODO
 
-- refactor connectable ports
 - direct edge shape
 - user deletable edges
 - user movable edges
