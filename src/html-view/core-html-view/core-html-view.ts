@@ -1,9 +1,10 @@
 import { createContainer, createHost, createNodeWrapper } from "./utils";
 import { Point } from "@/point";
-import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
+import { GraphStore, PortPayload } from "@/graph-store";
+import { TransformState, ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
+import { transformPoint } from "@/transform-point";
 
 /**
  * This entity is responsible for HTML modifications
@@ -133,42 +134,24 @@ export class CoreHtmlView implements HtmlView {
 
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
-    const rect = this.host.getBoundingClientRect();
+    const rectCanvas = this.host.getBoundingClientRect();
     const viewportMatrix = this.viewportStore.getViewportMatrix();
-    const viewportFromX = rectFrom.left - rect.left;
-    const viewportFromY = rectFrom.top - rect.top;
-    const viewportToX = rectTo.left - rect.left;
-    const viewportToY = rectTo.top - rect.top;
 
-    const contentFrom: Point = {
-      x: viewportMatrix.scale * viewportFromX + viewportMatrix.x,
-      y: viewportMatrix.scale * viewportFromY + viewportMatrix.y,
-    };
+    const from = this.createEdgeRenderPort(
+      edge.from,
+      portFrom,
+      rectFrom,
+      rectCanvas,
+      viewportMatrix,
+    );
 
-    const contentTo: Point = {
-      x: viewportMatrix.scale * viewportToX + viewportMatrix.x,
-      y: viewportMatrix.scale * viewportToY + viewportMatrix.y,
-    };
-
-    const from: EdgeRenderPort = {
-      x: contentFrom.x,
-      y: contentFrom.y,
-      width: rectFrom.width * viewportMatrix.scale,
-      height: rectFrom.height * viewportMatrix.scale,
-      direction: portFrom.direction,
-      portId: edge.from,
-      nodeId: portFrom.nodeId,
-    };
-
-    const to: EdgeRenderPort = {
-      x: contentTo.x,
-      y: contentTo.y,
-      width: rectTo.width * viewportMatrix.scale,
-      height: rectTo.height * viewportMatrix.scale,
-      direction: portTo.direction,
-      portId: edge.to,
-      nodeId: portTo.nodeId,
-    };
+    const to = this.createEdgeRenderPort(
+      edge.to,
+      portTo,
+      rectTo,
+      rectCanvas,
+      viewportMatrix,
+    );
 
     edge.shape.render({ from, to });
   }
@@ -177,5 +160,30 @@ export class CoreHtmlView implements HtmlView {
     const edge = this.graphStore.getEdge(edgeId)!;
 
     edge.shape.svg.style.zIndex = `${edge.priority}`;
+  }
+
+  private createEdgeRenderPort(
+    portId: unknown,
+    port: PortPayload,
+    rectPort: DOMRect,
+    rectCanvas: DOMRect,
+    viewportMatrix: TransformState,
+  ): EdgeRenderPort {
+    const viewportPoint: Point = {
+      x: rectPort.left - rectCanvas.left,
+      y: rectPort.top - rectCanvas.top,
+    };
+
+    const contentPoint: Point = transformPoint(viewportMatrix, viewportPoint);
+
+    return {
+      x: contentPoint.x,
+      y: contentPoint.y,
+      width: rectPort.width * viewportMatrix.scale,
+      height: rectPort.height * viewportMatrix.scale,
+      direction: port.direction,
+      portId,
+      nodeId: port.nodeId,
+    };
   }
 }

@@ -11,7 +11,7 @@ import {
 import { ViewportTransformConfig } from "./config";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
-import { createDefaults } from "@/create-canvas-defaults";
+import { createCanvasDefaults } from "@/create-canvas-defaults";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -30,7 +30,7 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    createDefaults({}),
+    createCanvasDefaults({}),
   );
 
   UserTransformableViewportConfigurator.configure(

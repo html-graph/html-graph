@@ -2,11 +2,12 @@ import { AddEdgeRequest, AddNodeRequest, Canvas, Defaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
-import { isPointInside, transformPoint } from "../shared";
+import { isPointInside } from "../shared";
 import { Point } from "@/point";
 import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
 import { OneToManyCollection } from "@/one-to-many-collection";
+import { transformPoint } from "@/transform-point";
 
 /**
  * Responsibility: Configuring ports connectable via drag

@@ -1,8 +1,9 @@
 import { Canvas } from "@/canvas";
-import { createConfig, DraggableNodesConfig, Config } from "./create-config";
-import { isPointInside, setCursor, transformPoint } from "../shared";
+import { createConfig, DraggableNodesConfig, Config } from "./config";
+import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
+import { transformPoint } from "@/transform-point";
 
 /**
  * Responsibility: Configures canvas to have nodes draggable by user

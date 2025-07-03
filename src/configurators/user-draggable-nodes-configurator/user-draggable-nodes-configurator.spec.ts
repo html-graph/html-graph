@@ -4,10 +4,10 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { DraggableNodesConfig } from "./create-config";
+import { DraggableNodesConfig } from "./config";
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
-import { createDefaults } from "@/create-canvas-defaults";
+import { createCanvasDefaults } from "@/create-canvas-defaults";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -26,7 +26,7 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    createDefaults({}),
+    createCanvasDefaults({}),
   );
 
   UserDraggableNodesConfigurator.configure(

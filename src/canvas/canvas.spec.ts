@@ -8,7 +8,7 @@ import { HtmlGraphError } from "@/error";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
-import { CanvasDefaults, createDefaults } from "@/create-canvas-defaults";
+import { CanvasDefaults, createCanvasDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (params?: {
   options?: CanvasDefaults;
@@ -24,7 +24,7 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    createDefaults(params?.options ?? {}),
+    createCanvasDefaults(params?.options ?? {}),
   );
 
   return canvas;

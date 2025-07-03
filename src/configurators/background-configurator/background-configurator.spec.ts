@@ -4,7 +4,7 @@ import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement } from "@/mocks";
-import { createDefaults } from "@/create-canvas-defaults";
+import { createCanvasDefaults } from "@/create-canvas-defaults";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore();
@@ -18,7 +18,7 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
     graphStore,
     viewportStore,
     htmlView,
-    createDefaults({}),
+    createCanvasDefaults({}),
   );
 
   BackgroundConfigurator.configure(
