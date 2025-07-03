@@ -1,5 +1,6 @@
 import {
   BezierEdgeShape,
+  DirectEdgeShape,
   HorizontalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
@@ -59,6 +60,20 @@ export const resolveEdgeShapeFactory: (
           roundness: options.roundness,
           detourDistance: options.detourDistance,
           detourDirection: options.detourDirection,
+        });
+    case "direct":
+      return () =>
+        new DirectEdgeShape({
+          color: options.color,
+          width: options.width,
+          arrowLength: options.arrowLength,
+          arrowWidth: options.arrowWidth,
+          hasSourceArrow: options.hasSourceArrow,
+          hasTargetArrow: options.hasTargetArrow,
+          sourceArrowOffset: options.sourceArrowOffset,
+          sourceLineOffset: options.sourceLineOffset,
+          targetArrowOffset: options.targetArrowOffset,
+          targetLineOffset: options.targetLineOffset,
         });
     default:
       return () =>

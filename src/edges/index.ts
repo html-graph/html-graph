@@ -14,3 +14,5 @@ export type { LineEdgeParams, CreatePathFn } from "./line";
 export type { StructuredEdgeShape } from "./structured-edge-shape";
 export { InteractiveEdgeShape, InteractiveEdgeError } from "./interactive";
 export type { InteractiveEdgeParams } from "./interactive";
+export { DirectEdgeShape } from "./direct";
+export type { DirectEdgeParams } from "./direct";
