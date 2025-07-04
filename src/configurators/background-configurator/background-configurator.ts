@@ -6,9 +6,7 @@ import {
 } from "./utils";
 import { BackgroundConfig, createConfig } from "./config";
 
-/**
- * Responsibility: Configures background rendering behind graph
- */
+// Responsibility: Configures background rendering behind graph
 export class BackgroundConfigurator {
   private readonly svg = createSvg();
 

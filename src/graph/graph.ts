@@ -4,9 +4,7 @@ import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
 
-/**
- * Responsibility: Provides access to graph model for end user
- */
+// Responsibility: Provides access to graph model for end user
 export class Graph {
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 

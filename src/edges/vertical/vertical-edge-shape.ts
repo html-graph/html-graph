@@ -10,10 +10,8 @@ import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-/**
- * Responsibility: Providing edge shape connecting ports with vertical angled
- * line
- */
+// Responsibility: Providing edge shape connecting ports with vertical angled
+// line
 export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

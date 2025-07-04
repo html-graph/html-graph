@@ -7,12 +7,10 @@ import { createEdgeSvg } from "../line/create-edge-svg";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { Point } from "@/point";
+import { Point, zero } from "@/point";
 import { createArrowPath } from "../line/create-arrow-path";
 
-/**
- * Responsibility: Providing edge shape connecting ports with direct line
- */
+// Responsibility: Providing edge shape connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 
@@ -44,13 +42,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.sourceOffset = params.sourceOffset ?? edgeConstants.preOffset;
     this.targetOffset = params.targetOffset ?? edgeConstants.preOffset;
 
-    console.log(
-      this.arrowLength,
-      this.arrowWidth,
-      this.sourceOffset,
-      this.targetOffset,
-    );
-
     this.svg.appendChild(this.group);
     this.line = createEdgeLine(this.color, this.width);
     this.group.appendChild(this.line);
@@ -77,97 +68,102 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.svg.style.height = `${Math.max(height, 1)}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const distance = Math.sqrt(width * width + height * height);
+    const distance = Math.max(Math.sqrt(width * width + height * height), 1);
 
-    if (distance === 0) {
-      this.renderEmptyEdge();
-
-      return;
-    }
-
-    const halfDistance = distance / 2;
-
-    const sourceArrowOffset = this.sourceArrow ? this.arrowLength : 0;
-    const sourceArrowEndDistance = Math.min(
-      this.sourceOffset + sourceArrowOffset,
-      halfDistance,
-    );
-
-    const targetArrowOffset = this.targetArrow ? this.arrowLength : 0;
-    const targetArrowEndDistance = Math.min(
-      this.targetOffset + targetArrowOffset,
-      halfDistance,
-    );
-
-    const sourceEndRatio = sourceArrowEndDistance / distance;
-    const targetEndRatio = 1 - targetArrowEndDistance / distance;
-
-    const sourceArrowEnd: Point = {
-      x: width * sourceEndRatio,
-      y: height * sourceEndRatio,
-    };
-    const targetArrowEnd: Point = {
-      x: width * targetEndRatio,
-      y: height * targetEndRatio,
+    const to: Point = {
+      x: width,
+      y: height,
     };
 
-    const linePath = `M ${sourceArrowEnd.x} ${sourceArrowEnd.y} L ${targetArrowEnd.x} ${targetArrowEnd.y}`;
-
-    this.line.setAttribute("d", linePath);
+    this.renderLine(distance, to);
 
     if (this.sourceArrow) {
-      const sourceStartRatio = this.sourceOffset / distance;
-
-      const sourceArrowStart: Point = {
-        x: width * sourceStartRatio,
-        y: height * sourceStartRatio,
-      };
-
-      const arrowPath = createArrowPath(
-        {
-          x: sourceArrowStart.x / this.sourceOffset,
-          y: sourceArrowStart.y / this.sourceOffset,
-        },
-        sourceArrowStart,
-        this.arrowLength,
-        this.arrowWidth,
+      const arrowPath = this.createArrowPath(
+        distance,
+        to,
+        1,
+        zero,
+        this.sourceOffset,
       );
+
       this.sourceArrow.setAttribute("d", arrowPath);
     }
 
     if (this.targetArrow) {
-      const targetStartRatio = this.targetOffset / distance;
-
-      const targetArrowStart: Point = {
-        x: width * targetStartRatio,
-        y: height * targetStartRatio,
-      };
-
-      const arrowPath = createArrowPath(
-        {
-          x: targetArrowStart.x / this.targetOffset,
-          y: targetArrowStart.y / this.targetOffset,
-        },
-        {
-          x: width - targetArrowStart.x,
-          y: height - targetArrowStart.y,
-        },
-        -this.arrowLength,
-        this.arrowWidth,
+      const arrowPath = this.createArrowPath(
+        distance,
+        to,
+        -1,
+        to,
+        this.targetOffset,
       );
+
       this.targetArrow.setAttribute("d", arrowPath);
     }
   }
 
-  private renderEmptyEdge(): void {
-    this.line.setAttribute("d", "");
+  private renderLine(distance: number, to: Point): void {
+    const minOffset = distance / 2;
 
-    if (this.sourceArrow) {
-      this.sourceArrow.setAttribute("d", "");
-    }
+    const sourceDistance = this.calculatePoint(
+      this.sourceArrow !== null,
+      minOffset,
+    );
+    const targetDistance = this.calculatePoint(
+      this.targetArrow !== null,
+      minOffset,
+    );
 
-    if (this.targetArrow) {
-      this.targetArrow.setAttribute("d", "");
-    }
+    const sourceRatio = sourceDistance / distance;
+    const source: Point = {
+      x: to.x * sourceRatio,
+      y: to.y * sourceRatio,
+    };
+
+    const targetRatio = 1 - targetDistance / distance;
+    const target: Point = {
+      x: to.x * targetRatio,
+      y: to.y * targetRatio,
+    };
+
+    const linePath = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
+
+    this.line.setAttribute("d", linePath);
+  }
+
+  private calculatePoint(hasArrow: boolean, minOffset: number): number {
+    const targetArrowOffset = hasArrow ? this.arrowLength : 0;
+
+    return Math.min(this.targetOffset + targetArrowOffset, minOffset);
+  }
+
+  private createArrowPath(
+    distance: number,
+    to: Point,
+    flip: number,
+    shift: Point,
+    offset: number,
+  ): string {
+    const minOffset = Math.max(offset, 1);
+
+    const startRatio = minOffset / distance;
+
+    const arrowStart: Point = {
+      x: flip * to.x * startRatio,
+      y: flip * to.y * startRatio,
+    };
+
+    return createArrowPath(
+      {
+        x: arrowStart.x / minOffset,
+        y: arrowStart.y / minOffset,
+      },
+      {
+        x: arrowStart.x + shift.x,
+        y: arrowStart.y + shift.y,
+      },
+      this.arrowLength,
+      this.arrowWidth,
+    );
   }
 }

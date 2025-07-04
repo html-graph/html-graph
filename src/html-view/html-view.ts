@@ -1,6 +1,4 @@
-/**
- * Responsibility: Provides access to DOM modifications
- */
+// Responsibility: Provides access to DOM modifications
 export interface HtmlView {
   attachNode(nodeId: unknown): void;
 

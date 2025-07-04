@@ -7,11 +7,14 @@ import {
 } from "@html-graph/html-graph";
 export function createNode(params: {
   id: unknown;
+  name: string;
   x: number;
   y: number;
 }): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
+
+  node.innerText = params.name;
 
   return {
     id: params.id,
@@ -34,8 +37,8 @@ const canvasDefaults: CanvasDefaults = {
       type: "direct",
       sourceOffset: 50,
       targetOffset: 50,
-      hasSourceArrow: true,
       hasTargetArrow: true,
+      hasSourceArrow: true,
     },
     priority: 0,
   },
@@ -50,24 +53,28 @@ const canvas: Canvas = builder
 
 const addNode1Request: AddNodeRequest = createNode({
   id: "node-1",
+  name: "1",
   x: 200,
   y: 400,
 });
 
 const addNode2Request: AddNodeRequest = createNode({
   id: "node-2",
+  name: "2",
   x: 500,
   y: 500,
 });
 
 const addNode3Request: AddNodeRequest = createNode({
   id: "node-3",
+  name: "3",
   x: 800,
   y: 300,
 });
 
 const addNode4Request: AddNodeRequest = createNode({
   id: "node-4",
+  name: "4",
   x: 800,
   y: 700,
 });

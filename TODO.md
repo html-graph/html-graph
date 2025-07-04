@@ -2,6 +2,7 @@
 
 - direct edge shape
 - node element validation
+- add moveEdgesOnTop option for draggable nodes
 - unset node transform
 - user deletable edges
 - user movable edges
