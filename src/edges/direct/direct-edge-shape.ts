@@ -10,7 +10,7 @@ import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
 import { createArrowPath } from "../line/create-arrow-path";
 
-// Responsibility: Providing edge shape connecting ports with direct line
+// Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 
@@ -68,18 +68,21 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.svg.style.height = `${Math.max(height, 1)}px`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const distance = Math.max(Math.sqrt(width * width + height * height), 1);
+    const distance = Math.sqrt(width * width + height * height);
+    const totalDistance = Math.max(distance, 1);
 
     const to: Point = {
       x: width,
       y: height,
     };
 
-    this.renderLine(distance, to);
+    const linePath = this.createDirectLinePath(totalDistance, to);
+
+    this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = this.createArrowPath(
-        distance,
+      const arrowPath = this.createDirectArrowPath(
+        totalDistance,
         to,
         1,
         zero,
@@ -90,8 +93,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     }
 
     if (this.targetArrow) {
-      const arrowPath = this.createArrowPath(
-        distance,
+      const arrowPath = this.createDirectArrowPath(
+        totalDistance,
         to,
         -1,
         to,
@@ -102,55 +105,64 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     }
   }
 
-  private renderLine(distance: number, to: Point): void {
-    const minOffset = distance / 2;
-
-    const sourceDistance = this.calculatePoint(
+  private createDirectLinePath(totalDistance: number, to: Point): string {
+    const source = this.createDirectLinePoint(
+      totalDistance,
+      to,
+      1,
+      zero,
       this.sourceArrow !== null,
-      minOffset,
+      this.sourceOffset,
     );
-    const targetDistance = this.calculatePoint(
+
+    const target = this.createDirectLinePoint(
+      totalDistance,
+      to,
+      -1,
+      to,
       this.targetArrow !== null,
-      minOffset,
+      this.targetOffset,
     );
 
-    const sourceRatio = sourceDistance / distance;
-    const source: Point = {
-      x: to.x * sourceRatio,
-      y: to.y * sourceRatio,
-    };
-
-    const targetRatio = 1 - targetDistance / distance;
-    const target: Point = {
-      x: to.x * targetRatio,
-      y: to.y * targetRatio,
-    };
-
-    const linePath = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
-
-    this.line.setAttribute("d", linePath);
+    return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
   }
 
-  private calculatePoint(hasArrow: boolean, minOffset: number): number {
-    const targetArrowOffset = hasArrow ? this.arrowLength : 0;
+  private createDirectLinePoint(
+    totalDistance: number,
+    to: Point,
+    flip: number,
+    shift: Point,
+    hasArrow: boolean,
+    offset: number,
+  ): Point {
+    const totalOffset = this.calculateArrowEndOffset(hasArrow, offset);
+    const targetRatio = (flip * totalOffset) / totalDistance;
 
-    return Math.min(this.targetOffset + targetArrowOffset, minOffset);
+    return {
+      x: shift.x + to.x * targetRatio,
+      y: shift.y + to.y * targetRatio,
+    };
   }
 
-  private createArrowPath(
-    distance: number,
+  private calculateArrowEndOffset(hasArrow: boolean, offset: number): number {
+    const arrowOffset = hasArrow ? this.arrowLength : 0;
+
+    return offset + arrowOffset;
+  }
+
+  private createDirectArrowPath(
+    totalDistance: number,
     to: Point,
     flip: number,
     shift: Point,
     offset: number,
   ): string {
     const minOffset = Math.max(offset, 1);
-
-    const startRatio = minOffset / distance;
+    const ratio = minOffset / totalDistance;
 
     const arrowStart: Point = {
-      x: flip * to.x * startRatio,
-      y: flip * to.y * startRatio,
+      x: flip * to.x * ratio,
+      y: flip * to.y * ratio,
     };
 
     return createArrowPath(
