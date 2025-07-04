@@ -5,66 +5,93 @@ import {
   CanvasBuilder,
   CanvasDefaults,
 } from "@html-graph/html-graph";
-import { createInOutNode } from "../shared/create-in-out-node";
+export function createNode(params: {
+  id: unknown;
+  x: number;
+  y: number;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+
+  return {
+    id: params.id,
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [{ id: params.id, element: node }],
+  };
+}
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
+  nodes: {
+    priority: 1,
+  },
   edges: {
     shape: {
       type: "direct",
-      sourceOffset: 10,
-      targetOffset: 10,
+      sourceOffset: 50,
+      targetOffset: 50,
+      hasSourceArrow: true,
       hasTargetArrow: true,
     },
+    priority: 0,
   },
 };
 
 const canvas: Canvas = builder
   .setDefaults(canvasDefaults)
-  .enableUserDraggableNodes()
+  .enableUserDraggableNodes({ moveOnTop: false })
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
 
-const addNode1Request: AddNodeRequest = createInOutNode({
-  name: "Node 1",
+const addNode1Request: AddNodeRequest = createNode({
+  id: "node-1",
   x: 200,
   y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
 });
 
-const addNode2Request: AddNodeRequest = createInOutNode({
-  name: "Node 2",
+const addNode2Request: AddNodeRequest = createNode({
+  id: "node-2",
   x: 500,
   y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
 });
 
-const addNode3Request: AddNodeRequest = createInOutNode({
-  name: "Node 3",
+const addNode3Request: AddNodeRequest = createNode({
+  id: "node-3",
   x: 800,
   y: 300,
-  frontPortId: "node-3-in",
-  backPortId: "node-3-out",
+});
+
+const addNode4Request: AddNodeRequest = createNode({
+  id: "node-4",
+  x: 800,
+  y: 700,
 });
 
 const addEdge1Request: AddEdgeRequest = {
-  from: "node-1-out",
-  to: "node-2-in",
+  from: "node-1",
+  to: "node-2",
 };
 
 const addEdge2Request: AddEdgeRequest = {
-  from: "node-2-out",
-  to: "node-3-in",
+  from: "node-2",
+  to: "node-3",
+};
+
+const addEdge3Request: AddEdgeRequest = {
+  from: "node-2",
+  to: "node-4",
 };
 
 canvas
   .addNode(addNode1Request)
   .addNode(addNode2Request)
   .addNode(addNode3Request)
+  .addNode(addNode4Request)
   .addEdge(addEdge1Request)
-  .addEdge(addEdge2Request);
+  .addEdge(addEdge2Request)
+  .addEdge(addEdge3Request);

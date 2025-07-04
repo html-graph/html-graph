@@ -116,12 +116,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const sourceArrowStartDistance = Math.min(
-        this.sourceOffset,
-        halfDistance,
-      );
-
-      const sourceStartRatio = sourceArrowStartDistance / distance;
+      const sourceStartRatio = this.sourceOffset / distance;
 
       const sourceArrowStart: Point = {
         x: width * sourceStartRatio,
@@ -130,8 +125,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
       const arrowPath = createArrowPath(
         {
-          x: sourceArrowStart.x / sourceArrowStartDistance,
-          y: sourceArrowStart.y / sourceArrowStartDistance,
+          x: sourceArrowStart.x / this.sourceOffset,
+          y: sourceArrowStart.y / this.sourceOffset,
         },
         sourceArrowStart,
         this.arrowLength,
@@ -141,12 +136,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     }
 
     if (this.targetArrow) {
-      const targetArrowStartDistance = Math.min(
-        this.targetOffset,
-        halfDistance,
-      );
-
-      const targetStartRatio = targetArrowStartDistance / distance;
+      const targetStartRatio = this.targetOffset / distance;
 
       const targetArrowStart: Point = {
         x: width * targetStartRatio,
@@ -155,8 +145,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
       const arrowPath = createArrowPath(
         {
-          x: targetArrowStart.x / targetArrowStartDistance,
-          y: targetArrowStart.y / targetArrowStartDistance,
+          x: targetArrowStart.x / this.targetOffset,
+          y: targetArrowStart.y / this.targetOffset,
         },
         {
           x: width - targetArrowStart.x,
