@@ -7,6 +7,8 @@ import { createEdgeSvg } from "../line/create-edge-svg";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
+import { Point } from "@/point";
+import { createArrowPath } from "../line/create-arrow-path";
 
 /**
  * Responsibility: Providing edge shape connecting ports with direct line
@@ -30,25 +32,23 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly sourceArrowOffset: number;
+  private readonly sourceOffset: number;
 
-  private readonly targetArrowOffset: number;
+  private readonly targetOffset: number;
 
   public constructor(params: DirectEdgeParams) {
     this.color = params.color ?? edgeConstants.color;
     this.width = params.width ?? edgeConstants.width;
     this.arrowLength = params.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params.arrowWidth ?? edgeConstants.arrowWidth;
-    this.sourceArrowOffset =
-      params.sourceArrowOffset ?? edgeConstants.preArrowOffset;
-    this.targetArrowOffset =
-      params.targetArrowOffset ?? edgeConstants.preArrowOffset;
+    this.sourceOffset = params.sourceOffset ?? edgeConstants.preOffset;
+    this.targetOffset = params.targetOffset ?? edgeConstants.preOffset;
 
     console.log(
       this.arrowLength,
       this.arrowWidth,
-      this.sourceArrowOffset,
-      this.targetArrowOffset,
+      this.sourceOffset,
+      this.targetOffset,
     );
 
     this.svg.appendChild(this.group);
@@ -79,9 +79,98 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const distance = Math.sqrt(width * width + height * height);
 
-    console.log(distance);
+    if (distance === 0) {
+      this.renderEmptyEdge();
 
-    this.line.setAttribute("d", `M 0 0 L ${width} ${height}`);
+      return;
+    }
+
+    const halfDistance = distance / 2;
+
+    const sourceArrowOffset = this.sourceArrow ? this.arrowLength : 0;
+    const sourceArrowEndDistance = Math.min(
+      this.sourceOffset + sourceArrowOffset,
+      halfDistance,
+    );
+
+    const targetArrowOffset = this.targetArrow ? this.arrowLength : 0;
+    const targetArrowEndDistance = Math.min(
+      this.targetOffset + targetArrowOffset,
+      halfDistance,
+    );
+
+    const sourceEndRatio = sourceArrowEndDistance / distance;
+    const targetEndRatio = 1 - targetArrowEndDistance / distance;
+
+    const sourceArrowEnd: Point = {
+      x: width * sourceEndRatio,
+      y: height * sourceEndRatio,
+    };
+    const targetArrowEnd: Point = {
+      x: width * targetEndRatio,
+      y: height * targetEndRatio,
+    };
+
+    const linePath = `M ${sourceArrowEnd.x} ${sourceArrowEnd.y} L ${targetArrowEnd.x} ${targetArrowEnd.y}`;
+
+    this.line.setAttribute("d", linePath);
+
+    if (this.sourceArrow) {
+      const sourceArrowStartDistance = Math.min(
+        this.sourceOffset,
+        halfDistance,
+      );
+
+      const sourceStartRatio = sourceArrowStartDistance / distance;
+
+      const sourceArrowStart: Point = {
+        x: width * sourceStartRatio,
+        y: height * sourceStartRatio,
+      };
+
+      const arrowPath = createArrowPath(
+        {
+          x: sourceArrowStart.x / sourceArrowStartDistance,
+          y: sourceArrowStart.y / sourceArrowStartDistance,
+        },
+        sourceArrowStart,
+        this.arrowLength,
+        this.arrowWidth,
+      );
+      this.sourceArrow.setAttribute("d", arrowPath);
+    }
+
+    if (this.targetArrow) {
+      const targetArrowStartDistance = Math.min(
+        this.targetOffset,
+        halfDistance,
+      );
+
+      const targetStartRatio = targetArrowStartDistance / distance;
+
+      const targetArrowStart: Point = {
+        x: width * targetStartRatio,
+        y: height * targetStartRatio,
+      };
+
+      const arrowPath = createArrowPath(
+        {
+          x: targetArrowStart.x / targetArrowStartDistance,
+          y: targetArrowStart.y / targetArrowStartDistance,
+        },
+        {
+          x: width - targetArrowStart.x,
+          y: height - targetArrowStart.y,
+        },
+        -this.arrowLength,
+        this.arrowWidth,
+      );
+      this.targetArrow.setAttribute("d", arrowPath);
+    }
+  }
+
+  private renderEmptyEdge(): void {
+    this.line.setAttribute("d", "");
 
     if (this.sourceArrow) {
       this.sourceArrow.setAttribute("d", "");

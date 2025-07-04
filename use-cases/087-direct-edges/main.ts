@@ -14,6 +14,9 @@ const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: {
       type: "direct",
+      sourceOffset: 10,
+      targetOffset: 10,
+      hasTargetArrow: true,
     },
   },
 };

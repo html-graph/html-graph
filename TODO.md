@@ -1,6 +1,7 @@
 # TODO
 
 - direct edge shape
+- node element validation
 - unset node transform
 - user deletable edges
 - user movable edges
