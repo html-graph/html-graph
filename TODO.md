@@ -1,8 +1,7 @@
 # TODO
 
-- edge group color
 - add moveEdgesOnTop option for draggable nodes
-- unset node transform
+- edge group color
 - user deletable edges
 - user movable edges
 - user selectable edges
@@ -11,7 +10,6 @@
 - make builder single use object
 - user draggable edges via ports
 - user draggable edges based on selection
-- user deletable edges
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
 - arrows customization
