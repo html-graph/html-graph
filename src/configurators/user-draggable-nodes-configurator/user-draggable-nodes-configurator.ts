@@ -256,7 +256,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
-    if (this.config.moveNodesOnTop) {
+    if (this.config.moveOnTop) {
       this.maxNodePriority++;
 
       if (this.config.moveEdgesOnTop) {

@@ -11,7 +11,6 @@ export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
     dragConfig?.events?.onNodeDragFinished ?? ((): void => {});
 
   const moveOnTop = dragConfig?.moveOnTop !== false;
-  const moveNodesOnTop = dragConfig?.moveNodesOnTop !== false && moveOnTop;
   const moveEdgesOnTop = dragConfig?.moveEdgesOnTop !== false && moveOnTop;
 
   const cursor = dragConfig?.mouse?.dragCursor;
@@ -33,7 +32,7 @@ export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
       : (event: MouseEvent): boolean => event.button === 0;
 
   return {
-    moveNodesOnTop,
+    moveOnTop,
     moveEdgesOnTop,
     dragCursor,
     mouseDownEventVerifier,

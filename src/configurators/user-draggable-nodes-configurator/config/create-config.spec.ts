@@ -102,32 +102,22 @@ describe("createConfig", () => {
     expect(options.moveEdgesOnTop).toBe(false);
   });
 
-  it("should move nodes on top by default", () => {
+  it("should move on top by default", () => {
     const dragOptions: DraggableNodesConfig = {};
 
     const options = createConfig(dragOptions);
 
-    expect(options.moveNodesOnTop).toBe(true);
+    expect(options.moveOnTop).toBe(true);
   });
 
-  it("should not move nodes on top when specified", () => {
-    const dragOptions: DraggableNodesConfig = {
-      moveNodesOnTop: false,
-    };
-
-    const options = createConfig(dragOptions);
-
-    expect(options.moveNodesOnTop).toBe(false);
-  });
-
-  it("should not move nodes on top when move on top disabled", () => {
+  it("should not move on top when specified", () => {
     const dragOptions: DraggableNodesConfig = {
       moveOnTop: false,
     };
 
     const options = createConfig(dragOptions);
 
-    expect(options.moveNodesOnTop).toBe(false);
+    expect(options.moveOnTop).toBe(false);
   });
 
   it("should not move edges on top when move on top disabled", () => {
