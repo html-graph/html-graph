@@ -1,6 +1,5 @@
 # TODO
 
-- add moveEdgesOnTop option for draggable nodes
 - edge group color
 - user deletable edges
 - user movable edges
