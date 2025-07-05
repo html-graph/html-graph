@@ -1,6 +1,5 @@
 # TODO
 
-- direct edge shape
 - node element validation
 - edge group color
 - add moveEdgesOnTop option for draggable nodes
