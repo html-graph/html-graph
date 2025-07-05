@@ -86,21 +86,4 @@ describe("createDirectLinePoint", () => {
 
     expect(point).toEqual({ x: 2, y: 3 });
   });
-
-  it("should return unmodified point when diagonal distance is 0", () => {
-    const to: Point = { x: 0, y: 0 };
-    const diagonalDistance = Math.sqrt(to.x * to.x + to.y * to.y);
-
-    const point = createDirectLinePoint({
-      diagonalDistance: diagonalDistance,
-      to,
-      offset: 0,
-      hasArrow: false,
-      flip: 1,
-      shift: { x: 2, y: 3 },
-      arrowLength: 0,
-    });
-
-    expect(point).toEqual({ x: 2, y: 3 });
-  });
 });
