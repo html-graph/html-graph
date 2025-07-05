@@ -7,3 +7,4 @@ export { createStraightLinePath } from "./create-straight-line-path";
 export { createVerticalLinePath } from "./create-vertical-line-path";
 export { createCycleSquarePath } from "./create-cycle-square-path";
 export { createCycleCirclePath } from "./create-cycle-circle-path";
+export { setSvgRectangle } from "./set-svg-rectangle";

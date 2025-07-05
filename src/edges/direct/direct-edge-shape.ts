@@ -9,6 +9,7 @@ import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
 import { createDirectArrowPath, createDirectLinePath } from "./utils";
+import { setSvgRectangle } from "../shared";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
@@ -63,9 +64,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       params.to,
     );
 
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-    this.svg.style.width = `${Math.max(width, 1)}px`;
-    this.svg.style.height = `${Math.max(height, 1)}px`;
+    setSvgRectangle(this.svg, { x, y, width, height });
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const distance = Math.sqrt(width * width + height * height);

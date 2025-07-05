@@ -17,7 +17,6 @@ export function createNode(params: {
   node.innerText = params.name;
 
   return {
-    id: params.id,
     element: node,
     x: params.x,
     y: params.y,
