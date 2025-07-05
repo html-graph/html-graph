@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 
 export const createDirectLinePoint = (params: {
-  readonly totalDistance: number;
+  readonly diagonalDistance: number;
   readonly to: Point;
   readonly offset: number;
   readonly hasArrow: boolean;
@@ -11,7 +11,7 @@ export const createDirectLinePoint = (params: {
 }): Point => {
   const arrowOffset = params.hasArrow ? params.arrowLength : 0;
   const totalOffset = params.offset + arrowOffset;
-  const targetRatio = (params.flip * totalOffset) / params.totalDistance;
+  const targetRatio = (params.flip * totalOffset) / params.diagonalDistance;
 
   return {
     x: params.to.x * targetRatio + params.shift.x,

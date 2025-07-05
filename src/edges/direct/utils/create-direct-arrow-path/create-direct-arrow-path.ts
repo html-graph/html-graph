@@ -2,7 +2,7 @@ import { createArrowPath } from "@/edges/line/create-arrow-path";
 import { Point } from "@/point";
 
 export const createDirectArrowPath = (params: {
-  readonly totalDistance: number;
+  readonly diagonalDistance: number;
   readonly to: Point;
   readonly offset: number;
   readonly flip: number;
@@ -10,11 +10,11 @@ export const createDirectArrowPath = (params: {
   readonly arrowWidth: number;
   readonly arrowLength: number;
 }): string => {
-  if (params.totalDistance === 0) {
+  if (params.diagonalDistance === 0) {
     return "";
   }
 
-  const ratio = params.offset / params.totalDistance;
+  const ratio = params.offset / params.diagonalDistance;
 
   const x = params.flip * params.to.x;
   const y = params.flip * params.to.y;
@@ -25,8 +25,8 @@ export const createDirectArrowPath = (params: {
   };
 
   const direction: Point = {
-    x: x / params.totalDistance,
-    y: y / params.totalDistance,
+    x: x / params.diagonalDistance,
+    y: y / params.diagonalDistance,
   };
 
   return createArrowPath(

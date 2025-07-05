@@ -7,7 +7,7 @@ describe("createDirectArrowPath", () => {
     const distance = Math.sqrt(to.x * to.x + to.y * to.y);
 
     const arrowPath = createDirectArrowPath({
-      totalDistance: distance,
+      diagonalDistance: distance,
       to,
       offset: 0,
       flip: 1,
@@ -24,7 +24,7 @@ describe("createDirectArrowPath", () => {
     const distance = Math.sqrt(to.x * to.x + to.y * to.y);
 
     const arrowPath = createDirectArrowPath({
-      totalDistance: distance,
+      diagonalDistance: distance,
       to,
       offset: 0,
       flip: 1,
@@ -41,7 +41,7 @@ describe("createDirectArrowPath", () => {
     const distance = Math.sqrt(to.x * to.x + to.y * to.y);
 
     const arrowPath = createDirectArrowPath({
-      totalDistance: distance,
+      diagonalDistance: distance,
       to,
       offset: 1,
       flip: 1,
@@ -58,7 +58,7 @@ describe("createDirectArrowPath", () => {
     const distance = Math.sqrt(to.x * to.x + to.y * to.y);
 
     const arrowPath = createDirectArrowPath({
-      totalDistance: distance,
+      diagonalDistance: distance,
       to,
       offset: 0,
       flip: 1,

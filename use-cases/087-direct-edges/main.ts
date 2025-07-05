@@ -37,7 +37,6 @@ const canvasDefaults: CanvasDefaults = {
       sourceOffset: 50,
       targetOffset: 50,
       hasTargetArrow: true,
-      hasSourceArrow: true,
     },
     priority: 0,
   },
@@ -61,7 +60,7 @@ const addNode2Request: AddNodeRequest = createNode({
   id: "node-2",
   name: "2",
   x: 500,
-  y: 500,
+  y: 450,
 });
 
 const addNode3Request: AddNodeRequest = createNode({

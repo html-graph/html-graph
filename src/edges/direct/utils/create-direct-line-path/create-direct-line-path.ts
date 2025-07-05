@@ -2,7 +2,7 @@ import { Point, zero } from "@/point";
 import { createDirectLinePoint } from "../create-direct-line-point";
 
 export const createDirectLinePath = (params: {
-  readonly totalDistance: number;
+  readonly diagonalDistance: number;
   readonly to: Point;
   readonly sourceOffset: number;
   readonly targetOffset: number;
@@ -11,7 +11,7 @@ export const createDirectLinePath = (params: {
   readonly arrowLength: number;
 }): string => {
   const source = createDirectLinePoint({
-    totalDistance: params.totalDistance,
+    diagonalDistance: params.diagonalDistance,
     to: params.to,
     offset: params.sourceOffset,
     hasArrow: params.hasSourceArrow,
@@ -21,7 +21,7 @@ export const createDirectLinePath = (params: {
   });
 
   const target = createDirectLinePoint({
-    totalDistance: params.totalDistance,
+    diagonalDistance: params.diagonalDistance,
     to: params.to,
     offset: params.targetOffset,
     hasArrow: params.hasTargetArrow,
