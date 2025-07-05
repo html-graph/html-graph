@@ -1,6 +1,5 @@
 # TODO
 
-- node element validation
 - edge group color
 - add moveEdgesOnTop option for draggable nodes
 - unset node transform
