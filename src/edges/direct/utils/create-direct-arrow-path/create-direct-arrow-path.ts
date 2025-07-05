@@ -10,23 +10,28 @@ export const createDirectArrowPath = (params: {
   readonly arrowWidth: number;
   readonly arrowLength: number;
 }): string => {
-  const minOffset = Math.max(params.offset, 1);
-  const ratio = minOffset / params.totalDistance;
+  if (params.totalDistance === 0) {
+    return "";
+  }
 
-  const arrowStart: Point = {
-    x: params.flip * params.to.x * ratio,
-    y: params.flip * params.to.y * ratio,
+  const ratio = params.offset / params.totalDistance;
+
+  const x = params.flip * params.to.x;
+  const y = params.flip * params.to.y;
+
+  const shift: Point = {
+    x: x * ratio + params.shift.x,
+    y: y * ratio + params.shift.y,
+  };
+
+  const direction: Point = {
+    x: x / params.totalDistance,
+    y: y / params.totalDistance,
   };
 
   return createArrowPath(
-    {
-      x: arrowStart.x / minOffset,
-      y: arrowStart.y / minOffset,
-    },
-    {
-      x: arrowStart.x + params.shift.x,
-      y: arrowStart.y + params.shift.y,
-    },
+    direction,
+    shift,
     params.arrowLength,
     params.arrowWidth,
   );

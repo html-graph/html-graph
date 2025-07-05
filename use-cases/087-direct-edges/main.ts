@@ -37,6 +37,7 @@ const canvasDefaults: CanvasDefaults = {
       sourceOffset: 50,
       targetOffset: 50,
       hasTargetArrow: true,
+      hasSourceArrow: true,
     },
     priority: 0,
   },
