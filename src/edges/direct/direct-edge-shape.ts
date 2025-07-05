@@ -8,7 +8,7 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
-import { createArrowPath } from "../line/create-arrow-path";
+import { createDirectArrowPath, createDirectLinePath } from "./utils";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
@@ -71,111 +71,46 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const distance = Math.sqrt(width * width + height * height);
     const totalDistance = Math.max(distance, 1);
 
-    const to: Point = {
-      x: width,
-      y: height,
-    };
+    const to: Point = { x: width, y: height };
 
-    const linePath = this.createDirectLinePath(totalDistance, to);
+    const linePath = createDirectLinePath({
+      totalDistance,
+      to,
+      sourceOffset: this.sourceOffset,
+      targetOffset: this.targetOffset,
+      hasSourceArrow: this.sourceArrow !== null,
+      hasTargetArrow: this.targetArrow !== null,
+      arrowLength: this.arrowLength,
+    });
 
     this.line.setAttribute("d", linePath);
 
     if (this.sourceArrow) {
-      const arrowPath = this.createDirectArrowPath(
+      const arrowPath = createDirectArrowPath({
         totalDistance,
         to,
-        1,
-        zero,
-        this.sourceOffset,
-      );
+        offset: this.sourceOffset,
+        flip: 1,
+        shift: zero,
+        arrowWidth: this.arrowWidth,
+        arrowLength: this.arrowLength,
+      });
 
       this.sourceArrow.setAttribute("d", arrowPath);
     }
 
     if (this.targetArrow) {
-      const arrowPath = this.createDirectArrowPath(
+      const arrowPath = createDirectArrowPath({
         totalDistance,
         to,
-        -1,
-        to,
-        this.targetOffset,
-      );
+        offset: this.targetOffset,
+        flip: -1,
+        shift: to,
+        arrowWidth: this.arrowWidth,
+        arrowLength: this.arrowLength,
+      });
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
-  }
-
-  private createDirectLinePath(totalDistance: number, to: Point): string {
-    const source = this.createDirectLinePoint(
-      totalDistance,
-      to,
-      1,
-      zero,
-      this.sourceArrow !== null,
-      this.sourceOffset,
-    );
-
-    const target = this.createDirectLinePoint(
-      totalDistance,
-      to,
-      -1,
-      to,
-      this.targetArrow !== null,
-      this.targetOffset,
-    );
-
-    return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
-  }
-
-  private createDirectLinePoint(
-    totalDistance: number,
-    to: Point,
-    flip: number,
-    shift: Point,
-    hasArrow: boolean,
-    offset: number,
-  ): Point {
-    const totalOffset = this.calculateArrowEndOffset(hasArrow, offset);
-    const targetRatio = (flip * totalOffset) / totalDistance;
-
-    return {
-      x: shift.x + to.x * targetRatio,
-      y: shift.y + to.y * targetRatio,
-    };
-  }
-
-  private calculateArrowEndOffset(hasArrow: boolean, offset: number): number {
-    const arrowOffset = hasArrow ? this.arrowLength : 0;
-
-    return offset + arrowOffset;
-  }
-
-  private createDirectArrowPath(
-    totalDistance: number,
-    to: Point,
-    flip: number,
-    shift: Point,
-    offset: number,
-  ): string {
-    const minOffset = Math.max(offset, 1);
-    const ratio = minOffset / totalDistance;
-
-    const arrowStart: Point = {
-      x: flip * to.x * ratio,
-      y: flip * to.y * ratio,
-    };
-
-    return createArrowPath(
-      {
-        x: arrowStart.x / minOffset,
-        y: arrowStart.y / minOffset,
-      },
-      {
-        x: arrowStart.x + shift.x,
-        y: arrowStart.y + shift.y,
-      },
-      this.arrowLength,
-      this.arrowWidth,
-    );
   }
 }
