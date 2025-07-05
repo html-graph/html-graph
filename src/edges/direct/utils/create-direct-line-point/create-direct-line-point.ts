@@ -14,7 +14,7 @@ export const createDirectLinePoint = (params: {
   const targetRatio = (params.flip * totalOffset) / params.totalDistance;
 
   return {
-    x: params.shift.x + params.to.x * targetRatio,
-    y: params.shift.y + params.to.y * targetRatio,
+    x: params.to.x * targetRatio + params.shift.x,
+    y: params.to.y * targetRatio + params.shift.y,
   };
 };

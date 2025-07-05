@@ -3,7 +3,7 @@ import {
   createCycleSquarePath,
   createDetourStraightPath,
   createVerticalLinePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";

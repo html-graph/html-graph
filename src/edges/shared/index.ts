@@ -1,3 +1,4 @@
+export { createRotatedPoint } from "./create-rotated-point";
 export { createBezierLinePath } from "./create-bezier-line-path";
 export { createDetourBezierPath } from "./create-detour-bezier-path";
 export { createHorizontalLinePath } from "./create-horizontal-line-path";

@@ -3,7 +3,7 @@ import {
   createBezierLinePath,
   createDetourBezierPath,
   createCycleCirclePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";

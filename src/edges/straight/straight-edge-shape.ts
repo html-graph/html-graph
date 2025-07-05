@@ -3,7 +3,7 @@ import {
   createCycleSquarePath,
   createDetourStraightPath,
   createStraightLinePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";

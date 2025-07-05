@@ -1,12 +1,12 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../../create-rotated-point";
+import { createRotatedPoint } from "../create-rotated-point";
 import { createRoundedPath } from "../create-rounded-path";
 
-export const createHorizontalLinePath = (params: {
+export const createVerticalLinePath = (params: {
   readonly to: Point;
   readonly fromVector: Point;
   readonly toVector: Point;
-  readonly flipX: number;
+  readonly flipY: number;
   readonly arrowLength: number;
   readonly arrowOffset: number;
   readonly roundness: number;
@@ -36,27 +36,26 @@ export const createHorizontalLinePath = (params: {
     params.fromVector,
     zero,
   );
-
   const endLine = createRotatedPoint(
     { x: params.to.x - gapRoundness, y: params.to.y },
     params.toVector,
     params.to,
   );
 
-  const halfWidth = Math.max((beginLine.x + endLine.x) / 2, gap);
-  const halfHeight = params.to.y / 2;
+  const halfHeight = Math.max((beginLine.y + endLine.y) / 2, gap);
+  const halfWidth = params.to.x / 2;
 
   const begin1: Point = {
-    x: params.flipX > 0 ? halfWidth : -gap,
-    y: beginLine.y,
+    x: beginLine.x,
+    y: params.flipY > 0 ? halfHeight : -gap,
   };
-  const begin2: Point = { x: begin1.x, y: halfHeight };
+  const begin2: Point = { x: halfWidth, y: begin1.y };
 
   const end1: Point = {
-    x: params.flipX > 0 ? params.to.x - halfWidth : params.to.x + gap,
-    y: endLine.y,
+    x: endLine.x,
+    y: params.flipY > 0 ? params.to.y - halfHeight : params.to.y + gap,
   };
-  const end2: Point = { x: end1.x, y: halfHeight };
+  const end2: Point = { x: halfWidth, y: end1.y };
 
   return createRoundedPath(
     [beginArrow, beginLine, begin1, begin2, end2, end1, endLine, endArrow],
