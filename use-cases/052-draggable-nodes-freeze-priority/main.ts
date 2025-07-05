@@ -11,7 +11,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const dragConfig: DraggableNodesConfig = {
-  moveNodesOnTop: false,
+  moveOnTop: false,
 };
 
 const canvas: Canvas = builder.enableUserDraggableNodes(dragConfig).build();

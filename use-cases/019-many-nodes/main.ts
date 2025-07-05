@@ -40,7 +40,7 @@ const defaults: CanvasDefaults = {
 };
 
 const dragConfig: DraggableNodesConfig = {
-  moveNodesOnTop: false,
+  moveOnTop: false,
 };
 
 builder
