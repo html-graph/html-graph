@@ -256,17 +256,15 @@ export class UserDraggableNodesConfigurator {
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
-    if (this.config.moveOnTop) {
-      this.maxNodePriority++;
-
-      if (this.config.moveEdgesOnTop) {
-        this.maxNodePriority++;
-      }
+    if (!this.config.moveOnTop) {
+      return;
     }
 
-    this.canvas.updateNode(nodeId, { priority: this.maxNodePriority });
+    this.maxNodePriority++;
 
     if (this.config.moveEdgesOnTop) {
+      this.maxNodePriority++;
+
       const edgePriority = this.maxNodePriority - 1;
 
       const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
@@ -275,6 +273,8 @@ export class UserDraggableNodesConfigurator {
         this.canvas.updateEdge(edgeId, { priority: edgePriority });
       });
     }
+
+    this.canvas.updateNode(nodeId, { priority: this.maxNodePriority });
   }
 
   private cancelMouseDrag(): void {
