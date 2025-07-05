@@ -3,6 +3,7 @@ import { MouseEventVerifier } from "../../shared";
 
 export interface DraggableNodesConfig {
   readonly moveOnTop?: boolean;
+  readonly moveEdgesOnTop?: boolean;
   readonly mouse?: {
     readonly dragCursor?: string | null;
     readonly mouseDownEventVerifier?: MouseEventVerifier;
