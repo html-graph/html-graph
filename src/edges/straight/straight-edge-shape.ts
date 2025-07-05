@@ -3,16 +3,14 @@ import {
   createCycleSquarePath,
   createDetourStraightPath,
   createStraightLinePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-/**
- * Responsibility: Providing edge shape connecting ports with straight line
- */
+// Responsibility: Providing edge shape connecting ports with straight line
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

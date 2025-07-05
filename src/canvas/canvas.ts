@@ -15,9 +15,7 @@ import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { Defaults } from "./defaults";
 
-/**
- * Responsibility: provides graph rendering API for end user
- */
+// Responsibility: provides graph rendering API for end user
 export class Canvas {
   /**
    * provides api for accessing model of rendered graph

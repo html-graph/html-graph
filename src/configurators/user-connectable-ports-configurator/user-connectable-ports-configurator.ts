@@ -8,9 +8,7 @@ import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
 import { transformPoint } from "@/transform-point";
 
-/**
- * Responsibility: Configuring ports connectable via drag
- */
+// Responsibility: Configuring ports connectable via drag
 export class UserConnectablePortsConfigurator {
   private readonly config: Config;
 

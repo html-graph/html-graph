@@ -20,9 +20,7 @@ import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
 import { CanvasDefaults, createCanvasDefaults } from "@/create-canvas-defaults";
 
-/**
- * Responsibility: Constructs canvas based on specified configuration
- */
+// Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
   private element: HTMLElement | null = null;
 

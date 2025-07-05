@@ -3,16 +3,14 @@ import {
   createBezierLinePath,
   createDetourBezierPath,
   createCycleCirclePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-/**
- * Responsibility: Providing edge shape connecting ports with bezier line
- */
+// Responsibility: Providing edge shape connecting ports with bezier line
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

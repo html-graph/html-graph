@@ -55,6 +55,7 @@ export {
   LineEdgeShape,
   InteractiveEdgeShape,
   InteractiveEdgeError,
+  DirectEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,
@@ -68,6 +69,7 @@ export type {
   CreatePathFn,
   StructuredEdgeShape,
   InteractiveEdgeParams,
+  DirectEdgeParams,
 } from "./edges";
 
 export type { Point } from "./point";

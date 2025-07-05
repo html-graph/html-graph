@@ -3,17 +3,15 @@ import {
   createCycleSquarePath,
   createDetourStraightPath,
   createHorizontalLinePath,
-} from "../paths";
+} from "../shared";
 import { Point } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { CreatePathFn, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-/**
- * Responsibility: Providing edge shape connecting ports with horizontal angled
- * line
- */
+// Responsibility: Providing edge shape connecting ports with horizontal angled
+// line
 export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

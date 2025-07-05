@@ -4,9 +4,7 @@ import { initialMatrix } from "./initial-matrix";
 import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
 
-/**
- * Responsibility: Stores viewport transformation state
- */
+// Responsibility: Stores viewport transformation state
 export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;
 

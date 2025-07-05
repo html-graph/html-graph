@@ -15,4 +15,5 @@ export const edgeConstants = Object.freeze({
   smallCycleRadius: 15,
   curvature: 90,
   interactiveWidth: 10,
+  preOffset: 0,
 });

@@ -10,10 +10,9 @@ import { createEdgeSvg } from "./create-edge-svg";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { CreatePathFn } from "./create-path-fn";
 import { StructuredEdgeShape } from "../structured-edge-shape";
+import { setSvgRectangle } from "../shared";
 
-/**
- * Responsibility: Providing low level core for single line structured edges
- */
+// Responsibility: Providing low level core for single line structured edges
 export class LineEdgeShape implements StructuredEdgeShape {
   public readonly svg = createEdgeSvg();
 
@@ -47,9 +46,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
       params.to,
     );
 
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
-    this.svg.style.width = `${Math.max(width, 1)}px`;
-    this.svg.style.height = `${Math.max(height, 1)}px`;
+    setSvgRectangle(this.svg, { x, y, width, height });
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const sourceDirection = createFlipDirectionVector(

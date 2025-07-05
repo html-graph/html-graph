@@ -1,6 +1,7 @@
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import {
   BezierEdgeShape,
+  DirectEdgeShape,
   EdgeShape,
   HorizontalEdgeShape,
   StraightEdgeShape,
@@ -46,5 +47,13 @@ describe("resolveEdgeShapeFactory", () => {
     const shape = factory("123");
 
     expect(shape instanceof VerticalEdgeShape).toBe(true);
+  });
+
+  it("should return direct function for direct type", () => {
+    const factory = resolveEdgeShapeFactory({ type: "direct" });
+
+    const shape = factory("123");
+
+    expect(shape instanceof DirectEdgeShape).toBe(true);
   });
 });

@@ -1,4 +1,4 @@
-import { createRotatedPoint } from "../../create-rotated-point";
+import { createRotatedPoint } from "../../shared";
 import { Point, zero } from "@/point";
 
 export const createArrowPath = (
@@ -13,13 +13,13 @@ export const createArrowPath = (
     { x: arrowLength, y: -arrowWidth },
   ];
 
-  const p: readonly Point[] = arrowPoints
-    .map((p) => createRotatedPoint(p, directionVector, zero))
-    .map((p) => ({ x: p.x + shift.x, y: p.y + shift.y }));
+  const points: readonly Point[] = arrowPoints
+    .map((point) => createRotatedPoint(point, directionVector, zero))
+    .map((point) => ({ x: point.x + shift.x, y: point.y + shift.y }));
 
-  const move = `M ${p[0].x} ${p[0].y}`;
-  const line1 = `L ${p[1].x} ${p[1].y}`;
-  const line2 = `L ${p[2].x} ${p[2].y}`;
+  const move = `M ${points[0].x} ${points[0].y}`;
+  const line1 = `L ${points[1].x} ${points[1].y}`;
+  const line2 = `L ${points[2].x} ${points[2].y}`;
 
   return `${move} ${line1} ${line2} Z`;
 };
