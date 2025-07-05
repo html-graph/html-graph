@@ -1195,4 +1195,24 @@ describe("Canvas", () => {
 
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
+
+  it("should throw error when trying to add node with existing element", () => {
+    const canvas = createCanvas();
+
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    expect(() => {
+      canvas.addNode({
+        element: nodeElement,
+        x: 0,
+        y: 0,
+      });
+    }).toThrow(HtmlGraphError);
+  });
 });
