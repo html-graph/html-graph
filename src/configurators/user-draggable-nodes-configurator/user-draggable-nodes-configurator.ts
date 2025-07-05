@@ -263,9 +263,9 @@ export class UserDraggableNodesConfigurator {
     this.maxNodePriority++;
 
     if (this.config.moveEdgesOnTop) {
-      this.maxNodePriority++;
+      const edgePriority = this.maxNodePriority;
 
-      const edgePriority = this.maxNodePriority - 1;
+      this.maxNodePriority++;
 
       const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
 
