@@ -2,23 +2,6 @@ import { createConfig } from "./create-config";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
 
 describe("createConfig", () => {
-  it("should not freeze priority by default", () => {
-    const dragOptions: DraggableNodesConfig = {};
-
-    const options = createConfig(dragOptions);
-
-    expect(options.freezePriority).toBe(false);
-  });
-  it("should freeze priority when specified", () => {
-    const dragOptions: DraggableNodesConfig = {
-      moveOnTop: false,
-    };
-
-    const options = createConfig(dragOptions);
-
-    expect(options.freezePriority).toBe(true);
-  });
-
   it("should set specified onNodeDrag", () => {
     const onNodeDrag = (): boolean => true;
 
@@ -99,5 +82,61 @@ describe("createConfig", () => {
     const options = createConfig(dragOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
+  });
+
+  it("should move edges on top by default", () => {
+    const dragOptions: DraggableNodesConfig = {};
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveEdgesOnTop).toBe(true);
+  });
+
+  it("should not move edges on top when specified", () => {
+    const dragOptions: DraggableNodesConfig = {
+      moveEdgesOnTop: false,
+    };
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveEdgesOnTop).toBe(false);
+  });
+
+  it("should move nodes on top by default", () => {
+    const dragOptions: DraggableNodesConfig = {};
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveNodesOnTop).toBe(true);
+  });
+
+  it("should not move nodes on top when specified", () => {
+    const dragOptions: DraggableNodesConfig = {
+      moveNodesOnTop: false,
+    };
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveNodesOnTop).toBe(false);
+  });
+
+  it("should not move nodes on top when move on top disabled", () => {
+    const dragOptions: DraggableNodesConfig = {
+      moveOnTop: false,
+    };
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveNodesOnTop).toBe(false);
+  });
+
+  it("should not move edges on top when move on top disabled", () => {
+    const dragOptions: DraggableNodesConfig = {
+      moveOnTop: false,
+    };
+
+    const options = createConfig(dragOptions);
+
+    expect(options.moveEdgesOnTop).toBe(false);
   });
 });

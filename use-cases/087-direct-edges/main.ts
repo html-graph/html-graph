@@ -44,7 +44,7 @@ const canvasDefaults: CanvasDefaults = {
 
 const canvas: Canvas = builder
   .setDefaults(canvasDefaults)
-  .enableUserDraggableNodes({ moveOnTop: false })
+  .enableUserDraggableNodes({ moveNodesOnTop: false })
   .enableUserTransformableViewport()
   .enableBackground()
   .build();

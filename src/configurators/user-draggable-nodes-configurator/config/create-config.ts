@@ -10,7 +10,9 @@ export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
   const onNodeDragFinished =
     dragConfig?.events?.onNodeDragFinished ?? ((): void => {});
 
-  const freezePriority = dragConfig?.moveOnTop === false;
+  const moveOnTop = dragConfig?.moveOnTop !== false;
+  const moveNodesOnTop = dragConfig?.moveNodesOnTop !== false && moveOnTop;
+  const moveEdgesOnTop = dragConfig?.moveEdgesOnTop !== false && moveOnTop;
 
   const cursor = dragConfig?.mouse?.dragCursor;
   const dragCursor = cursor !== undefined ? cursor : "grab";
@@ -31,7 +33,8 @@ export const createConfig = (dragConfig: DraggableNodesConfig): Config => {
       : (event: MouseEvent): boolean => event.button === 0;
 
   return {
-    freezePriority,
+    moveNodesOnTop,
+    moveEdgesOnTop,
     dragCursor,
     mouseDownEventVerifier,
     mouseUpEventVerifier,
