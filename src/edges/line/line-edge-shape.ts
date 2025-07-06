@@ -1,11 +1,11 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
 import { LineEdgeParams } from "./line-edge-params";
-import { createArrowPath } from "./create-arrow-path";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { CreatePathFn } from "./create-path-fn";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import {
+  createArrowPath,
   createEdgeArrow,
   createEdgeGroup,
   createEdgeLine,
