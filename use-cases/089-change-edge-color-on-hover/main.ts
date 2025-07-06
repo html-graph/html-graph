@@ -12,8 +12,8 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const edgeColor = "#00aa00";
-const hoverEdgeColor = "red";
+const edgeColor = "#777777";
+const hoverEdgeColor = "#f9880e";
 
 const defaults: CanvasDefaults = {
   nodes: {

@@ -3,8 +3,8 @@ import { Point, zero } from "@/point";
 
 export const createBezierLinePath = (params: {
   readonly to: Point;
-  readonly fromVector: Point;
-  readonly toVector: Point;
+  readonly sourceDirection: Point;
+  readonly targetDirection: Point;
   readonly arrowLength: number;
   readonly curvature: number;
   readonly hasSourceArrow: boolean;
@@ -12,24 +12,24 @@ export const createBezierLinePath = (params: {
 }): string => {
   const begin = createRotatedPoint(
     { x: params.arrowLength, y: zero.y },
-    params.fromVector,
+    params.sourceDirection,
     zero,
   );
 
   const end = createRotatedPoint(
     { x: params.to.x - params.arrowLength, y: params.to.y },
-    params.toVector,
+    params.targetDirection,
     params.to,
   );
 
   const bezierBegin: Point = {
-    x: begin.x + params.fromVector.x * params.curvature,
-    y: begin.y + params.fromVector.y * params.curvature,
+    x: begin.x + params.sourceDirection.x * params.curvature,
+    y: begin.y + params.sourceDirection.y * params.curvature,
   };
 
   const bezierEnd: Point = {
-    x: end.x - params.toVector.x * params.curvature,
-    y: end.y - params.toVector.y * params.curvature,
+    x: end.x - params.targetDirection.x * params.curvature,
+    y: end.y - params.targetDirection.y * params.curvature,
   };
 
   const curve = `M ${begin.x} ${begin.y} C ${bezierBegin.x} ${bezierBegin.y}, ${bezierEnd.x} ${bezierEnd.y}, ${end.x} ${end.y}`;

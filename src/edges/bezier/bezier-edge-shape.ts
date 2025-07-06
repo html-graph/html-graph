@@ -63,8 +63,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   ): string =>
     createDetourBezierPath({
       to,
-      fromVector: sourceDirection,
-      toVector: targetDirection,
+      sourceDirection,
+      targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
@@ -82,8 +82,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   ): string =>
     createBezierLinePath({
       to,
-      fromVector: sourceDirection,
-      toVector: targetDirection,
+      sourceDirection,
+      targetDirection,
       arrowLength: this.arrowLength,
       curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,

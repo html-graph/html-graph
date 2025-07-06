@@ -4,8 +4,8 @@ import { createRoundedPath } from "../create-rounded-path";
 
 export const createStraightLinePath = (params: {
   readonly to: Point;
-  readonly fromVector: Point;
-  readonly toVector: Point;
+  readonly sourceDirection: Point;
+  readonly targetDirection: Point;
   readonly arrowLength: number;
   readonly arrowOffset: number;
   readonly roundness: number;
@@ -15,14 +15,14 @@ export const createStraightLinePath = (params: {
   const pba: Point = params.hasSourceArrow
     ? createRotatedPoint(
         { x: params.arrowLength, y: zero.y },
-        params.fromVector,
+        params.sourceDirection,
         zero,
       )
     : zero;
   const pea: Point = params.hasTargetArrow
     ? createRotatedPoint(
         { x: params.to.x - params.arrowLength, y: params.to.y },
-        params.toVector,
+        params.targetDirection,
         params.to,
       )
     : params.to;
@@ -31,12 +31,12 @@ export const createStraightLinePath = (params: {
 
   const pbl = createRotatedPoint(
     { x: gap, y: zero.y },
-    params.fromVector,
+    params.sourceDirection,
     zero,
   );
   const pel = createRotatedPoint(
     { x: params.to.x - gap, y: params.to.y },
-    params.toVector,
+    params.targetDirection,
     params.to,
   );
 

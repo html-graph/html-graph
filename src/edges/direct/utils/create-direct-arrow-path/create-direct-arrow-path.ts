@@ -1,4 +1,4 @@
-import { createArrowPath } from "@/edges/line/create-arrow-path";
+import { createArrowPath } from "../../../shared";
 import { Point } from "@/point";
 
 export const createDirectArrowPath = (params: {
