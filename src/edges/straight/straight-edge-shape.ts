@@ -64,8 +64,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   ): string =>
     createDetourStraightPath({
       to,
-      fromVector: sourceDirection,
-      toVector: targetDirection,
+      sourceDirection,
+      targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
@@ -84,8 +84,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   ): string =>
     createStraightLinePath({
       to,
-      fromVector: sourceDirection,
-      toVector: targetDirection,
+      sourceDirection,
+      targetDirection,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,

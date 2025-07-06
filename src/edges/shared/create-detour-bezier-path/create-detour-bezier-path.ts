@@ -3,8 +3,8 @@ import { createRotatedPoint } from "../create-rotated-point";
 
 export const createDetourBezierPath = (params: {
   readonly to: Point;
-  readonly fromVector: Point;
-  readonly toVector: Point;
+  readonly sourceDirection: Point;
+  readonly targetDirection: Point;
   readonly flipX: number;
   readonly arrowLength: number;
   readonly detourDirection: number;
@@ -17,7 +17,7 @@ export const createDetourBezierPath = (params: {
   const pba: Point = params.hasSourceArrow
     ? createRotatedPoint(
         { x: params.arrowLength, y: zero.y },
-        params.fromVector,
+        params.sourceDirection,
         zero,
       )
     : zero;
@@ -25,7 +25,7 @@ export const createDetourBezierPath = (params: {
   const pea: Point = params.hasTargetArrow
     ? createRotatedPoint(
         { x: params.to.x - params.arrowLength, y: params.to.y },
-        params.toVector,
+        params.targetDirection,
         params.to,
       )
     : params.to;
@@ -40,7 +40,7 @@ export const createDetourBezierPath = (params: {
 
   const pbl1: Point = createRotatedPoint(
     { x: gap1, y: zero.y },
-    params.fromVector,
+    params.sourceDirection,
     zero,
   );
   const pbl2: Point = {
@@ -49,7 +49,7 @@ export const createDetourBezierPath = (params: {
   };
   const pel1: Point = createRotatedPoint(
     { x: params.to.x - gap1, y: params.to.y },
-    params.toVector,
+    params.targetDirection,
     params.to,
   );
   const pel2: Point = {
@@ -58,13 +58,13 @@ export const createDetourBezierPath = (params: {
   };
   const pm: Point = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
   const pbc1: Point = {
-    x: pbl1.x + params.curvature * params.fromVector.x,
-    y: pbl1.y + params.curvature * params.fromVector.y,
+    x: pbl1.x + params.curvature * params.sourceDirection.x,
+    y: pbl1.y + params.curvature * params.sourceDirection.y,
   };
 
   const pec1: Point = {
-    x: pel1.x - params.curvature * params.toVector.x,
-    y: pel1.y - params.curvature * params.toVector.y,
+    x: pel1.x - params.curvature * params.targetDirection.x,
+    y: pel1.y - params.curvature * params.targetDirection.y,
   };
 
   const pbc2: Point = {

@@ -4,8 +4,8 @@ describe("createVerticalLinePath", () => {
   it("should create vertical line path without arrows", () => {
     const path = createVerticalLinePath({
       to: { x: 100, y: 200 },
-      fromVector: { x: 1, y: 0 },
-      toVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -22,8 +22,8 @@ describe("createVerticalLinePath", () => {
   it("should create flipped vertical line path without arrows", () => {
     const path = createVerticalLinePath({
       to: { x: 100, y: 200 },
-      fromVector: { x: 1, y: 0 },
-      toVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -40,8 +40,8 @@ describe("createVerticalLinePath", () => {
   it("should create vertical line path with source arrow", () => {
     const path = createVerticalLinePath({
       to: { x: 100, y: 200 },
-      fromVector: { x: 1, y: 0 },
-      toVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -58,8 +58,8 @@ describe("createVerticalLinePath", () => {
   it("should create vertical line path with target arrow", () => {
     const path = createVerticalLinePath({
       to: { x: 100, y: 200 },
-      fromVector: { x: 1, y: 0 },
-      toVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,

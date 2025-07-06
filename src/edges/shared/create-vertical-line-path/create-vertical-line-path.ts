@@ -4,8 +4,8 @@ import { createRoundedPath } from "../create-rounded-path";
 
 export const createVerticalLinePath = (params: {
   readonly to: Point;
-  readonly fromVector: Point;
-  readonly toVector: Point;
+  readonly sourceDirection: Point;
+  readonly targetDirection: Point;
   readonly flipY: number;
   readonly arrowLength: number;
   readonly arrowOffset: number;
@@ -16,14 +16,14 @@ export const createVerticalLinePath = (params: {
   const beginArrow: Point = params.hasSourceArrow
     ? createRotatedPoint(
         { x: params.arrowLength, y: zero.y },
-        params.fromVector,
+        params.sourceDirection,
         zero,
       )
     : zero;
   const endArrow: Point = params.hasTargetArrow
     ? createRotatedPoint(
         { x: params.to.x - params.arrowLength, y: params.to.y },
-        params.toVector,
+        params.targetDirection,
         params.to,
       )
     : params.to;
@@ -33,12 +33,12 @@ export const createVerticalLinePath = (params: {
 
   const beginLine = createRotatedPoint(
     { x: gapRoundness, y: zero.y },
-    params.fromVector,
+    params.sourceDirection,
     zero,
   );
   const endLine = createRotatedPoint(
     { x: params.to.x - gapRoundness, y: params.to.y },
-    params.toVector,
+    params.targetDirection,
     params.to,
   );
 
