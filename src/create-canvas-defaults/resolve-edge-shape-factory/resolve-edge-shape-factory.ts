@@ -5,8 +5,8 @@ import {
   StraightEdgeShape,
   VerticalEdgeShape,
 } from "@/edges";
-import { EdgeShapeFactory } from "../edge-shape-factory";
 import { EdgeShapeConfig } from "../edge-shape-config";
+import { EdgeShapeFactory } from "@/canvas";
 
 export const resolveEdgeShapeFactory: (
   options: EdgeShapeConfig,
