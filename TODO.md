@@ -1,5 +1,7 @@
 # TODO
 
+- dashed edges
+- animated dashed edges
 - user selectable edges
 - user deletable edges
 - user movable edges
