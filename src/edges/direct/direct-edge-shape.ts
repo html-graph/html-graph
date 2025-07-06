@@ -1,19 +1,21 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import { createEdgeArrow } from "../line/create-edge-arrow";
-import { createEdgeGroup } from "../line/create-edge-group";
-import { createEdgeLine } from "../line/create-edge-line";
-import { createEdgeRectangle } from "../line/create-edge-rectangle";
-import { createEdgeSvg } from "../line/create-edge-svg";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
 import { createDirectArrowPath, createDirectLinePath } from "./utils";
-import { setSvgRectangle } from "../shared";
+import {
+  createEdgeArrow,
+  createEdgeGroup,
+  createEdgeLine,
+  createEdgeRectangle,
+  createEdgeSvg,
+  setSvgRectangle,
+} from "../shared";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
-  public readonly svg = createEdgeSvg();
+  public readonly svg: SVGSVGElement;
 
   public readonly group = createEdgeGroup();
 
@@ -43,17 +45,18 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.sourceOffset = params?.sourceOffset ?? edgeConstants.preOffset;
     this.targetOffset = params?.targetOffset ?? edgeConstants.preOffset;
 
+    this.svg = createEdgeSvg(this.color);
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(this.color, this.width);
+    this.line = createEdgeLine(this.width);
     this.group.appendChild(this.line);
 
     if (params?.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow(this.color);
+      this.sourceArrow = createEdgeArrow();
       this.group.appendChild(this.sourceArrow);
     }
 
     if (params?.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow(this.color);
+      this.targetArrow = createEdgeArrow();
       this.group.appendChild(this.targetArrow);
     }
   }
