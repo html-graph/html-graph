@@ -11,5 +11,5 @@ test("should freeze node priority when dragging", async ({ page }) => {
 
   await page.mouse.move(240, 400);
 
-  await expect(page).toHaveScreenshot("after-hover-leave.png");
+  await expect(page).toHaveScreenshot("initial.png");
 });
