@@ -3,7 +3,7 @@ import { createRotatedPoint } from "../create-rotated-point";
 import { createRoundedPath } from "../create-rounded-path";
 
 export const createCycleSquarePath = (params: {
-  readonly fromVector: Point;
+  readonly sourceDirection: Point;
   readonly arrowLength: number;
   readonly side: number;
   readonly arrowOffset: number;
@@ -28,7 +28,7 @@ export const createCycleSquarePath = (params: {
   ];
 
   const rp = linePoints.map((p) =>
-    createRotatedPoint(p, params.fromVector, zero),
+    createRotatedPoint(p, params.sourceDirection, zero),
   );
 
   const preLine = `M ${zero.x} ${zero.y} L ${rp[0].x} ${rp[0].y} `;

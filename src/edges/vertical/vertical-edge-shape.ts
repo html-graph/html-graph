@@ -44,10 +44,10 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
   private readonly lineShape: LineEdgeShape;
 
   private readonly createCyclePath: CreatePathFn = (
-    fromDirection: Point,
+    sourceDirection: Point,
   ): string =>
     createCycleSquarePath({
-      fromVector: fromDirection,
+      sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,

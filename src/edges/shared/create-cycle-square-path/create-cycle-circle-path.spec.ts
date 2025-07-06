@@ -3,7 +3,7 @@ import { createCycleSquarePath } from "./create-cycle-square-path";
 describe("createCycleSquarePath", () => {
   it("should create cycle square path without arrows", () => {
     const path = createCycleSquarePath({
-      fromVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
@@ -19,7 +19,7 @@ describe("createCycleSquarePath", () => {
 
   it("should create cycle square path with source arrow", () => {
     const path = createCycleSquarePath({
-      fromVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
@@ -35,7 +35,7 @@ describe("createCycleSquarePath", () => {
 
   it("should create cycle square path with target arrow", () => {
     const path = createCycleSquarePath({
-      fromVector: { x: 1, y: 0 },
+      sourceDirection: { x: 1, y: 0 },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
