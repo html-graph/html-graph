@@ -1,13 +1,11 @@
 # TODO
 
+- user selectable edges
 - user deletable edges
 - user movable edges
-- user selectable edges
 - improve onDestroy unit tests
 - virtual scroll node events
 - make builder single use object
-- user draggable edges via ports
-- user draggable edges based on selection
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
 - arrows customization
