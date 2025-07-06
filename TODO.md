@@ -1,6 +1,5 @@
 # TODO
 
-- edge group color
 - user deletable edges
 - user movable edges
 - user selectable edges
