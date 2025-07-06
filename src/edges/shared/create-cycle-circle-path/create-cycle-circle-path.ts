@@ -2,7 +2,7 @@ import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../create-rotated-point";
 
 export const createCycleCirclePath = (params: {
-  readonly fromVector: Point;
+  readonly sourceDirection: Point;
   readonly radius: number;
   readonly smallRadius: number;
   readonly arrowLength: number;
@@ -23,7 +23,7 @@ export const createCycleCirclePath = (params: {
   ];
 
   const rotatedPoints = points.map((p) =>
-    createRotatedPoint(p, params.fromVector, zero),
+    createRotatedPoint(p, params.sourceDirection, zero),
   );
 
   const c = [

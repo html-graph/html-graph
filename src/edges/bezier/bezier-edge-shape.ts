@@ -43,10 +43,10 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   private readonly lineShape: LineEdgeShape;
 
   private readonly createCyclePath: CreatePathFn = (
-    fromDirection: Point,
+    sourceDirection: Point,
   ): string =>
     createCycleCirclePath({
-      fromVector: fromDirection,
+      sourceDirection,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
