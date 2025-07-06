@@ -1,4 +1,4 @@
-import { TransformPreprocessorConfig } from "../config";
+import { TransformPreprocessorConfig } from "../config/transform-preprocessor-config";
 import {
   createScaleLimitTransformPreprocessor,
   createShiftLimitTransformPreprocessor,
