@@ -65,8 +65,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
   ): string =>
     createDetourStraightPath({
       to,
-      sourceDirection: sourceDirection,
-      targetDirection: targetDirection,
+      sourceDirection,
+      targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
@@ -86,8 +86,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
   ): string =>
     createHorizontalLinePath({
       to,
-      sourceDirection: sourceDirection,
-      targetDirection: targetDirection,
+      sourceDirection,
+      targetDirection,
       flipX,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
