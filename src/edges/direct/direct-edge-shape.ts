@@ -3,15 +3,16 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
-import { createDirectArrowPath, createDirectLinePath } from "./utils";
 import {
   createEdgeArrow,
   createEdgeGroup,
   createEdgeLine,
   createEdgeRectangle,
   createEdgeSvg,
+  DirectLine,
   setSvgRectangle,
 } from "../shared";
+import { createDirectArrowPath } from "./create-direct-arrow-path";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
@@ -74,7 +75,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const to: Point = { x: width, y: height };
 
     if (diagonalDistance > 0) {
-      const linePath = createDirectLinePath({
+      const linePath = new DirectLine({
         diagonalDistance,
         to,
         sourceOffset: this.sourceOffset,
@@ -84,7 +85,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         arrowLength: this.arrowLength,
       });
 
-      this.line.setAttribute("d", linePath);
+      this.line.setAttribute("d", linePath.getPath());
     } else {
       this.line.setAttribute("d", "");
     }

@@ -1,12 +1,16 @@
 export { createRotatedPoint } from "./create-rotated-point";
-export { createBezierLinePath } from "./create-bezier-line-path";
-export { createDetourBezierPath } from "./create-detour-bezier-path";
-export { createHorizontalLinePath } from "./create-horizontal-line-path";
-export { createDetourStraightPath } from "./create-detour-straight-path";
-export { createStraightLinePath } from "./create-straight-line-path";
-export { createVerticalLinePath } from "./create-vertical-line-path";
-export { createCycleSquarePath } from "./create-cycle-square-path";
-export { createCycleCirclePath } from "./create-cycle-circle-path";
+export {
+  BezierConnectionLine,
+  DetoutBezierLine,
+  createHorizontalLinePath,
+  createDetourStraightPath,
+  createStraightLinePath,
+  createVerticalLinePath,
+  createCycleSquarePath,
+  CycleCircleLine,
+  DirectLine,
+} from "./connection-line";
+export type { ConnectionLine } from "./connection-line";
 export { setSvgRectangle } from "./set-svg-rectangle";
 export { createEdgeSvg } from "./create-edge-svg";
 export { createEdgeArrow } from "./create-edge-arrow";
