@@ -1,8 +1,8 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import {
-  createCycleSquarePath,
-  createDetourStraightPath,
-  createHorizontalLinePath,
+  CycleSquareEdgePath,
+  DetourStraightEdgePath,
+  HorizontalEdgePath,
 } from "../shared";
 import { Point } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
@@ -45,8 +45,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly createCyclePath: CreatePathFn = (
     sourceDirection: Point,
-  ): string =>
-    createCycleSquarePath({
+  ): string => {
+    const line = new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -56,14 +56,17 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string =>
-    createDetourStraightPath({
+  ): string => {
+    const line = new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -78,13 +81,16 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
-  ): string =>
-    createHorizontalLinePath({
+  ): string => {
+    const line = new HorizontalEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -95,6 +101,9 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
+
+    return line.getPath();
+  };
 
   public constructor(params?: HorizontalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

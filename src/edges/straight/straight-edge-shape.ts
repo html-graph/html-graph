@@ -1,8 +1,8 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import {
-  createCycleSquarePath,
-  createDetourStraightPath,
-  createStraightLinePath,
+  CycleSquareEdgePath,
+  DetourStraightEdgePath,
+  StraightEdgePath,
 } from "../shared";
 import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
@@ -44,8 +44,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   private readonly createCyclePath: CreatePathFn = (
     sourceDirection: Point,
-  ): string =>
-    createCycleSquarePath({
+  ): string => {
+    const line = new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -55,14 +55,17 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string =>
-    createDetourStraightPath({
+  ): string => {
+    const line = new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -77,12 +80,15 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
-  ): string =>
-    createStraightLinePath({
+  ): string => {
+    const line = new StraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -92,6 +98,9 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
+
+    return line.getPath();
+  };
 
   public constructor(params?: StraightEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

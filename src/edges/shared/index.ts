@@ -1,17 +1,20 @@
 export { createRotatedPoint } from "./create-rotated-point";
-export { createBezierLinePath } from "./create-bezier-line-path";
-export { createDetourBezierPath } from "./create-detour-bezier-path";
-export { createHorizontalLinePath } from "./create-horizontal-line-path";
-export { createDetourStraightPath } from "./create-detour-straight-path";
-export { createStraightLinePath } from "./create-straight-line-path";
-export { createVerticalLinePath } from "./create-vertical-line-path";
-export { createCycleSquarePath } from "./create-cycle-square-path";
-export { createCycleCirclePath } from "./create-cycle-circle-path";
+export {
+  BezierEdgePath,
+  DetoutBezierEdgePath,
+  HorizontalEdgePath,
+  DetourStraightEdgePath,
+  StraightEdgePath,
+  VerticalEdgePath,
+  CycleSquareEdgePath,
+  CycleCircleEdgePath,
+  DirectEdgePath,
+} from "./edge-path";
 export { setSvgRectangle } from "./set-svg-rectangle";
 export { createEdgeSvg } from "./create-edge-svg";
 export { createEdgeArrow } from "./create-edge-arrow";
 export { createEdgeGroup } from "./create-edge-group";
-export { createEdgeLine } from "./create-edge-line";
+export { createEdgePath } from "./create-edge-path";
 export { createEdgeRectangle } from "./create-edge-rectangle";
 export { createArrowPath } from "./create-arrow-path";
 export { cssVariables } from "./css-variables";

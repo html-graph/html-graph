@@ -3,15 +3,16 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { Point, zero } from "@/point";
-import { createDirectArrowPath, createDirectLinePath } from "./utils";
 import {
   createEdgeArrow,
   createEdgeGroup,
-  createEdgeLine,
+  createEdgePath,
   createEdgeRectangle,
   createEdgeSvg,
+  DirectEdgePath,
   setSvgRectangle,
 } from "../shared";
+import { createDirectArrowPath } from "./create-direct-arrow-path";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
@@ -47,7 +48,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     this.svg = createEdgeSvg(this.color);
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(this.width);
+    this.line = createEdgePath(this.width);
     this.group.appendChild(this.line);
 
     if (params?.hasSourceArrow) {
@@ -70,28 +71,22 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     setSvgRectangle(this.svg, { x, y, width, height });
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const diagonalDistance = Math.sqrt(width * width + height * height);
     const to: Point = { x: width, y: height };
 
-    if (diagonalDistance > 0) {
-      const linePath = createDirectLinePath({
-        diagonalDistance,
-        to,
-        sourceOffset: this.sourceOffset,
-        targetOffset: this.targetOffset,
-        hasSourceArrow: this.sourceArrow !== null,
-        hasTargetArrow: this.targetArrow !== null,
-        arrowLength: this.arrowLength,
-      });
+    const linePath = new DirectEdgePath({
+      to,
+      sourceOffset: this.sourceOffset,
+      targetOffset: this.targetOffset,
+      hasSourceArrow: this.sourceArrow !== null,
+      hasTargetArrow: this.targetArrow !== null,
+      arrowLength: this.arrowLength,
+    });
 
-      this.line.setAttribute("d", linePath);
-    } else {
-      this.line.setAttribute("d", "");
-    }
+    this.line.setAttribute("d", linePath.getPath());
 
     if (this.sourceArrow) {
       const arrowPath = createDirectArrowPath({
-        diagonalDistance,
+        diagonalDistance: linePath.diagonalDistance,
         to,
         offset: this.sourceOffset,
         flip: 1,
@@ -105,7 +100,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     if (this.targetArrow) {
       const arrowPath = createDirectArrowPath({
-        diagonalDistance,
+        diagonalDistance: linePath.diagonalDistance,
         to,
         offset: this.targetOffset,
         flip: -1,
