@@ -1,1 +1,1 @@
-export { DetoutBezierEdgePath } from "./detour-bezier-edge-path";
+export { DetourBezierEdgePath } from "./detour-bezier-edge-path";

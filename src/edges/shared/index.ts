@@ -1,7 +1,7 @@
 export { createRotatedPoint } from "./create-rotated-point";
 export {
   BezierEdgePath,
-  DetoutBezierEdgePath,
+  DetourBezierEdgePath,
   HorizontalEdgePath,
   DetourStraightEdgePath,
   StraightEdgePath,

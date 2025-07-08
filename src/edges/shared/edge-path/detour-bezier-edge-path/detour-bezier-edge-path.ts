@@ -2,7 +2,7 @@ import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../../create-rotated-point";
 import { EdgePath } from "../edge-path";
 
-export class DetoutBezierEdgePath implements EdgePath {
+export class DetourBezierEdgePath implements EdgePath {
   public constructor(
     private readonly params: {
       readonly to: Point;

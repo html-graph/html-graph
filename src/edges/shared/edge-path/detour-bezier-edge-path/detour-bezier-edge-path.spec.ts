@@ -1,8 +1,8 @@
-import { DetoutBezierEdgePath } from "./detour-bezier-edge-path";
+import { DetourBezierEdgePath } from "./detour-bezier-edge-path";
 
 describe("DetourBezierEdgePath", () => {
   it("should create detour bezier path without flip", () => {
-    const path = new DetoutBezierEdgePath({
+    const path = new DetourBezierEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
       targetDirection: { x: 1, y: 0 },
@@ -22,7 +22,7 @@ describe("DetourBezierEdgePath", () => {
   });
 
   it("should create detour bezier path with flip", () => {
-    const path = new DetoutBezierEdgePath({
+    const path = new DetourBezierEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
       targetDirection: { x: 1, y: 0 },
@@ -42,7 +42,7 @@ describe("DetourBezierEdgePath", () => {
   });
 
   it("should create detour bezier path with source arrow", () => {
-    const path = new DetoutBezierEdgePath({
+    const path = new DetourBezierEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
       targetDirection: { x: 1, y: 0 },
@@ -62,7 +62,7 @@ describe("DetourBezierEdgePath", () => {
   });
 
   it("should create detour bezier path with target arrow", () => {
-    const path = new DetoutBezierEdgePath({
+    const path = new DetourBezierEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
       targetDirection: { x: 1, y: 0 },

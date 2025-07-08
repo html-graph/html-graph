@@ -1,5 +1,5 @@
 export { BezierEdgePath } from "./bezier-edge-path";
-export { DetoutBezierEdgePath } from "./detour-bezier-edge-path";
+export { DetourBezierEdgePath } from "./detour-bezier-edge-path";
 export { HorizontalEdgePath } from "./horizontal-edge-path";
 export { DetourStraightEdgePath } from "./detour-straight-edge-path";
 export { StraightEdgePath } from "./straight-edge-path";

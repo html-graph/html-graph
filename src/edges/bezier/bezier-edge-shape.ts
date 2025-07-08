@@ -1,7 +1,7 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import {
   BezierEdgePath,
-  DetoutBezierEdgePath,
+  DetourBezierEdgePath,
   CycleCircleEdgePath,
 } from "../shared";
 import { Point } from "@/point";
@@ -64,7 +64,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     flipX: number,
     flipY: number,
   ): string => {
-    const line = new DetoutBezierEdgePath({
+    const line = new DetourBezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
