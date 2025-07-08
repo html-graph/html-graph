@@ -1,9 +1,5 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import {
-  createCycleSquarePath,
-  createDetourStraightPath,
-  createVerticalLinePath,
-} from "../shared";
+import { CycleSquareLine, DetourStraightLine, VerticalLine } from "../shared";
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
@@ -45,8 +41,8 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
 
   private readonly createCyclePath: CreatePathFn = (
     sourceDirection: Point,
-  ): string =>
-    createCycleSquarePath({
+  ): string => {
+    const line = new CycleSquareLine({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -56,14 +52,17 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string =>
-    createDetourStraightPath({
+  ): string => {
+    const line = new DetourStraightLine({
       to,
       sourceDirection,
       targetDirection,
@@ -78,14 +77,17 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
+    return line.getPath();
+  };
+
   private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     _flipX: number,
     flipY: number,
-  ): string =>
-    createVerticalLinePath({
+  ): string => {
+    const line = new VerticalLine({
       to,
       sourceDirection,
       targetDirection,
@@ -96,6 +98,9 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
+
+    return line.getPath();
+  };
 
   public constructor(params?: VerticalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

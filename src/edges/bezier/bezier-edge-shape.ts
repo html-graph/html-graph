@@ -1,9 +1,5 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import {
-  BezierConnectionLine,
-  DetoutBezierLine,
-  CycleCircleLine,
-} from "../shared";
+import { BezierLine, DetoutBezierLine, CycleCircleLine } from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
@@ -86,7 +82,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     targetDirection: Point,
     to: Point,
   ): string => {
-    const line = new BezierConnectionLine({
+    const line = new BezierLine({
       to,
       sourceDirection,
       targetDirection,
