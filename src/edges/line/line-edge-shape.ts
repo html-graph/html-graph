@@ -8,7 +8,7 @@ import {
   createArrowPath,
   createEdgeArrow,
   createEdgeGroup,
-  createEdgeLine,
+  createEdgePath,
   createEdgeRectangle,
   createEdgeSvg,
   setSvgRectangle,
@@ -29,7 +29,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
   public constructor(private readonly params: LineEdgeParams) {
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(params.width);
+    this.line = createEdgePath(params.width);
     this.group.appendChild(this.line);
 
     if (params.hasSourceArrow) {

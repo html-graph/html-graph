@@ -1,5 +1,5 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import { BezierLine, DetoutBezierLine, CycleCircleLine } from "../shared";
+import { BezierEdgePath, DetoutBezierEdgePath, CycleCircleEdgePath } from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
@@ -41,7 +41,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   private readonly createCyclePath: CreatePathFn = (
     sourceDirection: Point,
   ): string => {
-    const line = new CycleCircleLine({
+    const line = new CycleCircleEdgePath({
       sourceDirection,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
@@ -60,7 +60,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     flipX: number,
     flipY: number,
   ): string => {
-    const line = new DetoutBezierLine({
+    const line = new DetoutBezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -82,7 +82,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     targetDirection: Point,
     to: Point,
   ): string => {
-    const line = new BezierLine({
+    const line = new BezierEdgePath({
       to,
       sourceDirection,
       targetDirection,

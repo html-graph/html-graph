@@ -6,10 +6,10 @@ import { Point, zero } from "@/point";
 import {
   createEdgeArrow,
   createEdgeGroup,
-  createEdgeLine,
+  createEdgePath,
   createEdgeRectangle,
   createEdgeSvg,
-  DirectLine,
+  DirectEdgePath,
   setSvgRectangle,
 } from "../shared";
 import { createDirectArrowPath } from "./create-direct-arrow-path";
@@ -48,7 +48,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     this.svg = createEdgeSvg(this.color);
     this.svg.appendChild(this.group);
-    this.line = createEdgeLine(this.width);
+    this.line = createEdgePath(this.width);
     this.group.appendChild(this.line);
 
     if (params?.hasSourceArrow) {
@@ -73,7 +73,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const to: Point = { x: width, y: height };
 
-    const linePath = new DirectLine({
+    const linePath = new DirectEdgePath({
       to,
       sourceOffset: this.sourceOffset,
       targetOffset: this.targetOffset,

@@ -1,5 +1,5 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import { CycleSquareLine, DetourStraightLine, StraightLine } from "../shared";
+import { CycleSquareEdgePath, DetourStraightEdgePath, StraightEdgePath } from "../shared";
 import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";
@@ -41,7 +41,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   private readonly createCyclePath: CreatePathFn = (
     sourceDirection: Point,
   ): string => {
-    const line = new CycleSquareLine({
+    const line = new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -61,7 +61,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     flipX: number,
     flipY: number,
   ): string => {
-    const line = new DetourStraightLine({
+    const line = new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -84,7 +84,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     targetDirection: Point,
     to: Point,
   ): string => {
-    const line = new StraightLine({
+    const line = new StraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
