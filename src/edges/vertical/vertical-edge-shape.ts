@@ -1,5 +1,9 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import { CycleSquareEdgePath, DetourStraightEdgePath, VerticalEdgePath } from "../shared";
+import {
+  CycleSquareEdgePath,
+  DetourStraightEdgePath,
+  VerticalEdgePath,
+} from "../shared";
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
