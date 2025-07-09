@@ -10,12 +10,17 @@ import {
   createEdgeRectangle,
   createEdgeSvg,
   DirectEdgePath,
+  EdgePath,
   setSvgRectangle,
 } from "../shared";
 import { createDirectArrowPath } from "./create-direct-arrow-path";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { PostRenderEdgeShape } from "../post-render-edge-shape";
 
 // Responsibility: Connecting ports with direct line
-export class DirectEdgeShape implements StructuredEdgeShape {
+export class DirectEdgeShape
+  implements StructuredEdgeShape, PostRenderEdgeShape
+{
   public readonly svg: SVGSVGElement;
 
   public readonly group = createEdgeGroup();
@@ -38,7 +43,13 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly targetOffset: number;
 
+  public readonly onAfterRender: EventHandler<EdgePath>;
+
+  private readonly afterRenderEmitter: EventEmitter<EdgePath>;
+
   public constructor(params?: DirectEdgeParams) {
+    [this.afterRenderEmitter, this.onAfterRender] = createPair<EdgePath>();
+
     this.color = params?.color ?? edgeConstants.color;
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
@@ -111,5 +122,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
+
+    this.afterRenderEmitter.emit(linePath);
   }
 }

@@ -6,10 +6,15 @@ import { InteractiveEdgeParams } from "./interactive-edge-params";
 import { createEdgeArrow } from "./create-edge-arrow";
 import { edgeConstants } from "../edge-constants";
 import { InteractiveEdgeError } from "./interactive-edge-error";
+import { PostRenderEdgeShape } from "../post-render-edge-shape";
+import { EventHandler } from "@/event-subject";
+import { EdgePath } from "../shared";
 
 // Responsibility: Providing handle for attaching interactive behavior to an
 // edge
-export class InteractiveEdgeShape implements StructuredEdgeShape {
+export class InteractiveEdgeShape
+  implements StructuredEdgeShape, PostRenderEdgeShape
+{
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -22,6 +27,8 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public readonly handle = createEdgeGroup();
 
+  public readonly onAfterRender: EventHandler<EdgePath>;
+
   private readonly interactiveLine: SVGPathElement;
 
   private readonly interactiveSourceArrow: SVGPathElement | null = null;
@@ -29,20 +36,21 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   private readonly interactiveTargetArrow: SVGPathElement | null = null;
 
   public constructor(
-    private readonly structuredEdge: StructuredEdgeShape,
+    private readonly baseEdge: StructuredEdgeShape & PostRenderEdgeShape,
     params?: InteractiveEdgeParams,
   ) {
-    if (structuredEdge instanceof InteractiveEdgeShape) {
+    if (baseEdge instanceof InteractiveEdgeShape) {
       throw new InteractiveEdgeError(
         "interactive edge can be configured only once",
       );
     }
 
-    this.svg = this.structuredEdge.svg;
-    this.group = this.structuredEdge.group;
-    this.line = this.structuredEdge.line;
-    this.sourceArrow = this.structuredEdge.sourceArrow;
-    this.targetArrow = this.structuredEdge.targetArrow;
+    this.svg = this.baseEdge.svg;
+    this.group = this.baseEdge.group;
+    this.line = this.baseEdge.line;
+    this.sourceArrow = this.baseEdge.sourceArrow;
+    this.targetArrow = this.baseEdge.targetArrow;
+    this.onAfterRender = this.baseEdge.onAfterRender;
 
     const width = params?.width ?? edgeConstants.interactiveWidth;
 
@@ -63,7 +71,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.structuredEdge.render(params);
+    this.baseEdge.render(params);
 
     const linePath = this.line.getAttribute("d")!;
     this.interactiveLine.setAttribute("d", linePath);

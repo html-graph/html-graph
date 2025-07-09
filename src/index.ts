@@ -64,10 +64,10 @@ export type {
   HorizontalEdgeParams,
   VerticalEdgeParams,
   StraightEdgeParams,
-  CreatePathFn,
-  StructuredEdgeShape,
   InteractiveEdgeParams,
   DirectEdgeParams,
+  StructuredEdgeShape,
+  PostRenderEdgeShape,
 } from "./edges";
 
 export type { Point } from "./point";

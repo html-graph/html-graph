@@ -2,17 +2,22 @@ import { EdgeRenderParams } from "../edge-render-params";
 import {
   CycleSquareEdgePath,
   DetourStraightEdgePath,
+  EdgePath,
   HorizontalEdgePath,
 } from "../shared";
 import { Point } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, LineEdgeShape } from "../line";
+import { EdgePathFactory, PathEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
+import { PostRenderEdgeShape } from "../post-render-edge-shape";
+import { EventHandler } from "@/event-subject";
 
 // Responsibility: Providing edge shape connecting ports with horizontal angled
 // line
-export class HorizontalEdgeShape implements StructuredEdgeShape {
+export class HorizontalEdgeShape
+  implements StructuredEdgeShape, PostRenderEdgeShape
+{
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -22,6 +27,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly sourceArrow: SVGPathElement | null;
 
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly onAfterRender: EventHandler<EdgePath>;
 
   private readonly arrowLength: number;
 
@@ -41,7 +48,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly lineShape: LineEdgeShape;
+  private readonly lineShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
@@ -119,7 +126,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    this.lineShape = new LineEdgeShape({
+    this.lineShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
@@ -136,6 +143,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     this.line = this.lineShape.line;
     this.sourceArrow = this.lineShape.sourceArrow;
     this.targetArrow = this.lineShape.targetArrow;
+    this.onAfterRender = this.lineShape.onAfterRender;
   }
 
   public render(params: EdgeRenderParams): void {

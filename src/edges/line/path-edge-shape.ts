@@ -1,6 +1,6 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
-import { LineEdgeParams } from "./line-edge-params";
+import { PathEdgeParams } from "./path-edge-params";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../structured-edge-shape";
@@ -11,11 +11,14 @@ import {
   createEdgePath,
   createEdgeRectangle,
   createEdgeSvg,
+  EdgePath,
   setSvgRectangle,
 } from "../shared";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { PostRenderEdgeShape } from "../post-render-edge-shape";
 
-// Responsibility: Providing low level core for single line structured edges
-export class LineEdgeShape implements StructuredEdgeShape {
+// Responsibility: Providing low level core for single path structured edges
+export class PathEdgeShape implements StructuredEdgeShape, PostRenderEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group = createEdgeGroup();
@@ -26,7 +29,13 @@ export class LineEdgeShape implements StructuredEdgeShape {
 
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(private readonly params: LineEdgeParams) {
+  public readonly onAfterRender: EventHandler<EdgePath>;
+
+  private readonly afterRenderEmitter: EventEmitter<EdgePath>;
+
+  public constructor(private readonly params: PathEdgeParams) {
+    [this.afterRenderEmitter, this.onAfterRender] = createPair<EdgePath>();
+
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
     this.line = createEdgePath(params.width);
@@ -114,5 +123,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
 
       this.targetArrow.setAttribute("d", arrowPath);
     }
+
+    this.afterRenderEmitter.emit(linePath);
   }
 }

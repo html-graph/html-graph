@@ -2,6 +2,7 @@ export type { EdgeShape } from "./edge-shape";
 export type { EdgeRenderParams } from "./edge-render-params";
 export type { EdgeRenderPort } from "./edge-render-port";
 export type { StructuredEdgeShape } from "./structured-edge-shape";
+export type { PostRenderEdgeShape } from "./post-render-edge-shape";
 
 export { BezierEdgeShape } from "./bezier";
 export type { BezierEdgeParams } from "./bezier";
@@ -14,9 +15,6 @@ export type { StraightEdgeParams } from "./straight";
 
 export { VerticalEdgeShape } from "./vertical";
 export type { VerticalEdgeParams } from "./vertical";
-
-export { LineEdgeShape } from "./line";
-export type { LineEdgeParams, EdgePathFactory as CreatePathFn } from "./line";
 
 export { DirectEdgeShape } from "./direct";
 export type { DirectEdgeParams } from "./direct";

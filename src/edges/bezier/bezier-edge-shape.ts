@@ -3,15 +3,20 @@ import {
   BezierEdgePath,
   DetourBezierEdgePath,
   CycleCircleEdgePath,
+  EdgePath,
 } from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, LineEdgeShape } from "../line";
+import { EdgePathFactory, PathEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
+import { PostRenderEdgeShape } from "../post-render-edge-shape";
+import { EventHandler } from "@/event-subject";
 
 // Responsibility: Providing edge shape connecting ports with bezier line
-export class BezierEdgeShape implements StructuredEdgeShape {
+export class BezierEdgeShape
+  implements StructuredEdgeShape, PostRenderEdgeShape
+{
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -21,6 +26,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly sourceArrow: SVGPathElement | null;
 
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly onAfterRender: EventHandler<EdgePath>;
 
   private readonly arrowLength: number;
 
@@ -40,7 +47,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly lineShape: LineEdgeShape;
+  private readonly lineShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
@@ -106,7 +113,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    this.lineShape = new LineEdgeShape({
+    this.lineShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
@@ -123,6 +130,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     this.line = this.lineShape.line;
     this.sourceArrow = this.lineShape.sourceArrow;
     this.targetArrow = this.lineShape.targetArrow;
+    this.onAfterRender = this.lineShape.onAfterRender;
   }
 
   public render(params: EdgeRenderParams): void {

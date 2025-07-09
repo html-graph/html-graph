@@ -1,16 +1,15 @@
-import { EdgeShape } from "../edge-shape";
 import {
   BezierEdgePath,
   CycleCircleEdgePath,
   DetourBezierEdgePath,
 } from "../shared";
-import { LineEdgeShape } from "./line-edge-shape";
+import { PathEdgeShape } from "./path-edge-shape";
 
 const createBezierEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
-): EdgeShape => {
-  return new LineEdgeShape({
+): PathEdgeShape => {
+  return new PathEdgeShape({
     color: "#FFFFFF",
     width: 2,
     arrowLength: 10,
@@ -53,7 +52,7 @@ const createBezierEdge = (
   });
 };
 
-describe("LineEdgeShape", () => {
+describe("PathEdgeShape", () => {
   it("should have only line element", () => {
     const shape = createBezierEdge(false, false);
 
@@ -224,5 +223,38 @@ describe("LineEdgeShape", () => {
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
+  });
+
+  it("should emit event after render", () => {
+    const shape = createBezierEdge(false, false);
+
+    const fn = jest.fn();
+
+    shape.onAfterRender.subscribe(() => {
+      fn();
+    });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: "port-1",
+        nodeId: "node-1",
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        portId: "port-2",
+        nodeId: "node-2",
+        direction: 0,
+      },
+    });
+
+    expect(fn).toHaveBeenCalled();
   });
 });
