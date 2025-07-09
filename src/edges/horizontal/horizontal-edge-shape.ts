@@ -43,7 +43,9 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (sourceDirection: Point) =>
+  private readonly createCyclePath: EdgePathFactory = (
+    sourceDirection: Point,
+  ) =>
     new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
