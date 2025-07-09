@@ -63,27 +63,27 @@ class Application {
   }
 
   createNode({ name, x, y, frontPortId, backPortId }) {
-    const node = document.createElement("div");
+    const nodeElement = document.createElement("div");
     const text = document.createElement("div");
-    const frontPort = document.createElement("div");
-    const backPort = document.createElement("div");
+    const frontPortElement = document.createElement("div");
+    const backPortElement = document.createElement("div");
 
-    node.classList.add("node");
-    frontPort.classList.add("port");
-    backPort.classList.add("port");
+    nodeElement.classList.add("node");
+    frontPortElement.classList.add("port");
+    backPortElement.classList.add("port");
     text.innerText = name;
 
-    node.appendChild(frontPort);
-    node.appendChild(text);
-    node.appendChild(backPort);
+    nodeElement.appendChild(frontPortElement);
+    nodeElement.appendChild(text);
+    nodeElement.appendChild(backPortElement);
 
     return {
-      element: node,
+      element: nodeElement,
       x: x,
       y: y,
       ports: [
-        { id: frontPortId, element: frontPort },
-        { id: backPortId, element: backPort },
+        { id: frontPortId, element: frontPortElement },
+        { id: backPortId, element: backPortElement },
       ],
     };
   }
