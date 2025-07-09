@@ -1,4 +1,4 @@
-import { CreatePathFn } from "./create-path-fn";
+import { EdgePathFactory } from "./create-path-fn";
 
 export interface LineEdgeParams {
   readonly width: number;
@@ -7,7 +7,7 @@ export interface LineEdgeParams {
   readonly arrowWidth: number;
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
-  readonly createCyclePath: CreatePathFn;
-  readonly createDetourPath: CreatePathFn;
-  readonly createLinePath: CreatePathFn;
+  readonly createCyclePath: EdgePathFactory;
+  readonly createDetourPath: EdgePathFactory;
+  readonly createLinePath: EdgePathFactory;
 }

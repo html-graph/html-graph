@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { EdgePath } from "../shared";
 
-export type CreatePathFn = (
+export type EdgePathFactory = (
   sourceDirection: Point,
   targetDirection: Point,
   to: Point,

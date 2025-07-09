@@ -7,7 +7,7 @@ import {
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { CreatePathFn, LineEdgeShape } from "../line";
+import { EdgePathFactory, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
 // Responsibility: Providing edge shape connecting ports with vertical angled
@@ -43,7 +43,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: CreatePathFn = (sourceDirection: Point) =>
+  private readonly createCyclePath: EdgePathFactory = (sourceDirection: Point) =>
     new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
@@ -54,7 +54,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  private readonly createDetourPath: CreatePathFn = (
+  private readonly createDetourPath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
@@ -76,7 +76,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  private readonly createLinePath: CreatePathFn = (
+  private readonly createLinePath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
