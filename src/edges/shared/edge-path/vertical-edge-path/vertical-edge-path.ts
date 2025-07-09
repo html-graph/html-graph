@@ -4,6 +4,8 @@ import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
 
 export class VerticalEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -16,9 +18,7 @@ export class VerticalEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const beginArrow: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
           { x: this.params.arrowLength, y: zero.y },
@@ -69,7 +69,7 @@ export class VerticalEdgePath implements EdgePath {
     };
     const end2: Point = { x: halfWidth, y: end1.y };
 
-    return createRoundedPath(
+    this.path = createRoundedPath(
       [beginArrow, beginLine, begin1, begin2, end2, end1, endLine, endArrow],
       this.params.roundness,
     );

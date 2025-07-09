@@ -3,6 +3,8 @@ import { createRotatedPoint } from "../../create-rotated-point";
 import { EdgePath } from "../edge-path";
 
 export class CycleCircleEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly sourceDirection: Point;
@@ -12,9 +14,7 @@ export class CycleCircleEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const smallRadius = this.params.smallRadius;
     const radius = this.params.radius;
     const distance = Math.sqrt(smallRadius * smallRadius + radius * radius);
@@ -41,6 +41,6 @@ export class CycleCircleEdgePath implements EdgePath {
 
     const preLine = `M ${0} ${0} L ${rotatedPoints[0].x} ${rotatedPoints[0].y} `;
 
-    return `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${c}`;
+    this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${c}`;
   }
 }

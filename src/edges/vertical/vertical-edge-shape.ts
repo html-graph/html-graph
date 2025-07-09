@@ -7,7 +7,7 @@ import {
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { CreatePathFn, LineEdgeShape } from "../line";
+import { EdgePathFactory, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
 // Responsibility: Providing edge shape connecting ports with vertical angled
@@ -43,10 +43,10 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: CreatePathFn = (
+  private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
-  ): string => {
-    const line = new CycleSquareEdgePath({
+  ) =>
+    new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -56,17 +56,14 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
-  private readonly createDetourPath: CreatePathFn = (
+  private readonly createDetourPath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string => {
-    const line = new DetourStraightEdgePath({
+  ) =>
+    new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -81,17 +78,14 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
-  private readonly createLinePath: CreatePathFn = (
+  private readonly createLinePath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     _flipX: number,
     flipY: number,
-  ): string => {
-    const line = new VerticalEdgePath({
+  ) =>
+    new VerticalEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -102,9 +96,6 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
-
-    return line.getPath();
-  };
 
   public constructor(params?: VerticalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

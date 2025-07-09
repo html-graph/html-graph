@@ -7,7 +7,7 @@ import {
 import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { CreatePathFn, LineEdgeShape } from "../line";
+import { EdgePathFactory, LineEdgeShape } from "../line";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
 // Responsibility: Providing edge shape connecting ports with straight line
@@ -42,10 +42,10 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: CreatePathFn = (
+  private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
-  ): string => {
-    const line = new CycleSquareEdgePath({
+  ) =>
+    new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -55,17 +55,14 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
-  private readonly createDetourPath: CreatePathFn = (
+  private readonly createDetourPath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string => {
-    const line = new DetourStraightEdgePath({
+  ) =>
+    new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -80,15 +77,12 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
-  private readonly createLinePath: CreatePathFn = (
+  private readonly createLinePath: EdgePathFactory = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
-  ): string => {
-    const line = new StraightEdgePath({
+  ) =>
+    new StraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -98,9 +92,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
-
-    return line.getPath();
-  };
 
   public constructor(params?: StraightEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

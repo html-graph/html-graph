@@ -16,7 +16,7 @@ export { VerticalEdgeShape } from "./vertical";
 export type { VerticalEdgeParams } from "./vertical";
 
 export { LineEdgeShape } from "./line";
-export type { LineEdgeParams, CreatePathFn } from "./line";
+export type { LineEdgeParams, EdgePathFactory as CreatePathFn } from "./line";
 
 export { DirectEdgeShape } from "./direct";
 export type { DirectEdgeParams } from "./direct";

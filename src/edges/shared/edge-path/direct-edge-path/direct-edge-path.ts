@@ -2,6 +2,8 @@ import { Point, zero } from "@/point";
 import { EdgePath } from "../edge-path";
 
 export class DirectEdgePath implements EdgePath {
+  public readonly path: string;
+
   public readonly diagonalDistance: number;
 
   public constructor(
@@ -17,15 +19,14 @@ export class DirectEdgePath implements EdgePath {
     this.diagonalDistance = Math.sqrt(
       this.params.to.x * this.params.to.x + this.params.to.y * this.params.to.y,
     );
-  }
 
-  public getPath(): string {
     const diagonalDistance = Math.sqrt(
       this.params.to.x * this.params.to.x + this.params.to.y * this.params.to.y,
     );
 
     if (diagonalDistance === 0) {
-      return "";
+      this.path = "";
+      return;
     }
 
     const source = this.createDirectLinePoint({
@@ -42,7 +43,7 @@ export class DirectEdgePath implements EdgePath {
       shift: this.params.to,
     });
 
-    return `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
+    this.path = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
   }
 
   private createDirectLinePoint(params: {

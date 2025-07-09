@@ -4,6 +4,8 @@ import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
 
 export class CycleSquareEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly sourceDirection: Point;
@@ -14,9 +16,7 @@ export class CycleSquareEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const g = this.params.arrowOffset;
     const s = this.params.side;
     const x1 = this.params.arrowLength + g;
@@ -39,6 +39,6 @@ export class CycleSquareEdgePath implements EdgePath {
 
     const preLine = `M ${zero.x} ${zero.y} L ${rp[0].x} ${rp[0].y} `;
 
-    return `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${createRoundedPath(rp, this.params.roundness)}`;
+    this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${createRoundedPath(rp, this.params.roundness)}`;
   }
 }

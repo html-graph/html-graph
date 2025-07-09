@@ -2,7 +2,7 @@ import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
 import { LineEdgeParams } from "./line-edge-params";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
-import { CreatePathFn } from "./create-path-fn";
+import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import {
   createArrowPath,
@@ -71,7 +71,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
 
     let targetVect = targetDirection;
     let targetArrowLength = -this.params.arrowLength;
-    let createPathFn: CreatePathFn;
+    let createPathFn: EdgePathFactory;
 
     if (params.from.portId === params.to.portId) {
       createPathFn = this.params.createCyclePath;
@@ -91,7 +91,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
       flipY,
     );
 
-    this.line.setAttribute("d", linePath);
+    this.line.setAttribute("d", linePath.path);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(
