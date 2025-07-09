@@ -4,6 +4,8 @@ import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
 
 export class DetourStraightEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -19,9 +21,7 @@ export class DetourStraightEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const pba: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
           { x: this.params.arrowLength, y: zero.y },
@@ -64,7 +64,7 @@ export class DetourStraightEdgePath implements EdgePath {
     );
     const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
 
-    return createRoundedPath(
+    this.path = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],
       this.params.roundness,
     );

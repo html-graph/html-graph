@@ -1,4 +1,9 @@
 import { EdgeShape } from "../edge-shape";
+import {
+  BezierEdgePath,
+  CycleCircleEdgePath,
+  DetourBezierEdgePath,
+} from "../shared";
 import { LineEdgeShape } from "./line-edge-shape";
 
 const createBezierEdge = (
@@ -12,9 +17,39 @@ const createBezierEdge = (
     arrowWidth: 3,
     hasSourceArrow,
     hasTargetArrow,
-    createLinePath: () => "",
-    createDetourPath: () => "",
-    createCyclePath: () => "",
+    createLinePath: () =>
+      new BezierEdgePath({
+        to: { x: 0, y: 0 },
+        sourceDirection: { x: 1, y: 0 },
+        targetDirection: { x: 1, y: 0 },
+        arrowLength: 10,
+        curvature: 90,
+        hasTargetArrow: false,
+        hasSourceArrow: false,
+      }),
+    createDetourPath: () =>
+      new DetourBezierEdgePath({
+        to: { x: 0, y: 0 },
+        sourceDirection: { x: 1, y: 0 },
+        targetDirection: { x: 1, y: 0 },
+        arrowLength: 10,
+        curvature: 90,
+        hasTargetArrow: false,
+        hasSourceArrow: false,
+        flipX: 1,
+        flipY: 1,
+        detourDistance: 100,
+        detourDirection: 0,
+      }),
+    createCyclePath: () =>
+      new CycleCircleEdgePath({
+        sourceDirection: { x: 1, y: 0 },
+        radius: 10,
+        smallRadius: 2,
+        hasTargetArrow: false,
+        hasSourceArrow: false,
+        arrowLength: 10,
+      }),
   });
 };
 

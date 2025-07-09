@@ -16,7 +16,7 @@ describe("DetourBezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 0 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 100 200",
     );
   });
@@ -36,7 +36,7 @@ describe("DetourBezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 0 0 L 10 0 C 110 0 9.999999999999995 100 50 200 C 90 300 -10 200 90 200 L 100 200",
     );
   });
@@ -56,7 +56,7 @@ describe("DetourBezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 10 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 100 200",
     );
   });
@@ -76,7 +76,7 @@ describe("DetourBezierEdgePath", () => {
       hasTargetArrow: true,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 0 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 90 200",
     );
   });

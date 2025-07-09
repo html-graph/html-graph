@@ -14,7 +14,7 @@ describe("DirectEdgePath", () => {
       arrowLength: 0,
     });
 
-    expect(linePath.getPath()).toBe("M 0 0 L 10 0");
+    expect(linePath.path).toBe("M 0 0 L 10 0");
   });
 
   it("should consider source offset", () => {
@@ -29,7 +29,7 @@ describe("DirectEdgePath", () => {
       arrowLength: 0,
     });
 
-    expect(linePath.getPath()).toBe("M 1 0 L 10 0");
+    expect(linePath.path).toBe("M 1 0 L 10 0");
   });
 
   it("should consider target offset", () => {
@@ -44,7 +44,7 @@ describe("DirectEdgePath", () => {
       arrowLength: 0,
     });
 
-    expect(linePath.getPath()).toBe("M 0 0 L 9 0");
+    expect(linePath.path).toBe("M 0 0 L 9 0");
   });
 
   it("should account for source arrow", () => {
@@ -59,7 +59,7 @@ describe("DirectEdgePath", () => {
       arrowLength: 1,
     });
 
-    expect(linePath.getPath()).toBe("M 1 0 L 10 0");
+    expect(linePath.path).toBe("M 1 0 L 10 0");
   });
 
   it("should account for target arrow", () => {
@@ -74,6 +74,6 @@ describe("DirectEdgePath", () => {
       arrowLength: 1,
     });
 
-    expect(linePath.getPath()).toBe("M 0 0 L 9 0");
+    expect(linePath.path).toBe("M 0 0 L 9 0");
   });
 });

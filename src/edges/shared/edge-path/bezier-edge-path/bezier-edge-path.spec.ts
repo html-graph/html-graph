@@ -12,7 +12,7 @@ describe("BezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 0 0 L 15 0 M 15 0 C 115 0, -15 200, 85 200 M 85 200 L 100 200",
     );
   });
@@ -28,7 +28,7 @@ describe("BezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 15 0 C 115 0, -15 200, 85 200 M 85 200 L 100 200",
     );
   });
@@ -44,7 +44,7 @@ describe("BezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 15 0 C 115 0, -15 200, 85 200 M 85 200 L 100 200",
     );
   });

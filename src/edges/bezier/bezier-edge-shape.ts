@@ -42,10 +42,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: CreatePathFn = (
-    sourceDirection: Point,
-  ): string => {
-    const line = new CycleCircleEdgePath({
+  private readonly createCyclePath: CreatePathFn = (sourceDirection: Point) =>
+    new CycleCircleEdgePath({
       sourceDirection,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
@@ -54,17 +52,14 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
   private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string => {
-    const line = new DetourBezierEdgePath({
+  ) =>
+    new DetourBezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -78,15 +73,12 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
   private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
-  ): string => {
-    const line = new BezierEdgePath({
+  ) =>
+    new BezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -95,9 +87,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
-
-    return line.getPath();
-  };
 
   public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

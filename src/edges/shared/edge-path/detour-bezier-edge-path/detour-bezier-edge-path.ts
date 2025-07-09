@@ -3,6 +3,8 @@ import { createRotatedPoint } from "../../create-rotated-point";
 import { EdgePath } from "../edge-path";
 
 export class DetourBezierEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -17,9 +19,7 @@ export class DetourBezierEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const pba: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
           { x: this.params.arrowLength, y: zero.y },
@@ -87,7 +87,7 @@ export class DetourBezierEdgePath implements EdgePath {
       y: pel1.y + flipDetourY,
     };
 
-    return [
+    this.path = [
       `M ${pba.x} ${pba.y}`,
       `L ${pbl1.x} ${pbl1.y}`,
       `C ${pbc1.x} ${pbc1.y} ${pbc2.x} ${pbc2.y} ${pm.x} ${pm.y}`,

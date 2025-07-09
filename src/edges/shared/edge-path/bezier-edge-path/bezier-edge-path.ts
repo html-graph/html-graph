@@ -3,6 +3,8 @@ import { createRotatedPoint } from "../../create-rotated-point";
 import { EdgePath } from "../edge-path";
 
 export class BezierEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -13,9 +15,7 @@ export class BezierEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const begin = createRotatedPoint(
       { x: this.params.arrowLength, y: zero.y },
       this.params.sourceDirection,
@@ -46,6 +46,6 @@ export class BezierEdgePath implements EdgePath {
       ? ""
       : ` M ${end.x} ${end.y} L ${this.params.to.x} ${this.params.to.y}`;
 
-    return `${preLine}${curve}${postLine}`;
+    this.path = `${preLine}${curve}${postLine}`;
   }
 }

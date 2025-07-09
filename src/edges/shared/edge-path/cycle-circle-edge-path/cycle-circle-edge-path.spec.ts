@@ -11,7 +11,7 @@ describe("CycleCircleEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 0 0 L 15 0 M 15 0 A 10 10 0 0 1 23.24621125123532 8 A 40 40 0 1 0 23.24621125123532 -8 A 10 10 0 0 1 15 0",
     );
   });
@@ -26,7 +26,7 @@ describe("CycleCircleEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 15 0 A 10 10 0 0 1 23.24621125123532 8 A 40 40 0 1 0 23.24621125123532 -8 A 10 10 0 0 1 15 0",
     );
   });
@@ -41,7 +41,7 @@ describe("CycleCircleEdgePath", () => {
       hasTargetArrow: true,
     });
 
-    expect(path.getPath()).toBe(
+    expect(path.path).toBe(
       "M 15 0 A 10 10 0 0 1 23.24621125123532 8 A 40 40 0 1 0 23.24621125123532 -8 A 10 10 0 0 1 15 0",
     );
   });

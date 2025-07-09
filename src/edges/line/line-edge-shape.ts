@@ -91,7 +91,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
       flipY,
     );
 
-    this.line.setAttribute("d", linePath);
+    this.line.setAttribute("d", linePath.path);
 
     if (this.sourceArrow) {
       const arrowPath = createArrowPath(

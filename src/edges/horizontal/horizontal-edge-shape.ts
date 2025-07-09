@@ -43,10 +43,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly lineShape: LineEdgeShape;
 
-  private readonly createCyclePath: CreatePathFn = (
-    sourceDirection: Point,
-  ): string => {
-    const line = new CycleSquareEdgePath({
+  private readonly createCyclePath: CreatePathFn = (sourceDirection: Point) =>
+    new CycleSquareEdgePath({
       sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
@@ -56,17 +54,14 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
   private readonly createDetourPath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
     flipY: number,
-  ): string => {
-    const line = new DetourStraightEdgePath({
+  ) =>
+    new DetourStraightEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -81,16 +76,13 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    return line.getPath();
-  };
-
   private readonly createLinePath: CreatePathFn = (
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
     flipX: number,
-  ): string => {
-    const line = new HorizontalEdgePath({
+  ) =>
+    new HorizontalEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -101,9 +93,6 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
-
-    return line.getPath();
-  };
 
   public constructor(params?: HorizontalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;

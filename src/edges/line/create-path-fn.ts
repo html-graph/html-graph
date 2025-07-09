@@ -1,4 +1,5 @@
 import { Point } from "@/point";
+import { EdgePath } from "../shared";
 
 export type CreatePathFn = (
   sourceDirection: Point,
@@ -6,4 +7,4 @@ export type CreatePathFn = (
   to: Point,
   flipX: number,
   flipY: number,
-) => string;
+) => EdgePath;

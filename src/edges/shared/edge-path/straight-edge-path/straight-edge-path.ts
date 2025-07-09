@@ -4,6 +4,8 @@ import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
 
 export class StraightEdgePath implements EdgePath {
+  public readonly path: string;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -15,9 +17,7 @@ export class StraightEdgePath implements EdgePath {
       readonly hasSourceArrow: boolean;
       readonly hasTargetArrow: boolean;
     },
-  ) {}
-
-  public getPath(): string {
+  ) {
     const pba: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
           { x: this.params.arrowLength, y: zero.y },
@@ -49,6 +49,6 @@ export class StraightEdgePath implements EdgePath {
       this.params.to,
     );
 
-    return createRoundedPath([pba, pbl, pel, pea], this.params.roundness);
+    this.path = createRoundedPath([pba, pbl, pel, pea], this.params.roundness);
   }
 }

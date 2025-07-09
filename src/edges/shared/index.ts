@@ -10,6 +10,7 @@ export {
   CycleCircleEdgePath,
   DirectEdgePath,
 } from "./edge-path";
+export type { EdgePath } from "./edge-path";
 export { setSvgRectangle } from "./set-svg-rectangle";
 export { createEdgeSvg } from "./create-edge-svg";
 export { createEdgeArrow } from "./create-edge-arrow";

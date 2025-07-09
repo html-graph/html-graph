@@ -82,7 +82,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
     });
 
-    this.line.setAttribute("d", linePath.getPath());
+    this.line.setAttribute("d", linePath.path);
 
     if (this.sourceArrow) {
       const arrowPath = createDirectArrowPath({
