@@ -1,4 +1,4 @@
-import { EdgePathFactory } from "./create-path-fn";
+import { EdgePathFactory } from "./edge-path-factory";
 
 export interface LineEdgeParams {
   readonly width: number;
