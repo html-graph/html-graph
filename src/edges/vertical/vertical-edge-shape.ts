@@ -8,7 +8,7 @@ import {
 import { Point } from "@/point";
 import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, PathEdgeShape } from "../line";
+import { EdgePathFactory, PathEdgeShape } from "../path";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { PostRenderEdgeShape } from "../post-render-edge-shape";
@@ -48,7 +48,7 @@ export class VerticalEdgeShape
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly lineShape: PathEdgeShape;
+  private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
@@ -127,7 +127,7 @@ export class VerticalEdgeShape
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    this.lineShape = new PathEdgeShape({
+    this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
@@ -139,15 +139,15 @@ export class VerticalEdgeShape
       createLinePath: this.createLinePath,
     });
 
-    this.svg = this.lineShape.svg;
-    this.group = this.lineShape.group;
-    this.line = this.lineShape.line;
-    this.sourceArrow = this.lineShape.sourceArrow;
-    this.targetArrow = this.lineShape.targetArrow;
-    this.onAfterRender = this.lineShape.onAfterRender;
+    this.svg = this.pathShape.svg;
+    this.group = this.pathShape.group;
+    this.line = this.pathShape.line;
+    this.sourceArrow = this.pathShape.sourceArrow;
+    this.targetArrow = this.pathShape.targetArrow;
+    this.onAfterRender = this.pathShape.onAfterRender;
   }
 
   public render(params: EdgeRenderParams): void {
-    this.lineShape.render(params);
+    this.pathShape.render(params);
   }
 }
