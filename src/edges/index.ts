@@ -4,20 +4,25 @@ export type { EdgeRenderPort } from "./edge-render-port";
 export type { StructuredEdgeShape } from "./structured-edge-shape";
 export type { StructuredEdgeRenderModel } from "./structure-render-model";
 
-export { BezierEdgeShape } from "./bezier";
-export type { BezierEdgeParams } from "./bezier";
+export { BezierEdgeShape } from "./bezier-edge-shape";
+export type { BezierEdgeParams } from "./bezier-edge-shape";
 
-export { HorizontalEdgeShape } from "./horizontal";
-export type { HorizontalEdgeParams } from "./horizontal";
+export { HorizontalEdgeShape } from "./horizontal-edge-shape";
+export type { HorizontalEdgeParams } from "./horizontal-edge-shape";
 
-export { StraightEdgeShape } from "./straight";
-export type { StraightEdgeParams } from "./straight";
+export { StraightEdgeShape } from "./straight-edge-shape";
+export type { StraightEdgeParams } from "./straight-edge-shape";
 
-export { VerticalEdgeShape } from "./vertical";
-export type { VerticalEdgeParams } from "./vertical";
+export { VerticalEdgeShape } from "./vertical-edge-shape";
+export type { VerticalEdgeParams } from "./vertical-edge-shape";
 
-export { DirectEdgeShape } from "./direct";
-export type { DirectEdgeParams } from "./direct";
+export { DirectEdgeShape } from "./direct-edge-shape";
+export type { DirectEdgeParams } from "./direct-edge-shape";
 
-export { InteractiveEdgeShape, InteractiveEdgeError } from "./interactive";
-export type { InteractiveEdgeParams } from "./interactive";
+export {
+  InteractiveEdgeShape,
+  InteractiveEdgeError,
+} from "./interactive-edge-shape";
+export type { InteractiveEdgeParams } from "./interactive-edge-shape";
+
+export { RemovableEdgeShape } from "./removable-edge-shape";

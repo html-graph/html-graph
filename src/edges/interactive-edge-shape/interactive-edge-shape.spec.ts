@@ -1,4 +1,4 @@
-import { BezierEdgeShape } from "../bezier";
+import { BezierEdgeShape } from "../bezier-edge-shape";
 import { EdgeRenderParams } from "../edge-render-params";
 import { InteractiveEdgeError } from "./interactive-edge-error";
 import { InteractiveEdgeShape } from "./interactive-edge-shape";

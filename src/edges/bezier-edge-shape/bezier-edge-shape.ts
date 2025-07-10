@@ -1,20 +1,19 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import {
-  CycleSquareEdgePath,
-  DetourStraightEdgePath,
-  HorizontalEdgePath,
+  BezierEdgePath,
+  DetourBezierEdgePath,
+  CycleCircleEdgePath,
 } from "../shared";
 import { Point } from "@/point";
-import { HorizontalEdgeParams } from "./horizontal-edge-params";
+import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, PathEdgeShape } from "../path";
+import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing edge shape connecting ports with horizontal angled
-// line
-export class HorizontalEdgeShape implements StructuredEdgeShape {
+// Responsibility: Providing edge shape connecting ports with bezier line
+export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -31,11 +30,11 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowWidth: number;
 
-  private readonly arrowOffset: number;
+  private readonly curvature: number;
 
-  private readonly roundness: number;
+  private readonly portCycleRadius: number;
 
-  private readonly cycleSquareSide: number;
+  private readonly portCycleSmallRadius: number;
 
   private readonly detourDirection: number;
 
@@ -50,12 +49,11 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
   private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
   ) =>
-    new CycleSquareEdgePath({
+    new CycleCircleEdgePath({
       sourceDirection,
+      radius: this.portCycleRadius,
+      smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
-      side: this.cycleSquareSide,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
@@ -67,17 +65,16 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     flipX: number,
     flipY: number,
   ) =>
-    new DetourStraightEdgePath({
+    new DetourBezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
       detourDirection: this.detourDirection,
       detourDistance: this.detourDistance,
+      curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
@@ -86,34 +83,24 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
-    flipX: number,
   ) =>
-    new HorizontalEdgePath({
+    new BezierEdgePath({
       to,
       sourceDirection,
       targetDirection,
-      flipX,
       arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
+      curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  public constructor(params?: HorizontalEdgeParams) {
+  public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
+    this.curvature = params?.curvature ?? edgeConstants.curvature;
+    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
+    this.portCycleSmallRadius =
+      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
     this.detourDirection =
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
