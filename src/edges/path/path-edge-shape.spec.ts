@@ -1,16 +1,15 @@
-import { EdgeShape } from "../edge-shape";
 import {
   BezierEdgePath,
   CycleCircleEdgePath,
   DetourBezierEdgePath,
 } from "../shared";
-import { LineEdgeShape } from "./line-edge-shape";
+import { PathEdgeShape } from "./path-edge-shape";
 
 const createBezierEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
-): EdgeShape => {
-  return new LineEdgeShape({
+): PathEdgeShape => {
+  return new PathEdgeShape({
     color: "#FFFFFF",
     width: 2,
     arrowLength: 10,
@@ -53,7 +52,7 @@ const createBezierEdge = (
   });
 };
 
-describe("LineEdgeShape", () => {
+describe("PathEdgeShape", () => {
   it("should have only line element", () => {
     const shape = createBezierEdge(false, false);
 

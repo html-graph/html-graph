@@ -1,6 +1,6 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import { Point, zero } from "@/point";
-import { LineEdgeParams } from "./line-edge-params";
+import { PathEdgeParams } from "./path-edge-params";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../structured-edge-shape";
@@ -13,9 +13,11 @@ import {
   createEdgeSvg,
   setSvgRectangle,
 } from "../shared";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing low level core for single line structured edges
-export class LineEdgeShape implements StructuredEdgeShape {
+// Responsibility: Providing low level core for single path structured edges
+export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group = createEdgeGroup();
@@ -26,7 +28,14 @@ export class LineEdgeShape implements StructuredEdgeShape {
 
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public constructor(private readonly params: LineEdgeParams) {
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
+
+  public constructor(private readonly params: PathEdgeParams) {
+    [this.afterRenderEmitter, this.onAfterRender] =
+      createPair<StructuredEdgeRenderModel>();
+
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
     this.line = createEdgePath(params.width);
@@ -83,7 +92,7 @@ export class LineEdgeShape implements StructuredEdgeShape {
       createPathFn = this.params.createLinePath;
     }
 
-    const linePath = createPathFn(
+    const edgePath = createPathFn(
       sourceDirection,
       targetDirection,
       to,
@@ -91,28 +100,38 @@ export class LineEdgeShape implements StructuredEdgeShape {
       flipY,
     );
 
-    this.line.setAttribute("d", linePath.path);
+    this.line.setAttribute("d", edgePath.path);
+
+    let sourceArrowPath: string | null = null;
 
     if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
+      sourceArrowPath = createArrowPath(
         sourceDirection,
         zero,
         this.params.arrowLength,
         this.params.arrowWidth,
       );
 
-      this.sourceArrow.setAttribute("d", arrowPath);
+      this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
+    let targetArrowPath: string | null = null;
+
     if (this.targetArrow) {
-      const arrowPath = createArrowPath(
+      targetArrowPath = createArrowPath(
         targetVect,
         to,
         targetArrowLength,
         this.params.arrowWidth,
       );
 
-      this.targetArrow.setAttribute("d", arrowPath);
+      this.targetArrow.setAttribute("d", targetArrowPath);
     }
+
+    this.afterRenderEmitter.emit({
+      edgePath,
+      sourceArrowPath,
+      targetArrowPath,
+    });
   }
 }

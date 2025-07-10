@@ -7,8 +7,10 @@ import {
 import { Point } from "@/point";
 import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, LineEdgeShape } from "../line";
+import { EdgePathFactory, PathEdgeShape } from "../path";
 import { StructuredEdgeShape } from "../structured-edge-shape";
+import { EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing edge shape connecting ports with horizontal angled
 // line
@@ -22,6 +24,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly sourceArrow: SVGPathElement | null;
 
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly arrowLength: number;
 
@@ -41,7 +45,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly lineShape: LineEdgeShape;
+  private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
     sourceDirection: Point,
@@ -119,7 +123,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     this.hasTargetArrow =
       params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
-    this.lineShape = new LineEdgeShape({
+    this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: this.arrowLength,
@@ -131,14 +135,15 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       createLinePath: this.createLinePath,
     });
 
-    this.svg = this.lineShape.svg;
-    this.group = this.lineShape.group;
-    this.line = this.lineShape.line;
-    this.sourceArrow = this.lineShape.sourceArrow;
-    this.targetArrow = this.lineShape.targetArrow;
+    this.svg = this.pathShape.svg;
+    this.group = this.pathShape.group;
+    this.line = this.pathShape.line;
+    this.sourceArrow = this.pathShape.sourceArrow;
+    this.targetArrow = this.pathShape.targetArrow;
+    this.onAfterRender = this.pathShape.onAfterRender;
   }
 
   public render(params: EdgeRenderParams): void {
-    this.lineShape.render(params);
+    this.pathShape.render(params);
   }
 }

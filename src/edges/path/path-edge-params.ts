@@ -1,6 +1,6 @@
 import { EdgePathFactory } from "./edge-path-factory";
 
-export interface LineEdgeParams {
+export interface PathEdgeParams {
   readonly width: number;
   readonly color: string;
   readonly arrowLength: number;

@@ -13,6 +13,8 @@ import {
   setSvgRectangle,
 } from "../shared";
 import { createDirectArrowPath } from "./create-direct-arrow-path";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
@@ -38,7 +40,14 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly targetOffset: number;
 
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
+
   public constructor(params?: DirectEdgeParams) {
+    [this.afterRenderEmitter, this.onAfterRender] =
+      createPair<StructuredEdgeRenderModel>();
+
     this.color = params?.color ?? edgeConstants.color;
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
@@ -73,7 +82,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const to: Point = { x: width, y: height };
 
-    const linePath = new DirectEdgePath({
+    const edgePath = new DirectEdgePath({
       to,
       sourceOffset: this.sourceOffset,
       targetOffset: this.targetOffset,
@@ -82,11 +91,13 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
     });
 
-    this.line.setAttribute("d", linePath.path);
+    this.line.setAttribute("d", edgePath.path);
+
+    let sourceArrowPath: string | null = null;
 
     if (this.sourceArrow) {
-      const arrowPath = createDirectArrowPath({
-        diagonalDistance: linePath.diagonalDistance,
+      sourceArrowPath = createDirectArrowPath({
+        diagonalDistance: edgePath.diagonalDistance,
         to,
         offset: this.sourceOffset,
         flip: 1,
@@ -95,12 +106,14 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         arrowLength: this.arrowLength,
       });
 
-      this.sourceArrow.setAttribute("d", arrowPath);
+      this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
+    let targetArrowPath: string | null = null;
+
     if (this.targetArrow) {
-      const arrowPath = createDirectArrowPath({
-        diagonalDistance: linePath.diagonalDistance,
+      targetArrowPath = createDirectArrowPath({
+        diagonalDistance: edgePath.diagonalDistance,
         to,
         offset: this.targetOffset,
         flip: -1,
@@ -109,7 +122,13 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         arrowLength: this.arrowLength,
       });
 
-      this.targetArrow.setAttribute("d", arrowPath);
+      this.targetArrow.setAttribute("d", targetArrowPath);
     }
+
+    this.afterRenderEmitter.emit({
+      edgePath,
+      sourceArrowPath,
+      targetArrowPath,
+    });
   }
 }
