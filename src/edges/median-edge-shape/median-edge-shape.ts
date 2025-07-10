@@ -3,7 +3,7 @@ import { EdgeRenderParams } from "../edge-render-params";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class RemovableEdgeShape implements StructuredEdgeShape {
+export class MedianEdgeShape implements StructuredEdgeShape {
   public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;
@@ -18,7 +18,7 @@ export class RemovableEdgeShape implements StructuredEdgeShape {
 
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
-    private readonly edgeId: unknown,
+    public readonly median: SVGElement,
   ) {
     this.svg = this.baseShape.svg;
     this.group = this.baseShape.group;
@@ -26,9 +26,13 @@ export class RemovableEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.baseShape.sourceArrow;
     this.targetArrow = this.baseShape.targetArrow;
     this.onAfterRender = this.baseShape.onAfterRender;
+    this.svg.append(this.median);
 
     this.baseShape.onAfterRender.subscribe((model) => {
-      console.log(this.edgeId, model);
+      const median = model.edgePath.median;
+      const transform = `translate(${median.x}px, ${median.y}px)`;
+
+      this.median.style.setProperty("transform", transform);
     });
   }
 

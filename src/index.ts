@@ -55,7 +55,7 @@ export {
   InteractiveEdgeShape,
   InteractiveEdgeError,
   DirectEdgeShape,
-  RemovableEdgeShape,
+  MedianEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,

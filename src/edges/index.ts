@@ -25,4 +25,4 @@ export {
 } from "./interactive-edge-shape";
 export type { InteractiveEdgeParams } from "./interactive-edge-shape";
 
-export { RemovableEdgeShape } from "./removable-edge-shape";
+export { MedianEdgeShape } from "./median-edge-shape";
