@@ -5,7 +5,7 @@ import { EdgePath } from "../edge-path";
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point = { x: 0, y: 0 };
+  public readonly median: Point;
 
   public constructor(
     private readonly params: {
