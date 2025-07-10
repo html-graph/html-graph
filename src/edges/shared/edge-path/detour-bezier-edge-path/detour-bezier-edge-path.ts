@@ -5,6 +5,8 @@ import { EdgePath } from "../edge-path";
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
 
+  public readonly median: Point;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -67,7 +69,9 @@ export class DetourBezierEdgePath implements EdgePath {
       x: pel1.x + flipDetourX,
       y: pel1.y + flipDetourY,
     };
-    const pm: Point = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+
+    this.median = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+
     const pbc1: Point = {
       x: pbl1.x + this.params.curvature * this.params.sourceDirection.x,
       y: pbl1.y + this.params.curvature * this.params.sourceDirection.y,
@@ -90,7 +94,7 @@ export class DetourBezierEdgePath implements EdgePath {
     this.path = [
       `M ${pba.x} ${pba.y}`,
       `L ${pbl1.x} ${pbl1.y}`,
-      `C ${pbc1.x} ${pbc1.y} ${pbc2.x} ${pbc2.y} ${pm.x} ${pm.y}`,
+      `C ${pbc1.x} ${pbc1.y} ${pbc2.x} ${pbc2.y} ${this.median.x} ${this.median.y}`,
       `C ${pec2.x} ${pec2.y} ${pec1.x} ${pec1.y} ${pel1.x} ${pel1.y}`,
       `L ${pea.x} ${pea.y}`,
     ].join(" ");

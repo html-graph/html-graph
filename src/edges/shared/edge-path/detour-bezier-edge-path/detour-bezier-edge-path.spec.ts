@@ -80,4 +80,22 @@ describe("DetourBezierEdgePath", () => {
       "M 0 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 90 200",
     );
   });
+
+  it("should calculate median in between detour points", () => {
+    const edgePath = new DetourBezierEdgePath({
+      to: { x: 100, y: 200 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
+      flipX: 1,
+      flipY: 1,
+      arrowLength: 10,
+      detourDirection: -Math.PI / 2,
+      detourDistance: 100,
+      curvature: 100,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.median).toEqual({ x: 50, y: 0 });
+  });
 });

@@ -76,4 +76,19 @@ describe("DirectEdgePath", () => {
 
     expect(edgePath.path).toBe("M 0 0 L 9 0");
   });
+
+  it("should calculate median in the center", () => {
+    const to: Point = { x: 100, y: 200 };
+
+    const edgePath = new DirectEdgePath({
+      to,
+      sourceOffset: 0,
+      targetOffset: 0,
+      hasSourceArrow: false,
+      hasTargetArrow: true,
+      arrowLength: 1,
+    });
+
+    expect(edgePath.median).toEqual({ x: 50, y: 100 });
+  });
 });

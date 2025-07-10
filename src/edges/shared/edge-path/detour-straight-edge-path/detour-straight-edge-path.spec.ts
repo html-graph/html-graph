@@ -84,4 +84,23 @@ describe("DetourStraightEdgePath", () => {
       "M 0 0 L 10 0 C 20 0 20 0 20 -10 L 20.000000000000007 -90 C 20.000000000000007 -100 20.000000000000007 -100 22.87347885566346 -90.42173714778849 L 77.12652114433655 90.42173714778849 C 80 100 80 100 80 110 L 80 190 C 80 200 80 200 90 200 L 90 200",
     );
   });
+
+  it("should calculate median in between detour points", () => {
+    const edgePath = new DetourStraightEdgePath({
+      to: { x: 100, y: 200 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
+      flipX: 1,
+      flipY: 1,
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDirection: -Math.PI / 2,
+      detourDistance: 100,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.median).toEqual({ x: 50, y: 0 });
+  });
 });

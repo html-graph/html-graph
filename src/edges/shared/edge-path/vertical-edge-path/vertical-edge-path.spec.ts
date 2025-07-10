@@ -72,4 +72,20 @@ describe("VerticalEdgePath", () => {
       "M 0 0 L 0 0 C 10 0 10 0 10 10 L 10 90 C 10 100 10 100 20 100 L 40 100 C 50 100 50 100 50 100 L 50 100 C 50 100 50 100 60 100 L 80 100 C 90 100 90 100 90 110 L 90 190 C 90 200 90 200 85 200 L 85 200",
     );
   });
+
+  it("should calculate median in the center", () => {
+    const edgePath = new VerticalEdgePath({
+      to: { x: 100, y: 200 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
+      arrowLength: 15,
+      arrowOffset: 5,
+      roundness: 10,
+      flipY: 1,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.median).toEqual({ x: 50, y: 100 });
+  });
 });
