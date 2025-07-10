@@ -3,20 +3,17 @@ import {
   BezierEdgePath,
   DetourBezierEdgePath,
   CycleCircleEdgePath,
-  EdgePath,
 } from "../shared";
 import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { EdgePathFactory, PathEdgeShape } from "../path";
 import { StructuredEdgeShape } from "../structured-edge-shape";
-import { PostRenderEdgeShape } from "../post-render-edge-shape";
 import { EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing edge shape connecting ports with bezier line
-export class BezierEdgeShape
-  implements StructuredEdgeShape, PostRenderEdgeShape
-{
+export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -27,7 +24,7 @@ export class BezierEdgeShape
 
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly onAfterRender: EventHandler<EdgePath>;
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly arrowLength: number;
 

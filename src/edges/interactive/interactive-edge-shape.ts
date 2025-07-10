@@ -6,15 +6,12 @@ import { InteractiveEdgeParams } from "./interactive-edge-params";
 import { createEdgeArrow } from "./create-edge-arrow";
 import { edgeConstants } from "../edge-constants";
 import { InteractiveEdgeError } from "./interactive-edge-error";
-import { PostRenderEdgeShape } from "../post-render-edge-shape";
 import { EventHandler } from "@/event-subject";
-import { EdgePath } from "../shared";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing handle for attaching interactive behavior to an
 // edge
-export class InteractiveEdgeShape
-  implements StructuredEdgeShape, PostRenderEdgeShape
-{
+export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -27,7 +24,7 @@ export class InteractiveEdgeShape
 
   public readonly handle = createEdgeGroup();
 
-  public readonly onAfterRender: EventHandler<EdgePath>;
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly interactiveLine: SVGPathElement;
 
@@ -36,7 +33,7 @@ export class InteractiveEdgeShape
   private readonly interactiveTargetArrow: SVGPathElement | null = null;
 
   public constructor(
-    private readonly baseEdge: StructuredEdgeShape & PostRenderEdgeShape,
+    private readonly baseEdge: StructuredEdgeShape,
     params?: InteractiveEdgeParams,
   ) {
     if (baseEdge instanceof InteractiveEdgeShape) {
@@ -68,22 +65,21 @@ export class InteractiveEdgeShape
     }
 
     this.group.appendChild(this.handle);
+
+    this.baseEdge.onAfterRender.subscribe((model) => {
+      this.interactiveLine.setAttribute("d", model.edgePath.path);
+
+      if (this.interactiveSourceArrow) {
+        this.interactiveSourceArrow.setAttribute("d", model.sourceArrowPath!);
+      }
+
+      if (this.interactiveTargetArrow) {
+        this.interactiveTargetArrow!.setAttribute("d", model.targetArrowPath!);
+      }
+    });
   }
 
   public render(params: EdgeRenderParams): void {
     this.baseEdge.render(params);
-
-    const linePath = this.line.getAttribute("d")!;
-    this.interactiveLine.setAttribute("d", linePath);
-
-    if (this.sourceArrow) {
-      const arrowPath = this.sourceArrow.getAttribute("d")!;
-      this.interactiveSourceArrow!.setAttribute("d", arrowPath);
-    }
-
-    if (this.targetArrow) {
-      const arrowPath = this.targetArrow.getAttribute("d")!;
-      this.interactiveTargetArrow!.setAttribute("d", arrowPath);
-    }
   }
 }

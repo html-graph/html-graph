@@ -2,7 +2,7 @@ export type { EdgeShape } from "./edge-shape";
 export type { EdgeRenderParams } from "./edge-render-params";
 export type { EdgeRenderPort } from "./edge-render-port";
 export type { StructuredEdgeShape } from "./structured-edge-shape";
-export type { PostRenderEdgeShape } from "./post-render-edge-shape";
+export type { StructuredEdgeRenderModel } from "./structure-render-model";
 
 export { BezierEdgeShape } from "./bezier";
 export type { BezierEdgeParams } from "./bezier";

@@ -67,7 +67,7 @@ export type {
   InteractiveEdgeParams,
   DirectEdgeParams,
   StructuredEdgeShape,
-  PostRenderEdgeShape,
+  StructuredEdgeRenderModel,
 } from "./edges";
 
 export type { Point } from "./point";

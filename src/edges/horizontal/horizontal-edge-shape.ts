@@ -2,7 +2,6 @@ import { EdgeRenderParams } from "../edge-render-params";
 import {
   CycleSquareEdgePath,
   DetourStraightEdgePath,
-  EdgePath,
   HorizontalEdgePath,
 } from "../shared";
 import { Point } from "@/point";
@@ -10,14 +9,12 @@ import { HorizontalEdgeParams } from "./horizontal-edge-params";
 import { edgeConstants } from "../edge-constants";
 import { EdgePathFactory, PathEdgeShape } from "../path";
 import { StructuredEdgeShape } from "../structured-edge-shape";
-import { PostRenderEdgeShape } from "../post-render-edge-shape";
 import { EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing edge shape connecting ports with horizontal angled
 // line
-export class HorizontalEdgeShape
-  implements StructuredEdgeShape, PostRenderEdgeShape
-{
+export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -28,7 +25,7 @@ export class HorizontalEdgeShape
 
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly onAfterRender: EventHandler<EdgePath>;
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly arrowLength: number;
 

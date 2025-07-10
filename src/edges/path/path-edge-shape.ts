@@ -11,14 +11,13 @@ import {
   createEdgePath,
   createEdgeRectangle,
   createEdgeSvg,
-  EdgePath,
   setSvgRectangle,
 } from "../shared";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { PostRenderEdgeShape } from "../post-render-edge-shape";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing low level core for single path structured edges
-export class PathEdgeShape implements StructuredEdgeShape, PostRenderEdgeShape {
+export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group = createEdgeGroup();
@@ -29,12 +28,13 @@ export class PathEdgeShape implements StructuredEdgeShape, PostRenderEdgeShape {
 
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public readonly onAfterRender: EventHandler<EdgePath>;
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  private readonly afterRenderEmitter: EventEmitter<EdgePath>;
+  private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
   public constructor(private readonly params: PathEdgeParams) {
-    [this.afterRenderEmitter, this.onAfterRender] = createPair<EdgePath>();
+    [this.afterRenderEmitter, this.onAfterRender] =
+      createPair<StructuredEdgeRenderModel>();
 
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
@@ -92,7 +92,7 @@ export class PathEdgeShape implements StructuredEdgeShape, PostRenderEdgeShape {
       createPathFn = this.params.createLinePath;
     }
 
-    const linePath = createPathFn(
+    const edgePath = createPathFn(
       sourceDirection,
       targetDirection,
       to,
@@ -100,30 +100,38 @@ export class PathEdgeShape implements StructuredEdgeShape, PostRenderEdgeShape {
       flipY,
     );
 
-    this.line.setAttribute("d", linePath.path);
+    this.line.setAttribute("d", edgePath.path);
+
+    let sourceArrowPath: string | null = null;
 
     if (this.sourceArrow) {
-      const arrowPath = createArrowPath(
+      sourceArrowPath = createArrowPath(
         sourceDirection,
         zero,
         this.params.arrowLength,
         this.params.arrowWidth,
       );
 
-      this.sourceArrow.setAttribute("d", arrowPath);
+      this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
+    let targetArrowPath: string | null = null;
+
     if (this.targetArrow) {
-      const arrowPath = createArrowPath(
+      targetArrowPath = createArrowPath(
         targetVect,
         to,
         targetArrowLength,
         this.params.arrowWidth,
       );
 
-      this.targetArrow.setAttribute("d", arrowPath);
+      this.targetArrow.setAttribute("d", targetArrowPath);
     }
 
-    this.afterRenderEmitter.emit(linePath);
+    this.afterRenderEmitter.emit({
+      edgePath,
+      sourceArrowPath,
+      targetArrowPath,
+    });
   }
 }

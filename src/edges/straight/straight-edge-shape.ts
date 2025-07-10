@@ -2,7 +2,6 @@ import { EdgeRenderParams } from "../edge-render-params";
 import {
   CycleSquareEdgePath,
   DetourStraightEdgePath,
-  EdgePath,
   StraightEdgePath,
 } from "../shared";
 import { Point } from "@/point";
@@ -11,12 +10,10 @@ import { edgeConstants } from "../edge-constants";
 import { EdgePathFactory, PathEdgeShape } from "../path";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
-import { PostRenderEdgeShape } from "../post-render-edge-shape";
+import { StructuredEdgeRenderModel } from "../structure-render-model";
 
 // Responsibility: Providing edge shape connecting ports with straight line
-export class StraightEdgeShape
-  implements StructuredEdgeShape, PostRenderEdgeShape
-{
+export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -27,7 +24,7 @@ export class StraightEdgeShape
 
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly onAfterRender: EventHandler<EdgePath>;
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly arrowLength: number;
 

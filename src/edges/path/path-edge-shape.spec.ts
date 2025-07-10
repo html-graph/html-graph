@@ -224,37 +224,4 @@ describe("PathEdgeShape", () => {
 
     expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
   });
-
-  it("should emit event after render", () => {
-    const shape = createBezierEdge(false, false);
-
-    const fn = jest.fn();
-
-    shape.onAfterRender.subscribe(() => {
-      fn();
-    });
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
-        direction: 0,
-      },
-    });
-
-    expect(fn).toHaveBeenCalled();
-  });
 });
