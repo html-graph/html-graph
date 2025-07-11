@@ -19,19 +19,17 @@ export class CycleCircleEdgePath implements EdgePath {
   ) {
     const smallRadius = this.params.smallRadius;
     const radius = this.params.radius;
-    const distance = Math.sqrt(smallRadius * smallRadius + radius * radius);
-    const g = smallRadius + radius;
-    const jointX = this.params.arrowLength + distance * (1 - radius / g);
-    const jointY = (smallRadius * radius) / g;
-    const farPoint =
-      Math.sqrt(g * g - smallRadius * smallRadius) +
-      radius +
-      this.params.arrowLength;
+    const diagonal = smallRadius + radius;
+    const jointY = (smallRadius * radius) / diagonal;
+    const distance = Math.sqrt(diagonal * diagonal - smallRadius * smallRadius);
+    const jointX = (distance * smallRadius) / diagonal;
+    const farPoint = distance + radius + this.params.arrowLength;
+    const totalX = this.params.arrowLength + jointX;
 
     const points: Point[] = [
       { x: this.params.arrowLength, y: zero.y },
-      { x: jointX, y: jointY },
-      { x: jointX, y: -jointY },
+      { x: totalX, y: jointY },
+      { x: totalX, y: -jointY },
       { x: farPoint, y: 0 },
     ];
 

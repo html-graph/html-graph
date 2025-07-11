@@ -30,6 +30,10 @@
 }
 
 .remove-button {
-  --remove-color: #d14b29;
+  --remove-color: #e88b74;
   --remove-background: white;
+}
+
+.remove-button:hover {
+  --remove-color: #f93707;
 }

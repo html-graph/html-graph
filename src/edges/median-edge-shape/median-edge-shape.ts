@@ -18,7 +18,7 @@ export class MedianEdgeShape implements StructuredEdgeShape {
 
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
-    public readonly median: SVGElement,
+    public readonly medianElement: SVGElement,
   ) {
     this.svg = this.baseShape.svg;
     this.group = this.baseShape.group;
@@ -26,13 +26,13 @@ export class MedianEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.baseShape.sourceArrow;
     this.targetArrow = this.baseShape.targetArrow;
     this.onAfterRender = this.baseShape.onAfterRender;
-    this.svg.append(this.median);
+    this.svg.append(this.medianElement);
 
     this.baseShape.onAfterRender.subscribe((model) => {
       const median = model.edgePath.median;
       const transform = `translate(${median.x}px, ${median.y}px)`;
 
-      this.median.style.setProperty("transform", transform);
+      this.medianElement.style.setProperty("transform", transform);
     });
   }
 

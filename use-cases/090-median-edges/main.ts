@@ -45,12 +45,16 @@ const canvas: Canvas = builder
   .setDefaults({
     edges: {
       shape: (edgeId) => {
-        const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
+        const baseShape = new BezierEdgeShape({
+          hasTargetArrow: true,
+          smallCycleRadius: 15,
+          cycleRadius: 30,
+        });
 
         const median = createMedian();
         const medianShape = new MedianEdgeShape(baseShape, median);
 
-        medianShape.median.addEventListener("mouseup", (event) => {
+        medianShape.medianElement.addEventListener("mouseup", (event) => {
           if (event.button === 0) {
             canvas.removeEdge(edgeId);
           }
