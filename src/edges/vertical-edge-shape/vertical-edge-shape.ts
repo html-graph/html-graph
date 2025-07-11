@@ -2,18 +2,19 @@ import { EdgeRenderParams } from "../edge-render-params";
 import {
   CycleSquareEdgePath,
   DetourStraightEdgePath,
-  StraightEdgePath,
+  VerticalEdgePath,
 } from "../shared";
 import { Point } from "@/point";
-import { StraightEdgeParams } from "./straight-edge-params";
+import { VerticalEdgeParams } from "./vertical-edge-params";
 import { edgeConstants } from "../edge-constants";
-import { EdgePathFactory, PathEdgeShape } from "../path";
+import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing edge shape connecting ports with straight line
-export class StraightEdgeShape implements StructuredEdgeShape {
+// Responsibility: Providing edge shape connecting ports with vertical angled
+// line
+export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -85,11 +86,14 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     sourceDirection: Point,
     targetDirection: Point,
     to: Point,
+    _flipX: number,
+    flipY: number,
   ) =>
-    new StraightEdgePath({
+    new VerticalEdgePath({
       to,
       sourceDirection,
       targetDirection,
+      flipY,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -97,7 +101,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-  public constructor(params?: StraightEdgeParams) {
+  public constructor(params?: VerticalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
@@ -105,7 +109,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
 
     const roundness = params?.roundness ?? edgeConstants.roundness;
-
     this.roundness = Math.min(
       roundness,
       this.arrowOffset,
@@ -113,10 +116,9 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     );
 
     this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
+      params?.detourDirection ?? edgeConstants.detourDirectionVertical;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-
     this.hasSourceArrow =
       params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
     this.hasTargetArrow =

@@ -5,6 +5,8 @@ import { EdgePath } from "../edge-path";
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
 
+  public readonly median: Point;
+
   public constructor(
     private readonly params: {
       readonly sourceDirection: Point;
@@ -17,15 +19,18 @@ export class CycleCircleEdgePath implements EdgePath {
   ) {
     const smallRadius = this.params.smallRadius;
     const radius = this.params.radius;
-    const distance = Math.sqrt(smallRadius * smallRadius + radius * radius);
-    const g = smallRadius + radius;
-    const jointX = this.params.arrowLength + distance * (1 - radius / g);
-    const jointY = (smallRadius * radius) / g;
+    const diagonal = smallRadius + radius;
+    const jointY = (smallRadius * radius) / diagonal;
+    const distance = Math.sqrt(diagonal * diagonal - smallRadius * smallRadius);
+    const jointX = (distance * smallRadius) / diagonal;
+    const farPoint = distance + radius + this.params.arrowLength;
+    const totalX = this.params.arrowLength + jointX;
 
     const points: Point[] = [
       { x: this.params.arrowLength, y: zero.y },
-      { x: jointX, y: jointY },
-      { x: jointX, y: -jointY },
+      { x: totalX, y: jointY },
+      { x: totalX, y: -jointY },
+      { x: farPoint, y: 0 },
     ];
 
     const rotatedPoints = points.map((p) =>
@@ -42,5 +47,7 @@ export class CycleCircleEdgePath implements EdgePath {
     const preLine = `M ${0} ${0} L ${rotatedPoints[0].x} ${rotatedPoints[0].y} `;
 
     this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${c}`;
+
+    this.median = rotatedPoints[3];
   }
 }

@@ -6,6 +6,8 @@ import { EdgePath } from "../edge-path";
 export class CycleSquareEdgePath implements EdgePath {
   public readonly path: string;
 
+  public readonly median: Point;
+
   public constructor(
     private readonly params: {
       readonly sourceDirection: Point;
@@ -40,5 +42,7 @@ export class CycleSquareEdgePath implements EdgePath {
     const preLine = `M ${zero.x} ${zero.y} L ${rp[0].x} ${rp[0].y} `;
 
     this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${createRoundedPath(rp, this.params.roundness)}`;
+
+    this.median = { x: (rp[3].x + rp[4].x) / 2, y: (rp[3].y + rp[4].y) / 2 };
   }
 }

@@ -55,6 +55,7 @@ export {
   InteractiveEdgeShape,
   InteractiveEdgeError,
   DirectEdgeShape,
+  MedianEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,
@@ -69,6 +70,17 @@ export type {
   StructuredEdgeShape,
   StructuredEdgeRenderModel,
 } from "./edges";
+
+/**
+ * @deprecated
+ * create your own implementation instead
+ */
+export { PathEdgeShape as LineEdgeShape } from "./edges/path-edge-shape";
+/**
+ * @deprecated
+ * create your own implementation instead
+ */
+export type { PathEdgeParams as LineEdgeParams } from "./edges/path-edge-shape";
 
 export type { Point } from "./point";
 

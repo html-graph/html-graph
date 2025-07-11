@@ -6,6 +6,8 @@ import { EdgePath } from "../edge-path";
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;
 
+  public readonly median: Point;
+
   public constructor(
     private readonly params: {
       readonly to: Point;
@@ -63,6 +65,8 @@ export class DetourStraightEdgePath implements EdgePath {
       this.params.to,
     );
     const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
+
+    this.median = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
 
     this.path = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],
