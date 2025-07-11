@@ -150,7 +150,7 @@ describe("BezierEdgeShape", () => {
     const line = shape.svg.children[0].children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 M 10 0 A 20 20 0 0 1 24.42220510185596 12 A 30 30 0 1 0 24.42220510185596 -12 A 20 20 0 0 1 10 0",
+      "M 0 0 L 10 0 M 10 0 A 20 20 0 0 1 28.33030277982336 12 A 30 30 0 1 0 28.33030277982336 -12 A 20 20 0 0 1 10 0",
     );
   });
 
