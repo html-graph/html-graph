@@ -71,6 +71,17 @@ export type {
   StructuredEdgeRenderModel,
 } from "./edges";
 
+/**
+ * @deprecated
+ * create your own implementation instead
+ */
+export { PathEdgeShape as LineEdgeShape } from "./edges/path-edge-shape";
+/**
+ * @deprecated
+ * create your own implementation instead
+ */
+export type { PathEdgeParams as LineEdgeParams } from "./edges/path-edge-shape";
+
 export type { Point } from "./point";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";

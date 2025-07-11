@@ -6,6 +6,39 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
+const createMedian = (): SVGElement => {
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+  group.style.setProperty("pointer-events", "auto");
+  group.style.setProperty("cursor", "pointer");
+  group.classList.add("remove-button");
+
+  const circle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "circle",
+  );
+
+  circle.setAttribute("cx", "0");
+  circle.setAttribute("cy", "0");
+  circle.setAttribute("r", "7");
+  circle.setAttribute("fill", "var(--remove-background)");
+  circle.setAttribute("stroke", "var(--remove-color)");
+
+  const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path1.setAttribute("d", "M -3 -3 L 3 3");
+  path1.setAttribute("stroke", "var(--remove-color)");
+
+  const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path2.setAttribute("d", "M 3 -3 L -3 3");
+  path2.setAttribute("stroke", "var(--remove-color)");
+
+  group.appendChild(circle);
+  group.appendChild(path1);
+  group.appendChild(path2);
+
+  return group;
+};
+
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
@@ -14,33 +47,11 @@ const canvas: Canvas = builder
       shape: (edgeId) => {
         const baseShape = new BezierEdgeShape({ hasTargetArrow: true });
 
-        const median = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "circle",
-        );
-
-        median.setAttribute("cx", "0");
-        median.setAttribute("cy", "0");
-        median.setAttribute("r", "7");
-        median.setAttribute("fill", "white");
-        median.setAttribute("stroke", "red");
-        median.style.setProperty("pointer-events", "auto");
-        median.style.setProperty("cursor", "pointer");
-
+        const median = createMedian();
         const medianShape = new MedianEdgeShape(baseShape, median);
 
-        let cancel = false;
-
-        medianShape.median.addEventListener("mousedown", () => {
-          cancel = false;
-        });
-
-        medianShape.median.addEventListener("mousemove", () => {
-          cancel = true;
-        });
-
         medianShape.median.addEventListener("mouseup", (event) => {
-          if (!cancel && event.button === 0) {
+          if (event.button === 0) {
             canvas.removeEdge(edgeId);
           }
         });
@@ -52,6 +63,7 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableUserDraggableNodes()
   .enableBackground()
+  .enableUserConnectablePorts()
   .build();
 
 canvas

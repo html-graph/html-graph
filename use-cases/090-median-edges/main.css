@@ -28,3 +28,8 @@
   background: var(--color-edge);
   border-radius: calc(2 * var(--port-size));
 }
+
+.remove-button {
+  --remove-color: #d14b29;
+  --remove-background: white;
+}
