@@ -1,23 +1,16 @@
-import {
-  AddEdgeRequest,
-  AddNodeRequest,
-  Canvas,
-  EdgeShapeFactory,
-} from "@/canvas";
+import { AddEdgeRequest, AddNodeRequest, Canvas, Defaults } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { isPointInside } from "../shared";
 import { Point } from "@/point";
-import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
 import { transformPoint } from "@/transform-point";
 import { standardCenterFn } from "@/center-fn";
+import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 
 // Responsibility: Configuring ports connectable via drag
 export class UserConnectablePortsConfigurator {
-  private readonly config: Config;
-
   private readonly overlayCanvas: Canvas;
 
   private readonly staticOverlayPortId = "static";
@@ -173,15 +166,8 @@ export class UserConnectablePortsConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
-    defaultEdgeShapeFactory: EdgeShapeFactory,
-    defaultDragPortDirection: number,
-    config: ConnectablePortsConfig,
+    private readonly config: UserConnectablePortsParams,
   ) {
-    this.config = createConfig(
-      config,
-      defaultEdgeShapeFactory,
-      defaultDragPortDirection,
-    );
     const graphStore = new GraphStore();
 
     const htmlView = new CoreHtmlView(
@@ -190,24 +176,26 @@ export class UserConnectablePortsConfigurator {
       this.overlayLayer,
     );
 
+    const defaults: Defaults = {
+      nodes: {
+        centerFn: standardCenterFn,
+        priorityFn: (): number => 0,
+      },
+      edges: {
+        shapeFactory: this.config.edgeShapeFactory,
+        priorityFn: (): number => 0,
+      },
+      ports: {
+        direction: 0,
+      },
+    };
+
     this.overlayCanvas = new Canvas(
       this.overlayLayer,
       graphStore,
       this.viewportStore,
       htmlView,
-      {
-        nodes: {
-          centerFn: standardCenterFn,
-          priorityFn: (): number => 0,
-        },
-        edges: {
-          shapeFactory: this.config.edgeShapeFactory,
-          priorityFn: (): number => 0,
-        },
-        ports: {
-          direction: 0,
-        },
-      },
+      defaults,
     );
 
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
@@ -221,18 +209,14 @@ export class UserConnectablePortsConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
-    defaultEdgeShapeFactory: EdgeShapeFactory,
-    defaultDragPortDirection: number,
-    config: ConnectablePortsConfig,
+    params: UserConnectablePortsParams,
   ): void {
     new UserConnectablePortsConfigurator(
       canvas,
       overlayLayer,
       viewportStore,
       win,
-      defaultEdgeShapeFactory,
-      defaultDragPortDirection,
-      config,
+      params,
     );
   }
 

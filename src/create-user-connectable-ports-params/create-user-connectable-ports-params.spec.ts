@@ -1,19 +1,25 @@
 import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
-import { ConnectionPreprocessor } from "./connection-preprocessor";
-import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { createConfig } from "./create-config";
+import { createUserConnectablePortsParams } from "./create-user-connectable-ports-params";
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
+import {
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
+} from "@/configurators";
 
-describe("createOptions", () => {
+describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
 
     expect(options.connectionTypeResolver("123")).toBe("direct");
   });
 
   it("should return specified connection type resolver", () => {
     const resolver: ConnectionTypeResolver = () => null;
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { connectionTypeResolver: resolver },
       () => new BezierEdgeShape(),
       0,
@@ -23,7 +29,11 @@ describe("createOptions", () => {
   });
 
   it("should return default connection preprocessor", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
 
     const request: AddEdgeRequest = { from: "1", to: "2" };
 
@@ -32,7 +42,7 @@ describe("createOptions", () => {
 
   it("should return specified connection preprocessor", () => {
     const preprocessor: ConnectionPreprocessor = () => null;
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { connectionPreprocessor: preprocessor },
       () => new BezierEdgeShape(),
       0,
@@ -42,7 +52,11 @@ describe("createOptions", () => {
   });
 
   it("should return LMB mouse down event verifier by default", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
     const pass = options.mouseDownEventVerifier(
       new MouseEvent("mousedown", { button: 0 }),
     );
@@ -56,7 +70,7 @@ describe("createOptions", () => {
 
   it("should return specified mouse down event verifier", () => {
     const verifier: (event: MouseEvent) => boolean = () => false;
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { mouseDownEventVerifier: verifier },
       () => new BezierEdgeShape(),
       0,
@@ -66,7 +80,11 @@ describe("createOptions", () => {
   });
 
   it("should return LMB mouse up event verifier by default", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
     const pass = options.mouseDownEventVerifier(
       new MouseEvent("mousedown", { button: 0 }),
     );
@@ -80,7 +98,7 @@ describe("createOptions", () => {
 
   it("should return specified mouse up event verifier", () => {
     const verifier: (event: MouseEvent) => boolean = () => false;
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { mouseUpEventVerifier: verifier },
       () => new BezierEdgeShape(),
       0,
@@ -90,7 +108,11 @@ describe("createOptions", () => {
   });
 
   it("should return default edge created callback", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
 
     expect(() => {
       options.onAfterEdgeCreated("123");
@@ -100,7 +122,7 @@ describe("createOptions", () => {
   it("should return specified edge created callback", () => {
     const onEdgeCreated = (): void => {};
 
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       {
         events: { onAfterEdgeCreated: onEdgeCreated },
       },
@@ -112,13 +134,17 @@ describe("createOptions", () => {
   });
 
   it("should return default drag port direction", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), Math.PI);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      Math.PI,
+    );
 
     expect(options.dragPortDirection).toBe(Math.PI);
   });
 
   it("should return specified drag port direction", () => {
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { dragPortDirection: Math.PI },
       () => new BezierEdgeShape(),
       0,
@@ -128,7 +154,11 @@ describe("createOptions", () => {
   });
 
   it("should return default edge creation interrupted callback", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
 
     expect(() => {
       options.onEdgeCreationInterrupted("123", true);
@@ -138,7 +168,7 @@ describe("createOptions", () => {
   it("should return specified edge creation interrupted callback", () => {
     const onEdgeCreationInterrupted = (): void => {};
 
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { events: { onEdgeCreationInterrupted } },
       () => new BezierEdgeShape(),
       0,
@@ -148,7 +178,11 @@ describe("createOptions", () => {
   });
 
   it("should return default edge creation prevented callback", () => {
-    const options = createConfig({}, () => new BezierEdgeShape(), 0);
+    const options = createUserConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
 
     expect(() => {
       options.onEdgeCreationPrevented({ from: "123", to: "456" });
@@ -158,7 +192,7 @@ describe("createOptions", () => {
   it("should return specified edge creation interrupted callback", () => {
     const onEdgeCreationPrevented = (): void => {};
 
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { events: { onEdgeCreationPrevented } },
       () => new BezierEdgeShape(),
       0,
@@ -169,7 +203,7 @@ describe("createOptions", () => {
 
   it("should return default edge shape factory", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
-    const options = createConfig({}, factory, 0);
+    const options = createUserConnectablePortsParams({}, factory, 0);
 
     expect(options.edgeShapeFactory).toBe(factory);
   });
@@ -177,7 +211,7 @@ describe("createOptions", () => {
   it("should return specified edge shape factory", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
     const connectionFactory: EdgeShapeFactory = () => new DirectEdgeShape();
-    const options = createConfig(
+    const options = createUserConnectablePortsParams(
       { edgeShapeFactory: connectionFactory },
       factory,
       0,

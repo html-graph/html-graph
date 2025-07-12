@@ -1,14 +1,16 @@
+import {
+  ConnectionTypeResolver,
+  ConnectionPreprocessor,
+  UserConnectablePortsParams,
+} from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { Config } from "./config";
-import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { ConnectionPreprocessor } from "./connection-preprocessor";
 import { EdgeShapeFactory } from "@/canvas";
 
-export const createConfig = (
+export const createUserConnectablePortsParams = (
   connectablePortsConfig: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   defaultDragPortDirection: number,
-): Config => {
+): UserConnectablePortsParams => {
   const defaultConnectionTypeResolver: ConnectionTypeResolver = () => "direct";
 
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
