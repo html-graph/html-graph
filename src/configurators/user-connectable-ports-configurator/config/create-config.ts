@@ -2,9 +2,12 @@ import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { Config } from "./config";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "./connection-preprocessor";
+import { EdgeShapeFactory } from "@/canvas";
 
 export const createConfig = (
   connectablePortsConfig: ConnectablePortsConfig,
+  defaultEdgeShapeFactory: EdgeShapeFactory,
+  defaultDragPortDirection: number,
 ): Config => {
   const defaultConnectionTypeResolver: ConnectionTypeResolver = () => "direct";
 
@@ -41,6 +44,9 @@ export const createConfig = (
     onEdgeCreationPrevented:
       connectablePortsConfig.events?.onEdgeCreationPrevented ??
       defaultOnAfterEdgeConnectionPrevented,
-    dragPortDirection: connectablePortsConfig.dragPortDirection ?? undefined,
+    dragPortDirection:
+      connectablePortsConfig.dragPortDirection ?? defaultDragPortDirection,
+    edgeShapeFactory:
+      connectablePortsConfig.edgeShapeFactory ?? defaultEdgeShapeFactory,
   };
 };

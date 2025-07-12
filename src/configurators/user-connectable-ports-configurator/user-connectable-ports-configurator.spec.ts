@@ -34,7 +34,8 @@ const createCanvas = (params?: {
     overlayElement,
     viewportStore,
     window,
-    defaults,
+    defaults.edges.shapeFactory,
+    defaults.ports.direction,
     params?.connectConfig ?? {},
   );
 

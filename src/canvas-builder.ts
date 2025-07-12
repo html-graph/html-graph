@@ -226,7 +226,8 @@ export class CanvasBuilder {
         layers.overlay,
         viewportStore,
         this.window,
-        defaults,
+        defaults.edges.shapeFactory,
+        defaults.ports.direction,
         this.connectablePortsConfig,
       );
     }
