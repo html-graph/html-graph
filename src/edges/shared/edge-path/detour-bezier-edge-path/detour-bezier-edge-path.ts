@@ -1,6 +1,7 @@
 import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../../create-rotated-point";
 import { EdgePath } from "../edge-path";
+import { flipPoint } from "../../flip-point";
 
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
@@ -22,7 +23,7 @@ export class DetourBezierEdgePath implements EdgePath {
       readonly hasTargetArrow: boolean;
     },
   ) {
-    const pba: Point = this.params.hasSourceArrow
+    const beginArrow: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
           { x: this.params.arrowLength, y: zero.y },
           this.params.sourceDirection,
@@ -30,7 +31,7 @@ export class DetourBezierEdgePath implements EdgePath {
         )
       : zero;
 
-    const pea: Point = this.params.hasTargetArrow
+    const endArrow: Point = this.params.hasTargetArrow
       ? createRotatedPoint(
           {
             x: this.params.to.x - this.params.arrowLength,
@@ -41,7 +42,7 @@ export class DetourBezierEdgePath implements EdgePath {
         )
       : this.params.to;
 
-    const gap1 = this.params.arrowLength;
+    const gap = this.params.arrowLength;
 
     const detourX =
       Math.cos(this.params.detourDirection) * this.params.detourDistance;
@@ -51,52 +52,57 @@ export class DetourBezierEdgePath implements EdgePath {
     const flipDetourX = detourX * this.params.flipX;
     const flipDetourY = detourY * this.params.flipY;
 
-    const pbl1: Point = createRotatedPoint(
-      { x: gap1, y: zero.y },
+    const beginLine1: Point = createRotatedPoint(
+      { x: gap, y: zero.y },
       this.params.sourceDirection,
       zero,
     );
-    const pbl2: Point = {
-      x: pbl1.x + flipDetourX,
-      y: pbl1.y + flipDetourY,
+    const beginLine2: Point = {
+      x: beginLine1.x + flipDetourX,
+      y: beginLine1.y + flipDetourY,
     };
-    const pel1: Point = createRotatedPoint(
-      { x: this.params.to.x - gap1, y: this.params.to.y },
+    const endLine1: Point = createRotatedPoint(
+      { x: this.params.to.x - gap, y: this.params.to.y },
       this.params.targetDirection,
       this.params.to,
     );
-    const pel2: Point = {
-      x: pel1.x + flipDetourX,
-      y: pel1.y + flipDetourY,
+    const endLine2: Point = {
+      x: endLine1.x + flipDetourX,
+      y: endLine1.y + flipDetourY,
     };
 
-    this.median = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
-
-    const pbc1: Point = {
-      x: pbl1.x + this.params.curvature * this.params.sourceDirection.x,
-      y: pbl1.y + this.params.curvature * this.params.sourceDirection.y,
+    const center: Point = {
+      x: (beginLine2.x + endLine2.x) / 2,
+      y: (beginLine2.y + endLine2.y) / 2,
     };
 
-    const pec1: Point = {
-      x: pel1.x - this.params.curvature * this.params.targetDirection.x,
-      y: pel1.y - this.params.curvature * this.params.targetDirection.y,
+    const beginCurve1: Point = {
+      x: beginLine1.x + this.params.curvature * this.params.sourceDirection.x,
+      y: beginLine1.y + this.params.curvature * this.params.sourceDirection.y,
     };
 
-    const pbc2: Point = {
-      x: pbl1.x + flipDetourX,
-      y: pbl1.y + flipDetourY,
+    const endCurve1: Point = {
+      x: endLine1.x - this.params.curvature * this.params.targetDirection.x,
+      y: endLine1.y - this.params.curvature * this.params.targetDirection.y,
     };
-    const pec2: Point = {
-      x: pel1.x + flipDetourX,
-      y: pel1.y + flipDetourY,
+
+    const beginCurve2: Point = {
+      x: beginLine1.x + flipDetourX,
+      y: beginLine1.y + flipDetourY,
+    };
+    const endCurve2: Point = {
+      x: endLine1.x + flipDetourX,
+      y: endLine1.y + flipDetourY,
     };
 
     this.path = [
-      `M ${pba.x} ${pba.y}`,
-      `L ${pbl1.x} ${pbl1.y}`,
-      `C ${pbc1.x} ${pbc1.y} ${pbc2.x} ${pbc2.y} ${this.median.x} ${this.median.y}`,
-      `C ${pec2.x} ${pec2.y} ${pec1.x} ${pec1.y} ${pel1.x} ${pel1.y}`,
-      `L ${pea.x} ${pea.y}`,
+      `M ${beginArrow.x} ${beginArrow.y}`,
+      `L ${beginLine1.x} ${beginLine1.y}`,
+      `C ${beginCurve1.x} ${beginCurve1.y} ${beginCurve2.x} ${beginCurve2.y} ${center.x} ${center.y}`,
+      `C ${endCurve2.x} ${endCurve2.y} ${endCurve1.x} ${endCurve1.y} ${endLine1.x} ${endLine1.y}`,
+      `L ${endArrow.x} ${endArrow.y}`,
     ].join(" ");
+
+    this.median = flipPoint(center, params.flipX, params.flipY, params.to);
   }
 }

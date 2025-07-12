@@ -2,6 +2,7 @@ import { Point, zero } from "@/point";
 import { createRotatedPoint } from "../../create-rotated-point";
 import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
+import { flipPoint } from "../../flip-point";
 
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;
@@ -66,7 +67,9 @@ export class DetourStraightEdgePath implements EdgePath {
     );
     const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
 
-    this.median = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+    const center = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+
+    this.median = flipPoint(center, params.flipX, params.flipY, params.to);
 
     this.path = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],

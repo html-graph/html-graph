@@ -1,6 +1,5 @@
 # TODO
 
-- fix advanced example median bug
 - improve connectable ports overlay canvas configuration
 - dashed edges
 - animated dashed edges
