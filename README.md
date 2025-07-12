@@ -5,11 +5,9 @@
 ### Graph visualization library that enables nodes customization using HTML
 
 
+<video width="1208" height="720" autoplay muted loop src="/media/advanced-demo.webm"></video>
 
 <a target="_blank" href="https://html-graph.github.io/use-cases/advanced-demo/">
-    <video autoplay muted loop>
-      <source src="/media/advanced-demo.webm">
-    </video>
     <!-- <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/> -->
 </a>
 
