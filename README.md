@@ -4,8 +4,13 @@
 
 ### Graph visualization library that enables nodes customization using HTML
 
+
+
 <a target="_blank" href="https://html-graph.github.io/use-cases/advanced-demo/">
-    <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
+    <video autoplay muted loop>
+      <source src="/media/advanced-demo.webm">
+    </video>
+    <!-- <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/> -->
 </a>
 
 Instead of connecting nodes directly, this library utilizes the concept of ports,
