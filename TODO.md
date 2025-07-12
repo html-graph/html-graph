@@ -1,6 +1,7 @@
 # TODO
 
 - refactor configurators configs
+- horizontal and vertical edges detour parallel
 - dashed edges
 - animated dashed edges
 - user selectable edges
