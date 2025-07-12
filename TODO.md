@@ -4,18 +4,12 @@
 - horizontal and vertical edges detour parallel
 - dashed edges
 - animated dashed edges
-- user selectable edges
-- user deletable edges
 - user movable edges
 - improve onDestroy unit tests
 - virtual scroll node events
-- make builder single use object
-- user selectable nodes? lasso selection? multiselection?
-- connection preview for connectable ports
-- arrows customization
 - snap nodes to grid
 - single responsibility for error
-- nodes without overlap
+- make builder single use object
 - onBeforeNodeDrag move somewhere?
 
 - layouts
@@ -24,6 +18,11 @@
   - implement default coordinates calculation
   - implement Canvas wrapper with optional coordinates
   - provide trigger for applying commands queue
+
+- arrows customization
+- user selectable nodes? lasso selection? multiselection?
+- connection preview for connectable ports
+- nodes without overlap
 
 - implement edges with label when specified manually
 - generics for identifiers?
