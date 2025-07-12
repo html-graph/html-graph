@@ -35,17 +35,20 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   TransformPreprocessorParams,
+  VirtualScrollConfig,
+  ConnectionPreprocessor,
+  ConnectionTypeResolver,
+  MouseEventVerifier,
+} from "./configurators";
+
+export type {
   /**
    * @deprecated
    * use ConnectablePortsConfig instead
    */
   ConnectablePortsConfig as ConnectablePortsOptions,
-  VirtualScrollConfig,
   ConnectablePortsConfig,
-  ConnectionPreprocessor,
-  ConnectionTypeResolver,
-  MouseEventVerifier,
-} from "./configurators";
+} from "./create-user-connectable-ports-params";
 
 export {
   BezierEdgeShape,

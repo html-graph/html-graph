@@ -1,11 +1,17 @@
+import {
+  ConnectionTypeResolver,
+  ConnectionPreprocessor,
+  UserConnectablePortsParams,
+} from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { Config } from "./config";
-import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { ConnectionPreprocessor } from "./connection-preprocessor";
+import { EdgeShapeFactory } from "@/canvas";
+import { resolveEdgeShapeFactory } from "@/resolve-edge-shape-factory";
 
-export const createConfig = (
+export const createUserConnectablePortsParams = (
   connectablePortsConfig: ConnectablePortsConfig,
-): Config => {
+  defaultEdgeShapeFactory: EdgeShapeFactory,
+  defaultDragPortDirection: number,
+): UserConnectablePortsParams => {
   const defaultConnectionTypeResolver: ConnectionTypeResolver = () => "direct";
 
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
@@ -41,6 +47,11 @@ export const createConfig = (
     onEdgeCreationPrevented:
       connectablePortsConfig.events?.onEdgeCreationPrevented ??
       defaultOnAfterEdgeConnectionPrevented,
-    dragPortDirection: connectablePortsConfig.dragPortDirection ?? undefined,
+    dragPortDirection:
+      connectablePortsConfig.dragPortDirection ?? defaultDragPortDirection,
+    edgeShapeFactory:
+      connectablePortsConfig.edgeShape !== undefined
+        ? resolveEdgeShapeFactory(connectablePortsConfig.edgeShape)
+        : defaultEdgeShapeFactory,
   };
 };

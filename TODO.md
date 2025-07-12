@@ -1,6 +1,6 @@
 # TODO
 
-- improve connectable ports overlay canvas configuration
+- refactor configurators configs
 - dashed edges
 - animated dashed edges
 - user selectable edges

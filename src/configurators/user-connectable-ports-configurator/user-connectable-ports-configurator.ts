@@ -4,14 +4,13 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { isPointInside } from "../shared";
 import { Point } from "@/point";
-import { ConnectablePortsConfig, createConfig, Config } from "./config";
 import { PortPayload } from "./port-payload";
 import { transformPoint } from "@/transform-point";
+import { standardCenterFn } from "@/center-fn";
+import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 
 // Responsibility: Configuring ports connectable via drag
 export class UserConnectablePortsConfigurator {
-  private readonly config: Config;
-
   private readonly overlayCanvas: Canvas;
 
   private readonly staticOverlayPortId = "static";
@@ -167,10 +166,8 @@ export class UserConnectablePortsConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
-    defaults: Defaults,
-    config: ConnectablePortsConfig,
+    private readonly config: UserConnectablePortsParams,
   ) {
-    this.config = createConfig(config);
     const graphStore = new GraphStore();
 
     const htmlView = new CoreHtmlView(
@@ -178,6 +175,20 @@ export class UserConnectablePortsConfigurator {
       this.viewportStore,
       this.overlayLayer,
     );
+
+    const defaults: Defaults = {
+      nodes: {
+        centerFn: standardCenterFn,
+        priorityFn: (): number => 0,
+      },
+      edges: {
+        shapeFactory: this.config.edgeShapeFactory,
+        priorityFn: (): number => 0,
+      },
+      ports: {
+        direction: 0,
+      },
+    };
 
     this.overlayCanvas = new Canvas(
       this.overlayLayer,
@@ -198,16 +209,14 @@ export class UserConnectablePortsConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
-    defaults: Defaults,
-    config: ConnectablePortsConfig,
+    params: UserConnectablePortsParams,
   ): void {
     new UserConnectablePortsConfigurator(
       canvas,
       overlayLayer,
       viewportStore,
       win,
-      defaults,
-      config,
+      params,
     );
   }
 

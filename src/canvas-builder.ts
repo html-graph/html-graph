@@ -6,7 +6,6 @@ import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
   BackgroundConfig,
-  ConnectablePortsConfig,
   DraggableNodesConfig,
   ResizeReactiveNodesConfigurator,
   ViewportTransformConfig,
@@ -19,6 +18,10 @@ import {
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
 import { CanvasDefaults, createCanvasDefaults } from "@/create-canvas-defaults";
+import {
+  ConnectablePortsConfig,
+  createUserConnectablePortsParams,
+} from "@/create-user-connectable-ports-params";
 
 // Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
@@ -221,13 +224,18 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserConnectablePorts) {
+      const params = createUserConnectablePortsParams(
+        this.connectablePortsConfig,
+        defaults.edges.shapeFactory,
+        defaults.ports.direction,
+      );
+
       UserConnectablePortsConfigurator.configure(
         canvas,
         layers.overlay,
         viewportStore,
         this.window,
-        defaults,
-        this.connectablePortsConfig,
+        params,
       );
     }
 

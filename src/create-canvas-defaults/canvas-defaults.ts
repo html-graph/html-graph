@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
-import { EdgeShapeConfig } from "./edge-shape-config";
 import { Priority } from "./priority";
+import { EdgeShapeConfig } from "@/resolve-edge-shape-factory";
 
 export interface CanvasDefaults {
   /**

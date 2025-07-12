@@ -24,9 +24,9 @@ export type { BackgroundConfig } from "./background-configurator";
 
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 export type {
-  ConnectablePortsConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
+  UserConnectablePortsParams,
 } from "./user-connectable-ports-configurator";
 
 export type { MouseEventVerifier } from "./shared";

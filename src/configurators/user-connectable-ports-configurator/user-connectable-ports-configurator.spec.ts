@@ -4,8 +4,11 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { ConnectablePortsConfig } from "./config";
 import { createCanvasDefaults } from "@/create-canvas-defaults";
+import {
+  ConnectablePortsConfig,
+  createUserConnectablePortsParams,
+} from "@/create-user-connectable-ports-params";
 
 const createCanvas = (params?: {
   mainElement?: HTMLElement;
@@ -29,13 +32,18 @@ const createCanvas = (params?: {
     defaults,
   );
 
+  const connectParams = createUserConnectablePortsParams(
+    params?.connectConfig ?? {},
+    defaults.edges.shapeFactory,
+    defaults.ports.direction,
+  );
+
   UserConnectablePortsConfigurator.configure(
     canvas,
     overlayElement,
     viewportStore,
     window,
-    defaults,
-    params?.connectConfig ?? {},
+    connectParams,
   );
 
   return canvas;
