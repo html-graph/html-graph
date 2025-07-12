@@ -1,12 +1,13 @@
-import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
+import { AddEdgeRequest } from "@/canvas";
 import {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,
 } from "@/configurators";
+import { EdgeShapeConfig } from "@/resolve-edge-shape-factory";
 
 export interface ConnectablePortsConfig {
-  readonly edgeShapeFactory?: EdgeShapeFactory;
+  readonly edgeShape?: EdgeShapeConfig;
   readonly connectionTypeResolver?: ConnectionTypeResolver;
   readonly connectionPreprocessor?: ConnectionPreprocessor;
   readonly mouseDownEventVerifier?: MouseEventVerifier;

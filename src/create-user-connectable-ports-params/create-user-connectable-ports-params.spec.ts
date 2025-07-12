@@ -212,7 +212,7 @@ describe("createUserConnectablePortsParams", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
     const connectionFactory: EdgeShapeFactory = () => new DirectEdgeShape();
     const options = createUserConnectablePortsParams(
-      { edgeShapeFactory: connectionFactory },
+      { edgeShape: connectionFactory },
       factory,
       0,
     );

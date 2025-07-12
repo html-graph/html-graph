@@ -1,6 +1,6 @@
 import { standardCenterFn } from "@/center-fn";
 import { resolvePriority } from "./resolve-priority";
-import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
+import { resolveEdgeShapeFactory } from "@/resolve-edge-shape-factory";
 import { CanvasDefaults } from "./canvas-defaults";
 import { Defaults } from "@/canvas";
 
