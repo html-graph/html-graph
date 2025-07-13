@@ -1,6 +1,5 @@
 # TODO
 
-- export Canvas type
 - horizontal and vertical edges detour parallel
 - rename Median to Midpoint
 - animated dashed edges
