@@ -1,5 +1,5 @@
-import { TransformPreprocessorFn } from "./preprocessors";
 import { MouseEventVerifier } from "../shared";
+import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 
 export interface TransformableViewportParams {
   readonly wheelSensitivity: number;

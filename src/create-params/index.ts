@@ -9,3 +9,10 @@ export { createUserConnectablePortsParams } from "./create-user-connectable-port
 
 export type { DraggableNodesConfig } from "./create-draggable-nodes-params";
 export { createDraggableNodesParams } from "./create-draggable-nodes-params";
+
+export type {
+  ViewportTransformConfig,
+  ShiftLimitPreprocessorParams,
+  ScaleLimitPreprocessorParams,
+} from "./create-transformable-viewport-params";
+export { createTransformableViewportParams } from "./create-transformable-viewport-params";

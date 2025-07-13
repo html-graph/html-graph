@@ -1,11 +1,11 @@
 import {
-  createCombinedTransformPreprocessor,
+  TransformableViewportParams,
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
-} from "../preprocessors";
-import { resolveTransformPreprocessor } from "../resolve-transform-preprocessor";
-import { TransformableViewportParams } from "../transformable-viewport-params";
+} from "@/configurators";
+import { createCombinedTransformPreprocessor } from "./preprocessors";
+import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 
 export const createTransformableViewportParams = (

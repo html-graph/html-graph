@@ -1,5 +1,5 @@
+import { MouseEventVerifier } from "@/configurators";
 import { TransformPreprocessorConfig } from "./transform-preprocessor-config";
-import { MouseEventVerifier } from "../../shared";
 
 export interface ViewportTransformConfig {
   readonly scale?: {

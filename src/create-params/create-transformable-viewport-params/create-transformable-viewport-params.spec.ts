@@ -1,10 +1,7 @@
 import { TransformState } from "@/viewport-store";
-import {
-  TransformPayload,
-  TransformPreprocessorParams,
-} from "../preprocessors";
 import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
+import { TransformPayload, TransformPreprocessorParams } from "@/configurators";
 
 describe("createConfig", () => {
   it("should set default wheel velocity if not specified", () => {

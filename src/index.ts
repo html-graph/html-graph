@@ -28,20 +28,20 @@ export type {
    */
   DraggableNodesConfig as DragOptions,
   DraggableNodesConfig,
-} from "./create-params";
-
-export type {
-  NodeDragPayload,
   ViewportTransformConfig,
   /**
    * @deprecated
    * use ViewportTransformConfig instead
    */
   ViewportTransformConfig as TransformOptions,
-  TransformPayload,
-  TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
+} from "./create-params";
+
+export type {
+  NodeDragPayload,
+  TransformPayload,
+  TransformPreprocessorFn,
   TransformPreprocessorParams,
   VirtualScrollConfig,
   ConnectionPreprocessor,

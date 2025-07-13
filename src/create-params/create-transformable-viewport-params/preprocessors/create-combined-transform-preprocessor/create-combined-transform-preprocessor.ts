@@ -1,5 +1,7 @@
-import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
-import { TransformPreprocessorParams } from "../transform-preprocessor-params";
+import {
+  TransformPreprocessorFn,
+  TransformPreprocessorParams,
+} from "@/configurators";
 
 export const createCombinedTransformPreprocessor: (
   preprocessors: readonly TransformPreprocessorFn[],

@@ -8,12 +8,10 @@ export type {
 
 export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 export type {
-  ViewportTransformConfig,
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
-  ShiftLimitPreprocessorParams,
-  ScaleLimitPreprocessorParams,
+  TransformableViewportParams,
 } from "./user-transformable-viewport-configurator";
 
 export { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";

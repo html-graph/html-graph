@@ -1,8 +1,4 @@
 import { Canvas, PatchMatrixRequest } from "@/canvas";
-import {
-  createTransformableViewportParams,
-  ViewportTransformConfig,
-} from "./create-transformable-viewport-params";
 import { isPointInside, setCursor } from "../shared";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
@@ -33,10 +29,10 @@ export class UserTransformableViewportConfigurator {
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.config.mouseDownEventVerifier(event)) {
+    if (this.element === null || !this.params.mouseDownEventVerifier(event)) {
       return;
     }
-    setCursor(this.element, this.config.shiftCursor);
+    setCursor(this.element, this.params.shiftCursor);
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
     });
@@ -70,7 +66,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.config.mouseUpEventVerifier(event)) {
+    if (this.element === null || !this.params.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -80,7 +76,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWheelScroll: (event: WheelEvent) => void = (
     event: WheelEvent,
   ) => {
-    if (!this.config.mouseWheelEventVerifier(event)) {
+    if (!this.params.mouseWheelEventVerifier(event)) {
       return;
     }
 
@@ -89,13 +85,13 @@ export class UserTransformableViewportConfigurator {
     const centerY = event.clientY - top;
     const deltaScale =
       event.deltaY < 0
-        ? this.config.wheelSensitivity
-        : 1 / this.config.wheelSensitivity;
+        ? this.params.wheelSensitivity
+        : 1 / this.params.wheelSensitivity;
 
     const deltaViewScale = 1 / deltaScale;
 
     if (this.wheelFinishTimer === null) {
-      this.config.onTransformStarted();
+      this.params.onTransformStarted();
     }
 
     this.scaleViewport(deltaViewScale, centerX, centerY);
@@ -106,11 +102,11 @@ export class UserTransformableViewportConfigurator {
 
     this.wheelFinishTimer = setTimeout(() => {
       if (!this.transformInProgress) {
-        this.config.onTransformFinished();
+        this.params.onTransformFinished();
       }
 
       this.wheelFinishTimer = null;
-    }, this.config.scaleWheelFinishTimeout);
+    }, this.params.scaleWheelFinishTimeout);
   };
 
   private readonly onTouchStart: (event: TouchEvent) => void = (
@@ -179,18 +175,16 @@ export class UserTransformableViewportConfigurator {
   private readonly observer = new ResizeObserver(() => {
     const prevTransform = this.viewport.getViewportMatrix();
     const { width, height } = this.element!.getBoundingClientRect();
-    const transform = this.config.transformPreprocessor({
+    const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform: prevTransform,
       canvasWidth: width,
       canvasHeight: height,
     });
-    this.config.onResizeTransformStarted();
+    this.params.onResizeTransformStarted();
     this.canvas.patchViewportMatrix(transform);
-    this.config.onResizeTransformFinished();
+    this.params.onResizeTransformFinished();
   });
-
-  private readonly config: TransformableViewportParams;
 
   private readonly preventWheelScaleListener = (event: WheelEvent): void => {
     event.preventDefault();
@@ -200,13 +194,11 @@ export class UserTransformableViewportConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    params: ViewportTransformConfig,
+    private readonly params: TransformableViewportParams,
   ) {
     this.element.addEventListener("wheel", this.preventWheelScaleListener, {
       passive: false,
     });
-
-    this.config = createTransformableViewportParams(params);
 
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);
@@ -227,21 +219,16 @@ export class UserTransformableViewportConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    transformConfig: ViewportTransformConfig,
+    params: TransformableViewportParams,
   ): void {
-    new UserTransformableViewportConfigurator(
-      canvas,
-      element,
-      win,
-      transformConfig,
-    );
+    new UserTransformableViewportConfigurator(canvas, element, win, params);
   }
 
   private moveViewport(dx: number, dy: number): void {
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
     const { width, height } = this.element.getBoundingClientRect();
-    const transform = this.config.transformPreprocessor({
+    const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
       canvasWidth: width,
@@ -255,7 +242,7 @@ export class UserTransformableViewportConfigurator {
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = this.element.getBoundingClientRect();
-    const transform = this.config.transformPreprocessor({
+    const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
       canvasWidth: width,
@@ -289,18 +276,18 @@ export class UserTransformableViewportConfigurator {
   }
 
   private performTransform(viewportTransform: PatchMatrixRequest): void {
-    this.config.onBeforeTransformChange();
+    this.params.onBeforeTransformChange();
     this.canvas.patchViewportMatrix(viewportTransform);
-    this.config.onTransformChange();
+    this.params.onTransformChange();
   }
 
   private startRegisteredTransform(): void {
     this.transformInProgress = true;
-    this.config.onTransformStarted();
+    this.params.onTransformStarted();
   }
 
   private finishRegisteredTransform(): void {
     this.transformInProgress = false;
-    this.config.onTransformFinished();
+    this.params.onTransformFinished();
   }
 }

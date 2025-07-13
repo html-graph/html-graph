@@ -1,9 +1,9 @@
-import { TransformPreprocessorConfig } from "../create-transformable-viewport-params";
+import { TransformPreprocessorFn } from "@/configurators";
 import {
   createScaleLimitTransformPreprocessor,
   createShiftLimitTransformPreprocessor,
-  TransformPreprocessorFn,
 } from "../preprocessors";
+import { TransformPreprocessorConfig } from "../transform-preprocessor-config";
 
 export const resolveTransformPreprocessor: (
   option: TransformPreprocessorConfig,

@@ -6,7 +6,6 @@ import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
   ResizeReactiveNodesConfigurator,
-  ViewportTransformConfig,
   UserConnectablePortsConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
@@ -24,6 +23,8 @@ import {
   createBackgroundParams,
   DraggableNodesConfig,
   createDraggableNodesParams,
+  ViewportTransformConfig,
+  createTransformableViewportParams,
 } from "@/create-params";
 
 // Responsibility: Constructs canvas based on specified configuration
@@ -247,7 +248,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        this.transformConfig,
+        createTransformableViewportParams(this.transformConfig),
         trigger!,
         this.virtualScrollConfig,
       );
@@ -256,7 +257,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        this.transformConfig,
+        createTransformableViewportParams(this.transformConfig),
       );
     }
 

@@ -1,5 +1,7 @@
-import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
-import { TransformPreprocessorParams } from "../transform-preprocessor-params";
+import {
+  TransformPreprocessorFn,
+  TransformPreprocessorParams,
+} from "@/configurators";
 import { ShiftLimitPreprocessorParams } from "./shift-limit-preprocessor-params";
 
 export const createShiftLimitTransformPreprocessor: (

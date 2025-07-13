@@ -1,4 +1,4 @@
-import { TransformPreprocessorFn } from "../preprocessors";
+import { TransformPreprocessorFn } from "@/configurators";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 
 describe("resolveTransformPreprocessor", () => {

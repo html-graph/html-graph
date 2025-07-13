@@ -2,7 +2,7 @@ import { Canvas } from "@/canvas";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "@/html-view";
 import {
-  ViewportTransformConfig,
+  TransformableViewportParams,
   UserTransformableViewportConfigurator,
 } from "../user-transformable-viewport-configurator";
 import { VirtualScrollConfig } from "./virtual-scroll-config";
@@ -69,7 +69,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    transformOptions: ViewportTransformConfig | undefined,
+    transformParams: TransformableViewportParams,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly params: VirtualScrollConfig,
   ) {
@@ -85,48 +85,34 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
     this.viewport = canvas.viewport;
 
-    const onResizeTransformStarted =
-      transformOptions?.events?.onResizeTransformStarted ?? ((): void => {});
-    const onResizeTransformFinished =
-      transformOptions?.events?.onResizeTransformFinished ?? ((): void => {});
-    const onTransformChange =
-      transformOptions?.events?.onTransformChange ?? ((): void => {});
-    const onBeforeTransformChange =
-      transformOptions?.events?.onBeforeTransformChange ?? ((): void => {});
-    const onTransformFinished =
-      transformOptions?.events?.onTransformFinished ?? ((): void => {});
+    const patchedTransformableViewportParams: TransformableViewportParams = {
+      ...transformParams,
+      onResizeTransformStarted: () => {
+        this.userTransformInProgress = true;
+        transformParams.onResizeTransformStarted();
+      },
+      onResizeTransformFinished: () => {
+        this.userTransformInProgress = false;
+        transformParams.onResizeTransformFinished();
+      },
+      onBeforeTransformChange: () => {
+        this.userTransformInProgress = true;
+        transformParams.onBeforeTransformChange();
+      },
+      onTransformChange: () => {
+        this.userTransformInProgress = false;
+        const viewportMatrix = this.viewportMatrix;
+        this.viewportMatrix = this.viewport.getViewportMatrix();
 
-    const patchedViewportTransformConfig: ViewportTransformConfig = {
-      ...transformOptions,
-      events: {
-        ...transformOptions?.events,
-        onResizeTransformStarted: () => {
-          this.userTransformInProgress = true;
-          onResizeTransformStarted();
-        },
-        onResizeTransformFinished: () => {
-          this.userTransformInProgress = false;
-          onResizeTransformFinished();
-        },
-        onBeforeTransformChange: () => {
-          this.userTransformInProgress = true;
-          onBeforeTransformChange();
-        },
-        onTransformChange: () => {
-          this.userTransformInProgress = false;
-          const viewportMatrix = this.viewportMatrix;
-          this.viewportMatrix = this.viewport.getViewportMatrix();
+        if (viewportMatrix.scale !== this.viewportMatrix.scale) {
+          this.scheduleEnsureViewportAreaLoaded();
+        }
 
-          if (viewportMatrix.scale !== this.viewportMatrix.scale) {
-            this.scheduleEnsureViewportAreaLoaded();
-          }
-
-          onTransformChange();
-        },
-        onTransformFinished: () => {
-          this.scheduleLoadAreaAroundViewport();
-          onTransformFinished();
-        },
+        transformParams.onTransformChange();
+      },
+      onTransformFinished: () => {
+        this.scheduleLoadAreaAroundViewport();
+        transformParams.onTransformFinished();
       },
     };
 
@@ -134,7 +120,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       canvas,
       this.element,
       this.window,
-      patchedViewportTransformConfig,
+      patchedTransformableViewportParams,
     );
 
     this.viewportMatrix = this.viewport.getViewportMatrix();
@@ -149,7 +135,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    transformOptions: ViewportTransformConfig,
+    transformParams: TransformableViewportParams,
     trigger: EventSubject<RenderingBox>,
     virtualScrollOptions: VirtualScrollConfig,
   ): void {
@@ -157,7 +143,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       canvas,
       element,
       win,
-      transformOptions,
+      transformParams,
       trigger,
       virtualScrollOptions,
     );

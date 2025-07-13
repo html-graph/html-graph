@@ -1,5 +1,5 @@
 import { TransformState } from "@/viewport-store";
-import { TransformPreprocessorFn } from "../transform-preprocessor-fn";
+import { TransformPreprocessorFn } from "@/configurators";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";
 
 describe("createCombinedTransformPreprocessor", () => {
