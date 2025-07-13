@@ -11,7 +11,7 @@
 V4
 
 - make builder single use object
-- single responsibility for error
+- split HtmlGraphError into CanvasError and CanvasBuilderError
 - onBeforeNodeDrag rename to nodeDragVerifier
 
 - layouts
