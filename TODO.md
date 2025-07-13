@@ -2,14 +2,15 @@
 
 - horizontal and vertical edges detour parallel
 - rename Median to Midpoint
-- dashed edges
 - animated dashed edges
 - user movable edges
 - improve onDestroy unit tests
 - virtual scroll node events
 - snap nodes to grid
-- single responsibility for error
+
+V4
 - make builder single use object
+- single responsibility for error
 - onBeforeNodeDrag move somewhere?
 
 - layouts
