@@ -1,2 +1,2 @@
 export { BackgroundConfigurator } from "./background-configurator";
-export type { BackgroundConfig } from "./config";
+export type { BackgroundParams } from "./background-params";

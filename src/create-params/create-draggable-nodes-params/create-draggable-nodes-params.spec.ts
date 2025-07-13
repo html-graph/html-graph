@@ -1,4 +1,4 @@
-import { createConfig } from "./create-config";
+import { createDraggableNodesParams } from "./create-draggable-nodes-params";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
 
 describe("createConfig", () => {
@@ -11,7 +11,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.onNodeDrag).toBe(onNodeDrag);
   });
@@ -25,7 +25,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.onBeforeNodeDrag).toBe(onBeforeNodeDrag);
   });
@@ -39,7 +39,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.onNodeDragFinished).toBe(onNodeDragFinished);
   });
@@ -51,7 +51,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.dragCursor).toBe("crosshair");
   });
@@ -65,7 +65,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
@@ -79,7 +79,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
@@ -87,7 +87,7 @@ describe("createConfig", () => {
   it("should move edges on top by default", () => {
     const dragOptions: DraggableNodesConfig = {};
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.moveEdgesOnTop).toBe(true);
   });
@@ -97,7 +97,7 @@ describe("createConfig", () => {
       moveEdgesOnTop: false,
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.moveEdgesOnTop).toBe(false);
   });
@@ -105,7 +105,7 @@ describe("createConfig", () => {
   it("should move on top by default", () => {
     const dragOptions: DraggableNodesConfig = {};
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.moveOnTop).toBe(true);
   });
@@ -115,7 +115,7 @@ describe("createConfig", () => {
       moveOnTop: false,
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.moveOnTop).toBe(false);
   });
@@ -125,7 +125,7 @@ describe("createConfig", () => {
       moveOnTop: false,
     };
 
-    const options = createConfig(dragOptions);
+    const options = createDraggableNodesParams(dragOptions);
 
     expect(options.moveEdgesOnTop).toBe(false);
   });

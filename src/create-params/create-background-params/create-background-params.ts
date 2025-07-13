@@ -1,8 +1,10 @@
+import { BackgroundParams } from "@/configurators";
 import { BackgroundConfig } from "./background-config";
-import { Config } from "./config";
 import { resolveRenderer } from "./resolve-renderer";
 
-export const createConfig = (backgroundConfig: BackgroundConfig): Config => {
+export const createBackgroundParams = (
+  backgroundConfig: BackgroundConfig,
+): BackgroundParams => {
   const dimensions = backgroundConfig.tileDimensions;
   const width = dimensions?.width ?? 25;
   const height = dimensions?.height ?? 25;

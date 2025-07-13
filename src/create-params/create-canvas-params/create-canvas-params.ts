@@ -2,9 +2,9 @@ import { standardCenterFn } from "@/center-fn";
 import { resolvePriority } from "./resolve-priority";
 import { resolveEdgeShapeFactory } from "@/resolve-edge-shape-factory";
 import { CanvasDefaults } from "./canvas-defaults";
-import { Defaults } from "@/canvas";
+import { CanvasParams } from "@/canvas";
 
-export const createCanvasDefaults: (defaults: CanvasDefaults) => Defaults = (
+export const createCanvasParams: (defaults: CanvasDefaults) => CanvasParams = (
   defaults: CanvasDefaults,
 ) => {
   const priorities = resolvePriority(

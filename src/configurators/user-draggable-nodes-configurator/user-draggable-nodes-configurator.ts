@@ -1,9 +1,9 @@
 import { Canvas } from "@/canvas";
-import { createConfig, DraggableNodesConfig, Config } from "./config";
 import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
 import { transformPoint } from "@/transform-point";
+import { DraggableNodesParams } from "./draggable-nodes-params";
 
 // Responsibility: Configures canvas to have nodes draggable by user
 export class UserDraggableNodesConfigurator {
@@ -198,15 +198,12 @@ export class UserDraggableNodesConfigurator {
     this.cancelTouchDrag();
   };
 
-  private readonly config: Config;
-
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    draggableNodesConfig: DraggableNodesConfig,
+    private readonly config: DraggableNodesParams,
   ) {
-    this.config = createConfig(draggableNodesConfig);
     this.graph = canvas.graph;
 
     this.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
@@ -220,7 +217,7 @@ export class UserDraggableNodesConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
-    config: DraggableNodesConfig,
+    config: DraggableNodesParams,
   ): void {
     new UserDraggableNodesConfigurator(canvas, element, win, config);
   }

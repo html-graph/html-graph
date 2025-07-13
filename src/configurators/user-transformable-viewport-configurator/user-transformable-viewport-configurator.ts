@@ -196,13 +196,13 @@ export class UserTransformableViewportConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    viewportTransformConfig: ViewportTransformConfig,
+    params: ViewportTransformConfig,
   ) {
     this.element.addEventListener("wheel", this.preventWheelScaleListener, {
       passive: false,
     });
 
-    this.config = createConfig(viewportTransformConfig);
+    this.config = createConfig(params);
 
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);

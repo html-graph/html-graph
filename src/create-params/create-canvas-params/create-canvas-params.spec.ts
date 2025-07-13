@@ -1,12 +1,12 @@
 import { Point } from "@/point";
-import { createCanvasDefaults } from "./create-canvas-defaults";
+import { createCanvasParams } from "./create-canvas-params";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
 import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
 
-describe("createCanvasDefaults", () => {
+describe("createCanvasParams", () => {
   it("should return standard nodes center fn", () => {
-    const options = createCanvasDefaults({});
+    const options = createCanvasParams({});
 
     expect(options.nodes.centerFn).toBe(standardCenterFn);
   });
@@ -14,7 +14,7 @@ describe("createCanvasDefaults", () => {
   it("should return specified nodes center fn", () => {
     const fn = (): Point => ({ x: 0, y: 0 });
 
-    const options = createCanvasDefaults({
+    const options = createCanvasParams({
       nodes: {
         centerFn: fn,
       },
@@ -24,7 +24,7 @@ describe("createCanvasDefaults", () => {
   });
 
   it("should return standard nodes priority fn", () => {
-    const options = createCanvasDefaults({});
+    const options = createCanvasParams({});
 
     expect(options.nodes.priorityFn).toBe(standardPriorityFn);
   });
@@ -32,7 +32,7 @@ describe("createCanvasDefaults", () => {
   it("should return specified nodes priority fn", () => {
     const fn = (): number => 0;
 
-    const options = createCanvasDefaults({
+    const options = createCanvasParams({
       nodes: {
         priority: fn,
       },
@@ -42,13 +42,13 @@ describe("createCanvasDefaults", () => {
   });
 
   it("should return standard ports direction", () => {
-    const options = createCanvasDefaults({});
+    const options = createCanvasParams({});
 
     expect(options.ports.direction).toBe(0);
   });
 
   it("should return specified ports direction", () => {
-    const options = createCanvasDefaults({
+    const options = createCanvasParams({
       ports: {
         direction: Math.PI,
       },
@@ -58,7 +58,7 @@ describe("createCanvasDefaults", () => {
   });
 
   it("should return standard edges priority fn", () => {
-    const options = createCanvasDefaults({});
+    const options = createCanvasParams({});
 
     expect(options.edges.priorityFn).toBe(standardPriorityFn);
   });
@@ -66,7 +66,7 @@ describe("createCanvasDefaults", () => {
   it("should return specified edges priority fn", () => {
     const fn = (): number => 0;
 
-    const options = createCanvasDefaults({
+    const options = createCanvasParams({
       edges: {
         priority: fn,
       },
@@ -76,14 +76,14 @@ describe("createCanvasDefaults", () => {
   });
 
   it("should return standard edges shape factory", () => {
-    const options = createCanvasDefaults({});
+    const options = createCanvasParams({});
     const shape = options.edges.shapeFactory("123");
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
 
   it("should return specified edges shape factory", () => {
-    const options = createCanvasDefaults({
+    const options = createCanvasParams({
       edges: {
         shape: {
           type: "straight",

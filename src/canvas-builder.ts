@@ -5,8 +5,6 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  BackgroundConfig,
-  DraggableNodesConfig,
   ResizeReactiveNodesConfigurator,
   ViewportTransformConfig,
   UserConnectablePortsConfigurator,
@@ -17,11 +15,16 @@ import {
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
-import { CanvasDefaults, createCanvasDefaults } from "@/create-canvas-defaults";
 import {
+  CanvasDefaults,
+  createCanvasParams,
   ConnectablePortsConfig,
   createUserConnectablePortsParams,
-} from "@/create-user-connectable-ports-params";
+  BackgroundConfig,
+  createBackgroundParams,
+  DraggableNodesConfig,
+  createDraggableNodesParams,
+} from "@/create-params";
 
 // Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
@@ -185,7 +188,7 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
-    const defaults = createCanvasDefaults(this.canvasDefaults);
+    const defaults = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
       this.element,
@@ -205,7 +208,7 @@ export class CanvasBuilder {
     if (this.hasBackground) {
       BackgroundConfigurator.configure(
         canvas,
-        this.backgroundConfig,
+        createBackgroundParams(this.backgroundConfig),
         layers.background,
       );
     }
@@ -219,7 +222,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        this.dragConfig,
+        createDraggableNodesParams(this.dragConfig),
       );
     }
 

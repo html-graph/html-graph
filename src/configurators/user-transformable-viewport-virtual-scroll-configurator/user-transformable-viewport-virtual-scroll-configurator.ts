@@ -71,11 +71,10 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     private readonly window: Window,
     transformOptions: ViewportTransformConfig | undefined,
     private readonly trigger: EventSubject<RenderingBox>,
-    private readonly virtualScrollOptions: VirtualScrollConfig,
+    private readonly params: VirtualScrollConfig,
   ) {
-    this.nodeHorizontal =
-      this.virtualScrollOptions.nodeContainingRadius.horizontal;
-    this.nodeVertical = this.virtualScrollOptions.nodeContainingRadius.vertical;
+    this.nodeHorizontal = this.params.nodeContainingRadius.horizontal;
+    this.nodeVertical = this.params.nodeContainingRadius.vertical;
 
     this.canvasResizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];

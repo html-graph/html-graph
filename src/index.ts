@@ -13,15 +13,24 @@ export type {
   PatchMatrixRequest,
 } from "./canvas";
 
-export type { CanvasDefaults } from "./create-canvas-defaults";
-
 export type {
+  CanvasDefaults,
+  BackgroundConfig,
+  /**
+   * @deprecated
+   * use ConnectablePortsConfig instead
+   */
+  ConnectablePortsConfig as ConnectablePortsOptions,
+  ConnectablePortsConfig,
   /**
    * @deprecated
    * use DraggableNodesConfig instead
    */
   DraggableNodesConfig as DragOptions,
   DraggableNodesConfig,
+} from "./create-params";
+
+export type {
   NodeDragPayload,
   ViewportTransformConfig,
   /**
@@ -29,7 +38,6 @@ export type {
    * use ViewportTransformConfig instead
    */
   ViewportTransformConfig as TransformOptions,
-  BackgroundConfig,
   TransformPayload,
   TransformPreprocessorFn,
   ShiftLimitPreprocessorParams,
@@ -40,15 +48,6 @@ export type {
   ConnectionTypeResolver,
   MouseEventVerifier,
 } from "./configurators";
-
-export type {
-  /**
-   * @deprecated
-   * use ConnectablePortsConfig instead
-   */
-  ConnectablePortsConfig as ConnectablePortsOptions,
-  ConnectablePortsConfig,
-} from "./create-user-connectable-ports-params";
 
 export {
   BezierEdgeShape,
