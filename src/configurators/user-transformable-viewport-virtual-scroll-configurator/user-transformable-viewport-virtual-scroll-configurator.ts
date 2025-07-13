@@ -5,7 +5,7 @@ import {
   ViewportTransformConfig,
   UserTransformableViewportConfigurator,
 } from "../user-transformable-viewport-configurator";
-import { VirtualScrollConfig } from "./virtual-scroll-options";
+import { VirtualScrollConfig } from "./virtual-scroll-config";
 import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport";
 
