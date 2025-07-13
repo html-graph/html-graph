@@ -31,4 +31,3 @@ V4
 - transformable canvas shift limit when scaling
 - node drag handle example
 - sankey connections
-- node creation factory function?
