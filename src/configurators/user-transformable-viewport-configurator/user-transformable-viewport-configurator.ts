@@ -1,9 +1,13 @@
 import { Canvas, PatchMatrixRequest } from "@/canvas";
-import { Config, createConfig, ViewportTransformConfig } from "./config";
+import {
+  createTransformableViewportParams,
+  ViewportTransformConfig,
+} from "./create-transformable-viewport-params";
 import { isPointInside, setCursor } from "../shared";
 import { Viewport } from "@/viewport";
 import { move, scale } from "./transformations";
 import { processTouch, TouchState } from "./process-touch";
+import { TransformableViewportParams } from "./transformable-viewport-params";
 
 // Responsibility: Configures canvas to have viewport transformable by user
 export class UserTransformableViewportConfigurator {
@@ -186,7 +190,7 @@ export class UserTransformableViewportConfigurator {
     this.config.onResizeTransformFinished();
   });
 
-  private readonly config: Config;
+  private readonly config: TransformableViewportParams;
 
   private readonly preventWheelScaleListener = (event: WheelEvent): void => {
     event.preventDefault();
@@ -202,7 +206,7 @@ export class UserTransformableViewportConfigurator {
       passive: false,
     });
 
-    this.config = createConfig(params);
+    this.config = createTransformableViewportParams(params);
 
     this.viewport = canvas.viewport;
     this.observer.observe(this.element);

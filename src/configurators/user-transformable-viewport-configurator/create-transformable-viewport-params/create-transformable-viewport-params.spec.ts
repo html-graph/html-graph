@@ -3,18 +3,18 @@ import {
   TransformPayload,
   TransformPreprocessorParams,
 } from "../preprocessors";
-import { createConfig } from "./create-config";
+import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 
 describe("createConfig", () => {
   it("should set default wheel velocity if not specified", () => {
-    const res = createConfig(undefined);
+    const res = createTransformableViewportParams(undefined);
 
     expect(res.wheelSensitivity).toBe(1.2);
   });
 
   it("should set specified wheel velocity", () => {
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       scale: {
         mouseWheelSensitivity: 1.5,
       },
@@ -24,7 +24,7 @@ describe("createConfig", () => {
   });
 
   it("should set noop transform preprocessor if not specified", () => {
-    const res = createConfig(undefined);
+    const res = createTransformableViewportParams(undefined);
 
     const preprocessor = res.transformPreprocessor;
 
@@ -53,7 +53,7 @@ describe("createConfig", () => {
 
     const fn = jest.fn(transformPreprocessor);
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       transformPreprocessor: fn,
     });
 
@@ -78,7 +78,7 @@ describe("createConfig", () => {
 
     const fn = jest.fn(transformPreprocessor);
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       transformPreprocessor: [fn, fn],
     });
 
@@ -95,13 +95,13 @@ describe("createConfig", () => {
   });
 
   it("should set default shift cursor if not specified", () => {
-    const res = createConfig(undefined);
+    const res = createTransformableViewportParams(undefined);
 
     expect(res.shiftCursor).toBe("grab");
   });
 
   it("should set specified shift cursor", () => {
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       shift: {
         cursor: "crosshair",
       },
@@ -113,7 +113,7 @@ describe("createConfig", () => {
   it("should set specified onBeforeTransformChange", () => {
     const onBeforeTransformChange = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onBeforeTransformChange,
       },
@@ -125,7 +125,7 @@ describe("createConfig", () => {
   it("should set specified onTransformChange", () => {
     const onTransformChange = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onTransformChange,
       },
@@ -137,7 +137,7 @@ describe("createConfig", () => {
   it("should set specified onTransformStarted", () => {
     const onTransformStarted = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onTransformStarted,
       },
@@ -149,7 +149,7 @@ describe("createConfig", () => {
   it("should set specified onTransformFinished", () => {
     const onTransformFinished = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onTransformFinished,
       },
@@ -167,7 +167,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(transformOptions);
+    const options = createTransformableViewportParams(transformOptions);
 
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
@@ -181,7 +181,7 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(transformOptions);
+    const options = createTransformableViewportParams(transformOptions);
 
     expect(options.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
@@ -195,13 +195,13 @@ describe("createConfig", () => {
       },
     };
 
-    const options = createConfig(transformOptions);
+    const options = createTransformableViewportParams(transformOptions);
 
     expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
 
   it("should set default scale wheel timeout", () => {
-    const res = createConfig(undefined);
+    const res = createTransformableViewportParams(undefined);
 
     expect(res.scaleWheelFinishTimeout).toBe(500);
   });
@@ -209,7 +209,7 @@ describe("createConfig", () => {
   it("should set specified onResizeTransformStarted", () => {
     const onResizeTransformStarted = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onResizeTransformStarted,
       },
@@ -221,7 +221,7 @@ describe("createConfig", () => {
   it("should set specified onResizeTransformFinished", () => {
     const onResizeTransformFinished = (): void => {};
 
-    const res = createConfig({
+    const res = createTransformableViewportParams({
       events: {
         onResizeTransformFinished,
       },

@@ -1,4 +1,4 @@
-import { TransformPreprocessorConfig } from "../config";
+import { TransformPreprocessorConfig } from "../create-transformable-viewport-params";
 import {
   createScaleLimitTransformPreprocessor,
   createShiftLimitTransformPreprocessor,

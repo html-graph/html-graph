@@ -1,7 +1,7 @@
-import { TransformPreprocessorFn } from "../preprocessors";
-import { MouseEventVerifier } from "../../shared";
+import { TransformPreprocessorFn } from "./preprocessors";
+import { MouseEventVerifier } from "../shared";
 
-export interface Config {
+export interface TransformableViewportParams {
   readonly wheelSensitivity: number;
   readonly onTransformStarted: () => void;
   readonly onTransformFinished: () => void;

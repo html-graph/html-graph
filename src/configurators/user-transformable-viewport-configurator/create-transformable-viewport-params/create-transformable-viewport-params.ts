@@ -5,12 +5,12 @@ import {
   TransformPreprocessorParams,
 } from "../preprocessors";
 import { resolveTransformPreprocessor } from "../resolve-transform-preprocessor";
-import { Config } from "./config";
+import { TransformableViewportParams } from "../transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 
-export const createConfig = (
+export const createTransformableViewportParams = (
   transformConfig: ViewportTransformConfig | undefined,
-): Config => {
+): TransformableViewportParams => {
   const configWheelSensitivity = transformConfig?.scale?.mouseWheelSensitivity;
   const wheelSensitivity =
     configWheelSensitivity !== undefined ? configWheelSensitivity : 1.2;

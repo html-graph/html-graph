@@ -8,7 +8,7 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
-import { ViewportTransformConfig } from "./config";
+import { ViewportTransformConfig } from "./create-transformable-viewport-params";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { createCanvasParams } from "@/create-params";
