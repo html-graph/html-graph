@@ -13,7 +13,7 @@ import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
-import { Defaults } from "./defaults";
+import { CanvasParams } from "./canvas-params";
 
 // Responsibility: provides graph rendering API for end user
 export class Canvas {
@@ -122,7 +122,7 @@ export class Canvas {
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
-    private readonly defaults: Defaults,
+    private readonly params: CanvasParams,
   ) {
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
@@ -181,8 +181,8 @@ export class Canvas {
       element: request.element,
       x: request.x,
       y: request.y,
-      centerFn: request.centerFn ?? this.defaults.nodes.centerFn,
-      priority: request.priority ?? this.defaults.nodes.priorityFn(),
+      centerFn: request.centerFn ?? this.params.nodes.centerFn,
+      priority: request.priority ?? this.params.nodes.priorityFn(),
     });
 
     if (request.ports !== undefined) {
@@ -247,7 +247,7 @@ export class Canvas {
       id,
       element: request.element,
       nodeId: request.nodeId,
-      direction: request.direction ?? this.defaults.ports.direction,
+      direction: request.direction ?? this.params.ports.direction,
     });
 
     return this;
@@ -304,8 +304,8 @@ export class Canvas {
       id,
       from: request.from,
       to: request.to,
-      shape: request.shape ?? this.defaults.edges.shapeFactory(id),
-      priority: request.priority ?? this.defaults.edges.priorityFn(),
+      shape: request.shape ?? this.params.edges.shapeFactory(id),
+      priority: request.priority ?? this.params.edges.priorityFn(),
     });
 
     return this;

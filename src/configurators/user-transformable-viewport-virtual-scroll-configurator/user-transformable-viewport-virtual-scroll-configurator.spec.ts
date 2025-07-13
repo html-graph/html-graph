@@ -13,8 +13,11 @@ import {
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
-import { ViewportTransformConfig } from "../user-transformable-viewport-configurator";
-import { createCanvasDefaults } from "@/create-canvas-defaults";
+import {
+  createCanvasParams,
+  createTransformableViewportParams,
+  ViewportTransformConfig,
+} from "@/create-params";
 
 const createCanvas = (params?: {
   element?: HTMLElement;
@@ -36,14 +39,14 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasDefaults({}),
+    createCanvasParams({}),
   );
 
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,
     element,
     window,
-    params?.transformOptions ?? {},
+    createTransformableViewportParams(params?.transformOptions ?? {}),
     trigger,
     {
       nodeContainingRadius: {

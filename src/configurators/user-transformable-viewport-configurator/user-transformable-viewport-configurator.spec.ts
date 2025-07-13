@@ -8,10 +8,13 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
-import { ViewportTransformConfig } from "./config";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
-import { createCanvasDefaults } from "@/create-canvas-defaults";
+import {
+  createCanvasParams,
+  createTransformableViewportParams,
+  ViewportTransformConfig,
+} from "@/create-params";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -30,14 +33,14 @@ const createCanvas = (params?: {
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasDefaults({}),
+    createCanvasParams({}),
   );
 
   UserTransformableViewportConfigurator.configure(
     canvas,
     element,
     window,
-    params?.transformOptions ?? {},
+    createTransformableViewportParams(params?.transformOptions ?? {}),
   );
 
   return canvas;

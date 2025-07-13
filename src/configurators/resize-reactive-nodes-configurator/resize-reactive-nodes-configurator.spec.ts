@@ -6,7 +6,7 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { triggerResizeFor } from "@/mocks";
 import { Canvas } from "@/canvas";
-import { createCanvasDefaults } from "@/create-canvas-defaults";
+import { createCanvasParams } from "@/create-params";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -19,7 +19,7 @@ const createCanvas = (): Canvas => {
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasDefaults({}),
+    createCanvasParams({}),
   );
 
   ResizeReactiveNodesConfigurator.configure(canvas);

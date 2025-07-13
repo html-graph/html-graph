@@ -1,5 +1,5 @@
 import { TransformState } from "@/viewport-store";
-import { TransformPayload } from "../../preprocessors";
+import { TransformPayload } from "../../transform-payload";
 import { scale } from "./scale";
 
 describe("scale", () => {

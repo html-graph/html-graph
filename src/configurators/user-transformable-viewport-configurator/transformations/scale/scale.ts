@@ -1,4 +1,4 @@
-import { TransformPayload } from "../../preprocessors";
+import { TransformPayload } from "../../transform-payload";
 
 export const scale = (
   prevTransform: TransformPayload,

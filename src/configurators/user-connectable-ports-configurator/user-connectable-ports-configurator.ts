@@ -1,4 +1,4 @@
-import { AddEdgeRequest, AddNodeRequest, Canvas, Defaults } from "@/canvas";
+import { AddEdgeRequest, AddNodeRequest, Canvas, CanvasParams } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -43,7 +43,7 @@ export class UserConnectablePortsConfigurator {
     const target = event.currentTarget as HTMLElement;
 
     const isValidEvent =
-      this.config.mouseDownEventVerifier(event) &&
+      this.params.mouseDownEventVerifier(event) &&
       this.isPortConnectionAllowed(target);
 
     if (!isValidEvent) {
@@ -79,7 +79,7 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
-    if (!this.config.mouseUpEventVerifier(event)) {
+    if (!this.params.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -158,7 +158,7 @@ export class UserConnectablePortsConfigurator {
   };
 
   private readonly onEdgeCreated = (edgeId: unknown): void => {
-    this.config.onAfterEdgeCreated(edgeId);
+    this.params.onAfterEdgeCreated(edgeId);
   };
 
   private constructor(
@@ -166,7 +166,7 @@ export class UserConnectablePortsConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
-    private readonly config: UserConnectablePortsParams,
+    private readonly params: UserConnectablePortsParams,
   ) {
     const graphStore = new GraphStore();
 
@@ -176,13 +176,13 @@ export class UserConnectablePortsConfigurator {
       this.overlayLayer,
     );
 
-    const defaults: Defaults = {
+    const defaults: CanvasParams = {
       nodes: {
         centerFn: standardCenterFn,
         priorityFn: (): number => 0,
       },
       edges: {
-        shapeFactory: this.config.edgeShapeFactory,
+        shapeFactory: this.params.edgeShapeFactory,
         priorityFn: (): number => 0,
       },
       ports: {
@@ -226,7 +226,7 @@ export class UserConnectablePortsConfigurator {
 
     this.staticPortId = portId;
 
-    const portType = this.config.connectionTypeResolver(this.staticPortId);
+    const portType = this.params.connectionTypeResolver(this.staticPortId);
 
     const portRect = portElement.getBoundingClientRect();
     const portX = portRect.x + portRect.width / 2;
@@ -254,7 +254,7 @@ export class UserConnectablePortsConfigurator {
     const draggingPayload: PortPayload = {
       overlayId: this.draggingOverlayPortId,
       portCoords: cursorCoords,
-      portDirection: this.config.dragPortDirection,
+      portDirection: this.params.dragPortDirection,
     };
 
     this.isDirect = portType === "direct";
@@ -336,7 +336,7 @@ export class UserConnectablePortsConfigurator {
     const draggingPortId = this.findPortAtPoint(cursor);
 
     if (draggingPortId === null) {
-      this.config.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
+      this.params.onEdgeCreationInterrupted(this.staticPortId, this.isDirect);
       return;
     }
 
@@ -345,14 +345,14 @@ export class UserConnectablePortsConfigurator {
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 
-    const processedRequest = this.config.connectionPreprocessor(request);
+    const processedRequest = this.params.connectionPreprocessor(request);
 
     if (processedRequest !== null) {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeCreated);
     } else {
-      this.config.onEdgeCreationPrevented(request);
+      this.params.onEdgeCreationPrevented(request);
     }
   }
 
@@ -409,6 +409,6 @@ export class UserConnectablePortsConfigurator {
   private isPortConnectionAllowed(portElement: HTMLElement): boolean {
     const portId = this.canvas.graph.getElementPortsIds(portElement)[0]!;
 
-    return this.config.connectionTypeResolver(portId) !== null;
+    return this.params.connectionTypeResolver(portId) !== null;
   }
 }
