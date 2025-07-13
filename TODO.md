@@ -1,6 +1,7 @@
 # TODO
 
 - horizontal and vertical edges detour parallel
+- rename Median to Midpoint
 - dashed edges
 - animated dashed edges
 - user movable edges
