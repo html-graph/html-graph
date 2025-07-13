@@ -12,7 +12,7 @@ V4
 
 - make builder single use object
 - single responsibility for error
-- onBeforeNodeDrag move somewhere?
+- onBeforeNodeDrag rename to nodeDragVerifier
 
 - layouts
 
