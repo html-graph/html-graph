@@ -5,7 +5,7 @@ import {
 } from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { EdgeShapeFactory } from "@/canvas";
-import { resolveEdgeShapeFactory } from "@/resolve-edge-shape-factory";
+import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 
 export const createUserConnectablePortsParams = (
   connectablePortsConfig: ConnectablePortsConfig,

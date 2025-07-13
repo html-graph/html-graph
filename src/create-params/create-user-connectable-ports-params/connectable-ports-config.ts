@@ -4,7 +4,7 @@ import {
   ConnectionTypeResolver,
   MouseEventVerifier,
 } from "@/configurators";
-import { EdgeShapeConfig } from "@/resolve-edge-shape-factory";
+import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
 
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;
