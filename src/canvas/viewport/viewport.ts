@@ -1,5 +1,5 @@
 import { EventHandler } from "@/event-subject";
-import { ViewportStore, TransformState } from "../viewport-store";
+import { ViewportStore, TransformState } from "@/viewport-store";
 
 // Responsibility: Provides access to viewport state for end user
 export class Viewport {

@@ -1,5 +1,5 @@
-import { Viewport } from "@/viewport";
-import { Graph } from "@/graph";
+import { Viewport } from "./viewport";
+import { Graph } from "./graph";
 import { IdGenerator } from "@/id-generator";
 import { HtmlGraphError } from "@/error";
 import { AddEdgeRequest } from "./add-edge-request";

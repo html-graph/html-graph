@@ -11,6 +11,11 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
+  GraphNode,
+  GraphPort,
+  GraphEdge,
+  Graph,
+  Viewport,
 } from "./canvas";
 
 export type {
@@ -85,10 +90,6 @@ export { PathEdgeShape as LineEdgeShape } from "./edges/path-edge-shape";
 export type { PathEdgeParams as LineEdgeParams } from "./edges/path-edge-shape";
 
 export type { Point } from "./point";
-
-export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
-
-export type { Viewport } from "./viewport";
 
 export type { CenterFn } from "./center-fn";
 

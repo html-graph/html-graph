@@ -1,5 +1,5 @@
 import { EventHandler } from "@/event-subject";
-import { GraphStore } from "../graph-store";
+import { GraphStore } from "@/graph-store";
 import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";

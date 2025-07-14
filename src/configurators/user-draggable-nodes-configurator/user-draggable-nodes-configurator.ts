@@ -1,7 +1,7 @@
 import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
-import { Graph } from "@/graph";
+import { Graph } from "@/canvas";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 

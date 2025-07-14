@@ -1,4 +1,4 @@
-import { ViewportStore, TransformState } from "../viewport-store";
+import { ViewportStore, TransformState } from "@/viewport-store";
 import { Viewport } from "./viewport";
 
 describe("Viewport", () => {

@@ -7,7 +7,7 @@ import {
 } from "../user-transformable-viewport-configurator";
 import { VirtualScrollConfig } from "./virtual-scroll-config";
 import { TransformState } from "@/viewport-store";
-import { Viewport } from "@/viewport";
+import { Viewport } from "@/canvas";
 
 // Responsibility: Configures canvas to have viewport transformable by user, while
 // rendering only entities near viewport

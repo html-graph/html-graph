@@ -4,7 +4,7 @@ import {
   AddNodeRequest,
   AddPortRequest,
   GraphStore,
-} from "../graph-store";
+} from "@/graph-store";
 import { Graph } from "./graph";
 import { Point } from "@/point";
 
