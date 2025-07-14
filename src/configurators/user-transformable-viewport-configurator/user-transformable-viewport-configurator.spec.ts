@@ -8,39 +8,92 @@ import {
   createTouch,
   wait,
 } from "@/mocks";
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
-import {
-  createCanvasParams,
-  createTransformableViewportParams,
-  ViewportTransformConfig,
-} from "@/create-params";
+import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
+import { MouseEventVerifier } from "../shared";
+import { TransformableViewportParams } from "./transformable-viewport-params";
+import { TransformPayload } from "./transform-payload";
+import { standardCenterFn } from "@/center-fn";
+import { BezierEdgeShape } from "@/edges";
 
 let innerWidth: number;
 let innerHeight: number;
 
-const createCanvas = (params?: {
+const createCanvas = (options?: {
   element?: HTMLElement;
-  transformOptions?: ViewportTransformConfig;
+  wheelSensitivity?: number;
+  onTransformStarted?: () => void;
+  onTransformFinished?: () => void;
+  onBeforeTransformChange?: () => void;
+  onTransformChange?: () => void;
+  onResizeTransformStarted?: () => void;
+  onResizeTransformFinished?: () => void;
+  transformPreprocessor?: TransformPreprocessorFn;
+  shiftCursor?: string | null;
+  mouseDownEventVerifier?: MouseEventVerifier;
+  mouseUpEventVerifier?: MouseEventVerifier;
+  mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
+  scaleWheelFinishTimeout?: number;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = params?.element ?? document.createElement("div");
+  const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+
+  const canvasParams: CanvasParams = {
+    nodes: {
+      centerFn: standardCenterFn,
+      priorityFn: (): number => 0,
+    },
+    ports: {
+      direction: 0,
+    },
+    edges: {
+      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
+      priorityFn: (): number => 0,
+    },
+  };
 
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasParams({}),
+    canvasParams,
   );
+
+  const params: TransformableViewportParams = {
+    wheelSensitivity: options?.wheelSensitivity ?? 1.2,
+    onTransformStarted: options?.onTransformStarted ?? ((): void => {}),
+    onTransformFinished: options?.onTransformFinished ?? ((): void => {}),
+    onBeforeTransformChange:
+      options?.onBeforeTransformChange ?? ((): void => {}),
+    onTransformChange: options?.onTransformChange ?? ((): void => {}),
+    onResizeTransformStarted:
+      options?.onResizeTransformStarted ?? ((): void => {}),
+    onResizeTransformFinished:
+      options?.onResizeTransformFinished ?? ((): void => {}),
+    transformPreprocessor:
+      options?.transformPreprocessor ??
+      ((transform): TransformPayload => transform.nextTransform),
+    shiftCursor: options?.shiftCursor ?? "grab",
+    mouseDownEventVerifier:
+      options?.mouseDownEventVerifier ??
+      ((event: MouseEvent): boolean => event.button === 0),
+    mouseUpEventVerifier:
+      options?.mouseUpEventVerifier ??
+      ((event: MouseEvent): boolean => event.button === 0),
+    mouseWheelEventVerifier:
+      options?.mouseWheelEventVerifier ?? ((): boolean => true),
+    scaleWheelFinishTimeout: options?.scaleWheelFinishTimeout ?? 500,
+  };
 
   UserTransformableViewportConfigurator.configure(
     canvas,
     element,
     window,
-    createTransformableViewportParams(params?.transformOptions ?? {}),
+    params,
   );
 
   return canvas;
@@ -99,11 +152,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onBeforeTransformChange,
-        },
-      },
+      onBeforeTransformChange,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -121,11 +170,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformChange,
-        },
-      },
+      onTransformChange,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -143,11 +188,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -206,11 +247,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformChange,
-        },
-      },
+      onTransformChange,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -286,11 +323,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformStarted,
-        },
-      },
+      onTransformStarted,
     });
 
     const wheelEvent = createMouseWheelEvent({
@@ -310,11 +343,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     const wheelEvent = createMouseWheelEvent({
@@ -335,11 +364,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     const wheelEvent = createMouseWheelEvent({
@@ -363,11 +388,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformStarted,
-        },
-      },
+      onTransformStarted,
     });
 
     const wheelEvent = createMouseWheelEvent({
@@ -469,11 +490,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformStarted,
-        },
-      },
+      onTransformStarted,
     });
 
     element.dispatchEvent(
@@ -599,11 +616,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformStarted: onTransformStarted,
-        },
-      },
+      onTransformStarted: onTransformStarted,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -617,11 +630,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformStarted: onTransformStarted,
-        },
-      },
+      onTransformStarted: onTransformStarted,
     });
 
     element.dispatchEvent(
@@ -639,11 +648,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -658,11 +663,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     element.dispatchEvent(
@@ -681,12 +682,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     createCanvas({
       element,
-      transformOptions: {
-        scale: {
-          mouseWheelEventVerifier: (event: WheelEvent): boolean =>
-            event.ctrlKey,
-        },
-      },
+      mouseWheelEventVerifier: (event: WheelEvent): boolean => event.ctrlKey,
     });
 
     const wheelEvent = createMouseWheelEvent({
@@ -707,11 +703,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onResizeTransformStarted,
-        },
-      },
+      onResizeTransformStarted,
     });
 
     expect(onResizeTransformStarted).toHaveBeenCalledTimes(1);
@@ -723,11 +715,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onResizeTransformFinished,
-        },
-      },
+      onResizeTransformFinished,
     });
 
     expect(onResizeTransformFinished).toHaveBeenCalledTimes(1);
@@ -745,11 +733,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));

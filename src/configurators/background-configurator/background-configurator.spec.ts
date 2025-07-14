@@ -1,10 +1,12 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement } from "@/mocks";
-import { createBackgroundParams, createCanvasParams } from "@/create-params";
+import { BackgroundParams } from "./background-params";
+import { standardCenterFn } from "@/center-fn";
+import { BezierEdgeShape } from "@/edges";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore();
@@ -13,19 +15,36 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
+  const canvasParams: CanvasParams = {
+    nodes: {
+      centerFn: standardCenterFn,
+      priorityFn: (): number => 0,
+    },
+    ports: {
+      direction: 0,
+    },
+    edges: {
+      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
+      priorityFn: (): number => 0,
+    },
+  };
+
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasParams({}),
+    canvasParams,
   );
 
-  BackgroundConfigurator.configure(
-    canvas,
-    createBackgroundParams({ tileDimensions: { width: 10, height: 10 } }),
-    backgroundElement,
-  );
+  const params: BackgroundParams = {
+    tileWidth: 10,
+    tileHeight: 10,
+    renderer: document.createElementNS("http://www.w3.org/2000/svg", "circle"),
+    maxViewportScale: 10,
+  };
+
+  BackgroundConfigurator.configure(canvas, params, backgroundElement);
 
   return { canvas, backgroundElement };
 };

@@ -56,7 +56,17 @@ describe("createConfig", () => {
     expect(options.dragCursor).toBe("crosshair");
   });
 
-  it("should set default mouse down event validator", () => {
+  it("should set default mouse down event verifier", () => {
+    const options = createDraggableNodesParams({});
+    const verifier = options.mouseDownEventVerifier;
+
+    expect([
+      verifier(new MouseEvent("mousedown", { button: 0 })),
+      verifier(new MouseEvent("mousedown", { button: 1 })),
+    ]).toEqual([true, false]);
+  });
+
+  it("should set specified mouse down event verifier", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
     const dragOptions: DraggableNodesConfig = {
@@ -70,7 +80,17 @@ describe("createConfig", () => {
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should set default mouse up event validator", () => {
+  it("should set default mouse up event verifier", () => {
+    const options = createDraggableNodesParams({});
+    const verifier = options.mouseUpEventVerifier;
+
+    expect([
+      verifier(new MouseEvent("mouseup", { button: 0 })),
+      verifier(new MouseEvent("mouseup", { button: 1 })),
+    ]).toEqual([true, false]);
+  });
+
+  it("should set specified mouse up event verifier", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
     const dragOptions: DraggableNodesConfig = {

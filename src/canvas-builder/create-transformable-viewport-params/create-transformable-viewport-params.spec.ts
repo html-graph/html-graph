@@ -155,7 +155,17 @@ describe("createConfig", () => {
     expect(res.onTransformFinished).toBe(onTransformFinished);
   });
 
-  it("should set default mouse down event validator", () => {
+  it("should set default mouse down event verifier", () => {
+    const options = createTransformableViewportParams({});
+    const verifier = options.mouseDownEventVerifier;
+
+    expect([
+      verifier(new MouseEvent("mousedown", { button: 0 })),
+      verifier(new MouseEvent("mousedown", { button: 1 })),
+    ]).toEqual([true, false]);
+  });
+
+  it("should set specified mouse down event validator", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
     const transformOptions: ViewportTransformConfig = {
@@ -169,7 +179,17 @@ describe("createConfig", () => {
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should set default mouse up event validator", () => {
+  it("should set default mouse up event verifier", () => {
+    const options = createTransformableViewportParams({});
+    const verifier = options.mouseUpEventVerifier;
+
+    expect([
+      verifier(new MouseEvent("mouseup", { button: 0 })),
+      verifier(new MouseEvent("mouseup", { button: 1 })),
+    ]).toEqual([true, false]);
+  });
+
+  it("should set specified mouse up event validator", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
     const transformOptions: ViewportTransformConfig = {
@@ -184,6 +204,12 @@ describe("createConfig", () => {
   });
 
   it("should set default mouse wheel event validator", () => {
+    const options = createTransformableViewportParams({});
+
+    expect(options.mouseWheelEventVerifier(new WheelEvent(""))).toBe(true);
+  });
+
+  it("should set specified mouse wheel event validator", () => {
     const mouseWheelEventVerifier = (): boolean => false;
 
     const transformOptions: ViewportTransformConfig = {

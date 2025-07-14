@@ -11,22 +11,23 @@ import {
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
-import {
-  createCanvasParams,
-  createTransformableViewportParams,
-  ViewportTransformConfig,
-} from "@/create-params";
+import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
 
-const createCanvas = (params?: {
+const createCanvas = (options?: {
   element?: HTMLElement;
-  transformOptions?: ViewportTransformConfig;
+  wheelSensitivity?: number;
+  onTransformFinished?: () => void;
+  onBeforeTransformChange?: () => void;
+  onTransformChange?: () => void;
+  onResizeTransformStarted?: () => void;
+  onResizeTransformFinished?: () => void;
 }): Canvas => {
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = params?.element ?? document.createElement("div");
+  const element = options?.element ?? document.createElement("div");
 
   const htmlView = new BoxHtmlView(
     new CoreHtmlView(graphStore, viewportStore, element),
@@ -34,19 +35,52 @@ const createCanvas = (params?: {
     trigger,
   );
 
+  const canvasParams: CanvasParams = {
+    nodes: {
+      centerFn: standardCenterFn,
+      priorityFn: (): number => 0,
+    },
+    ports: {
+      direction: 0,
+    },
+    edges: {
+      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
+      priorityFn: (): number => 0,
+    },
+  };
+
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasParams({}),
+    canvasParams,
   );
+
+  const transformParams: TransformableViewportParams = {
+    wheelSensitivity: options?.wheelSensitivity ?? 1.2,
+    onTransformStarted: (): void => {},
+    onTransformFinished: options?.onTransformFinished ?? ((): void => {}),
+    onBeforeTransformChange:
+      options?.onBeforeTransformChange ?? ((): void => {}),
+    onTransformChange: options?.onTransformChange ?? ((): void => {}),
+    onResizeTransformStarted:
+      options?.onResizeTransformStarted ?? ((): void => {}),
+    onResizeTransformFinished:
+      options?.onResizeTransformFinished ?? ((): void => {}),
+    transformPreprocessor: (transform) => transform.nextTransform,
+    shiftCursor: "grab",
+    mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
+    mouseUpEventVerifier: (event: MouseEvent) => event.button === 0,
+    mouseWheelEventVerifier: () => true,
+    scaleWheelFinishTimeout: 500,
+  };
 
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,
     element,
     window,
-    createTransformableViewportParams(params?.transformOptions ?? {}),
+    transformParams,
     trigger,
     {
       nodeContainingRadius: {
@@ -213,11 +247,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   it("should load elements around viewport on wheel scale when reached outside of viewport on next tick", async () => {
     const element = createElement({ width: 100, height: 100 });
     const canvas = createCanvas({
-      transformOptions: {
-        scale: {
-          mouseWheelSensitivity: 10,
-        },
-      },
+      wheelSensitivity: 10,
       element,
     });
 
@@ -244,11 +274,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
-      transformOptions: {
-        events: {
-          onTransformChange,
-        },
-      },
+      onTransformChange,
       element,
     });
 
@@ -272,11 +298,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
-      transformOptions: {
-        events: {
-          onTransformFinished,
-        },
-      },
+      onTransformFinished,
       element,
     });
 
@@ -301,11 +323,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
     const canvas = createCanvas({
       element,
-      transformOptions: {
-        scale: {
-          mouseWheelSensitivity: 1.1,
-        },
-      },
+      wheelSensitivity: 1.1,
     });
 
     configureEdgeGraph(canvas);
@@ -337,11 +355,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
-      transformOptions: {
-        events: {
-          onResizeTransformStarted,
-        },
-      },
+      onResizeTransformStarted,
       element,
     });
 
@@ -355,11 +369,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
-      transformOptions: {
-        events: {
-          onResizeTransformFinished,
-        },
-      },
+      onResizeTransformFinished,
       element,
     });
 
@@ -373,11 +383,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
-      transformOptions: {
-        events: {
-          onBeforeTransformChange,
-        },
-      },
+      onBeforeTransformChange,
       element,
     });
 
