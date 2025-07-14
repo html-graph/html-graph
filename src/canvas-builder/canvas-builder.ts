@@ -13,7 +13,7 @@ import {
   VirtualScrollConfig,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
-import { Layers } from "@/layers";
+import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
 import {
   createDraggableNodesParams,
