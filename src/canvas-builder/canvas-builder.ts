@@ -194,14 +194,14 @@ export class CanvasBuilder {
       htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
     }
 
-    const defaults = createCanvasParams(this.canvasDefaults);
+    const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
       this.element,
       graphStore,
       viewportStore,
       htmlView,
-      defaults,
+      canvasParams,
     );
 
     const onBeforeDestroy = (): void => {
@@ -235,8 +235,8 @@ export class CanvasBuilder {
     if (this.hasUserConnectablePorts) {
       const params = createUserConnectablePortsParams(
         this.connectablePortsConfig,
-        defaults.edges.shapeFactory,
-        defaults.ports.direction,
+        canvasParams.edges.shapeFactory,
+        canvasParams.ports.direction,
       );
 
       UserConnectablePortsConfigurator.configure(
