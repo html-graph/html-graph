@@ -25,7 +25,7 @@ const createCanvas = (options?: {
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const p: CanvasParams = {
+  const params: CanvasParams = {
     nodes: {
       centerFn: options?.nodesCenterFn ?? standardCenterFn,
       priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
@@ -41,7 +41,13 @@ const createCanvas = (options?: {
     },
   };
 
-  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, p);
+  const canvas = new Canvas(
+    element,
+    graphStore,
+    viewportStore,
+    htmlView,
+    params,
+  );
 
   return canvas;
 };

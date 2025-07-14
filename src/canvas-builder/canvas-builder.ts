@@ -14,18 +14,23 @@ import {
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "@/layers";
+import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
 import {
-  CanvasDefaults,
-  createCanvasParams,
-  ConnectablePortsConfig,
-  createUserConnectablePortsParams,
+  createDraggableNodesParams,
+  DraggableNodesConfig,
+} from "./create-draggable-nodes-params";
+import {
+  createTransformableViewportParams,
+  ViewportTransformConfig,
+} from "./create-transformable-viewport-params";
+import {
   BackgroundConfig,
   createBackgroundParams,
-  DraggableNodesConfig,
-  createDraggableNodesParams,
-  ViewportTransformConfig,
-  createTransformableViewportParams,
-} from "@/create-params";
+} from "./create-background-params";
+import {
+  ConnectablePortsConfig,
+  createUserConnectablePortsParams,
+} from "./create-user-connectable-ports-params";
 
 // Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {

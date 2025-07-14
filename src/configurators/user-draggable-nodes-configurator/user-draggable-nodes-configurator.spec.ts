@@ -4,40 +4,68 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
-import {
-  createCanvasParams,
-  createDraggableNodesParams,
-  DraggableNodesConfig,
-} from "@/create-params";
+import { DraggableNodesParams } from "./draggable-nodes-params";
+import { NodeDragPayload } from "./node-drag-payload";
+import { MouseEventVerifier } from "../shared";
 
 let innerWidth: number;
 let innerHeight: number;
 
-const createCanvas = (params?: {
+const createCanvas = (options?: {
+  dragCursor?: string | null;
   element?: HTMLElement;
-  dragConfig?: DraggableNodesConfig;
+  onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;
+  moveOnTop?: boolean;
+  moveEdgesOnTop?: boolean;
+  onNodeDragFinished?: (nodeId: NodeDragPayload) => void;
+  mouseDownEventVerifier?: MouseEventVerifier;
+  mouseUpEventVerifier?: MouseEventVerifier;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = params?.element ?? document.createElement("div");
+  const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+
+  const canvasParams: CanvasParams = {
+    nodes: {
+      centerFn: standardCenterFn,
+      priorityFn: (): number => 0,
+    },
+    ports: {
+      direction: 0,
+    },
+    edges: {
+      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
+      priorityFn: (): number => 0,
+    },
+  };
 
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    createCanvasParams({}),
+    canvasParams,
   );
 
-  UserDraggableNodesConfigurator.configure(
-    canvas,
-    element,
-    window,
-    createDraggableNodesParams(params?.dragConfig ?? {}),
-  );
+  const params: DraggableNodesParams = {
+    moveOnTop: options?.moveOnTop !== undefined ? options.moveOnTop : true,
+    moveEdgesOnTop:
+      options?.moveEdgesOnTop !== undefined ? options.moveEdgesOnTop : true,
+    dragCursor: options?.dragCursor ?? "grab",
+    mouseDownEventVerifier:
+      options?.mouseDownEventVerifier ??
+      ((event): boolean => event.button === 0),
+    mouseUpEventVerifier:
+      options?.mouseUpEventVerifier ?? ((event): boolean => event.button === 0),
+    onNodeDrag: () => {},
+    onBeforeNodeDrag: options?.onBeforeNodeDrag ?? ((): boolean => true),
+    onNodeDragFinished: options?.onNodeDragFinished ?? ((): void => {}),
+  };
+
+  UserDraggableNodesConfigurator.configure(canvas, element, window, params);
 
   return canvas;
 };
@@ -164,11 +192,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        mouse: {
-          dragCursor: "crosshair",
-        },
-      },
+      dragCursor: "crosshair",
     });
     const nodeElement = createElement();
 
@@ -457,11 +481,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        events: {
-          onBeforeNodeDrag: (): boolean => false,
-        },
-      },
+      onBeforeNodeDrag: (): boolean => false,
     });
     const nodeElement = createElement();
 
@@ -488,11 +508,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        events: {
-          onBeforeNodeDrag: (): boolean => false,
-        },
-      },
+      onBeforeNodeDrag: (): boolean => false,
     });
     const nodeElement = createElement();
 
@@ -630,9 +646,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        moveOnTop: false,
-      },
+      moveOnTop: false,
     });
     const nodeElement = createElement();
 
@@ -713,11 +727,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        events: {
-          onNodeDragFinished,
-        },
-      },
+      onNodeDragFinished,
     });
 
     const nodeElement = createElement();
@@ -748,11 +758,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        events: {
-          onNodeDragFinished,
-        },
-      },
+      onNodeDragFinished,
     });
 
     const nodeElement = createElement();
@@ -790,12 +796,8 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        mouse: {
-          mouseDownEventVerifier: (event: MouseEvent): boolean =>
-            event.button === 0 && event.ctrlKey,
-        },
-      },
+      mouseDownEventVerifier: (event: MouseEvent): boolean =>
+        event.button === 0 && event.ctrlKey,
     });
 
     const nodeElement = createElement();
@@ -825,12 +827,8 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      dragConfig: {
-        mouse: {
-          mouseUpEventVerifier: (event: MouseEvent): boolean =>
-            event.button === 0 && event.ctrlKey,
-        },
-      },
+      mouseUpEventVerifier: (event: MouseEvent): boolean =>
+        event.button === 0 && event.ctrlKey,
     });
 
     const nodeElement = createElement();

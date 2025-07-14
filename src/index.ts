@@ -36,7 +36,7 @@ export type {
   ViewportTransformConfig as TransformOptions,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
-} from "./create-params";
+} from "./canvas-builder";
 
 export type {
   NodeDragPayload,
