@@ -204,13 +204,6 @@ export class CanvasBuilder {
       canvasParams,
     );
 
-    const onBeforeDestroy = (): void => {
-      layers.destroy();
-      canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
-    };
-
-    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
-
     if (this.hasBackground) {
       BackgroundConfigurator.configure(
         canvas,
@@ -267,6 +260,13 @@ export class CanvasBuilder {
     }
 
     this.reset();
+
+    const onBeforeDestroy = (): void => {
+      layers.destroy();
+      canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
+    };
+
+    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
   }
