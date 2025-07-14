@@ -4,7 +4,8 @@ import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement } from "@/mocks";
-import { createBackgroundParams, createCanvasParams } from "@/create-params";
+import { createCanvasParams } from "@/create-params";
+import { BackgroundParams } from "./background-params";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore();
@@ -21,11 +22,14 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
     createCanvasParams({}),
   );
 
-  BackgroundConfigurator.configure(
-    canvas,
-    createBackgroundParams({ tileDimensions: { width: 10, height: 10 } }),
-    backgroundElement,
-  );
+  const params: BackgroundParams = {
+    tileWidth: 10,
+    tileHeight: 10,
+    renderer: document.createElementNS("http://www.w3.org/2000/svg", "circle"),
+    maxViewportScale: 10,
+  };
+
+  BackgroundConfigurator.configure(canvas, params, backgroundElement);
 
   return { canvas, backgroundElement };
 };

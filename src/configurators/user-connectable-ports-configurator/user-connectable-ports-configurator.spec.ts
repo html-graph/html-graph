@@ -1,26 +1,30 @@
-import { Canvas } from "@/canvas";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 import { createCanvasParams } from "@/create-params";
-import {
-  ConnectablePortsConfig,
-  createUserConnectablePortsParams,
-} from "@/create-params";
+import { UserConnectablePortsParams } from "./user-connectable-ports-params";
+import { BezierEdgeShape } from "@/edges";
+import { ConnectionTypeResolver } from "./connection-type-resolver";
+import { ConnectionPreprocessor } from "./connection-preprocessor";
 
-const createCanvas = (params?: {
+const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
-  connectConfig?: ConnectablePortsConfig;
+  connectionTypeResolver?: ConnectionTypeResolver;
+  connectionPreprocessor?: ConnectionPreprocessor;
+  onAfterEdgeCreated?: (edgeId: unknown) => void;
+  onEdgeCreationInterrupted?: () => void;
+  onEdgeCreationPrevented?: () => void;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const mainElement =
-    params?.mainElement ?? createElement({ width: 1000, height: 1000 });
+    options?.mainElement ?? createElement({ width: 1000, height: 1000 });
   const overlayElement =
-    params?.overlayElement ?? createElement({ width: 1000, height: 1000 });
+    options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
   const defaults = createCanvasParams({});
 
@@ -32,18 +36,29 @@ const createCanvas = (params?: {
     defaults,
   );
 
-  const connectParams = createUserConnectablePortsParams(
-    params?.connectConfig ?? {},
-    defaults.edges.shapeFactory,
-    defaults.ports.direction,
-  );
+  const params: UserConnectablePortsParams = {
+    edgeShapeFactory: () => new BezierEdgeShape(),
+    connectionTypeResolver:
+      options?.connectionTypeResolver ?? ((): "direct" | "reverse" => "direct"),
+    mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
+    mouseUpEventVerifier: (event: MouseEvent) => event.button === 0,
+    connectionPreprocessor:
+      options?.connectionPreprocessor ??
+      ((request): AddEdgeRequest | null => request),
+    onAfterEdgeCreated: options?.onAfterEdgeCreated ?? ((): void => {}),
+    onEdgeCreationInterrupted:
+      options?.onEdgeCreationInterrupted ?? ((): void => {}),
+    onEdgeCreationPrevented:
+      options?.onEdgeCreationPrevented ?? ((): void => {}),
+    dragPortDirection: 0,
+  };
 
   UserConnectablePortsConfigurator.configure(
     canvas,
     overlayElement,
     viewportStore,
     window,
-    connectParams,
+    params,
   );
 
   return canvas;
@@ -96,9 +111,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectConfig: {
-        connectionTypeResolver: () => null,
-      },
+      connectionTypeResolver: () => null,
     });
 
     const portElement = document.createElement("div");
@@ -148,9 +161,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectConfig: {
-        connectionTypeResolver: () => null,
-      },
+      connectionTypeResolver: () => null,
     });
 
     const portElement = document.createElement("div");
@@ -232,9 +243,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectConfig: {
-        connectionTypeResolver: () => "reverse",
-      },
+      connectionTypeResolver: () => "reverse",
     });
 
     const portElement = createElement({ width: 10, height: 10 });
@@ -252,9 +261,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       overlayElement,
-      connectConfig: {
-        connectionTypeResolver: () => "reverse",
-      },
+      connectionTypeResolver: () => "reverse",
     });
 
     const portElement = document.createElement("div");
@@ -491,7 +498,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectConfig: { connectionTypeResolver: () => "reverse" },
+      connectionTypeResolver: () => "reverse",
     });
 
     document.body.appendChild(mainElement);
@@ -558,7 +565,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectConfig: { events: { onAfterEdgeCreated } },
+      onAfterEdgeCreated,
     });
 
     document.body.appendChild(mainElement);
@@ -597,7 +604,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectConfig: { events: { onEdgeCreationInterrupted } },
+      onEdgeCreationInterrupted,
     });
 
     document.body.appendChild(mainElement);
@@ -636,10 +643,8 @@ describe("UserConnectablePortsConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       mainElement,
-      connectConfig: {
-        events: { onEdgeCreationPrevented },
-        connectionPreprocessor: () => null,
-      },
+      onEdgeCreationPrevented,
+      connectionPreprocessor: () => null,
     });
 
     document.body.appendChild(mainElement);

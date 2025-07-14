@@ -3,29 +3,45 @@ import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { createElement } from "@/mocks";
-import { CenterFn } from "@/center-fn";
+import { CenterFn, standardCenterFn } from "@/center-fn";
 import { HtmlGraphError } from "@/error";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
-import { CanvasDefaults, createCanvasParams } from "@/create-params";
+import { PriorityFn } from "@/priority";
+import { CanvasParams } from "./canvas-params";
+import { EdgeShapeFactory } from "./edge-shape-factory";
 
-const createCanvas = (params?: {
-  options?: CanvasDefaults;
+const createCanvas = (options?: {
   element?: HTMLElement;
+  nodesCenterFn?: CenterFn;
+  nodesPriorityFn?: PriorityFn;
+  portsDirection?: number;
+  edgeShapeFactory?: EdgeShapeFactory;
+  edgesPriorityFn?: PriorityFn;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = params?.element ?? document.createElement("div");
+  const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvas = new Canvas(
-    element,
-    graphStore,
-    viewportStore,
-    htmlView,
-    createCanvasParams(params?.options ?? {}),
-  );
+  const p: CanvasParams = {
+    nodes: {
+      centerFn: options?.nodesCenterFn ?? standardCenterFn,
+      priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
+    },
+    ports: {
+      direction: options?.portsDirection ?? 0,
+    },
+    edges: {
+      shapeFactory:
+        options?.edgeShapeFactory ??
+        ((): BezierEdgeShape => new BezierEdgeShape()),
+      priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
+    },
+  };
+
+  const canvas = new Canvas(element, graphStore, viewportStore, htmlView, p);
 
   return canvas;
 };
@@ -86,11 +102,7 @@ describe("Canvas", () => {
 
     const canvas = createCanvas({
       element,
-      options: {
-        nodes: {
-          centerFn,
-        },
-      },
+      nodesCenterFn: centerFn,
     });
 
     canvas.addNode({
@@ -131,11 +143,7 @@ describe("Canvas", () => {
 
     const canvas = createCanvas({
       element,
-      options: {
-        nodes: {
-          priority: 10,
-        },
-      },
+      nodesPriorityFn: () => 10,
     });
 
     canvas.addNode({
@@ -392,7 +400,7 @@ describe("Canvas", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({
       element,
-      options: { ports: { direction: Math.PI } },
+      portsDirection: Math.PI,
     });
 
     canvas.addNode({
@@ -551,7 +559,7 @@ describe("Canvas", () => {
     const shape = new BezierEdgeShape();
     const canvas = createCanvas({
       element,
-      options: { edges: { shape: () => shape } },
+      edgeShapeFactory: () => shape,
     });
 
     canvas.addNode({
@@ -606,7 +614,7 @@ describe("Canvas", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({
       element,
-      options: { edges: { priority: 10 } },
+      edgesPriorityFn: () => 10,
     });
 
     canvas.addNode({
