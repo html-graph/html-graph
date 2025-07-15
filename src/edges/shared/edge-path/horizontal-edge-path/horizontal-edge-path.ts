@@ -6,7 +6,7 @@ import { EdgePath } from "../edge-path";
 export class HorizontalEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public constructor(
     private readonly params: {
@@ -23,7 +23,7 @@ export class HorizontalEdgePath implements EdgePath {
   ) {
     const to = this.params.to;
 
-    this.median = { x: to.x / 2, y: to.y / 2 };
+    this.midpoint = { x: to.x / 2, y: to.y / 2 };
 
     const beginArrow: Point = this.params.hasSourceArrow
       ? createRotatedPoint(

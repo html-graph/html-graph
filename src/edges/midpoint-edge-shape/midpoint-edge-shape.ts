@@ -36,8 +36,8 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
     this.svg.append(this.midpointElement);
 
     this.baseShape.onAfterRender.subscribe((model) => {
-      const median = model.edgePath.median;
-      const transform = `translate(${median.x}px, ${median.y}px)`;
+      const midpoint = model.edgePath.midpoint;
+      const transform = `translate(${midpoint.x}px, ${midpoint.y}px)`;
 
       this.midpointElement.style.setProperty("transform", transform);
     });

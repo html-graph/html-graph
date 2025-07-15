@@ -4,7 +4,7 @@ import { EdgePath } from "../edge-path";
 export class DirectEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public readonly diagonalDistance: number;
 
@@ -20,7 +20,7 @@ export class DirectEdgePath implements EdgePath {
   ) {
     const to = this.params.to;
 
-    this.median = { x: to.x / 2, y: to.y / 2 };
+    this.midpoint = { x: to.x / 2, y: to.y / 2 };
 
     this.diagonalDistance = Math.sqrt(
       this.params.to.x * this.params.to.x + this.params.to.y * this.params.to.y,

@@ -77,7 +77,7 @@ describe("DirectEdgePath", () => {
     expect(edgePath.path).toBe("M 0 0 L 9 0");
   });
 
-  it("should calculate median in the center", () => {
+  it("should calculate midpoint in the center", () => {
     const to: Point = { x: 100, y: 200 };
 
     const edgePath = new DirectEdgePath({
@@ -89,6 +89,6 @@ describe("DirectEdgePath", () => {
       arrowLength: 1,
     });
 
-    expect(edgePath.median).toEqual({ x: 50, y: 100 });
+    expect(edgePath.midpoint).toEqual({ x: 50, y: 100 });
   });
 });

@@ -6,7 +6,7 @@ import { flipPoint } from "../../flip-point";
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public constructor(
     private readonly params: {
@@ -103,6 +103,6 @@ export class DetourBezierEdgePath implements EdgePath {
       `L ${endArrow.x} ${endArrow.y}`,
     ].join(" ");
 
-    this.median = flipPoint(center, params.flipX, params.flipY, params.to);
+    this.midpoint = flipPoint(center, params.flipX, params.flipY, params.to);
   }
 }

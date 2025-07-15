@@ -7,7 +7,7 @@ import { flipPoint } from "../../flip-point";
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public constructor(
     private readonly params: {
@@ -69,7 +69,7 @@ export class DetourStraightEdgePath implements EdgePath {
 
     const center = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
 
-    this.median = flipPoint(center, params.flipX, params.flipY, params.to);
+    this.midpoint = flipPoint(center, params.flipX, params.flipY, params.to);
 
     this.path = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],

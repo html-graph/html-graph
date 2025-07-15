@@ -5,7 +5,7 @@ import { EdgePath } from "../edge-path";
 export class BezierEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public constructor(
     private readonly params: {
@@ -20,7 +20,7 @@ export class BezierEdgePath implements EdgePath {
   ) {
     const to = this.params.to;
 
-    this.median = { x: to.x / 2, y: to.y / 2 };
+    this.midpoint = { x: to.x / 2, y: to.y / 2 };
 
     const begin = createRotatedPoint(
       { x: this.params.arrowLength, y: zero.y },

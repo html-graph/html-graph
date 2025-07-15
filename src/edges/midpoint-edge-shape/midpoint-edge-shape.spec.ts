@@ -2,7 +2,7 @@ import { BezierEdgeShape } from "../bezier-edge-shape";
 import { MidpointEdgeShape } from "./midpoint-edge-shape";
 
 describe("MidpointEdgeShape", () => {
-  it("should append specified median element to svg", () => {
+  it("should append specified midpoint element to svg", () => {
     const baseShape = new BezierEdgeShape();
 
     const midpointElement = document.createElementNS(
@@ -15,7 +15,7 @@ describe("MidpointEdgeShape", () => {
     expect(midpointShape.svg.lastChild).toBe(midpointElement);
   });
 
-  it("should update median element transformation", () => {
+  it("should update midpoint element transformation", () => {
     const baseShape = new BezierEdgeShape();
 
     const midpointElement = document.createElementNS(

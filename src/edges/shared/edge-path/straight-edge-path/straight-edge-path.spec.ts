@@ -52,7 +52,7 @@ describe("StraightEdgePath", () => {
     );
   });
 
-  it("should calculate median in the center", () => {
+  it("should calculate midpoint in the center", () => {
     const edgePath = new StraightEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
@@ -64,6 +64,6 @@ describe("StraightEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(edgePath.median).toEqual({ x: 50, y: 100 });
+    expect(edgePath.midpoint).toEqual({ x: 50, y: 100 });
   });
 });
