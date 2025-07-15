@@ -10,9 +10,9 @@ describe("MidpointEdgeShape", () => {
       "g",
     );
 
-    const medianShape = new MidpointEdgeShape(baseShape, medianElement);
+    const midpointShape = new MidpointEdgeShape(baseShape, medianElement);
 
-    expect(medianShape.svg.lastChild).toBe(medianElement);
+    expect(midpointShape.svg.lastChild).toBe(medianElement);
   });
 
   it("should update median element transformation", () => {
@@ -23,9 +23,9 @@ describe("MidpointEdgeShape", () => {
       "g",
     );
 
-    const medianShape = new MidpointEdgeShape(baseShape, medianElement);
+    const midpointShape = new MidpointEdgeShape(baseShape, medianElement);
 
-    medianShape.render({
+    midpointShape.render({
       from: {
         x: 0,
         y: 0,

@@ -52,15 +52,15 @@ const canvas: Canvas = builder
         });
 
         const median = createMedian();
-        const medianShape = new MidpointEdgeShape(baseShape, median);
+        const midpointShape = new MidpointEdgeShape(baseShape, median);
 
-        medianShape.medianElement.addEventListener("mouseup", (event) => {
+        midpointShape.medianElement.addEventListener("mouseup", (event) => {
           if (event.button === 0) {
             canvas.removeEdge(edgeId);
           }
         });
 
-        return medianShape;
+        return midpointShape;
       },
     },
   })

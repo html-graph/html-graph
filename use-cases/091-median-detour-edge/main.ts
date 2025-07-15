@@ -51,9 +51,9 @@ const canvas: Canvas = builder
         });
 
         const median = createMedian();
-        const medianShape = new MidpointEdgeShape(baseShape, median);
+        const midpointShape = new MidpointEdgeShape(baseShape, median);
 
-        return medianShape;
+        return midpointShape;
       },
     },
   })
