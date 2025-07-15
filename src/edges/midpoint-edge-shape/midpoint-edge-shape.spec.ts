@@ -5,25 +5,25 @@ describe("MidpointEdgeShape", () => {
   it("should append specified median element to svg", () => {
     const baseShape = new BezierEdgeShape();
 
-    const medianElement = document.createElementNS(
+    const midpointElement = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "g",
     );
 
-    const midpointShape = new MidpointEdgeShape(baseShape, medianElement);
+    const midpointShape = new MidpointEdgeShape(baseShape, midpointElement);
 
-    expect(midpointShape.svg.lastChild).toBe(medianElement);
+    expect(midpointShape.svg.lastChild).toBe(midpointElement);
   });
 
   it("should update median element transformation", () => {
     const baseShape = new BezierEdgeShape();
 
-    const medianElement = document.createElementNS(
+    const midpointElement = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "g",
     );
 
-    const midpointShape = new MidpointEdgeShape(baseShape, medianElement);
+    const midpointShape = new MidpointEdgeShape(baseShape, midpointElement);
 
     midpointShape.render({
       from: {
@@ -46,6 +46,6 @@ describe("MidpointEdgeShape", () => {
       },
     });
 
-    expect(medianElement.style.transform).toBe("translate(50px, 50px)");
+    expect(midpointElement.style.transform).toBe("translate(50px, 50px)");
   });
 });
