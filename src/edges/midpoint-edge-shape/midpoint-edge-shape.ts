@@ -16,23 +16,30 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
 
   public readonly svg: SVGSVGElement;
 
+  /**
+   * @deprecated
+   * use midpointElement instead
+   */
+  public readonly medianElement: SVGElement;
+
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
-    public readonly medianElement: SVGElement,
+    public readonly midpointElement: SVGElement,
   ) {
+    this.medianElement = this.midpointElement;
     this.svg = this.baseShape.svg;
     this.group = this.baseShape.group;
     this.line = this.baseShape.line;
     this.sourceArrow = this.baseShape.sourceArrow;
     this.targetArrow = this.baseShape.targetArrow;
     this.onAfterRender = this.baseShape.onAfterRender;
-    this.svg.append(this.medianElement);
+    this.svg.append(this.midpointElement);
 
     this.baseShape.onAfterRender.subscribe((model) => {
       const median = model.edgePath.median;
       const transform = `translate(${median.x}px, ${median.y}px)`;
 
-      this.medianElement.style.setProperty("transform", transform);
+      this.midpointElement.style.setProperty("transform", transform);
     });
   }
 

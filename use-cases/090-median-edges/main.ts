@@ -54,7 +54,7 @@ const canvas: Canvas = builder
         const median = createMedian();
         const midpointShape = new MidpointEdgeShape(baseShape, median);
 
-        midpointShape.medianElement.addEventListener("mouseup", (event) => {
+        midpointShape.midpointElement.addEventListener("mouseup", (event) => {
           if (event.button === 0) {
             canvas.removeEdge(edgeId);
           }
