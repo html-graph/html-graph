@@ -49,7 +49,7 @@ describe("CycleSquareEdgePath", () => {
     );
   });
 
-  it("should calculate median in between detour points", () => {
+  it("should calculate midpoint in between detour points", () => {
     const edgePath = new CycleSquareEdgePath({
       sourceDirection: { x: 1, y: 0 },
       side: 40,
@@ -60,6 +60,6 @@ describe("CycleSquareEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(edgePath.median).toEqual({ x: 100, y: 0 });
+    expect(edgePath.midpoint).toEqual({ x: 100, y: 0 });
   });
 });

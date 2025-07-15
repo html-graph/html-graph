@@ -1,12 +1,12 @@
 # TODO
 
-- horizontal and vertical edges detour parallel
-- rename Median to Midpoint
 - animated dashed edges
 - user movable edges
 - improve onDestroy unit tests
 - virtual scroll node events
 - snap nodes to grid
+
+- horizontal and vertical edges detour parallel
 
 V4
 

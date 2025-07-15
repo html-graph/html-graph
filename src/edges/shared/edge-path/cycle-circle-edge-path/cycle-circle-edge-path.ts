@@ -5,7 +5,7 @@ import { EdgePath } from "../edge-path";
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly median: Point;
+  public readonly midpoint: Point;
 
   public constructor(
     private readonly params: {
@@ -48,6 +48,6 @@ export class CycleCircleEdgePath implements EdgePath {
 
     this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${c}`;
 
-    this.median = rotatedPoints[3];
+    this.midpoint = rotatedPoints[3];
   }
 }

@@ -81,7 +81,7 @@ describe("DetourBezierEdgePath", () => {
     );
   });
 
-  it("should calculate median in between detour points", () => {
+  it("should calculate midpoint in between detour points", () => {
     const edgePath = new DetourBezierEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
@@ -96,6 +96,6 @@ describe("DetourBezierEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(edgePath.median).toEqual({ x: 50, y: 0 });
+    expect(edgePath.midpoint).toEqual({ x: 50, y: 0 });
   });
 });

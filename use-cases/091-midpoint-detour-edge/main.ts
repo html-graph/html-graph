@@ -1,12 +1,12 @@
 import {
-  BezierEdgeShape,
   Canvas,
   CanvasBuilder,
-  MedianEdgeShape,
+  MidpointEdgeShape,
+  StraightEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const createMedian = (): SVGElement => {
+const createMidpoint = (): SVGElement => {
   const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
   group.style.setProperty("pointer-events", "auto");
@@ -44,23 +44,16 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .setDefaults({
     edges: {
-      shape: (edgeId) => {
-        const baseShape = new BezierEdgeShape({
+      shape: () => {
+        const baseShape = new StraightEdgeShape({
           hasTargetArrow: true,
-          smallCycleRadius: 15,
-          cycleRadius: 30,
+          detourDirection: Math.PI / 12,
         });
 
-        const median = createMedian();
-        const medianShape = new MedianEdgeShape(baseShape, median);
+        const midpoint = createMidpoint();
+        const midpointShape = new MidpointEdgeShape(baseShape, midpoint);
 
-        medianShape.medianElement.addEventListener("mouseup", (event) => {
-          if (event.button === 0) {
-            canvas.removeEdge(edgeId);
-          }
-        });
-
-        return medianShape;
+        return midpointShape;
       },
     },
   })
@@ -73,33 +66,6 @@ const canvas: Canvas = builder
 canvas
   .addNode(
     createInOutNode({
-      name: "Node 1",
-      x: 200,
-      y: 100,
-      frontPortId: "node-1-in",
-      backPortId: "node-1-out",
-    }),
-  )
-  .addNode(
-    createInOutNode({
-      name: "Node 2",
-      x: 500,
-      y: 200,
-      frontPortId: "node-2-in",
-      backPortId: "node-2-out",
-    }),
-  )
-  .addNode(
-    createInOutNode({
-      name: "Node 3",
-      x: 200,
-      y: 350,
-      frontPortId: "node-3-in",
-      backPortId: "node-3-out",
-    }),
-  )
-  .addNode(
-    createInOutNode({
       name: "Node 4",
       x: 400,
       y: 500,
@@ -107,16 +73,4 @@ canvas
       backPortId: "node-4-out",
     }),
   )
-  .addNode(
-    createInOutNode({
-      name: "Node 5",
-      x: 600,
-      y: 500,
-      frontPortId: "node-5-in",
-      backPortId: "node-5-out",
-    }),
-  )
-  .addEdge({ from: "node-1-out", to: "node-2-in" })
-  .addEdge({ from: "node-2-out", to: "node-3-in" })
-  .addEdge({ from: "node-4-out", to: "node-4-in" })
-  .addEdge({ from: "node-5-out", to: "node-5-out" });
+  .addEdge({ from: "node-4-out", to: "node-4-in" });
