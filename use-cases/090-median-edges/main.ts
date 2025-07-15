@@ -2,7 +2,7 @@ import {
   BezierEdgeShape,
   Canvas,
   CanvasBuilder,
-  MedianEdgeShape,
+  MidpointEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -52,7 +52,7 @@ const canvas: Canvas = builder
         });
 
         const median = createMedian();
-        const medianShape = new MedianEdgeShape(baseShape, median);
+        const medianShape = new MidpointEdgeShape(baseShape, median);
 
         medianShape.medianElement.addEventListener("mouseup", (event) => {
           if (event.button === 0) {

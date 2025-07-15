@@ -1,7 +1,7 @@
 import {
   Canvas,
   CanvasBuilder,
-  MedianEdgeShape,
+  MidpointEdgeShape,
   StraightEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -51,7 +51,7 @@ const canvas: Canvas = builder
         });
 
         const median = createMedian();
-        const medianShape = new MedianEdgeShape(baseShape, median);
+        const medianShape = new MidpointEdgeShape(baseShape, median);
 
         return medianShape;
       },

@@ -3,7 +3,7 @@ import { EdgeRenderParams } from "../edge-render-params";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 
-export class MedianEdgeShape implements StructuredEdgeShape {
+export class MidpointEdgeShape implements StructuredEdgeShape {
   public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;

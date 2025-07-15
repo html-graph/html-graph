@@ -1,7 +1,7 @@
 import { BezierEdgeShape } from "../bezier-edge-shape";
-import { MedianEdgeShape } from "./median-edge-shape";
+import { MidpointEdgeShape } from "./midpoint-edge-shape";
 
-describe("MedianEdgeShape", () => {
+describe("MidpointEdgeShape", () => {
   it("should append specified median element to svg", () => {
     const baseShape = new BezierEdgeShape();
 
@@ -10,7 +10,7 @@ describe("MedianEdgeShape", () => {
       "g",
     );
 
-    const medianShape = new MedianEdgeShape(baseShape, medianElement);
+    const medianShape = new MidpointEdgeShape(baseShape, medianElement);
 
     expect(medianShape.svg.lastChild).toBe(medianElement);
   });
@@ -23,7 +23,7 @@ describe("MedianEdgeShape", () => {
       "g",
     );
 
-    const medianShape = new MedianEdgeShape(baseShape, medianElement);
+    const medianShape = new MidpointEdgeShape(baseShape, medianElement);
 
     medianShape.render({
       from: {

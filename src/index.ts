@@ -62,7 +62,12 @@ export {
   InteractiveEdgeShape,
   InteractiveEdgeError,
   DirectEdgeShape,
-  MedianEdgeShape,
+  MidpointEdgeShape,
+  /**
+   * @deprecated
+   * use Midpoint EdgeShape instead
+   */
+  MidpointEdgeShape as MedianEdgeShape,
 } from "./edges";
 export type {
   EdgeShape,
