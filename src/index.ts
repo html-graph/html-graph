@@ -65,7 +65,7 @@ export {
   MidpointEdgeShape,
   /**
    * @deprecated
-   * use Midpoint EdgeShape instead
+   * use MidpointEdgeShape instead
    */
   MidpointEdgeShape as MedianEdgeShape,
 } from "./edges";
