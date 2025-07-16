@@ -1,6 +1,5 @@
 # TODO
 
-- animated dashed edges
 - user movable edges
 - improve onDestroy unit tests
 - virtual scroll node events
