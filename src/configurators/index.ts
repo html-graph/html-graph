@@ -27,4 +27,6 @@ export type {
   UserConnectablePortsParams,
 } from "./user-connectable-ports-configurator";
 
+export { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
+
 export type { MouseEventVerifier } from "./shared";
