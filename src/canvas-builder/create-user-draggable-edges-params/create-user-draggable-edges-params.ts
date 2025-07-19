@@ -11,8 +11,11 @@ export const createUserDraggableEdgeParams = (
   defaultEdgeShapeFactory: EdgeShapeFactory,
   canvas: Canvas,
 ): UserDraggableEdgesParams => {
-  const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
+  const defaultMouseDownEventVerifier = (event: MouseEvent): boolean =>
     event.button === 0 && event.ctrlKey;
+
+  const defaultMouseUpEventVerifier = (event: MouseEvent): boolean =>
+    event.button === 0;
 
   const defaultDraggingEdgeResolver: DraggingEdgeResolver = (portId) => {
     const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId)!;
@@ -26,9 +29,9 @@ export const createUserDraggableEdgeParams = (
 
   return {
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaultMouseEventVerifier,
+      config.mouseDownEventVerifier ?? defaultMouseDownEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaultMouseEventVerifier,
+      config.mouseUpEventVerifier ?? defaultMouseUpEventVerifier,
     draggingEdgeResolver: defaultDraggingEdgeResolver,
     edgeShapeFactory:
       config.edgeShape !== undefined
