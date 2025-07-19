@@ -42,7 +42,7 @@ describe("createUserDraggableEdgeParams", () => {
     const options = createUserDraggableEdgeParams(
       {},
       () => new BezierEdgeShape(),
-      createCanvas(),
+      createCanvas().graph,
     );
 
     const fail1 = options.mouseDownEventVerifier(
@@ -67,7 +67,7 @@ describe("createUserDraggableEdgeParams", () => {
         mouseDownEventVerifier: verifier,
       },
       () => new BezierEdgeShape(),
-      createCanvas(),
+      createCanvas().graph,
     );
 
     expect(options.mouseDownEventVerifier).toBe(verifier);

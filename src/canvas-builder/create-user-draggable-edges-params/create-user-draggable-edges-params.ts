@@ -3,13 +3,13 @@ import {
   UserDraggableEdgesParams,
 } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
-import { Canvas, EdgeShapeFactory } from "@/canvas";
+import { EdgeShapeFactory, Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 
 export const createUserDraggableEdgeParams = (
   config: DraggableEdgesConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
-  canvas: Canvas,
+  graph: Graph,
 ): UserDraggableEdgesParams => {
   const defaultMouseDownEventVerifier = (event: MouseEvent): boolean =>
     event.button === 0 && event.ctrlKey;
@@ -18,7 +18,7 @@ export const createUserDraggableEdgeParams = (
     event.button === 0;
 
   const defaultDraggingEdgeResolver: DraggingEdgeResolver = (portId) => {
-    const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId)!;
+    const edgeIds = graph.getPortAdjacentEdgeIds(portId)!;
 
     if (edgeIds.length > 0) {
       return edgeIds[0];
