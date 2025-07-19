@@ -52,6 +52,7 @@ export type {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,
+  DraggingEdgeResolver,
 } from "./configurators";
 
 export {

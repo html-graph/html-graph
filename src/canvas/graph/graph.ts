@@ -128,7 +128,12 @@ export class Graph {
       return null;
     }
 
-    return { from: edge.from, to: edge.to, priority: edge.priority };
+    return {
+      from: edge.from,
+      to: edge.to,
+      priority: edge.priority,
+      shape: edge.shape,
+    };
   }
 
   // TODO: use Set in v4

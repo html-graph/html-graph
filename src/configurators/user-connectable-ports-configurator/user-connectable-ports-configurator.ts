@@ -13,9 +13,9 @@ import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private readonly staticOverlayPortId = "static";
+  private readonly staticOverlayId = "static";
 
-  private readonly draggingOverlayPortId = "dragging";
+  private readonly draggingOverlayId = "dragging";
 
   private staticPortId: unknown | null = null;
 
@@ -246,13 +246,13 @@ export class UserConnectablePortsConfigurator {
     });
 
     const staticPayload: PortPayload = {
-      overlayId: this.staticOverlayPortId,
+      overlayId: this.staticOverlayId,
       portCoords: portCoords,
       portDirection: port.direction,
     };
 
     const draggingPayload: PortPayload = {
-      overlayId: this.draggingOverlayPortId,
+      overlayId: this.draggingOverlayId,
       portCoords: cursorCoords,
       portDirection: this.params.dragPortDirection,
     };
@@ -367,7 +367,7 @@ export class UserConnectablePortsConfigurator {
     const matrix = this.canvas.viewport.getViewportMatrix();
     const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
 
-    this.overlayCanvas.updateNode(this.draggingOverlayPortId, {
+    this.overlayCanvas.updateNode(this.draggingOverlayId, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });

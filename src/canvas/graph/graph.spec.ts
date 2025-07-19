@@ -426,6 +426,7 @@ describe("Graph", () => {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
       priority: addEdgeRequest12.priority,
+      shape: addEdgeRequest12.shape,
     });
   });
 

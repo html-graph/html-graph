@@ -4,9 +4,19 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { ViewportStore } from "@/viewport-store";
+import { UserDraggableEdgesError } from "./user-draggable-edges-error";
+import { Point } from "@/point";
+import { transformPoint } from "@/transform-point";
+import { isPointInside } from "../shared";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
+
+  private edgeDragStarted = false;
+
+  private readonly staticOverlayId = "static";
+
+  private readonly draggingOverlayId = "dragging";
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
@@ -34,7 +44,41 @@ export class UserDraggableEdgesConfigurator {
     const target = event.currentTarget as HTMLElement;
     const portId = this.canvas.graph.getElementPortsIds(target)[0]!;
 
-    console.log(portId);
+    this.tryStartEdgeDragging(portId, { x: event.x, y: event.y }, event);
+
+    if (this.edgeDragStarted) {
+      this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+        passive: true,
+      });
+      this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+        passive: true,
+      });
+    }
+  };
+
+  private readonly onWindowMouseMove = (event: MouseEvent): void => {
+    const isInside = isPointInside(
+      this.window,
+      this.overlayLayer,
+      event.clientX,
+      event.clientY,
+    );
+
+    if (!isInside) {
+      this.stopMouseDrag();
+      return;
+    }
+
+    this.moveDraggingNode({ x: event.clientX, y: event.clientY });
+  };
+
+  private readonly onWindowMouseUp = (event: MouseEvent): void => {
+    if (!this.params.mouseUpEventVerifier(event)) {
+      return;
+    }
+
+    this.tryCreateConnection({ x: event.clientX, y: event.clientY });
+    this.stopMouseDrag();
   };
 
   private readonly onPortTouchStart = (event: TouchEvent): void => {
@@ -45,7 +89,49 @@ export class UserDraggableEdgesConfigurator {
     const target = event.currentTarget as HTMLElement;
     const portId = this.canvas.graph.getElementPortsIds(target)[0]!;
 
-    console.log(portId);
+    const touch = event.touches[0];
+
+    this.tryStartEdgeDragging(
+      portId,
+      { x: touch.clientX, y: touch.clientY },
+      event,
+    );
+
+    if (this.edgeDragStarted) {
+      this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+        passive: true,
+      });
+      this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+        passive: true,
+      });
+      this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+        passive: true,
+      });
+    }
+  };
+
+  private readonly onWindowTouchMove = (event: TouchEvent): void => {
+    const touch = event.touches[0];
+
+    const isInside = isPointInside(
+      this.window,
+      this.overlayLayer,
+      touch.clientX,
+      touch.clientY,
+    );
+
+    if (!isInside) {
+      this.stopTouchDrag();
+      return;
+    }
+
+    this.moveDraggingNode({ x: touch.clientX, y: touch.clientY });
+  };
+
+  private readonly onWindowTouchFinish = (event: TouchEvent): void => {
+    const touch = event.changedTouches[0];
+    this.tryCreateConnection({ x: touch.clientX, y: touch.clientY });
+    this.stopTouchDrag();
   };
 
   private readonly onBeforeClear = (): void => {
@@ -68,6 +154,7 @@ export class UserDraggableEdgesConfigurator {
     private readonly canvas: Canvas,
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
+    private readonly window: Window,
     private readonly params: UserDraggableEdgesParams,
   ) {
     const graphStore = new GraphStore();
@@ -112,12 +199,14 @@ export class UserDraggableEdgesConfigurator {
     canvas: Canvas,
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
+    win: Window,
     params: UserDraggableEdgesParams,
   ): void {
     new UserDraggableEdgesConfigurator(
       canvas,
       overlayLayer,
       viewportStore,
+      win,
       params,
     );
   }
@@ -134,5 +223,123 @@ export class UserDraggableEdgesConfigurator {
   private unhookPortEvents(element: HTMLElement): void {
     element.removeEventListener("mousedown", this.onPortMouseDown);
     element.removeEventListener("touchstart", this.onPortTouchStart);
+  }
+
+  private tryStartEdgeDragging(
+    portId: unknown,
+    cursor: Point,
+    event: Event,
+  ): void {
+    this.edgeDragStarted = false;
+    const edgeId = this.params.draggingEdgeResolver(portId);
+
+    if (edgeId === null) {
+      return;
+    }
+
+    const edge = this.canvas.graph.getEdge(edgeId);
+
+    if (edge === null) {
+      return;
+    }
+
+    const isSource = portId === edge.from;
+    const isTarget = portId === edge.to;
+
+    if (!(isSource || isTarget)) {
+      throw new UserDraggableEdgesError(
+        `failed to grab the edge with id of ${edgeId} because it is not adjacent to the port with id of ${portId}`,
+      );
+    }
+
+    event.stopPropagation();
+
+    const oppositePortId = isSource ? edge.to : edge.from;
+    const oppositePort = this.canvas.graph.getPort(oppositePortId)!;
+    const portRect = oppositePort.element.getBoundingClientRect();
+    const oppositePortX = portRect.x + portRect.width / 2;
+    const oppositePortY = portRect.y + portRect.height / 2;
+    const matrix = this.canvas.viewport.getViewportMatrix();
+    const canvasRect = this.overlayLayer.getBoundingClientRect();
+
+    const staticPoint = transformPoint(matrix, {
+      x: oppositePortX - canvasRect.x,
+      y: oppositePortY - canvasRect.y,
+    });
+
+    const draggingPoint = transformPoint(matrix, {
+      x: cursor.x - canvasRect.x,
+      y: cursor.y - canvasRect.y,
+    });
+
+    console.log(cursor, oppositePort);
+
+    this.canvas.removeEdge(edgeId);
+
+    const draggingNodeElement = document.createElement("div");
+
+    this.overlayCanvas.addNode({
+      id: this.draggingOverlayId,
+      x: draggingPoint.x,
+      y: draggingPoint.y,
+      element: draggingNodeElement,
+      ports: [
+        {
+          id: this.draggingOverlayId,
+          element: draggingNodeElement,
+          direction: 0,
+        },
+      ],
+    });
+
+    const staticNodeElement = document.createElement("div");
+
+    this.overlayCanvas.addNode({
+      id: this.staticOverlayId,
+      x: staticPoint.x,
+      y: staticPoint.y,
+      element: staticNodeElement,
+      ports: [
+        {
+          id: this.staticOverlayId,
+          element: staticNodeElement,
+          direction: 0,
+        },
+      ],
+    });
+
+    this.overlayCanvas.addEdge({
+      from: isSource ? this.draggingOverlayId : this.staticOverlayId,
+      to: isSource ? this.staticOverlayId : this.draggingOverlayId,
+      shape: edge.shape,
+    });
+
+    this.edgeDragStarted = true;
+  }
+
+  private stopMouseDrag(): void {
+    this.resetDragState();
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+  }
+
+  private stopTouchDrag(): void {
+    this.resetDragState();
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchFinish);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
+  }
+
+  private resetDragState(): void {
+    this.edgeDragStarted = false;
+    this.overlayCanvas.clear();
+  }
+
+  private moveDraggingNode(point: Point): void {
+    console.log(point);
+  }
+
+  private tryCreateConnection(point: Point): void {
+    console.log(point);
   }
 }

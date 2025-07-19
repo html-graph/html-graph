@@ -260,14 +260,18 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserDraggableEdges) {
+      const dragEdgeParams = createUserDraggableEdgeParams(
+        this.draggableEdgesConfig,
+        canvasParams.edges.shapeFactory,
+        canvas,
+      );
+
       UserDraggableEdgesConfigurator.configure(
         canvas,
         layers.overlayDraggableEdges,
         viewportStore,
-        createUserDraggableEdgeParams(
-          this.draggableEdgesConfig,
-          canvasParams.edges.shapeFactory,
-        ),
+        this.window,
+        dragEdgeParams,
       );
     }
 
