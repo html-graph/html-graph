@@ -9,7 +9,7 @@ export const findPortForElement = (
 
   while (elementBuf !== null) {
     draggingPortId =
-      graph.getElementPortsIds(elementBuf as HTMLElement)[0] ?? null;
+      graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
 
     if (draggingPortId !== null) {
       break;

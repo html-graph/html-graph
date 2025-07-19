@@ -23,7 +23,7 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
+    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 
     if (elementPortIds.length === 1) {
       this.hookPortEvents(port.element);
@@ -32,7 +32,7 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onBeforePortUnmarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
+    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 
     if (elementPortIds.length === 1) {
       this.unhookPortEvents(port.element);
@@ -221,7 +221,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private grabPort(portElement: HTMLElement, cursor: Point): void {
-    const portId = this.canvas.graph.getElementPortsIds(portElement)[0]!;
+    const portId = this.canvas.graph.getElementPortIds(portElement)[0]!;
     const port = this.canvas.graph.getPort(portId)!;
 
     this.staticPortId = portId;
@@ -349,7 +349,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private isPortConnectionAllowed(portElement: HTMLElement): boolean {
-    const portId = this.canvas.graph.getElementPortsIds(portElement)[0]!;
+    const portId = this.canvas.graph.getElementPortIds(portElement)[0]!;
 
     return this.params.connectionTypeResolver(portId) !== null;
   }

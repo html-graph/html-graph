@@ -197,7 +197,7 @@ export class GraphStore {
     return Array.from(this.ports.keys());
   }
 
-  public getElementPortsIds(element: HTMLElement): readonly unknown[] {
+  public getElementPortIds(element: HTMLElement): readonly unknown[] {
     return this.elementPorts.getMultiBySingle(element);
   }
 

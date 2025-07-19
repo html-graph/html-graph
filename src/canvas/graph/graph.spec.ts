@@ -695,7 +695,7 @@ describe("Graph", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    expect(graph.getElementPortsIds(addPortRequest1.element)).toEqual([
+    expect(graph.getElementPortIds(addPortRequest1.element)).toEqual([
       addPortRequest1.id,
     ]);
   });

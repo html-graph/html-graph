@@ -28,7 +28,7 @@ export class UserDraggableEdgesConfigurator {
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
+    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 
     if (elementPortIds.length === 1) {
       this.hookPortEvents(port.element);
@@ -37,7 +37,7 @@ export class UserDraggableEdgesConfigurator {
 
   private readonly onBeforePortUnmarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
+    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 
     if (elementPortIds.length === 1) {
       this.unhookPortEvents(port.element);
@@ -50,7 +50,7 @@ export class UserDraggableEdgesConfigurator {
     }
 
     const target = event.currentTarget as HTMLElement;
-    const portId = this.canvas.graph.getElementPortsIds(target)[0]!;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
 
     this.tryStartEdgeDragging(portId, { x: event.x, y: event.y }, event);
 
@@ -97,7 +97,7 @@ export class UserDraggableEdgesConfigurator {
     }
 
     const target = event.currentTarget as HTMLElement;
-    const portId = this.canvas.graph.getElementPortsIds(target)[0]!;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
 
     const touch = event.touches[0];
 

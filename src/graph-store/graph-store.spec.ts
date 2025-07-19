@@ -947,7 +947,7 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([
+    expect(store.getElementPortIds(addPortRequest1.element)).toEqual([
       "port-1",
     ]);
   });
@@ -967,7 +967,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest1);
     store.removePort(addPortRequest1.id);
 
-    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([]);
+    expect(store.getElementPortIds(addPortRequest1.element)).toEqual([]);
   });
 
   it("should clear element port ids", () => {
@@ -985,7 +985,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest1);
     store.clear();
 
-    expect(store.getElementPortsIds(addPortRequest1.element)).toEqual([]);
+    expect(store.getElementPortIds(addPortRequest1.element)).toEqual([]);
   });
 
   it("should return element node id", () => {

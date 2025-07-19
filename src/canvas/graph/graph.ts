@@ -111,8 +111,16 @@ export class Graph {
   }
 
   // TODO: use Set in v4
+  public getElementPortIds(element: HTMLElement): readonly unknown[] {
+    return [...this.graphStore.getElementPortIds(element)];
+  }
+
+  /**
+   * @deprecated
+   * use getElementPortIds instead
+   */
   public getElementPortsIds(element: HTMLElement): readonly unknown[] {
-    return [...this.graphStore.getElementPortsIds(element)];
+    return this.getElementPortIds(element);
   }
 
   // TODO: use Set in v4
