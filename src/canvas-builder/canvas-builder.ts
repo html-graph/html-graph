@@ -32,6 +32,10 @@ import {
   ConnectablePortsConfig,
   createUserConnectablePortsParams,
 } from "./create-user-connectable-ports-params";
+import {
+  createUserDraggableEdgeParams,
+  DraggableEdgesConfig,
+} from "./create-user-draggable-edges-params";
 
 // Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
@@ -46,6 +50,8 @@ export class CanvasBuilder {
   private backgroundConfig: BackgroundConfig = {};
 
   private connectablePortsConfig: ConnectablePortsConfig = {};
+
+  private draggableEdgesConfig: DraggableEdgesConfig = {};
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
@@ -167,8 +173,11 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableUserDraggableEdges(): CanvasBuilder {
+  public enableUserDraggableEdges(
+    config?: DraggableEdgesConfig,
+  ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
+    this.draggableEdgesConfig = config ?? {};
 
     return this;
   }
@@ -243,7 +252,7 @@ export class CanvasBuilder {
 
       UserConnectablePortsConfigurator.configure(
         canvas,
-        layers.overlay,
+        layers.overlayDraggableNodes,
         viewportStore,
         this.window,
         params,
@@ -251,7 +260,10 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserDraggableEdges) {
-      UserDraggableEdgesConfigurator.configure(canvas);
+      UserDraggableEdgesConfigurator.configure(
+        canvas,
+        createUserDraggableEdgeParams(this.draggableEdgesConfig),
+      );
     }
 
     if (this.virtualScrollConfig !== undefined) {

@@ -5,7 +5,7 @@ export class Layers {
 
   public readonly main = createLayer();
 
-  public readonly overlay = createLayer();
+  public readonly overlayDraggableNodes = createLayer();
 
   private readonly host = createHost();
 
@@ -13,14 +13,14 @@ export class Layers {
     this.element.appendChild(this.host);
     this.host.appendChild(this.background);
     this.host.appendChild(this.main);
-    this.overlay.style.pointerEvents = "none";
-    this.host.appendChild(this.overlay);
+    this.overlayDraggableNodes.style.pointerEvents = "none";
+    this.host.appendChild(this.overlayDraggableNodes);
   }
 
   public destroy(): void {
     this.host.removeChild(this.background);
     this.host.removeChild(this.main);
-    this.host.removeChild(this.overlay);
+    this.host.removeChild(this.overlayDraggableNodes);
     this.element.removeChild(this.host);
   }
 }

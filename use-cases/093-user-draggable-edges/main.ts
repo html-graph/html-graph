@@ -18,7 +18,9 @@ const defaults: CanvasDefaults = {
 
 const canvas: Canvas = builder
   .setDefaults(defaults)
-  .enableUserDraggableEdges()
+  .enableUserDraggableEdges({
+    mouseDownEventVerifier: (event) => event.button === 0,
+  })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground()
