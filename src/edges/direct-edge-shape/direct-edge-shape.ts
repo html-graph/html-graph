@@ -16,7 +16,6 @@ import { createDirectArrowPath } from "./create-direct-arrow-path";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Connecting ports with direct line
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

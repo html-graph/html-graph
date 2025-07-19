@@ -14,7 +14,6 @@ import { transformPoint } from "@/transform-point";
 import { standardCenterFn } from "@/center-fn";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 
-// Responsibility: Configuring ports connectable via drag
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
 

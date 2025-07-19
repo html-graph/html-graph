@@ -12,8 +12,6 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing edge shape connecting ports with horizontal angled
-// line
 export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

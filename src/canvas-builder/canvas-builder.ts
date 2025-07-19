@@ -37,7 +37,6 @@ import {
   DraggableEdgesConfig,
 } from "./create-user-draggable-edges-params";
 
-// Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
   private element: HTMLElement | null = null;
 
