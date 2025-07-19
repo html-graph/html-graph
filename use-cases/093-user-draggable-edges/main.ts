@@ -20,15 +20,6 @@ const canvas: Canvas = builder
   .setDefaults(defaults)
   .enableUserDraggableEdges({
     mouseDownEventVerifier: (event) => event.button === 0,
-    draggingEdgeResolver: (portId) => {
-      const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId)!;
-
-      if (edgeIds.length > 0) {
-        return edgeIds[0];
-      } else {
-        return null;
-      }
-    },
   })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()

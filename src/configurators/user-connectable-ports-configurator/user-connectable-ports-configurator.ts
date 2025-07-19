@@ -1,10 +1,13 @@
-import { AddEdgeRequest, AddNodeRequest, Canvas, CanvasParams } from "@/canvas";
+import { AddEdgeRequest, Canvas, CanvasParams } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
-import { isPointInside } from "../shared";
+import {
+  createAddNodeOverlayRequest,
+  isPointInside,
+  OverlayNodeParams,
+} from "../shared";
 import { Point } from "@/point";
-import { PortPayload } from "./port-payload";
 import { transformPoint } from "@/transform-point";
 import { standardCenterFn } from "@/center-fn";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
@@ -245,13 +248,13 @@ export class UserConnectablePortsConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
-    const staticPayload: PortPayload = {
+    const staticPayload: OverlayNodeParams = {
       overlayId: this.staticOverlayId,
       portCoords: portCoords,
       portDirection: port.direction,
     };
 
-    const draggingPayload: PortPayload = {
+    const draggingPayload: OverlayNodeParams = {
       overlayId: this.draggingOverlayId,
       portCoords: cursorCoords,
       portDirection: this.params.dragPortDirection,
@@ -299,37 +302,19 @@ export class UserConnectablePortsConfigurator {
   }
 
   private createOverlayGraph(
-    sourcePayload: PortPayload,
-    targetPayload: PortPayload,
+    sourceParams: OverlayNodeParams,
+    targetParams: OverlayNodeParams,
   ): void {
-    const addSourceRequest = this.createAddNodeRequest(sourcePayload);
+    const addSourceRequest = createAddNodeOverlayRequest(sourceParams);
     this.overlayCanvas.addNode(addSourceRequest);
 
-    const addTargetRequest = this.createAddNodeRequest(targetPayload);
+    const addTargetRequest = createAddNodeOverlayRequest(targetParams);
     this.overlayCanvas.addNode(addTargetRequest);
 
     this.overlayCanvas.addEdge({
-      from: sourcePayload.overlayId,
-      to: targetPayload.overlayId,
+      from: sourceParams.overlayId,
+      to: targetParams.overlayId,
     });
-  }
-
-  private createAddNodeRequest(payload: PortPayload): AddNodeRequest {
-    const element = document.createElement("div");
-
-    return {
-      id: payload.overlayId,
-      element,
-      x: payload.portCoords.x,
-      y: payload.portCoords.y,
-      ports: [
-        {
-          id: payload.overlayId,
-          element: element,
-          direction: payload.portDirection,
-        },
-      ],
-    };
   }
 
   private tryCreateConnection(cursor: Point): void {

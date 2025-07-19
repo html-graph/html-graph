@@ -25,7 +25,7 @@ export const createUserDraggableEdgeParams = (
     const edgeIds = graph.getPortAdjacentEdgeIds(portId)!;
 
     if (edgeIds.length > 0) {
-      return edgeIds[0];
+      return edgeIds[edgeIds.length - 1];
     } else {
       return null;
     }
