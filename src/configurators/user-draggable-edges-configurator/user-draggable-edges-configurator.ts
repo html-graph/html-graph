@@ -1,7 +1,13 @@
-import { Canvas } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
+import { GraphStore } from "@/graph-store";
+import { CoreHtmlView } from "@/html-view";
+import { standardCenterFn } from "@/center-fn";
+import { ViewportStore } from "@/viewport-store";
 
 export class UserDraggableEdgesConfigurator {
+  private readonly overlayCanvas: Canvas;
+
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
     const elementPortIds = this.canvas.graph.getElementPortsIds(port.element);
@@ -60,9 +66,42 @@ export class UserDraggableEdgesConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
+    private readonly overlayLayer: HTMLElement,
+    private readonly viewportStore: ViewportStore,
     private readonly params: UserDraggableEdgesParams,
   ) {
-    console.log(this.params);
+    const graphStore = new GraphStore();
+
+    const htmlView = new CoreHtmlView(
+      graphStore,
+      this.viewportStore,
+      this.overlayLayer,
+    );
+
+    const defaults: CanvasParams = {
+      nodes: {
+        centerFn: standardCenterFn,
+        priorityFn: (): number => 0,
+      },
+      edges: {
+        shapeFactory: this.params.edgeShapeFactory,
+        priorityFn: (): number => 0,
+      },
+      ports: {
+        direction: 0,
+      },
+    };
+
+    this.overlayCanvas = new Canvas(
+      this.overlayLayer,
+      graphStore,
+      this.viewportStore,
+      htmlView,
+      defaults,
+    );
+
+    console.log(this.overlayCanvas);
+
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.subscribe(this.onBeforePortUnmarked);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
@@ -71,9 +110,16 @@ export class UserDraggableEdgesConfigurator {
 
   public static configure(
     canvas: Canvas,
+    overlayLayer: HTMLElement,
+    viewportStore: ViewportStore,
     params: UserDraggableEdgesParams,
   ): void {
-    new UserDraggableEdgesConfigurator(canvas, params);
+    new UserDraggableEdgesConfigurator(
+      canvas,
+      overlayLayer,
+      viewportStore,
+      params,
+    );
   }
 
   private hookPortEvents(element: HTMLElement): void {

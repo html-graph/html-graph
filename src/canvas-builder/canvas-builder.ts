@@ -252,7 +252,7 @@ export class CanvasBuilder {
 
       UserConnectablePortsConfigurator.configure(
         canvas,
-        layers.overlayDraggableNodes,
+        layers.overlayConnectablePorts,
         viewportStore,
         this.window,
         params,
@@ -262,7 +262,12 @@ export class CanvasBuilder {
     if (this.hasUserDraggableEdges) {
       UserDraggableEdgesConfigurator.configure(
         canvas,
-        createUserDraggableEdgeParams(this.draggableEdgesConfig),
+        layers.overlayDraggableEdges,
+        viewportStore,
+        createUserDraggableEdgeParams(
+          this.draggableEdgesConfig,
+          canvasParams.edges.shapeFactory,
+        ),
       );
     }
 

@@ -1,8 +1,12 @@
+import { BezierEdgeShape } from "@/edges";
 import { createUserDraggableEdgeParams } from "./create-user-draggable-edges-params";
 
 describe("createUserDraggableEdgeParams", () => {
   it("should return LMB mouse down event verifier by default", () => {
-    const options = createUserDraggableEdgeParams({});
+    const options = createUserDraggableEdgeParams(
+      {},
+      () => new BezierEdgeShape(),
+    );
 
     const fail1 = options.mouseDownEventVerifier(
       new MouseEvent("mousedown", { button: 1 }),
@@ -21,9 +25,12 @@ describe("createUserDraggableEdgeParams", () => {
 
   it("should return specified mouse down event verifier", () => {
     const verifier: (event: MouseEvent) => boolean = () => false;
-    const options = createUserDraggableEdgeParams({
-      mouseDownEventVerifier: verifier,
-    });
+    const options = createUserDraggableEdgeParams(
+      {
+        mouseDownEventVerifier: verifier,
+      },
+      () => new BezierEdgeShape(),
+    );
 
     expect(options.mouseDownEventVerifier).toBe(verifier);
   });

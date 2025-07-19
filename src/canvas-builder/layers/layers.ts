@@ -1,11 +1,15 @@
-import { createHost, createLayer } from "./utils";
+import { createHost } from "./create-host";
+import { createLayer } from "./create-layer";
+import { createOverlayLayer } from "./create-overlay-layer";
 
 export class Layers {
   public readonly background = createLayer();
 
   public readonly main = createLayer();
 
-  public readonly overlayDraggableNodes = createLayer();
+  public readonly overlayConnectablePorts = createOverlayLayer();
+
+  public readonly overlayDraggableEdges = createOverlayLayer();
 
   private readonly host = createHost();
 
@@ -13,14 +17,15 @@ export class Layers {
     this.element.appendChild(this.host);
     this.host.appendChild(this.background);
     this.host.appendChild(this.main);
-    this.overlayDraggableNodes.style.pointerEvents = "none";
-    this.host.appendChild(this.overlayDraggableNodes);
+    this.host.appendChild(this.overlayConnectablePorts);
+    this.host.appendChild(this.overlayDraggableEdges);
   }
 
   public destroy(): void {
     this.host.removeChild(this.background);
     this.host.removeChild(this.main);
-    this.host.removeChild(this.overlayDraggableNodes);
+    this.host.removeChild(this.overlayConnectablePorts);
+    this.host.removeChild(this.overlayDraggableEdges);
     this.element.removeChild(this.host);
   }
 }
