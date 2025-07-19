@@ -3,13 +3,12 @@ import {
   UserDraggableEdgesParams,
 } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
-import { EdgeShapeFactory, Graph } from "@/canvas";
+import { Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { ConnectionPreprocessor } from "@/configurators";
 
 export const createUserDraggableEdgeParams = (
   config: DraggableEdgesConfig,
-  defaultEdgeShapeFactory: EdgeShapeFactory,
   graph: Graph,
 ): UserDraggableEdgesParams => {
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
@@ -46,10 +45,10 @@ export const createUserDraggableEdgeParams = (
       config.mouseUpEventVerifier ?? defaultMouseUpEventVerifier,
     draggingEdgeResolver:
       config.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
-    edgeShapeFactory:
-      config.edgeShape !== undefined
-        ? resolveEdgeShapeFactory(config.edgeShape)
-        : defaultEdgeShapeFactory,
+    draggingEdgeShapeFactory:
+      config.draggingEdgeShape !== undefined
+        ? resolveEdgeShapeFactory(config.draggingEdgeShape)
+        : null,
     onAfterEdgeReattached:
       config.events?.onAfterEdgeReattached ?? defaultOnAfterEdgeReattached,
     onEdgeReattachInterrupted:

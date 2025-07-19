@@ -261,7 +261,6 @@ export class CanvasBuilder {
     if (this.hasUserDraggableEdges) {
       const dragEdgeParams = createUserDraggableEdgeParams(
         this.draggableEdgesConfig,
-        canvasParams.edges.shapeFactory,
         canvas.graph,
       );
 

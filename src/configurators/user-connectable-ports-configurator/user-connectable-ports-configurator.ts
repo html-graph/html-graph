@@ -13,9 +13,12 @@ import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import { standardCenterFn } from "@/center-fn";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
+import { DirectEdgeShape } from "@/edges";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
+
+  private readonly overlayEdgeId = "edge";
 
   private staticPortId: unknown | null = null;
 
@@ -182,7 +185,7 @@ export class UserConnectablePortsConfigurator {
         priorityFn: (): number => 0,
       },
       edges: {
-        shapeFactory: this.params.edgeShapeFactory,
+        shapeFactory: () => new DirectEdgeShape(),
         priorityFn: (): number => 0,
       },
       ports: {
@@ -268,6 +271,7 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addEdge({
       from: sourceParams.overlayId,
       to: targetParams.overlayId,
+      shape: this.params.edgeShapeFactory(this.overlayEdgeId),
     });
   }
 

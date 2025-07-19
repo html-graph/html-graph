@@ -11,7 +11,7 @@ export interface DraggableEdgesConfig {
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly draggingEdgeResolver?: DraggingEdgeResolver;
-  readonly edgeShape?: EdgeShapeConfig;
+  readonly draggingEdgeShape?: EdgeShapeConfig;
   readonly events?: {
     readonly onAfterEdgeReattached?: (edgeId: unknown) => void;
     readonly onEdgeReattachInterrupted?: (

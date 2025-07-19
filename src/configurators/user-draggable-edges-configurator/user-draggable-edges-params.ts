@@ -7,7 +7,7 @@ export interface UserDraggableEdgesParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly draggingEdgeResolver: DraggingEdgeResolver;
-  readonly edgeShapeFactory: EdgeShapeFactory;
+  readonly draggingEdgeShapeFactory: EdgeShapeFactory | null;
   readonly onAfterEdgeReattached: (edgeId: unknown) => void;
   readonly onEdgeReattachInterrupted: (
     staticPortId: unknown,
