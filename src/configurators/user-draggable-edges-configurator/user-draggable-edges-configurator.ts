@@ -7,20 +7,24 @@ import { ViewportStore } from "@/viewport-store";
 import { UserDraggableEdgesError } from "./user-draggable-edges-error";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
-import { createAddNodeOverlayRequest, isPointInside } from "../shared";
+import {
+  createAddNodeOverlayRequest,
+  findPortAtPoint,
+  isPointInside,
+  OverlayId,
+  OverlayNodeParams,
+} from "../shared";
 
 export class UserDraggableEdgesConfigurator {
+  private readonly overlayEdgeId = "edge";
+
   private readonly overlayCanvas: Canvas;
 
   private edgeDragStarted = false;
 
-  private readonly staticOverlayId = "static";
-
-  private readonly draggingOverlayId = "dragging";
-
   private staticPortId: unknown | null = null;
 
-  private isDirect: boolean = true;
+  private isTargetDragging: boolean = true;
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
@@ -266,7 +270,7 @@ export class UserDraggableEdgesConfigurator {
 
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
-    this.isDirect = isTargetDragging;
+    this.isTargetDragging = isTargetDragging;
     const draggingPort = this.canvas.graph.getPort(portId)!;
     const staticPort = this.canvas.graph.getPort(staticPortId)!;
 
@@ -291,27 +295,30 @@ export class UserDraggableEdgesConfigurator {
 
     this.canvas.removeEdge(edgeId);
 
-    this.overlayCanvas.addNode(
-      createAddNodeOverlayRequest({
-        overlayId: this.draggingOverlayId,
-        portCoords: draggingPoint,
-        portDirection: draggingPort.direction,
-      }),
-    );
+    const staticParams: OverlayNodeParams = {
+      overlayId: OverlayId.Static,
+      portCoords: staticPoint,
+      portDirection: staticPort.direction,
+    };
 
-    this.overlayCanvas.addNode(
-      createAddNodeOverlayRequest({
-        overlayId: this.staticOverlayId,
-        portCoords: staticPoint,
-        portDirection: staticPort.direction,
-      }),
-    );
+    const draggingParams: OverlayNodeParams = {
+      overlayId: OverlayId.Dragging,
+      portCoords: draggingPoint,
+      portDirection: draggingPort.direction,
+    };
+
+    const [sourceParams, targetParams] = this.isTargetDragging
+      ? [staticParams, draggingParams]
+      : [draggingParams, staticParams];
+
+    this.overlayCanvas.addNode(createAddNodeOverlayRequest(sourceParams));
+    this.overlayCanvas.addNode(createAddNodeOverlayRequest(targetParams));
 
     // edge shape preprocessor
     this.overlayCanvas.addEdge({
-      id: "edge",
-      from: isSourceDragging ? this.draggingOverlayId : this.staticOverlayId,
-      to: isSourceDragging ? this.staticOverlayId : this.draggingOverlayId,
+      id: this.overlayEdgeId,
+      from: sourceParams.overlayId,
+      to: targetParams.overlayId,
       shape: edge.shape,
     });
 
@@ -334,7 +341,7 @@ export class UserDraggableEdgesConfigurator {
   private resetDragState(): void {
     this.edgeDragStarted = false;
     this.staticPortId = null;
-    this.isDirect = true;
+    this.isTargetDragging = true;
     this.overlayCanvas.clear();
   }
 
@@ -349,24 +356,27 @@ export class UserDraggableEdgesConfigurator {
     const matrix = this.canvas.viewport.getViewportMatrix();
     const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
 
-    this.overlayCanvas.updateNode(this.draggingOverlayId, {
+    this.overlayCanvas.updateNode(OverlayId.Dragging, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const draggingPortId = this.findPortAtPoint(cursor);
+    const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
 
     if (draggingPortId === null) {
-      this.params.onEdgeReattachInterrupted(this.staticPortId, this.isDirect);
+      this.params.onEdgeReattachInterrupted(
+        this.staticPortId,
+        this.isTargetDragging,
+      );
       return;
     }
 
-    const sourceId = this.isDirect ? this.staticPortId : draggingPortId;
-    const targetId = this.isDirect ? draggingPortId : this.staticPortId;
-    const edge = this.overlayCanvas.graph.getEdge("edge")!;
-    this.overlayCanvas.removeEdge("edge");
+    const sourceId = this.isTargetDragging ? this.staticPortId : draggingPortId;
+    const targetId = this.isTargetDragging ? draggingPortId : this.staticPortId;
+    const edge = this.overlayCanvas.graph.getEdge(this.overlayEdgeId)!;
+    this.overlayCanvas.removeEdge(this.overlayEdgeId);
 
     const request: AddEdgeRequest = {
       from: sourceId,
@@ -383,38 +393,5 @@ export class UserDraggableEdgesConfigurator {
     } else {
       this.params.onEdgeReattachPrevented(request);
     }
-  }
-
-  private findPortAtPoint(point: Point): unknown | null {
-    const elements = document.elementsFromPoint(point.x, point.y);
-
-    for (const element of elements) {
-      const draggingPortId = this.findPortAtElement(element);
-
-      if (draggingPortId !== null) {
-        return draggingPortId;
-      }
-    }
-
-    return null;
-  }
-
-  private findPortAtElement(element: Element): unknown | null {
-    let elementBuf: Element | null = element;
-    let draggingPortId: unknown | null = null;
-
-    while (elementBuf !== null) {
-      draggingPortId =
-        this.canvas.graph.getElementPortsIds(elementBuf as HTMLElement)[0] ??
-        null;
-
-      if (draggingPortId !== null) {
-        break;
-      }
-
-      elementBuf = elementBuf.parentElement;
-    }
-
-    return draggingPortId;
   }
 }
