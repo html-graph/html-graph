@@ -22,10 +22,11 @@ export type { BackgroundParams } from "./background-configurator";
 
 export { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
 export type {
-  ConnectionPreprocessor,
   ConnectionTypeResolver,
   UserConnectablePortsParams,
 } from "./user-connectable-ports-configurator";
+
+export type { ConnectionPreprocessor } from "./shared";
 
 export { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 export type {

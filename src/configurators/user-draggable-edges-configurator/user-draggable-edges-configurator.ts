@@ -50,14 +50,16 @@ export class UserDraggableEdgesConfigurator {
 
     this.tryStartEdgeDragging(portId, { x: event.x, y: event.y }, event);
 
-    if (this.edgeDragStarted) {
-      this.window.addEventListener("mousemove", this.onWindowMouseMove, {
-        passive: true,
-      });
-      this.window.addEventListener("mouseup", this.onWindowMouseUp, {
-        passive: true,
-      });
+    if (!this.edgeDragStarted) {
+      return;
     }
+
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
@@ -101,17 +103,19 @@ export class UserDraggableEdgesConfigurator {
       event,
     );
 
-    if (this.edgeDragStarted) {
-      this.window.addEventListener("touchmove", this.onWindowTouchMove, {
-        passive: true,
-      });
-      this.window.addEventListener("touchend", this.onWindowTouchFinish, {
-        passive: true,
-      });
-      this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
-        passive: true,
-      });
+    if (!this.edgeDragStarted) {
+      return;
     }
+
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+    this.window.addEventListener("touchend", this.onWindowTouchFinish, {
+      passive: true,
+    });
+    this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
+      passive: true,
+    });
   };
 
   private readonly onWindowTouchMove = (event: TouchEvent): void => {
@@ -143,6 +147,10 @@ export class UserDraggableEdgesConfigurator {
       const port = this.canvas.graph.getPort(portId)!;
       this.unhookPortEvents(port.element);
     });
+  };
+
+  private readonly onEdgeCreated = (edgeId: unknown): void => {
+    this.params.onAfterEdgeReattached(edgeId);
   };
 
   private readonly onBeforeDestroy = (): void => {
@@ -261,6 +269,7 @@ export class UserDraggableEdgesConfigurator {
     const oppositePortId = isSource ? edge.to : edge.from;
     this.staticPortId = oppositePortId;
     this.isDirect = isTarget;
+    const draggingPort = this.canvas.graph.getPort(portId)!;
     const oppositePort = this.canvas.graph.getPort(oppositePortId)!;
     const portRect = oppositePort.element.getBoundingClientRect();
     const oppositePortX = portRect.x + portRect.width / 2;
@@ -291,7 +300,7 @@ export class UserDraggableEdgesConfigurator {
         {
           id: this.draggingOverlayId,
           element: draggingNodeElement,
-          direction: 0,
+          direction: draggingPort.direction,
         },
       ],
     });
@@ -307,7 +316,7 @@ export class UserDraggableEdgesConfigurator {
         {
           id: this.staticOverlayId,
           element: staticNodeElement,
-          direction: 0,
+          direction: oppositePort.direction,
         },
       ],
     });
@@ -361,12 +370,25 @@ export class UserDraggableEdgesConfigurator {
   private tryCreateConnection(cursor: Point): void {
     const draggingPortId = this.findPortAtPoint(cursor);
 
+    if (draggingPortId === null) {
+      this.params.onEdgeReattachInterrupted(this.staticPortId, this.isDirect);
+      return;
+    }
+
     const sourceId = this.isDirect ? this.staticPortId : draggingPortId;
     const targetId = this.isDirect ? draggingPortId : this.staticPortId;
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 
-    this.canvas.addEdge(request);
+    const processedRequest = this.params.connectionPreprocessor(request);
+
+    if (processedRequest !== null) {
+      this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
+      this.canvas.addEdge(processedRequest);
+      this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeCreated);
+    } else {
+      this.params.onEdgeReattachPrevented(request);
+    }
   }
 
   private findPortAtPoint(point: Point): unknown | null {

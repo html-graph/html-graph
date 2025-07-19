@@ -5,12 +5,16 @@ import {
 import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { EdgeShapeFactory, Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
+import { ConnectionPreprocessor } from "@/configurators";
 
 export const createUserDraggableEdgeParams = (
   config: DraggableEdgesConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   graph: Graph,
 ): UserDraggableEdgesParams => {
+  const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
+    request;
+
   const defaultMouseDownEventVerifier = (event: MouseEvent): boolean =>
     event.button === 0 && event.ctrlKey;
 
@@ -27,15 +31,32 @@ export const createUserDraggableEdgeParams = (
     }
   };
 
+  const defaultOnAfterEdgeReattached: (edgeId: unknown) => void = () => {};
+
+  const defaultOnAfterEdgeReattachPrevented = (): void => {};
+
+  const defaultOnAfterEdgeReattachInterrupted = (): void => {};
+
   return {
+    connectionPreprocessor:
+      config.connectionPreprocessor ?? defaultConnectionPreprocessor,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? defaultMouseDownEventVerifier,
     mouseUpEventVerifier:
       config.mouseUpEventVerifier ?? defaultMouseUpEventVerifier,
-    draggingEdgeResolver: defaultDraggingEdgeResolver,
+    draggingEdgeResolver:
+      config.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
     edgeShapeFactory:
       config.edgeShape !== undefined
         ? resolveEdgeShapeFactory(config.edgeShape)
         : defaultEdgeShapeFactory,
+    onAfterEdgeReattached:
+      config.events?.onAfterEdgeReattached ?? defaultOnAfterEdgeReattached,
+    onEdgeReattachInterrupted:
+      config.events?.onEdgeReattachInterrupted ??
+      defaultOnAfterEdgeReattachInterrupted,
+    onEdgeReattachPrevented:
+      config.events?.onEdgeReattachPrevented ??
+      defaultOnAfterEdgeReattachPrevented,
   };
 };

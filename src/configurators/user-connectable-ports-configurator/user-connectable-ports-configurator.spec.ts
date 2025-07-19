@@ -7,7 +7,7 @@ import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { ConnectionPreprocessor } from "./connection-preprocessor";
+import { ConnectionPreprocessor } from "../shared";
 import { standardCenterFn } from "@/center-fn";
 
 const createCanvas = (options?: {

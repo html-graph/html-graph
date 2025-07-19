@@ -1,6 +1,5 @@
-import { ConnectionPreprocessor } from "./connection-preprocessor";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { MouseEventVerifier } from "../shared";
+import { ConnectionPreprocessor, MouseEventVerifier } from "../shared";
 import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
 
 export interface UserConnectablePortsParams {
