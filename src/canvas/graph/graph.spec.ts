@@ -491,7 +491,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(graph.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
+    expect(graph.getPortOutgoingEdgeIds(addPortRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -571,7 +571,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(graph.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
+    expect(graph.getNodeOutgoingEdgeIds(addNodeRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -625,7 +625,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPortOutcomingEdgeIds("port-1")).toEqual(null);
+    expect(graph.getPortOutgoingEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port cycle edges", () => {
@@ -653,7 +653,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNodeOutcomingEdgeIds("node-1")).toEqual(null);
+    expect(graph.getNodeOutgoingEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node cycle edges", () => {

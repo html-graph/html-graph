@@ -44,7 +44,7 @@ export class UserDraggableEdgesConfigurator {
       this.window,
       {
         mouseDownEventVerifier: this.params.mouseDownEventVerifier,
-        mouseUpEventVerifier: this.params.mouseDownEventVerifier,
+        mouseUpEventVerifier: this.params.mouseUpEventVerifier,
         onStopDrag: () => {
           this.resetDragState();
         },
