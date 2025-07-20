@@ -5,10 +5,7 @@ export interface DraggablePortsParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly onStopDrag: () => void;
-  readonly onPortPointerDown: (
-    clientPoint: Point,
-    element: HTMLElement,
-  ) => boolean;
+  readonly onPortPointerDown: (portId: unknown, clientPoint: Point) => boolean;
   readonly onPointerMove: (clientPoint: Point) => void;
   readonly onPointerUp: (clientPoint: Point) => void;
 }

@@ -26,10 +26,13 @@ export class DraggablePortsConfigurator {
       return;
     }
 
-    const accepted = this.params.onPortPointerDown(
-      { x: event.clientX, y: event.clientY },
-      event.currentTarget as HTMLElement,
-    );
+    const target = event.currentTarget as HTMLElement;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+
+    const accepted = this.params.onPortPointerDown(portId, {
+      x: event.clientX,
+      y: event.clientY,
+    });
 
     if (!accepted) {
       return;
@@ -48,7 +51,7 @@ export class DraggablePortsConfigurator {
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
     const isInside = isPointInside(
       this.window,
-      this.overlayLayer,
+      this.element,
       event.clientX,
       event.clientY,
     );
@@ -76,11 +79,13 @@ export class DraggablePortsConfigurator {
     }
 
     const touch = event.touches[0];
+    const target = event.currentTarget as HTMLElement;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
 
-    const accepted = this.params.onPortPointerDown(
-      { x: touch.clientX, y: touch.clientY },
-      event.currentTarget as HTMLElement,
-    );
+    const accepted = this.params.onPortPointerDown(portId, {
+      x: touch.clientX,
+      y: touch.clientY,
+    });
 
     if (!accepted) {
       return;
@@ -104,7 +109,7 @@ export class DraggablePortsConfigurator {
 
     const isInside = isPointInside(
       this.window,
-      this.overlayLayer,
+      this.element,
       touch.clientX,
       touch.clientY,
     );
@@ -144,7 +149,7 @@ export class DraggablePortsConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    private readonly overlayLayer: HTMLElement,
+    private readonly element: HTMLElement,
     private readonly window: Window,
     private readonly params: DraggablePortsParams,
   ) {
