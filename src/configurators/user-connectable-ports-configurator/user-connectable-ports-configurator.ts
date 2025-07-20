@@ -57,7 +57,7 @@ export class UserConnectablePortsConfigurator {
           return true;
         },
         onPointerMove: (cursor) => {
-          this.moveDraggingNode(cursor);
+          this.moveDraggingPort(cursor);
         },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
@@ -168,7 +168,7 @@ export class UserConnectablePortsConfigurator {
     }
   }
 
-  private moveDraggingNode(dragPoint: Point): void {
+  private moveDraggingPort(dragPoint: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeViewCoords: Point = {
