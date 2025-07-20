@@ -13,6 +13,7 @@ const createCanvas = (options?: {
   element?: HTMLElement;
   onPointerDown?: (portId: unknown, clientPoint: Point) => boolean;
   onPointerMove?: (clientPoint: Point) => void;
+  onPointerUp?: (clientPoint: Point) => void;
   onStopDrag?: () => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
@@ -48,7 +49,7 @@ const createCanvas = (options?: {
   DraggablePortsConfigurator.configure(canvas, element, window, {
     onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
-    onPointerUp: () => {},
+    onPointerUp: options?.onPointerUp ?? ((): void => {}),
     onStopDrag: options?.onStopDrag ?? ((): void => {}),
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ?? ((): boolean => true),
@@ -323,6 +324,53 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onStopDrag).toHaveBeenCalled();
+  });
+
+  it("should call onPointerUp on mouse up", () => {
+    const onPointerUp = jest.fn();
+    const canvas = createCanvas({ onPointerUp });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 100, clientY: 200 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerUp).toHaveBeenCalledWith({ x: 100, y: 200 });
+  });
+
+  it("should  not call onPointerUp when mouse up event verifier fails", () => {
+    const onPointerUp = jest.fn();
+    const canvas = createCanvas({
+      onPointerUp,
+      mouseUpEventVerifier: () => false,
+    });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 100, clientY: 200 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerUp).not.toHaveBeenCalledWith();
   });
 
   it("should call onStopDrag on touch end", () => {

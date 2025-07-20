@@ -161,11 +161,11 @@ export class DraggablePortsConfigurator {
 
   public static configure(
     canvas: Canvas,
-    overlayLayer: HTMLElement,
+    element: HTMLElement,
     win: Window,
     params: DraggablePortsParams,
   ): void {
-    new DraggablePortsConfigurator(canvas, overlayLayer, win, params);
+    new DraggablePortsConfigurator(canvas, element, win, params);
   }
 
   private hookPortEvents(element: HTMLElement): void {
