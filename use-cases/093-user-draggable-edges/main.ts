@@ -20,6 +20,34 @@ const canvas: Canvas = builder
   .setDefaults(defaults)
   .enableUserDraggableEdges({
     mouseDownEventVerifier: (event) => event.button === 0,
+    connectionPreprocessor: (request) => {
+      if (
+        `${request.from}`.endsWith("-out") &&
+        `${request.to}`.endsWith("-in")
+      ) {
+        return request;
+      }
+
+      return null;
+    },
+    events: {
+      onEdgeReattachPrevented: (edge) => {
+        canvas.addEdge({
+          from: edge.from,
+          to: edge.to,
+          shape: edge.shape,
+          priority: edge.priority,
+        });
+      },
+      onEdgeReattachInterrupted: (edge) => {
+        canvas.addEdge({
+          from: edge.from,
+          to: edge.to,
+          shape: edge.shape,
+          priority: edge.priority,
+        });
+      },
+    },
   })
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()

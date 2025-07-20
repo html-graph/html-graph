@@ -20,8 +20,6 @@ export class UserDraggableEdgesConfigurator {
 
   private staticPortId: unknown | null = null;
 
-  private draggingPortId: unknown | null = null;
-
   private isTargetDragging: boolean = true;
 
   private draggingEdge: GraphEdge | null = null;
@@ -243,7 +241,6 @@ export class UserDraggableEdgesConfigurator {
 
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
-    this.draggingPortId = isSourceDragging ? edge.from : edge.to;
     this.isTargetDragging = isTargetDragging;
     const draggingPort = this.canvas.graph.getPort(portId)!;
     const staticPort = this.canvas.graph.getPort(staticPortId)!;
@@ -321,7 +318,6 @@ export class UserDraggableEdgesConfigurator {
     this.edgeDragStarted = false;
     this.draggingEdge = null;
     this.staticPortId = null;
-    this.draggingPortId = null;
     this.isTargetDragging = true;
     this.overlayCanvas.clear();
   }
@@ -345,22 +341,12 @@ export class UserDraggableEdgesConfigurator {
 
   private tryCreateConnection(cursor: Point): void {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
+    this.overlayCanvas.removeEdge(OverlayId.Edge);
 
     if (draggingPortId === null) {
-      const [from, to] = this.isTargetDragging
-        ? [this.staticPortId!, this.draggingPortId!]
-        : [this.draggingPortId!, this.staticPortId!];
-
-      this.params.onEdgeReattachInterrupted({
-        from,
-        to,
-        shape: this.draggingEdge!.shape,
-        priority: this.draggingEdge!.priority,
-      });
+      this.params.onEdgeReattachInterrupted(this.draggingEdge!);
       return;
     }
-
-    this.overlayCanvas.removeEdge(OverlayId.Edge);
 
     const [from, to] = this.isTargetDragging
       ? [this.staticPortId!, draggingPortId!]
@@ -380,7 +366,7 @@ export class UserDraggableEdgesConfigurator {
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeReattached);
     } else {
-      this.params.onEdgeReattachPrevented(request);
+      this.params.onEdgeReattachPrevented(this.draggingEdge!);
     }
   }
 }

@@ -167,7 +167,12 @@ describe("createUserDraggableEdgeParams", () => {
     const options = createUserDraggableEdgeParams({}, createCanvas().graph);
 
     expect(() => {
-      options.onEdgeReattachPrevented({ from: "123", to: "456" });
+      options.onEdgeReattachPrevented({
+        from: "123",
+        to: "456",
+        shape: new BezierEdgeShape(),
+        priority: 0,
+      });
     }).not.toThrow();
   });
 
