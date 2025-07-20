@@ -1,7 +1,6 @@
-import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
+import { AddEdgeRequest, EdgeShapeFactory, GraphEdge } from "@/canvas";
 import { ConnectionPreprocessor, MouseEventVerifier } from "../shared";
 import { DraggingEdgeResolver } from "./dragging-edge-resolver";
-import { DraggingEdgeReattachInterruptedPayload } from "./dragging-edge-reattach-interrupted-payload";
 
 export interface UserDraggableEdgesParams {
   readonly connectionPreprocessor: ConnectionPreprocessor;
@@ -10,8 +9,6 @@ export interface UserDraggableEdgesParams {
   readonly draggingEdgeResolver: DraggingEdgeResolver;
   readonly draggingEdgeShapeFactory: EdgeShapeFactory | null;
   readonly onAfterEdgeReattached: (edgeId: unknown) => void;
-  readonly onEdgeReattachInterrupted: (
-    payload: DraggingEdgeReattachInterruptedPayload,
-  ) => void;
+  readonly onEdgeReattachInterrupted: (edge: GraphEdge) => void;
   readonly onEdgeReattachPrevented: (request: AddEdgeRequest) => void;
 }

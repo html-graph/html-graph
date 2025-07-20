@@ -144,10 +144,10 @@ describe("createUserDraggableEdgeParams", () => {
 
     expect(() => {
       options.onEdgeReattachInterrupted({
-        staticPortId: "1",
-        draggingPortId: "2",
+        from: "1",
+        to: "2",
         shape: new BezierEdgeShape(),
-        isTargetDragging: true,
+        priority: 0,
       });
     }).not.toThrow();
   });

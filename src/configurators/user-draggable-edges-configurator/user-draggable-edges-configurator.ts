@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas } from "@/canvas";
+import { AddEdgeRequest, Canvas, GraphEdge } from "@/canvas";
 import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
 import { UserDraggableEdgesError } from "./user-draggable-edges-error";
@@ -12,7 +12,6 @@ import {
   OverlayId,
   OverlayNodeParams,
 } from "../shared";
-import { EdgeShape } from "@/edges";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -25,7 +24,7 @@ export class UserDraggableEdgesConfigurator {
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdgeShape: EdgeShape | null = null;
+  private draggingEdge: GraphEdge | null = null;
 
   private readonly onAfterPortMarked = (portId: unknown): void => {
     const port = this.canvas.graph.getPort(portId)!;
@@ -290,7 +289,7 @@ export class UserDraggableEdgesConfigurator {
 
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(sourceParams));
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(targetParams));
-    this.draggingEdgeShape = edge.shape;
+    this.draggingEdge = edge;
 
     const overlayEdgeShape =
       this.params.draggingEdgeShapeFactory !== null
@@ -322,7 +321,7 @@ export class UserDraggableEdgesConfigurator {
 
   private resetDragState(): void {
     this.edgeDragStarted = false;
-    this.draggingEdgeShape = null;
+    this.draggingEdge = null;
     this.staticPortId = null;
     this.draggingPortId = null;
     this.isTargetDragging = true;
@@ -350,11 +349,12 @@ export class UserDraggableEdgesConfigurator {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
 
     if (draggingPortId === null) {
+      // replace from/to
       this.params.onEdgeReattachInterrupted({
-        staticPortId: this.staticPortId!,
-        draggingPortId: this.draggingPortId!,
-        shape: this.draggingEdgeShape!,
-        isTargetDragging: this.isTargetDragging,
+        from: this.isTargetDragging ? this.staticPortId! : this.draggingPortId!,
+        to: this.isTargetDragging ? this.draggingPortId! : this.staticPortId!,
+        shape: this.draggingEdge!.shape,
+        priority: 0,
       });
       return;
     }
@@ -367,7 +367,8 @@ export class UserDraggableEdgesConfigurator {
     const request: AddEdgeRequest = {
       from: sourceId,
       to: targetId,
-      shape: this.draggingEdgeShape!,
+      shape: this.draggingEdge!.shape,
+      priority: this.draggingEdge!.priority,
     };
 
     const processedRequest = this.params.connectionPreprocessor(request);

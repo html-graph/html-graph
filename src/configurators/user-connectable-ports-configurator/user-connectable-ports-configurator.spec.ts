@@ -30,14 +30,14 @@ const createCanvas = (options?: {
   const canvasParams: CanvasParams = {
     nodes: {
       centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
+      priorityFn: () => 0,
     },
     ports: {
       direction: 0,
     },
     edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
+      shapeFactory: () => new BezierEdgeShape(),
+      priorityFn: () => 0,
     },
   };
 
