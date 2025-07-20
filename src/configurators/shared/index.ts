@@ -6,3 +6,4 @@ export { createAddNodeOverlayRequest } from "./create-add-node-overlay-request";
 export type { OverlayNodeParams } from "./create-add-node-overlay-request";
 export { findPortAtPoint } from "./find-point-at-point";
 export { OverlayId } from "./overlay-id";
+export { createOverlayCanvas } from "./create-overlay-canvas";

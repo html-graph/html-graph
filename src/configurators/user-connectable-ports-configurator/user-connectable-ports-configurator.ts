@@ -1,9 +1,8 @@
-import { AddEdgeRequest, Canvas, CanvasParams } from "@/canvas";
-import { GraphStore } from "@/graph-store";
-import { CoreHtmlView } from "@/html-view";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { ViewportStore } from "@/viewport-store";
 import {
   createAddNodeOverlayRequest,
+  createOverlayCanvas,
   findPortAtPoint,
   isPointInside,
   OverlayId,
@@ -11,9 +10,7 @@ import {
 } from "../shared";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
-import { standardCenterFn } from "@/center-fn";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
-import { DirectEdgeShape } from "@/edges";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -171,34 +168,9 @@ export class UserConnectablePortsConfigurator {
     private readonly window: Window,
     private readonly params: UserConnectablePortsParams,
   ) {
-    const graphStore = new GraphStore();
-
-    const htmlView = new CoreHtmlView(
-      graphStore,
-      this.viewportStore,
+    this.overlayCanvas = createOverlayCanvas(
       this.overlayLayer,
-    );
-
-    const defaults: CanvasParams = {
-      nodes: {
-        centerFn: standardCenterFn,
-        priorityFn: (): number => 0,
-      },
-      edges: {
-        shapeFactory: () => new DirectEdgeShape(),
-        priorityFn: (): number => 0,
-      },
-      ports: {
-        direction: 0,
-      },
-    };
-
-    this.overlayCanvas = new Canvas(
-      this.overlayLayer,
-      graphStore,
       this.viewportStore,
-      htmlView,
-      defaults,
     );
 
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);

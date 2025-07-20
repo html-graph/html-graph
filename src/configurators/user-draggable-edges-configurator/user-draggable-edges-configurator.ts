@@ -1,20 +1,18 @@
-import { AddEdgeRequest, Canvas, CanvasParams } from "@/canvas";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
-import { GraphStore } from "@/graph-store";
-import { CoreHtmlView } from "@/html-view";
-import { standardCenterFn } from "@/center-fn";
 import { ViewportStore } from "@/viewport-store";
 import { UserDraggableEdgesError } from "./user-draggable-edges-error";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import {
   createAddNodeOverlayRequest,
+  createOverlayCanvas,
   findPortAtPoint,
   isPointInside,
   OverlayId,
   OverlayNodeParams,
 } from "../shared";
-import { DirectEdgeShape, EdgeShape } from "@/edges";
+import { EdgeShape } from "@/edges";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayEdgeId = "edge";
@@ -176,34 +174,9 @@ export class UserDraggableEdgesConfigurator {
     private readonly window: Window,
     private readonly params: UserDraggableEdgesParams,
   ) {
-    const graphStore = new GraphStore();
-
-    const htmlView = new CoreHtmlView(
-      graphStore,
-      this.viewportStore,
+    this.overlayCanvas = createOverlayCanvas(
       this.overlayLayer,
-    );
-
-    const defaults: CanvasParams = {
-      nodes: {
-        centerFn: standardCenterFn,
-        priorityFn: (): number => 0,
-      },
-      edges: {
-        shapeFactory: () => new DirectEdgeShape(),
-        priorityFn: (): number => 0,
-      },
-      ports: {
-        direction: 0,
-      },
-    };
-
-    this.overlayCanvas = new Canvas(
-      this.overlayLayer,
-      graphStore,
       this.viewportStore,
-      htmlView,
-      defaults,
     );
 
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
