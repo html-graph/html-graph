@@ -81,7 +81,6 @@ export class Graph {
     return this.graphStore.getElementNodeId(element) ?? null;
   }
 
-  // TODO: use Set in v4
   public getAllNodeIds(): readonly unknown[] {
     return this.graphStore.getAllNodeIds();
   }
@@ -100,17 +99,14 @@ export class Graph {
     };
   }
 
-  // TODO: use Set in v4
   public getAllPortIds(): readonly unknown[] {
     return this.graphStore.getAllPortIds();
   }
 
-  // TODO: use Set in v4
   public getNodePortIds(nodeId: unknown): readonly unknown[] | null {
     return this.graphStore.getNodePortIds(nodeId) ?? null;
   }
 
-  // TODO: use Set in v4
   public getElementPortIds(element: HTMLElement): readonly unknown[] {
     return [...this.graphStore.getElementPortIds(element)];
   }
@@ -123,7 +119,6 @@ export class Graph {
     return this.getElementPortIds(element);
   }
 
-  // TODO: use Set in v4
   public getAllEdgeIds(): readonly unknown[] {
     return this.graphStore.getAllEdgeIds();
   }
@@ -143,7 +138,6 @@ export class Graph {
     };
   }
 
-  // TODO: use Set in v4
   public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
@@ -152,7 +146,6 @@ export class Graph {
     return this.graphStore.getPortIncomingEdgeIds(portId);
   }
 
-  // TODO: use Set in v4
   public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
@@ -161,7 +154,6 @@ export class Graph {
     return this.graphStore.getPortOutcomingEdgeIds(portId);
   }
 
-  // TODO: use Set in v4
   public getPortCycleEdgeIds(portId: unknown): readonly unknown[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
@@ -170,7 +162,6 @@ export class Graph {
     return this.graphStore.getPortCycleEdgeIds(portId);
   }
 
-  // TODO: use Set in v4
   public getPortAdjacentEdgeIds(portId: unknown): readonly unknown[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
@@ -179,7 +170,6 @@ export class Graph {
     return this.graphStore.getPortAdjacentEdgeIds(portId);
   }
 
-  // TODO: use Set in v4
   public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
@@ -188,7 +178,6 @@ export class Graph {
     return this.graphStore.getNodeIncomingEdgeIds(nodeId);
   }
 
-  // TODO: use Set in v4
   public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
@@ -197,7 +186,6 @@ export class Graph {
     return this.graphStore.getNodeOutcomingEdgeIds(nodeId);
   }
 
-  // TODO: use Set in v4
   public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
@@ -206,7 +194,6 @@ export class Graph {
     return this.graphStore.getNodeCycleEdgeIds(nodeId);
   }
 
-  // TODO: use Set in v4
   public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;

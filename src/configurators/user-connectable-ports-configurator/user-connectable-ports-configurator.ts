@@ -15,8 +15,6 @@ import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private readonly overlayEdgeId = "edge";
-
   private staticPortId: unknown | null = null;
 
   private isTargetDragging: boolean = true;
@@ -41,10 +39,11 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onPortMouseDown = (event: MouseEvent): void => {
     const target = event.currentTarget as HTMLElement;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+    const connectionType = this.params.connectionTypeResolver(portId);
 
     const isValidEvent =
-      this.params.mouseDownEventVerifier(event) &&
-      this.isPortConnectionAllowed(target);
+      this.params.mouseDownEventVerifier(event) && connectionType !== null;
 
     if (!isValidEvent) {
       return;
@@ -52,7 +51,11 @@ export class UserConnectablePortsConfigurator {
 
     event.stopPropagation();
 
-    this.grabPort(target, { x: event.clientX, y: event.clientY });
+    this.grabPort(
+      portId,
+      { x: event.clientX, y: event.clientY },
+      connectionType,
+    );
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
@@ -89,9 +92,10 @@ export class UserConnectablePortsConfigurator {
 
   private readonly onPortTouchStart = (event: TouchEvent): void => {
     const target = event.currentTarget as HTMLElement;
+    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+    const connectionType = this.params.connectionTypeResolver(portId);
 
-    const isValidEvent =
-      event.touches.length === 1 && this.isPortConnectionAllowed(target);
+    const isValidEvent = event.touches.length === 1 && connectionType !== null;
 
     if (!isValidEvent) {
       return;
@@ -101,7 +105,11 @@ export class UserConnectablePortsConfigurator {
 
     const touch = event.touches[0];
 
-    this.grabPort(target, { x: touch.clientX, y: touch.clientY });
+    this.grabPort(
+      portId,
+      { x: touch.clientX, y: touch.clientY },
+      connectionType,
+    );
 
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
@@ -195,15 +203,16 @@ export class UserConnectablePortsConfigurator {
     );
   }
 
-  private grabPort(portElement: HTMLElement, cursor: Point): void {
-    const portId = this.canvas.graph.getElementPortIds(portElement)[0]!;
+  private grabPort(
+    portId: unknown,
+    cursor: Point,
+    connectionType: "direct" | "reverse",
+  ): void {
     const port = this.canvas.graph.getPort(portId)!;
 
     this.staticPortId = portId;
 
-    const portType = this.params.connectionTypeResolver(this.staticPortId);
-
-    const portRect = portElement.getBoundingClientRect();
+    const portRect = port.element.getBoundingClientRect();
     const portX = portRect.x + portRect.width / 2;
     const portY = portRect.y + portRect.height / 2;
 
@@ -232,7 +241,7 @@ export class UserConnectablePortsConfigurator {
       portDirection: this.params.dragPortDirection,
     };
 
-    this.isTargetDragging = portType === "direct";
+    this.isTargetDragging = connectionType === "direct";
 
     const [sourceParams, targetParams] = this.isTargetDragging
       ? [staticParams, draggingParams]
@@ -243,7 +252,7 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addEdge({
       from: sourceParams.overlayId,
       to: targetParams.overlayId,
-      shape: this.params.edgeShapeFactory(this.overlayEdgeId),
+      shape: this.params.edgeShapeFactory(OverlayId.Edge),
     });
   }
 
@@ -322,11 +331,5 @@ export class UserConnectablePortsConfigurator {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });
-  }
-
-  private isPortConnectionAllowed(portElement: HTMLElement): boolean {
-    const portId = this.canvas.graph.getElementPortIds(portElement)[0]!;
-
-    return this.params.connectionTypeResolver(portId) !== null;
   }
 }

@@ -15,8 +15,6 @@ import {
 import { EdgeShape } from "@/edges";
 
 export class UserDraggableEdgesConfigurator {
-  private readonly overlayEdgeId = "edge";
-
   private readonly overlayCanvas: Canvas;
 
   private edgeDragStarted = false;
@@ -296,11 +294,11 @@ export class UserDraggableEdgesConfigurator {
 
     const overlayEdgeShape =
       this.params.draggingEdgeShapeFactory !== null
-        ? this.params.draggingEdgeShapeFactory(this.overlayEdgeId)
+        ? this.params.draggingEdgeShapeFactory(OverlayId.Edge)
         : edge.shape;
 
     this.overlayCanvas.addEdge({
-      id: this.overlayEdgeId,
+      id: OverlayId.Edge,
       from: sourceParams.overlayId,
       to: targetParams.overlayId,
       shape: overlayEdgeShape,
@@ -364,7 +362,7 @@ export class UserDraggableEdgesConfigurator {
     const sourceId = this.isTargetDragging ? this.staticPortId : draggingPortId;
     const targetId = this.isTargetDragging ? draggingPortId : this.staticPortId;
 
-    this.overlayCanvas.removeEdge(this.overlayEdgeId);
+    this.overlayCanvas.removeEdge(OverlayId.Edge);
 
     const request: AddEdgeRequest = {
       from: sourceId,
