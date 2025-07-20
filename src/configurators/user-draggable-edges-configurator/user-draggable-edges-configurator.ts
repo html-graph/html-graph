@@ -16,8 +16,6 @@ import { DraggablePortsConfigurator } from "../draggable-ports-configurator";
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private edgeDragStarted = false;
-
   private staticPortId: unknown | null = null;
 
   private isTargetDragging: boolean = true;
@@ -51,13 +49,7 @@ export class UserDraggableEdgesConfigurator {
           this.resetDragState();
         },
         onPortPointerDown: (portId, cursor) => {
-          this.tryStartEdgeDragging(portId, cursor);
-
-          if (!this.edgeDragStarted) {
-            return false;
-          }
-
-          return true;
+          return this.tryStartEdgeDragging(portId, cursor);
         },
         onPointerMove: (cursor) => {
           this.moveDraggingPort(cursor);
@@ -85,18 +77,17 @@ export class UserDraggableEdgesConfigurator {
     );
   }
 
-  private tryStartEdgeDragging(portId: unknown, cursor: Point): void {
-    this.edgeDragStarted = false;
+  private tryStartEdgeDragging(portId: unknown, cursor: Point): boolean {
     const edgeId = this.params.draggingEdgeResolver(portId);
 
     if (edgeId === null) {
-      return;
+      return false;
     }
 
     const edge = this.canvas.graph.getEdge(edgeId);
 
     if (edge === null) {
-      return;
+      return false;
     }
 
     const isSourceDragging = portId === edge.from;
@@ -167,11 +158,10 @@ export class UserDraggableEdgesConfigurator {
       shape: overlayEdgeShape,
     });
 
-    this.edgeDragStarted = true;
+    return true;
   }
 
   private resetDragState(): void {
-    this.edgeDragStarted = false;
     this.draggingEdge = null;
     this.staticPortId = null;
     this.isTargetDragging = true;
