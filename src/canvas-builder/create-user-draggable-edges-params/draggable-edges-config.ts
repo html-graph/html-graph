@@ -1,5 +1,6 @@
 import {
   ConnectionPreprocessor,
+  DraggingEdgeReattachInterruptedPayload,
   DraggingEdgeResolver,
   MouseEventVerifier,
 } from "@/configurators";
@@ -15,8 +16,7 @@ export interface DraggableEdgesConfig {
   readonly events?: {
     readonly onAfterEdgeReattached?: (edgeId: unknown) => void;
     readonly onEdgeReattachInterrupted?: (
-      staticPortId: unknown,
-      isDirect: boolean,
+      payload: DraggingEdgeReattachInterruptedPayload,
     ) => void;
     readonly onEdgeReattachPrevented?: (request: AddEdgeRequest) => void;
   };

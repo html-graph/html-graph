@@ -23,6 +23,8 @@ export class UserDraggableEdgesConfigurator {
 
   private staticPortId: unknown | null = null;
 
+  private draggingPortId: unknown | null = null;
+
   private isTargetDragging: boolean = true;
 
   private draggingEdgeShape: EdgeShape | null = null;
@@ -246,6 +248,7 @@ export class UserDraggableEdgesConfigurator {
 
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
+    this.draggingPortId = isSourceDragging ? edge.from : edge.to;
     this.isTargetDragging = isTargetDragging;
     const draggingPort = this.canvas.graph.getPort(portId)!;
     const staticPort = this.canvas.graph.getPort(staticPortId)!;
@@ -323,6 +326,7 @@ export class UserDraggableEdgesConfigurator {
     this.edgeDragStarted = false;
     this.draggingEdgeShape = null;
     this.staticPortId = null;
+    this.draggingPortId = null;
     this.isTargetDragging = true;
     this.overlayCanvas.clear();
   }
@@ -348,10 +352,12 @@ export class UserDraggableEdgesConfigurator {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
 
     if (draggingPortId === null) {
-      this.params.onEdgeReattachInterrupted(
-        this.staticPortId,
-        this.isTargetDragging,
-      );
+      this.params.onEdgeReattachInterrupted({
+        staticPortId: this.staticPortId!,
+        draggingPortId: this.draggingPortId!,
+        shape: this.draggingEdgeShape!,
+        isTargetDragging: this.isTargetDragging,
+      });
       return;
     }
 

@@ -32,6 +32,7 @@ export { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configura
 export type {
   UserDraggableEdgesParams,
   DraggingEdgeResolver,
+  DraggingEdgeReattachInterruptedPayload,
 } from "./user-draggable-edges-configurator";
 
 export type { MouseEventVerifier } from "./shared";

@@ -143,7 +143,12 @@ describe("createUserDraggableEdgeParams", () => {
     const options = createUserDraggableEdgeParams({}, createCanvas().graph);
 
     expect(() => {
-      options.onEdgeReattachInterrupted("123", true);
+      options.onEdgeReattachInterrupted({
+        staticPortId: "1",
+        draggingPortId: "2",
+        shape: new BezierEdgeShape(),
+        isTargetDragging: true,
+      });
     }).not.toThrow();
   });
 

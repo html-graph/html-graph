@@ -53,6 +53,7 @@ export type {
   ConnectionTypeResolver,
   MouseEventVerifier,
   DraggingEdgeResolver,
+  DraggingEdgeReattachInterruptedPayload,
 } from "./configurators";
 
 export {

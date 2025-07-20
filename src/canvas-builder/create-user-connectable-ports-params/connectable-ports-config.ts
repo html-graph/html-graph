@@ -15,6 +15,7 @@ export interface ConnectablePortsConfig {
   readonly dragPortDirection?: number | undefined;
   readonly events?: {
     readonly onAfterEdgeCreated?: (edgeId: unknown) => void;
+    // TODO: make params object
     readonly onEdgeCreationInterrupted?: (
       staticPortId: unknown,
       isDirect: boolean,
