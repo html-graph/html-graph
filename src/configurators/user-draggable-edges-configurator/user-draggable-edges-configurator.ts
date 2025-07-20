@@ -51,11 +51,13 @@ export class UserDraggableEdgesConfigurator {
     const portId = this.canvas.graph.getElementPortIds(target)[0]!;
     const clientPoint: Point = { x: event.clientX, y: event.clientY };
 
-    this.tryStartEdgeDragging(portId, clientPoint, event);
+    this.tryStartEdgeDragging(portId, clientPoint);
 
     if (!this.edgeDragStarted) {
       return;
     }
+
+    event.stopPropagation();
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
@@ -101,11 +103,13 @@ export class UserDraggableEdgesConfigurator {
     const touch = event.touches[0];
     const clientPoint: Point = { x: touch.clientX, y: touch.clientY };
 
-    this.tryStartEdgeDragging(portId, clientPoint, event);
+    this.tryStartEdgeDragging(portId, clientPoint);
 
     if (!this.edgeDragStarted) {
       return;
     }
+
+    event.stopPropagation();
 
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
@@ -154,6 +158,9 @@ export class UserDraggableEdgesConfigurator {
   };
 
   private readonly onBeforeDestroy = (): void => {
+    this.stopMouseDrag();
+    this.stopTouchDrag();
+
     this.canvas.graph.onAfterPortMarked.unsubscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.unsubscribe(
       this.onBeforePortUnmarked,
@@ -210,11 +217,7 @@ export class UserDraggableEdgesConfigurator {
     element.removeEventListener("touchstart", this.onPortTouchStart);
   }
 
-  private tryStartEdgeDragging(
-    portId: unknown,
-    cursor: Point,
-    event: Event,
-  ): void {
+  private tryStartEdgeDragging(portId: unknown, cursor: Point): void {
     this.edgeDragStarted = false;
     const edgeId = this.params.draggingEdgeResolver(portId);
 
@@ -236,8 +239,6 @@ export class UserDraggableEdgesConfigurator {
         `failed to grab the edge with id of ${edgeId} because it is not adjacent to the port with id of ${portId}`,
       );
     }
-
-    event.stopPropagation();
 
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
