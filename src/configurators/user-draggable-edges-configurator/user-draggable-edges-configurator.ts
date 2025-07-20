@@ -51,8 +51,9 @@ export class UserDraggableEdgesConfigurator {
 
     const target = event.currentTarget as HTMLElement;
     const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+    const clientPoint: Point = { x: event.clientX, y: event.clientY };
 
-    this.tryStartEdgeDragging(portId, { x: event.x, y: event.y }, event);
+    this.tryStartEdgeDragging(portId, clientPoint, event);
 
     if (!this.edgeDragStarted) {
       return;
@@ -100,12 +101,9 @@ export class UserDraggableEdgesConfigurator {
     const portId = this.canvas.graph.getElementPortIds(target)[0]!;
 
     const touch = event.touches[0];
+    const clientPoint: Point = { x: touch.clientX, y: touch.clientY };
 
-    this.tryStartEdgeDragging(
-      portId,
-      { x: touch.clientX, y: touch.clientY },
-      event,
-    );
+    this.tryStartEdgeDragging(portId, clientPoint, event);
 
     if (!this.edgeDragStarted) {
       return;
@@ -269,6 +267,7 @@ export class UserDraggableEdgesConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
+    this.draggingEdge = edge;
     this.canvas.removeEdge(edgeId);
 
     const staticParams: OverlayNodeParams = {
@@ -289,7 +288,6 @@ export class UserDraggableEdgesConfigurator {
 
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(sourceParams));
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(targetParams));
-    this.draggingEdge = edge;
 
     const overlayEdgeShape =
       this.params.draggingEdgeShapeFactory !== null
@@ -349,24 +347,28 @@ export class UserDraggableEdgesConfigurator {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
 
     if (draggingPortId === null) {
-      // replace from/to
+      const [from, to] = this.isTargetDragging
+        ? [this.staticPortId!, this.draggingPortId!]
+        : [this.draggingPortId!, this.staticPortId!];
+
       this.params.onEdgeReattachInterrupted({
-        from: this.isTargetDragging ? this.staticPortId! : this.draggingPortId!,
-        to: this.isTargetDragging ? this.draggingPortId! : this.staticPortId!,
+        from,
+        to,
         shape: this.draggingEdge!.shape,
-        priority: 0,
+        priority: this.draggingEdge!.priority,
       });
       return;
     }
 
-    const sourceId = this.isTargetDragging ? this.staticPortId : draggingPortId;
-    const targetId = this.isTargetDragging ? draggingPortId : this.staticPortId;
-
     this.overlayCanvas.removeEdge(OverlayId.Edge);
 
+    const [from, to] = this.isTargetDragging
+      ? [this.staticPortId!, draggingPortId!]
+      : [draggingPortId!, this.staticPortId!];
+
     const request: AddEdgeRequest = {
-      from: sourceId,
-      to: targetId,
+      from,
+      to,
       shape: this.draggingEdge!.shape,
       priority: this.draggingEdge!.priority,
     };

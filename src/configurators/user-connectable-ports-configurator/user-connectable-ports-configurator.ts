@@ -51,11 +51,9 @@ export class UserConnectablePortsConfigurator {
 
     event.stopPropagation();
 
-    this.grabPort(
-      portId,
-      { x: event.clientX, y: event.clientY },
-      connectionType,
-    );
+    const clientPoint: Point = { x: event.clientX, y: event.clientY };
+
+    this.grabPort(portId, clientPoint, connectionType);
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
@@ -104,12 +102,9 @@ export class UserConnectablePortsConfigurator {
     event.stopPropagation();
 
     const touch = event.touches[0];
+    const clientPoint: Point = { x: touch.clientX, y: touch.clientY };
 
-    this.grabPort(
-      portId,
-      { x: touch.clientX, y: touch.clientY },
-      connectionType,
-    );
+    this.grabPort(portId, clientPoint, connectionType);
 
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
