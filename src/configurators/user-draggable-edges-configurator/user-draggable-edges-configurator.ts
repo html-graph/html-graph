@@ -195,8 +195,8 @@ export class UserDraggableEdgesConfigurator {
     }
 
     const [from, to] = this.isTargetDragging
-      ? [this.staticPortId!, draggingPortId!]
-      : [draggingPortId!, this.staticPortId!];
+      ? [this.staticPortId!, draggingPortId]
+      : [draggingPortId, this.staticPortId!];
 
     const request: AddEdgeRequest = {
       from,

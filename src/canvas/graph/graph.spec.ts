@@ -475,7 +475,7 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return specified port outcoming edge ids", () => {
+  it("should return specified port outgoing edge ids", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
@@ -492,6 +492,27 @@ describe("Graph", () => {
     store.addEdge(addEdgeRequest12);
 
     expect(graph.getPortOutgoingEdgeIds(addPortRequest1.id)).toEqual([
+      addEdgeRequest12.id,
+    ]);
+  });
+
+  it("should return legacy specified port outgoing edge ids", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    expect(graph.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -555,7 +576,7 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return specified node outcoming edge ids", () => {
+  it("should return specified node outgoing edge ids", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
@@ -572,6 +593,27 @@ describe("Graph", () => {
     store.addEdge(addEdgeRequest12);
 
     expect(graph.getNodeOutgoingEdgeIds(addNodeRequest1.id)).toEqual([
+      addEdgeRequest12.id,
+    ]);
+  });
+
+  it("should return legacy specified node outgoing edge ids", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    expect(graph.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -621,7 +663,7 @@ describe("Graph", () => {
     expect(graph.getPortIncomingEdgeIds("port-1")).toEqual(null);
   });
 
-  it("should return null when accessing non-existing port outcoming edges", () => {
+  it("should return null when accessing non-existing port outgoing edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
@@ -649,7 +691,7 @@ describe("Graph", () => {
     expect(graph.getNodeIncomingEdgeIds("node-1")).toEqual(null);
   });
 
-  it("should return null when accessing non-existing node outcoming edges", () => {
+  it("should return null when accessing non-existing node outgoing edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 

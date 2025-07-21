@@ -702,7 +702,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(store.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
+    expect(store.getPortOutgoingEdgeIds(addPortRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -808,7 +808,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(store.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
+    expect(store.getNodeOutgoingEdgeIds(addNodeRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });

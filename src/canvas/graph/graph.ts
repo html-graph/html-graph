@@ -151,7 +151,7 @@ export class Graph {
       return null;
     }
 
-    return this.graphStore.getPortOutcomingEdgeIds(portId);
+    return this.graphStore.getPortOutgoingEdgeIds(portId);
   }
 
   /**
@@ -191,7 +191,7 @@ export class Graph {
       return null;
     }
 
-    return this.graphStore.getNodeOutcomingEdgeIds(nodeId);
+    return this.graphStore.getNodeOutgoingEdgeIds(nodeId);
   }
 
   /**
