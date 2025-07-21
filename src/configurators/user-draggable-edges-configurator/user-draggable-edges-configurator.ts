@@ -169,6 +169,7 @@ export class UserDraggableEdgesConfigurator {
   }
 
   private moveDraggingPort(dragPoint: Point): void {
+    // calculate port center
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeViewCoords: Point = {
