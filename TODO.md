@@ -7,7 +7,6 @@
 
 - horizontal and vertical edges detour parallel
 
-
 - remove onBeforeViewportUpdated
 
 V4
