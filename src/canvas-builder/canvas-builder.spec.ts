@@ -320,4 +320,77 @@ describe("CanvasBuilder", () => {
 
     expect(canvas.graph.getAllEdgeIds().length).toBe(1);
   });
+
+  it("should build canvas with user draggable edges", () => {
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
+    document.body.appendChild(canvasElement);
+
+    const canvas = builder.enableUserDraggableEdges().build();
+
+    setLayersDimensions(canvasElement);
+
+    const sourcePortElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+
+    const sourceNodeElement = document.createElement("div");
+    sourceNodeElement.appendChild(sourcePortElement);
+
+    canvas.addNode({
+      element: sourceNodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: sourcePortElement,
+        },
+      ],
+    });
+
+    const targetPortElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+
+    const targetNodeElement = document.createElement("div");
+    targetNodeElement.appendChild(targetPortElement);
+
+    canvas.addNode({
+      element: targetNodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: targetPortElement,
+        },
+      ],
+    });
+
+    const shape = new BezierEdgeShape();
+
+    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2", shape });
+
+    sourcePortElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0, ctrlKey: true }),
+    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(canvas.graph.getEdge(0)).toEqual({
+      from: "port-2",
+      to: "port-2",
+      priority: 0,
+      shape,
+    });
+  });
 });

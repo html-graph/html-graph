@@ -111,6 +111,7 @@ const createGraph = (
   params?: {
     portElement1?: HTMLElement;
     portElement2?: HTMLElement;
+    portElement3?: HTMLElement;
     edgeShape?: EdgeShape;
   },
 ): void => {
@@ -119,6 +120,9 @@ const createGraph = (
 
   const portElement2 = params?.portElement2 ?? document.createElement("div");
   createNode(canvas, portElement2, "node-2-1");
+
+  const portElement3 = params?.portElement3 ?? document.createElement("div");
+  createNode(canvas, portElement3, "node-3-1");
 
   canvas.addEdge({
     from: "node-1-1",
@@ -429,5 +433,41 @@ describe("UserDraggableEdgesConfigurator", () => {
     expect(overlayElement.children[0].children[0].children[2]).toBe(
       edgeShape.svg,
     );
+  });
+
+  it("should account for target port dragging", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ overlayElement, mainElement });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portElement1 = document.createElement("div");
+    const portElement2 = createElement({ x: 95, y: 95, width: 10, height: 10 });
+    const portElement3 = createElement({ x: 95, y: -5, width: 10, height: 10 });
+    const edgeShape = new BezierEdgeShape();
+
+    createGraph(canvas, {
+      portElement1,
+      portElement2,
+      portElement3,
+      edgeShape,
+    });
+
+    portElement2.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 0 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 0 }),
+    );
+
+    expect(canvas.graph.getEdge(0)).toEqual({
+      from: "node-1-1",
+      to: "node-3-1",
+      priority: 0,
+      shape: edgeShape,
+    });
   });
 });
