@@ -1,7 +1,6 @@
 import { AddEdgeRequest, Canvas, GraphEdge } from "@/canvas";
 import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
-import { UserDraggableEdgesError } from "./user-draggable-edges-error";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import {
@@ -93,12 +92,6 @@ export class UserDraggableEdgesConfigurator {
     const isSourceDragging = portId === edge.from;
     const isTargetDragging = portId === edge.to;
 
-    if (!(isSourceDragging || isTargetDragging)) {
-      throw new UserDraggableEdgesError(
-        `failed to grab the edge with id of ${edgeId} because it is not adjacent to the port with id of ${portId}`,
-      );
-    }
-
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
     this.isTargetDragging = isTargetDragging;
@@ -169,7 +162,6 @@ export class UserDraggableEdgesConfigurator {
   }
 
   private moveDraggingPort(dragPoint: Point): void {
-    // calculate port center
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeViewCoords: Point = {
