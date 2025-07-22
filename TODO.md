@@ -7,6 +7,9 @@
 
 - horizontal and vertical edges detour parallel
 
+
+- remove onBeforeViewportUpdated
+
 V4
 
 - make builder single use object
