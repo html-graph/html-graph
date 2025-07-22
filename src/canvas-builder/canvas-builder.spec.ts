@@ -326,11 +326,7 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder(canvasElement);
     document.body.appendChild(canvasElement);
 
-    const canvas = builder
-      .enableUserDraggableEdges({
-        connectionPreprocessor: (request) => ({ ...request, id: "edge-1" }),
-      })
-      .build();
+    const canvas = builder.enableUserDraggableEdges().build();
 
     setLayersDimensions(canvasElement);
 
@@ -390,7 +386,7 @@ describe("CanvasBuilder", () => {
       new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
     );
 
-    expect(canvas.graph.getEdge("edge-1")).toEqual({
+    expect(canvas.graph.getEdge(0)).toEqual({
       from: "port-2",
       to: "port-2",
       priority: 0,
