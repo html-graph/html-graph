@@ -21,6 +21,16 @@ const canvas: Canvas = builder
   .enableUserDraggableEdges({
     mouseDownEventVerifier: (event) => event.button === 0,
     connectionPreprocessor: (request) => {
+      const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
+        const edge = canvas.graph.getEdge(edgeId)!;
+
+        return edge.from === request.from && edge.to === request.to;
+      });
+
+      if (existingEdge !== undefined) {
+        return null;
+      }
+
       if (
         `${request.from}`.endsWith("-out") &&
         `${request.to}`.endsWith("-in")
