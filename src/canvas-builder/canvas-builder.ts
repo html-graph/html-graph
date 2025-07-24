@@ -7,6 +7,7 @@ import {
   BackgroundConfigurator,
   ResizeReactiveNodesConfigurator,
   UserConnectablePortsConfigurator,
+  UserDraggableEdgesConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
@@ -31,8 +32,11 @@ import {
   ConnectablePortsConfig,
   createUserConnectablePortsParams,
 } from "./create-user-connectable-ports-params";
+import {
+  createUserDraggableEdgeParams,
+  DraggableEdgesConfig,
+} from "./create-user-draggable-edges-params";
 
-// Responsibility: Constructs canvas based on specified configuration
 export class CanvasBuilder {
   private element: HTMLElement | null = null;
 
@@ -46,6 +50,8 @@ export class CanvasBuilder {
 
   private connectablePortsConfig: ConnectablePortsConfig = {};
 
+  private draggableEdgesConfig: DraggableEdgesConfig = {};
+
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
   private hasDraggableNode = false;
@@ -57,6 +63,8 @@ export class CanvasBuilder {
   private hasBackground = false;
 
   private hasUserConnectablePorts = false;
+
+  private hasUserDraggableEdges = false;
 
   private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
     undefined;
@@ -164,6 +172,15 @@ export class CanvasBuilder {
     return this;
   }
 
+  public enableUserDraggableEdges(
+    config?: DraggableEdgesConfig,
+  ): CanvasBuilder {
+    this.hasUserDraggableEdges = true;
+    this.draggableEdgesConfig = config ?? {};
+
+    return this;
+  }
+
   /**
    * builds final canvas
    */
@@ -234,10 +251,25 @@ export class CanvasBuilder {
 
       UserConnectablePortsConfigurator.configure(
         canvas,
-        layers.overlay,
+        layers.overlayConnectablePorts,
         viewportStore,
         this.window,
         params,
+      );
+    }
+
+    if (this.hasUserDraggableEdges) {
+      const dragEdgeParams = createUserDraggableEdgeParams(
+        this.draggableEdgesConfig,
+        canvas.graph,
+      );
+
+      UserDraggableEdgesConfigurator.configure(
+        canvas,
+        layers.overlayDraggableEdges,
+        viewportStore,
+        this.window,
+        dragEdgeParams,
       );
     }
 

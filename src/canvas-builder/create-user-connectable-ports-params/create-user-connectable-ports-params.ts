@@ -8,7 +8,7 @@ import { EdgeShapeFactory } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 
 export const createUserConnectablePortsParams = (
-  connectablePortsConfig: ConnectablePortsConfig,
+  config: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   defaultDragPortDirection: number,
 ): UserConnectablePortsParams => {
@@ -28,30 +28,25 @@ export const createUserConnectablePortsParams = (
 
   return {
     connectionTypeResolver:
-      connectablePortsConfig.connectionTypeResolver ??
-      defaultConnectionTypeResolver,
+      config.connectionTypeResolver ?? defaultConnectionTypeResolver,
     connectionPreprocessor:
-      connectablePortsConfig.connectionPreprocessor ??
-      defaultConnectionPreprocessor,
+      config.connectionPreprocessor ?? defaultConnectionPreprocessor,
     mouseDownEventVerifier:
-      connectablePortsConfig.mouseDownEventVerifier ??
-      defaultMouseEventVerifier,
+      config.mouseDownEventVerifier ?? defaultMouseEventVerifier,
     mouseUpEventVerifier:
-      connectablePortsConfig.mouseUpEventVerifier ?? defaultMouseEventVerifier,
+      config.mouseUpEventVerifier ?? defaultMouseEventVerifier,
     onAfterEdgeCreated:
-      connectablePortsConfig.events?.onAfterEdgeCreated ??
-      defaultOnAfterEdgeCreated,
+      config.events?.onAfterEdgeCreated ?? defaultOnAfterEdgeCreated,
     onEdgeCreationInterrupted:
-      connectablePortsConfig.events?.onEdgeCreationInterrupted ??
+      config.events?.onEdgeCreationInterrupted ??
       defaultOnAfterEdgeConnectionInterrupted,
     onEdgeCreationPrevented:
-      connectablePortsConfig.events?.onEdgeCreationPrevented ??
+      config.events?.onEdgeCreationPrevented ??
       defaultOnAfterEdgeConnectionPrevented,
-    dragPortDirection:
-      connectablePortsConfig.dragPortDirection ?? defaultDragPortDirection,
+    dragPortDirection: config.dragPortDirection ?? defaultDragPortDirection,
     edgeShapeFactory:
-      connectablePortsConfig.edgeShape !== undefined
-        ? resolveEdgeShapeFactory(connectablePortsConfig.edgeShape)
+      config.edgeShape !== undefined
+        ? resolveEdgeShapeFactory(config.edgeShape)
         : defaultEdgeShapeFactory,
   };
 };

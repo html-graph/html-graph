@@ -1,11 +1,13 @@
 # TODO
 
-- user movable edges
+- improve edge render type API
 - improve onDestroy unit tests
 - virtual scroll node events
 - snap nodes to grid
 
 - horizontal and vertical edges detour parallel
+
+- remove onBeforeViewportUpdated
 
 V4
 

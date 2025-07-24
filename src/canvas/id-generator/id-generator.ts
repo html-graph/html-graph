@@ -1,4 +1,3 @@
-// Responsibility: Generated IDs for graph entities
 export class IdGenerator {
   private counter = 0;
 

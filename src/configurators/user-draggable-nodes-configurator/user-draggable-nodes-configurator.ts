@@ -5,7 +5,6 @@ import { Graph } from "@/canvas";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 
-// Responsibility: Configures canvas to have nodes draggable by user
 export class UserDraggableNodesConfigurator {
   private grabbedNodeId: unknown | null = null;
 

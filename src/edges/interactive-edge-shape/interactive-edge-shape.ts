@@ -9,8 +9,6 @@ import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing handle for attaching interactive behavior to an
-// edge
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

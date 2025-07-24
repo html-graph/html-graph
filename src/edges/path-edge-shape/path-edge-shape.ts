@@ -16,7 +16,6 @@ import {
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
 
-// Responsibility: Providing low level core for single path structured edges
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

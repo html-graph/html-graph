@@ -10,7 +10,6 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 
-// Responsibility: Store state of graph
 export class GraphStore {
   private readonly nodes = new Map<unknown, NodePayload>();
 
@@ -198,7 +197,7 @@ export class GraphStore {
     return Array.from(this.ports.keys());
   }
 
-  public getElementPortsIds(element: HTMLElement): readonly unknown[] {
+  public getElementPortIds(element: HTMLElement): readonly unknown[] {
     return this.elementPorts.getMultiBySingle(element);
   }
 
@@ -285,7 +284,7 @@ export class GraphStore {
     return Array.from(this.incomingEdges.get(portId)!);
   }
 
-  public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] {
+  public getPortOutgoingEdgeIds(portId: unknown): readonly unknown[] {
     return Array.from(this.outcomingEdges.get(portId)!);
   }
 
@@ -296,7 +295,7 @@ export class GraphStore {
   public getPortAdjacentEdgeIds(portId: unknown): readonly unknown[] {
     return [
       ...this.getPortIncomingEdgeIds(portId),
-      ...this.getPortOutcomingEdgeIds(portId),
+      ...this.getPortOutgoingEdgeIds(portId),
       ...this.getPortCycleEdgeIds(portId),
     ];
   }
@@ -312,12 +311,12 @@ export class GraphStore {
     return res;
   }
 
-  public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] {
+  public getNodeOutgoingEdgeIds(nodeId: unknown): readonly unknown[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
     let res: unknown[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortOutcomingEdgeIds(portId)];
+      res = [...res, ...this.getPortOutgoingEdgeIds(portId)];
     });
 
     return res;
@@ -337,7 +336,7 @@ export class GraphStore {
   public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] {
     return [
       ...this.getNodeIncomingEdgeIds(nodeId),
-      ...this.getNodeOutcomingEdgeIds(nodeId),
+      ...this.getNodeOutgoingEdgeIds(nodeId),
       ...this.getNodeCycleEdgeIds(nodeId),
     ];
   }

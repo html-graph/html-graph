@@ -6,7 +6,6 @@ import {
 } from "./utils";
 import { BackgroundParams } from "./background-params";
 
-// Responsibility: Configures background rendering behind graph
 export class BackgroundConfigurator {
   private readonly svg = createSvg();
 

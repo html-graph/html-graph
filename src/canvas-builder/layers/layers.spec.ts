@@ -22,6 +22,15 @@ describe("Layers", () => {
     expect(layers.background.parentElement!.parentElement).toBe(element);
   });
 
+  it("should create connectable ports overlay layer", () => {
+    const element = document.createElement("div");
+    const layers = new Layers(element);
+
+    expect(layers.overlayConnectablePorts.parentElement!.parentElement).toBe(
+      element,
+    );
+  });
+
   it("should destroy layers", () => {
     const element = document.createElement("div");
     const layers = new Layers(element);
