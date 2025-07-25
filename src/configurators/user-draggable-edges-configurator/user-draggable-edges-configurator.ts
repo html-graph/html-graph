@@ -207,11 +207,13 @@ export class UserDraggableEdgesConfigurator {
       ? [this.staticPortId!, draggingPortId]
       : [draggingPortId, this.staticPortId!];
 
+    const edge = this.draggingEdgePayload!;
     const request: AddEdgeRequest = {
+      id: edge.id,
       from,
       to,
-      shape: this.draggingEdgePayload!.shape,
-      priority: this.draggingEdgePayload!.priority,
+      shape: edge.shape,
+      priority: edge.priority,
     };
 
     const processedRequest = this.params.connectionPreprocessor(request);
