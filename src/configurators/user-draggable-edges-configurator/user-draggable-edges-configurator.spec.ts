@@ -363,6 +363,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     );
 
     expect(onEdgeReattachInterrupted).toHaveBeenCalledWith({
+      id: 0,
       from: "node-1-1",
       to: "node-2-1",
       priority: 0,
@@ -398,6 +399,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     );
 
     expect(onEdgeReattachPrevented).toHaveBeenCalledWith({
+      id: 0,
       from: "node-1-1",
       to: "node-2-1",
       priority: 0,

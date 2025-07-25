@@ -19,7 +19,8 @@ export class UserDraggableEdgesConfigurator {
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdge: GraphEdge | null = null;
+  private draggingEdgePayload: (GraphEdge & { readonly id: unknown }) | null =
+    null;
 
   private readonly onEdgeReattached = (edgeId: unknown): void => {
     this.params.onAfterEdgeReattached(edgeId);
@@ -117,7 +118,14 @@ export class UserDraggableEdgesConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
-    this.draggingEdge = edge;
+    this.draggingEdgePayload = {
+      id: edgeId,
+      from: edge.from,
+      to: edge.to,
+      shape: edge.shape,
+      priority: edge.priority,
+    };
+
     this.canvas.removeEdge(edgeId);
 
     const staticParams: OverlayNodeParams = {
@@ -155,7 +163,7 @@ export class UserDraggableEdgesConfigurator {
   }
 
   private resetDragState(): void {
-    this.draggingEdge = null;
+    this.draggingEdgePayload = null;
     this.staticPortId = null;
     this.isTargetDragging = true;
     this.overlayCanvas.clear();
@@ -183,7 +191,15 @@ export class UserDraggableEdgesConfigurator {
     this.overlayCanvas.removeEdge(OverlayId.Edge);
 
     if (draggingPortId === null) {
-      this.params.onEdgeReattachInterrupted(this.draggingEdge!);
+      const edge = this.draggingEdgePayload!;
+
+      this.params.onEdgeReattachInterrupted({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
       return;
     }
 
@@ -194,8 +210,8 @@ export class UserDraggableEdgesConfigurator {
     const request: AddEdgeRequest = {
       from,
       to,
-      shape: this.draggingEdge!.shape,
-      priority: this.draggingEdge!.priority,
+      shape: this.draggingEdgePayload!.shape,
+      priority: this.draggingEdgePayload!.priority,
     };
 
     const processedRequest = this.params.connectionPreprocessor(request);
@@ -205,7 +221,15 @@ export class UserDraggableEdgesConfigurator {
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeReattached);
     } else {
-      this.params.onEdgeReattachPrevented(this.draggingEdge!);
+      const edge = this.draggingEdgePayload!;
+
+      this.params.onEdgeReattachPrevented({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
     }
   }
 }

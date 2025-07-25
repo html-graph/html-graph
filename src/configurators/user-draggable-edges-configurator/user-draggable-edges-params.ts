@@ -9,6 +9,10 @@ export interface UserDraggableEdgesParams {
   readonly draggingEdgeResolver: DraggingEdgeResolver;
   readonly draggingEdgeShapeFactory: EdgeShapeFactory | null;
   readonly onAfterEdgeReattached: (edgeId: unknown) => void;
-  readonly onEdgeReattachInterrupted: (edge: GraphEdge) => void;
-  readonly onEdgeReattachPrevented: (request: GraphEdge) => void;
+  readonly onEdgeReattachInterrupted: (
+    payload: GraphEdge & { readonly id: unknown },
+  ) => void;
+  readonly onEdgeReattachPrevented: (
+    payload: GraphEdge & { readonly id: unknown },
+  ) => void;
 }
