@@ -386,7 +386,7 @@ describe("CanvasBuilder", () => {
       new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
     );
 
-    expect(canvas.graph.getEdge(0)).toEqual({
+    expect(canvas.graph.getEdge("edge-1")).toEqual({
       from: "port-2",
       to: "port-2",
       priority: 0,
