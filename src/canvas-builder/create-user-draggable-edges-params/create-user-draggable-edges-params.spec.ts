@@ -144,6 +144,7 @@ describe("createUserDraggableEdgeParams", () => {
 
     expect(() => {
       options.onEdgeReattachInterrupted({
+        id: 0,
         from: "1",
         to: "2",
         shape: new BezierEdgeShape(),
@@ -168,6 +169,7 @@ describe("createUserDraggableEdgeParams", () => {
 
     expect(() => {
       options.onEdgeReattachPrevented({
+        id: 0,
         from: "123",
         to: "456",
         shape: new BezierEdgeShape(),
