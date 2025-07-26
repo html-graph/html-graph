@@ -114,4 +114,8 @@ export { EventSubject } from "./event-subject";
  */
 export type { EventEmitter, EventHandler } from "./event-subject";
 
+/**
+ * @deprecated
+ * do not use
+ */
 export type { RenderingBox } from "./html-view";
