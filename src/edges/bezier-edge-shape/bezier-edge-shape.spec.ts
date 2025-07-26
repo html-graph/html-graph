@@ -1,3 +1,4 @@
+import { ConnectionCategory } from "../connection-category";
 import { EdgeShape } from "../edge-shape";
 import { BezierEdgeShape } from "./bezier-edge-shape";
 
@@ -49,6 +50,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -81,6 +83,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -113,6 +116,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -145,6 +149,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.PortCycle,
     });
 
     const line = shape.svg.children[0].children[0];
@@ -176,6 +181,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];
@@ -208,6 +214,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];
@@ -240,6 +247,7 @@ describe("BezierEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];

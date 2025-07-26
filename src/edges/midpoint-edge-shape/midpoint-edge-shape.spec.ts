@@ -1,4 +1,5 @@
 import { BezierEdgeShape } from "../bezier-edge-shape";
+import { ConnectionCategory } from "../connection-category";
 import { MidpointEdgeShape } from "./midpoint-edge-shape";
 
 describe("MidpointEdgeShape", () => {
@@ -44,6 +45,7 @@ describe("MidpointEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     expect(midpointElement.style.transform).toBe("translate(50px, 50px)");

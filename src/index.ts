@@ -1,23 +1,4 @@
 export { CanvasBuilder } from "./canvas-builder";
-
-export type {
-  Canvas,
-  AddNodeRequest,
-  AddEdgeRequest,
-  AddNodePorts,
-  MarkNodePortRequest,
-  MarkPortRequest,
-  UpdateNodeRequest,
-  UpdatePortRequest,
-  UpdateEdgeRequest,
-  PatchMatrixRequest,
-  GraphNode,
-  GraphPort,
-  GraphEdge,
-  Graph,
-  Viewport,
-} from "./canvas";
-
 export type {
   CanvasDefaults,
   BackgroundConfig,
@@ -42,6 +23,24 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
 } from "./canvas-builder";
+
+export type {
+  Canvas,
+  AddNodeRequest,
+  AddEdgeRequest,
+  AddNodePorts,
+  MarkNodePortRequest,
+  MarkPortRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
+  UpdateEdgeRequest,
+  PatchMatrixRequest,
+  GraphNode,
+  GraphPort,
+  GraphEdge,
+  Graph,
+  Viewport,
+} from "./canvas";
 
 export type {
   NodeDragPayload,
@@ -82,6 +81,7 @@ export type {
   DirectEdgeParams,
   StructuredEdgeShape,
   StructuredEdgeRenderModel,
+  ConnectionCategory,
 } from "./edges";
 
 /**

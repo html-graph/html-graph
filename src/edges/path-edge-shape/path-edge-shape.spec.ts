@@ -1,3 +1,4 @@
+import { ConnectionCategory } from "../connection-category";
 import {
   BezierEdgePath,
   CycleCircleEdgePath,
@@ -99,6 +100,7 @@ describe("PathEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0] as SVGGElement;
@@ -128,6 +130,7 @@ describe("PathEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -158,6 +161,7 @@ describe("PathEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -188,6 +192,7 @@ describe("PathEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.PortCycle,
     });
 
     const line = shape.svg.children[0].children[1];
@@ -217,6 +222,7 @@ describe("PathEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];

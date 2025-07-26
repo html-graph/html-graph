@@ -8,6 +8,7 @@ import { CoreHtmlView } from "./core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
 import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
+import { ConnectionCategory } from "@/edges/connection-category";
 
 const createHtmlController = (params?: {
   transformer?: ViewportStore;
@@ -23,7 +24,7 @@ const createHtmlController = (params?: {
 
 const centerFn = (): Point => ({ x: 0, y: 0 });
 
-const createAddNodeRequest1 = (): AddNodeRequest => {
+const createAddNode1Request = (): AddNodeRequest => {
   return {
     id: "node-1",
     element: document.createElement("div"),
@@ -34,7 +35,7 @@ const createAddNodeRequest1 = (): AddNodeRequest => {
   };
 };
 
-const createAddNodeRequest2 = (): AddNodeRequest => {
+const createAddNode2Request = (): AddNodeRequest => {
   return {
     id: "node-2",
     element: document.createElement("div"),
@@ -45,7 +46,7 @@ const createAddNodeRequest2 = (): AddNodeRequest => {
   };
 };
 
-const createAddPortRequest1 = (): AddPortRequest => {
+const createAddPort11Request = (): AddPortRequest => {
   const addPortRequest: AddPortRequest = {
     id: "port-1",
     nodeId: "node-1",
@@ -59,7 +60,21 @@ const createAddPortRequest1 = (): AddPortRequest => {
   return addPortRequest;
 };
 
-const createAddPortRequest2 = (): AddPortRequest => {
+const createAddPort21Request = (): AddPortRequest => {
+  const addPortRequest: AddPortRequest = {
+    id: "port-2",
+    nodeId: "node-1",
+    element: document.createElement("div"),
+    direction: 0,
+  };
+
+  addPortRequest.element.getBoundingClientRect = (): DOMRect => {
+    return new DOMRect(0, 0, 0, 0);
+  };
+  return addPortRequest;
+};
+
+const createAddPort22Request = (): AddPortRequest => {
   const addPortRequest: AddPortRequest = {
     id: "port-2",
     nodeId: "node-2",
@@ -79,6 +94,16 @@ const createAddEdgeRequest12 = (): AddEdgeRequest => {
     id: "edge-12",
     from: "port-1",
     to: "port-2",
+    shape: new BezierEdgeShape(),
+    priority: 0,
+  };
+};
+
+const createAddEdgeRequest11 = (): AddEdgeRequest => {
+  return {
+    id: "edge-11",
+    from: "port-1",
+    to: "port-1",
     shape: new BezierEdgeShape(),
     priority: 0,
   };
@@ -114,7 +139,7 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest1 = createAddNode1Request();
 
     store.addNode(addNodeRequest1);
     htmlView.attachNode(addNodeRequest1.id);
@@ -129,7 +154,7 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest1 = createAddNode1Request();
 
     store.addNode(addNodeRequest1);
     htmlView.attachNode(addNodeRequest1.id);
@@ -145,10 +170,10 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);
@@ -171,10 +196,10 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);
@@ -198,10 +223,10 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);
@@ -244,7 +269,7 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest1 = createAddNode1Request();
 
     store.addNode(addNodeRequest1);
     htmlView.attachNode(addNodeRequest1.id);
@@ -266,7 +291,7 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest1 = createAddNode1Request();
 
     store.addNode(addNodeRequest1);
     htmlView.attachNode(addNodeRequest1.id);
@@ -286,10 +311,10 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);
@@ -314,14 +339,14 @@ describe("CoreHtmlView", () => {
     expect(container.children[2]).toBe(newShape.svg);
   });
 
-  it("should update edge coordinates", () => {
+  it("should update edge coordinates for line category", () => {
     const store: GraphStore = new GraphStore();
     const htmlView = createHtmlController({ store });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);
@@ -357,6 +382,97 @@ describe("CoreHtmlView", () => {
         nodeId: addPortRequest2.nodeId,
         direction: 0,
       },
+      category: ConnectionCategory.Line,
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
+  });
+
+  it("should update edge coordinates for node cycle category", () => {
+    const store: GraphStore = new GraphStore();
+    const htmlView = createHtmlController({ store });
+
+    const addNodeRequest1 = createAddNode1Request();
+    const addPortRequest11 = createAddPort11Request();
+    const addPortRequest21 = createAddPort21Request();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest11);
+    store.addPort(addPortRequest21);
+    store.addEdge(addEdgeRequest12);
+
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachEdge(addEdgeRequest12.id);
+
+    const spy = jest.spyOn(addEdgeRequest12.shape, "render");
+
+    htmlView.renderEdge(addEdgeRequest12.id);
+
+    const expected: EdgeRenderParams = {
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest11.id,
+        nodeId: addPortRequest11.nodeId,
+        direction: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest21.id,
+        nodeId: addPortRequest21.nodeId,
+        direction: 0,
+      },
+      category: ConnectionCategory.NodeCycle,
+    };
+
+    expect(spy).toHaveBeenCalledWith(expected);
+  });
+
+  it("should update edge coordinates for port cycle category", () => {
+    const store: GraphStore = new GraphStore();
+    const htmlView = createHtmlController({ store });
+
+    const addNodeRequest1 = createAddNode1Request();
+    const addPortRequest11 = createAddPort11Request();
+    const addEdgeRequest11 = createAddEdgeRequest11();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest11);
+    store.addEdge(addEdgeRequest11);
+
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.attachEdge(addEdgeRequest11.id);
+
+    const spy = jest.spyOn(addEdgeRequest11.shape, "render");
+
+    htmlView.renderEdge(addEdgeRequest11.id);
+
+    const expected: EdgeRenderParams = {
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest11.id,
+        nodeId: addPortRequest11.nodeId,
+        direction: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        portId: addPortRequest11.id,
+        nodeId: addPortRequest11.nodeId,
+        direction: 0,
+      },
+      category: ConnectionCategory.PortCycle,
     };
 
     expect(spy).toHaveBeenCalledWith(expected);
@@ -367,10 +483,10 @@ describe("CoreHtmlView", () => {
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest1 = createAddPortRequest1();
-    const addPortRequest2 = createAddPortRequest2();
+    const addNodeRequest1 = createAddNode1Request();
+    const addNodeRequest2 = createAddNode2Request();
+    const addPortRequest1 = createAddPort11Request();
+    const addPortRequest2 = createAddPort22Request();
     const addEdgeRequest12 = createAddEdgeRequest12();
 
     store.addNode(addNodeRequest1);

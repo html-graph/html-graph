@@ -1,3 +1,4 @@
+import { ConnectionCategory } from "../connection-category";
 import { EdgeShape } from "../edge-shape";
 import { HorizontalEdgeShape } from "./horizontal-edge-shape";
 
@@ -50,6 +51,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -82,6 +84,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -114,6 +117,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -146,6 +150,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -178,6 +183,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.PortCycle,
     });
 
     const g = shape.svg.children[0];
@@ -210,6 +216,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];
@@ -242,6 +249,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];
@@ -274,6 +282,7 @@ describe("HorizontalEdgeShape", () => {
         nodeId: "node-1",
         direction: 0,
       },
+      category: ConnectionCategory.NodeCycle,
     });
 
     const g = shape.svg.children[0];
