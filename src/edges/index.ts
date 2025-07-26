@@ -26,3 +26,5 @@ export {
 export type { InteractiveEdgeParams } from "./interactive-edge-shape";
 
 export { MidpointEdgeShape } from "./midpoint-edge-shape";
+
+export { ConnectionCategory } from "./connection-category";

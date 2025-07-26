@@ -1,6 +1,5 @@
 # TODO
 
-- improve edge render type API
 - improve onDestroy unit tests
 - virtual scroll node events
 - snap nodes to grid

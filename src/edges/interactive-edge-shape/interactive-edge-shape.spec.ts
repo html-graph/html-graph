@@ -1,4 +1,5 @@
 import { BezierEdgeShape } from "../bezier-edge-shape";
+import { ConnectionCategory } from "../connection-category";
 import { EdgeRenderParams } from "../edge-render-params";
 import { InteractiveEdgeError } from "./interactive-edge-error";
 import { InteractiveEdgeShape } from "./interactive-edge-shape";
@@ -22,6 +23,7 @@ const edgeRenderParams: EdgeRenderParams = {
     portId: "port-2",
     direction: 100,
   },
+  category: ConnectionCategory.Line,
 };
 
 describe("InteractiveEdgeShape", () => {

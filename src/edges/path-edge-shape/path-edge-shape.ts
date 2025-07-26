@@ -15,6 +15,7 @@ import {
 } from "../shared";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structure-render-model";
+import { ConnectionCategory } from "../connection-category";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -81,11 +82,11 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let targetArrowLength = -this.params.arrowLength;
     let createPathFn: EdgePathFactory;
 
-    if (params.from.portId === params.to.portId) {
+    if (params.category === ConnectionCategory.PortCycle) {
       createPathFn = this.params.createCyclePath;
       targetVect = sourceDirection;
       targetArrowLength = this.params.arrowLength;
-    } else if (params.from.nodeId === params.to.nodeId) {
+    } else if (params.category === ConnectionCategory.NodeCycle) {
       createPathFn = this.params.createDetourPath;
     } else {
       createPathFn = this.params.createLinePath;

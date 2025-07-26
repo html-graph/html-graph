@@ -5,6 +5,7 @@ import { TransformState, ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
 import { transformPoint } from "@/transform-point";
+import { ConnectionCategory } from "@/edges/connection-category";
 
 /**
  * This entity is responsible for HTML modifications
@@ -143,7 +144,15 @@ export class CoreHtmlView implements HtmlView {
       viewportMatrix,
     );
 
-    edge.shape.render({ from, to });
+    let category = ConnectionCategory.Line;
+
+    if (portFrom.element === portTo.element) {
+      category = ConnectionCategory.PortCycle;
+    } else if (portFrom.nodeId === portTo.nodeId) {
+      category = ConnectionCategory.NodeCycle;
+    }
+
+    edge.shape.render({ from, to, category });
   }
 
   public updateEdgePriority(edgeId: unknown): void {

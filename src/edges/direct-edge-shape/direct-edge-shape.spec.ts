@@ -1,3 +1,4 @@
+import { ConnectionCategory } from "../connection-category";
 import { DirectEdgeShape } from "./direct-edge-shape";
 
 describe("DirectEdgeShape", () => {
@@ -50,6 +51,7 @@ describe("DirectEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0] as SVGGElement;
@@ -79,6 +81,7 @@ describe("DirectEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -109,6 +112,7 @@ describe("DirectEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
@@ -139,6 +143,7 @@ describe("DirectEdgeShape", () => {
         nodeId: "node-2",
         direction: 0,
       },
+      category: ConnectionCategory.Line,
     });
 
     const g = shape.svg.children[0];
