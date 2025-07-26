@@ -22,6 +22,7 @@ export type {
   ViewportTransformConfig as TransformOptions,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
+  VirtualScrollConfig,
 } from "./canvas-builder";
 
 export type {
@@ -47,7 +48,6 @@ export type {
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
-  VirtualScrollConfig,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,
@@ -103,7 +103,15 @@ export type { PriorityFn } from "./priority";
 
 export { HtmlGraphError } from "./error";
 
+/**
+ * @deprecated
+ * do not use
+ */
 export { EventSubject } from "./event-subject";
+/**
+ * @deprecated
+ * do not use
+ */
 export type { EventEmitter, EventHandler } from "./event-subject";
 
 export type { RenderingBox } from "./html-view";

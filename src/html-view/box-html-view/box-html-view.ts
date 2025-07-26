@@ -3,6 +3,7 @@ import { HtmlView } from "../html-view";
 import { RenderingBox } from "./rendering-box";
 import { EventSubject } from "@/event-subject";
 import { RenderingBoxState } from "./rendering-box-state";
+import { BoxHtmlViewParams } from "./box-html-view-params";
 
 /**
  * This entity is responsible for HTML rendering optimization regarding for limited rendering box
@@ -82,6 +83,7 @@ export class BoxHtmlView implements HtmlView {
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<RenderingBox>,
+    private readonly params: BoxHtmlViewParams,
   ) {
     this.renderingBox = new RenderingBoxState(this.graphStore);
     this.trigger.subscribe(this.updateViewport);
@@ -181,11 +183,13 @@ export class BoxHtmlView implements HtmlView {
 
   private handleAttachNode(nodeId: unknown): void {
     this.attachedNodes.add(nodeId);
+    this.params.onBeforeNodeAttached(nodeId);
     this.htmlView.attachNode(nodeId);
   }
 
   private handleDetachNode(nodeId: unknown): void {
     this.htmlView.detachNode(nodeId);
+    this.params.onAfterNodeDetached(nodeId);
     this.attachedNodes.delete(nodeId);
   }
 

@@ -1,11 +1,11 @@
 import {
+  AddNodeRequest,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
   ViewportTransformConfig,
   VirtualScrollConfig,
 } from "@html-graph/html-graph";
-import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
@@ -30,7 +30,56 @@ const virtualScrollConfig: VirtualScrollConfig = {
     horizontal: 25,
     vertical: 25,
   },
+  events: {
+    onBeforeNodeAttached: (nodeId) => {
+      const element = canvas.graph.getNode(nodeId)!.element
+        .children[1] as HTMLElement;
+
+      element.innerText = `Node ${nodeId}`;
+    },
+    onAfterNodeDetached: (nodeId) => {
+      const element = canvas.graph.getNode(nodeId)!.element
+        .children[1] as HTMLElement;
+
+      element.innerText = "";
+    },
+  },
 };
+
+function createInOutNode(params: {
+  id?: unknown;
+  x: number;
+  y: number;
+  frontPortId: string;
+  backPortId: string;
+  priority?: number;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+
+  const frontPort = document.createElement("div");
+  frontPort.classList.add("node-port");
+  node.appendChild(frontPort);
+
+  const text = document.createElement("div");
+  node.appendChild(text);
+
+  const backPort = document.createElement("div");
+  backPort.classList.add("node-port");
+  node.appendChild(backPort);
+
+  return {
+    id: params.id,
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [
+      { id: params.frontPortId, element: frontPort },
+      { id: params.backPortId, element: backPort },
+    ],
+    priority: params.priority,
+  };
+}
 
 const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults(defaults)
@@ -49,7 +98,6 @@ for (let i = 0; i < 10; i++) {
 
     canvas.addNode(
       createInOutNode({
-        name: `Node ${cnt}`,
         x: j * 300,
         y: i * 300,
         frontPortId,

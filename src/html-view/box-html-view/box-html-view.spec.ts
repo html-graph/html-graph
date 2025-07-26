@@ -7,7 +7,10 @@ import { BoxHtmlView } from "./box-html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 
-const create = (): {
+const create = (config?: {
+  onBeforeNodeAttached?: (nodeId: unknown) => void;
+  onAfterNodeDetached?: (nodeId: unknown) => void;
+}): {
   trigger: EventSubject<RenderingBox>;
   store: GraphStore;
   coreView: CoreHtmlView;
@@ -18,7 +21,10 @@ const create = (): {
   const transformer = new ViewportStore();
   const element = document.createElement("div");
   const coreView = new CoreHtmlView(store, transformer, element);
-  const boxView = new BoxHtmlView(coreView, store, trigger);
+  const boxView = new BoxHtmlView(coreView, store, trigger, {
+    onBeforeNodeAttached: config?.onBeforeNodeAttached ?? ((): void => {}),
+    onAfterNodeDetached: config?.onAfterNodeDetached ?? ((): void => {}),
+  });
 
   return { trigger, store, coreView, boxView };
 };
@@ -112,6 +118,16 @@ describe("BoxHtmlView", () => {
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
+  it("should call event handler before node attach", () => {
+    const onBeforeNodeAttached = jest.fn();
+    const { trigger, store } = create({ onBeforeNodeAttached });
+
+    store.addNode(addNodeRequest);
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+
+    expect(onBeforeNodeAttached).toHaveBeenCalledWith(addNodeRequest.id);
+  });
+
   it("should not attach node outside of the viewbox", () => {
     const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
@@ -132,6 +148,18 @@ describe("BoxHtmlView", () => {
     boxView.detachNode("node-1");
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
+  });
+
+  it("should call event handler after node detach", () => {
+    const onAfterNodeDetached = jest.fn();
+    const { trigger, store, boxView } = create({ onAfterNodeDetached });
+
+    store.addNode(addNodeRequest);
+    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
+
+    boxView.detachNode("node-1");
+
+    expect(onAfterNodeDetached).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should not detach not attached node", () => {

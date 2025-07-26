@@ -1,6 +1,4 @@
-export interface VirtualScrollConfig {
-  readonly nodeContainingRadius: {
-    readonly vertical: number;
-    readonly horizontal: number;
-  };
+export interface VirtualScrollParams {
+  readonly nodeVerticalRadius: number;
+  readonly nodeHorizontalRadius: number;
 }

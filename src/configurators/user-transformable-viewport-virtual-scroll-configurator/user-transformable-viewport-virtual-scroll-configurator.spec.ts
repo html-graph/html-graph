@@ -33,6 +33,10 @@ const createCanvas = (options?: {
     new CoreHtmlView(graphStore, viewportStore, element),
     graphStore,
     trigger,
+    {
+      onBeforeNodeAttached: (): void => {},
+      onAfterNodeDetached: (): void => {},
+    },
   );
 
   const canvasParams: CanvasParams = {
@@ -83,10 +87,8 @@ const createCanvas = (options?: {
     transformParams,
     trigger,
     {
-      nodeContainingRadius: {
-        vertical: 25,
-        horizontal: 25,
-      },
+      nodeVerticalRadius: 25,
+      nodeHorizontalRadius: 25,
     },
   );
 
