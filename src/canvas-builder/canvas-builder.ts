@@ -11,7 +11,6 @@ import {
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
-  VirtualScrollConfig,
 } from "@/configurators";
 import { HtmlGraphError } from "@/error";
 import { Layers } from "./layers";
@@ -36,6 +35,11 @@ import {
   createUserDraggableEdgeParams,
   DraggableEdgesConfig,
 } from "./create-user-draggable-edges-params";
+import {
+  createVirtualScrollParams,
+  VirtualScrollConfig,
+} from "./create-virtual-scroll-params";
+import { createBoxHtmlViewParams } from "./create-box-html-view-params";
 
 export class CanvasBuilder {
   private element: HTMLElement | null = null;
@@ -130,6 +134,8 @@ export class CanvasBuilder {
   }
 
   /**
+   * @deprecated
+   * do not use
    * sets emitter for rendering graph inside bounded area
    */
   public enableBoxAreaRendering(
@@ -208,7 +214,12 @@ export class CanvasBuilder {
     );
 
     if (trigger !== undefined) {
-      htmlView = new BoxHtmlView(htmlView, graphStore, trigger);
+      htmlView = new BoxHtmlView(
+        htmlView,
+        graphStore,
+        trigger,
+        createBoxHtmlViewParams(this.virtualScrollConfig),
+      );
     }
 
     const canvasParams = createCanvasParams(this.canvasDefaults);
@@ -280,7 +291,7 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
         trigger!,
-        this.virtualScrollConfig,
+        createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
       UserTransformableViewportConfigurator.configure(

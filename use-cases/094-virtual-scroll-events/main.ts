@@ -30,6 +30,14 @@ const virtualScrollConfig: VirtualScrollConfig = {
     horizontal: 25,
     vertical: 25,
   },
+  events: {
+    onBeforeNodeAttached: (nodeId) => {
+      console.log(`node ${nodeId} entered viewport`);
+    },
+    onAfterNodeDetached: (nodeId) => {
+      console.log(`node ${nodeId} left viewport`);
+    },
+  },
 };
 
 const canvas: Canvas = new CanvasBuilder(canvasElement)

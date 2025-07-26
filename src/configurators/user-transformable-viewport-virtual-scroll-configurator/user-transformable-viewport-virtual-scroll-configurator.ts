@@ -5,7 +5,7 @@ import {
   TransformableViewportParams,
   UserTransformableViewportConfigurator,
 } from "../user-transformable-viewport-configurator";
-import { VirtualScrollConfig } from "./virtual-scroll-config";
+import { VirtualScrollParams } from "./virtual-scroll-config";
 import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/canvas";
 
@@ -69,10 +69,10 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     private readonly window: Window,
     transformParams: TransformableViewportParams,
     private readonly trigger: EventSubject<RenderingBox>,
-    private readonly params: VirtualScrollConfig,
+    private readonly params: VirtualScrollParams,
   ) {
-    this.nodeHorizontal = this.params.nodeContainingRadius.horizontal;
-    this.nodeVertical = this.params.nodeContainingRadius.vertical;
+    this.nodeHorizontal = this.params.nodeVerticalRadius;
+    this.nodeVertical = this.params.nodeHorizontalRadius;
 
     this.canvasResizeObserver = new ResizeObserver((entries) => {
       const entry = entries[0];
@@ -135,7 +135,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     win: Window,
     transformParams: TransformableViewportParams,
     trigger: EventSubject<RenderingBox>,
-    virtualScrollOptions: VirtualScrollConfig,
+    virtualScrollOptions: VirtualScrollParams,
   ): void {
     new UserTransformableViewportVirtualScrollConfigurator(
       canvas,
