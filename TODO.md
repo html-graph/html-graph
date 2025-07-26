@@ -6,6 +6,7 @@
 - horizontal and vertical edges detour parallel
 
 - remove onBeforeViewportUpdated
+- rename resize responsive edges
 
 V4
 
