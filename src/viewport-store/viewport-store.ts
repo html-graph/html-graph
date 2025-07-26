@@ -15,6 +15,10 @@ export class ViewportStore {
 
   private readonly beforeUpdateEmitter: EventEmitter<void>;
 
+  /**
+   * @deprecated
+   * do not use
+   */
   public readonly onBeforeUpdated: EventHandler<void>;
 
   public constructor() {
