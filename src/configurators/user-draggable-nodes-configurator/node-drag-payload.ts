@@ -1,3 +1,6 @@
+/**
+ * TODO: replace with node ID
+ */
 export interface NodeDragPayload {
   readonly nodeId: unknown;
   readonly element: HTMLElement;
