@@ -116,7 +116,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("");
   });
 
-  it("should move controller with mouse", () => {
+  it("should move viewport with mouse", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -186,7 +186,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("");
   });
 
-  it("should not move controller with mouse when pointer is outside of window", () => {
+  it("should not move viewport with mouse when pointer is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -206,7 +206,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should not move controller with mouse when pointer is inside window but outside of element", () => {
+  it("should not move viewport with mouse when pointer is inside window but outside of element", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -245,7 +245,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("grab");
   });
 
-  it("should scale controller on mouse wheel scroll", () => {
+  it("should scale viewport on mouse wheel scroll", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -265,7 +265,7 @@ describe("UserTransformableViewportConfigurator", () => {
     );
   });
 
-  it("should scale down controller on mouse wheel scroll backward", () => {
+  it("should scale down viewport on mouse wheel scroll backward", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -390,7 +390,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
 
-  it("should move controller with touch", () => {
+  it("should move viewport with touch", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -496,7 +496,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformStarted).toHaveReturnedTimes(1);
   });
 
-  it("should not move controller if touch is outside of window", () => {
+  it("should not move viewport if touch is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -517,7 +517,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should not move controller if touch is outside of controller", () => {
+  it("should not move viewport if touch is outside of viewport", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -538,7 +538,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should move and scale controller with two touches", () => {
+  it("should move and scale viewport with two touches", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -565,7 +565,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 50, 0)");
   });
 
-  it("should keep moving controller after move touches ended", () => {
+  it("should keep moving viewport after move touches ended", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -662,7 +662,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformFinished).toHaveBeenCalled();
   });
 
-  it("should not scale controller if mouse wheel event not valid", () => {
+  it("should not scale viewport if mouse wheel event not valid", () => {
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
