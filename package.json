@@ -2,7 +2,7 @@
   "name": "@html-graph/html-graph",
   "author": "Dmitry Marov <d.marov94@gmail.com>",
   "private": false,
-  "version": "3.18.0",
+  "version": "3.19.0",
   "type": "module",
   "main": "dist/html-graph.js",
   "types": "dist/html-graph.d.ts",
