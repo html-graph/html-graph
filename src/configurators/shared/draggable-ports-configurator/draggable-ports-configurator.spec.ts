@@ -479,7 +479,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onStopDrag).toHaveBeenCalled();
   });
 
-  it("should not throw error when canvas destroyed in the process of dragging with mouse", () => {
+  it("should not call onPointerMove error when canvas destroyed in the process of dragging with mouse", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
@@ -499,7 +499,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMove).not.toHaveBeenCalled();
   });
 
-  it("should not throw error when canvas destroyed in the process of dragging with touch", () => {
+  it("should not call onPointerMove error when canvas destroyed in the process of dragging with touch", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
@@ -523,7 +523,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMove).not.toHaveBeenCalled();
   });
 
-  it("should not throw error when canvas destroyed before mouse up", () => {
+  it("should not call onPointerMove error when canvas destroyed before mouse up", () => {
     const onPointerUp = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
 
@@ -541,7 +541,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerUp).not.toHaveBeenCalled();
   });
 
-  it("should not throw error when canvas destroyed before touch end", () => {
+  it("should not call onPointerMove error when canvas destroyed before touch end", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
@@ -565,7 +565,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMove).not.toHaveBeenCalled();
   });
 
-  it("should not throw error when canvas destroyed before touch cancel", () => {
+  it("should not call onPointerMove error when canvas destroyed before touch cancel", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
