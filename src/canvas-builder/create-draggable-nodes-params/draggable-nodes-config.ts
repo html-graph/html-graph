@@ -8,6 +8,7 @@ export interface DraggableNodesConfig {
     readonly mouseDownEventVerifier?: MouseEventVerifier;
     readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
+  readonly gridSize?: number | null;
   readonly events?: {
     readonly onNodeDrag?: (payload: NodeDragPayload) => void;
     readonly onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;

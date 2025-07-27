@@ -147,23 +147,22 @@ describe("CanvasBuilder", () => {
     const builder = new CanvasBuilder(canvasElement);
 
     const canvas = builder.enableUserDraggableNodes().build();
+    setLayersDimensions(canvasElement);
 
-    const element = createElement();
+    const nodeElement = createElement();
 
     canvas.addNode({
       id: "node-1",
-      element,
+      element: nodeElement,
       x: 0,
       y: 0,
       centerFn: standardCenterFn,
       priority: 0,
     });
 
-    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
-    window.dispatchEvent(
-      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
-    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
 
     const container =
       canvasElement.children[0].children[1].children[0].children[0];
