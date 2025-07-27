@@ -17,12 +17,6 @@ export class UserTransformableViewportConfigurator {
   private readonly onBeforeDestroy = (): void => {
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
-    this.observer.unobserve(this.element);
-    this.element.removeEventListener("mousedown", this.onMouseDown);
-    this.element.removeEventListener("wheel", this.onWheelScroll);
-    this.element.removeEventListener("touchstart", this.onTouchStart);
-    this.element.removeEventListener("wheel", this.preventWheelScaleListener);
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
   };
 
   private readonly onMouseDown: (event: MouseEvent) => void = (
@@ -133,8 +127,8 @@ export class UserTransformableViewportConfigurator {
     event: TouchEvent,
   ) => {
     const currentTouches = processTouch(event);
-    const isEvery = currentTouches.touches.every((t) =>
-      isPointInside(this.window, this.element, t[0], t[1]),
+    const isEvery = currentTouches.touches.every((touch) =>
+      isPointInside(this.window, this.element, touch[0], touch[1]),
     );
 
     if (!isEvery) {

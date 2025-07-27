@@ -6,16 +6,15 @@ import {
   createMouseMoveEvent,
   createMouseWheelEvent,
   createTouch,
+  defaultCanvasParams,
   wait,
 } from "@/mocks";
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { TransformPayload } from "./transform-payload";
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -41,26 +40,12 @@ const createCanvas = (options?: {
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const params: TransformableViewportParams = {
@@ -131,7 +116,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("");
   });
 
-  it("should move controller with mouse", () => {
+  it("should move viewport with mouse", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -201,7 +186,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("");
   });
 
-  it("should not move controller with mouse when pointer is outside of window", () => {
+  it("should not move viewport with mouse when pointer is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -221,7 +206,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should not move controller with mouse when pointer is inside window but outside of element", () => {
+  it("should not move viewport with mouse when pointer is inside window but outside of element", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -260,7 +245,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(element.style.cursor).toBe("grab");
   });
 
-  it("should scale controller on mouse wheel scroll", () => {
+  it("should scale viewport on mouse wheel scroll", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -280,7 +265,7 @@ describe("UserTransformableViewportConfigurator", () => {
     );
   });
 
-  it("should scale down controller on mouse wheel scroll backward", () => {
+  it("should scale down viewport on mouse wheel scroll backward", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -405,7 +390,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
 
-  it("should move controller with touch", () => {
+  it("should move viewport with touch", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -511,7 +496,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformStarted).toHaveReturnedTimes(1);
   });
 
-  it("should not move controller if touch is outside of window", () => {
+  it("should not move viewport if touch is outside of window", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -532,7 +517,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should not move controller if touch is outside of controller", () => {
+  it("should not move viewport if touch is outside of viewport", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -553,7 +538,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
 
-  it("should move and scale controller with two touches", () => {
+  it("should move and scale viewport with two touches", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -580,7 +565,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 50, 0)");
   });
 
-  it("should keep moving controller after move touches ended", () => {
+  it("should keep moving viewport after move touches ended", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({ element });
 
@@ -677,7 +662,7 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(onTransformFinished).toHaveBeenCalled();
   });
 
-  it("should not scale controller if mouse wheel event not valid", () => {
+  it("should not scale viewport if mouse wheel event not valid", () => {
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -749,5 +734,49 @@ describe("UserTransformableViewportConfigurator", () => {
     await wait(1000);
 
     expect(onTransformFinished).not.toHaveBeenCalled();
+  });
+
+  it("should not move viewport with mouse after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    canvas.destroy();
+
+    const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
+
+    window.dispatchEvent(moveEvent);
+
+    expect(canvas.viewport.getViewportMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
+  });
+
+  it("should not move viewport with touch after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(canvas.viewport.getViewportMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
   });
 });

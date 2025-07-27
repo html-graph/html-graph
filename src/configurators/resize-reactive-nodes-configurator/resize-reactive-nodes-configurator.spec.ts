@@ -4,8 +4,8 @@ import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { triggerResizeFor } from "@/mocks";
-import { Canvas, CanvasParams } from "@/canvas";
+import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
+import { Canvas } from "@/canvas";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -13,26 +13,12 @@ const createCanvas = (): Canvas => {
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   ResizeReactiveNodesConfigurator.configure(canvas);
@@ -144,11 +130,5 @@ describe("ResizeReactiveNodesConfigurator", () => {
     triggerResizeFor(element);
 
     expect(spy).toHaveBeenCalled();
-  });
-
-  it("should unsubscribe before destroy", () => {
-    const canvas = createCanvas();
-
-    canvas.destroy();
   });
 });

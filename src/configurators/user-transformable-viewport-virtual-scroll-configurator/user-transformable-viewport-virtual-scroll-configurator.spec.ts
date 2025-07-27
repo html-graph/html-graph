@@ -8,10 +8,11 @@ import {
   createElement,
   createMouseMoveEvent,
   createMouseWheelEvent,
+  defaultCanvasParams,
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
 
@@ -39,26 +40,12 @@ const createCanvas = (options?: {
     },
   );
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const transformParams: TransformableViewportParams = {

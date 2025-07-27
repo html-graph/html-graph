@@ -108,6 +108,8 @@ export class Canvas {
 
   private readonly onBeforeDestroyEmitter: EventEmitter<void>;
 
+  private destroyed = false;
+
   /**
    * emits event just before destruction of canvas
    */
@@ -371,6 +373,10 @@ export class Canvas {
    * canvas element gets rolled back to initial state, and can not be reused
    */
   public destroy(): void {
+    if (this.destroyed) {
+      return;
+    }
+
     this.clear();
 
     this.onBeforeDestroyEmitter.emit();
@@ -406,5 +412,7 @@ export class Canvas {
     this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
 
     this.htmlView.destroy();
+
+    this.destroyed = true;
   }
 }

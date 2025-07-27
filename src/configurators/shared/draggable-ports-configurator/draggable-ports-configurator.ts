@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { isPointInside } from "../shared";
+import { isPointInside } from "../is-point-inside";
 import { DraggablePortsParams } from "./draggable-ports-params";
 
 export class DraggablePortsConfigurator {
@@ -136,15 +136,9 @@ export class DraggablePortsConfigurator {
   };
 
   private readonly onBeforeDestroy = (): void => {
-    this.stopMouseDrag();
-    this.stopTouchDrag();
-
-    this.canvas.graph.onAfterPortMarked.unsubscribe(this.onAfterPortMarked);
-    this.canvas.graph.onBeforePortUnmarked.unsubscribe(
-      this.onBeforePortUnmarked,
-    );
-    this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
+    this.params.onStopDrag();
+    this.removeWindowMouseListeners();
+    this.removeWindowTouchListeners();
   };
 
   private constructor(
@@ -184,12 +178,20 @@ export class DraggablePortsConfigurator {
 
   private stopMouseDrag(): void {
     this.params.onStopDrag();
-    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
-    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.removeWindowMouseListeners();
   }
 
   private stopTouchDrag(): void {
     this.params.onStopDrag();
+    this.removeWindowTouchListeners();
+  }
+
+  private removeWindowMouseListeners(): void {
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
+    this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+  }
+
+  private removeWindowTouchListeners(): void {
     this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchFinish);
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);

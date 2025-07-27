@@ -1,10 +1,8 @@
 import { Canvas } from "@/canvas";
-import {
-  createPattern,
-  createPatternFilledRectangle,
-  createSvg,
-} from "./utils";
 import { BackgroundParams } from "./background-params";
+import { createSvg } from "./create-svg";
+import { createPatternFilledRectangle } from "./create-pattern-filled-rectangle";
+import { createPattern } from "./create-pattern";
 
 export class BackgroundConfigurator {
   private readonly svg = createSvg();
@@ -45,29 +43,20 @@ export class BackgroundConfigurator {
   });
 
   private readonly onAfterTransformUpdated = (): void => {
-    const m = this.canvas.viewport.getContentMatrix();
-    const x = m.x - this.halfTileWidth * m.scale;
-    const y = m.y - this.halfTileHeight * m.scale;
-    const transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${x}, ${y})`;
+    const matrix = this.canvas.viewport.getContentMatrix();
+    const x = matrix.x - this.halfTileWidth * matrix.scale;
+    const y = matrix.y - this.halfTileHeight * matrix.scale;
+    const transform = `matrix(${matrix.scale}, 0, 0, ${matrix.scale}, ${x}, ${y})`;
 
     this.pattern.setAttribute("patternTransform", transform);
 
     this.updateVisibility();
   };
 
-  private readonly onBeforeDestroy = (): void => {
-    this.resizeObserver.unobserve(this.host);
-    this.host.removeChild(this.svg);
-    this.canvas.viewport.onAfterUpdated.unsubscribe(
-      this.onAfterTransformUpdated,
-    );
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
-  };
-
   private constructor(
     private readonly canvas: Canvas,
     params: BackgroundParams,
-    private readonly host: HTMLElement,
+    private readonly backgroundHost: HTMLElement,
   ) {
     this.tileWidth = params.tileWidth;
     this.tileHeight = params.tileHeight;
@@ -87,12 +76,10 @@ export class BackgroundConfigurator {
     this.svg.appendChild(defs);
     this.svg.appendChild(this.patternRenderingRectangle);
 
-    this.resizeObserver.observe(this.host);
+    this.resizeObserver.observe(this.backgroundHost);
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
     this.onAfterTransformUpdated();
-
-    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
   public static configure(
@@ -109,10 +96,10 @@ export class BackgroundConfigurator {
 
     if (scaleReached && this.visible) {
       this.visible = false;
-      this.host.removeChild(this.svg);
+      this.backgroundHost.removeChild(this.svg);
     } else if (!scaleReached && !this.visible) {
       this.visible = true;
-      this.host.appendChild(this.svg);
+      this.backgroundHost.appendChild(this.svg);
     }
   }
 }

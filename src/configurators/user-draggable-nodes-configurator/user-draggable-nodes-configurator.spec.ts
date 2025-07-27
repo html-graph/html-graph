@@ -3,8 +3,13 @@ import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
-import { Canvas, CanvasParams } from "@/canvas";
+import {
+  createElement,
+  createMouseMoveEvent,
+  createTouch,
+  defaultCanvasParams,
+} from "@/mocks";
+import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { NodeDragPayload } from "./node-drag-payload";
@@ -28,26 +33,12 @@ const createCanvas = (options?: {
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const params: DraggableNodesParams = {
@@ -866,5 +857,61 @@ describe("UserDraggableNodesConfigurator", () => {
     const canvas = createCanvas();
 
     canvas.destroy();
+  });
+
+  it("should not move grabbed node with mouse after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
+    );
+
+    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should not move grabbed node with touch after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
   });
 });
