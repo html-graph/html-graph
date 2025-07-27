@@ -5,6 +5,7 @@ export interface DraggableNodesParams {
   readonly moveOnTop: boolean;
   readonly moveEdgesOnTop: boolean;
   readonly dragCursor: string | null;
+  readonly gridSize: number | null;
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly onNodeDrag: (payload: NodeDragPayload) => void;

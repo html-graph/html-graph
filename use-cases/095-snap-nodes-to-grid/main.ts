@@ -11,7 +11,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const dragConfig: DraggableNodesConfig = {
-  gridSize: 50,
+  gridSize: 25,
 };
 
 const canvas: Canvas = builder

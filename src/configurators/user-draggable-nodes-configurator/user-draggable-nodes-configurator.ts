@@ -53,7 +53,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onMouseDown = (event: MouseEvent): void => {
-    if (!this.config.mouseDownEventVerifier(event)) {
+    if (!this.params.mouseDownEventVerifier(event)) {
       return;
     }
 
@@ -61,7 +61,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.config.onBeforeNodeDrag({
+    const isDragAllowed = this.params.onBeforeNodeDrag({
       nodeId,
       element: node.element,
       x: node.x,
@@ -85,7 +85,7 @@ export class UserDraggableNodesConfigurator {
       dy: cursorContent.y - node.y,
     };
 
-    setCursor(this.element, this.config.dragCursor);
+    setCursor(this.element, this.params.dragCursor);
 
     this.moveNodeOnTop(nodeId);
 
@@ -113,7 +113,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.canvas.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.config.onBeforeNodeDrag({
+    const isDragAllowed = this.params.onBeforeNodeDrag({
       nodeId: nodeId,
       element: node.element,
       x: node.x,
@@ -161,7 +161,7 @@ export class UserDraggableNodesConfigurator {
     }
 
     if (this.grabbedNode !== null) {
-      this.dragNode(this.grabbedNode, {
+      this.moveNode(this.grabbedNode, {
         x: event.clientX,
         y: event.clientY,
       });
@@ -169,7 +169,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
-    if (!this.config.mouseUpEventVerifier(event)) {
+    if (!this.params.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -196,7 +196,7 @@ export class UserDraggableNodesConfigurator {
     }
 
     if (this.grabbedNode !== null) {
-      this.dragNode(this.grabbedNode, {
+      this.moveNode(this.grabbedNode, {
         x: touch.clientX,
         y: touch.clientY,
       });
@@ -211,7 +211,7 @@ export class UserDraggableNodesConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
-    private readonly config: DraggableNodesParams,
+    private readonly params: DraggableNodesParams,
   ) {
     this.graph = canvas.graph;
 
@@ -231,7 +231,7 @@ export class UserDraggableNodesConfigurator {
     new UserDraggableNodesConfigurator(canvas, element, win, config);
   }
 
-  private dragNode(state: GrabbedNodeState, cursor: Point): void {
+  private moveNode(state: GrabbedNodeState, cursor: Point): void {
     const node = this.graph.getNode(state.nodeId)!;
 
     if (node === null) {
@@ -245,27 +245,29 @@ export class UserDraggableNodesConfigurator {
       y: contentPoint.y - state.dy,
     };
 
+    const adjustedCoords: Point = this.adjustNodeCoords(newCoords);
+
     this.canvas.updateNode(state.nodeId, {
-      x: newCoords.x,
-      y: newCoords.y,
+      x: adjustedCoords.x,
+      y: adjustedCoords.y,
     });
 
-    this.config.onNodeDrag({
+    this.params.onNodeDrag({
       nodeId: state.nodeId,
       element: node.element,
-      x: newCoords.x,
-      y: newCoords.y,
+      x: adjustedCoords.x,
+      y: adjustedCoords.y,
     });
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
-    if (!this.config.moveOnTop) {
+    if (!this.params.moveOnTop) {
       return;
     }
 
     this.maxNodePriority++;
 
-    if (this.config.moveEdgesOnTop) {
+    if (this.params.moveEdgesOnTop) {
       const edgePriority = this.maxNodePriority;
 
       this.maxNodePriority++;
@@ -285,7 +287,7 @@ export class UserDraggableNodesConfigurator {
       const node = this.graph.getNode(this.grabbedNode.nodeId);
 
       if (node !== null) {
-        this.config.onNodeDragFinished({
+        this.params.onNodeDragFinished({
           nodeId: this.grabbedNode.nodeId,
           element: node.element,
           x: node.x,
@@ -309,7 +311,7 @@ export class UserDraggableNodesConfigurator {
       const node = this.graph.getNode(this.grabbedNode.nodeId);
 
       if (node !== null) {
-        this.config.onNodeDragFinished({
+        this.params.onNodeDragFinished({
           nodeId: this.grabbedNode.nodeId,
           element: node.element,
           x: node.x,
@@ -345,5 +347,20 @@ export class UserDraggableNodesConfigurator {
     const contentPoint = transformPoint(viewportMatrix, viewportPoint);
 
     return contentPoint;
+  }
+
+  private adjustNodeCoords(coords: Point): Point {
+    const gridSize = this.params.gridSize;
+
+    if (gridSize !== null) {
+      const half = gridSize / 2;
+
+      return {
+        x: Math.floor((coords.x + half) / gridSize) * gridSize,
+        y: Math.floor((coords.y + half) / gridSize) * gridSize,
+      };
+    }
+
+    return coords;
   }
 }

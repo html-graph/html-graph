@@ -27,6 +27,7 @@ const createCanvas = (options?: {
   onNodeDragFinished?: (nodeId: NodeDragPayload) => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
+  gridSize?: number | null;
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
@@ -46,6 +47,7 @@ const createCanvas = (options?: {
     moveEdgesOnTop:
       options?.moveEdgesOnTop !== undefined ? options.moveEdgesOnTop : true,
     dragCursor: options?.dragCursor ?? "grab",
+    gridSize: options?.gridSize ?? null,
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ??
       ((event): boolean => event.button === 0),
@@ -907,5 +909,29 @@ describe("UserDraggableNodesConfigurator", () => {
     );
 
     expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+  });
+
+  it("should snap node to grid", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element, gridSize: 100 });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 51, clientY: 51 }));
+
+    const container = element.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 });
