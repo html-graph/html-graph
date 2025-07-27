@@ -10,7 +10,7 @@ import {
   OverlayId,
   OverlayNodeParams,
 } from "../shared";
-import { DraggablePortsConfigurator } from "../draggable-ports-configurator";
+import { DraggablePortsConfigurator } from "../shared";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;

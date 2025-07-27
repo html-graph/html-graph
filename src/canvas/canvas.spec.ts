@@ -1104,6 +1104,20 @@ describe("Canvas", () => {
     expect(onBeforeDestroy).toHaveBeenCalled();
   });
 
+  it("should not emit destroy event twice", () => {
+    const element = document.createElement("div");
+    const canvas = createCanvas({ element });
+
+    const onBeforeDestroy = jest.fn();
+
+    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
+
+    canvas.destroy();
+    canvas.destroy();
+
+    expect(onBeforeDestroy).toHaveBeenCalledTimes(1);
+  });
+
   it("should render adjacent edges when updating node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });

@@ -1,12 +1,10 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
-import { createElement } from "@/mocks";
+import { createElement, defaultCanvasParams } from "@/mocks";
 import { BackgroundParams } from "./background-params";
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore();
@@ -15,26 +13,12 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const params: BackgroundParams = {
@@ -79,6 +63,15 @@ describe("BackgroundConfigurator", () => {
     const rect = svg.children[1];
 
     expect(rect.tagName).toBe("rect");
+  });
+
+  it("should set svg dimensions from canvas element", () => {
+    const { backgroundElement } = createCanvas();
+    const svg = backgroundElement.children[0] as SVGSVGElement;
+    const width = svg.getAttribute("width");
+    const height = svg.getAttribute("height");
+
+    expect({ width, height }).toEqual({ width: "2500", height: "1000" });
   });
 
   it("should set pattern rendering rectangle dimensions from canvas element", () => {
@@ -161,11 +154,5 @@ describe("BackgroundConfigurator", () => {
     const svg = backgroundElement.children[0];
 
     expect(svg).not.toBe(undefined);
-  });
-
-  it("should destroy configuaration", () => {
-    const { canvas } = createCanvas();
-
-    canvas.destroy();
   });
 });

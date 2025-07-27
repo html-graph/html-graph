@@ -1,4 +1,3 @@
-import { createContainer, createHost, prepareNodeElement } from "./utils";
 import { Point } from "@/point";
 import { GraphStore, PortPayload } from "@/graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
@@ -6,6 +5,9 @@ import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
 import { transformPoint } from "@/transform-point";
 import { ConnectionCategory } from "@/edges/connection-category";
+import { createHost } from "./create-host";
+import { createContainer } from "./create-container";
+import { prepareNodeElement } from "./prepare-node-element";
 
 /**
  * This entity is responsible for HTML modifications

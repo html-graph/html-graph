@@ -45,15 +45,6 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     };
   };
 
-  private readonly onBeforeDestroy = (): void => {
-    this.trigger.unsubscribe(this.updateLoadedArea);
-    this.canvasResizeObserver.unobserve(this.element);
-    this.canvas.viewport.onAfterUpdated.unsubscribe(
-      this.onAfterViewportUpdated,
-    );
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
-  };
-
   private readonly onAfterViewportUpdated = (): void => {
     if (!this.userTransformInProgress) {
       this.viewportMatrix = this.viewport.getViewportMatrix();
@@ -125,8 +116,6 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     this.trigger.subscribe(this.updateLoadedArea);
     this.canvasResizeObserver.observe(this.element);
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
-
-    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
   public static configure(

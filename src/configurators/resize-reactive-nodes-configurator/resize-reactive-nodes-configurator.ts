@@ -24,13 +24,6 @@ export class ResizeReactiveNodesConfigurator {
     this.elementToNodeId.clear();
   };
 
-  private readonly onBeforeDestroy = (): void => {
-    this.canvas.graph.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
-    this.canvas.graph.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
-    this.canvas.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
-  };
-
   private constructor(private readonly canvas: Canvas) {
     this.nodesResizeObserver = new ResizeObserver((entries) => {
       entries.forEach((entry) => {
@@ -43,8 +36,6 @@ export class ResizeReactiveNodesConfigurator {
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
-
-    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
   }
 
   public static configure(canvas: Canvas): void {

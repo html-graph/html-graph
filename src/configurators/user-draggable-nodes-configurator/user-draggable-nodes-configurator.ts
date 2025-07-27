@@ -38,12 +38,6 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onBeforeDestroy = (): void => {
-    this.graph.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
-    this.graph.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
-    this.graph.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
-    this.graph.onBeforeClear.unsubscribe(this.onBeforeClear);
-    this.canvas.onBeforeDestroy.unsubscribe(this.onBeforeDestroy);
-
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
   };
@@ -83,10 +77,12 @@ export class UserDraggableNodesConfigurator {
     this.grabbedNodeId = nodeId;
     setCursor(this.element, this.config.dragCursor);
     this.moveNodeOnTop(nodeId);
-    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
     });
-    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+
+    this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
     });
   };

@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { MouseEventVerifier } from "../shared";
+import { MouseEventVerifier } from "../mouse-event-verifier";
 
 export interface DraggablePortsParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;

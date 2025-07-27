@@ -1,15 +1,12 @@
-import {
-  AddEdgeRequest,
-  Canvas,
-  CanvasParams,
-  EdgeShapeFactory,
-  GraphEdge,
-} from "@/canvas";
-import { standardCenterFn } from "@/center-fn";
+import { AddEdgeRequest, Canvas, EdgeShapeFactory, GraphEdge } from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, createMouseMoveEvent } from "@/mocks";
+import {
+  createElement,
+  createMouseMoveEvent,
+  defaultCanvasParams,
+} from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
 import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
@@ -33,26 +30,12 @@ const createCanvas = (options?: {
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: () => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: () => new BezierEdgeShape(),
-      priorityFn: () => 0,
-    },
-  };
-
   const canvas = new Canvas(
     mainElement,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const defaultResolver = (portId: unknown): unknown => {

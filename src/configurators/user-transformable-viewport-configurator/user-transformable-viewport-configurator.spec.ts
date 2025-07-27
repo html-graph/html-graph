@@ -6,16 +6,15 @@ import {
   createMouseMoveEvent,
   createMouseWheelEvent,
   createTouch,
+  defaultCanvasParams,
   wait,
 } from "@/mocks";
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { TransformPayload } from "./transform-payload";
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -41,26 +40,12 @@ const createCanvas = (options?: {
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-  };
-
   const canvas = new Canvas(
     element,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const params: TransformableViewportParams = {
@@ -749,5 +734,49 @@ describe("UserTransformableViewportConfigurator", () => {
     await wait(1000);
 
     expect(onTransformFinished).not.toHaveBeenCalled();
+  });
+
+  it("should not move viewport with mouse after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    canvas.destroy();
+
+    const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
+
+    window.dispatchEvent(moveEvent);
+
+    expect(canvas.viewport.getViewportMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
+  });
+
+  it("should not move viewport with touch after canvas destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(canvas.viewport.getViewportMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
   });
 });

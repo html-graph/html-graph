@@ -1,14 +1,17 @@
-import { AddEdgeRequest, Canvas, CanvasParams } from "@/canvas";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
-import { createElement, createMouseMoveEvent } from "@/mocks";
+import {
+  createElement,
+  createMouseMoveEvent,
+  defaultCanvasParams,
+} from "@/mocks";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "../shared";
-import { standardCenterFn } from "@/center-fn";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -27,26 +30,12 @@ const createCanvas = (options?: {
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
 
-  const canvasParams: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: () => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: () => new BezierEdgeShape(),
-      priorityFn: () => 0,
-    },
-  };
-
   const canvas = new Canvas(
     mainElement,
     graphStore,
     viewportStore,
     htmlView,
-    canvasParams,
+    defaultCanvasParams,
   );
 
   const params: UserConnectablePortsParams = {

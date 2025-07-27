@@ -10,7 +10,7 @@ import {
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
-import { DraggablePortsConfigurator } from "../draggable-ports-configurator";
+import { DraggablePortsConfigurator } from "../shared";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
