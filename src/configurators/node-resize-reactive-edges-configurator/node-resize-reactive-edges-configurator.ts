@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 
-export class ResizeReactiveNodesConfigurator {
+export class NodeResizeReactiveEdgesConfigurator {
   private readonly elementToNodeId = new Map<Element, unknown>();
 
   private readonly nodesResizeObserver: ResizeObserver;
@@ -39,7 +39,7 @@ export class ResizeReactiveNodesConfigurator {
   }
 
   public static configure(canvas: Canvas): void {
-    new ResizeReactiveNodesConfigurator(canvas);
+    new NodeResizeReactiveEdgesConfigurator(canvas);
   }
 
   private handleNodeResize(element: HTMLElement): void {

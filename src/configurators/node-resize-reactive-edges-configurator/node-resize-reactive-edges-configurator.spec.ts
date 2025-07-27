@@ -1,4 +1,4 @@
-import { ResizeReactiveNodesConfigurator } from "./resize-reactive-nodes-configurator";
+import { NodeResizeReactiveEdgesConfigurator } from "./node-resize-reactive-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
@@ -21,12 +21,12 @@ const createCanvas = (): Canvas => {
     defaultCanvasParams,
   );
 
-  ResizeReactiveNodesConfigurator.configure(canvas);
+  NodeResizeReactiveEdgesConfigurator.configure(canvas);
 
   return canvas;
 };
 
-describe("ResizeReactiveNodesConfigurator", () => {
+describe("NodeResizeReactiveEdgesConfigurator", () => {
   it("should react to node changes", () => {
     const canvas = createCanvas();
 
