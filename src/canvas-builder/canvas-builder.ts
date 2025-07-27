@@ -125,9 +125,19 @@ export class CanvasBuilder {
   }
 
   /**
-   * enables automatic edges update on node resize
+   * @deprecated
+   * use enableNodeResizeReactiveEdges instead
    */
   public enableResizeReactiveNodes(): CanvasBuilder {
+    this.hasResizeReactiveNodes = true;
+
+    return this;
+  }
+
+  /**
+   * enables automatic edges update on node resize
+   */
+  public enableNodeResizeReactiveEdges(): CanvasBuilder {
     this.hasResizeReactiveNodes = true;
 
     return this;

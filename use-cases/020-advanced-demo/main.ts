@@ -26,7 +26,7 @@ const canvas = builder
   .enableBackground()
   .enableUserDraggableNodes()
   .enableUserTransformableViewport()
-  .enableResizeReactiveNodes()
+  .enableNodeResizeReactiveEdges()
   .build();
 
 const helper = new AdvancedDemoHelper();
