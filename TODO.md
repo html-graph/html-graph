@@ -1,6 +1,5 @@
 # TODO
 
-- snap nodes to grid
 - horizontal and vertical edges detour parallel
 - rename resize responsive edges
 
