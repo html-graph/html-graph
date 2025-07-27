@@ -18,21 +18,9 @@ const setLayersDimensions = (element: HTMLElement): void => {
   }
 };
 
-// let innerWidth: number;
-// let innerHeight: number;
-
 describe("CanvasBuilder", () => {
-  beforeEach(() => {
-    // innerWidth = window.innerWidth;
-    // innerHeight = window.innerHeight;
-    // window.innerWidth = 1500;
-    // window.innerHeight = 1200;
-  });
-
   afterEach(() => {
     document.body.innerHTML = "";
-    window.innerWidth = innerWidth;
-    window.innerHeight = innerHeight;
   });
 
   it("should throw error when attach element not specified", () => {
@@ -81,10 +69,9 @@ describe("CanvasBuilder", () => {
 
   it("should set element with legacy method", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder();
+    const builder = new CanvasBuilder(canvasElement);
 
     const canvas = builder
-      .setElement(canvasElement)
       .setDefaults({
         nodes: {
           priority: () => 10,
