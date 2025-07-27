@@ -69,9 +69,10 @@ describe("CanvasBuilder", () => {
 
   it("should set element with legacy method", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
+    const builder = new CanvasBuilder();
 
     const canvas = builder
+      .setElement(canvasElement)
       .setDefaults({
         nodes: {
           priority: () => 10,
