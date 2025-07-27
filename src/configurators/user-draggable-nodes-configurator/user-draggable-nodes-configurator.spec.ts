@@ -129,9 +129,7 @@ describe("UserDraggableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
-    window.dispatchEvent(
-      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
-    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
 
     const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;
@@ -837,15 +835,11 @@ describe("UserDraggableNodesConfigurator", () => {
       new MouseEvent("mousedown", { button: 0, ctrlKey: true }),
     );
 
-    window.dispatchEvent(
-      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
-    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
 
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
-    window.dispatchEvent(
-      createMouseMoveEvent({ movementX: 100, movementY: 100 }),
-    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 200, clientY: 200 }));
 
     const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLElement;

@@ -8,10 +8,6 @@
   <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
 </a>
 
-Instead of connecting nodes directly, this library utilizes the concept of ports,
-which provide greater flexibility in managing edges. A port is an entity on a
-node to which edges can be attached.
-
 Visit the <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a> for more details.
 
 ## Getting started:
