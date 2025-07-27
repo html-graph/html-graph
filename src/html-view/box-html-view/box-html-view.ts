@@ -182,15 +182,15 @@ export class BoxHtmlView implements HtmlView {
   }
 
   private handleAttachNode(nodeId: unknown): void {
-    this.attachedNodes.add(nodeId);
     this.params.onBeforeNodeAttached(nodeId);
+    this.attachedNodes.add(nodeId);
     this.htmlView.attachNode(nodeId);
   }
 
   private handleDetachNode(nodeId: unknown): void {
     this.htmlView.detachNode(nodeId);
-    this.params.onAfterNodeDetached(nodeId);
     this.attachedNodes.delete(nodeId);
+    this.params.onAfterNodeDetached(nodeId);
   }
 
   private handleAttachEdge(edgeId: unknown): void {
