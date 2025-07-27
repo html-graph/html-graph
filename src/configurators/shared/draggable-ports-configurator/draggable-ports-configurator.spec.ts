@@ -523,7 +523,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMove).not.toHaveBeenCalled();
   });
 
-  it("should not call onPointerMove error when canvas destroyed before mouse up", () => {
+  it("should not call onPointerUp error when canvas destroyed before mouse up", () => {
     const onPointerUp = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
 
