@@ -93,7 +93,56 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should build canvas with resize reactive nodes", () => {
+  it("should build canvas with node resize reactive edges", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
+
+    const canvas = builder.enableNodeResizeReactiveEdges().build();
+
+    const nodeRequest1: AddNodeRequest = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: document.createElement("div"),
+        },
+      ],
+    };
+
+    const nodeRequest2: AddNodeRequest = {
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: document.createElement("div"),
+        },
+      ],
+    };
+
+    const shape = new BezierEdgeShape();
+
+    const addEdge: AddEdgeRequest = {
+      from: "port-1",
+      to: "port-2",
+      shape,
+    };
+
+    canvas.addNode(nodeRequest1).addNode(nodeRequest2).addEdge(addEdge);
+
+    const spy = jest.spyOn(shape, "render");
+
+    triggerResizeFor(nodeRequest1.element);
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should build canvas with node resize reactive edges legacy", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
 

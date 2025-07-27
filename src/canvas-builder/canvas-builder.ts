@@ -5,7 +5,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  ResizeReactiveNodesConfigurator,
+  NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
   UserDraggableNodesConfigurator,
@@ -62,7 +62,7 @@ export class CanvasBuilder {
 
   private hasTransformableViewport = false;
 
-  private hasResizeReactiveNodes = false;
+  private hasNodeResizeReactiveEdges = false;
 
   private hasBackground = false;
 
@@ -125,10 +125,20 @@ export class CanvasBuilder {
   }
 
   /**
-   * enables automatic edges update on node resize
+   * @deprecated
+   * use enableNodeResizeReactiveEdges instead
    */
   public enableResizeReactiveNodes(): CanvasBuilder {
-    this.hasResizeReactiveNodes = true;
+    this.hasNodeResizeReactiveEdges = true;
+
+    return this;
+  }
+
+  /**
+   * enables automatic edges update on node resize
+   */
+  public enableNodeResizeReactiveEdges(): CanvasBuilder {
+    this.hasNodeResizeReactiveEdges = true;
 
     return this;
   }
@@ -240,8 +250,8 @@ export class CanvasBuilder {
       );
     }
 
-    if (this.hasResizeReactiveNodes) {
-      ResizeReactiveNodesConfigurator.configure(canvas);
+    if (this.hasNodeResizeReactiveEdges) {
+      NodeResizeReactiveEdgesConfigurator.configure(canvas);
     }
 
     if (this.hasDraggableNode) {
@@ -327,7 +337,7 @@ export class CanvasBuilder {
     this.virtualScrollConfig = undefined;
     this.hasDraggableNode = false;
     this.hasTransformableViewport = false;
-    this.hasResizeReactiveNodes = false;
+    this.hasNodeResizeReactiveEdges = false;
     this.hasBackground = false;
     this.boxRenderingTrigger = undefined;
     this.hasUserConnectablePorts = false;

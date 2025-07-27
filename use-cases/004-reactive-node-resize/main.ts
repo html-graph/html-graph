@@ -8,7 +8,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-builder.enableResizeReactiveNodes();
+builder.enableNodeResizeReactiveEdges();
 
 const canvas: Canvas = builder.build();
 
