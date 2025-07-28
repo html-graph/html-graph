@@ -1,7 +1,6 @@
 # TODO
 
 - horizontal and vertical edges detour parallel
-- rename resize responsive edges
 
 V4
 
