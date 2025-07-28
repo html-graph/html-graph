@@ -17,24 +17,20 @@
   width: 0;
 }
 
-.forward {
-  .node-port:first-child {
-    top: 1rem;
-  }
-
-  .node-port:last-child {
-    top: -1rem;
-  }
+.forward .node-port:first-child {
+  top: 1rem;
 }
 
-.backward {
-  .node-port:first-child {
-    top: -1rem;
-  }
+.forward .node-port:last-child {
+  top: -1rem;
+}
 
-  .node-port:last-child {
-    top: 1rem;
-  }
+.backward .node-port:first-child {
+  top: -1rem;
+}
+
+.backward .node-port:last-child {
+  top: 1rem;
 }
 
 .node-port::after {
