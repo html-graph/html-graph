@@ -7,4 +7,5 @@ export { VerticalEdgePath } from "./vertical-edge-path";
 export { CycleSquareEdgePath } from "./cycle-square-edge-path";
 export { CycleCircleEdgePath } from "./cycle-circle-edge-path";
 export { DirectEdgePath } from "./direct-edge-path";
+export { DetourHorizontalEdgePath } from "./detour-horizontal-edge-path";
 export type { EdgePath } from "./edge-path";
