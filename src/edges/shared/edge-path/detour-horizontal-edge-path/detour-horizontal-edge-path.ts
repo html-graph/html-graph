@@ -57,7 +57,10 @@ export class DetourHorizontalEdgePath implements EdgePath {
       this.params.to,
     );
 
-    const lowest = endLine1.y + this.params.detourDistance * this.params.flipY;
+    const flipDetour = this.params.detourDistance > 0 ? 1 : -1;
+    const halfHeight = this.params.to.y / 2;
+    const centerDetour = halfHeight + Math.abs(this.params.detourDistance);
+    const lowest = halfHeight + centerDetour * this.params.flipY * flipDetour;
 
     const center = {
       x: (beginLine1.x + endLine1.x) / 2,

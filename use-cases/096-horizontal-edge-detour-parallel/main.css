@@ -18,7 +18,7 @@
 }
 
 .forward .node-port:first-child {
-  top: 1rem;
+  top: 2rem;
 }
 
 .forward .node-port:last-child {
@@ -30,7 +30,7 @@
 }
 
 .backward .node-port:last-child {
-  top: 1rem;
+  top: 2rem;
 }
 
 .node-port::after {
