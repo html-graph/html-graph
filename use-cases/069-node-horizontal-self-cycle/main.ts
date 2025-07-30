@@ -15,6 +15,7 @@ const canvasDefaults: CanvasDefaults = {
     shape: {
       type: "horizontal",
       hasTargetArrow: true,
+      detourDistance: -100,
     },
   },
 };
