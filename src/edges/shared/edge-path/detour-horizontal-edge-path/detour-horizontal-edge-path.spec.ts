@@ -21,6 +21,26 @@ describe("DetourHorizontalEdgePath", () => {
     );
   });
 
+  it("should create detour horizontal path accounting for negative detour distance", () => {
+    const edgePath = new DetourHorizontalEdgePath({
+      to: { x: 100, y: 200 },
+      sourceDirection: { x: 1, y: 0 },
+      targetDirection: { x: 1, y: 0 },
+      flipX: 1,
+      flipY: 1,
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDistance: -100,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.path).toBe(
+      "M 0 0 L 10 0 C 20 0 20 0 20 -10 L 20 -90 C 20 -100 20 -100 30 -100 L 70 -100 C 80 -100 80 -100 80 -90 L 80 190 C 80 200 80 200 90 200 L 100 200",
+    );
+  });
+
   it("should create detour horizontal path with flip Y", () => {
     const edgePath = new DetourHorizontalEdgePath({
       to: { x: 100, y: 200 },
