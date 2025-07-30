@@ -4,7 +4,7 @@ import { createRoundedPath } from "../../create-rounded-path";
 import { EdgePath } from "../edge-path";
 import { flipPoint } from "../../flip-point";
 
-export class DetourHorizontalEdgePath implements EdgePath {
+export class DetourVerticalEdgePath implements EdgePath {
   public readonly path: string;
 
   public readonly midpoint: Point;
@@ -58,13 +58,13 @@ export class DetourHorizontalEdgePath implements EdgePath {
     );
 
     const flipDetour = this.params.detourDistance > 0 ? 1 : -1;
-    const halfHeight = this.params.to.y / 2;
-    const centerDetour = halfHeight + Math.abs(this.params.detourDistance);
-    const sideY = halfHeight + centerDetour * this.params.flipY * flipDetour;
+    const halfWidth = this.params.to.x / 2;
+    const centerDetour = halfWidth + Math.abs(this.params.detourDistance);
+    const sideX = halfWidth + centerDetour * this.params.flipX * flipDetour;
 
     const center = {
-      x: (beginLine1.x + endLine1.x) / 2,
-      y: sideY,
+      x: sideX,
+      y: (beginLine1.y + endLine1.y) / 2,
     };
 
     this.midpoint = flipPoint(center, params.flipX, params.flipY, params.to);
@@ -73,8 +73,8 @@ export class DetourHorizontalEdgePath implements EdgePath {
       [
         beginArrow,
         beginLine1,
-        { x: beginLine1.x, y: sideY },
-        { x: endLine1.x, y: sideY },
+        { x: sideX, y: beginLine1.y },
+        { x: sideX, y: endLine1.y },
         endLine1,
         endArrow,
       ],

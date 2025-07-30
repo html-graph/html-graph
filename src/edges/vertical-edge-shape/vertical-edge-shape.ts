@@ -1,7 +1,7 @@
 import { EdgeRenderParams } from "../edge-render-params";
 import {
   CycleSquareEdgePath,
-  DetourStraightEdgePath,
+  DetourVerticalEdgePath,
   VerticalEdgePath,
 } from "../shared";
 import { Point } from "@/point";
@@ -35,8 +35,6 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
 
   private readonly cycleSquareSide: number;
 
-  private readonly detourDirection: number;
-
   private readonly detourDistance: number;
 
   private readonly hasSourceArrow: boolean;
@@ -65,7 +63,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
     flipX: number,
     flipY: number,
   ) =>
-    new DetourStraightEdgePath({
+    new DetourVerticalEdgePath({
       to,
       sourceDirection,
       targetDirection,
@@ -74,7 +72,6 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      detourDirection: this.detourDirection,
       detourDistance: this.detourDistance,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
@@ -113,8 +110,6 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       this.cycleSquareSide / 2,
     );
 
-    this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirectionVertical;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
     this.hasSourceArrow =

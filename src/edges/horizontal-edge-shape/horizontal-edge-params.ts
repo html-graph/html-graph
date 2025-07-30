@@ -9,5 +9,9 @@ export interface HorizontalEdgeParams {
   readonly cycleSquareSide?: number | undefined;
   readonly roundness?: number | undefined;
   readonly detourDistance?: number | undefined;
+  /**
+   * @deprecated
+   * do not use
+   */
   readonly detourDirection?: number | undefined;
 }
