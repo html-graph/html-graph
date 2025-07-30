@@ -1,7 +1,7 @@
 import { DetourVerticalEdgePath } from "./detour-vertical-edge-path";
 
 describe("DetourVerticalEdgePath", () => {
-  it("should create detour horizontal path without flip Y", () => {
+  it("should create detour vertical path without flip Y", () => {
     const edgePath = new DetourVerticalEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
@@ -21,7 +21,7 @@ describe("DetourVerticalEdgePath", () => {
     );
   });
 
-  it("should create detour horizontal path with flip Y", () => {
+  it("should create detour vertical path with flip Y", () => {
     const edgePath = new DetourVerticalEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
@@ -41,7 +41,7 @@ describe("DetourVerticalEdgePath", () => {
     );
   });
 
-  it("should create detour horizontal path with source arrow", () => {
+  it("should create detour vertical path with source arrow", () => {
     const edgePath = new DetourVerticalEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
@@ -61,7 +61,7 @@ describe("DetourVerticalEdgePath", () => {
     );
   });
 
-  it("should create detour horizontal path with target arrow", () => {
+  it("should create detour vertical path with target arrow", () => {
     const edgePath = new DetourVerticalEdgePath({
       to: { x: 100, y: 200 },
       sourceDirection: { x: 1, y: 0 },
