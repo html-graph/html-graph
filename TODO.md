@@ -1,13 +1,12 @@
 # TODO
 
-- horizontal and vertical edges detour parallel
+- onBeforeNodeDrag rename to nodeDragVerifier
 
 V4
 
 - remove onBeforeViewportUpdated
 - make builder single use object
 - split HtmlGraphError into CanvasError and CanvasBuilderError
-- onBeforeNodeDrag rename to nodeDragVerifier
 
 - layouts
 
