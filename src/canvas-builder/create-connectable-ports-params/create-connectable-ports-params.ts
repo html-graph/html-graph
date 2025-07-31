@@ -7,7 +7,7 @@ import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { EdgeShapeFactory } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 
-export const createUserConnectablePortsParams = (
+export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   defaultDragPortDirection: number,

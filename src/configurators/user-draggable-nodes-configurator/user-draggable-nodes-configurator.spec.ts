@@ -54,7 +54,7 @@ const createCanvas = (options?: {
     mouseUpEventVerifier:
       options?.mouseUpEventVerifier ?? ((event): boolean => event.button === 0),
     onNodeDrag: () => {},
-    onBeforeNodeDrag: options?.onBeforeNodeDrag ?? ((): boolean => true),
+    nodeDragVerifier: options?.onBeforeNodeDrag ?? ((): boolean => true),
     onNodeDragFinished: options?.onNodeDragFinished ?? ((): void => {}),
   };
 

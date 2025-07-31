@@ -1,5 +1,5 @@
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
-import { createUserDraggableEdgeParams } from "./create-user-draggable-edges-params";
+import { createDraggableEdgeParams } from "./create-draggable-edges-params";
 import {
   AddEdgeRequest,
   Canvas,
@@ -43,9 +43,9 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-describe("createUserDraggableEdgeParams", () => {
+describe("createDraggableEdgeParams", () => {
   it("should return LMB+CTRL mouse down event verifier by default", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     const fail1 = options.mouseDownEventVerifier(
       new MouseEvent("mousedown", { button: 1 }),
@@ -64,7 +64,7 @@ describe("createUserDraggableEdgeParams", () => {
 
   it("should return specified mouse down event verifier", () => {
     const verifier: (event: MouseEvent) => boolean = () => false;
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       {
         mouseDownEventVerifier: verifier,
       },
@@ -75,7 +75,7 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return LMB mouse up event verifier by default", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     const fail = options.mouseUpEventVerifier(
       new MouseEvent("mousedown", { button: 1 }),
@@ -90,7 +90,7 @@ describe("createUserDraggableEdgeParams", () => {
 
   it("should return specified mouse up event verifier", () => {
     const verifier: (event: MouseEvent) => boolean = () => false;
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       {
         mouseUpEventVerifier: verifier,
       },
@@ -101,7 +101,7 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return default connection preprocessor", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     const request: AddEdgeRequest = { from: "1", to: "2" };
 
@@ -110,7 +110,7 @@ describe("createUserDraggableEdgeParams", () => {
 
   it("should return specified connection preprocessor", () => {
     const preprocessor: ConnectionPreprocessor = () => null;
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       { connectionPreprocessor: preprocessor },
       createCanvas().graph,
     );
@@ -119,7 +119,7 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return default edge reattached callback", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     expect(() => {
       options.onAfterEdgeReattached("123");
@@ -129,7 +129,7 @@ describe("createUserDraggableEdgeParams", () => {
   it("should return specified edge reattached callback", () => {
     const onAfterEdgeReattached = (): void => {};
 
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       {
         events: { onAfterEdgeReattached },
       },
@@ -140,7 +140,7 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return default edge reattach interrupted callback", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     expect(() => {
       options.onEdgeReattachInterrupted({
@@ -156,7 +156,7 @@ describe("createUserDraggableEdgeParams", () => {
   it("should return specified edge reattach interrupted callback", () => {
     const onEdgeReattachInterrupted = (): void => {};
 
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       { events: { onEdgeReattachInterrupted } },
       createCanvas().graph,
     );
@@ -165,7 +165,7 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return default edge reattach prevented callback", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     expect(() => {
       options.onEdgeReattachPrevented({
@@ -181,7 +181,7 @@ describe("createUserDraggableEdgeParams", () => {
   it("should return specified edge reattach interrupted callback", () => {
     const onEdgeReattachPrevented = (): void => {};
 
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       { events: { onEdgeReattachPrevented } },
       createCanvas().graph,
     );
@@ -190,14 +190,14 @@ describe("createUserDraggableEdgeParams", () => {
   });
 
   it("should return default edge shape factory", () => {
-    const options = createUserDraggableEdgeParams({}, createCanvas().graph);
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
 
     expect(options.draggingEdgeShapeFactory).toBe(null);
   });
 
   it("should return specified edge shape factory", () => {
     const connectionFactory: EdgeShapeFactory = () => new DirectEdgeShape();
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       { draggingEdgeShape: connectionFactory },
       createCanvas().graph,
     );
@@ -208,7 +208,7 @@ describe("createUserDraggableEdgeParams", () => {
   it("should return default dragging edge resolver", () => {
     const canvas = createCanvas();
 
-    const options = createUserDraggableEdgeParams({}, canvas.graph);
+    const options = createDraggableEdgeParams({}, canvas.graph);
 
     canvas.addNode({
       id: "node-1",
@@ -251,7 +251,7 @@ describe("createUserDraggableEdgeParams", () => {
   it("should return specified dragging edge resolver", () => {
     const resolver: DraggingEdgeResolver = () => null;
 
-    const options = createUserDraggableEdgeParams(
+    const options = createDraggableEdgeParams(
       { draggingEdgeResolver: resolver },
       createCanvas().graph,
     );

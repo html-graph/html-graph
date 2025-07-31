@@ -1,5 +1,5 @@
 import { AddEdgeRequest, Canvas, GraphEdge } from "@/canvas";
-import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
+import { DraggableEdgesParams } from "./draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
@@ -31,7 +31,7 @@ export class UserDraggableEdgesConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
-    private readonly params: UserDraggableEdgesParams,
+    private readonly params: DraggableEdgesParams,
   ) {
     this.overlayCanvas = createOverlayCanvas(
       this.overlayLayer,
@@ -66,7 +66,7 @@ export class UserDraggableEdgesConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
-    params: UserDraggableEdgesParams,
+    params: DraggableEdgesParams,
   ): void {
     new UserDraggableEdgesConfigurator(
       canvas,

@@ -30,7 +30,7 @@ export type { ConnectionPreprocessor } from "./shared";
 
 export { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 export type {
-  UserDraggableEdgesParams,
+  DraggableEdgesParams,
   DraggingEdgeResolver,
 } from "./user-draggable-edges-configurator";
 

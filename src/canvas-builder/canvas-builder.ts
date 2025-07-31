@@ -29,12 +29,12 @@ import {
 } from "./create-background-params";
 import {
   ConnectablePortsConfig,
-  createUserConnectablePortsParams,
-} from "./create-user-connectable-ports-params";
+  createConnectablePortsParams,
+} from "./create-connectable-ports-params";
 import {
-  createUserDraggableEdgeParams,
+  createDraggableEdgeParams,
   DraggableEdgesConfig,
-} from "./create-user-draggable-edges-params";
+} from "./create-draggable-edges-params";
 import {
   createVirtualScrollParams,
   VirtualScrollConfig,
@@ -264,7 +264,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserConnectablePorts) {
-      const params = createUserConnectablePortsParams(
+      const params = createConnectablePortsParams(
         this.connectablePortsConfig,
         canvasParams.edges.shapeFactory,
         canvasParams.ports.direction,
@@ -280,7 +280,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasUserDraggableEdges) {
-      const dragEdgeParams = createUserDraggableEdgeParams(
+      const dragEdgeParams = createDraggableEdgeParams(
         this.draggableEdgesConfig,
         canvas.graph,
       );
