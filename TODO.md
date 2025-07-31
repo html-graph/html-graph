@@ -1,7 +1,5 @@
 # TODO
 
-- onBeforeNodeDrag rename to nodeDragVerifier
-
 V4
 
 - remove onBeforeViewportUpdated
