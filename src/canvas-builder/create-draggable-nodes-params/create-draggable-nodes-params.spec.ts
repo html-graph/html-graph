@@ -16,7 +16,7 @@ describe("createConfig", () => {
     expect(options.onNodeDrag).toBe(onNodeDrag);
   });
 
-  it("should set specified onBeforeNodeDrag", () => {
+  it("should set specified legacy nodeDragVerifier", () => {
     const onBeforeNodeDrag = (): boolean => true;
 
     const dragOptions: DraggableNodesConfig = {
@@ -27,7 +27,19 @@ describe("createConfig", () => {
 
     const options = createDraggableNodesParams(dragOptions);
 
-    expect(options.onBeforeNodeDrag).toBe(onBeforeNodeDrag);
+    expect(options.nodeDragVerifier).toBe(onBeforeNodeDrag);
+  });
+
+  it("should set specified legacy nodeDragVerifier", () => {
+    const nodeDragVerifier = (): boolean => true;
+
+    const dragOptions: DraggableNodesConfig = {
+      nodeDragVerifier,
+    };
+
+    const options = createDraggableNodesParams(dragOptions);
+
+    expect(options.nodeDragVerifier).toBe(nodeDragVerifier);
   });
 
   it("should set specified onNodeDragFinished", () => {

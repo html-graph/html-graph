@@ -2,7 +2,7 @@ import { EdgeShapeFactory, GraphEdge } from "@/canvas";
 import { ConnectionPreprocessor, MouseEventVerifier } from "../shared";
 import { DraggingEdgeResolver } from "./dragging-edge-resolver";
 
-export interface UserDraggableEdgesParams {
+export interface DraggableEdgesParams {
   readonly connectionPreprocessor: ConnectionPreprocessor;
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;

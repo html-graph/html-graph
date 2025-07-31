@@ -8,7 +8,7 @@ import {
   defaultCanvasParams,
 } from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
-import { UserDraggableEdgesParams } from "./user-draggable-edges-params";
+import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 import { ConnectionPreprocessor } from "../shared";
 
@@ -48,7 +48,7 @@ const createCanvas = (options?: {
     }
   };
 
-  const params: UserDraggableEdgesParams = {
+  const params: DraggableEdgesParams = {
     draggingEdgeShapeFactory: options?.draggingEdgeShapeFactory ?? null,
     draggingEdgeResolver: options?.draggingEdgeResolver ?? defaultResolver,
     connectionPreprocessor:

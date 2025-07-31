@@ -61,7 +61,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.params.onBeforeNodeDrag({
+    const isDragAllowed = this.params.nodeDragVerifier({
       nodeId,
       element: node.element,
       x: node.x,
@@ -113,7 +113,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.canvas.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.params.onBeforeNodeDrag({
+    const isDragAllowed = this.params.nodeDragVerifier({
       nodeId: nodeId,
       element: node.element,
       x: node.x,
