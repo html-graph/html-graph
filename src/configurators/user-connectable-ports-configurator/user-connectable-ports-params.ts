@@ -9,10 +9,10 @@ export interface UserConnectablePortsParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
   readonly onAfterEdgeCreated: (edgeId: unknown) => void;
-  readonly onEdgeCreationInterrupted: (
-    staticPortId: unknown,
-    isDirect: boolean,
-  ) => void;
+  readonly onEdgeCreationInterrupted: (params: {
+    readonly staticPortId: unknown;
+    readonly isDirect: boolean;
+  }) => void;
   readonly onEdgeCreationPrevented: (request: AddEdgeRequest) => void;
   readonly dragPortDirection: number;
 }

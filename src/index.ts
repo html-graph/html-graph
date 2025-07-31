@@ -29,7 +29,6 @@ export type {
 } from "./canvas";
 
 export type {
-  NodeDragPayload,
   TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,

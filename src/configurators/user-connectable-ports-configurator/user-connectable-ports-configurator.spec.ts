@@ -401,7 +401,10 @@ describe("UserConnectablePortsConfigurator", () => {
       new MouseEvent("mouseup", { clientX: 50, clientY: 50 }),
     );
 
-    expect(onEdgeCreationInterrupted).toHaveBeenCalledWith(0, true);
+    expect(onEdgeCreationInterrupted).toHaveBeenCalledWith({
+      staticPortId: 0,
+      isDirect: true,
+    });
   });
 
   it("should call specified callback on edge creation prevention", () => {

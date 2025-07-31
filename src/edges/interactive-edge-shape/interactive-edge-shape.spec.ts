@@ -52,7 +52,7 @@ describe("InteractiveEdgeShape", () => {
 
   it("should create interactive group with line of specified width", () => {
     const shape = new BezierEdgeShape();
-    const interactiveShape = new InteractiveEdgeShape(shape, { width: 20 });
+    const interactiveShape = new InteractiveEdgeShape(shape, { distance: 20 });
 
     const width =
       interactiveShape.handle.children[0].getAttribute("stroke-width");

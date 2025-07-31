@@ -161,7 +161,10 @@ describe("createUserConnectablePortsParams", () => {
     );
 
     expect(() => {
-      options.onEdgeCreationInterrupted("123", true);
+      options.onEdgeCreationInterrupted({
+        staticPortId: "123",
+        isDirect: true,
+      });
     }).not.toThrow();
   });
 

@@ -4,7 +4,6 @@ import {
   Canvas,
   CanvasBuilder,
   DraggableNodesConfig,
-  NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -15,11 +14,13 @@ const current = document.getElementById("current") as HTMLElement;
 
 const dragConfig: DraggableNodesConfig = {
   events: {
-    onNodeDrag: (payload: NodeDragPayload) => {
-      current.innerText = `drag triggered for ${JSON.stringify(payload)}`;
+    onNodeDrag: (nodeId: unknown) => {
+      current.innerText = `drag triggered for
+        ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
     },
-    onNodeDragFinished: (payload: NodeDragPayload) => {
-      current.innerText = `drag finished triggered for ${JSON.stringify(payload)}`;
+    onNodeDragFinished: (nodeId: unknown) => {
+      current.innerText = `drag finished triggered for
+        ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
     },
   },
 };

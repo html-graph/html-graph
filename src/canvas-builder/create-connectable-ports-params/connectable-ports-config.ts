@@ -15,11 +15,10 @@ export interface ConnectablePortsConfig {
   readonly dragPortDirection?: number | undefined;
   readonly events?: {
     readonly onAfterEdgeCreated?: (edgeId: unknown) => void;
-    // TODO: make params object
-    readonly onEdgeCreationInterrupted?: (
-      staticPortId: unknown,
-      isDirect: boolean,
-    ) => void;
+    readonly onEdgeCreationInterrupted?: (params: {
+      readonly staticPortId: unknown;
+      readonly isDirect: boolean;
+    }) => void;
     readonly onEdgeCreationPrevented?: (request: AddEdgeRequest) => void;
   };
 }

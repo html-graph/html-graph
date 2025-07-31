@@ -145,10 +145,11 @@ export class UserConnectablePortsConfigurator {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
 
     if (draggingPortId === null) {
-      this.params.onEdgeCreationInterrupted(
-        this.staticPortId,
-        this.isTargetDragging,
-      );
+      this.params.onEdgeCreationInterrupted({
+        staticPortId: this.staticPortId,
+        isDirect: this.isTargetDragging,
+      });
+
       return;
     }
 

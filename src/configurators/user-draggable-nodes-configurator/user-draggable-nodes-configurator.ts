@@ -61,12 +61,7 @@ export class UserDraggableNodesConfigurator {
     const nodeId = this.graph.getElementNodeId(element)!;
     const node = this.graph.getNode(nodeId)!;
 
-    const isDragAllowed = this.params.nodeDragVerifier({
-      nodeId,
-      element: node.element,
-      x: node.x,
-      y: node.y,
-    });
+    const isDragAllowed = this.params.nodeDragVerifier(nodeId);
 
     if (!isDragAllowed) {
       return;
@@ -252,12 +247,7 @@ export class UserDraggableNodesConfigurator {
       y: adjustedCoords.y,
     });
 
-    this.params.onNodeDrag({
-      nodeId: state.nodeId,
-      element: node.element,
-      x: adjustedCoords.x,
-      y: adjustedCoords.y,
-    });
+    this.params.onNodeDrag(state.nodeId);
   }
 
   private moveNodeOnTop(nodeId: unknown): void {
@@ -287,12 +277,7 @@ export class UserDraggableNodesConfigurator {
       const node = this.graph.getNode(this.grabbedNode.nodeId);
 
       if (node !== null) {
-        this.params.onNodeDragFinished({
-          nodeId: this.grabbedNode.nodeId,
-          element: node.element,
-          x: node.x,
-          y: node.y,
-        });
+        this.params.onNodeDragFinished(this.grabbedNode.nodeId);
       }
     }
 

@@ -4,7 +4,6 @@ import {
   Canvas,
   DraggableNodesConfig,
   CanvasBuilder,
-  NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -17,8 +16,9 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const dragOptions: DraggableNodesConfig = {
   events: {
-    onNodeDrag: (payload: NodeDragPayload) => {
-      positions.set(payload.nodeId, { x: payload.x, y: payload.y });
+    onNodeDrag: (nodeId: unknown) => {
+      const node = canvas.graph.getNode(nodeId)!;
+      positions.set(nodeId, { x: node.x, y: node.y });
       nodesElement.innerText = JSON.stringify(Object.fromEntries(positions));
     },
   },
