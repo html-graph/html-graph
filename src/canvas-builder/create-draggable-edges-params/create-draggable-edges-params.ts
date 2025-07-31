@@ -1,7 +1,4 @@
-import {
-  DraggingEdgeResolver,
-  DraggableEdgesParams,
-} from "@/configurators";
+import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
