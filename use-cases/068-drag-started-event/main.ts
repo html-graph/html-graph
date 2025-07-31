@@ -15,12 +15,10 @@ const current = document.getElementById("current") as HTMLElement;
 const dragConfig: DraggableNodesConfig = {
   events: {
     onNodeDrag: (nodeId: unknown) => {
-      current.innerText = `drag triggered for
-        ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
+      current.innerText = `drag triggered for ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
     },
     onNodeDragFinished: (nodeId: unknown) => {
-      current.innerText = `drag finished triggered for
-        ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
+      current.innerText = `drag finished triggered for ${JSON.stringify(canvas.graph.getNode(nodeId))}`;
     },
   },
 };
