@@ -21,7 +21,7 @@ describe("CanvasBuilder", () => {
     document.body.innerHTML = "";
   });
 
-  it("should throw error when trying to cann build second time", () => {
+  it("should throw error when trying to call build second time", () => {
     const builder = new CanvasBuilder(document.createElement("div"));
     builder.build();
 
