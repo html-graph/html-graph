@@ -31,7 +31,6 @@ const createCanvas = (options?: {
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
 
   const canvas = new Canvas(
-    mainElement,
     graphStore,
     viewportStore,
     htmlView,

@@ -12,11 +12,6 @@ export interface DraggableNodesConfig {
   readonly nodeDragVerifier?: (payload: NodeDragPayload) => boolean;
   readonly events?: {
     readonly onNodeDrag?: (payload: NodeDragPayload) => void;
-    /**
-     * @deprecated
-     * use nodeDragVerifier instead
-     */
-    readonly onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;
     readonly onNodeDragFinished?: (payload: NodeDragPayload) => void;
   };
 }

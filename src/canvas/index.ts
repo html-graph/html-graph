@@ -13,3 +13,4 @@ export type { GraphNode, GraphPort, GraphEdge } from "./graph";
 export { Canvas } from "./canvas";
 export { Graph } from "./graph";
 export { Viewport } from "./viewport";
+export { CanvasError } from "./canvas-error";

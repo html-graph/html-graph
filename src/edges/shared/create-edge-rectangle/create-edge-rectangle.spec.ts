@@ -7,8 +7,6 @@ const source: EdgeRenderPort = {
   width: 10,
   height: 10,
   direction: 0,
-  portId: "port-1",
-  nodeId: "node-1",
 };
 
 const target: EdgeRenderPort = {
@@ -17,8 +15,6 @@ const target: EdgeRenderPort = {
   width: 10,
   height: 10,
   direction: 0,
-  portId: "port-2",
-  nodeId: "node-2",
 };
 
 describe("createEdgeRectangle", () => {

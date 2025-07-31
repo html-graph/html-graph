@@ -131,7 +131,6 @@ export class CoreHtmlView implements HtmlView {
     const viewportMatrix = this.viewportStore.getViewportMatrix();
 
     const from = this.createEdgeRenderPort(
-      edge.from,
       portFrom,
       rectFrom,
       rectCanvas,
@@ -139,7 +138,6 @@ export class CoreHtmlView implements HtmlView {
     );
 
     const to = this.createEdgeRenderPort(
-      edge.to,
       portTo,
       rectTo,
       rectCanvas,
@@ -164,7 +162,6 @@ export class CoreHtmlView implements HtmlView {
   }
 
   private createEdgeRenderPort(
-    portId: unknown,
     port: PortPayload,
     rectPort: DOMRect,
     rectCanvas: DOMRect,
@@ -183,8 +180,6 @@ export class CoreHtmlView implements HtmlView {
       width: rectPort.width * viewportMatrix.scale,
       height: rectPort.height * viewportMatrix.scale,
       direction: port.direction,
-      portId,
-      nodeId: port.nodeId,
     };
   }
 }

@@ -10,8 +10,6 @@ const edgeRenderParams: EdgeRenderParams = {
     y: 0,
     width: 0,
     height: 0,
-    nodeId: "node-1",
-    portId: "port-1",
     direction: 0,
   },
   to: {
@@ -19,8 +17,6 @@ const edgeRenderParams: EdgeRenderParams = {
     y: 100,
     width: 0,
     height: 0,
-    nodeId: "node-2",
-    portId: "port-2",
     direction: 100,
   },
   category: ConnectionCategory.Line,

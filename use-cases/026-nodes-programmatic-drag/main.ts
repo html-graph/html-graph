@@ -1,6 +1,5 @@
 import {
   CanvasBuilder,
-  HtmlGraphError,
   Canvas,
   AddNodeRequest,
   AddEdgeRequest,
@@ -83,7 +82,7 @@ class NodesDragHandler {
           const node = this.nodes.get(this.grabbedNode);
 
           if (node === undefined) {
-            throw new HtmlGraphError("failed to drag nonexistent node");
+            throw new Error("failed to drag nonexistent node");
           }
 
           const matrixContent = canvas.viewport.getContentMatrix();

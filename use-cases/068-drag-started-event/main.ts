@@ -15,11 +15,6 @@ const current = document.getElementById("current") as HTMLElement;
 
 const dragConfig: DraggableNodesConfig = {
   events: {
-    onBeforeNodeDrag: (payload: NodeDragPayload) => {
-      current.innerText = `before drag triggered for ${JSON.stringify(payload)}`;
-
-      return true;
-    },
     onNodeDrag: (payload: NodeDragPayload) => {
       current.innerText = `drag triggered for ${JSON.stringify(payload)}`;
     },

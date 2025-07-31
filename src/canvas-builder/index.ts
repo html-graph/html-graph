@@ -9,3 +9,4 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
 } from "./create-transformable-viewport-params";
+export { CanvasBuilderError } from "./canvas-builder-error";

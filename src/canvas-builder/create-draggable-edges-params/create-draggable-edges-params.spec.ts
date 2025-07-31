@@ -32,13 +32,7 @@ const createCanvas = (): Canvas => {
     },
   };
 
-  const canvas = new Canvas(
-    element,
-    graphStore,
-    viewportStore,
-    htmlView,
-    params,
-  );
+  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
 
   return canvas;
 };
