@@ -10,6 +10,7 @@ export type {
   VirtualScrollConfig,
 } from "./canvas-builder";
 
+export { CanvasError } from "./canvas";
 export type {
   Canvas,
   AddNodeRequest,
@@ -68,5 +69,3 @@ export type { Point } from "./point";
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";
-
-export { CanvasError } from "./canvas";
