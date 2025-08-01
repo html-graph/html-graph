@@ -47,7 +47,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.targetArrow = this.baseEdge.targetArrow;
     this.onAfterRender = this.baseEdge.onAfterRender;
 
-    const width = params?.width ?? edgeConstants.interactiveWidth;
+    const width = params?.distance ?? edgeConstants.interactiveWidth;
 
     this.interactiveLine = createEdgeLine(width);
     this.handle.appendChild(this.interactiveLine);

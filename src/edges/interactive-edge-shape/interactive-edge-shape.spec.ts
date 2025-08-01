@@ -10,8 +10,6 @@ const edgeRenderParams: EdgeRenderParams = {
     y: 0,
     width: 0,
     height: 0,
-    nodeId: "node-1",
-    portId: "port-1",
     direction: 0,
   },
   to: {
@@ -19,8 +17,6 @@ const edgeRenderParams: EdgeRenderParams = {
     y: 100,
     width: 0,
     height: 0,
-    nodeId: "node-2",
-    portId: "port-2",
     direction: 100,
   },
   category: ConnectionCategory.Line,
@@ -56,7 +52,7 @@ describe("InteractiveEdgeShape", () => {
 
   it("should create interactive group with line of specified width", () => {
     const shape = new BezierEdgeShape();
-    const interactiveShape = new InteractiveEdgeShape(shape, { width: 20 });
+    const interactiveShape = new InteractiveEdgeShape(shape, { distance: 20 });
 
     const width =
       interactiveShape.handle.children[0].getAttribute("stroke-width");

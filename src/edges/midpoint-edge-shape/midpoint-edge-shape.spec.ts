@@ -32,8 +32,6 @@ describe("MidpointEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        portId: "port-1",
-        nodeId: "node-1",
         direction: 0,
       },
       to: {
@@ -41,8 +39,6 @@ describe("MidpointEdgeShape", () => {
         y: 100,
         width: 0,
         height: 0,
-        portId: "port-2",
-        nodeId: "node-2",
         direction: 0,
       },
       category: ConnectionCategory.Line,

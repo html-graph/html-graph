@@ -496,27 +496,6 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return legacy specified port outgoing edge ids", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addPortRequest1 = createAddPortRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest2 = createAddPortRequest2();
-    const addEdgeRequest12 = createAddEdgeRequest12();
-
-    store.addNode(addNodeRequest1);
-    store.addNode(addNodeRequest2);
-    store.addPort(addPortRequest1);
-    store.addPort(addPortRequest2);
-    store.addEdge(addEdgeRequest12);
-
-    expect(graph.getPortOutcomingEdgeIds(addPortRequest1.id)).toEqual([
-      addEdgeRequest12.id,
-    ]);
-  });
-
   it("should return specified port cycle edge ids", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
@@ -593,27 +572,6 @@ describe("Graph", () => {
     store.addEdge(addEdgeRequest12);
 
     expect(graph.getNodeOutgoingEdgeIds(addNodeRequest1.id)).toEqual([
-      addEdgeRequest12.id,
-    ]);
-  });
-
-  it("should return legacy specified node outgoing edge ids", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addPortRequest1 = createAddPortRequest1();
-    const addNodeRequest2 = createAddNodeRequest2();
-    const addPortRequest2 = createAddPortRequest2();
-    const addEdgeRequest12 = createAddEdgeRequest12();
-
-    store.addNode(addNodeRequest1);
-    store.addNode(addNodeRequest2);
-    store.addPort(addPortRequest1);
-    store.addPort(addPortRequest2);
-    store.addEdge(addEdgeRequest12);
-
-    expect(graph.getNodeOutcomingEdgeIds(addNodeRequest1.id)).toEqual([
       addEdgeRequest12.id,
     ]);
   });
@@ -738,21 +696,6 @@ describe("Graph", () => {
     store.addPort(addPortRequest1);
 
     expect(graph.getElementPortIds(addPortRequest1.element)).toEqual([
-      addPortRequest1.id,
-    ]);
-  });
-
-  it("should return legacy marked port ids for element", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addPortRequest1 = createAddPortRequest1();
-
-    store.addNode(addNodeRequest1);
-    store.addPort(addPortRequest1);
-
-    expect(graph.getElementPortsIds(addPortRequest1.element)).toEqual([
       addPortRequest1.id,
     ]);
   });

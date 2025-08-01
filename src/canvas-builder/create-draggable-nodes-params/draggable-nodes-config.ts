@@ -1,22 +1,17 @@
-import { MouseEventVerifier, NodeDragPayload } from "@/configurators";
+import { MouseEventVerifier } from "@/configurators";
 
 export interface DraggableNodesConfig {
   readonly moveOnTop?: boolean;
   readonly moveEdgesOnTop?: boolean;
+  readonly gridSize?: number | null;
+  readonly nodeDragVerifier?: (nodeId: unknown) => boolean;
   readonly mouse?: {
     readonly dragCursor?: string | null;
     readonly mouseDownEventVerifier?: MouseEventVerifier;
     readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
-  readonly gridSize?: number | null;
-  readonly nodeDragVerifier?: (payload: NodeDragPayload) => boolean;
   readonly events?: {
-    readonly onNodeDrag?: (payload: NodeDragPayload) => void;
-    /**
-     * @deprecated
-     * use nodeDragVerifier instead
-     */
-    readonly onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;
-    readonly onNodeDragFinished?: (payload: NodeDragPayload) => void;
+    readonly onNodeDrag?: (nodeId: unknown) => void;
+    readonly onNodeDragFinished?: (nodeId: unknown) => void;
   };
 }

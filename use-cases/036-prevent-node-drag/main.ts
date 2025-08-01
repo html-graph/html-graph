@@ -3,7 +3,6 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -12,10 +11,8 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvas: Canvas = builder
   .enableUserDraggableNodes({
-    events: {
-      onBeforeNodeDrag: (payload: NodeDragPayload) => {
-        return payload.nodeId !== "node-1";
-      },
+    nodeDragVerifier: (nodeId: unknown) => {
+      return nodeId !== "node-1";
     },
   })
   .build();

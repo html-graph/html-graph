@@ -6,9 +6,7 @@ export const createDraggableNodesParams = (
 ): DraggableNodesParams => {
   const onNodeDrag = config.events?.onNodeDrag ?? ((): void => {});
 
-  const nodeDragVerifier =
-    (config.events?.onBeforeNodeDrag || config.nodeDragVerifier) ??
-    ((): boolean => true);
+  const nodeDragVerifier = config.nodeDragVerifier ?? ((): boolean => true);
 
   const onNodeDragFinished =
     config.events?.onNodeDragFinished ?? ((): void => {});

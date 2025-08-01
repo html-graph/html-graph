@@ -37,12 +37,8 @@ canvas
   .addNode(addNode2Request)
   .addEdge(addEdgeRequest);
 
-canvas.viewport.onBeforeUpdated.subscribe(() => {
-  const before = JSON.stringify(canvas.viewport.getViewportMatrix());
-  document.getElementById("before")!.innerText = before;
-});
-
 canvas.viewport.onAfterUpdated.subscribe(() => {
   const after = JSON.stringify(canvas.viewport.getViewportMatrix());
+
   document.getElementById("after")!.innerText = after;
 });

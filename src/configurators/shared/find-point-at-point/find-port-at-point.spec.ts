@@ -30,7 +30,7 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     },
   };
 
-  return new Canvas(element, graphStore, viewportStore, htmlView, defaults);
+  return new Canvas(graphStore, viewportStore, htmlView, defaults);
 };
 
 describe("findPortAtPoint", () => {

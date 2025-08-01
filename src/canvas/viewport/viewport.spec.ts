@@ -74,20 +74,6 @@ describe("Viewport", () => {
     expect(viewportMatrix).not.toBe(matrix);
   });
 
-  it("should call callback before viewport update", () => {
-    const viewportStore = new ViewportStore();
-
-    const viewport = new Viewport(viewportStore);
-
-    const onBeforeUpdate = jest.fn();
-
-    viewport.onBeforeUpdated.subscribe(onBeforeUpdate);
-
-    viewportStore.patchViewportMatrix({});
-
-    expect(onBeforeUpdate).toHaveBeenCalled();
-  });
-
   it("should call callback after viewport update", () => {
     const viewportStore = new ViewportStore();
 

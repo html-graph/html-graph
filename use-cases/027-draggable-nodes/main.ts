@@ -4,7 +4,6 @@ import {
   Canvas,
   CanvasBuilder,
   DraggableNodesConfig,
-  NodeDragPayload,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -13,9 +12,9 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const dragConfig: DraggableNodesConfig = {
   events: {
-    onNodeDrag: (payload: NodeDragPayload) => {
+    onNodeDrag: (nodeId: unknown) => {
       const current = document.getElementById("current") as HTMLElement;
-      current.innerText = payload.nodeId as string;
+      current.innerText = nodeId as string;
     },
     onNodeDragFinished: () => {
       const current = document.getElementById("current") as HTMLElement;

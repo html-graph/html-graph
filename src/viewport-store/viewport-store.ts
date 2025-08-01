@@ -13,17 +13,8 @@ export class ViewportStore {
 
   public readonly onAfterUpdated: EventHandler<void>;
 
-  private readonly beforeUpdateEmitter: EventEmitter<void>;
-
-  /**
-   * @deprecated
-   * do not use
-   */
-  public readonly onBeforeUpdated: EventHandler<void>;
-
   public constructor() {
     [this.afterUpdateEmitter, this.onAfterUpdated] = createPair<void>();
-    [this.beforeUpdateEmitter, this.onBeforeUpdated] = createPair<void>();
   }
 
   public getViewportMatrix(): TransformState {
@@ -35,8 +26,6 @@ export class ViewportStore {
   }
 
   public patchViewportMatrix(matrix: PatchTransformRequest): void {
-    this.beforeUpdateEmitter.emit();
-
     this.viewportMatrix = {
       scale: matrix.scale ?? this.viewportMatrix.scale,
       x: matrix.x ?? this.viewportMatrix.x,
@@ -48,8 +37,6 @@ export class ViewportStore {
   }
 
   public patchContentMatrix(matrix: PatchTransformRequest): void {
-    this.beforeUpdateEmitter.emit();
-
     this.contentMatrix = {
       scale: matrix.scale ?? this.contentMatrix.scale,
       x: matrix.x ?? this.contentMatrix.x,

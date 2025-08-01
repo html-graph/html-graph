@@ -44,7 +44,6 @@ export const resolveEdgeShapeFactory: (
           cycleSquareSide: options.cycleSquareSide,
           roundness: options.roundness,
           detourDistance: options.detourDistance,
-          detourDirection: options.detourDirection,
         });
     case "vertical":
       return () =>
@@ -59,7 +58,6 @@ export const resolveEdgeShapeFactory: (
           cycleSquareSide: options.cycleSquareSide,
           roundness: options.roundness,
           detourDistance: options.detourDistance,
-          detourDirection: options.detourDirection,
         });
     case "direct":
       return () =>

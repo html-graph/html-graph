@@ -12,7 +12,6 @@ import {
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
 } from "@/configurators";
-import { HtmlGraphError } from "@/error";
 import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
 import {
@@ -40,9 +39,10 @@ import {
   VirtualScrollConfig,
 } from "./create-virtual-scroll-params";
 import { createBoxHtmlViewParams } from "./create-box-html-view-params";
+import { CanvasBuilderError } from "./canvas-builder-error";
 
 export class CanvasBuilder {
-  private element: HTMLElement | null = null;
+  private used = false;
 
   private canvasDefaults: CanvasDefaults = {};
 
@@ -75,20 +75,10 @@ export class CanvasBuilder {
 
   private readonly window = window;
 
-  public constructor(element?: HTMLElement) {
+  public constructor(private readonly element: HTMLElement) {
     if (element !== undefined) {
       this.element = element;
     }
-  }
-
-  /**
-   * @deprecated
-   * use `new CanvasBuilder(element);` instead
-   */
-  public setElement(element: HTMLElement): CanvasBuilder {
-    this.element = element;
-
-    return this;
   }
 
   /**
@@ -125,33 +115,10 @@ export class CanvasBuilder {
   }
 
   /**
-   * @deprecated
-   * use enableNodeResizeReactiveEdges instead
-   */
-  public enableResizeReactiveNodes(): CanvasBuilder {
-    this.hasNodeResizeReactiveEdges = true;
-
-    return this;
-  }
-
-  /**
    * enables automatic edges update on node resize
    */
   public enableNodeResizeReactiveEdges(): CanvasBuilder {
     this.hasNodeResizeReactiveEdges = true;
-
-    return this;
-  }
-
-  /**
-   * @deprecated
-   * do not use
-   * sets emitter for rendering graph inside bounded area
-   */
-  public enableBoxAreaRendering(
-    trigger: EventSubject<RenderingBox>,
-  ): CanvasBuilder {
-    this.boxRenderingTrigger = trigger;
 
     return this;
   }
@@ -201,11 +168,11 @@ export class CanvasBuilder {
    * builds final canvas
    */
   public build(): Canvas {
-    if (this.element === null) {
-      throw new HtmlGraphError(
-        "unable to build canvas when no attach element specified",
-      );
+    if (this.used) {
+      throw new CanvasBuilderError("CanvasBuilder is a single use object");
     }
+
+    this.used = true;
 
     let trigger = this.boxRenderingTrigger;
 
@@ -235,7 +202,6 @@ export class CanvasBuilder {
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
-      this.element,
       graphStore,
       viewportStore,
       htmlView,
@@ -312,8 +278,6 @@ export class CanvasBuilder {
       );
     }
 
-    this.reset();
-
     const onBeforeDestroy = (): void => {
       layers.destroy();
       canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
@@ -322,24 +286,5 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
-  }
-
-  /**
-   * @deprecated
-   * CanvasBuilder should be single use object
-   */
-  private reset(): void {
-    this.element = null;
-    this.canvasDefaults = {};
-    this.dragConfig = {};
-    this.transformConfig = {};
-    this.backgroundConfig = {};
-    this.virtualScrollConfig = undefined;
-    this.hasDraggableNode = false;
-    this.hasTransformableViewport = false;
-    this.hasNodeResizeReactiveEdges = false;
-    this.hasBackground = false;
-    this.boxRenderingTrigger = undefined;
-    this.hasUserConnectablePorts = false;
   }
 }

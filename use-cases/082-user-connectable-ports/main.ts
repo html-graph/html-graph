@@ -48,9 +48,9 @@ const connectablePortConfig: ConnectablePortsConfig = {
       console.log(`prevented edge creation`);
       console.log(request);
     },
-    onEdgeCreationInterrupted: (staticPortId, isDirect) => {
+    onEdgeCreationInterrupted: (params) => {
       console.log(`interrupted edge creation`);
-      console.log(staticPortId, isDirect);
+      console.log(params);
     },
   },
 };

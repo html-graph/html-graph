@@ -1,10 +1,7 @@
 export { NodeResizeReactiveEdgesConfigurator } from "./node-resize-reactive-edges-configurator";
 
 export { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
-export type {
-  DraggableNodesParams,
-  NodeDragPayload,
-} from "./user-draggable-nodes-configurator";
+export type { DraggableNodesParams } from "./user-draggable-nodes-configurator";
 
 export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 export type {

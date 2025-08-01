@@ -25,7 +25,7 @@ const canvasDefaults: CanvasDefaults = {
       });
 
       const interactiveEdge = new InteractiveEdgeShape(baseShape, {
-        width: 10,
+        distance: 10,
       });
 
       const handler = (): void => {

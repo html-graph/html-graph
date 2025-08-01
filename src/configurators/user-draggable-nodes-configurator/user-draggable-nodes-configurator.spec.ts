@@ -12,7 +12,6 @@ import {
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
-import { NodeDragPayload } from "./node-drag-payload";
 import { MouseEventVerifier } from "../shared";
 
 let innerWidth: number;
@@ -21,10 +20,10 @@ let innerHeight: number;
 const createCanvas = (options?: {
   dragCursor?: string | null;
   element?: HTMLElement;
-  onBeforeNodeDrag?: (payload: NodeDragPayload) => boolean;
+  onBeforeNodeDrag?: (nodeId: unknown) => boolean;
   moveOnTop?: boolean;
   moveEdgesOnTop?: boolean;
-  onNodeDragFinished?: (nodeId: NodeDragPayload) => void;
+  onNodeDragFinished?: (nodeId: unknown) => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
   gridSize?: number | null;
@@ -35,7 +34,6 @@ const createCanvas = (options?: {
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
   const canvas = new Canvas(
-    element,
     graphStore,
     viewportStore,
     htmlView,
@@ -735,12 +733,7 @@ describe("UserDraggableNodesConfigurator", () => {
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
-    expect(onNodeDragFinished).toHaveBeenCalledWith({
-      nodeId: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
+    expect(onNodeDragFinished).toHaveBeenCalledWith("node-1");
   });
 
   it("should call on drag finished with touch", () => {

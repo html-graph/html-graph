@@ -27,11 +27,5 @@ export const createOverlayCanvas = (
     },
   };
 
-  return new Canvas(
-    overlayLayer,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaults,
-  );
+  return new Canvas(graphStore, viewportStore, htmlView, defaults);
 };

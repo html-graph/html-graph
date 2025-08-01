@@ -4,13 +4,13 @@ import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { createElement } from "@/mocks";
 import { CenterFn, standardCenterFn } from "@/center-fn";
-import { HtmlGraphError } from "@/error";
 import { AddNodeRequest } from "./add-node-request";
 import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
+import { CanvasError } from "./canvas-error";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -41,13 +41,7 @@ const createCanvas = (options?: {
     },
   };
 
-  const canvas = new Canvas(
-    element,
-    graphStore,
-    viewportStore,
-    htmlView,
-    params,
-  );
+  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
 
   return canvas;
 };
@@ -99,7 +93,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.addNode(addNodeRequest);
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should add node with specified default centerFn", () => {
@@ -300,7 +294,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.updateNode("node-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should remove node", () => {
@@ -327,7 +321,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.removeNode("node-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should mark port", () => {
@@ -390,7 +384,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.markPort(markPortRequest);
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should throw error when trying to mark port to nonexistent node", () => {
@@ -399,7 +393,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.markPort({ nodeId: "node-1", element: createElement() });
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should mark port with specified default port direction", () => {
@@ -480,7 +474,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.updatePort("port-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should unmark port", () => {
@@ -511,7 +505,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.unmarkPort("port-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should add edge", () => {
@@ -695,7 +689,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should not add edge from nonexistent port", () => {
@@ -717,7 +711,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.addEdge({ id: "edge-1", from: "port-2", to: "port-1" });
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should not add edge to nonexistent port", () => {
@@ -739,7 +733,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should update edge without parameters", () => {
@@ -915,7 +909,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.updateEdge("edge-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should remove edge", () => {
@@ -949,7 +943,7 @@ describe("Canvas", () => {
 
     expect(() => {
       canvas.removeEdge("edge-1");
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 
   it("should patch viewport matrix", () => {
@@ -1241,6 +1235,6 @@ describe("Canvas", () => {
         x: 0,
         y: 0,
       });
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasError);
   });
 });

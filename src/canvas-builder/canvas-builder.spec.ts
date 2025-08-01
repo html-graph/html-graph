@@ -2,15 +2,13 @@ import { AddEdgeRequest, AddNodeRequest } from "@/canvas";
 import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
-import { EventSubject } from "@/event-subject";
-import { RenderingBox } from "@/html-view";
 import {
   createElement,
   createMouseMoveEvent,
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { HtmlGraphError } from "@/error";
+import { CanvasBuilderError } from "./canvas-builder-error";
 
 const setLayersDimensions = (element: HTMLElement): void => {
   for (const child of element.children[0].children) {
@@ -23,12 +21,13 @@ describe("CanvasBuilder", () => {
     document.body.innerHTML = "";
   });
 
-  it("should throw error when attach element not specified", () => {
-    const builder = new CanvasBuilder();
+  it("should throw error when trying to call build second time", () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    builder.build();
 
     expect(() => {
       builder.build();
-    }).toThrow(HtmlGraphError);
+    }).toThrow(CanvasBuilderError);
   });
 
   it("should remove all children before destroy", () => {
@@ -67,86 +66,11 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should set element with legacy method", () => {
-    const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder();
-
-    const canvas = builder
-      .setElement(canvasElement)
-      .setDefaults({
-        nodes: {
-          priority: () => 10,
-        },
-      })
-      .build();
-
-    canvas.addNode({
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    });
-
-    const container =
-      canvasElement.children[0].children[1].children[0].children[0];
-    const nodeWrapper = container.children[0] as HTMLElement;
-
-    expect(nodeWrapper.style.zIndex).toBe("10");
-  });
-
   it("should build canvas with node resize reactive edges", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
 
     const canvas = builder.enableNodeResizeReactiveEdges().build();
-
-    const nodeRequest1: AddNodeRequest = {
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: document.createElement("div"),
-        },
-      ],
-    };
-
-    const nodeRequest2: AddNodeRequest = {
-      id: "node-2",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: document.createElement("div"),
-        },
-      ],
-    };
-
-    const shape = new BezierEdgeShape();
-
-    const addEdge: AddEdgeRequest = {
-      from: "port-1",
-      to: "port-2",
-      shape,
-    };
-
-    canvas.addNode(nodeRequest1).addNode(nodeRequest2).addEdge(addEdge);
-
-    const spy = jest.spyOn(shape, "render");
-
-    triggerResizeFor(nodeRequest1.element);
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should build canvas with node resize reactive edges legacy", () => {
-    const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
-
-    const canvas = builder.enableResizeReactiveNodes().build();
 
     const nodeRequest1: AddNodeRequest = {
       id: "node-1",
@@ -236,29 +160,6 @@ describe("CanvasBuilder", () => {
     const container = host.children[0].children[0] as HTMLElement;
 
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
-  });
-
-  it("should build canvas with specified rendering trigger", () => {
-    const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
-    const trigger = new EventSubject<RenderingBox>();
-
-    const canvas = builder.enableBoxAreaRendering(trigger).build();
-
-    canvas.addNode({
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-    });
-
-    const container =
-      canvasElement.children[0].children[1].children[0].children[0];
-
-    const elementsBefore = container.children.length;
-    trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
-    const elementsAfter = container.children.length;
-
-    expect([elementsBefore, elementsAfter]).toStrictEqual([0, 1]);
   });
 
   it("should build canvas with virtual scroll", async () => {

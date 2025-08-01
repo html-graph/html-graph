@@ -111,14 +111,6 @@ export class Graph {
     return [...this.graphStore.getElementPortIds(element)];
   }
 
-  /**
-   * @deprecated
-   * use getElementPortIds instead
-   */
-  public getElementPortsIds(element: HTMLElement): readonly unknown[] {
-    return this.getElementPortIds(element);
-  }
-
   public getAllEdgeIds(): readonly unknown[] {
     return this.graphStore.getAllEdgeIds();
   }
@@ -154,14 +146,6 @@ export class Graph {
     return this.graphStore.getPortOutgoingEdgeIds(portId);
   }
 
-  /**
-   * @deprecated
-   * use getPortOutgoingEdgeIds instead
-   */
-  public getPortOutcomingEdgeIds(portId: unknown): readonly unknown[] | null {
-    return this.getPortOutgoingEdgeIds(portId);
-  }
-
   public getPortCycleEdgeIds(portId: unknown): readonly unknown[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
@@ -192,14 +176,6 @@ export class Graph {
     }
 
     return this.graphStore.getNodeOutgoingEdgeIds(nodeId);
-  }
-
-  /**
-   * @deprecated
-   * use getNodeOutgoingEdgeIds instead
-   */
-  public getNodeOutcomingEdgeIds(nodeId: unknown): readonly unknown[] | null {
-    return this.getNodeOutgoingEdgeIds(nodeId);
   }
 
   public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] | null {

@@ -41,7 +41,6 @@ const createCanvas = (options?: {
   );
 
   const canvas = new Canvas(
-    element,
     graphStore,
     viewportStore,
     htmlView,
