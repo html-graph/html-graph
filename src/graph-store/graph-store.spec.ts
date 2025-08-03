@@ -4,8 +4,8 @@ import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { PortPayload } from "./port-payload";
-import { NodePayload } from "./node-payload";
+import { StorePort } from "./store-port";
+import { StoreNode } from "./store-node";
 import { CenterFn } from "@/center-fn";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
@@ -82,7 +82,7 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    const expected: NodePayload = {
+    const expected: StoreNode = {
       element: addNodeRequest1.element,
       x: addNodeRequest1.x,
       y: addNodeRequest1.y,
@@ -124,7 +124,7 @@ describe("GraphStore", () => {
       priority: undefined,
     });
 
-    const expected: NodePayload = {
+    const expected: StoreNode = {
       element: addNodeRequest1.element,
       x: 100,
       y: 100,
@@ -171,7 +171,7 @@ describe("GraphStore", () => {
       priority: 10,
     });
 
-    const expected: NodePayload = {
+    const expected: StoreNode = {
       element: addNodeRequest1.element,
       x: addNodeRequest1.x,
       y: addNodeRequest1.y,
@@ -253,7 +253,7 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    const expected: PortPayload = {
+    const expected: StorePort = {
       element: addPortRequest1.element,
       direction: addPortRequest1.direction,
       nodeId: addNodeRequest1.id,
@@ -290,7 +290,7 @@ describe("GraphStore", () => {
       direction: Math.PI,
     });
 
-    const expected: PortPayload = {
+    const expected: StorePort = {
       element: addPortRequest1.element,
       direction: Math.PI,
       nodeId: addNodeRequest1.id,
