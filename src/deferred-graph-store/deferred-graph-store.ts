@@ -12,8 +12,23 @@ import { Command, CommandType } from "./commands";
 export class DeferredGraphStore extends GraphStore<number | undefined> {
   private commands: Command[] = [];
 
+  private readonly onBeforeNodeRemovedHandler = (nodeId: unknown): void => {
+    this.getNodePortIds(nodeId)!.forEach((portId) => {
+      this.removePort(portId);
+    });
+  };
+
+  private readonly onBeforePortRemovedHandler = (portId: unknown): void => {
+    this.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
+      this.removeEdge(edgeId);
+    });
+  };
+
   public constructor(private readonly baseGraphStore: GraphStore<number>) {
     super();
+
+    this.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemovedHandler);
+    this.onBeforePortRemoved.subscribe(this.onBeforePortRemovedHandler);
   }
 
   public addNode(request: AddNodeRequest<number | undefined>): void {
