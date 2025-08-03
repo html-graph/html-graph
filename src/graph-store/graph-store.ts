@@ -1,6 +1,6 @@
-import { EdgePayload } from "./edge-payload";
-import { NodePayload } from "./node-payload";
-import { PortPayload } from "./port-payload";
+import { StoreEdge } from "./store-edge";
+import { StoreNode } from "./store-node";
+import { StorePort } from "./store-port";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
@@ -11,11 +11,11 @@ import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 
 export class GraphStore {
-  private readonly nodes = new Map<unknown, NodePayload>();
+  private readonly nodes = new Map<unknown, StoreNode>();
 
-  private readonly ports = new Map<unknown, PortPayload>();
+  private readonly ports = new Map<unknown, StorePort>();
 
-  private readonly edges = new Map<unknown, EdgePayload>();
+  private readonly edges = new Map<unknown, StoreEdge>();
 
   private readonly nodesElementsMap = new Map<HTMLElement, unknown>();
 
@@ -115,7 +115,7 @@ export class GraphStore {
   public addNode(request: AddNodeRequest): void {
     const ports = new Map<unknown, HTMLElement>();
 
-    const node: NodePayload = {
+    const node: StoreNode = {
       element: request.element,
       x: request.x,
       y: request.y,
@@ -134,7 +134,7 @@ export class GraphStore {
     return Array.from(this.nodes.keys());
   }
 
-  public getNode(nodeId: unknown): NodePayload | undefined {
+  public getNode(nodeId: unknown): StoreNode | undefined {
     return this.nodes.get(nodeId);
   }
 
@@ -181,7 +181,7 @@ export class GraphStore {
     this.afterPortAddedEmitter.emit(request.id);
   }
 
-  public getPort(portId: unknown): PortPayload | undefined {
+  public getPort(portId: unknown): StorePort | undefined {
     return this.ports.get(portId);
   }
 
@@ -258,7 +258,7 @@ export class GraphStore {
     return Array.from(this.edges.keys());
   }
 
-  public getEdge(edgeId: unknown): EdgePayload | undefined {
+  public getEdge(edgeId: unknown): StoreEdge | undefined {
     return this.edges.get(edgeId);
   }
 
