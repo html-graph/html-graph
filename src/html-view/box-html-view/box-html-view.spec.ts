@@ -311,9 +311,9 @@ describe("BoxHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const node = store.getNode(addNodeRequest.id)!;
-    node.x = 11;
-    node.y = 11;
+    const payload = store.getNode(addNodeRequest.id)!.payload;
+    payload.x = 11;
+    payload.y = 11;
 
     const spy = jest.spyOn(coreView, "updateNodePosition");
     boxView.updateNodePosition(addNodeRequest.id);
@@ -326,9 +326,9 @@ describe("BoxHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
-    const node = store.getNode(addNodeRequest.id)!;
-    node.x = 2;
-    node.y = 2;
+    const payload = store.getNode(addNodeRequest.id)!.payload;
+    payload.x = 2;
+    payload.y = 2;
 
     const spy = jest.spyOn(coreView, "attachNode");
     boxView.updateNodePosition(addNodeRequest.id);
@@ -341,9 +341,9 @@ describe("BoxHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const node = store.getNode("node-1")!;
-    node.x = 12;
-    node.y = 12;
+    const payload = store.getNode("node-1")!.payload;
+    payload.x = 12;
+    payload.y = 12;
 
     const spy = jest.spyOn(coreView, "attachEdge");
     boxView.updateNodePosition("node-1");

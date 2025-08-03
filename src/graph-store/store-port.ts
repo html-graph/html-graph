@@ -1,5 +1,7 @@
 export interface StorePort {
   readonly element: HTMLElement;
-  direction: number;
+  readonly payload: {
+    direction: number;
+  };
   readonly nodeId: unknown;
 }

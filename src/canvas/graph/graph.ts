@@ -68,12 +68,14 @@ export class Graph {
       return null;
     }
 
+    const payload = node.payload;
+
     return {
       element: node.element,
-      x: node.x,
-      y: node.y,
-      centerFn: node.centerFn,
-      priority: node.priority,
+      x: payload.x,
+      y: payload.y,
+      centerFn: payload.centerFn,
+      priority: payload.priority,
     };
   }
 
@@ -94,7 +96,7 @@ export class Graph {
 
     return {
       element: port.element,
-      direction: port.direction,
+      direction: port.payload.direction,
       nodeId: port.nodeId,
     };
   }
@@ -122,11 +124,13 @@ export class Graph {
       return null;
     }
 
+    const payload = edge.payload;
+
     return {
       from: edge.from,
       to: edge.to,
-      priority: edge.priority,
-      shape: edge.shape,
+      priority: payload.priority,
+      shape: payload.shape,
     };
   }
 

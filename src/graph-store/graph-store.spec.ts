@@ -7,6 +7,7 @@ import { AddEdgeRequest } from "./add-edge-request";
 import { StorePort } from "./store-port";
 import { StoreNode } from "./store-node";
 import { CenterFn } from "@/center-fn";
+import { StoreEdge } from "./store-edge";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
   return {
@@ -84,10 +85,12 @@ describe("GraphStore", () => {
 
     const expected: StoreNode = {
       element: addNodeRequest1.element,
-      x: addNodeRequest1.x,
-      y: addNodeRequest1.y,
-      centerFn: addNodeRequest1.centerFn,
-      priority: addNodeRequest1.priority,
+      payload: {
+        x: addNodeRequest1.x,
+        y: addNodeRequest1.y,
+        centerFn: addNodeRequest1.centerFn,
+        priority: addNodeRequest1.priority,
+      },
       ports: new Map(),
     };
 
@@ -126,10 +129,12 @@ describe("GraphStore", () => {
 
     const expected: StoreNode = {
       element: addNodeRequest1.element,
-      x: 100,
-      y: 100,
-      centerFn,
-      priority: addNodeRequest1.priority,
+      payload: {
+        x: 100,
+        y: 100,
+        centerFn,
+        priority: addNodeRequest1.priority,
+      },
       ports: new Map(),
     };
 
@@ -173,10 +178,12 @@ describe("GraphStore", () => {
 
     const expected: StoreNode = {
       element: addNodeRequest1.element,
-      x: addNodeRequest1.x,
-      y: addNodeRequest1.y,
-      centerFn: addNodeRequest1.centerFn,
-      priority: 10,
+      payload: {
+        x: addNodeRequest1.x,
+        y: addNodeRequest1.y,
+        centerFn: addNodeRequest1.centerFn,
+        priority: 10,
+      },
       ports: new Map(),
     };
 
@@ -255,7 +262,9 @@ describe("GraphStore", () => {
 
     const expected: StorePort = {
       element: addPortRequest1.element,
-      direction: addPortRequest1.direction,
+      payload: {
+        direction: addPortRequest1.direction,
+      },
       nodeId: addNodeRequest1.id,
     };
 
@@ -292,7 +301,9 @@ describe("GraphStore", () => {
 
     const expected: StorePort = {
       element: addPortRequest1.element,
-      direction: Math.PI,
+      payload: {
+        direction: Math.PI,
+      },
       nodeId: addNodeRequest1.id,
     };
 
@@ -398,12 +409,16 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+    const expected: StoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
-      shape: addEdgeRequest12.shape,
-      priority: addEdgeRequest12.priority,
-    });
+      payload: {
+        shape: addEdgeRequest12.shape,
+        priority: addEdgeRequest12.priority,
+      },
+    };
+
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual(expected);
   });
 
   it("should emit event after edge added", () => {
@@ -450,12 +465,16 @@ describe("GraphStore", () => {
       priority: undefined,
     });
 
-    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+    const expected: StoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
-      shape: shape,
-      priority: addEdgeRequest12.priority,
-    });
+      payload: {
+        shape: shape,
+        priority: addEdgeRequest12.priority,
+      },
+    };
+
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual(expected);
   });
 
   it("should emit event after edge shape updated", () => {
@@ -509,12 +528,16 @@ describe("GraphStore", () => {
       priority: 10,
     });
 
-    expect(store.getEdge(addEdgeRequest12.id)).toEqual({
+    const expected: StoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
-      shape: addEdgeRequest12.shape,
-      priority: 10,
-    });
+      payload: {
+        shape: addEdgeRequest12.shape,
+        priority: 10,
+      },
+    };
+
+    expect(store.getEdge(addEdgeRequest12.id)).toEqual(expected);
   });
 
   it("should emit event after edge priority updated", () => {

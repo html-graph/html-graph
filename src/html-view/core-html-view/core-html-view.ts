@@ -56,7 +56,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public attachEdge(edgeId: unknown): void {
-    const svg = this.graphStore.getEdge(edgeId)!.shape.svg;
+    const svg = this.graphStore.getEdge(edgeId)!.payload.shape.svg;
 
     this.edgeIdToElementMap.set(edgeId, svg);
     this.container.appendChild(svg);
@@ -95,10 +95,10 @@ export class CoreHtmlView implements HtmlView {
     const node = this.graphStore.getNode(nodeId)!;
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
-    const center = node.centerFn(width, height);
+    const center = node.payload.centerFn(width, height);
 
-    const x = node.x - viewportScale * center.x;
-    const y = node.y - viewportScale * center.y;
+    const x = node.payload.x - viewportScale * center.x;
+    const y = node.payload.y - viewportScale * center.y;
 
     node.element.style.transform = `translate(${x}px, ${y}px)`;
   }
@@ -106,7 +106,7 @@ export class CoreHtmlView implements HtmlView {
   public updateNodePriority(nodeId: unknown): void {
     const node = this.graphStore.getNode(nodeId)!;
 
-    node.element.style.zIndex = `${node.priority}`;
+    node.element.style.zIndex = `${node.payload.priority}`;
   }
 
   public updateEdgeShape(edgeId: unknown): void {
@@ -116,8 +116,10 @@ export class CoreHtmlView implements HtmlView {
 
     const edge = this.graphStore.getEdge(edgeId)!;
 
-    this.edgeIdToElementMap.set(edgeId, edge.shape.svg);
-    this.container.appendChild(edge.shape.svg);
+    const svg = edge.payload.shape.svg;
+
+    this.edgeIdToElementMap.set(edgeId, svg);
+    this.container.appendChild(svg);
   }
 
   public renderEdge(edgeId: unknown): void {
@@ -152,13 +154,13 @@ export class CoreHtmlView implements HtmlView {
       category = ConnectionCategory.NodeCycle;
     }
 
-    edge.shape.render({ from, to, category });
+    edge.payload.shape.render({ from, to, category });
   }
 
   public updateEdgePriority(edgeId: unknown): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
-    edge.shape.svg.style.zIndex = `${edge.priority}`;
+    edge.payload.shape.svg.style.zIndex = `${edge.payload.priority}`;
   }
 
   private createEdgeRenderPort(
@@ -179,7 +181,7 @@ export class CoreHtmlView implements HtmlView {
       y: contentPoint.y,
       width: rectPort.width * viewportMatrix.scale,
       height: rectPort.height * viewportMatrix.scale,
-      direction: port.direction,
+      direction: port.payload.direction,
     };
   }
 }
