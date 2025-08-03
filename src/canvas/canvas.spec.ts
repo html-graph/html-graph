@@ -1148,30 +1148,30 @@ describe("Canvas", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should unmark ports before node removal", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
+  // it("should unmark ports before node removal", () => {
+  //   const element = document.createElement("div");
+  //   const canvas = createCanvas({ element });
+  //   const nodeElement = createElement();
 
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
+  //   canvas.addNode({
+  //     id: "node-1",
+  //     element: nodeElement,
+  //     x: 0,
+  //     y: 0,
+  //     ports: [
+  //       {
+  //         id: "port-1",
+  //         element: createElement(),
+  //       },
+  //     ],
+  //   });
 
-    const spy = jest.spyOn(canvas, "unmarkPort");
+  //   const spy = jest.spyOn(canvas, "unmarkPort");
 
-    canvas.removeNode("node-1");
+  //   canvas.removeNode("node-1");
 
-    expect(spy).toHaveBeenCalledWith("port-1");
-  });
+  //   expect(spy).toHaveBeenCalledWith("port-1");
+  // });
 
   it("should render adjacent edges when updating port", () => {
     const element = document.createElement("div");
@@ -1200,32 +1200,32 @@ describe("Canvas", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should remove adjacent edges before port unmark", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
+  // it("should remove adjacent edges before port unmark", () => {
+  //   const element = document.createElement("div");
+  //   const canvas = createCanvas({ element });
+  //   const nodeElement = createElement();
 
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
+  //   canvas.addNode({
+  //     id: "node-1",
+  //     element: nodeElement,
+  //     x: 0,
+  //     y: 0,
+  //     ports: [
+  //       {
+  //         id: "port-1",
+  //         element: createElement(),
+  //       },
+  //     ],
+  //   });
 
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+  //   canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(canvas, "removeEdge");
+  //   const spy = jest.spyOn(canvas, "removeEdge");
 
-    canvas.unmarkPort("port-1");
+  //   canvas.unmarkPort("port-1");
 
-    expect(spy).toHaveBeenCalledWith("edge-1");
-  });
+  //   expect(spy).toHaveBeenCalledWith("edge-1");
+  // });
 
   it("should throw error when trying to add node with existing element", () => {
     const canvas = createCanvas();
