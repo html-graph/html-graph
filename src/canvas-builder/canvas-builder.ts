@@ -70,16 +70,15 @@ export class CanvasBuilder {
 
   private hasUserDraggableEdges = false;
 
-  private boxRenderingTrigger: EventSubject<RenderingBox> | undefined =
-    undefined;
+  private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly window = window;
+  private readonly graphStore = new GraphStore();
 
-  public constructor(private readonly element: HTMLElement) {
-    if (element !== undefined) {
-      this.element = element;
-    }
-  }
+  private readonly viewportStore = new ViewportStore();
+
+  private readonly window: Window = window;
+
+  public constructor(private readonly element: HTMLElement) {}
 
   /**
    * specifies default values for graph entities
@@ -149,8 +148,8 @@ export class CanvasBuilder {
   public enableUserConnectablePorts(
     config?: ConnectablePortsConfig,
   ): CanvasBuilder {
-    this.connectablePortsConfig = config ?? {};
     this.hasUserConnectablePorts = true;
+    this.connectablePortsConfig = config ?? {};
 
     return this;
   }
@@ -174,27 +173,19 @@ export class CanvasBuilder {
 
     this.used = true;
 
-    let trigger = this.boxRenderingTrigger;
-
-    if (this.virtualScrollConfig !== undefined && trigger === undefined) {
-      trigger = new EventSubject<RenderingBox>();
-    }
-
-    const graphStore = new GraphStore();
-    const viewportStore = new ViewportStore();
     const layers = new Layers(this.element);
 
     let htmlView: HtmlView = new CoreHtmlView(
-      graphStore,
-      viewportStore,
+      this.graphStore,
+      this.viewportStore,
       layers.main,
     );
 
-    if (trigger !== undefined) {
+    if (this.virtualScrollConfig !== undefined) {
       htmlView = new BoxHtmlView(
         htmlView,
-        graphStore,
-        trigger,
+        this.graphStore,
+        this.boxRenderingTrigger,
         createBoxHtmlViewParams(this.virtualScrollConfig),
       );
     }
@@ -202,8 +193,8 @@ export class CanvasBuilder {
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
-      graphStore,
-      viewportStore,
+      this.graphStore,
+      this.viewportStore,
       htmlView,
       canvasParams,
     );
@@ -239,7 +230,7 @@ export class CanvasBuilder {
       UserConnectablePortsConfigurator.configure(
         canvas,
         layers.overlayConnectablePorts,
-        viewportStore,
+        this.viewportStore,
         this.window,
         params,
       );
@@ -254,7 +245,7 @@ export class CanvasBuilder {
       UserDraggableEdgesConfigurator.configure(
         canvas,
         layers.overlayDraggableEdges,
-        viewportStore,
+        this.viewportStore,
         this.window,
         dragEdgeParams,
       );
@@ -266,7 +257,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         createTransformableViewportParams(this.transformConfig),
-        trigger!,
+        this.boxRenderingTrigger,
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
