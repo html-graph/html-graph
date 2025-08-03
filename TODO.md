@@ -1,7 +1,6 @@
 # TODO
 
 ```typescript
-
 interface LayoutGraph {
   readonly nodes: ReadonlyArray<LayoutNode>;
   readonly edges: ReadonlyArray<LayoutEdge>;
@@ -11,13 +10,13 @@ interface LayoutGraph {
 }
 
 interface Layout {
-  updateCoords(graph: LayoutGraph): void
+  updateCoords(graph: LayoutGraph): void;
 }
 
 class MyLayout implements Layout {
   updateCoords(graph: LayoutGraph): void {
     graph.edges.forEach((edge, edgeId) => {
-      console.log(edge.source, edge.target, edgeId)
+      console.log(edge.source, edge.target, edgeId);
     });
 
     graph.nodes.forEach((node) => {
@@ -37,7 +36,6 @@ nodesWithOptionalCoords => nodesWithMandatoryCoords
 
 storeQueue -> topologyStore readonly?
 storeQueue -> geometryStore
-
 
 - layouts
 
