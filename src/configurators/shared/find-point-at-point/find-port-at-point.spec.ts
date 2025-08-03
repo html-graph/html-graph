@@ -8,7 +8,7 @@ import { BezierEdgeShape } from "@/edges";
 import { createElement } from "@/mocks";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
 
   const element =

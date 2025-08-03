@@ -35,7 +35,7 @@ const createCanvas = (options?: {
   mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
   scaleWheelFinishTimeout?: number;
 }): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

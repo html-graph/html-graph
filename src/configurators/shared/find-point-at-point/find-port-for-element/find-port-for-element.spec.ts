@@ -7,7 +7,7 @@ import { ViewportStore } from "@/viewport-store";
 import { findPortForElement } from "./find-port-for-element";
 
 const createCanvas = (): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
 

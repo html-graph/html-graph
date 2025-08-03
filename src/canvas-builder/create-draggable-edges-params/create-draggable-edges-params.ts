@@ -6,7 +6,7 @@ import { ConnectionPreprocessor } from "@/configurators";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
-  graph: Graph,
+  graph: Graph<number>,
 ): DraggableEdgesParams => {
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
     request;

@@ -8,7 +8,7 @@ import {
 import { Graph } from "./graph";
 import { Point } from "@/point";
 
-const createAddNodeRequest1 = (): AddNodeRequest => {
+const createAddNodeRequest1 = (): AddNodeRequest<number> => {
   return {
     id: "node-1",
     element: document.createElement("div"),
@@ -19,7 +19,7 @@ const createAddNodeRequest1 = (): AddNodeRequest => {
   };
 };
 
-const createAddNodeRequest2 = (): AddNodeRequest => {
+const createAddNodeRequest2 = (): AddNodeRequest<number> => {
   return {
     id: "node-2",
     element: document.createElement("div"),

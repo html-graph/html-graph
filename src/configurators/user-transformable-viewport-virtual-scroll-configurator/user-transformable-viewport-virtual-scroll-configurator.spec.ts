@@ -26,7 +26,7 @@ const createCanvas = (options?: {
   onResizeTransformFinished?: () => void;
 }): Canvas => {
   const trigger = new EventSubject<RenderingBox>();
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
 

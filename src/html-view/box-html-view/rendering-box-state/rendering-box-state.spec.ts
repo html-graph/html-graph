@@ -4,16 +4,16 @@ import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 
 const create = (): {
-  graphStore: GraphStore;
+  graphStore: GraphStore<number>;
   renderingBoxState: RenderingBoxState;
 } => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const renderingBoxState = new RenderingBoxState(graphStore);
 
   return { graphStore, renderingBoxState };
 };
 
-const configureEdgeGraph = (store: GraphStore): void => {
+const configureEdgeGraph = (store: GraphStore<number>): void => {
   store.addNode({
     id: "node-1",
     element: document.createElement("div"),

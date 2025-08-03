@@ -26,7 +26,7 @@ export class CoreHtmlView implements HtmlView {
   };
 
   public constructor(
-    private readonly graphStore: GraphStore,
+    private readonly graphStore: GraphStore<number>,
     private readonly viewportStore: ViewportStore,
     private readonly element: HTMLElement,
   ) {

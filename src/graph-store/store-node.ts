@@ -1,10 +1,10 @@
 import { CenterFn } from "@/center-fn";
 
-export interface StoreNode {
+export interface StoreNode<T> {
   readonly element: HTMLElement;
   readonly payload: {
-    x: number;
-    y: number;
+    x: T;
+    y: T;
     centerFn: CenterFn;
     priority: number;
   };

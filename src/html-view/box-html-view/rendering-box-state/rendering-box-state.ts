@@ -10,7 +10,7 @@ export class RenderingBoxState {
 
   private yTo = Infinity;
 
-  public constructor(private readonly graphStore: GraphStore) {}
+  public constructor(private readonly graphStore: GraphStore<number>) {}
 
   public setRenderingBox(renderingBox: RenderingBox): void {
     this.xFrom = renderingBox.x;

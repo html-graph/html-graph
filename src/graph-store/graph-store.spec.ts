@@ -9,7 +9,7 @@ import { StoreNode } from "./store-node";
 import { CenterFn } from "@/center-fn";
 import { StoreEdge } from "./store-edge";
 
-const createAddNodeRequest1 = (): AddNodeRequest => {
+const createAddNodeRequest1 = (): AddNodeRequest<number> => {
   return {
     id: "node-1",
     element: document.createElement("div"),
@@ -20,7 +20,7 @@ const createAddNodeRequest1 = (): AddNodeRequest => {
   };
 };
 
-const createAddNodeRequest2 = (): AddNodeRequest => {
+const createAddNodeRequest2 = (): AddNodeRequest<number> => {
   return {
     id: "node-2",
     element: document.createElement("div"),
@@ -83,7 +83,7 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    const expected: StoreNode = {
+    const expected: StoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: addNodeRequest1.x,
@@ -127,7 +127,7 @@ describe("GraphStore", () => {
       priority: undefined,
     });
 
-    const expected: StoreNode = {
+    const expected: StoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: 100,
@@ -176,7 +176,7 @@ describe("GraphStore", () => {
       priority: 10,
     });
 
-    const expected: StoreNode = {
+    const expected: StoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: addNodeRequest1.x,

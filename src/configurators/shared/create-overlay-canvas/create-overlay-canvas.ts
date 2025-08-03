@@ -9,7 +9,7 @@ export const createOverlayCanvas = (
   overlayLayer: HTMLElement,
   viewportStore: ViewportStore,
 ): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 

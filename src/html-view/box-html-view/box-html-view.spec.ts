@@ -12,12 +12,12 @@ const create = (config?: {
   onAfterNodeDetached?: (nodeId: unknown) => void;
 }): {
   trigger: EventSubject<RenderingBox>;
-  store: GraphStore;
+  store: GraphStore<number>;
   coreView: CoreHtmlView;
   boxView: BoxHtmlView;
 } => {
   const trigger = new EventSubject<RenderingBox>();
-  const store = new GraphStore();
+  const store = new GraphStore<number>();
   const transformer = new ViewportStore();
   const element = document.createElement("div");
   const coreView = new CoreHtmlView(store, transformer, element);
@@ -29,16 +29,18 @@ const create = (config?: {
   return { trigger, store, coreView, boxView };
 };
 
-const addNodeRequest: AddNodeRequest = {
-  id: "node-1",
-  element: document.createElement("div"),
-  x: 0,
-  y: 0,
-  centerFn: standardCenterFn,
-  priority: 0,
+const createAddNodeRequest = (): AddNodeRequest<number> => {
+  return {
+    id: "node-1",
+    element: document.createElement("div"),
+    x: 0,
+    y: 0,
+    centerFn: standardCenterFn,
+    priority: 0,
+  };
 };
 
-const configureEdgeGraph = (store: GraphStore): void => {
+const configureEdgeGraph = (store: GraphStore<number>): void => {
   store.addNode({
     id: "node-1",
     element: document.createElement("div"),
@@ -110,6 +112,7 @@ describe("BoxHtmlView", () => {
 
   it("should attach node inside of the viewbox", () => {
     const { trigger, coreView, store } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
 
     const spy = jest.spyOn(coreView, "attachNode");
@@ -122,6 +125,7 @@ describe("BoxHtmlView", () => {
     const onBeforeNodeAttached = jest.fn();
     const { trigger, store } = create({ onBeforeNodeAttached });
 
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
@@ -130,6 +134,7 @@ describe("BoxHtmlView", () => {
 
   it("should not attach node outside of the viewbox", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: 9, y: 9, width: 2, height: 2 });
 
@@ -141,6 +146,7 @@ describe("BoxHtmlView", () => {
 
   it("should detach node inside of the viewbox", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
@@ -154,6 +160,7 @@ describe("BoxHtmlView", () => {
     const onAfterNodeDetached = jest.fn();
     const { trigger, store, boxView } = create({ onAfterNodeDetached });
 
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
@@ -164,6 +171,7 @@ describe("BoxHtmlView", () => {
 
   it("should not detach not attached node", () => {
     const { coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
 
     const spy = jest.spyOn(coreView, "detachNode");
@@ -174,6 +182,7 @@ describe("BoxHtmlView", () => {
 
   it("should reattach node inside of the viewbox", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.detachNode(addNodeRequest.id);
@@ -284,6 +293,7 @@ describe("BoxHtmlView", () => {
 
   it("should clear nodes", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.clear();
@@ -308,6 +318,7 @@ describe("BoxHtmlView", () => {
 
   it("should update node coordinates if was attached", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
@@ -323,6 +334,7 @@ describe("BoxHtmlView", () => {
 
   it("should attach node when moved inside of the viewport", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
@@ -352,6 +364,7 @@ describe("BoxHtmlView", () => {
 
   it("should update node priority for attached node", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
@@ -363,6 +376,7 @@ describe("BoxHtmlView", () => {
 
   it("should not update node priority if not attached", () => {
     const { trigger, coreView, store, boxView } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
@@ -440,6 +454,7 @@ describe("BoxHtmlView", () => {
 
   it("should attach node moved to inside of the viewport", () => {
     const { trigger, coreView, store } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     const spy = jest.spyOn(coreView, "attachNode");
 
@@ -450,6 +465,7 @@ describe("BoxHtmlView", () => {
 
   it("should not attach node moved to outside of the viewport", () => {
     const { trigger, coreView, store } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
 
     const spy = jest.spyOn(coreView, "attachNode");
@@ -461,6 +477,7 @@ describe("BoxHtmlView", () => {
 
   it("should detach node moved to outside of the viewport", () => {
     const { trigger, coreView, store } = create();
+    const addNodeRequest = createAddNodeRequest();
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 

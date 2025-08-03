@@ -72,7 +72,7 @@ export class CanvasBuilder {
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly graphStore = new GraphStore();
+  private readonly graphStore = new GraphStore<number>();
 
   private readonly viewportStore = new ViewportStore();
 

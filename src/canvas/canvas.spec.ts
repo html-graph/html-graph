@@ -20,7 +20,7 @@ const createCanvas = (options?: {
   edgeShapeFactory?: EdgeShapeFactory;
   edgesPriorityFn?: PriorityFn;
 }): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

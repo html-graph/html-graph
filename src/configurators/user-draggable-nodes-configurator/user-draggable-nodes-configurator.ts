@@ -11,7 +11,7 @@ export class UserDraggableNodesConfigurator {
 
   private maxNodePriority = 0;
 
-  private readonly graph: Graph;
+  private readonly graph: Graph<number>;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.updateMaxNodePriority(nodeId);

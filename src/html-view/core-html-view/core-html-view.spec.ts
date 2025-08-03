@@ -12,11 +12,11 @@ import { ConnectionCategory } from "@/edges/connection-category";
 
 const createHtmlController = (params?: {
   transformer?: ViewportStore;
-  store?: GraphStore;
+  store?: GraphStore<number>;
   element?: HTMLElement;
 }): CoreHtmlView => {
   return new CoreHtmlView(
-    params?.store ?? new GraphStore(),
+    params?.store ?? new GraphStore<number>(),
     params?.transformer ?? new ViewportStore(),
     params?.element ?? document.createElement("div"),
   );
@@ -24,7 +24,7 @@ const createHtmlController = (params?: {
 
 const centerFn = (): Point => ({ x: 0, y: 0 });
 
-const createAddNode1Request = (): AddNodeRequest => {
+const createAddNode1Request = (): AddNodeRequest<number> => {
   return {
     id: "node-1",
     element: document.createElement("div"),
@@ -35,7 +35,7 @@ const createAddNode1Request = (): AddNodeRequest => {
   };
 };
 
-const createAddNode2Request = (): AddNodeRequest => {
+const createAddNode2Request = (): AddNodeRequest<number> => {
   return {
     id: "node-2",
     element: document.createElement("div"),
@@ -135,7 +135,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should attach node", () => {
-    const store = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -150,7 +150,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should detach node", () => {
-    const store = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -166,7 +166,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should attach edge", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -192,7 +192,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should detach edge", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -219,7 +219,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should clear nodes and edges", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -265,7 +265,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update node coordinates", () => {
-    const store = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -287,7 +287,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update node priority", () => {
-    const store = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -307,7 +307,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update edge shape", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 
@@ -340,7 +340,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update edge coordinates for line category", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const htmlView = createHtmlController({ store });
 
     const addNodeRequest1 = createAddNode1Request();
@@ -385,7 +385,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update edge coordinates for node cycle category", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const htmlView = createHtmlController({ store });
 
     const addNodeRequest1 = createAddNode1Request();
@@ -427,7 +427,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update edge coordinates for port cycle category", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const htmlView = createHtmlController({ store });
 
     const addNodeRequest1 = createAddNode1Request();
@@ -467,7 +467,7 @@ describe("CoreHtmlView", () => {
   });
 
   it("should update edge priority", () => {
-    const store: GraphStore = new GraphStore();
+    const store = new GraphStore<number>();
     const element = document.createElement("div");
     const htmlView = createHtmlController({ store, element });
 

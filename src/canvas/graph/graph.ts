@@ -4,7 +4,7 @@ import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
 
-export class Graph {
+export class Graph<T> {
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 
   public readonly onAfterNodeUpdated: EventHandler<unknown>;
@@ -31,7 +31,7 @@ export class Graph {
 
   public readonly onBeforeClear: EventHandler<void>;
 
-  public constructor(private readonly graphStore: GraphStore) {
+  public constructor(private readonly graphStore: GraphStore<T>) {
     this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
 
     this.onAfterNodeUpdated = this.graphStore.onAfterNodeUpdated;
@@ -61,7 +61,7 @@ export class Graph {
     this.onBeforeClear = this.graphStore.onBeforeClear;
   }
 
-  public getNode(nodeId: unknown): GraphNode | null {
+  public getNode(nodeId: unknown): GraphNode<T> | null {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {

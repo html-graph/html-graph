@@ -81,7 +81,7 @@ export class BoxHtmlView implements HtmlView {
 
   public constructor(
     private readonly htmlView: HtmlView,
-    private readonly graphStore: GraphStore,
+    private readonly graphStore: GraphStore<number>,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly params: BoxHtmlViewParams,
   ) {

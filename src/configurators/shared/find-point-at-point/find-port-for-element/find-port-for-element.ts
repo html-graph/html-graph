@@ -1,7 +1,7 @@
 import { Graph } from "@/canvas";
 
 export const findPortForElement = (
-  graph: Graph,
+  graph: Graph<number>,
   element: Element,
 ): unknown | null => {
   let elementBuf: Element | null = element;

@@ -22,7 +22,7 @@ const createCanvas = (options?: {
   onEdgeReattachPrevented?: (edge: GraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
 }): Canvas => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const mainElement =
     options?.mainElement ?? createElement({ width: 1000, height: 1000 });

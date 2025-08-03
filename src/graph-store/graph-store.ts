@@ -10,8 +10,8 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 
-export class GraphStore {
-  private readonly nodes = new Map<unknown, StoreNode>();
+export class GraphStore<T> {
+  private readonly nodes = new Map<unknown, StoreNode<T>>();
 
   private readonly ports = new Map<unknown, StorePort>();
 
@@ -112,10 +112,10 @@ export class GraphStore {
     [this.beforeClearEmitter, this.onBeforeClear] = createPair();
   }
 
-  public addNode(request: AddNodeRequest): void {
+  public addNode(request: AddNodeRequest<T>): void {
     const ports = new Map<unknown, HTMLElement>();
 
-    const node: StoreNode = {
+    const node: StoreNode<T> = {
       element: request.element,
       payload: {
         x: request.x,
@@ -136,7 +136,7 @@ export class GraphStore {
     return Array.from(this.nodes.keys());
   }
 
-  public getNode(nodeId: unknown): StoreNode | undefined {
+  public getNode(nodeId: unknown): StoreNode<T> | undefined {
     return this.nodes.get(nodeId);
   }
 
@@ -144,7 +144,7 @@ export class GraphStore {
     return this.nodesElementsMap.get(element);
   }
 
-  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
+  public updateNode(nodeId: unknown, request: UpdateNodeRequest<T>): void {
     const payload = this.nodes.get(nodeId)!.payload;
 
     payload.x = request.x ?? payload.x;

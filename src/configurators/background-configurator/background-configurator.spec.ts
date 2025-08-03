@@ -7,7 +7,7 @@ import { createElement, defaultCanvasParams } from "@/mocks";
 import { BackgroundParams } from "./background-params";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
-  const graphStore = new GraphStore();
+  const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = createElement({ width: 2500, height: 1000 });
   const backgroundElement = createElement({ width: 2500, height: 1000 });
