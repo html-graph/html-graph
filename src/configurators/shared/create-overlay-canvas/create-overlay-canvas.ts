@@ -1,5 +1,6 @@
 import { Canvas, CanvasParams } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 import { DirectEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
@@ -27,5 +28,13 @@ export const createOverlayCanvas = (
     },
   };
 
-  return new Canvas(graphStore, viewportStore, htmlView, defaults);
+  const deferredGraphStore = new DeferredGraphStore(graphStore);
+
+  return new Canvas(
+    graphStore,
+    deferredGraphStore,
+    viewportStore,
+    htmlView,
+    defaults,
+  );
 };

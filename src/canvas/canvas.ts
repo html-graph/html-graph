@@ -14,6 +14,7 @@ import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
 import { CanvasError } from "./canvas-error";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 
 export class Canvas {
   /**
@@ -117,10 +118,12 @@ export class Canvas {
 
   public constructor(
     private readonly graphStore: GraphStore<number>,
+    private readonly deferredGraphStore: DeferredGraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
     private readonly params: CanvasParams,
   ) {
+    console.log(this.deferredGraphStore);
     this.graph = new Graph(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
 

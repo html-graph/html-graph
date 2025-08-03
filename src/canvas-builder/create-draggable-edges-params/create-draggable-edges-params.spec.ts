@@ -11,6 +11,7 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore<number>();
@@ -32,7 +33,14 @@ const createCanvas = (): Canvas => {
     },
   };
 
-  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
+  const deferredGraphStore = new DeferredGraphStore(graphStore);
+  const canvas = new Canvas(
+    graphStore,
+    deferredGraphStore,
+    viewportStore,
+    htmlView,
+    params,
+  );
 
   return canvas;
 };

@@ -40,6 +40,7 @@ import {
 } from "./create-virtual-scroll-params";
 import { createBoxHtmlViewParams } from "./create-box-html-view-params";
 import { CanvasBuilderError } from "./canvas-builder-error";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 
 export class CanvasBuilder {
   private used = false;
@@ -73,6 +74,8 @@ export class CanvasBuilder {
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
   private readonly graphStore = new GraphStore<number>();
+
+  private readonly deferredGraphStore = new DeferredGraphStore(this.graphStore);
 
   private readonly viewportStore = new ViewportStore();
 
@@ -194,6 +197,7 @@ export class CanvasBuilder {
 
     const canvas = new Canvas(
       this.graphStore,
+      this.deferredGraphStore,
       this.viewportStore,
       htmlView,
       canvasParams,

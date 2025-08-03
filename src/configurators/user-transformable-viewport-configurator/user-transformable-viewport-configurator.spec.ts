@@ -15,6 +15,7 @@ import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { TransformPayload } from "./transform-payload";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -39,9 +40,11 @@ const createCanvas = (options?: {
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
+    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

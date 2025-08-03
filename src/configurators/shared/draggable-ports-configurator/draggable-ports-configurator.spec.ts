@@ -6,6 +6,7 @@ import { ViewportStore } from "@/viewport-store";
 import { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 import { Point } from "@/point";
 import { MouseEventVerifier } from "../mouse-event-verifier";
+import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
@@ -21,9 +22,11 @@ const createDraggablePortsCanvas = (options?: {
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
+    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

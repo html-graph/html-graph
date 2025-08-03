@@ -82,36 +82,58 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
   public apply(): void {
     this.commands.forEach((command) => {
       switch (command.type) {
-        case CommandType.AddNode:
-          // this.baseGraphStore.addNode(command.request);
+        case CommandType.AddNode: {
+          const request = command.request;
+          const nodeId = request.id;
+          const node = this.getNode(nodeId)!;
+          const x: number | undefined = request.x || node.payload.x;
+          const y: number | undefined = request.y || node.payload.y;
+
+          if (x === undefined || y === undefined) {
+            throw new Error(
+              `failed to add node ${nodeId} with undefined coordinates`,
+            );
+          }
+
+          this.baseGraphStore.addNode({ ...command.request, x, y });
           break;
-        case CommandType.UpdateNode:
+        }
+        case CommandType.UpdateNode: {
           this.baseGraphStore.updateNode(command.nodeId, command.request);
           break;
-        case CommandType.RemoveNode:
+        }
+        case CommandType.RemoveNode: {
           this.baseGraphStore.removeNode(command.nodeId);
           break;
-        case CommandType.AddPort:
+        }
+        case CommandType.AddPort: {
           this.baseGraphStore.addPort(command.request);
           break;
-        case CommandType.UpdatePort:
+        }
+        case CommandType.UpdatePort: {
           this.baseGraphStore.updatePort(command.portId, command.request);
           break;
-        case CommandType.RemovePort:
+        }
+        case CommandType.RemovePort: {
           this.baseGraphStore.removePort(command.portId);
           break;
-        case CommandType.AddEdge:
+        }
+        case CommandType.AddEdge: {
           this.baseGraphStore.addEdge(command.request);
           break;
-        case CommandType.UpdateEdge:
+        }
+        case CommandType.UpdateEdge: {
           this.baseGraphStore.updateEdge(command.edgeId, command.request);
           break;
-        case CommandType.RemoveEdge:
+        }
+        case CommandType.RemoveEdge: {
           this.baseGraphStore.removeEdge(command.edgeId);
           break;
-        case CommandType.Clear:
+        }
+        case CommandType.Clear: {
           this.baseGraphStore.clear();
           break;
+        }
       }
     });
 
