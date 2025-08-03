@@ -117,10 +117,12 @@ export class GraphStore {
 
     const node: StoreNode = {
       element: request.element,
-      x: request.x,
-      y: request.y,
-      centerFn: request.centerFn,
-      priority: request.priority,
+      payload: {
+        x: request.x,
+        y: request.y,
+        centerFn: request.centerFn,
+        priority: request.priority,
+      },
       ports,
     };
 
@@ -143,14 +145,14 @@ export class GraphStore {
   }
 
   public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
-    const node = this.nodes.get(nodeId)!;
+    const payload = this.nodes.get(nodeId)!.payload;
 
-    node.x = request.x ?? node.x;
-    node.y = request.y ?? node.y;
-    node.centerFn = request.centerFn ?? node.centerFn;
+    payload.x = request.x ?? payload.x;
+    payload.y = request.y ?? payload.y;
+    payload.centerFn = request.centerFn ?? payload.centerFn;
 
     if (request.priority !== undefined) {
-      node.priority = request.priority;
+      payload.priority = request.priority;
       this.afterNodePriorityUpdatedEmitter.emit(nodeId);
     }
 
@@ -167,7 +169,9 @@ export class GraphStore {
   public addPort(request: AddPortRequest): void {
     this.ports.set(request.id, {
       element: request.element,
-      direction: request.direction,
+      payload: {
+        direction: request.direction,
+      },
       nodeId: request.nodeId,
     });
 
@@ -186,9 +190,9 @@ export class GraphStore {
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {
-    const port = this.ports.get(portId)!;
+    const payload = this.ports.get(portId)!.payload;
 
-    port.direction = request.direction ?? port.direction;
+    payload.direction = request.direction ?? payload.direction;
 
     this.afterPortUpdatedEmitter.emit(portId);
   }
@@ -228,26 +232,27 @@ export class GraphStore {
   public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
     if (request.from !== undefined || request.to !== undefined) {
       const edge = this.edges.get(edgeId)!;
+      const payload = edge.payload;
 
       this.removeEdgeInternal(edgeId);
       this.addEdgeInternal({
         id: edgeId,
         from: request.from ?? edge.from,
         to: request.to ?? edge.to,
-        shape: edge.shape,
-        priority: edge.priority,
+        shape: payload.shape,
+        priority: payload.priority,
       });
     }
 
     const edge = this.edges.get(edgeId)!;
 
     if (request.shape !== undefined) {
-      edge.shape = request.shape;
+      edge.payload.shape = request.shape;
       this.afterEdgeShapeUpdatedEmitter.emit(edgeId);
     }
 
     if (request.priority !== undefined) {
-      edge.priority = request.priority;
+      edge.payload.priority = request.priority;
       this.afterEdgePriorityUpdatedEmitter.emit(edgeId);
     }
 
@@ -345,8 +350,10 @@ export class GraphStore {
     this.edges.set(request.id, {
       from: request.from,
       to: request.to,
-      shape: request.shape,
-      priority: request.priority,
+      payload: {
+        shape: request.shape,
+        priority: request.priority,
+      },
     });
 
     if (request.from !== request.to) {

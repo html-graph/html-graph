@@ -275,8 +275,8 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest1.id);
 
     const node = store.getNode(addNodeRequest1.id)!;
-    node.x = 100;
-    node.y = 100;
+    node.payload.x = 100;
+    node.payload.y = 100;
 
     htmlView.updateNodePosition(addNodeRequest1.id);
 
@@ -300,7 +300,7 @@ describe("CoreHtmlView", () => {
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
     const node = store.getNode(addNodeRequest1.id)!;
-    node.priority = 10;
+    node.payload.priority = 10;
     htmlView.updateNodePriority(addNodeRequest1.id);
 
     expect(nodeWrapper.style.zIndex).toBe("10");
@@ -330,7 +330,7 @@ describe("CoreHtmlView", () => {
     const edge = store.getEdge(addEdgeRequest12.id)!;
 
     const newShape = new BezierEdgeShape();
-    edge.shape = newShape;
+    edge.payload.shape = newShape;
 
     htmlView.updateEdgeShape(addEdgeRequest12.id);
 
@@ -488,7 +488,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachEdge(addEdgeRequest12.id);
 
     const edge = store.getEdge(addEdgeRequest12.id)!;
-    edge.priority = 10;
+    edge.payload.priority = 10;
     htmlView.updateEdgePriority(addEdgeRequest12.id);
 
     const container = element.children[0].children[0];
