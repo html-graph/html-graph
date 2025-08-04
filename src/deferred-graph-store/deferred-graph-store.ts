@@ -53,10 +53,7 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
   public addPort(request: AddPortRequest): void {
     super.addPort(request);
 
-    this.commands.push({
-      type: CommandType.AddPort,
-      request,
-    });
+    this.commands.push({ type: CommandType.AddPort, request });
   }
 
   public updatePort(portId: unknown, request: UpdatePortRequest): void {

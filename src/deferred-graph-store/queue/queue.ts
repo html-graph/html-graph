@@ -21,9 +21,9 @@ export class Queue<T> {
 
     const result = this.first.value;
 
-    const afterFirst = this.first.previous!;
-    afterFirst.next = null;
-    this.first = afterFirst;
+    const newFirst = this.first.previous!;
+    newFirst.next = null;
+    this.first = newFirst;
 
     return result;
   }
