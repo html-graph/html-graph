@@ -161,9 +161,4 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
       }
     }
   }
-
-  public destroy(): void {
-    this.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemovedHandler);
-    this.onBeforePortRemoved.unsubscribe(this.onBeforePortRemovedHandler);
-  }
 }
