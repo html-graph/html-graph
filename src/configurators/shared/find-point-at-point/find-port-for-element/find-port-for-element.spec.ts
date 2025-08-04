@@ -5,7 +5,6 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { findPortForElement } from "./find-port-for-element";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore<number>();
@@ -28,15 +27,7 @@ const createCanvas = (): Canvas => {
     },
   };
 
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
-
-  return new Canvas(
-    graphStore,
-    deferredGraphStore,
-    viewportStore,
-    htmlView,
-    defaults,
-  );
+  return new Canvas(graphStore, viewportStore, htmlView, defaults);
 };
 
 describe("findPortForElement", () => {

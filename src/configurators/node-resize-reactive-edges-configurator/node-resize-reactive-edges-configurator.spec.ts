@@ -6,18 +6,15 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
 import { Canvas } from "@/canvas";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
-    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

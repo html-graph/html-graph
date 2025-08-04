@@ -11,7 +11,6 @@ import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { CanvasError } from "./canvas-error";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -42,15 +41,7 @@ const createCanvas = (options?: {
     },
   };
 
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
-
-  const canvas = new Canvas(
-    graphStore,
-    deferredGraphStore,
-    viewportStore,
-    htmlView,
-    params,
-  );
+  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
 
   return canvas;
 };

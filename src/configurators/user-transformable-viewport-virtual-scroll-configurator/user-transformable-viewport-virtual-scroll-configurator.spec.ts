@@ -15,7 +15,6 @@ import {
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -41,11 +40,8 @@ const createCanvas = (options?: {
     },
   );
 
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
-
   const canvas = new Canvas(
     graphStore,
-    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

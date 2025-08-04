@@ -6,7 +6,6 @@ import { CoreHtmlView } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { createElement } from "@/mocks";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore<number>();
@@ -31,15 +30,7 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     },
   };
 
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
-
-  return new Canvas(
-    graphStore,
-    deferredGraphStore,
-    viewportStore,
-    htmlView,
-    defaults,
-  );
+  return new Canvas(graphStore, viewportStore, htmlView, defaults);
 };
 
 describe("findPortAtPoint", () => {

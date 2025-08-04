@@ -12,7 +12,6 @@ import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "../shared";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -30,11 +29,9 @@ const createCanvas = (options?: {
   const overlayElement =
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
-    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

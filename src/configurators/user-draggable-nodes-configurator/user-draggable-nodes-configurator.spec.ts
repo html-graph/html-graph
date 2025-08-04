@@ -13,7 +13,6 @@ import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { MouseEventVerifier } from "../shared";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -33,11 +32,9 @@ const createCanvas = (options?: {
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
-    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,

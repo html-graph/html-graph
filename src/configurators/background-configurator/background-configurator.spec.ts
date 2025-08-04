@@ -5,7 +5,6 @@ import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement, defaultCanvasParams } from "@/mocks";
 import { BackgroundParams } from "./background-params";
-import { DeferredGraphStore } from "@/deferred-graph-store";
 
 const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const graphStore = new GraphStore<number>();
@@ -13,11 +12,9 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const element = createElement({ width: 2500, height: 1000 });
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
-  const deferredGraphStore = new DeferredGraphStore(graphStore);
 
   const canvas = new Canvas(
     graphStore,
-    deferredGraphStore,
     viewportStore,
     htmlView,
     defaultCanvasParams,
