@@ -8,9 +8,10 @@ import {
   UpdatePortRequest,
 } from "@/graph-store";
 import { Command, CommandType } from "./commands";
+import { Queue } from "./queue";
 
 export class DeferredGraphStore extends GraphStore<number | undefined> {
-  private commands: Command[] = [];
+  private readonly commands = new Queue<Command>();
 
   private readonly onBeforeNodeRemovedHandler = (nodeId: unknown): void => {
     this.getNodePortIds(nodeId)!.forEach((portId) => {
@@ -95,7 +96,15 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
   }
 
   public apply(): void {
-    this.commands.forEach((command) => {
+    let command: Command | null = null;
+
+    for (;;) {
+      command = this.commands.pop();
+
+      if (command === null) {
+        break;
+      }
+
       switch (command.type) {
         case CommandType.AddNode: {
           const request = command.request;
@@ -150,8 +159,6 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
           break;
         }
       }
-    });
-
-    this.commands = [];
+    }
   }
 }
