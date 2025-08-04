@@ -1,27 +1,56 @@
-export class Queue<T> {
-  private first: T | null = null;
+import { QueueEntry } from "./queue-entry";
 
-  private last: T | null = null;
+export class Queue<T> {
+  private first: QueueEntry<T> | null = null;
+
+  private last: QueueEntry<T> | null = null;
 
   public pop(): T | null {
-    if (this.first !== null) {
-      const first = this.first;
-      this.first = null;
+    if (this.first === null) {
+      return null;
+    }
 
-      return first;
-    } else {
-      const last = this.last;
+    if (this.first === this.last) {
+      const result = this.first.value;
+
+      this.first = null;
       this.last = null;
 
-      return last;
+      return result;
     }
+
+    const result = this.first.value;
+
+    const afterFirst = this.first.previous;
+    afterFirst!.next = null;
+    this.first = afterFirst;
+
+    return result;
   }
 
   public push(value: T): void {
     if (this.first === null) {
-      this.first = value;
-    } else {
-      this.last = value;
+      const entry: QueueEntry<T> = { value, previous: null, next: null };
+      this.last = entry;
+      this.first = this.last;
+
+      return;
     }
+
+    if (this.first === this.last) {
+      const newLast: QueueEntry<T> = {
+        value,
+        next: this.first,
+        previous: null,
+      };
+
+      this.first.previous = newLast;
+      this.last = newLast;
+      return;
+    }
+    const last = this.last!;
+    const newLast: QueueEntry<T> = { value, next: last, previous: null };
+    last.previous = newLast;
+    this.last = newLast;
   }
 }
