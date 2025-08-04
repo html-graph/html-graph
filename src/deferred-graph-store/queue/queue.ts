@@ -21,8 +21,8 @@ export class Queue<T> {
 
     const result = this.first.value;
 
-    const afterFirst = this.first.previous;
-    afterFirst!.next = null;
+    const afterFirst = this.first.previous!;
+    afterFirst.next = null;
     this.first = afterFirst;
 
     return result;
@@ -48,9 +48,10 @@ export class Queue<T> {
       this.last = newLast;
       return;
     }
-    const last = this.last!;
-    const newLast: QueueEntry<T> = { value, next: last, previous: null };
-    last.previous = newLast;
+
+    const oldLast = this.last!;
+    const newLast: QueueEntry<T> = { value, next: oldLast, previous: null };
+    oldLast.previous = newLast;
     this.last = newLast;
   }
 }

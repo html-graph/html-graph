@@ -96,10 +96,8 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
   }
 
   public apply(): void {
-    let command: Command | null = null;
-
     for (;;) {
-      command = this.commands.pop();
+      const command = this.commands.pop();
 
       if (command === null) {
         break;
@@ -110,8 +108,8 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
           const request = command.request;
           const nodeId = request.id;
           const node = this.getNode(nodeId)!;
-          const x: number | undefined = request.x || node.payload.x;
-          const y: number | undefined = request.y || node.payload.y;
+          const x: number | undefined = request.x ?? node.payload.x;
+          const y: number | undefined = request.y ?? node.payload.y;
 
           if (x === undefined || y === undefined) {
             throw new Error(
