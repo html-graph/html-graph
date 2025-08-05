@@ -118,7 +118,19 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
           break;
         }
         case CommandType.UpdateNode: {
-          this.baseGraphStore.updateNode(command.nodeId, command.request);
+          const request = command.request;
+          const nodeId = command.nodeId;
+          const node = this.getNode(nodeId)!;
+          const x: number | undefined = request.x ?? node.payload.x;
+          const y: number | undefined = request.y ?? node.payload.y;
+
+          if (x === undefined || y === undefined) {
+            throw new Error(
+              `failed to updaye node ${nodeId} with undefined coordinates`,
+            );
+          }
+
+          this.baseGraphStore.updateNode(nodeId, command.request);
           break;
         }
         case CommandType.RemoveNode: {
