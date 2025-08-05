@@ -1,11 +1,18 @@
 import {
+  AddEdgeRequest,
   AddNodeRequest,
+  AddPortRequest,
   GraphStore,
+  StoreEdge,
   StoreNode,
+  StorePort,
+  UpdateEdgeRequest,
   UpdateNodeRequest,
 } from "@/graph-store";
 import { DeferredGraphStore } from "./deferred-graph-store";
 import { standardCenterFn } from "@/center-fn";
+import { UpdatePortRequest } from "@/canvas";
+import { BezierEdgeShape } from "@/edges";
 
 const createDeferredGraphStore = (): DeferredGraphStore => {
   const store = new GraphStore<number>();
@@ -92,5 +99,326 @@ describe("DeferredGraphStore", () => {
     deferredStore.removeNode("node-1");
 
     expect(deferredStore.getNode("node-1")).toBe(undefined);
+  });
+
+  it("should add new port to deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const expected: StorePort = {
+      element: addPortRequest.element,
+      nodeId: addPortRequest.nodeId,
+      payload: {
+        direction: addPortRequest.direction,
+      },
+    };
+
+    expect(deferredStore.getPort("port-1")).toEqual(expected);
+  });
+
+  it("should update existing port in deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const updatePortRequest: UpdatePortRequest = {
+      direction: Math.PI,
+    };
+
+    deferredStore.updatePort("port-1", updatePortRequest);
+
+    const expected: StorePort = {
+      element: addPortRequest.element,
+      nodeId: addPortRequest.nodeId,
+      payload: {
+        direction: updatePortRequest.direction!,
+      },
+    };
+
+    expect(deferredStore.getPort("port-1")).toEqual(expected);
+  });
+
+  it("should remove existing port from deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    deferredStore.removePort("port-1");
+
+    expect(deferredStore.getPort("port-1")).toEqual(undefined);
+  });
+
+  it("should add new edge to deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const addEdgeRequest: AddEdgeRequest = {
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    };
+
+    deferredStore.addEdge(addEdgeRequest);
+
+    const expected: StoreEdge = {
+      from: addEdgeRequest.from,
+      to: addEdgeRequest.to,
+      payload: {
+        shape: addEdgeRequest.shape,
+        priority: addEdgeRequest.priority,
+      },
+    };
+
+    expect(deferredStore.getEdge("edge-1")).toEqual(expected);
+  });
+
+  it("should update existing edge in deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const addEdgeRequest: AddEdgeRequest = {
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    };
+
+    deferredStore.addEdge(addEdgeRequest);
+
+    const updateEdgeRequest: UpdateEdgeRequest = {
+      priority: 10,
+    };
+
+    deferredStore.updateEdge("edge-1", updateEdgeRequest);
+
+    const expected: StoreEdge = {
+      from: addEdgeRequest.from,
+      to: addEdgeRequest.to,
+      payload: {
+        shape: addEdgeRequest.shape,
+        priority: updateEdgeRequest.priority!,
+      },
+    };
+
+    expect(deferredStore.getEdge("edge-1")).toEqual(expected);
+  });
+
+  it("should remove existing edge from deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const addEdgeRequest: AddEdgeRequest = {
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    };
+
+    deferredStore.addEdge(addEdgeRequest);
+
+    deferredStore.removeEdge("edge-1");
+
+    expect(deferredStore.getEdge("edge-1")).toEqual(undefined);
+  });
+
+  it("should clear deferred graph", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    deferredStore.clear();
+
+    expect(deferredStore.getNode("node-1")).toEqual(undefined);
+  });
+
+  it("should remove adjacent port hen removing related node", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    deferredStore.removeNode("node-1");
+
+    expect(deferredStore.getPort("port-1")).toEqual(undefined);
+  });
+
+  it("should remove adjacent edge when removing port", () => {
+    const deferredStore = createDeferredGraphStore();
+
+    const addNodeRequest: AddNodeRequest<number | undefined> = {
+      id: "node-1",
+      element: document.createElement("div"),
+      x: undefined,
+      y: undefined,
+      priority: 0,
+      centerFn: standardCenterFn,
+    };
+
+    deferredStore.addNode(addNodeRequest);
+
+    const addPortRequest: AddPortRequest = {
+      id: "port-1",
+      element: document.createElement("div"),
+      nodeId: "node-1",
+      direction: 0,
+    };
+
+    deferredStore.addPort(addPortRequest);
+
+    const addEdgeRequest: AddEdgeRequest = {
+      id: "edge-1",
+      from: "port-1",
+      to: "port-1",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    };
+
+    deferredStore.addEdge(addEdgeRequest);
+
+    deferredStore.removePort("port-1");
+
+    expect(deferredStore.getEdge("edge-1")).toEqual(undefined);
   });
 });
