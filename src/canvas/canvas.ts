@@ -1,5 +1,5 @@
 import { Viewport } from "./viewport";
-import { Graph } from "./graph";
+import { Graph } from "@/graph";
 import { IdGenerator } from "./id-generator";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
