@@ -11,7 +11,7 @@ import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 import { ConnectionPreprocessor } from "../shared";
-import { GraphEdge } from "@/graph";
+import { GenericGraphEdge } from "@/generic-graph";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -19,8 +19,8 @@ const createCanvas = (options?: {
   connectionPreprocessor?: ConnectionPreprocessor;
   draggingEdgeResolver?: (portId: unknown) => unknown;
   onAfterEdgeReattached?: (edgeId: unknown) => unknown;
-  onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
-  onEdgeReattachPrevented?: (edge: GraphEdge) => void;
+  onEdgeReattachInterrupted?: (edge: GenericGraphEdge) => void;
+  onEdgeReattachPrevented?: (edge: GenericGraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
 }): Canvas => {
   const graphStore = new GraphStore<number>();

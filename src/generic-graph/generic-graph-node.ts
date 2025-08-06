@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
 
-export interface GraphNode<T> {
+export interface GenericGraphNode<T> {
   readonly element: HTMLElement;
   readonly x: T;
   readonly y: T;

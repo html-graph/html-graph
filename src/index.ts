@@ -23,9 +23,11 @@ export type {
   UpdateEdgeRequest,
   PatchMatrixRequest,
   Viewport,
+  Graph,
+  GraphNode,
+  GraphPort,
+  GraphEdge,
 } from "./canvas";
-
-export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 
 export type {
   TransformPayload,

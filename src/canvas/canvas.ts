@@ -1,5 +1,5 @@
 import { Viewport } from "./viewport";
-import { Graph } from "@/graph";
+import { GenericGraph } from "@/generic-graph";
 import { IdGenerator } from "./id-generator";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
@@ -14,12 +14,13 @@ import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
 import { CanvasError } from "./canvas-error";
+import { Graph } from "./graph";
 
 export class Canvas {
   /**
    * provides api for accessing model of rendered graph
    */
-  public readonly graph: Graph<number>;
+  public readonly graph: Graph;
 
   /**
    * provides api for accessing viewport state
@@ -121,7 +122,7 @@ export class Canvas {
     private readonly htmlView: HtmlView,
     private readonly params: CanvasParams,
   ) {
-    this.graph = new Graph<number>(this.graphStore);
+    this.graph = new GenericGraph<number>(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
 
     this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);

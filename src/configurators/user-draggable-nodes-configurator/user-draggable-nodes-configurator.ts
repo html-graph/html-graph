@@ -4,14 +4,14 @@ import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
-import { Graph } from "@/graph";
+import { GenericGraph } from "@/generic-graph";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;
 
   private maxNodePriority = 0;
 
-  private readonly graph: Graph<number>;
+  private readonly graph: GenericGraph<number>;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.updateMaxNodePriority(nodeId);

@@ -1,10 +1,10 @@
 import { EventHandler } from "@/event-subject";
 import { GraphStore } from "@/graph-store";
-import { GraphEdge } from "./graph-edge";
-import { GraphNode } from "./graph-node";
-import { GraphPort } from "./graph-port";
+import { GenericGraphEdge } from "./generic-graph-edge";
+import { GenericGraphNode } from "./generic-graph-node";
+import { GenericGraphPort } from "./generic-graph-port";
 
-export class Graph<T> {
+export class GenericGraph<T> {
   public readonly onAfterNodeAdded: EventHandler<unknown>;
 
   public readonly onAfterNodeUpdated: EventHandler<unknown>;
@@ -61,7 +61,7 @@ export class Graph<T> {
     this.onBeforeClear = this.graphStore.onBeforeClear;
   }
 
-  public getNode(nodeId: unknown): GraphNode<T> | null {
+  public getNode(nodeId: unknown): GenericGraphNode<T> | null {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
@@ -87,7 +87,7 @@ export class Graph<T> {
     return this.graphStore.getAllNodeIds();
   }
 
-  public getPort(portId: unknown): GraphPort | null {
+  public getPort(portId: unknown): GenericGraphPort | null {
     const port = this.graphStore.getPort(portId);
 
     if (port === undefined) {
@@ -117,7 +117,7 @@ export class Graph<T> {
     return this.graphStore.getAllEdgeIds();
   }
 
-  public getEdge(edgeId: unknown): GraphEdge | null {
+  public getEdge(edgeId: unknown): GenericGraphEdge | null {
     const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {

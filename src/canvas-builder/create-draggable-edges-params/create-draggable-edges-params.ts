@@ -1,12 +1,12 @@
 import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
-import { Graph } from "@/graph";
+import { GenericGraph } from "@/generic-graph";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { ConnectionPreprocessor } from "@/configurators";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
-  graph: Graph<number>,
+  graph: GenericGraph<number>,
 ): DraggableEdgesParams => {
   const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
     request;

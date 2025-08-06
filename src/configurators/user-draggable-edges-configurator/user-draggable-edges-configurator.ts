@@ -11,7 +11,7 @@ import {
   OverlayNodeParams,
 } from "../shared";
 import { DraggablePortsConfigurator } from "../shared";
-import { GraphEdge } from "@/graph";
+import { GenericGraphEdge } from "@/generic-graph";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -20,7 +20,7 @@ export class UserDraggableEdgesConfigurator {
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdgePayload: (GraphEdge & { readonly id: unknown }) | null =
+  private draggingEdgePayload: (GenericGraphEdge & { readonly id: unknown }) | null =
     null;
 
   private readonly onEdgeReattached = (edgeId: unknown): void => {

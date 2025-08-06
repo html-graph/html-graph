@@ -1,6 +1,6 @@
 import { EdgeShape } from "@/edges";
 
-export interface GraphEdge {
+export interface GenericGraphEdge {
   readonly from: unknown;
   readonly to: unknown;
   readonly priority: number;
