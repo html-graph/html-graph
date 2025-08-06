@@ -1,5 +1,5 @@
 import { EventHandler } from "@/event-subject";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { GenericGraphEdge } from "./generic-graph-edge";
 import { GenericGraphNode } from "./generic-graph-node";
 import { GenericGraphPort } from "./generic-graph-port";
@@ -31,7 +31,7 @@ export class GenericGraph<T> {
 
   public readonly onBeforeClear: EventHandler<void>;
 
-  public constructor(private readonly graphStore: GraphStore<T>) {
+  public constructor(private readonly graphStore: GenericGraphStore<T>) {
     this.onAfterNodeAdded = this.graphStore.onAfterNodeAdded;
 
     this.onAfterNodeUpdated = this.graphStore.onAfterNodeUpdated;

@@ -1,4 +1,4 @@
-import { UpdateNodeRequest } from "@/graph-store";
+import { UpdateNodeRequest } from "@/generic-graph-store";
 import { CommandType } from "./command-type";
 
 export interface UpdateNodeCommand {

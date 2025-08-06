@@ -1,4 +1,4 @@
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { RenderingBox } from "../rendering-box";
 
 export class RenderingBoxState {
@@ -10,7 +10,7 @@ export class RenderingBoxState {
 
   private yTo = Infinity;
 
-  public constructor(private readonly graphStore: GraphStore<number>) {}
+  public constructor(private readonly graphStore: GenericGraphStore<number>) {}
 
   public setRenderingBox(renderingBox: RenderingBox): void {
     this.xFrom = renderingBox.x;

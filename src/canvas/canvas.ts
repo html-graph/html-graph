@@ -9,7 +9,7 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdateNodeRequest } from "./update-node-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
@@ -117,7 +117,7 @@ export class Canvas {
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
-    private readonly graphStore: GraphStore<number>,
+    private readonly graphStore: GenericGraphStore<number>,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
     private readonly params: CanvasParams,

@@ -1,6 +1,6 @@
-import { StoreEdge } from "./store-edge";
-import { StoreNode } from "./store-node";
-import { StorePort } from "./store-port";
+import { GenericStoreEdge } from "./generic-store-edge";
+import { GenericStoreNode } from "./generic-store-node";
+import { GenericStorePort } from "./generic-store-port";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
@@ -10,12 +10,12 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 
-export class GraphStore<T> {
-  private readonly nodes = new Map<unknown, StoreNode<T>>();
+export class GenericGraphStore<T> {
+  private readonly nodes = new Map<unknown, GenericStoreNode<T>>();
 
-  private readonly ports = new Map<unknown, StorePort>();
+  private readonly ports = new Map<unknown, GenericStorePort>();
 
-  private readonly edges = new Map<unknown, StoreEdge>();
+  private readonly edges = new Map<unknown, GenericStoreEdge>();
 
   private readonly nodesElementsMap = new Map<HTMLElement, unknown>();
 
@@ -115,7 +115,7 @@ export class GraphStore<T> {
   public addNode(request: AddNodeRequest<T>): void {
     const ports = new Map<unknown, HTMLElement>();
 
-    const node: StoreNode<T> = {
+    const node: GenericStoreNode<T> = {
       element: request.element,
       payload: {
         x: request.x,
@@ -136,7 +136,7 @@ export class GraphStore<T> {
     return Array.from(this.nodes.keys());
   }
 
-  public getNode(nodeId: unknown): StoreNode<T> | undefined {
+  public getNode(nodeId: unknown): GenericStoreNode<T> | undefined {
     return this.nodes.get(nodeId);
   }
 
@@ -185,7 +185,7 @@ export class GraphStore<T> {
     this.afterPortAddedEmitter.emit(request.id);
   }
 
-  public getPort(portId: unknown): StorePort | undefined {
+  public getPort(portId: unknown): GenericStorePort | undefined {
     return this.ports.get(portId);
   }
 
@@ -263,7 +263,7 @@ export class GraphStore<T> {
     return Array.from(this.edges.keys());
   }
 
-  public getEdge(edgeId: unknown): StoreEdge | undefined {
+  public getEdge(edgeId: unknown): GenericStoreEdge | undefined {
     return this.edges.get(edgeId);
   }
 

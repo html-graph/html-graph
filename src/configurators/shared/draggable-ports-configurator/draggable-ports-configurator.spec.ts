@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createTouch, defaultCanvasParams } from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
@@ -16,7 +16,7 @@ const createDraggablePortsCanvas = (options?: {
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
 }): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });

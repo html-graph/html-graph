@@ -2,7 +2,7 @@ import { EventSubject } from "@/event-subject";
 import { BoxHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   createElement,
@@ -26,7 +26,7 @@ const createCanvas = (options?: {
   onResizeTransformFinished?: () => void;
 }): Canvas => {
   const trigger = new EventSubject<RenderingBox>();
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
 

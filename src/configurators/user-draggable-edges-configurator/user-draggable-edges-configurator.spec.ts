@@ -1,6 +1,6 @@
 import { AddEdgeRequest, Canvas, EdgeShapeFactory } from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { CoreHtmlView } from "@/html-view";
 import {
   createElement,
@@ -23,7 +23,7 @@ const createCanvas = (options?: {
   onEdgeReattachPrevented?: (edge: GenericGraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
 }): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const mainElement =
     options?.mainElement ?? createElement({ width: 1000, height: 1000 });

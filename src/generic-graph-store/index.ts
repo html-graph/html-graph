@@ -1,7 +1,7 @@
-export { GraphStore } from "./graph-store";
-export type { StoreNode } from "./store-node";
-export type { StorePort } from "./store-port";
-export type { StoreEdge } from "./store-edge";
+export { GenericGraphStore } from "./generic-graph-store";
+export type { GenericStoreNode } from "./generic-store-node";
+export type { GenericStorePort } from "./generic-store-port";
+export type { GenericStoreEdge } from "./generic-store-edge";
 export type { AddNodeRequest } from "./add-node-request";
 export type { AddPortRequest } from "./add-port-request";
 export type { AddEdgeRequest } from "./add-edge-request";

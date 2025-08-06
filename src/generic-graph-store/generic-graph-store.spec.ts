@@ -1,13 +1,13 @@
 import { Point } from "@/point";
-import { GraphStore } from "./graph-store";
+import { GenericGraphStore } from "./generic-graph-store";
 import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
-import { StorePort } from "./store-port";
-import { StoreNode } from "./store-node";
+import { GenericStorePort } from "./generic-store-port";
+import { GenericStoreNode } from "./generic-store-node";
+import { GenericStoreEdge } from "./generic-store-edge";
 import { CenterFn } from "@/center-fn";
-import { StoreEdge } from "./store-edge";
 
 const createAddNodeRequest1 = (): AddNodeRequest<number> => {
   return {
@@ -71,19 +71,19 @@ const createAddEdgeRequest11 = (): AddEdgeRequest => {
 
 describe("GraphStore", () => {
   it("should return undefined for non-existing node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     expect(store.getNode(1)).toBe(undefined);
   });
 
   it("should return specified node for existing node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 
     store.addNode(addNodeRequest1);
 
-    const expected: StoreNode<number> = {
+    const expected: GenericStoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: addNodeRequest1.x,
@@ -98,7 +98,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after node added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -112,7 +112,7 @@ describe("GraphStore", () => {
   });
 
   it("should update node coordinates", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 
@@ -127,7 +127,7 @@ describe("GraphStore", () => {
       priority: undefined,
     });
 
-    const expected: StoreNode<number> = {
+    const expected: GenericStoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: 100,
@@ -142,7 +142,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after updating node coordinates", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -163,7 +163,7 @@ describe("GraphStore", () => {
   });
 
   it("should update node priority", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 
@@ -176,7 +176,7 @@ describe("GraphStore", () => {
       priority: 10,
     });
 
-    const expected: StoreNode<number> = {
+    const expected: GenericStoreNode<number> = {
       element: addNodeRequest1.element,
       payload: {
         x: addNodeRequest1.x,
@@ -191,7 +191,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after updating node priority", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -212,7 +212,7 @@ describe("GraphStore", () => {
   });
 
   it("should return all added node ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     store.addNode(addNodeRequest1);
@@ -221,7 +221,7 @@ describe("GraphStore", () => {
   });
 
   it("should remove node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     store.addNode(addNodeRequest1);
@@ -231,7 +231,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit before node removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -247,20 +247,20 @@ describe("GraphStore", () => {
   });
 
   it("should return undefined for non-existing port", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     expect(store.getPort(1)).toBe(undefined);
   });
 
   it("should return specified port for existing port", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1);
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest1.element,
       payload: {
         direction: addPortRequest1.direction,
@@ -272,7 +272,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit after port added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -288,7 +288,7 @@ describe("GraphStore", () => {
   });
 
   it("should update port direction", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -299,7 +299,7 @@ describe("GraphStore", () => {
       direction: Math.PI,
     });
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest1.element,
       payload: {
         direction: Math.PI,
@@ -311,7 +311,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit after port direction updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -331,7 +331,7 @@ describe("GraphStore", () => {
   });
 
   it("should return all added port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -342,13 +342,13 @@ describe("GraphStore", () => {
   });
 
   it("should return undefined when getting ports of non-existing node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     expect(store.getNodePortIds(1)).toBe(undefined);
   });
 
   it("should return node port id for existing node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -361,7 +361,7 @@ describe("GraphStore", () => {
   });
 
   it("should remove node port", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -373,7 +373,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit before port removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -390,13 +390,13 @@ describe("GraphStore", () => {
   });
 
   it("should return undefined when getting non-existing id", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     expect(store.getEdge(1)).toBe(undefined);
   });
 
   it("should return specified edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -409,7 +409,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
       payload: {
@@ -422,7 +422,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after edge added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -443,7 +443,7 @@ describe("GraphStore", () => {
   });
 
   it("should update edge shape", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -465,7 +465,7 @@ describe("GraphStore", () => {
       priority: undefined,
     });
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
       payload: {
@@ -478,7 +478,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after edge shape updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -508,7 +508,7 @@ describe("GraphStore", () => {
   });
 
   it("should update edge priority", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -528,7 +528,7 @@ describe("GraphStore", () => {
       priority: 10,
     });
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest12.from,
       to: addEdgeRequest12.to,
       payload: {
@@ -541,7 +541,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event after edge priority updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -569,7 +569,7 @@ describe("GraphStore", () => {
   });
 
   it("should return all edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -586,7 +586,7 @@ describe("GraphStore", () => {
   });
 
   it("should remove edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -604,7 +604,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event before edge removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -627,7 +627,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     store.addNode(addNodeRequest1);
@@ -637,7 +637,7 @@ describe("GraphStore", () => {
   });
 
   it("should emit event before clear", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const handler = jest.fn();
 
@@ -651,7 +651,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear port", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -663,7 +663,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear node ports", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -675,7 +675,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -693,7 +693,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port incoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -712,7 +712,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port outcoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -731,7 +731,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port cycle edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -746,7 +746,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port incoming edge ids as adjacent edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -765,7 +765,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port outcoming edge ids as adjacent edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -784,7 +784,7 @@ describe("GraphStore", () => {
   });
 
   it("should return port cycle edge ids as adjacent edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -799,7 +799,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node incoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -818,7 +818,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node outcoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -837,7 +837,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node cycle edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -852,7 +852,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node incoming edge ids as adjacent edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -871,7 +871,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node outcoming edge ids as adjacent edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -890,7 +890,7 @@ describe("GraphStore", () => {
   });
 
   it("should return node cycle edge ids as adjacent edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -905,7 +905,7 @@ describe("GraphStore", () => {
   });
 
   it("should update edge from", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -931,7 +931,7 @@ describe("GraphStore", () => {
   });
 
   it("should update edge to", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addNodeRequest2 = createAddNodeRequest2();
@@ -957,7 +957,7 @@ describe("GraphStore", () => {
   });
 
   it("should return element port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = {
@@ -976,7 +976,7 @@ describe("GraphStore", () => {
   });
 
   it("should remove element port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = {
@@ -994,7 +994,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear element port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = {
@@ -1012,7 +1012,7 @@ describe("GraphStore", () => {
   });
 
   it("should return element node id", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 
@@ -1022,7 +1022,7 @@ describe("GraphStore", () => {
   });
 
   it("should remove node element", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 
@@ -1033,7 +1033,7 @@ describe("GraphStore", () => {
   });
 
   it("should clear node elements", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
 

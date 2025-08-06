@@ -2,13 +2,13 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   AddPortRequest,
-  GraphStore,
-  StoreEdge,
-  StoreNode,
-  StorePort,
+  GenericGraphStore,
+  GenericStoreEdge,
+  GenericStoreNode,
+  GenericStorePort,
   UpdateEdgeRequest,
   UpdateNodeRequest,
-} from "@/graph-store";
+} from "@/generic-graph-store";
 import { LayoutGraphStore } from "./layout-graph-store";
 import { standardCenterFn } from "@/center-fn";
 import { UpdatePortRequest } from "@/canvas";
@@ -16,10 +16,10 @@ import { BezierEdgeShape } from "@/edges";
 import { LayoutError } from "./layout-error";
 
 const createLayoutGraphStore = (): {
-  store: GraphStore<number>;
+  store: GenericGraphStore<number>;
   layoutStore: LayoutGraphStore;
 } => {
-  const store = new GraphStore<number>();
+  const store = new GenericGraphStore<number>();
   const layoutStore = new LayoutGraphStore(store);
 
   return { store, layoutStore };
@@ -40,7 +40,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.addNode(addNodeRequest);
 
-    const expected: StoreNode<number | undefined> = {
+    const expected: GenericStoreNode<number | undefined> = {
       element: addNodeRequest.element,
       payload: {
         x: addNodeRequest.x,
@@ -74,7 +74,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.updateNode("node-1", updateNodeRequest);
 
-    const expected: StoreNode<number | undefined> = {
+    const expected: GenericStoreNode<number | undefined> = {
       element: addNodeRequest.element,
       payload: {
         x: updateNodeRequest.x,
@@ -129,7 +129,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.addPort(addPortRequest);
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest.element,
       nodeId: addPortRequest.nodeId,
       payload: {
@@ -169,7 +169,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.updatePort("port-1", updatePortRequest);
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest.element,
       nodeId: addPortRequest.nodeId,
       payload: {
@@ -241,7 +241,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.addEdge(addEdgeRequest);
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest.from,
       to: addEdgeRequest.to,
       payload: {
@@ -292,7 +292,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.updateEdge("edge-1", updateEdgeRequest);
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest.from,
       to: addEdgeRequest.to,
       payload: {
@@ -442,7 +442,7 @@ describe("layoutGraphStore", () => {
     layoutStore.addNode(addNodeRequest);
     layoutStore.apply();
 
-    const expected: StoreNode<number | undefined> = {
+    const expected: GenericStoreNode<number | undefined> = {
       element: addNodeRequest.element,
       payload: {
         x: addNodeRequest.x,
@@ -516,7 +516,7 @@ describe("layoutGraphStore", () => {
     layoutStore.updateNode("node-1", updateNodeRequest);
     layoutStore.apply();
 
-    const expected: StoreNode<number | undefined> = {
+    const expected: GenericStoreNode<number | undefined> = {
       element: addNodeRequest.element,
       payload: {
         x: updateNodeRequest.x,
@@ -593,7 +593,7 @@ describe("layoutGraphStore", () => {
     layoutStore.addPort(addPortRequest);
     layoutStore.apply();
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest.element,
       nodeId: addPortRequest.nodeId,
       payload: {
@@ -635,7 +635,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.apply();
 
-    const expected: StorePort = {
+    const expected: GenericStorePort = {
       element: addPortRequest.element,
       nodeId: addPortRequest.nodeId,
       payload: {
@@ -707,7 +707,7 @@ describe("layoutGraphStore", () => {
 
     layoutStore.addEdge(addEdgeRequest);
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest.from,
       to: addEdgeRequest.to,
       payload: {
@@ -761,7 +761,7 @@ describe("layoutGraphStore", () => {
     layoutStore.updateEdge("edge-1", updateEdgeRequest);
     layoutStore.apply();
 
-    const expected: StoreEdge = {
+    const expected: GenericStoreEdge = {
       from: addEdgeRequest.from,
       to: addEdgeRequest.to,
       payload: {

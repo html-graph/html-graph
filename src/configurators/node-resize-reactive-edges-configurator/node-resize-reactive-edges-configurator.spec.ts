@@ -1,14 +1,14 @@
 import { NodeResizeReactiveEdgesConfigurator } from "./node-resize-reactive-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 import { standardCenterFn } from "@/center-fn";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
 import { Canvas } from "@/canvas";
 
 const createCanvas = (): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

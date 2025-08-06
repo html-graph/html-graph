@@ -20,8 +20,9 @@ export class UserDraggableEdgesConfigurator {
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdgePayload: (GenericGraphEdge & { readonly id: unknown }) | null =
-    null;
+  private draggingEdgePayload:
+    | (GenericGraphEdge & { readonly id: unknown })
+    | null = null;
 
   private readonly onEdgeReattached = (edgeId: unknown): void => {
     this.params.onAfterEdgeReattached(edgeId);

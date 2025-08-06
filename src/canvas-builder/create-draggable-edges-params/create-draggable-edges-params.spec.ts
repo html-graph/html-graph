@@ -6,14 +6,14 @@ import {
   CanvasParams,
   EdgeShapeFactory,
 } from "@/canvas";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 
 const createCanvas = (): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

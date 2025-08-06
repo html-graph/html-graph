@@ -3,8 +3,8 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   AddPortRequest,
-  GraphStore,
-} from "@/graph-store";
+  GenericGraphStore,
+} from "@/generic-graph-store";
 import { GenericGraph } from "./generic-graph";
 import { Point } from "@/point";
 
@@ -70,14 +70,14 @@ const createAddEdgeRequest11 = (): AddEdgeRequest => {
 
 describe("GenericGraph", () => {
   it("should return null when no node in store", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getNode(1)).toBe(null);
   });
 
   it("should return specified node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -94,7 +94,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after node added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -109,7 +109,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after updating node coordinates", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -131,7 +131,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after updating node priority", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -153,7 +153,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -164,7 +164,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit before node removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -181,14 +181,14 @@ describe("GenericGraph", () => {
   });
 
   it("should return null for no port in store", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getPort(1)).toBe(null);
   });
 
   it("should return specified port", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1 = createAddPortRequest1();
@@ -206,7 +206,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit after port added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -223,7 +223,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit after port direction updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -244,7 +244,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -257,7 +257,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -272,7 +272,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return null when accessing non-existing node port ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -281,7 +281,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit before port removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -299,7 +299,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after edge added", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -321,7 +321,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after edge shape updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -352,7 +352,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event after edge priority updated", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -381,7 +381,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -400,14 +400,14 @@ describe("GenericGraph", () => {
   });
 
   it("should return null for no edge in store", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getEdge(1)).toBe(null);
   });
 
   it("should return specified edge", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -431,7 +431,7 @@ describe("GenericGraph", () => {
   });
 
   it("should emit event before edge removed", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -455,7 +455,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified port incoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -476,7 +476,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified port outgoing edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -497,7 +497,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified port cycle edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -514,7 +514,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified port adjacent edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -535,7 +535,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node incoming edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -556,7 +556,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node outgoing edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -577,7 +577,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node cycle edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -594,7 +594,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return specified node adjacent edge ids", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -615,63 +615,63 @@ describe("GenericGraph", () => {
   });
 
   it("should return null when accessing non-existing port incoming edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getPortIncomingEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port outgoing edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getPortOutgoingEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port cycle edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getPortCycleEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing port adjacent edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getPortAdjacentEdgeIds("port-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node incoming edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getNodeIncomingEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node outgoing edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getNodeOutgoingEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node cycle edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getNodeCycleEdgeIds("node-1")).toEqual(null);
   });
 
   it("should return null when accessing non-existing node adjacent edges", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     expect(graph.getNodeAdjacentEdgeIds("node-1")).toEqual(null);
   });
 
   it("should emit event before clear", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const handler = jest.fn();
@@ -686,7 +686,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return marked port ids for element", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -701,7 +701,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return node id for element", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
@@ -714,7 +714,7 @@ describe("GenericGraph", () => {
   });
 
   it("should return null when element is not a node", () => {
-    const store = new GraphStore();
+    const store = new GenericGraphStore();
     const graph = new GenericGraph(store);
 
     const element = document.createElement("div");

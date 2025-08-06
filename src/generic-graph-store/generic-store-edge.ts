@@ -1,6 +1,6 @@
 import { EdgeShape } from "@/edges";
 
-export interface StoreEdge {
+export interface GenericStoreEdge {
   readonly from: unknown;
   readonly to: unknown;
   readonly payload: {

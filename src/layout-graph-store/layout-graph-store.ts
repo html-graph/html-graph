@@ -2,16 +2,16 @@ import {
   AddEdgeRequest,
   AddNodeRequest,
   AddPortRequest,
-  GraphStore,
+  GenericGraphStore,
   UpdateEdgeRequest,
   UpdateNodeRequest,
   UpdatePortRequest,
-} from "@/graph-store";
+} from "@/generic-graph-store";
 import { Command, CommandType } from "./commands";
 import { Queue } from "./queue";
 import { LayoutError } from "./layout-error";
 
-export class LayoutGraphStore extends GraphStore<number | undefined> {
+export class LayoutGraphStore extends GenericGraphStore<number | undefined> {
   private readonly commands = new Queue<Command>();
 
   private readonly onBeforeNodeRemovedHandler = (nodeId: unknown): void => {
@@ -26,7 +26,9 @@ export class LayoutGraphStore extends GraphStore<number | undefined> {
     });
   };
 
-  public constructor(private readonly baseGraphStore: GraphStore<number>) {
+  public constructor(
+    private readonly baseGraphStore: GenericGraphStore<number>,
+  ) {
     super();
 
     this.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemovedHandler);

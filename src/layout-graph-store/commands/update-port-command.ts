@@ -1,4 +1,4 @@
-import { UpdatePortRequest } from "@/graph-store";
+import { UpdatePortRequest } from "@/generic-graph-store";
 import { CommandType } from "./command-type";
 
 export interface UpdatePortCommand {

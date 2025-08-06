@@ -1,5 +1,5 @@
 import { AddEdgeRequest, Canvas } from "@/canvas";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
@@ -22,7 +22,7 @@ const createCanvas = (options?: {
   onEdgeCreationInterrupted?: () => void;
   onEdgeCreationPrevented?: () => void;
 }): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const mainElement =
     options?.mainElement ?? createElement({ width: 1000, height: 1000 });

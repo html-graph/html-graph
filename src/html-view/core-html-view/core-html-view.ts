@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { GraphStore, StorePort } from "@/graph-store";
+import { GenericGraphStore, GenericStorePort } from "@/generic-graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
@@ -26,7 +26,7 @@ export class CoreHtmlView implements HtmlView {
   };
 
   public constructor(
-    private readonly graphStore: GraphStore<number>,
+    private readonly graphStore: GenericGraphStore<number>,
     private readonly viewportStore: ViewportStore,
     private readonly element: HTMLElement,
   ) {
@@ -164,7 +164,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   private createEdgeRenderPort(
-    port: StorePort,
+    port: GenericStorePort,
     rectPort: DOMRect,
     rectCanvas: DOMRect,
     viewportMatrix: TransformState,

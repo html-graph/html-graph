@@ -1,6 +1,6 @@
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import {
@@ -28,7 +28,7 @@ const createCanvas = (options?: {
   mouseUpEventVerifier?: MouseEventVerifier;
   gridSize?: number | null;
 }): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
 
-export interface StoreNode<T> {
+export interface GenericStoreNode<T> {
   readonly element: HTMLElement;
   readonly payload: {
     x: T;

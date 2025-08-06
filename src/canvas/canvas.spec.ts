@@ -1,4 +1,4 @@
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
@@ -20,7 +20,7 @@ const createCanvas = (options?: {
   edgeShapeFactory?: EdgeShapeFactory;
   edgesPriorityFn?: PriorityFn;
 }): Canvas => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);

@@ -1,4 +1,4 @@
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { HtmlView } from "../html-view";
 import { RenderingBox } from "./rendering-box";
 import { EventSubject } from "@/event-subject";
@@ -81,7 +81,7 @@ export class BoxHtmlView implements HtmlView {
 
   public constructor(
     private readonly htmlView: HtmlView,
-    private readonly graphStore: GraphStore<number>,
+    private readonly graphStore: GenericGraphStore<number>,
     private readonly trigger: EventSubject<RenderingBox>,
     private readonly params: BoxHtmlViewParams,
   ) {

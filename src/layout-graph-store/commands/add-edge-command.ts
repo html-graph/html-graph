@@ -1,4 +1,4 @@
-import { AddEdgeRequest } from "@/graph-store";
+import { AddEdgeRequest } from "@/generic-graph-store";
 import { CommandType } from "./command-type";
 
 export interface AddEdgeCommand {

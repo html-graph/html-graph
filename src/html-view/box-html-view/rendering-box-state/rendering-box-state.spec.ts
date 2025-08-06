@@ -1,19 +1,19 @@
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { RenderingBoxState } from "./rendering-box-state";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 
 const create = (): {
-  graphStore: GraphStore<number>;
+  graphStore: GenericGraphStore<number>;
   renderingBoxState: RenderingBoxState;
 } => {
-  const graphStore = new GraphStore<number>();
+  const graphStore = new GenericGraphStore<number>();
   const renderingBoxState = new RenderingBoxState(graphStore);
 
   return { graphStore, renderingBoxState };
 };
 
-const configureEdgeGraph = (store: GraphStore<number>): void => {
+const configureEdgeGraph = (store: GenericGraphStore<number>): void => {
   store.addNode({
     id: "node-1",
     element: document.createElement("div"),

@@ -1,4 +1,4 @@
-import { AddNodeRequest, GraphStore } from "@/graph-store";
+import { AddNodeRequest, GenericGraphStore } from "@/generic-graph-store";
 import { CoreHtmlView } from "../core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { EventSubject } from "@/event-subject";
@@ -12,12 +12,12 @@ const create = (config?: {
   onAfterNodeDetached?: (nodeId: unknown) => void;
 }): {
   trigger: EventSubject<RenderingBox>;
-  store: GraphStore<number>;
+  store: GenericGraphStore<number>;
   coreView: CoreHtmlView;
   boxView: BoxHtmlView;
 } => {
   const trigger = new EventSubject<RenderingBox>();
-  const store = new GraphStore<number>();
+  const store = new GenericGraphStore<number>();
   const transformer = new ViewportStore();
   const element = document.createElement("div");
   const coreView = new CoreHtmlView(store, transformer, element);
@@ -40,7 +40,7 @@ const createAddNodeRequest = (): AddNodeRequest<number> => {
   };
 };
 
-const configureEdgeGraph = (store: GraphStore<number>): void => {
+const configureEdgeGraph = (store: GenericGraphStore<number>): void => {
   store.addNode({
     id: "node-1",
     element: document.createElement("div"),

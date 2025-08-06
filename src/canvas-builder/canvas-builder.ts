@@ -1,7 +1,7 @@
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
 import { Canvas } from "@/canvas";
-import { GraphStore } from "@/graph-store";
+import { GenericGraphStore } from "@/generic-graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
@@ -72,7 +72,7 @@ export class CanvasBuilder {
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly graphStore = new GraphStore<number>();
+  private readonly graphStore = new GenericGraphStore<number>();
 
   private readonly viewportStore = new ViewportStore();
 
