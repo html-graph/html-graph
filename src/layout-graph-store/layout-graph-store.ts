@@ -10,7 +10,7 @@ import {
 import { Command, CommandType } from "./commands";
 import { Queue } from "./queue";
 
-export class DeferredGraphStore extends GraphStore<number | undefined> {
+export class LayoutGraphStore extends GraphStore<number | undefined> {
   private readonly commands = new Queue<Command>();
 
   private readonly onBeforeNodeRemovedHandler = (nodeId: unknown): void => {
@@ -93,6 +93,8 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
   }
 
   public apply(): void {
+    // TODO: apply layout before commands execution
+
     for (;;) {
       const command = this.commands.pop();
 
@@ -118,19 +120,7 @@ export class DeferredGraphStore extends GraphStore<number | undefined> {
           break;
         }
         case CommandType.UpdateNode: {
-          const request = command.request;
-          const nodeId = command.nodeId;
-          const node = this.getNode(nodeId)!;
-          const x: number | undefined = request.x ?? node.payload.x;
-          const y: number | undefined = request.y ?? node.payload.y;
-
-          if (x === undefined || y === undefined) {
-            throw new Error(
-              `failed to updaye node ${nodeId} with undefined coordinates`,
-            );
-          }
-
-          this.baseGraphStore.updateNode(nodeId, command.request);
+          this.baseGraphStore.updateNode(command.nodeId, command.request);
           break;
         }
         case CommandType.RemoveNode: {

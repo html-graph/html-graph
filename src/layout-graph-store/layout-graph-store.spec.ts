@@ -9,20 +9,20 @@ import {
   UpdateEdgeRequest,
   UpdateNodeRequest,
 } from "@/graph-store";
-import { DeferredGraphStore } from "./deferred-graph-store";
+import { LayoutGraphStore } from "./layout-graph-store";
 import { standardCenterFn } from "@/center-fn";
 import { UpdatePortRequest } from "@/canvas";
 import { BezierEdgeShape } from "@/edges";
 
-const createDeferredGraphStore = (): DeferredGraphStore => {
+const createLayoutGraphStore = (): LayoutGraphStore => {
   const store = new GraphStore<number>();
 
-  return new DeferredGraphStore(store);
+  return new LayoutGraphStore(store);
 };
 
-describe("DeferredGraphStore", () => {
-  it("should add new node to deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+describe("layoutGraphStore", () => {
+  it("should add new node to layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -33,7 +33,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const expected: StoreNode<number | undefined> = {
       element: addNodeRequest.element,
@@ -46,11 +46,11 @@ describe("DeferredGraphStore", () => {
       ports: new Map(),
     };
 
-    expect(deferredStore.getNode("node-1")).toEqual(expected);
+    expect(layoutStore.getNode("node-1")).toEqual(expected);
   });
 
-  it("should update existing node in deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should update existing node in layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -61,13 +61,13 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const updateNodeRequest: UpdateNodeRequest<number> = {
       x: 10,
     };
 
-    deferredStore.updateNode("node-1", updateNodeRequest);
+    layoutStore.updateNode("node-1", updateNodeRequest);
 
     const expected: StoreNode<number | undefined> = {
       element: addNodeRequest.element,
@@ -80,11 +80,11 @@ describe("DeferredGraphStore", () => {
       ports: new Map(),
     };
 
-    expect(deferredStore.getNode("node-1")).toEqual(expected);
+    expect(layoutStore.getNode("node-1")).toEqual(expected);
   });
 
-  it("should remove existing node from deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should remove existing node from layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -95,14 +95,14 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
-    deferredStore.removeNode("node-1");
+    layoutStore.addNode(addNodeRequest);
+    layoutStore.removeNode("node-1");
 
-    expect(deferredStore.getNode("node-1")).toBe(undefined);
+    expect(layoutStore.getNode("node-1")).toBe(undefined);
   });
 
-  it("should add new port to deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should add new port to layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -113,7 +113,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -122,7 +122,7 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const expected: StorePort = {
       element: addPortRequest.element,
@@ -132,11 +132,11 @@ describe("DeferredGraphStore", () => {
       },
     };
 
-    expect(deferredStore.getPort("port-1")).toEqual(expected);
+    expect(layoutStore.getPort("port-1")).toEqual(expected);
   });
 
-  it("should update existing port in deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should update existing port in layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -147,7 +147,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -156,13 +156,13 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const updatePortRequest: UpdatePortRequest = {
       direction: Math.PI,
     };
 
-    deferredStore.updatePort("port-1", updatePortRequest);
+    layoutStore.updatePort("port-1", updatePortRequest);
 
     const expected: StorePort = {
       element: addPortRequest.element,
@@ -172,11 +172,11 @@ describe("DeferredGraphStore", () => {
       },
     };
 
-    expect(deferredStore.getPort("port-1")).toEqual(expected);
+    expect(layoutStore.getPort("port-1")).toEqual(expected);
   });
 
-  it("should remove existing port from deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should remove existing port from layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -187,7 +187,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -196,15 +196,15 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
-    deferredStore.removePort("port-1");
+    layoutStore.removePort("port-1");
 
-    expect(deferredStore.getPort("port-1")).toEqual(undefined);
+    expect(layoutStore.getPort("port-1")).toEqual(undefined);
   });
 
-  it("should add new edge to deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should add new edge to layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -215,7 +215,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -224,7 +224,7 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const addEdgeRequest: AddEdgeRequest = {
       id: "edge-1",
@@ -234,7 +234,7 @@ describe("DeferredGraphStore", () => {
       priority: 0,
     };
 
-    deferredStore.addEdge(addEdgeRequest);
+    layoutStore.addEdge(addEdgeRequest);
 
     const expected: StoreEdge = {
       from: addEdgeRequest.from,
@@ -245,11 +245,11 @@ describe("DeferredGraphStore", () => {
       },
     };
 
-    expect(deferredStore.getEdge("edge-1")).toEqual(expected);
+    expect(layoutStore.getEdge("edge-1")).toEqual(expected);
   });
 
-  it("should update existing edge in deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should update existing edge in layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -260,7 +260,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -269,7 +269,7 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const addEdgeRequest: AddEdgeRequest = {
       id: "edge-1",
@@ -279,13 +279,13 @@ describe("DeferredGraphStore", () => {
       priority: 0,
     };
 
-    deferredStore.addEdge(addEdgeRequest);
+    layoutStore.addEdge(addEdgeRequest);
 
     const updateEdgeRequest: UpdateEdgeRequest = {
       priority: 10,
     };
 
-    deferredStore.updateEdge("edge-1", updateEdgeRequest);
+    layoutStore.updateEdge("edge-1", updateEdgeRequest);
 
     const expected: StoreEdge = {
       from: addEdgeRequest.from,
@@ -296,11 +296,11 @@ describe("DeferredGraphStore", () => {
       },
     };
 
-    expect(deferredStore.getEdge("edge-1")).toEqual(expected);
+    expect(layoutStore.getEdge("edge-1")).toEqual(expected);
   });
 
-  it("should remove existing edge from deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should remove existing edge from layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -311,7 +311,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -320,7 +320,7 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const addEdgeRequest: AddEdgeRequest = {
       id: "edge-1",
@@ -330,15 +330,15 @@ describe("DeferredGraphStore", () => {
       priority: 0,
     };
 
-    deferredStore.addEdge(addEdgeRequest);
+    layoutStore.addEdge(addEdgeRequest);
 
-    deferredStore.removeEdge("edge-1");
+    layoutStore.removeEdge("edge-1");
 
-    expect(deferredStore.getEdge("edge-1")).toEqual(undefined);
+    expect(layoutStore.getEdge("edge-1")).toEqual(undefined);
   });
 
-  it("should clear deferred graph", () => {
-    const deferredStore = createDeferredGraphStore();
+  it("should clear layout graph", () => {
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -349,15 +349,15 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
-    deferredStore.clear();
+    layoutStore.clear();
 
-    expect(deferredStore.getNode("node-1")).toEqual(undefined);
+    expect(layoutStore.getNode("node-1")).toEqual(undefined);
   });
 
   it("should remove adjacent port hen removing related node", () => {
-    const deferredStore = createDeferredGraphStore();
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -368,7 +368,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -377,15 +377,15 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
-    deferredStore.removeNode("node-1");
+    layoutStore.removeNode("node-1");
 
-    expect(deferredStore.getPort("port-1")).toEqual(undefined);
+    expect(layoutStore.getPort("port-1")).toEqual(undefined);
   });
 
   it("should remove adjacent edge when removing port", () => {
-    const deferredStore = createDeferredGraphStore();
+    const layoutStore = createLayoutGraphStore();
 
     const addNodeRequest: AddNodeRequest<number | undefined> = {
       id: "node-1",
@@ -396,7 +396,7 @@ describe("DeferredGraphStore", () => {
       centerFn: standardCenterFn,
     };
 
-    deferredStore.addNode(addNodeRequest);
+    layoutStore.addNode(addNodeRequest);
 
     const addPortRequest: AddPortRequest = {
       id: "port-1",
@@ -405,7 +405,7 @@ describe("DeferredGraphStore", () => {
       direction: 0,
     };
 
-    deferredStore.addPort(addPortRequest);
+    layoutStore.addPort(addPortRequest);
 
     const addEdgeRequest: AddEdgeRequest = {
       id: "edge-1",
@@ -415,10 +415,10 @@ describe("DeferredGraphStore", () => {
       priority: 0,
     };
 
-    deferredStore.addEdge(addEdgeRequest);
+    layoutStore.addEdge(addEdgeRequest);
 
-    deferredStore.removePort("port-1");
+    layoutStore.removePort("port-1");
 
-    expect(deferredStore.getEdge("edge-1")).toEqual(undefined);
+    expect(layoutStore.getEdge("edge-1")).toEqual(undefined);
   });
 });
