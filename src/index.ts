@@ -70,4 +70,4 @@ export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";
 
-export { LayoutError } from "./layout-graph-store";
+// export { LayoutError } from "./layout-graph-store";
