@@ -9,6 +9,7 @@ import {
 } from "@/graph-store";
 import { Command, CommandType } from "./commands";
 import { Queue } from "./queue";
+import { LayoutError } from "./layout-error";
 
 export class LayoutGraphStore extends GraphStore<number | undefined> {
   private readonly commands = new Queue<Command>();
@@ -111,7 +112,7 @@ export class LayoutGraphStore extends GraphStore<number | undefined> {
           const y: number | undefined = request.y ?? node.payload.y;
 
           if (x === undefined || y === undefined) {
-            throw new Error(
+            throw new LayoutError(
               `failed to add node ${nodeId} with undefined coordinates`,
             );
           }
