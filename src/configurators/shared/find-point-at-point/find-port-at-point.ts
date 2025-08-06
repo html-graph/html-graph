@@ -1,11 +1,8 @@
 import { Point } from "@/point";
 import { findPortForElement } from "./find-port-for-element";
-import { GenericGraph } from "@/generic-graph";
+import { Graph } from "@/canvas";
 
-export const findPortAtPoint = (
-  graph: GenericGraph<number>,
-  point: Point,
-): unknown | null => {
+export const findPortAtPoint = (graph: Graph, point: Point): unknown | null => {
   const elements = document.elementsFromPoint(point.x, point.y);
 
   for (const element of elements) {

@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas } from "@/canvas";
+import { AddEdgeRequest, Canvas, GraphEdge } from "@/canvas";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
@@ -11,7 +11,6 @@ import {
   OverlayNodeParams,
 } from "../shared";
 import { DraggablePortsConfigurator } from "../shared";
-import { GenericGraphEdge } from "@/generic-graph";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -20,9 +19,8 @@ export class UserDraggableEdgesConfigurator {
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdgePayload:
-    | (GenericGraphEdge & { readonly id: unknown })
-    | null = null;
+  private draggingEdgePayload: (GraphEdge & { readonly id: unknown }) | null =
+    null;
 
   private readonly onEdgeReattached = (edgeId: unknown): void => {
     this.params.onAfterEdgeReattached(edgeId);

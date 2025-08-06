@@ -1,17 +1,16 @@
-import { Canvas } from "@/canvas";
+import { Canvas, Graph } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
-import { GenericGraph } from "@/generic-graph";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;
 
   private maxNodePriority = 0;
 
-  private readonly graph: GenericGraph<number>;
+  private readonly graph: Graph;
 
   private readonly onAfterNodeAdded = (nodeId: unknown): void => {
     this.updateMaxNodePriority(nodeId);

@@ -1,7 +1,7 @@
-import { GenericGraph } from "@/generic-graph";
+import { Graph } from "@/canvas";
 
 export const findPortForElement = (
-  graph: GenericGraph<number>,
+  graph: Graph,
   element: Element,
 ): unknown | null => {
   let elementBuf: Element | null = element;
