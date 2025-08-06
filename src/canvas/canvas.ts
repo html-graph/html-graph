@@ -121,7 +121,7 @@ export class Canvas {
     private readonly htmlView: HtmlView,
     private readonly params: CanvasParams,
   ) {
-    this.graph = new Graph(this.graphStore);
+    this.graph = new Graph<number>(this.graphStore);
     this.viewport = new Viewport(this.viewportStore);
 
     this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
