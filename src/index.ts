@@ -69,5 +69,3 @@ export type { Point } from "./point";
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";
-
-// export { LayoutError } from "./layout-graph-store";

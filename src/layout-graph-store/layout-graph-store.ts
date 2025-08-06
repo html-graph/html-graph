@@ -94,8 +94,6 @@ export class LayoutGraphStore extends GraphStore<number | undefined> {
   }
 
   public apply(): void {
-    // TODO: apply layout before commands execution
-
     for (;;) {
       const command = this.commands.pop();
 
