@@ -26,10 +26,6 @@ const createCanvas = (): Canvas => {
 };
 
 describe("NodeResizeReactiveEdgesConfigurator", () => {
-  it("should pass", () => {
-    expect(true).toBe(true);
-  });
-
   it("should react to node changes", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
