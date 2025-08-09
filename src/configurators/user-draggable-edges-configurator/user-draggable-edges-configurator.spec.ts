@@ -18,7 +18,7 @@ const createCanvas = (options?: {
   overlayElement?: HTMLElement;
   connectionPreprocessor?: ConnectionPreprocessor;
   draggingEdgeResolver?: (portId: Identifier) => Identifier | null;
-  onAfterEdgeReattached?: (edgeId: Identifier) => Identifier;
+  onAfterEdgeReattached?: (edgeId: Identifier) => void;
   onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
   onEdgeReattachPrevented?: (edge: GraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
