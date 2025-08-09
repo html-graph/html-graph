@@ -1,9 +1,10 @@
 import { Canvas } from "@/canvas";
 import { isPointInside } from "../is-point-inside";
 import { DraggablePortsParams } from "./draggable-ports-params";
+import { Identifier } from "@/identifier";
 
 export class DraggablePortsConfigurator {
-  private readonly onAfterPortMarked = (portId: unknown): void => {
+  private readonly onAfterPortMarked = (portId: Identifier): void => {
     const port = this.canvas.graph.getPort(portId)!;
     const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 
@@ -12,7 +13,7 @@ export class DraggablePortsConfigurator {
     }
   };
 
-  private readonly onBeforePortUnmarked = (portId: unknown): void => {
+  private readonly onBeforePortUnmarked = (portId: Identifier): void => {
     const port = this.canvas.graph.getPort(portId)!;
     const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
 

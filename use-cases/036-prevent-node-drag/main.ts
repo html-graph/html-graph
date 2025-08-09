@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  Identifier,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -11,7 +12,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvas: Canvas = builder
   .enableUserDraggableNodes({
-    nodeDragVerifier: (nodeId: unknown) => {
+    nodeDragVerifier: (nodeId: Identifier) => {
       return nodeId !== "node-1";
     },
   })

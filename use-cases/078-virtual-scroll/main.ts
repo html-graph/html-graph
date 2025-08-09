@@ -3,6 +3,7 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
+  Identifier,
   ViewportTransformConfig,
   VirtualScrollConfig,
 } from "@html-graph/html-graph";
@@ -51,7 +52,7 @@ document.getElementById("start")!.addEventListener("click", async () => {
 });
 
 const initiateGraph = async (): Promise<void> => {
-  let prevPortId: unknown | null = null;
+  let prevPortId: Identifier | null = null;
 
   const total = 100_000;
   const layer = total / 10;

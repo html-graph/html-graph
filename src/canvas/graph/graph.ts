@@ -3,31 +3,32 @@ import { GraphStore } from "@/graph-store";
 import { GraphEdge } from "./graph-edge";
 import { GraphNode } from "./graph-node";
 import { GraphPort } from "./graph-port";
+import { Identifier } from "@/identifier";
 
 export class Graph {
-  public readonly onAfterNodeAdded: EventHandler<unknown>;
+  public readonly onAfterNodeAdded: EventHandler<Identifier>;
 
-  public readonly onAfterNodeUpdated: EventHandler<unknown>;
+  public readonly onAfterNodeUpdated: EventHandler<Identifier>;
 
-  public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
+  public readonly onAfterNodePriorityUpdated: EventHandler<Identifier>;
 
-  public readonly onBeforeNodeRemoved: EventHandler<unknown>;
+  public readonly onBeforeNodeRemoved: EventHandler<Identifier>;
 
-  public readonly onAfterPortMarked: EventHandler<unknown>;
+  public readonly onAfterPortMarked: EventHandler<Identifier>;
 
-  public readonly onAfterPortUpdated: EventHandler<unknown>;
+  public readonly onAfterPortUpdated: EventHandler<Identifier>;
 
-  public readonly onBeforePortUnmarked: EventHandler<unknown>;
+  public readonly onBeforePortUnmarked: EventHandler<Identifier>;
 
-  public readonly onAfterEdgeAdded: EventHandler<unknown>;
+  public readonly onAfterEdgeAdded: EventHandler<Identifier>;
 
-  public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgeShapeUpdated: EventHandler<Identifier>;
 
-  public readonly onAfterEdgeUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgeUpdated: EventHandler<Identifier>;
 
-  public readonly onAfterEdgePriorityUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgePriorityUpdated: EventHandler<Identifier>;
 
-  public readonly onBeforeEdgeRemoved: EventHandler<unknown>;
+  public readonly onBeforeEdgeRemoved: EventHandler<Identifier>;
 
   public readonly onBeforeClear: EventHandler<void>;
 
@@ -61,7 +62,7 @@ export class Graph {
     this.onBeforeClear = this.graphStore.onBeforeClear;
   }
 
-  public getNode(nodeId: unknown): GraphNode | null {
+  public getNode(nodeId: Identifier): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
@@ -79,15 +80,15 @@ export class Graph {
     };
   }
 
-  public getElementNodeId(element: HTMLElement): unknown | null {
+  public getElementNodeId(element: HTMLElement): Identifier | null {
     return this.graphStore.getElementNodeId(element) ?? null;
   }
 
-  public getAllNodeIds(): readonly unknown[] {
+  public getAllNodeIds(): readonly Identifier[] {
     return this.graphStore.getAllNodeIds();
   }
 
-  public getPort(portId: unknown): GraphPort | null {
+  public getPort(portId: Identifier): GraphPort | null {
     const port = this.graphStore.getPort(portId);
 
     if (port === undefined) {
@@ -101,23 +102,23 @@ export class Graph {
     };
   }
 
-  public getAllPortIds(): readonly unknown[] {
+  public getAllPortIds(): readonly Identifier[] {
     return this.graphStore.getAllPortIds();
   }
 
-  public getNodePortIds(nodeId: unknown): readonly unknown[] | null {
+  public getNodePortIds(nodeId: Identifier): readonly Identifier[] | null {
     return this.graphStore.getNodePortIds(nodeId) ?? null;
   }
 
-  public getElementPortIds(element: HTMLElement): readonly unknown[] {
+  public getElementPortIds(element: HTMLElement): readonly Identifier[] {
     return [...this.graphStore.getElementPortIds(element)];
   }
 
-  public getAllEdgeIds(): readonly unknown[] {
+  public getAllEdgeIds(): readonly Identifier[] {
     return this.graphStore.getAllEdgeIds();
   }
 
-  public getEdge(edgeId: unknown): GraphEdge | null {
+  public getEdge(edgeId: Identifier): GraphEdge | null {
     const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {
@@ -134,7 +135,9 @@ export class Graph {
     };
   }
 
-  public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] | null {
+  public getPortIncomingEdgeIds(
+    portId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
     }
@@ -142,7 +145,9 @@ export class Graph {
     return this.graphStore.getPortIncomingEdgeIds(portId);
   }
 
-  public getPortOutgoingEdgeIds(portId: unknown): readonly unknown[] | null {
+  public getPortOutgoingEdgeIds(
+    portId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
     }
@@ -150,7 +155,7 @@ export class Graph {
     return this.graphStore.getPortOutgoingEdgeIds(portId);
   }
 
-  public getPortCycleEdgeIds(portId: unknown): readonly unknown[] | null {
+  public getPortCycleEdgeIds(portId: Identifier): readonly Identifier[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
     }
@@ -158,7 +163,9 @@ export class Graph {
     return this.graphStore.getPortCycleEdgeIds(portId);
   }
 
-  public getPortAdjacentEdgeIds(portId: unknown): readonly unknown[] | null {
+  public getPortAdjacentEdgeIds(
+    portId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getPort(portId) === undefined) {
       return null;
     }
@@ -166,7 +173,9 @@ export class Graph {
     return this.graphStore.getPortAdjacentEdgeIds(portId);
   }
 
-  public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] | null {
+  public getNodeIncomingEdgeIds(
+    nodeId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
     }
@@ -174,7 +183,9 @@ export class Graph {
     return this.graphStore.getNodeIncomingEdgeIds(nodeId);
   }
 
-  public getNodeOutgoingEdgeIds(nodeId: unknown): readonly unknown[] | null {
+  public getNodeOutgoingEdgeIds(
+    nodeId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
     }
@@ -182,7 +193,7 @@ export class Graph {
     return this.graphStore.getNodeOutgoingEdgeIds(nodeId);
   }
 
-  public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] | null {
+  public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
     }
@@ -190,7 +201,9 @@ export class Graph {
     return this.graphStore.getNodeCycleEdgeIds(nodeId);
   }
 
-  public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] | null {
+  public getNodeAdjacentEdgeIds(
+    nodeId: Identifier,
+  ): readonly Identifier[] | null {
     if (this.graphStore.getNode(nodeId) === undefined) {
       return null;
     }

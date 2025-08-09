@@ -6,6 +6,7 @@ import {
 import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { EdgeShapeFactory } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
+import { Identifier } from "@/identifier";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
@@ -20,7 +21,7 @@ export const createConnectablePortsParams = (
   const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
     event.button === 0;
 
-  const defaultOnAfterEdgeCreated: (edgeId: unknown) => void = () => {};
+  const defaultOnAfterEdgeCreated: (edgeId: Identifier) => void = () => {};
 
   const defaultOnAfterEdgeConnectionPrevented = (): void => {};
 

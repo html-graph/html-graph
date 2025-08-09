@@ -69,3 +69,5 @@ export type { Point } from "./point";
 export type { CenterFn } from "./center-fn";
 
 export type { PriorityFn } from "./priority";
+
+export type { Identifier } from "./identifier";

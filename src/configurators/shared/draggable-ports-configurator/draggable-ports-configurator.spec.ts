@@ -6,10 +6,11 @@ import { ViewportStore } from "@/viewport-store";
 import { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 import { Point } from "@/point";
 import { MouseEventVerifier } from "../mouse-event-verifier";
+import { Identifier } from "@/identifier";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
-  onPointerDown?: (portId: unknown, clientPoint: Point) => boolean;
+  onPointerDown?: (portId: Identifier, clientPoint: Point) => boolean;
   onPointerMove?: (clientPoint: Point) => void;
   onPointerUp?: (clientPoint: Point) => void;
   onStopDrag?: () => void;

@@ -1,6 +1,8 @@
+import { Identifier } from "@/identifier";
+
 export interface AddPortRequest {
-  readonly id: unknown;
-  readonly nodeId: unknown;
+  readonly id: Identifier;
+  readonly nodeId: Identifier;
   readonly element: HTMLElement;
   readonly direction: number;
 }

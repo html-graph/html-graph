@@ -1,18 +1,19 @@
 import { Canvas } from "@/canvas";
+import { Identifier } from "@/identifier";
 
 export class NodeResizeReactiveEdgesConfigurator {
-  private readonly elementToNodeId = new Map<Element, unknown>();
+  private readonly elementToNodeId = new Map<Element, Identifier>();
 
   private readonly nodesResizeObserver: ResizeObserver;
 
-  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+  private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     const node = this.canvas.graph.getNode(nodeId)!;
 
     this.elementToNodeId.set(node.element, nodeId);
     this.nodesResizeObserver.observe(node.element);
   };
 
-  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+  private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     const node = this.canvas.graph.getNode(nodeId)!;
 
     this.elementToNodeId.delete(node.element);

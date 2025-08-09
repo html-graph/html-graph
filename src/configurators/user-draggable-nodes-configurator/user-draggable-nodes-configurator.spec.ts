@@ -13,6 +13,7 @@ import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { MouseEventVerifier } from "../shared";
+import { Identifier } from "@/identifier";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -20,10 +21,10 @@ let innerHeight: number;
 const createCanvas = (options?: {
   dragCursor?: string | null;
   element?: HTMLElement;
-  onBeforeNodeDrag?: (nodeId: unknown) => boolean;
+  onBeforeNodeDrag?: (nodeId: Identifier) => boolean;
   moveOnTop?: boolean;
   moveEdgesOnTop?: boolean;
-  onNodeDragFinished?: (nodeId: unknown) => void;
+  onNodeDragFinished?: (nodeId: Identifier) => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
   gridSize?: number | null;

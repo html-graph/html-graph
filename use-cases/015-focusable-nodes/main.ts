@@ -1,7 +1,12 @@
-import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import {
+  AddNodeRequest,
+  Canvas,
+  CanvasBuilder,
+  Identifier,
+} from "@html-graph/html-graph";
 
 export function createNode(params: {
-  id: unknown;
+  id: Identifier;
   name: string;
   x: number;
   y: number;
@@ -43,7 +48,7 @@ addNodeRequests.forEach(
     canvas.addNode(request);
 
     request.element.addEventListener("focus", () => {
-      const node = canvas.graph.getNode(request.id)!;
+      const node = canvas.graph.getNode(request.id!)!;
       const rect = canvasElement.getBoundingClientRect();
       const sv = canvas.viewport.getViewportMatrix().scale;
 

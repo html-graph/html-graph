@@ -5,6 +5,7 @@ import { Graph } from "@/canvas";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
+import { Identifier } from "@/identifier";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;
@@ -13,7 +14,7 @@ export class UserDraggableNodesConfigurator {
 
   private readonly graph: Graph;
 
-  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+  private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     this.updateMaxNodePriority(nodeId);
     const node = this.graph.getNode(nodeId)!;
 
@@ -25,11 +26,11 @@ export class UserDraggableNodesConfigurator {
     });
   };
 
-  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
+  private readonly onAfterNodeUpdated = (nodeId: Identifier): void => {
     this.updateMaxNodePriority(nodeId);
   };
 
-  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+  private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     const node = this.graph.getNode(nodeId)!;
 
     node.element.removeEventListener("mousedown", this.onMouseDown);
@@ -250,7 +251,7 @@ export class UserDraggableNodesConfigurator {
     this.params.onNodeDrag(state.nodeId);
   }
 
-  private moveNodeOnTop(nodeId: unknown): void {
+  private moveNodeOnTop(nodeId: Identifier): void {
     if (!this.params.moveOnTop) {
       return;
     }
@@ -315,7 +316,7 @@ export class UserDraggableNodesConfigurator {
     this.window.removeEventListener("touchcancel", this.onWindowTouchFinish);
   }
 
-  private updateMaxNodePriority(nodeId: unknown): void {
+  private updateMaxNodePriority(nodeId: Identifier): void {
     const priority = this.graph.getNode(nodeId)!.priority;
 
     this.maxNodePriority = Math.max(this.maxNodePriority, priority);

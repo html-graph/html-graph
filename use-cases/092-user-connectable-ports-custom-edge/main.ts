@@ -4,6 +4,7 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   ConnectablePortsConfig,
+  Identifier,
 } from "@html-graph/html-graph";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -22,7 +23,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
     type: "direct",
     hasTargetArrow: true,
   },
-  connectionTypeResolver: (portId: unknown) => {
+  connectionTypeResolver: (portId: Identifier) => {
     const idStr = portId as string;
 
     return idStr.endsWith("-out") ? "direct" : "reverse";

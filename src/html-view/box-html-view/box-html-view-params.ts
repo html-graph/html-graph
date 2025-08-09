@@ -1,4 +1,6 @@
+import { Identifier } from "@/identifier";
+
 export interface BoxHtmlViewParams {
-  readonly onBeforeNodeAttached: (nodeId: unknown) => void;
-  readonly onAfterNodeDetached: (nodeId: unknown) => void;
+  readonly onBeforeNodeAttached: (nodeId: Identifier) => void;
+  readonly onAfterNodeDetached: (nodeId: Identifier) => void;
 }

@@ -1,5 +1,6 @@
 import { GraphStore } from "@/graph-store";
 import { RenderingBox } from "../rendering-box";
+import { Identifier } from "@/identifier";
 
 export class RenderingBoxState {
   private xFrom = Infinity;
@@ -19,7 +20,7 @@ export class RenderingBoxState {
     this.yTo = renderingBox.y + renderingBox.height;
   }
 
-  public hasNode(nodeId: unknown): boolean {
+  public hasNode(nodeId: Identifier): boolean {
     const payload = this.graphStore.getNode(nodeId)!.payload;
 
     return (
@@ -30,7 +31,7 @@ export class RenderingBoxState {
     );
   }
 
-  public hasEdge(edgeId: unknown): boolean {
+  public hasEdge(edgeId: Identifier): boolean {
     const edge = this.graphStore.getEdge(edgeId)!;
     const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
     const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;

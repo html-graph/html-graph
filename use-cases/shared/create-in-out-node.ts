@@ -1,7 +1,7 @@
-import { AddNodeRequest } from "@html-graph/html-graph";
+import { AddNodeRequest, Identifier } from "@html-graph/html-graph";
 
 export function createInOutNode(params: {
-  id?: unknown;
+  id?: Identifier;
   name: string;
   x: number;
   y: number;

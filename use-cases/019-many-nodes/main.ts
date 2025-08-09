@@ -4,10 +4,11 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   DraggableNodesConfig,
+  Identifier,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
-  portId: unknown;
+  portId: Identifier;
   x: number;
   y: number;
 }): AddNodeRequest {

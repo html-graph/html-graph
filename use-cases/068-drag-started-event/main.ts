@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasBuilder,
   DraggableNodesConfig,
+  Identifier,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -14,10 +15,10 @@ const current = document.getElementById("current") as HTMLElement;
 
 const dragConfig: DraggableNodesConfig = {
   events: {
-    onNodeDrag: (nodeId: unknown) => {
+    onNodeDrag: (nodeId: Identifier) => {
       current.innerText = `drag triggered for ${nodeId}`;
     },
-    onNodeDragFinished: (nodeId: unknown) => {
+    onNodeDragFinished: (nodeId: Identifier) => {
       current.innerText = `drag finished triggered for ${nodeId}`;
     },
   },

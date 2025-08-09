@@ -1,3 +1,4 @@
+import { Identifier } from "@/identifier";
 import { MouseEventVerifier } from "../shared";
 
 export interface DraggableNodesParams {
@@ -5,9 +6,9 @@ export interface DraggableNodesParams {
   readonly moveEdgesOnTop: boolean;
   readonly dragCursor: string | null;
   readonly gridSize: number | null;
-  readonly nodeDragVerifier: (nodeId: unknown) => boolean;
+  readonly nodeDragVerifier: (nodeId: Identifier) => boolean;
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
-  readonly onNodeDrag: (nodeId: unknown) => void;
-  readonly onNodeDragFinished: (nodeId: unknown) => void;
+  readonly onNodeDrag: (nodeId: Identifier) => void;
+  readonly onNodeDragFinished: (nodeId: Identifier) => void;
 }
