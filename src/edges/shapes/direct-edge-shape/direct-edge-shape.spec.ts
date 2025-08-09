@@ -82,7 +82,7 @@ describe("DirectEdgeShape", () => {
     expect(arrow.getAttribute("d")).toBe("M 0 0 L 15 4 L 15 -4 Z");
   });
 
-  it("should create path for source arrow", () => {
+  it("should create path for target arrow", () => {
     const shape = new DirectEdgeShape({ hasTargetArrow: true });
 
     shape.render({

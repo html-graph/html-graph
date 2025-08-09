@@ -1,10 +1,4 @@
 export { createRotatedPoint } from "./create-rotated-point";
-export { setSvgRectangle } from "./set-svg-rectangle";
 export { createRoundedPath } from "./create-rounded-path";
-export { createEdgeSvg } from "./create-edge-svg";
-export { createEdgeArrow } from "./create-edge-arrow";
-export { createEdgeGroup } from "./create-edge-group";
-export { createEdgePath } from "./create-edge-path";
 export { createEdgeRectangle } from "./create-edge-rectangle";
-export { cssVariables } from "./css-variables";
 export { flipPoint } from "./flip-point";

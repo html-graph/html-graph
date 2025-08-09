@@ -128,7 +128,7 @@ describe("PathEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
+    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 97 L 90 103 Z");
   });
 
   it("should create path for source arrow", () => {
@@ -208,6 +208,6 @@ describe("PathEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 103 L 90 97 Z");
+    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 97 L 90 103 Z");
   });
 });
