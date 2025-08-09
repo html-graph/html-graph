@@ -1,4 +1,4 @@
-import { EdgePath } from "./shared";
+import { EdgePath } from "./paths";
 
 export interface StructuredEdgeRenderModel {
   readonly edgePath: EdgePath;
