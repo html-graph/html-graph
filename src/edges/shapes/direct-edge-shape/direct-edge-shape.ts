@@ -3,7 +3,7 @@ import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../../edge-constants";
 import { Point } from "@/point";
-import { createEdgeRectangle } from "../../shared";
+import { createEdgeRectangle } from "../../geometry";
 import { DirectEdgePath } from "../../paths";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";

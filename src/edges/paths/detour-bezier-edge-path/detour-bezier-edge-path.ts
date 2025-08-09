@@ -1,5 +1,5 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint, flipPoint } from "../../shared";
+import { createRotatedPoint, flipPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 
 export class DetourBezierEdgePath implements EdgePath {

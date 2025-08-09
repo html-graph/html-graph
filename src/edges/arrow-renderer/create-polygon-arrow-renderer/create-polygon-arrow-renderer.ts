@@ -1,4 +1,4 @@
-import { createRotatedPoint } from "../../shared";
+import { createRotatedPoint } from "../../geometry";
 import { Point, zero } from "@/point";
 import { ArrowRenderer } from "../arrow-renderer";
 

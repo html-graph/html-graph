@@ -4,7 +4,7 @@ import { PathEdgeParams } from "./path-edge-params";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
-import { createEdgeRectangle } from "../../shared";
+import { createEdgeRectangle } from "../../geometry";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ConnectionCategory } from "../../connection-category";

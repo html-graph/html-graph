@@ -1,5 +1,5 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint } from "../../shared";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 
 export class CycleCircleEdgePath implements EdgePath {
