@@ -1,6 +1,7 @@
 import { Point, zero } from "@/point";
-import { createRotatedPoint, createRoundedPath } from "../../geometry";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { createRoundedPath } from "../../svg";
 
 export class HorizontalEdgePath implements EdgePath {
   public readonly path: string;
