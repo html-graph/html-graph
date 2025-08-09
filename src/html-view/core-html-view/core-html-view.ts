@@ -8,6 +8,7 @@ import { ConnectionCategory } from "@/edges/connection-category";
 import { createHost } from "./create-host";
 import { createContainer } from "./create-container";
 import { prepareNodeElement } from "./prepare-node-element";
+import { Identifier } from "@/identifier";
 
 /**
  * This entity is responsible for HTML modifications
@@ -17,7 +18,7 @@ export class CoreHtmlView implements HtmlView {
 
   private readonly container = createContainer();
 
-  private readonly edgeIdToElementMap = new Map<unknown, SVGSVGElement>();
+  private readonly edgeIdToElementMap = new Map<Identifier, SVGSVGElement>();
 
   private readonly applyTransform = (): void => {
     const m = this.viewportStore.getContentMatrix();
@@ -36,7 +37,7 @@ export class CoreHtmlView implements HtmlView {
     this.viewportStore.onAfterUpdated.subscribe(this.applyTransform);
   }
 
-  public attachNode(nodeId: unknown): void {
+  public attachNode(nodeId: Identifier): void {
     const node = this.graphStore.getNode(nodeId)!;
 
     prepareNodeElement(node.element);
@@ -49,13 +50,13 @@ export class CoreHtmlView implements HtmlView {
     node.element.style.visibility = "visible";
   }
 
-  public detachNode(nodeId: unknown): void {
+  public detachNode(nodeId: Identifier): void {
     const node = this.graphStore.getNode(nodeId)!;
 
     this.container.removeChild(node.element);
   }
 
-  public attachEdge(edgeId: unknown): void {
+  public attachEdge(edgeId: Identifier): void {
     const svg = this.graphStore.getEdge(edgeId)!.payload.shape.svg;
 
     this.edgeIdToElementMap.set(edgeId, svg);
@@ -65,7 +66,7 @@ export class CoreHtmlView implements HtmlView {
     this.updateEdgePriority(edgeId);
   }
 
-  public detachEdge(edgeId: unknown): void {
+  public detachEdge(edgeId: Identifier): void {
     const svg = this.edgeIdToElementMap.get(edgeId)!;
 
     this.container.removeChild(svg);
@@ -91,7 +92,7 @@ export class CoreHtmlView implements HtmlView {
     this.host.removeChild(this.container);
   }
 
-  public updateNodePosition(nodeId: unknown): void {
+  public updateNodePosition(nodeId: Identifier): void {
     const node = this.graphStore.getNode(nodeId)!;
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
@@ -103,13 +104,13 @@ export class CoreHtmlView implements HtmlView {
     node.element.style.transform = `translate(${x}px, ${y}px)`;
   }
 
-  public updateNodePriority(nodeId: unknown): void {
+  public updateNodePriority(nodeId: Identifier): void {
     const node = this.graphStore.getNode(nodeId)!;
 
     node.element.style.zIndex = `${node.payload.priority}`;
   }
 
-  public updateEdgeShape(edgeId: unknown): void {
+  public updateEdgeShape(edgeId: Identifier): void {
     const element = this.edgeIdToElementMap.get(edgeId)!;
 
     this.container.removeChild(element);
@@ -122,7 +123,7 @@ export class CoreHtmlView implements HtmlView {
     this.container.appendChild(svg);
   }
 
-  public renderEdge(edgeId: unknown): void {
+  public renderEdge(edgeId: Identifier): void {
     const edge = this.graphStore.getEdge(edgeId)!;
     const portFrom = this.graphStore.getPort(edge.from)!;
     const portTo = this.graphStore.getPort(edge.to)!;
@@ -157,7 +158,7 @@ export class CoreHtmlView implements HtmlView {
     edge.payload.shape.render({ from, to, category });
   }
 
-  public updateEdgePriority(edgeId: unknown): void {
+  public updateEdgePriority(edgeId: Identifier): void {
     const edge = this.graphStore.getEdge(edgeId)!;
 
     edge.payload.shape.svg.style.zIndex = `${edge.payload.priority}`;

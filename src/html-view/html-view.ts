@@ -1,23 +1,25 @@
+import { Identifier } from "@/identifier";
+
 export interface HtmlView {
-  attachNode(nodeId: unknown): void;
+  attachNode(nodeId: Identifier): void;
 
-  detachNode(nodeId: unknown): void;
+  detachNode(nodeId: Identifier): void;
 
-  attachEdge(edgeId: unknown): void;
+  attachEdge(edgeId: Identifier): void;
 
-  detachEdge(edgeId: unknown): void;
+  detachEdge(edgeId: Identifier): void;
 
   clear(): void;
 
   destroy(): void;
 
-  updateNodePosition(nodeId: unknown): void;
+  updateNodePosition(nodeId: Identifier): void;
 
-  updateNodePriority(nodeId: unknown): void;
+  updateNodePriority(nodeId: Identifier): void;
 
-  updateEdgeShape(edgeId: unknown): void;
+  updateEdgeShape(edgeId: Identifier): void;
 
-  renderEdge(edgeId: unknown): void;
+  renderEdge(edgeId: Identifier): void;
 
-  updateEdgePriority(edgeId: unknown): void;
+  updateEdgePriority(edgeId: Identifier): void;
 }

@@ -6,10 +6,11 @@ import { RenderingBox } from "./rendering-box";
 import { BoxHtmlView } from "./box-html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
+import { Identifier } from "@/identifier";
 
 const create = (config?: {
-  onBeforeNodeAttached?: (nodeId: unknown) => void;
-  onAfterNodeDetached?: (nodeId: unknown) => void;
+  onBeforeNodeAttached?: (nodeId: Identifier) => void;
+  onAfterNodeDetached?: (nodeId: Identifier) => void;
 }): {
   trigger: EventSubject<RenderingBox>;
   store: GraphStore;

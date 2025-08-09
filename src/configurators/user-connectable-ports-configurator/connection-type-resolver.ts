@@ -1,3 +1,5 @@
+import { Identifier } from "@/identifier";
+
 export type ConnectionTypeResolver = (
-  portId: unknown,
+  portId: Identifier,
 ) => "direct" | "reverse" | null;

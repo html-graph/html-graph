@@ -1,4 +1,5 @@
 import { CenterFn } from "@/center-fn";
+import { Identifier } from "@/identifier";
 
 export interface StoreNode {
   readonly element: HTMLElement;
@@ -8,5 +9,5 @@ export interface StoreNode {
     centerFn: CenterFn;
     priority: number;
   };
-  readonly ports: Map<unknown, HTMLElement>;
+  readonly ports: Map<Identifier, HTMLElement>;
 }

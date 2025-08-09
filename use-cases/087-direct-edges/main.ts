@@ -4,9 +4,11 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
+  Identifier,
 } from "@html-graph/html-graph";
+
 export function createNode(params: {
-  id: unknown;
+  id: Identifier;
   name: string;
   x: number;
   y: number;

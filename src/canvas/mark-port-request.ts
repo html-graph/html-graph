@@ -1,6 +1,8 @@
+import { Identifier } from "@/identifier";
+
 export interface MarkPortRequest {
-  readonly id?: unknown;
+  readonly id?: Identifier;
   readonly element: HTMLElement;
-  readonly nodeId: unknown;
+  readonly nodeId: Identifier;
   readonly direction?: number;
 }

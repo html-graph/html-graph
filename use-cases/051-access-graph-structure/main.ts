@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  Identifier,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -77,9 +78,9 @@ canvas
   .addEdge(addEdge3Request);
 
 const structure: {
-  nodes: Array<{ nodeId: unknown; x: number; y: number }>;
-  ports: Array<{ portId: unknown; direction: number }>;
-  edges: Array<{ edgeId: unknown; from: unknown; to: unknown }>;
+  nodes: Array<{ nodeId: Identifier; x: number; y: number }>;
+  ports: Array<{ portId: Identifier; direction: number }>;
+  edges: Array<{ edgeId: Identifier; from: Identifier; to: Identifier }>;
 } = {
   nodes: [],
   edges: [],

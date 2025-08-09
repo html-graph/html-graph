@@ -11,18 +11,20 @@ import {
   OverlayNodeParams,
 } from "../shared";
 import { DraggablePortsConfigurator } from "../shared";
+import { Identifier } from "@/identifier";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private staticPortId: unknown | null = null;
+  private staticPortId: Identifier | null = null;
 
   private isTargetDragging: boolean = true;
 
-  private draggingEdgePayload: (GraphEdge & { readonly id: unknown }) | null =
-    null;
+  private draggingEdgePayload:
+    | (GraphEdge & { readonly id: Identifier })
+    | null = null;
 
-  private readonly onEdgeReattached = (edgeId: unknown): void => {
+  private readonly onEdgeReattached = (edgeId: Identifier): void => {
     this.params.onAfterEdgeReattached(edgeId);
   };
 
@@ -77,7 +79,7 @@ export class UserDraggableEdgesConfigurator {
     );
   }
 
-  private tryStartEdgeDragging(portId: unknown, cursor: Point): boolean {
+  private tryStartEdgeDragging(portId: Identifier, cursor: Point): boolean {
     const edgeId = this.params.draggingEdgeResolver(portId);
 
     if (edgeId === null) {

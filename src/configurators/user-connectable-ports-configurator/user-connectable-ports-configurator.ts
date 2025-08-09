@@ -11,15 +11,16 @@ import { Point } from "@/point";
 import { transformPoint } from "@/transform-point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
+import { Identifier } from "@/identifier";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private staticPortId: unknown | null = null;
+  private staticPortId: Identifier | null = null;
 
   private isTargetDragging: boolean = true;
 
-  private readonly onEdgeCreated = (edgeId: unknown): void => {
+  private readonly onEdgeCreated = (edgeId: Identifier): void => {
     this.params.onAfterEdgeCreated(edgeId);
   };
 
@@ -83,7 +84,7 @@ export class UserConnectablePortsConfigurator {
   }
 
   private grabPort(
-    portId: unknown,
+    portId: Identifier,
     cursor: Point,
     connectionType: "direct" | "reverse",
   ): void {
@@ -143,18 +144,19 @@ export class UserConnectablePortsConfigurator {
 
   private tryCreateConnection(cursor: Point): void {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
+    const staticPortId = this.staticPortId!;
 
     if (draggingPortId === null) {
       this.params.onEdgeCreationInterrupted({
-        staticPortId: this.staticPortId,
+        staticPortId,
         isDirect: this.isTargetDragging,
       });
 
       return;
     }
 
-    const sourceId = this.isTargetDragging ? this.staticPortId : draggingPortId;
-    const targetId = this.isTargetDragging ? draggingPortId : this.staticPortId;
+    const sourceId = this.isTargetDragging ? staticPortId : draggingPortId;
+    const targetId = this.isTargetDragging ? draggingPortId : staticPortId;
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 

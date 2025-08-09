@@ -3,6 +3,7 @@ import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { ConnectionPreprocessor } from "@/configurators";
+import { Identifier } from "@/identifier";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
@@ -27,7 +28,7 @@ export const createDraggableEdgeParams = (
     }
   };
 
-  const defaultOnAfterEdgeReattached: (edgeId: unknown) => void = () => {};
+  const defaultOnAfterEdgeReattached: (edgeId: Identifier) => void = () => {};
 
   const defaultOnAfterEdgeReattachPrevented = (): void => {};
 

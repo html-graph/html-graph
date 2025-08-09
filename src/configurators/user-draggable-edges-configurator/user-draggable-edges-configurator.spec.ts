@@ -11,13 +11,14 @@ import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 import { ConnectionPreprocessor } from "../shared";
+import { Identifier } from "@/identifier";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
   connectionPreprocessor?: ConnectionPreprocessor;
-  draggingEdgeResolver?: (portId: unknown) => unknown;
-  onAfterEdgeReattached?: (edgeId: unknown) => unknown;
+  draggingEdgeResolver?: (portId: Identifier) => Identifier | null;
+  onAfterEdgeReattached?: (edgeId: Identifier) => void;
   onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
   onEdgeReattachPrevented?: (edge: GraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
@@ -37,7 +38,7 @@ const createCanvas = (options?: {
     defaultCanvasParams,
   );
 
-  const defaultResolver = (portId: unknown): unknown => {
+  const defaultResolver = (portId: Identifier): Identifier | null => {
     const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId)!;
 
     if (edgeIds.length > 0) {
@@ -75,7 +76,7 @@ const createCanvas = (options?: {
 const createNode = (
   canvas: Canvas,
   portElement: HTMLElement,
-  portId: unknown,
+  portId: Identifier,
 ): void => {
   const nodeElement = document.createElement("div");
   nodeElement.appendChild(portElement);

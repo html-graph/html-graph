@@ -1,8 +1,9 @@
 import { CenterFn } from "@/center-fn";
 import { AddNodePorts } from "./add-node-ports";
+import { Identifier } from "@/identifier";
 
 export interface AddNodeRequest {
-  readonly id?: unknown | undefined;
+  readonly id?: Identifier;
   readonly element: HTMLElement;
   readonly x: number;
   readonly y: number;

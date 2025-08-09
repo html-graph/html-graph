@@ -3,6 +3,7 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
+  Identifier,
   ViewportTransformConfig,
   VirtualScrollConfig,
 } from "@html-graph/html-graph";
@@ -47,7 +48,7 @@ const virtualScrollConfig: VirtualScrollConfig = {
 };
 
 function createInOutNode(params: {
-  id?: unknown;
+  id?: Identifier;
   x: number;
   y: number;
   frontPortId: string;
@@ -89,7 +90,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
 
 let cnt = 0;
 
-let prevPortId: unknown | null = null;
+let prevPortId: Identifier | null = null;
 
 for (let i = 0; i < 10; i++) {
   for (let j = 0; j < 10000; j++) {

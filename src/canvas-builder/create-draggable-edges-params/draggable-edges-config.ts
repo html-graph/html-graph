@@ -5,6 +5,7 @@ import {
 } from "@/configurators";
 import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
 import { AddEdgeRequest, GraphEdge } from "@/canvas";
+import { Identifier } from "@/identifier";
 
 export interface DraggableEdgesConfig {
   readonly connectionPreprocessor?: ConnectionPreprocessor;
@@ -13,7 +14,7 @@ export interface DraggableEdgesConfig {
   readonly draggingEdgeResolver?: DraggingEdgeResolver;
   readonly draggingEdgeShape?: EdgeShapeConfig;
   readonly events?: {
-    readonly onAfterEdgeReattached?: (edgeId: unknown) => void;
+    readonly onAfterEdgeReattached?: (edgeId: Identifier) => void;
     readonly onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
     readonly onEdgeReattachPrevented?: (request: AddEdgeRequest) => void;
   };

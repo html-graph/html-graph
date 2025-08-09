@@ -14,6 +14,7 @@ import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
 import { CanvasError } from "./canvas-error";
+import { Identifier } from "@/identifier";
 
 export class Canvas {
   /**
@@ -38,11 +39,11 @@ export class Canvas {
     (edgeId) => this.graph.getEdge(edgeId) !== null,
   );
 
-  private readonly onAfterNodeAdded = (nodeId: unknown): void => {
+  private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     this.htmlView.attachNode(nodeId);
   };
 
-  private readonly onAfterNodeUpdated = (nodeId: unknown): void => {
+  private readonly onAfterNodeUpdated = (nodeId: Identifier): void => {
     this.htmlView.updateNodePosition(nodeId);
 
     const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
@@ -52,11 +53,11 @@ export class Canvas {
     });
   };
 
-  private readonly onAfterNodePriorityUpdated = (nodeId: unknown): void => {
+  private readonly onAfterNodePriorityUpdated = (nodeId: Identifier): void => {
     this.htmlView.updateNodePriority(nodeId);
   };
 
-  private readonly onBeforeNodeRemoved = (nodeId: unknown): void => {
+  private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
       this.unmarkPort(portId);
     });
@@ -64,7 +65,7 @@ export class Canvas {
     this.htmlView.detachNode(nodeId);
   };
 
-  private readonly onAfterPortUpdated = (portId: unknown): void => {
+  private readonly onAfterPortUpdated = (portId: Identifier): void => {
     const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
 
     edgeIds.forEach((edge) => {
@@ -72,29 +73,29 @@ export class Canvas {
     });
   };
 
-  private readonly onBeforePortUnmarked = (portId: unknown): void => {
+  private readonly onBeforePortUnmarked = (portId: Identifier): void => {
     this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
       this.removeEdge(edgeId);
     });
   };
 
-  private readonly onAfterEdgeAdded = (edgeId: unknown): void => {
+  private readonly onAfterEdgeAdded = (edgeId: Identifier): void => {
     this.htmlView.attachEdge(edgeId);
   };
 
-  private readonly onAfterEdgeShapeUpdated = (edgeId: unknown): void => {
+  private readonly onAfterEdgeShapeUpdated = (edgeId: Identifier): void => {
     this.htmlView.updateEdgeShape(edgeId);
   };
 
-  private readonly onAfterEdgeUpdated = (edgeId: unknown): void => {
+  private readonly onAfterEdgeUpdated = (edgeId: Identifier): void => {
     this.htmlView.renderEdge(edgeId);
   };
 
-  private readonly onAfterEdgePriorityUpdated = (edgeId: unknown): void => {
+  private readonly onAfterEdgePriorityUpdated = (edgeId: Identifier): void => {
     this.htmlView.updateEdgePriority(edgeId);
   };
 
-  private readonly onBeforeEdgeRemoved = (edgeId: unknown): void => {
+  private readonly onBeforeEdgeRemoved = (edgeId: Identifier): void => {
     this.htmlView.detachEdge(edgeId);
   };
 
@@ -199,7 +200,7 @@ export class Canvas {
   /**
    * updates node parameters
    */
-  public updateNode(nodeId: unknown, request?: UpdateNodeRequest): Canvas {
+  public updateNode(nodeId: Identifier, request?: UpdateNodeRequest): Canvas {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
@@ -216,7 +217,7 @@ export class Canvas {
    * all the ports of node get unmarked
    * all the edges adjacent to node get removed
    */
-  public removeNode(nodeId: unknown): Canvas {
+  public removeNode(nodeId: Identifier): Canvas {
     if (this.graphStore.getNode(nodeId) === undefined) {
       throw new CanvasError("failed to remove non existing node");
     }
@@ -253,7 +254,7 @@ export class Canvas {
   /**
    * updates port and edges attached to it
    */
-  public updatePort(portId: unknown, request?: UpdatePortRequest): Canvas {
+  public updatePort(portId: Identifier, request?: UpdatePortRequest): Canvas {
     const port = this.graphStore.getPort(portId);
 
     if (port === undefined) {
@@ -269,7 +270,7 @@ export class Canvas {
    * unmarks specified port
    * all the edges adjacent to the port get removed
    */
-  public unmarkPort(portId: unknown): Canvas {
+  public unmarkPort(portId: Identifier): Canvas {
     if (this.graphStore.getPort(portId) === undefined) {
       throw new CanvasError("failed to unmark non existing port");
     }
@@ -311,7 +312,7 @@ export class Canvas {
   /**
    * updates specified edge
    */
-  public updateEdge(edgeId: unknown, request?: UpdateEdgeRequest): Canvas {
+  public updateEdge(edgeId: Identifier, request?: UpdateEdgeRequest): Canvas {
     const edge = this.graphStore.getEdge(edgeId);
 
     if (edge === undefined) {
@@ -326,7 +327,7 @@ export class Canvas {
   /**
    * removes specified edge
    */
-  public removeEdge(edgeId: unknown): Canvas {
+  public removeEdge(edgeId: Identifier): Canvas {
     if (this.graphStore.getEdge(edgeId) === undefined) {
       throw new CanvasError("failed to remove nonexistent edge");
     }

@@ -1,9 +1,13 @@
+import { Identifier } from "@/identifier";
+
 export class IdGenerator {
   private counter = 0;
 
-  public constructor(private readonly checkExists: (id: unknown) => boolean) {}
+  public constructor(
+    private readonly checkExists: (id: Identifier) => boolean,
+  ) {}
 
-  public create(suggestedId: unknown | undefined): unknown {
+  public create(suggestedId: Identifier | undefined): Identifier {
     if (suggestedId !== undefined) {
       return suggestedId;
     }

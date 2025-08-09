@@ -9,74 +9,75 @@ import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
+import { Identifier } from "@/identifier";
 
 export class GraphStore {
-  private readonly nodes = new Map<unknown, StoreNode>();
+  private readonly nodes = new Map<Identifier, StoreNode>();
 
-  private readonly ports = new Map<unknown, StorePort>();
+  private readonly ports = new Map<Identifier, StorePort>();
 
-  private readonly edges = new Map<unknown, StoreEdge>();
+  private readonly edges = new Map<Identifier, StoreEdge>();
 
-  private readonly nodesElementsMap = new Map<HTMLElement, unknown>();
+  private readonly nodesElementsMap = new Map<HTMLElement, Identifier>();
 
-  private readonly incomingEdges = new Map<unknown, Set<unknown>>();
+  private readonly incomingEdges = new Map<Identifier, Set<Identifier>>();
 
-  private readonly outcomingEdges = new Map<unknown, Set<unknown>>();
+  private readonly outcomingEdges = new Map<Identifier, Set<Identifier>>();
 
-  private readonly cycleEdges = new Map<unknown, Set<unknown>>();
+  private readonly cycleEdges = new Map<Identifier, Set<Identifier>>();
 
   private readonly elementPorts = new OneToManyCollection<
     HTMLElement,
-    unknown
+    Identifier
   >();
 
-  private readonly afterNodeAddedEmitter: EventEmitter<unknown>;
+  private readonly afterNodeAddedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterNodeAdded: EventHandler<unknown>;
+  public readonly onAfterNodeAdded: EventHandler<Identifier>;
 
-  private readonly afterNodeUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterNodeUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterNodeUpdated: EventHandler<unknown>;
+  public readonly onAfterNodeUpdated: EventHandler<Identifier>;
 
-  private readonly afterNodePriorityUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterNodePriorityUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterNodePriorityUpdated: EventHandler<unknown>;
+  public readonly onAfterNodePriorityUpdated: EventHandler<Identifier>;
 
-  private readonly beforeNodeRemovedEmitter: EventEmitter<unknown>;
+  private readonly beforeNodeRemovedEmitter: EventEmitter<Identifier>;
 
-  public readonly onBeforeNodeRemoved: EventHandler<unknown>;
+  public readonly onBeforeNodeRemoved: EventHandler<Identifier>;
 
-  private readonly afterPortAddedEmitter: EventEmitter<unknown>;
+  private readonly afterPortAddedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterPortAdded: EventHandler<unknown>;
+  public readonly onAfterPortAdded: EventHandler<Identifier>;
 
-  private readonly afterPortUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterPortUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterPortUpdated: EventHandler<unknown>;
+  public readonly onAfterPortUpdated: EventHandler<Identifier>;
 
-  private readonly beforePortRemovedEmitter: EventEmitter<unknown>;
+  private readonly beforePortRemovedEmitter: EventEmitter<Identifier>;
 
-  public readonly onBeforePortRemoved: EventHandler<unknown>;
+  public readonly onBeforePortRemoved: EventHandler<Identifier>;
 
-  private readonly afterEdgeAddedEmitter: EventEmitter<unknown>;
+  private readonly afterEdgeAddedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterEdgeAdded: EventHandler<unknown>;
+  public readonly onAfterEdgeAdded: EventHandler<Identifier>;
 
-  private readonly afterEdgeShapeUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterEdgeShapeUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterEdgeShapeUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgeShapeUpdated: EventHandler<Identifier>;
 
-  private readonly afterEdgeUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterEdgeUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterEdgeUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgeUpdated: EventHandler<Identifier>;
 
-  private readonly afterEdgePriorityUpdatedEmitter: EventEmitter<unknown>;
+  private readonly afterEdgePriorityUpdatedEmitter: EventEmitter<Identifier>;
 
-  public readonly onAfterEdgePriorityUpdated: EventHandler<unknown>;
+  public readonly onAfterEdgePriorityUpdated: EventHandler<Identifier>;
 
-  private readonly beforeEdgeRemovedEmitter: EventEmitter<unknown>;
+  private readonly beforeEdgeRemovedEmitter: EventEmitter<Identifier>;
 
-  public readonly onBeforeEdgeRemoved: EventHandler<unknown>;
+  public readonly onBeforeEdgeRemoved: EventHandler<Identifier>;
 
   private readonly beforeClearEmitter: EventEmitter<void>;
 
@@ -113,7 +114,7 @@ export class GraphStore {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const ports = new Map<unknown, HTMLElement>();
+    const ports = new Map<Identifier, HTMLElement>();
 
     const node: StoreNode = {
       element: request.element,
@@ -132,19 +133,19 @@ export class GraphStore {
     this.afterNodeAddedEmitter.emit(request.id);
   }
 
-  public getAllNodeIds(): readonly unknown[] {
+  public getAllNodeIds(): readonly Identifier[] {
     return Array.from(this.nodes.keys());
   }
 
-  public getNode(nodeId: unknown): StoreNode | undefined {
+  public getNode(nodeId: Identifier): StoreNode | undefined {
     return this.nodes.get(nodeId);
   }
 
-  public getElementNodeId(element: HTMLElement): unknown | undefined {
+  public getElementNodeId(element: HTMLElement): Identifier | undefined {
     return this.nodesElementsMap.get(element);
   }
 
-  public updateNode(nodeId: unknown, request: UpdateNodeRequest): void {
+  public updateNode(nodeId: Identifier, request: UpdateNodeRequest): void {
     const payload = this.nodes.get(nodeId)!.payload;
 
     payload.x = request.x ?? payload.x;
@@ -159,7 +160,7 @@ export class GraphStore {
     this.afterNodeUpdatedEmitter.emit(nodeId);
   }
 
-  public removeNode(nodeId: unknown): void {
+  public removeNode(nodeId: Identifier): void {
     this.beforeNodeRemovedEmitter.emit(nodeId);
     const node = this.nodes.get(nodeId)!;
     this.nodesElementsMap.delete(node.element);
@@ -185,11 +186,11 @@ export class GraphStore {
     this.afterPortAddedEmitter.emit(request.id);
   }
 
-  public getPort(portId: unknown): StorePort | undefined {
+  public getPort(portId: Identifier): StorePort | undefined {
     return this.ports.get(portId);
   }
 
-  public updatePort(portId: unknown, request: UpdatePortRequest): void {
+  public updatePort(portId: Identifier, request: UpdatePortRequest): void {
     const payload = this.ports.get(portId)!.payload;
 
     payload.direction = request.direction ?? payload.direction;
@@ -197,15 +198,15 @@ export class GraphStore {
     this.afterPortUpdatedEmitter.emit(portId);
   }
 
-  public getAllPortIds(): readonly unknown[] {
+  public getAllPortIds(): readonly Identifier[] {
     return Array.from(this.ports.keys());
   }
 
-  public getElementPortIds(element: HTMLElement): readonly unknown[] {
+  public getElementPortIds(element: HTMLElement): readonly Identifier[] {
     return this.elementPorts.getMultiBySingle(element);
   }
 
-  public getNodePortIds(nodeId: unknown): readonly unknown[] | undefined {
+  public getNodePortIds(nodeId: Identifier): readonly Identifier[] | undefined {
     const node = this.nodes.get(nodeId);
 
     if (node !== undefined) {
@@ -215,7 +216,7 @@ export class GraphStore {
     return undefined;
   }
 
-  public removePort(portId: unknown): void {
+  public removePort(portId: Identifier): void {
     const nodeId = this.ports.get(portId)!.nodeId;
 
     this.beforePortRemovedEmitter.emit(portId);
@@ -229,7 +230,7 @@ export class GraphStore {
     this.afterEdgeAddedEmitter.emit(request.id);
   }
 
-  public updateEdge(edgeId: unknown, request: UpdateEdgeRequest): void {
+  public updateEdge(edgeId: Identifier, request: UpdateEdgeRequest): void {
     if (request.from !== undefined || request.to !== undefined) {
       const edge = this.edges.get(edgeId)!;
       const payload = edge.payload;
@@ -259,15 +260,15 @@ export class GraphStore {
     this.afterEdgeUpdatedEmitter.emit(edgeId);
   }
 
-  public getAllEdgeIds(): readonly unknown[] {
+  public getAllEdgeIds(): readonly Identifier[] {
     return Array.from(this.edges.keys());
   }
 
-  public getEdge(edgeId: unknown): StoreEdge | undefined {
+  public getEdge(edgeId: Identifier): StoreEdge | undefined {
     return this.edges.get(edgeId);
   }
 
-  public removeEdge(edgeId: unknown): void {
+  public removeEdge(edgeId: Identifier): void {
     this.beforeEdgeRemovedEmitter.emit(edgeId);
     this.removeEdgeInternal(edgeId);
   }
@@ -285,19 +286,19 @@ export class GraphStore {
     this.nodes.clear();
   }
 
-  public getPortIncomingEdgeIds(portId: unknown): readonly unknown[] {
+  public getPortIncomingEdgeIds(portId: Identifier): readonly Identifier[] {
     return Array.from(this.incomingEdges.get(portId)!);
   }
 
-  public getPortOutgoingEdgeIds(portId: unknown): readonly unknown[] {
+  public getPortOutgoingEdgeIds(portId: Identifier): readonly Identifier[] {
     return Array.from(this.outcomingEdges.get(portId)!);
   }
 
-  public getPortCycleEdgeIds(portId: unknown): readonly unknown[] {
+  public getPortCycleEdgeIds(portId: Identifier): readonly Identifier[] {
     return Array.from(this.cycleEdges.get(portId)!);
   }
 
-  public getPortAdjacentEdgeIds(portId: unknown): readonly unknown[] {
+  public getPortAdjacentEdgeIds(portId: Identifier): readonly Identifier[] {
     return [
       ...this.getPortIncomingEdgeIds(portId),
       ...this.getPortOutgoingEdgeIds(portId),
@@ -305,9 +306,9 @@ export class GraphStore {
     ];
   }
 
-  public getNodeIncomingEdgeIds(nodeId: unknown): readonly unknown[] {
+  public getNodeIncomingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: unknown[] = [];
+    let res: Identifier[] = [];
 
     ports.forEach((portId) => {
       res = [...res, ...this.getPortIncomingEdgeIds(portId)];
@@ -316,9 +317,9 @@ export class GraphStore {
     return res;
   }
 
-  public getNodeOutgoingEdgeIds(nodeId: unknown): readonly unknown[] {
+  public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: unknown[] = [];
+    let res: Identifier[] = [];
 
     ports.forEach((portId) => {
       res = [...res, ...this.getPortOutgoingEdgeIds(portId)];
@@ -327,9 +328,9 @@ export class GraphStore {
     return res;
   }
 
-  public getNodeCycleEdgeIds(nodeId: unknown): readonly unknown[] {
+  public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: unknown[] = [];
+    let res: Identifier[] = [];
 
     ports.forEach((portId) => {
       res = [...res, ...this.getPortCycleEdgeIds(portId)];
@@ -338,7 +339,7 @@ export class GraphStore {
     return res;
   }
 
-  public getNodeAdjacentEdgeIds(nodeId: unknown): readonly unknown[] {
+  public getNodeAdjacentEdgeIds(nodeId: Identifier): readonly Identifier[] {
     return [
       ...this.getNodeIncomingEdgeIds(nodeId),
       ...this.getNodeOutgoingEdgeIds(nodeId),
@@ -364,7 +365,7 @@ export class GraphStore {
     }
   }
 
-  private removeEdgeInternal(edgeId: unknown): void {
+  private removeEdgeInternal(edgeId: Identifier): void {
     const edge = this.edges.get(edgeId)!;
     const portFromId = edge.from;
     const portToId = edge.to;

@@ -1,11 +1,12 @@
 import { Graph } from "@/canvas";
+import { Identifier } from "@/identifier";
 
 export const findPortForElement = (
   graph: Graph,
   element: Element,
-): unknown | null => {
+): Identifier | null => {
   let elementBuf: Element | null = element;
-  let draggingPortId: unknown | null = null;
+  let draggingPortId: Identifier | null = null;
 
   while (elementBuf !== null) {
     draggingPortId =

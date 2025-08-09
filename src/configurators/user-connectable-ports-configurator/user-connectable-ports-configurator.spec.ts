@@ -12,13 +12,14 @@ import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "../shared";
+import { Identifier } from "@/identifier";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
   connectionTypeResolver?: ConnectionTypeResolver;
   connectionPreprocessor?: ConnectionPreprocessor;
-  onAfterEdgeCreated?: (edgeId: unknown) => void;
+  onAfterEdgeCreated?: (edgeId: Identifier) => void;
   onEdgeCreationInterrupted?: () => void;
   onEdgeCreationPrevented?: () => void;
 }): Canvas => {

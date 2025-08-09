@@ -5,6 +5,7 @@ import {
   MouseEventVerifier,
 } from "@/configurators";
 import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
+import { Identifier } from "@/identifier";
 
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;
@@ -14,9 +15,9 @@ export interface ConnectablePortsConfig {
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly dragPortDirection?: number | undefined;
   readonly events?: {
-    readonly onAfterEdgeCreated?: (edgeId: unknown) => void;
+    readonly onAfterEdgeCreated?: (edgeId: Identifier) => void;
     readonly onEdgeCreationInterrupted?: (params: {
-      readonly staticPortId: unknown;
+      readonly staticPortId: Identifier;
       readonly isDirect: boolean;
     }) => void;
     readonly onEdgeCreationPrevented?: (request: AddEdgeRequest) => void;
