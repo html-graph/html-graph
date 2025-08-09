@@ -14,9 +14,16 @@
   <body>
     <div class="overlay">
       This use case specifies how to enable virtual scroll for user
-      transformable canvas. This graph has 100k nodes and (100k - 1) edges
+      transformable canvas. This graph has 100 000 nodes.
     </div>
     <div id="canvas" class="canvas"></div>
+    <div id="loader" class="loader">
+      <div id="spinner" class="spinner"></div>
+      <button class="btn" id="start" data-testid="start">
+        Load 100 000 nodes
+      </button>
+      <div class="status" id="status"></div>
+    </div>
     <script type="module" src="main.ts"></script>
   </body>
 </html>

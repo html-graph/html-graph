@@ -33,3 +33,40 @@
   background: var(--color-edge);
   border-radius: calc(2 * var(--port-size));
 }
+
+.loader {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  background: #ffffffaa;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid green;
+  border-radius: 50%;
+  border-bottom-color: transparent;
+  animation: rotation 1s linear infinite;
+  display: none;
+}
+
+.status {
+  margin-top: 1rem;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.btn {
+  padding: 1rem;
+}
