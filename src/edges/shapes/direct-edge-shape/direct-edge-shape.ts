@@ -2,7 +2,7 @@ import { EdgeRenderParams } from "../../edge-render-params";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../../edge-constants";
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import {
   createEdgeArrow,
   createEdgeGroup,
@@ -104,32 +104,47 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.line.setAttribute("d", edgePath.path);
 
     let sourceArrowPath: string | null = null;
+    let targetArrowPath: string | null = null;
     const diagonal = edgePath.diagonalDistance;
 
-    if (this.sourceArrow) {
-      if (diagonal > 0) {
-        const direction: Point = { x: to.x / diagonal, y: to.y / diagonal };
-
-        sourceArrowPath = this.arrowRenderer(direction, zero);
-      } else {
+    if (diagonal === 0) {
+      if (this.sourceArrow !== null) {
         sourceArrowPath = "";
+        this.sourceArrow.setAttribute("d", sourceArrowPath);
       }
 
-      this.sourceArrow.setAttribute("d", sourceArrowPath);
-    }
-
-    let targetArrowPath: string | null = null;
-
-    if (this.targetArrow) {
-      if (diagonal > 0) {
-        const direction: Point = { x: -to.x / diagonal, y: -to.y / diagonal };
-
-        targetArrowPath = this.arrowRenderer(direction, to);
-      } else {
+      if (this.targetArrow !== null) {
         targetArrowPath = "";
+        this.targetArrow.setAttribute("d", targetArrowPath);
+      }
+    } else {
+      const direction: Point = {
+        x: to.x / diagonal,
+        y: to.y / diagonal,
+      };
+
+      const shift: Point = {
+        x: direction.x * this.sourceOffset,
+        y: direction.y * this.sourceOffset,
+      };
+
+      if (this.sourceArrow) {
+        sourceArrowPath = this.arrowRenderer(direction, shift);
+
+        this.sourceArrow.setAttribute("d", sourceArrowPath);
       }
 
-      this.targetArrow.setAttribute("d", targetArrowPath);
+      if (this.targetArrow) {
+        targetArrowPath = this.arrowRenderer(
+          { x: -direction.x, y: -direction.y },
+          {
+            x: to.x - shift.x,
+            y: to.y - shift.y,
+          },
+        );
+
+        this.targetArrow.setAttribute("d", targetArrowPath);
+      }
     }
 
     this.afterRenderEmitter.emit({
