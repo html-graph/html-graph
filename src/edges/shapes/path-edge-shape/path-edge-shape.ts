@@ -5,7 +5,6 @@ import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import {
-  createArrowPath,
   createEdgeArrow,
   createEdgeGroup,
   createEdgePath,
@@ -16,6 +15,10 @@ import {
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ConnectionCategory } from "../../connection-category";
+import {
+  ArrowRenderer,
+  createPolygonArrowRenderer,
+} from "../../arrow-renderer";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -32,9 +35,16 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
   private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
+  private readonly arrowRenderer: ArrowRenderer;
+
   public constructor(private readonly params: PathEdgeParams) {
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
+
+    this.arrowRenderer = createPolygonArrowRenderer({
+      width: this.params.arrowWidth,
+      length: this.params.arrowLength,
+    });
 
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
@@ -78,14 +88,12 @@ export class PathEdgeShape implements StructuredEdgeShape {
       y: height,
     };
 
-    let targetVect = targetDirection;
-    let targetArrowLength = -this.params.arrowLength;
+    let targetVect: Point = { x: -targetDirection.x, y: -targetDirection.y };
     let createPathFn: EdgePathFactory;
 
     if (params.category === ConnectionCategory.PortCycle) {
       createPathFn = this.params.createCyclePath;
       targetVect = sourceDirection;
-      targetArrowLength = this.params.arrowLength;
     } else if (params.category === ConnectionCategory.NodeCycle) {
       createPathFn = this.params.createDetourPath;
     } else {
@@ -105,12 +113,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let sourceArrowPath: string | null = null;
 
     if (this.sourceArrow) {
-      sourceArrowPath = createArrowPath(
-        sourceDirection,
-        zero,
-        this.params.arrowLength,
-        this.params.arrowWidth,
-      );
+      sourceArrowPath = this.arrowRenderer(sourceDirection, zero);
 
       this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
@@ -118,12 +121,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let targetArrowPath: string | null = null;
 
     if (this.targetArrow) {
-      targetArrowPath = createArrowPath(
-        targetVect,
-        to,
-        targetArrowLength,
-        this.params.arrowWidth,
-      );
+      targetArrowPath = this.arrowRenderer(targetVect, to);
 
       this.targetArrow.setAttribute("d", targetArrowPath);
     }

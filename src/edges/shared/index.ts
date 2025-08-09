@@ -6,6 +6,5 @@ export { createEdgeArrow } from "./create-edge-arrow";
 export { createEdgeGroup } from "./create-edge-group";
 export { createEdgePath } from "./create-edge-path";
 export { createEdgeRectangle } from "./create-edge-rectangle";
-export { createArrowPath } from "./create-arrow-path";
 export { cssVariables } from "./css-variables";
 export { flipPoint } from "./flip-point";

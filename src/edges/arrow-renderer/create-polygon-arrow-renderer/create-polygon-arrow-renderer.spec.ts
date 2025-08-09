@@ -1,14 +1,13 @@
 import { Point } from "@/point";
-import { createArrowPath } from "./create-arrow-path";
+import { createPolygonArrowRenderer } from "./create-polygon-arrow-renderer";
 
-describe("createArrowPath", () => {
+describe("createPolygonArrowRenderer", () => {
   it("should create arrow path", () => {
     const vector: Point = { x: 1, y: 0 };
     const shift: Point = { x: 0, y: 0 };
-    const arrowLength = 10;
-    const arrowWidth = 5;
+    const renderer = createPolygonArrowRenderer({ width: 5, length: 10 });
 
-    const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
+    const path = renderer(vector, shift);
 
     expect(path).toBe("M 0 0 L 10 5 L 10 -5 Z");
   });
@@ -16,10 +15,9 @@ describe("createArrowPath", () => {
   it("should create rotated arrow path", () => {
     const vector: Point = { x: 0, y: 1 };
     const shift: Point = { x: 0, y: 0 };
-    const arrowLength = 10;
-    const arrowWidth = 5;
+    const renderer = createPolygonArrowRenderer({ width: 5, length: 10 });
 
-    const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
+    const path = renderer(vector, shift);
 
     expect(path).toBe("M 0 0 L -5 10 L 5 10 Z");
   });
@@ -27,10 +25,9 @@ describe("createArrowPath", () => {
   it("should create shifted arrow path", () => {
     const vector: Point = { x: 1, y: 0 };
     const shift: Point = { x: 5, y: 10 };
-    const arrowLength = 10;
-    const arrowWidth = 5;
+    const renderer = createPolygonArrowRenderer({ width: 5, length: 10 });
 
-    const path = createArrowPath(vector, shift, arrowLength, arrowWidth);
+    const path = renderer(vector, shift);
 
     expect(path).toBe("M 5 10 L 15 15 L 15 5 Z");
   });
