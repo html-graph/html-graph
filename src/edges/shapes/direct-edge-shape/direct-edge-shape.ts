@@ -11,11 +11,13 @@ import {
   ArrowRenderer,
   createPolygonArrowRenderer,
 } from "@/edges/arrow-renderer";
-import { createEdgeGroup } from "../../create-edge-group";
-import { createEdgeSvg } from "../../create-edge-svg";
-import { createEdgePath } from "../../create-edge-path";
-import { createEdgeArrow } from "../../create-edge-arrow";
-import { setSvgRectangle } from "../../set-svg-rectangle";
+import {
+  createEdgeArrow,
+  createEdgeGroup,
+  createEdgePath,
+  createEdgeSvg,
+  setSvgRectangle,
+} from "../../svg";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;

@@ -26,18 +26,18 @@ export class BoxHtmlView implements HtmlView {
 
     this.graphStore.getAllNodeIds().forEach((nodeId) => {
       const isInViewport = this.renderingBox.hasNode(nodeId);
-      const wasInViewport = this.attachedNodes.has(nodeId);
+      const isAttached = this.attachedNodes.has(nodeId);
 
-      if (isInViewport && !wasInViewport) {
+      if (isInViewport && !isAttached) {
         nodesToAttach.add(nodeId);
-      } else if (!isInViewport && wasInViewport) {
+      } else if (!isInViewport && isAttached) {
         nodesToDetach.add(nodeId);
       }
     });
 
     this.graphStore.getAllEdgeIds().forEach((edgeId) => {
       const isInViewport = this.renderingBox.hasEdge(edgeId);
-      const wasInViewport = this.attachedEdges.has(edgeId);
+      const isAttached = this.attachedEdges.has(edgeId);
       const edge = this.graphStore.getEdge(edgeId)!;
       const fromNodeId = this.graphStore.getPort(edge.from)!.nodeId;
       const toNodeId = this.graphStore.getPort(edge.to)!.nodeId;
@@ -54,9 +54,9 @@ export class BoxHtmlView implements HtmlView {
         }
       }
 
-      if (isInViewport && !wasInViewport) {
+      if (isInViewport && !isAttached) {
         edgesToAttach.add(edgeId);
-      } else if (!isInViewport && wasInViewport) {
+      } else if (!isInViewport && isAttached) {
         edgesToDetach.add(edgeId);
       }
     });
