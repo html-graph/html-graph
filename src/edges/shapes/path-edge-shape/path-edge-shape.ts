@@ -8,10 +8,7 @@ import { createEdgeRectangle } from "../../geometry";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ConnectionCategory } from "../../connection-category";
-import {
-  ArrowRenderer,
-  createPolygonArrowRenderer,
-} from "../../arrow-renderer";
+import { ArrowRenderer } from "../../arrow-renderer";
 import {
   createEdgeArrow,
   createEdgeGroup,
@@ -41,10 +38,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
-    this.arrowRenderer = createPolygonArrowRenderer({
-      width: this.params.arrowWidth,
-      length: this.params.arrowLength,
-    });
+    this.arrowRenderer = this.params.arrowRenderer;
 
     this.svg = createEdgeSvg(params.color);
     this.svg.appendChild(this.group);
@@ -113,7 +107,11 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let sourceArrowPath: string | null = null;
 
     if (this.sourceArrow) {
-      sourceArrowPath = this.arrowRenderer(sourceDirection, zero);
+      sourceArrowPath = this.arrowRenderer({
+        direction: sourceDirection,
+        shift: zero,
+        arrowLength: this.params.arrowLength,
+      });
 
       this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
@@ -121,7 +119,11 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let targetArrowPath: string | null = null;
 
     if (this.targetArrow) {
-      targetArrowPath = this.arrowRenderer(targetVect, to);
+      targetArrowPath = this.arrowRenderer({
+        direction: targetVect,
+        shift: to,
+        arrowLength: this.params.arrowLength,
+      });
 
       this.targetArrow.setAttribute("d", targetArrowPath);
     }

@@ -15,7 +15,7 @@ export const resolveEdgeShapeFactory: (
     return options;
   }
 
-  switch (options?.type) {
+  switch (options.type) {
     case "straight":
       return () =>
         new StraightEdgeShape({
@@ -24,6 +24,7 @@ export const resolveEdgeShapeFactory: (
           arrowLength: options.arrowLength,
           arrowWidth: options.arrowWidth,
           arrowOffset: options.arrowOffset,
+          arrowRenderer: options.arrowRenderer,
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           cycleSquareSide: options.cycleSquareSide,
@@ -39,6 +40,7 @@ export const resolveEdgeShapeFactory: (
           arrowLength: options.arrowLength,
           arrowWidth: options.arrowWidth,
           arrowOffset: options.arrowOffset,
+          arrowRenderer: options.arrowRenderer,
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           cycleSquareSide: options.cycleSquareSide,
@@ -53,6 +55,7 @@ export const resolveEdgeShapeFactory: (
           arrowLength: options.arrowLength,
           arrowWidth: options.arrowWidth,
           arrowOffset: options.arrowOffset,
+          arrowRenderer: options.arrowRenderer,
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           cycleSquareSide: options.cycleSquareSide,
@@ -66,6 +69,7 @@ export const resolveEdgeShapeFactory: (
           width: options.width,
           arrowLength: options.arrowLength,
           arrowWidth: options.arrowWidth,
+          arrowRenderer: options.arrowRenderer,
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           sourceOffset: options.sourceOffset,
@@ -78,6 +82,7 @@ export const resolveEdgeShapeFactory: (
           width: options.width,
           arrowLength: options.arrowLength,
           arrowWidth: options.arrowWidth,
+          arrowRenderer: options.arrowRenderer,
           hasSourceArrow: options.hasSourceArrow,
           hasTargetArrow: options.hasTargetArrow,
           cycleRadius: options.cycleRadius,

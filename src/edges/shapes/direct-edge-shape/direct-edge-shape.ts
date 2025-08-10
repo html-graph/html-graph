@@ -7,10 +7,7 @@ import { createEdgeRectangle } from "../../geometry";
 import { DirectEdgePath } from "../../paths";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
-import {
-  ArrowRenderer,
-  createPolygonArrowRenderer,
-} from "@/edges/arrow-renderer";
+import { ArrowRenderer, resolveArrowRenderer } from "@/edges/arrow-renderer";
 import {
   createEdgeArrow,
   createEdgeGroup,
@@ -36,8 +33,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowLength: number;
 
-  private readonly arrowWidth: number;
-
   private readonly sourceOffset: number;
 
   private readonly targetOffset: number;
@@ -55,12 +50,15 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.color = params?.color ?? edgeConstants.color;
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
 
-    this.arrowRenderer = createPolygonArrowRenderer({
-      width: this.arrowWidth,
-      length: this.arrowLength,
-    });
+    this.arrowRenderer = resolveArrowRenderer(
+      params?.arrowRenderer !== undefined
+        ? params.arrowRenderer
+        : {
+            type: "polygon",
+            radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
+          },
+    );
 
     this.sourceOffset = params?.sourceOffset ?? edgeConstants.preOffset;
     this.targetOffset = params?.targetOffset ?? edgeConstants.preOffset;
@@ -129,7 +127,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
           y: direction.y * this.sourceOffset,
         };
 
-        sourceArrowPath = this.arrowRenderer(direction, sourceOffset);
+        sourceArrowPath = this.arrowRenderer({
+          direction,
+          shift: sourceOffset,
+          arrowLength: this.arrowLength,
+        });
 
         this.sourceArrow.setAttribute("d", sourceArrowPath);
       }
@@ -140,13 +142,14 @@ export class DirectEdgeShape implements StructuredEdgeShape {
           y: direction.y * this.targetOffset,
         };
 
-        targetArrowPath = this.arrowRenderer(
-          { x: -direction.x, y: -direction.y },
-          {
+        targetArrowPath = this.arrowRenderer({
+          direction: { x: -direction.x, y: -direction.y },
+          shift: {
             x: to.x - targetOffset.x,
             y: to.y - targetOffset.y,
           },
-        );
+          arrowLength: this.arrowLength,
+        });
 
         this.targetArrow.setAttribute("d", targetArrowPath);
       }

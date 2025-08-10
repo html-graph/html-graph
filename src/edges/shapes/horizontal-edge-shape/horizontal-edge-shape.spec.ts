@@ -17,7 +17,9 @@ const createHorizontalEdge = (
     color,
     width,
     arrowLength,
-    arrowWidth,
+    arrowRenderer: {
+      radius: arrowWidth,
+    },
     arrowOffset,
     hasSourceArrow,
     hasTargetArrow,

@@ -11,6 +11,7 @@ import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { resolveArrowRenderer } from "../../arrow-renderer";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -26,8 +27,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly arrowLength: number;
-
-  private readonly arrowWidth: number;
 
   private readonly curvature: number;
 
@@ -95,7 +94,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.curvature = params?.curvature ?? edgeConstants.curvature;
     this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
     this.portCycleSmallRadius =
@@ -112,8 +110,15 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer !== undefined
+          ? params.arrowRenderer
+          : {
+              type: "polygon",
+              radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
+            },
+      ),
       arrowLength: this.arrowLength,
-      arrowWidth: this.arrowWidth,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
       createCyclePath: this.createCyclePath,
