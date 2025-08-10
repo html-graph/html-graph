@@ -1,9 +1,11 @@
 export const edgeConstants = Object.freeze({
   color: "#777777",
   width: 1,
-  arrowLength: 20,
+  arrowLength: 15,
   polygonArrowRadius: 4,
   circleArrowRadius: 8,
+  wedgeArrowRadius: 10,
+  wedgeArrowAngle: Math.PI / 5,
   arrowOffset: 15,
   hasSourceArrow: false,
   hasTargetArrow: false,

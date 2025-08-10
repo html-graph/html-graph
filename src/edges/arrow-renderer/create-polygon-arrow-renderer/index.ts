@@ -1,1 +1,1 @@
-export { createPolygonArrowRenderer } from "./create-polygon-arrow-renderer";
+export { createTriangleArrowRenderer } from "./create-triangle-arrow-renderer";

@@ -85,7 +85,7 @@ describe("DirectEdgeShape", () => {
   it("should create path for source arrow", () => {
     const shape = new DirectEdgeShape({
       hasSourceArrow: true,
-      arrowRenderer: { type: "polygon" },
+      arrowRenderer: { type: "triangle" },
     });
 
     shape.render({
@@ -115,7 +115,7 @@ describe("DirectEdgeShape", () => {
   it("should create path for target arrow", () => {
     const shape = new DirectEdgeShape({
       hasTargetArrow: true,
-      arrowRenderer: { type: "polygon" },
+      arrowRenderer: { type: "triangle" },
     });
 
     shape.render({
@@ -227,7 +227,7 @@ describe("DirectEdgeShape", () => {
     const shape = new DirectEdgeShape({
       hasSourceArrow: true,
       sourceOffset: 10,
-      arrowRenderer: { type: "polygon" },
+      arrowRenderer: { type: "triangle" },
     });
 
     shape.render({
@@ -258,7 +258,7 @@ describe("DirectEdgeShape", () => {
     const shape = new DirectEdgeShape({
       hasTargetArrow: true,
       targetOffset: 10,
-      arrowRenderer: { type: "polygon" },
+      arrowRenderer: { type: "triangle" },
     });
 
     shape.render({

@@ -1,1 +1,1 @@
-export { createCircleArrowRenderer } from "./create-circle-arrow-renderer";
+export { createArcArrowRenderer } from "./create-circle-arrow-renderer";
