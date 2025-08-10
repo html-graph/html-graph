@@ -135,4 +135,118 @@ describe("DirectEdgeShape", () => {
 
     expect(line.getAttribute("d")).toBe("");
   });
+
+  it("should not render source arrow when diagonal distance is 0", () => {
+    const shape = new DirectEdgeShape({ hasSourceArrow: true });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("");
+  });
+
+  it("should not render target arrow when diagonal distance is 0", () => {
+    const shape = new DirectEdgeShape({ hasTargetArrow: true });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("");
+  });
+
+  it("should account for source arrow offset", () => {
+    const shape = new DirectEdgeShape({
+      hasSourceArrow: true,
+      sourceOffset: 10,
+    });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("M 10 0 L 25 4 L 25 -4 Z");
+  });
+
+  it("should account for target arrow offset", () => {
+    const shape = new DirectEdgeShape({
+      hasTargetArrow: true,
+      targetOffset: 10,
+    });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -4 L 75 4 Z");
+  });
 });

@@ -123,23 +123,28 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         y: to.y / diagonal,
       };
 
-      const shift: Point = {
-        x: direction.x * this.sourceOffset,
-        y: direction.y * this.sourceOffset,
-      };
-
       if (this.sourceArrow) {
-        sourceArrowPath = this.arrowRenderer(direction, shift);
+        const sourceOffset: Point = {
+          x: direction.x * this.sourceOffset,
+          y: direction.y * this.sourceOffset,
+        };
+
+        sourceArrowPath = this.arrowRenderer(direction, sourceOffset);
 
         this.sourceArrow.setAttribute("d", sourceArrowPath);
       }
 
       if (this.targetArrow) {
+        const targetOffset: Point = {
+          x: direction.x * this.targetOffset,
+          y: direction.y * this.targetOffset,
+        };
+
         targetArrowPath = this.arrowRenderer(
           { x: -direction.x, y: -direction.y },
           {
-            x: to.x - shift.x,
-            y: to.y - shift.y,
+            x: to.x - targetOffset.x,
+            y: to.y - targetOffset.y,
           },
         );
 
