@@ -2,6 +2,7 @@ import { edgeConstants } from "@/edges/edge-constants";
 import { ArrowRenderer } from "../arrow-renderer";
 import { createPolygonArrowRenderer } from "../create-polygon-arrow-renderer";
 import { ArrowRendererConfig } from "./arrow-config";
+import { createCircleArrowRenderer } from "../create-circle-arrow-renderer";
 
 export const resolveArrowRenderer = (
   config: ArrowRendererConfig,
@@ -11,6 +12,11 @@ export const resolveArrowRenderer = (
   }
 
   switch (config.type) {
+    case "circle": {
+      return createCircleArrowRenderer({
+        radius: config.radius ?? edgeConstants.arrowRadius,
+      });
+    }
     default: {
       return createPolygonArrowRenderer({
         radius: config.radius ?? edgeConstants.arrowRadius,
