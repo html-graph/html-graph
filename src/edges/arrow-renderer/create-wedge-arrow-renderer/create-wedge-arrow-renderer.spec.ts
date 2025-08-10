@@ -6,7 +6,8 @@ describe("createWedgeArrowRenderer", () => {
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 0, y: 0 };
     const renderer = createWedgeArrowRenderer({
-      radius: 8,
+      smallRadius: 8,
+      radius: 30,
       angle: Math.PI / 4,
     });
 
@@ -21,7 +22,8 @@ describe("createWedgeArrowRenderer", () => {
     const direction: Point = { x: 0, y: 1 };
     const shift: Point = { x: 0, y: 0 };
     const renderer = createWedgeArrowRenderer({
-      radius: 8,
+      smallRadius: 8,
+      radius: 30,
       angle: Math.PI / 4,
     });
 
@@ -36,7 +38,8 @@ describe("createWedgeArrowRenderer", () => {
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 5, y: 10 };
     const renderer = createWedgeArrowRenderer({
-      radius: 8,
+      smallRadius: 8,
+      radius: 30,
       angle: Math.PI / 4,
     });
 

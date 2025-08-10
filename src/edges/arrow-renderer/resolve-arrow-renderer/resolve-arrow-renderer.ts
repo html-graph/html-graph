@@ -25,8 +25,9 @@ export const resolveArrowRenderer = (
     }
     default: {
       return createWedgeArrowRenderer({
-        radius: config.radius ?? edgeConstants.wedgeArrowRadius,
+        smallRadius: config.radius ?? edgeConstants.wedgeArrowSmallRadius,
         angle: config.angle ?? edgeConstants.wedgeArrowAngle,
+        radius: config.radius ?? edgeConstants.wedgeArrowSmallRadius,
       });
     }
   }
