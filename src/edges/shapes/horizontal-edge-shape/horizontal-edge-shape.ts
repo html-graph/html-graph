@@ -122,7 +122,7 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
           ? params.arrowRenderer
           : {
               type: "polygon",
-              radius: params?.arrowWidth ?? edgeConstants.arrowWidth,
+              radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
             },
       ),
       arrowLength: this.arrowLength,
