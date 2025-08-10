@@ -5,7 +5,7 @@ export const edgeConstants = Object.freeze({
   polygonArrowRadius: 4,
   circleArrowRadius: 8,
   wedgeArrowRadius: 10,
-  wedgeArrowAngle: Math.PI / 5,
+  wedgeArrowAngle: Math.PI / 7,
   arrowOffset: 15,
   hasSourceArrow: false,
   hasTargetArrow: false,
