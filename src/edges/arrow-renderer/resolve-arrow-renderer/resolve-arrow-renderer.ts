@@ -14,7 +14,7 @@ export const resolveArrowRenderer = (
   switch (config.type) {
     case "polygon": {
       return createPolygonArrowRenderer({
-        radius: config.radius ?? edgeConstants.arrowRadius,
+        radius: config.radius ?? edgeConstants.polygonArrowRadius,
       });
     }
     default: {

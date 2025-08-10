@@ -1,8 +1,8 @@
 export const edgeConstants = Object.freeze({
   color: "#777777",
   width: 1,
-  arrowLength: 15,
-  arrowRadius: 4,
+  arrowLength: 20,
+  polygonArrowRadius: 4,
   circleArrowRadius: 8,
   arrowOffset: 15,
   hasSourceArrow: false,
