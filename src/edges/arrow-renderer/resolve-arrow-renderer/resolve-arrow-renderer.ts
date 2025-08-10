@@ -12,14 +12,14 @@ export const resolveArrowRenderer = (
   }
 
   switch (config.type) {
-    case "circle": {
-      return createCircleArrowRenderer({
+    case "polygon": {
+      return createPolygonArrowRenderer({
         radius: config.radius ?? edgeConstants.arrowRadius,
       });
     }
     default: {
-      return createPolygonArrowRenderer({
-        radius: config.radius ?? edgeConstants.arrowRadius,
+      return createCircleArrowRenderer({
+        radius: config.radius ?? edgeConstants.circleArrowRadius,
       });
     }
   }

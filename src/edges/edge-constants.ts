@@ -3,6 +3,7 @@ export const edgeConstants = Object.freeze({
   width: 1,
   arrowLength: 15,
   arrowRadius: 4,
+  circleArrowRadius: 5,
   arrowOffset: 15,
   hasSourceArrow: false,
   hasTargetArrow: false,
