@@ -4,6 +4,7 @@ export type ArrowRendererConfig =
   | {
       readonly type?: "wedge";
       readonly radius?: number | undefined;
+      readonly smallRadius?: number | undefined;
       readonly angle?: number | undefined;
     }
   | {
