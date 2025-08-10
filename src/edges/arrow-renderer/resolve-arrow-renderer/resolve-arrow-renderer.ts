@@ -3,7 +3,9 @@ import { ArrowRenderer } from "../arrow-renderer";
 import { createPolygonArrowRenderer } from "../create-polygon-arrow-renderer";
 import { ArrowRendererConfig } from "./arrow-config";
 
-export const resolveArrowRenderer = (config: ArrowRendererConfig): ArrowRenderer => {
+export const resolveArrowRenderer = (
+  config: ArrowRendererConfig,
+): ArrowRenderer => {
   if (typeof config === "function") {
     return config;
   }
@@ -11,7 +13,7 @@ export const resolveArrowRenderer = (config: ArrowRendererConfig): ArrowRenderer
   switch (config.type) {
     default: {
       return createPolygonArrowRenderer({
-        width: config.radius ?? edgeConstants.arrowWidth,
+        radius: config.radius ?? edgeConstants.arrowWidth,
       });
     }
   }

@@ -15,7 +15,7 @@ const createBezierEdge = (
     color: "#FFFFFF",
     width: 2,
     arrowRenderer: createPolygonArrowRenderer({
-      width: 3,
+      radius: 3,
     }),
     arrowLength: 10,
     hasSourceArrow,
