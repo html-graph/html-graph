@@ -28,8 +28,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowLength: number;
 
-  private readonly arrowWidth: number;
-
   private readonly curvature: number;
 
   private readonly portCycleRadius: number;
@@ -96,7 +94,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   public constructor(params?: BezierEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.curvature = params?.curvature ?? edgeConstants.curvature;
     this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
     this.portCycleSmallRadius =
@@ -114,10 +111,12 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(
-        params?.arrowRenderer ?? {
-          type: "polygon",
-          radius: this.arrowWidth,
-        },
+        params?.arrowRenderer !== undefined
+          ? params.arrowRenderer
+          : {
+              type: "polygon",
+              radius: params?.arrowWidth ?? edgeConstants.arrowWidth,
+            },
       ),
       arrowLength: this.arrowLength,
       hasSourceArrow: this.hasSourceArrow,

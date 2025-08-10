@@ -55,6 +55,33 @@ describe("DirectEdgeShape", () => {
     expect(g.style.transform).toBe("scale(1, -1)");
   });
 
+  it("should create line path", () => {
+    const shape = new DirectEdgeShape();
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[0];
+
+    expect(arrow.getAttribute("d")).toBe("M 0 0 L 100 0");
+  });
+
   it("should create path for source arrow", () => {
     const shape = new DirectEdgeShape({ hasSourceArrow: true });
 
@@ -248,5 +275,38 @@ describe("DirectEdgeShape", () => {
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -4 L 75 4 Z");
+  });
+
+  it("should account for legacy target arrow offset", () => {
+    const shape = new DirectEdgeShape({
+      hasTargetArrow: true,
+      targetOffset: 10,
+      arrowRenderer: {
+        radius: 10,
+      },
+    });
+
+    shape.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    const g = shape.svg.children[0];
+    const arrow = g.children[1];
+
+    expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -10 L 75 10 Z");
   });
 });

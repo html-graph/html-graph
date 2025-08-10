@@ -33,8 +33,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowLength: number;
 
-  private readonly arrowWidth: number;
-
   private readonly sourceOffset: number;
 
   private readonly targetOffset: number;
@@ -52,13 +50,14 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.color = params?.color ?? edgeConstants.color;
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
 
     this.arrowRenderer = resolveArrowRenderer(
-      params?.arrowRenderer ?? {
-        type: "polygon",
-        radius: this.arrowWidth,
-      },
+      params?.arrowRenderer !== undefined
+        ? params.arrowRenderer
+        : {
+            type: "polygon",
+            radius: params?.arrowWidth ?? edgeConstants.arrowWidth,
+          },
     );
 
     this.sourceOffset = params?.sourceOffset ?? edgeConstants.preOffset;

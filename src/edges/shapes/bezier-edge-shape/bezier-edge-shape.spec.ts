@@ -17,7 +17,9 @@ const createBezierEdge = (
     width,
     curvature,
     arrowLength,
-    arrowWidth,
+    arrowRenderer: {
+      radius: arrowWidth,
+    },
     hasSourceArrow,
     hasTargetArrow,
     cycleRadius: 30,

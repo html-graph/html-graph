@@ -28,8 +28,6 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowLength: number;
 
-  private readonly arrowWidth: number;
-
   private readonly arrowOffset: number;
 
   private readonly roundness: number;
@@ -98,7 +96,6 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
 
   public constructor(params?: HorizontalEdgeParams) {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowWidth = params?.arrowWidth ?? edgeConstants.arrowWidth;
     this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
     this.cycleSquareSide =
       params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
@@ -121,10 +118,12 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(
-        params?.arrowRenderer ?? {
-          type: "polygon",
-          radius: this.arrowWidth,
-        },
+        params?.arrowRenderer !== undefined
+          ? params.arrowRenderer
+          : {
+              type: "polygon",
+              radius: params?.arrowWidth ?? edgeConstants.arrowWidth,
+            },
       ),
       arrowLength: this.arrowLength,
       hasSourceArrow: this.hasSourceArrow,
