@@ -15,7 +15,7 @@ export const resolveEdgeShapeFactory: (
     return options;
   }
 
-  switch (options?.type) {
+  switch (options.type) {
     case "straight":
       return () =>
         new StraightEdgeShape({

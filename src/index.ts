@@ -62,6 +62,9 @@ export type {
   StructuredEdgeShape,
   StructuredEdgeRenderModel,
   ConnectionCategory,
+  ArrowRendererConfig,
+  ArrowRenderer,
+  ArrowRenderingParams,
 } from "./edges";
 
 export type { Point } from "./point";

@@ -1,3 +1,3 @@
-import { Point } from "@/point";
+import { ArrowRenderingParams } from "./arrow-rendering-params";
 
-export type ArrowRenderer = (direction: Point, shift: Point) => string;
+export type ArrowRenderer = (params: ArrowRenderingParams) => string;

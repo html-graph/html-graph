@@ -24,3 +24,9 @@ export type {
 } from "./shapes";
 
 export { ConnectionCategory } from "./connection-category";
+
+export type {
+  ArrowRendererConfig,
+  ArrowRenderer,
+  ArrowRenderingParams,
+} from "./arrow-renderer";

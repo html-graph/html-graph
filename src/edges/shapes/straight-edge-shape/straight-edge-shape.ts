@@ -11,6 +11,7 @@ import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { resolveArrowRenderer } from "../../arrow-renderer";
 
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -124,8 +125,13 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer ?? {
+          type: "polygon",
+          radius: this.arrowWidth,
+        },
+      ),
       arrowLength: this.arrowLength,
-      arrowWidth: this.arrowWidth,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
       createCyclePath: this.createCyclePath,
