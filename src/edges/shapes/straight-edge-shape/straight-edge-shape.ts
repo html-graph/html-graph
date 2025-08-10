@@ -123,11 +123,11 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(
-        params?.arrowRenderer !== undefined
-          ? params.arrowRenderer
+        params?.arrowWidth === undefined
+          ? (params?.arrowRenderer ?? {})
           : {
               type: "polygon",
-              radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
+              radius: params.arrowWidth,
             },
       ),
       arrowLength: this.arrowLength,

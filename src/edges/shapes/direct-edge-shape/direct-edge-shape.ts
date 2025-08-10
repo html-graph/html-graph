@@ -52,11 +52,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
 
     this.arrowRenderer = resolveArrowRenderer(
-      params?.arrowRenderer !== undefined
-        ? params.arrowRenderer
+      params?.arrowWidth === undefined
+        ? (params?.arrowRenderer ?? {})
         : {
             type: "polygon",
-            radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
+            radius: params?.arrowWidth,
           },
     );
 
