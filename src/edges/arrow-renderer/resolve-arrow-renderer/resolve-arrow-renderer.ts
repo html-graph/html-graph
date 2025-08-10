@@ -1,7 +1,9 @@
 import { edgeConstants } from "@/edges/edge-constants";
 import { ArrowRenderer } from "../arrow-renderer";
-import { createPolygonArrowRenderer } from "../create-polygon-arrow-renderer";
+import { createTriangleArrowRenderer } from "../create-polygon-arrow-renderer";
 import { ArrowRendererConfig } from "./arrow-config";
+import { createArcArrowRenderer } from "../create-arc-arrow-renderer";
+import { createWedgeArrowRenderer } from "../create-wedge-arrow-renderer";
 
 export const resolveArrowRenderer = (
   config: ArrowRendererConfig,
@@ -11,9 +13,21 @@ export const resolveArrowRenderer = (
   }
 
   switch (config.type) {
+    case "triangle": {
+      return createTriangleArrowRenderer({
+        radius: config.radius ?? edgeConstants.polygonArrowRadius,
+      });
+    }
+    case "arc": {
+      return createArcArrowRenderer({
+        radius: config.radius ?? edgeConstants.circleArrowRadius,
+      });
+    }
     default: {
-      return createPolygonArrowRenderer({
-        radius: config.radius ?? edgeConstants.arrowRadius,
+      return createWedgeArrowRenderer({
+        smallRadius: config.smallRadius ?? edgeConstants.wedgeArrowSmallRadius,
+        angle: config.angle ?? edgeConstants.wedgeArrowAngle,
+        radius: config.radius ?? edgeConstants.wedgeArrowRadius,
       });
     }
   }

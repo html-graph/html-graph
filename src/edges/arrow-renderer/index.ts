@@ -1,4 +1,4 @@
-export { createPolygonArrowRenderer } from "./create-polygon-arrow-renderer";
+export { createTriangleArrowRenderer as createPolygonArrowRenderer } from "./create-polygon-arrow-renderer";
 export type { ArrowRenderer } from "./arrow-renderer";
 export { resolveArrowRenderer } from "./resolve-arrow-renderer";
 export type { ArrowRendererConfig } from "./resolve-arrow-renderer";

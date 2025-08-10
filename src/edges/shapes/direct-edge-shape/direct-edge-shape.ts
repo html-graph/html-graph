@@ -50,16 +50,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.color = params?.color ?? edgeConstants.color;
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-
-    this.arrowRenderer = resolveArrowRenderer(
-      params?.arrowRenderer !== undefined
-        ? params.arrowRenderer
-        : {
-            type: "polygon",
-            radius: params?.arrowWidth ?? edgeConstants.arrowRadius,
-          },
-    );
-
+    this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
     this.sourceOffset = params?.sourceOffset ?? edgeConstants.preOffset;
     this.targetOffset = params?.targetOffset ?? edgeConstants.preOffset;
 

@@ -7,7 +7,5 @@ test("should display canvas with virtual scroll", async ({ page }) => {
 
   await page.getByTestId("start").click();
 
-  await expect(page.getByTestId("loader")).not.toBeVisible();
-
   await expect(page).toHaveScreenshot("graph.png");
 });

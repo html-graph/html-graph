@@ -1,7 +1,5 @@
 # TODO
 
-- nodes HTMLElement factory ?
-- arrows customization
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
 - nodes without overlap

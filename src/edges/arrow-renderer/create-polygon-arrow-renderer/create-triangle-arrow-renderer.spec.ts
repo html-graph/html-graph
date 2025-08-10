@@ -1,11 +1,11 @@
 import { Point } from "@/point";
-import { createPolygonArrowRenderer } from "./create-polygon-arrow-renderer";
+import { createTriangleArrowRenderer } from "./create-triangle-arrow-renderer";
 
 describe("createPolygonArrowRenderer", () => {
   it("should create arrow path", () => {
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 0, y: 0 };
-    const renderer = createPolygonArrowRenderer({ radius: 5 });
+    const renderer = createTriangleArrowRenderer({ radius: 5 });
 
     const path = renderer({ direction, shift, arrowLength: 10 });
 
@@ -15,7 +15,7 @@ describe("createPolygonArrowRenderer", () => {
   it("should create rotated arrow path", () => {
     const direction: Point = { x: 0, y: 1 };
     const shift: Point = { x: 0, y: 0 };
-    const renderer = createPolygonArrowRenderer({ radius: 5 });
+    const renderer = createTriangleArrowRenderer({ radius: 5 });
 
     const path = renderer({ direction, shift, arrowLength: 10 });
 
@@ -25,7 +25,7 @@ describe("createPolygonArrowRenderer", () => {
   it("should create shifted arrow path", () => {
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 5, y: 10 };
-    const renderer = createPolygonArrowRenderer({ radius: 5 });
+    const renderer = createTriangleArrowRenderer({ radius: 5 });
 
     const path = renderer({ direction, shift, arrowLength: 10 });
 

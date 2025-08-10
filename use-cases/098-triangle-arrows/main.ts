@@ -15,8 +15,7 @@ const canvas: Canvas = builder
         hasSourceArrow: true,
         hasTargetArrow: true,
         arrowRenderer: {
-          type: "polygon",
-          radius: 7,
+          type: "triangle",
         },
       },
     },
