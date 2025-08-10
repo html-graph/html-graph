@@ -109,7 +109,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 15 4 L 15 -4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 0 0 L 20 4 L 20 -4 Z");
   });
 
   it("should create path for target arrow", () => {
@@ -139,7 +139,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 0 L 85 -4 L 85 4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 100 0 L 80 -4 L 80 4 Z");
   });
 
   it("should render empty line when diagonal distance is 0", () => {
@@ -251,7 +251,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 10 0 L 25 4 L 25 -4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 10 0 L 30 4 L 30 -4 Z");
   });
 
   it("should account for target arrow offset", () => {
@@ -282,6 +282,6 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -4 L 75 4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 90 0 L 70 -4 L 70 4 Z");
   });
 });

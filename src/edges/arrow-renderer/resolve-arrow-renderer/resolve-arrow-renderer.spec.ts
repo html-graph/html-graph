@@ -9,7 +9,21 @@ describe("resolveArrowRenderer", () => {
     const shift: Point = { x: 0, y: 0 };
 
     expect(renderer({ direction, shift, arrowLength: 15 })).toBe(
-      "M 0 0 L 16.909830056250527 5.877852522924732 A 10 10 0 0 1 16.909830056250527 -5.877852522924732 L 0 0",
+      "M 0 0 A 100 100 0 0 1 15.681483474218634 5.176380902050416 A 20 20 0 0 1 15.681483474218634 -5.176380902050416 A 100 100 0 0 1 0 0",
+    );
+  });
+
+  it("should resolve wedge arrow renderer with specified radius and angle", () => {
+    const renderer = resolveArrowRenderer({
+      type: "wedge",
+      radius: 10,
+      angle: Math.PI / 6,
+    });
+    const direction: Point = { x: 1, y: 0 };
+    const shift: Point = { x: 0, y: 0 };
+
+    expect(renderer({ direction, shift, arrowLength: 15 })).toBe(
+      "M 0 0 A 10 10 0 0 1 16.33974596215561 4.999999999999999 A 10 10 0 0 1 16.33974596215561 -4.999999999999999 A 10 10 0 0 1 0 0",
     );
   });
 
@@ -40,20 +54,6 @@ describe("resolveArrowRenderer", () => {
 
     expect(renderer({ direction, shift, arrowLength: 15 })).toBe(
       "M 0 0 L 15 10 L 15 -10 Z",
-    );
-  });
-
-  it("should resolve wedge arrow renderer with specified radius and angle", () => {
-    const renderer = resolveArrowRenderer({
-      type: "wedge",
-      radius: 10,
-      angle: Math.PI / 6,
-    });
-    const direction: Point = { x: 1, y: 0 };
-    const shift: Point = { x: 0, y: 0 };
-
-    expect(renderer({ direction, shift, arrowLength: 15 })).toBe(
-      "M 0 0 L 16.33974596215561 4.999999999999999 A 10 10 0 0 1 16.33974596215561 -4.999999999999999 L 0 0",
     );
   });
 
