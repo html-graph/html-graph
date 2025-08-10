@@ -83,7 +83,10 @@ describe("DirectEdgeShape", () => {
   });
 
   it("should create path for source arrow", () => {
-    const shape = new DirectEdgeShape({ hasSourceArrow: true });
+    const shape = new DirectEdgeShape({
+      hasSourceArrow: true,
+      arrowRenderer: { type: "polygon" },
+    });
 
     shape.render({
       from: {
@@ -110,7 +113,10 @@ describe("DirectEdgeShape", () => {
   });
 
   it("should create path for target arrow", () => {
-    const shape = new DirectEdgeShape({ hasTargetArrow: true });
+    const shape = new DirectEdgeShape({
+      hasTargetArrow: true,
+      arrowRenderer: { type: "polygon" },
+    });
 
     shape.render({
       from: {
@@ -221,6 +227,7 @@ describe("DirectEdgeShape", () => {
     const shape = new DirectEdgeShape({
       hasSourceArrow: true,
       sourceOffset: 10,
+      arrowRenderer: { type: "polygon" },
     });
 
     shape.render({
@@ -251,6 +258,7 @@ describe("DirectEdgeShape", () => {
     const shape = new DirectEdgeShape({
       hasTargetArrow: true,
       targetOffset: 10,
+      arrowRenderer: { type: "polygon" },
     });
 
     shape.render({
@@ -275,38 +283,5 @@ describe("DirectEdgeShape", () => {
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -4 L 75 4 Z");
-  });
-
-  it("should account for legacy target arrow offset", () => {
-    const shape = new DirectEdgeShape({
-      hasTargetArrow: true,
-      targetOffset: 10,
-      arrowRenderer: {
-        radius: 10,
-      },
-    });
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 90 0 L 75 -10 L 75 10 Z");
   });
 });

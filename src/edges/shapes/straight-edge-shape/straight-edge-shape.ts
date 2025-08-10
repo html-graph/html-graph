@@ -122,14 +122,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
-      arrowRenderer: resolveArrowRenderer(
-        params?.arrowWidth === undefined
-          ? (params?.arrowRenderer ?? {})
-          : {
-              type: "polygon",
-              radius: params.arrowWidth,
-            },
-      ),
+      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
       arrowLength: this.arrowLength,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
