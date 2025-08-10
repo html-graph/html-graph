@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { createArcArrowRenderer } from "./create-circle-arrow-renderer";
+import { createArcArrowRenderer } from "./create-arc-arrow-renderer";
 
 describe("createArcArrowRenderer", () => {
   it("should create arrow path", () => {
