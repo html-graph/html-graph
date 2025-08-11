@@ -1,4 +1,4 @@
-<img src="/media/readme-logo.svg" alt="HTMLGraph" width="260" height="50"/>
+<img src="/media/readme-logo.svg" alt="HTMLGraph" width="5200" height="100"/>
 
 ### Graph visualization library that enables rich nodes customization using HTML
 
