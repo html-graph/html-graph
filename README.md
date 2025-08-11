@@ -1,4 +1,4 @@
-<p align="center">
+<p style="text-align: center;">
   <img src="/media/logo-label.svg" alt="HTMLGraph" width="520" height="100"/>
 </p>
 
