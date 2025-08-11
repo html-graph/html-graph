@@ -1,4 +1,6 @@
-<img src="/media/logo-label.svg" alt="HTMLGraph" width="5200" height="100"/>
+<h1>
+  <img src="/media/logo-label.svg" alt="HTMLGraph" width="5200" height="100"/>
+</h1>
 
 <a target="_blank" href="https://html-graph.github.io/use-cases/advanced-demo/">
   <img width="100%" src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/full-demo.gif"/>
