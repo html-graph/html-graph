@@ -1,0 +1,97 @@
+<svg
+   width="260mm"
+   height="50mm"
+   viewBox="0 0 260 50"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="readme-logo.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.72782688"
+     inkscape:cx="388.14175"
+     inkscape:cy="151.13484"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="52"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     showgrid="true">
+    <inkscape:grid
+       id="grid1"
+       units="mm"
+       originx="0"
+       originy="0"
+       spacingx="0.99999998"
+       spacingy="0.99999999"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="display:inline;fill:#93e33e;fill-opacity:1;stroke-width:0.028269"
+       d="M 14.986733,3.7381318 18.298884,41.881281 33.577512,46.261868 48.962984,41.881281 52.275135,3.7381318"
+       id="path3"
+       sodipodi:nodetypes="ccccc"
+       inkscape:label="shape" />
+    <path
+       style="display:inline;opacity:0.661998;fill:#d9e33e;fill-opacity:1;stroke-width:0.028269"
+       d="M 33.684355,6.9968598 V 43.00314 l 12.28701,-3.31215 2.991619,-32.6941301"
+       id="path4"
+       sodipodi:nodetypes="cccc"
+       inkscape:label="shadow" />
+    <path
+       style="display:inline;fill:#000000;fill-opacity:1;stroke-width:0.028269"
+       d="M 45.330304,11.697977 H 22.038407 l 1.923186,23.826113 9.722762,2.777933 9.615921,-2.67109 1.282122,-14.423878 H 33.684355 v 4.701113 h 5.662709 l -0.534218,5.983241 -5.128491,1.495809 -5.342178,-1.495809 -1.282123,-15.492315 h 17.842875"
+       id="path5"
+       sodipodi:nodetypes="cccccccccccccc"
+       inkscape:label="letter" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.5139px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;stroke-width:1.9;opacity:1;paint-order:normal;stroke-dasharray:none;stroke:#ffffff;stroke-opacity:1;fill-opacity:1"
+       x="65.298492"
+       y="36.30854"
+       id="text1"
+       inkscape:label="text-bg"><tspan
+         id="tspan1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.5139px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.9;paint-order:normal;stroke-dasharray:none;fill:#ffffff;stroke:#ffffff;stroke-opacity:1;fill-opacity:1"
+         x="65.298492"
+         y="36.30854"
+         sodipodi:role="line">HTMLGraph</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.5139px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke:#000000;stroke-width:0.7;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       x="65.298492"
+       y="36.30854"
+       id="text1-7"
+       inkscape:label="text"><tspan
+         id="tspan1-4"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:33.5139px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;stroke:#000000;stroke-width:0.7;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         x="65.298492"
+         y="36.30854"
+         sodipodi:role="line">HTMLGraph</tspan></text>
+  </g>
+</svg>

@@ -1,6 +1,4 @@
-<h1>
-  <img src="/media/favicon.png" alt="HTMLGraph" width="25" height="25"/> HTMLGraph
-</h1>
+<img src="/media/readme-logo.svg" alt="HTMLGraph" width="25" height="25"/>
 
 ### Graph visualization library that enables rich nodes customization using HTML
 
