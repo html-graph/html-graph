@@ -2,7 +2,9 @@
   <img src="/media/logo-label.svg" alt="HTMLGraph" width="520" height="100"/>
 </p>
 
-<video autoplay muted src="https://github.com/user-attachments/assets/8149ada6-c392-47ca-8df3-e75a77387c44"></video>
+<video autoplay muted>
+  <source type="video/webm" src="https://github.com/user-attachments/assets/8149ada6-c392-47ca-8df3-e75a77387c44">
+</video>
 
 ### Graph visualization library that enables rich nodes customization using HTML
 
