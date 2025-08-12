@@ -1,4 +1,4 @@
-import { createPolygonArrowRenderer } from "@/edges/arrow-renderer";
+import { resolveArrowRenderer } from "../../../edges/arrow-renderer";
 import { ConnectionCategory } from "../../connection-category";
 import {
   BezierEdgePath,
@@ -14,9 +14,7 @@ const createBezierEdge = (
   return new PathEdgeShape({
     color: "#FFFFFF",
     width: 2,
-    arrowRenderer: createPolygonArrowRenderer({
-      radius: 3,
-    }),
+    arrowRenderer: resolveArrowRenderer({ type: "triangle", radius: 3 }),
     arrowLength: 10,
     hasSourceArrow,
     hasTargetArrow,

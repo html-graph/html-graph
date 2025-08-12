@@ -1,6 +1,6 @@
 import { edgeConstants } from "@/edges/edge-constants";
 import { ArrowRenderer } from "../arrow-renderer";
-import { createTriangleArrowRenderer } from "../create-polygon-arrow-renderer";
+import { createTriangleArrowRenderer } from "../create-triangle-arrow-renderer";
 import { ArrowRendererConfig } from "./arrow-config";
 import { createArcArrowRenderer } from "../create-arc-arrow-renderer";
 import { createWedgeArrowRenderer } from "../create-wedge-arrow-renderer";

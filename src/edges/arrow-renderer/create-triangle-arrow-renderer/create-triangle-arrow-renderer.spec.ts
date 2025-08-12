@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { createTriangleArrowRenderer } from "./create-triangle-arrow-renderer";
 
-describe("createPolygonArrowRenderer", () => {
+describe("createTriangleArrowRenderer", () => {
   it("should create arrow path", () => {
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 0, y: 0 };
