@@ -3,7 +3,7 @@
 </p>
 
 <a target="_blank" href="https://html-graph.github.io/use-cases/advanced-demo/">
-  <video autoplay src="https://github.com/user-attachments/assets/8149ada6-c392-47ca-8df3-e75a77387c44"></video>
+  <video autoplay muted src="https://github.com/user-attachments/assets/8149ada6-c392-47ca-8df3-e75a77387c44"></video>
 </a>
 
 ### Graph visualization library that enables rich nodes customization using HTML
