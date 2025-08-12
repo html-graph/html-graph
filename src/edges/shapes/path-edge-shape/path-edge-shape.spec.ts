@@ -1,4 +1,4 @@
-import { resolveArrowRenderer } from "@/edges/arrow-renderer";
+import { resolveArrowRenderer } from "../../../edges/arrow-renderer";
 import { ConnectionCategory } from "../../connection-category";
 import {
   BezierEdgePath,
