@@ -76,6 +76,10 @@ export class CanvasBuilder {
 
   private readonly viewportStore = new ViewportStore();
 
+  private readonly graph = new Graph(this.graphStore);
+
+  private readonly viewport = new Viewport(this.viewportStore);
+
   private readonly window: Window = window;
 
   public constructor(private readonly element: HTMLElement) {}
@@ -192,12 +196,9 @@ export class CanvasBuilder {
 
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
-    const graph = new Graph(this.graphStore);
-    const viewport = new Viewport(this.viewportStore);
-
     const canvas = new Canvas(
-      graph,
-      viewport,
+      this.graph,
+      this.viewport,
       this.graphStore,
       this.viewportStore,
       htmlView,
