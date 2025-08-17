@@ -66,7 +66,7 @@ export class Graph {
     const { from, to } = this.edges.get(edgeId)!;
 
     const outgoingEdges = this.outgoingEdges.get(from)!;
-    outgoingEdges.delete(to);
+    outgoingEdges.delete(edgeId);
 
     if (outgoingEdges.size === 0) {
       this.outgoingEdges.delete(from);
@@ -76,7 +76,7 @@ export class Graph {
     incomingEdges.delete(from);
 
     if (incomingEdges.size === 0) {
-      this.incomingEdges.delete(to);
+      this.incomingEdges.delete(edgeId);
     }
 
     this.edges.delete(edgeId);
