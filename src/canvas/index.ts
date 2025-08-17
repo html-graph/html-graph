@@ -9,8 +9,5 @@ export type { UpdatePortRequest } from "./update-port-request";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
 export type { CanvasParams } from "./canvas-params";
 export type { EdgeShapeFactory } from "./edge-shape-factory";
-export type { GraphNode, GraphPort, GraphEdge } from "./graph";
 export { Canvas } from "./canvas";
-export { Graph } from "./graph";
-export { Viewport } from "./viewport";
 export { CanvasError } from "./canvas-error";

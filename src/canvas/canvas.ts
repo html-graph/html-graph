@@ -1,5 +1,3 @@
-import { Viewport } from "./viewport";
-import { Graph } from "./graph";
 import { IdGenerator } from "./id-generator";
 import { AddEdgeRequest } from "./add-edge-request";
 import { AddNodeRequest } from "./add-node-request";
@@ -15,6 +13,8 @@ import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
 import { CanvasError } from "./canvas-error";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(

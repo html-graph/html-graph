@@ -9,11 +9,13 @@ import {
   createTouch,
   defaultCanvasParams,
 } from "@/mocks";
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { MouseEventVerifier } from "../shared";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 let innerWidth: number;
 let innerHeight: number;

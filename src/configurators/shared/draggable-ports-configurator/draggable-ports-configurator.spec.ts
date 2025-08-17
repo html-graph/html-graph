@@ -1,4 +1,4 @@
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createTouch, defaultCanvasParams } from "@/mocks";
@@ -7,6 +7,8 @@ import { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 import { Point } from "@/point";
 import { MouseEventVerifier } from "../mouse-event-verifier";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;

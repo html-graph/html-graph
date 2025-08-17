@@ -1,10 +1,12 @@
-import { Canvas, CanvasParams, Graph, Viewport } from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { findPortForElement } from "./find-port-for-element";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();

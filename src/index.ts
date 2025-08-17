@@ -22,11 +22,6 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
-  GraphNode,
-  GraphPort,
-  GraphEdge,
-  Graph,
-  Viewport,
 } from "./canvas";
 
 export type {
@@ -66,6 +61,10 @@ export type {
   ArrowRenderer,
   ArrowRenderingParams,
 } from "./edges";
+
+export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
+
+export type { Viewport } from "./viewport";
 
 export type { Point } from "./point";
 

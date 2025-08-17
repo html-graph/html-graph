@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas, Graph, Viewport } from "@/canvas";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -13,6 +13,8 @@ import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor } from "../shared";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
