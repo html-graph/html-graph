@@ -6,6 +6,26 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
+import edges from "./graph.json";
+import { TopologyGraph } from "./topology-graph";
+import { SerializedEdge } from "./serialized-edge";
+
+const graph = new TopologyGraph();
+
+edges.forEach((edge: SerializedEdge) => {
+  if (!graph.nodes.has(edge.from)) {
+    graph.addNode(edge.from);
+  }
+
+  if (!graph.nodes.has(edge.to)) {
+    graph.addNode(edge.to);
+  }
+
+  graph.addEdge(edge.id, edge.from, edge.to);
+});
+
+console.log(graph);
+
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder.build();
