@@ -1,43 +1,61 @@
 import { Identifier } from "@html-graph/html-graph";
+import { Edge } from "./edge";
 
 export class Graph {
-  private readonly nodes = new Set<Identifier>();
+  private readonly nodesInternal = new Set<Identifier>();
 
-  private readonly edges = new Map<
+  public readonly nodes: ReadonlySet<Identifier> = this.nodesInternal;
+
+  private readonly edgesInternal = new Map<Identifier, Edge>();
+
+  public readonly edges: ReadonlyMap<Identifier, Edge> = this.edgesInternal;
+
+  private readonly outgoingEdgesInternal = new Map<
     Identifier,
-    { from: Identifier; to: Identifier }
+    Set<Identifier>
   >();
 
-  private readonly outgoingEdges = new Map<Identifier, Set<Identifier>>();
+  public readonly outgoingEdges: ReadonlyMap<
+    Identifier,
+    ReadonlySet<Identifier>
+  > = this.outgoingEdgesInternal;
 
-  private readonly incomingEdges = new Map<Identifier, Set<Identifier>>();
+  private readonly incomingEdgesInternal = new Map<
+    Identifier,
+    Set<Identifier>
+  >();
+
+  public readonly incomingEdges: ReadonlyMap<
+    Identifier,
+    ReadonlySet<Identifier>
+  > = this.incomingEdgesInternal;
 
   public addNode(nodeId: Identifier): void {
-    this.nodes.add(nodeId);
+    this.nodesInternal.add(nodeId);
   }
 
   public addEdge(edgeId: Identifier, from: Identifier, to: Identifier): void {
-    this.edges.set(edgeId, { from, to });
+    this.edgesInternal.set(edgeId, { from, to });
 
-    const outgoingEdges = this.outgoingEdges.get(from);
+    const outgoingEdges = this.outgoingEdgesInternal.get(from);
 
     if (outgoingEdges === undefined) {
-      this.outgoingEdges.set(from, new Set([edgeId]));
+      this.outgoingEdgesInternal.set(from, new Set([edgeId]));
     } else {
       outgoingEdges.add(edgeId);
     }
 
-    const incomingEdges = this.incomingEdges.get(from);
+    const incomingEdges = this.incomingEdgesInternal.get(to);
 
     if (incomingEdges === undefined) {
-      this.incomingEdges.set(to, new Set([edgeId]));
+      this.incomingEdgesInternal.set(to, new Set([edgeId]));
     } else {
       incomingEdges.add(edgeId);
     }
   }
 
   public removeNode(nodeId: Identifier): void {
-    const outgoingEdges = this.outgoingEdges.get(nodeId);
+    const outgoingEdges = this.outgoingEdgesInternal.get(nodeId);
 
     const edgesToRemove = new Set<Identifier>();
 
@@ -47,7 +65,7 @@ export class Graph {
       });
     }
 
-    const incomingEdges = this.incomingEdges.get(nodeId);
+    const incomingEdges = this.incomingEdgesInternal.get(nodeId);
 
     if (incomingEdges !== undefined) {
       incomingEdges.forEach((edgeId) => {
@@ -59,26 +77,26 @@ export class Graph {
       this.removeEdge(edgeId);
     });
 
-    this.nodes.delete(nodeId);
+    this.nodesInternal.delete(nodeId);
   }
 
   public removeEdge(edgeId: Identifier): void {
-    const { from, to } = this.edges.get(edgeId)!;
+    const { from, to } = this.edgesInternal.get(edgeId)!;
 
-    const outgoingEdges = this.outgoingEdges.get(from)!;
+    const outgoingEdges = this.outgoingEdgesInternal.get(from)!;
     outgoingEdges.delete(edgeId);
 
     if (outgoingEdges.size === 0) {
-      this.outgoingEdges.delete(from);
+      this.outgoingEdgesInternal.delete(from);
     }
 
-    const incomingEdges = this.incomingEdges.get(to)!;
-    incomingEdges.delete(from);
+    const incomingEdges = this.incomingEdgesInternal.get(to)!;
+    incomingEdges.delete(edgeId);
 
     if (incomingEdges.size === 0) {
-      this.incomingEdges.delete(edgeId);
+      this.incomingEdgesInternal.delete(to);
     }
 
-    this.edges.delete(edgeId);
+    this.edgesInternal.delete(edgeId);
   }
 }
