@@ -7,7 +7,7 @@ import {
 } from "../user-transformable-viewport-configurator";
 import { VirtualScrollParams } from "./virtual-scroll-config";
 import { TransformState } from "@/viewport-store";
-import { Viewport } from "@/canvas";
+import { Viewport } from "@/viewport";
 
 export class UserTransformableViewportVirtualScrollConfigurator {
   private readonly canvasResizeObserver: ResizeObserver;

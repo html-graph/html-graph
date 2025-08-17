@@ -1,11 +1,11 @@
 import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
-import { Graph } from "@/canvas";
 import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;

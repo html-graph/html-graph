@@ -1,6 +1,6 @@
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
@@ -40,6 +40,8 @@ import {
 } from "./create-virtual-scroll-params";
 import { createBoxHtmlViewParams } from "./create-box-html-view-params";
 import { CanvasBuilderError } from "./canvas-builder-error";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 export class CanvasBuilder {
   private used = false;

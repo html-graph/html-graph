@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "nodeId": 0,
+      "ports": [0, 1]
+    },
+    {
+      "nodeId": 1,
+      "ports": [2, 3]
+    },
+    {
+      "nodeId": 2,
+      "ports": [4, 5]
+    },
+    {
+      "nodeId": 3,
+      "ports": [6, 7]
+    }
+  ],
+  "edges": [
+    { "from": 1, "to": 2 },
+    { "from": 1, "to": 4 },
+    { "from": 1, "to": 5 }
+  ]
+}

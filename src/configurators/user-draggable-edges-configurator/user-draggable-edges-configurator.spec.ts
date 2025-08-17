@@ -1,11 +1,4 @@
-import {
-  AddEdgeRequest,
-  Canvas,
-  EdgeShapeFactory,
-  Graph,
-  GraphEdge,
-  Viewport,
-} from "@/canvas";
+import { AddEdgeRequest, Canvas, EdgeShapeFactory } from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
@@ -19,6 +12,8 @@ import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
 import { ConnectionPreprocessor } from "../shared";
 import { Identifier } from "@/identifier";
+import { Graph, GraphEdge } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;

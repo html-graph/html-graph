@@ -9,12 +9,14 @@ import {
   defaultCanvasParams,
   wait,
 } from "@/mocks";
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { TransformPayload } from "./transform-payload";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 let innerWidth: number;
 let innerHeight: number;

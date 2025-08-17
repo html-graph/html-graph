@@ -12,9 +12,11 @@ import {
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

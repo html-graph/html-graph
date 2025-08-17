@@ -1,9 +1,9 @@
 import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
-import { Graph } from "@/canvas";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { ConnectionPreprocessor } from "@/configurators";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,

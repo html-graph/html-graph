@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { findPortForElement } from "./find-port-for-element";
-import { Graph } from "@/canvas";
 import { Identifier } from "@/identifier";
+import { Graph } from "@/graph";
 
 export const findPortAtPoint = (
   graph: Graph,

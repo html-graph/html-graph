@@ -5,7 +5,9 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
-import { Canvas, Graph, Viewport } from "@/canvas";
+import { Canvas } from "@/canvas";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();

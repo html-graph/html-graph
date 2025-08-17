@@ -11,8 +11,8 @@ import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { CanvasError } from "./canvas-error";
-import { Graph } from "./graph";
-import { Viewport } from "./viewport";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

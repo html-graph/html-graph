@@ -1,4 +1,4 @@
-import { Graph } from "@/canvas";
+import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 
 export const findPortForElement = (

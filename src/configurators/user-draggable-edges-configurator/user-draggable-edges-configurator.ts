@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas, GraphEdge } from "@/canvas";
+import { AddEdgeRequest, Canvas } from "@/canvas";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
@@ -12,6 +12,7 @@ import {
 } from "../shared";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
+import { GraphEdge } from "@/graph";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;

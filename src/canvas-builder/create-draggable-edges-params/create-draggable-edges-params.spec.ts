@@ -5,14 +5,14 @@ import {
   Canvas,
   CanvasParams,
   EdgeShapeFactory,
-  Graph,
-  Viewport,
 } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
+import { Graph } from "@/graph";
+import { Viewport } from "@/viewport";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
