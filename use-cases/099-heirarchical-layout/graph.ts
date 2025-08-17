@@ -24,7 +24,7 @@ export class Graph {
     if (outgoingEdges === undefined) {
       this.outgoingEdges.set(from, new Set([edgeId]));
     } else {
-      outgoingEdges.add(to);
+      outgoingEdges.add(edgeId);
     }
 
     const incomingEdges = this.incomingEdges.get(from);
@@ -32,7 +32,7 @@ export class Graph {
     if (incomingEdges === undefined) {
       this.incomingEdges.set(to, new Set([edgeId]));
     } else {
-      incomingEdges.add(from);
+      incomingEdges.add(edgeId);
     }
   }
 
