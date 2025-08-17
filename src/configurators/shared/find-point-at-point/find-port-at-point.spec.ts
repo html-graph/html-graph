@@ -1,4 +1,4 @@
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas, CanvasParams, Graph, Viewport } from "@/canvas";
 import { findPortAtPoint } from "./find-port-at-point";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
@@ -10,6 +10,8 @@ import { createElement } from "@/mocks";
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });
@@ -30,7 +32,14 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     },
   };
 
-  return new Canvas(graphStore, viewportStore, htmlView, defaults);
+  return new Canvas(
+    graph,
+    viewport,
+    graphStore,
+    viewportStore,
+    htmlView,
+    defaults,
+  );
 };
 
 describe("findPortAtPoint", () => {

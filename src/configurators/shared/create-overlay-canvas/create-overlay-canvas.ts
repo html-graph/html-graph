@@ -1,4 +1,4 @@
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas, CanvasParams, Graph, Viewport } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
 import { DirectEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
@@ -10,6 +10,8 @@ export const createOverlayCanvas = (
   viewportStore: ViewportStore,
 ): Canvas => {
   const graphStore = new GraphStore();
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 
@@ -27,5 +29,12 @@ export const createOverlayCanvas = (
     },
   };
 
-  return new Canvas(graphStore, viewportStore, htmlView, defaults);
+  return new Canvas(
+    graph,
+    viewport,
+    graphStore,
+    viewportStore,
+    htmlView,
+    defaults,
+  );
 };

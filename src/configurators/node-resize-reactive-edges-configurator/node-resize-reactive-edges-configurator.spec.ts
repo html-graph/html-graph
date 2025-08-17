@@ -5,15 +5,19 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
-import { Canvas } from "@/canvas";
+import { Canvas, Graph, Viewport } from "@/canvas";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const canvas = new Canvas(
+    graph,
+    viewport,
     graphStore,
     viewportStore,
     htmlView,

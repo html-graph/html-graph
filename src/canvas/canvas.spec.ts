@@ -11,6 +11,8 @@ import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { CanvasError } from "./canvas-error";
+import { Graph } from "./graph";
+import { Viewport } from "./viewport";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -22,6 +24,8 @@ const createCanvas = (options?: {
 }): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
   const element = options?.element ?? document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
@@ -41,7 +45,14 @@ const createCanvas = (options?: {
     },
   };
 
-  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
+  const canvas = new Canvas(
+    graph,
+    viewport,
+    graphStore,
+    viewportStore,
+    htmlView,
+    params,
+  );
 
   return canvas;
 };

@@ -12,7 +12,7 @@ import {
   triggerResizeFor,
   wait,
 } from "@/mocks";
-import { Canvas } from "@/canvas";
+import { Canvas, Graph, Viewport } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
 
@@ -29,6 +29,8 @@ const createCanvas = (options?: {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const htmlView = new BoxHtmlView(
     new CoreHtmlView(graphStore, viewportStore, element),
@@ -41,6 +43,8 @@ const createCanvas = (options?: {
   );
 
   const canvas = new Canvas(
+    graph,
+    viewport,
     graphStore,
     viewportStore,
     htmlView,

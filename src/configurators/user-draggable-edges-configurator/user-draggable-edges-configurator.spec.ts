@@ -1,4 +1,11 @@
-import { AddEdgeRequest, Canvas, EdgeShapeFactory, GraphEdge } from "@/canvas";
+import {
+  AddEdgeRequest,
+  Canvas,
+  EdgeShapeFactory,
+  Graph,
+  GraphEdge,
+  Viewport,
+} from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
@@ -30,8 +37,12 @@ const createCanvas = (options?: {
   const overlayElement =
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const canvas = new Canvas(
+    graph,
+    viewport,
     graphStore,
     viewportStore,
     htmlView,
