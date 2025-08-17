@@ -1,6 +1,6 @@
 import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
 import { EventSubject } from "@/event-subject";
-import { Canvas } from "@/canvas";
+import { Canvas, Graph, Viewport } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
@@ -75,6 +75,10 @@ export class CanvasBuilder {
   private readonly graphStore = new GraphStore();
 
   private readonly viewportStore = new ViewportStore();
+
+  private readonly graph = new Graph(this.graphStore);
+
+  private readonly viewport = new Viewport(this.viewportStore);
 
   private readonly window: Window = window;
 
@@ -193,6 +197,8 @@ export class CanvasBuilder {
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
+      this.graph,
+      this.viewport,
       this.graphStore,
       this.viewportStore,
       htmlView,

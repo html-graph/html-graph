@@ -1,4 +1,4 @@
-import { Canvas } from "@/canvas";
+import { Canvas, Graph, Viewport } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement, createTouch, defaultCanvasParams } from "@/mocks";
@@ -22,8 +22,12 @@ const createDraggablePortsCanvas = (options?: {
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const canvas = new Canvas(
+    graph,
+    viewport,
     graphStore,
     viewportStore,
     htmlView,

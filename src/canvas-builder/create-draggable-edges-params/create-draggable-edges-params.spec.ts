@@ -5,6 +5,8 @@ import {
   Canvas,
   CanvasParams,
   EdgeShapeFactory,
+  Graph,
+  Viewport,
 } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
@@ -15,6 +17,8 @@ import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
   const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
@@ -32,7 +36,14 @@ const createCanvas = (): Canvas => {
     },
   };
 
-  const canvas = new Canvas(graphStore, viewportStore, htmlView, params);
+  const canvas = new Canvas(
+    graph,
+    viewport,
+    graphStore,
+    viewportStore,
+    htmlView,
+    params,
+  );
 
   return canvas;
 };

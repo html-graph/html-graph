@@ -17,16 +17,6 @@ import { CanvasError } from "./canvas-error";
 import { Identifier } from "@/identifier";
 
 export class Canvas {
-  /**
-   * provides api for accessing model of rendered graph
-   */
-  public readonly graph: Graph;
-
-  /**
-   * provides api for accessing viewport state
-   */
-  public readonly viewport: Viewport;
-
   private readonly nodeIdGenerator = new IdGenerator(
     (nodeId) => this.graph.getNode(nodeId) !== null,
   );
@@ -117,14 +107,19 @@ export class Canvas {
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
+    /**
+     * provides api for accessing model of rendered graph
+     */
+    public readonly graph: Graph,
+    /**
+     * provides api for accessing viewport state
+     */
+    public readonly viewport: Viewport,
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
     private readonly params: CanvasParams,
   ) {
-    this.graph = new Graph(this.graphStore);
-    this.viewport = new Viewport(this.viewportStore);
-
     this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
 
     this.graphStore.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
@@ -204,7 +199,7 @@ export class Canvas {
     const node = this.graphStore.getNode(nodeId);
 
     if (node === undefined) {
-      throw new CanvasError("failed to update non existing node");
+      throw new CanvasError("failed to update nonexistent node");
     }
 
     this.graphStore.updateNode(nodeId, request ?? {});
@@ -219,7 +214,7 @@ export class Canvas {
    */
   public removeNode(nodeId: Identifier): Canvas {
     if (this.graphStore.getNode(nodeId) === undefined) {
-      throw new CanvasError("failed to remove non existing node");
+      throw new CanvasError("failed to remove nonexistent node");
     }
 
     this.graphStore.removeNode(nodeId);
@@ -272,7 +267,7 @@ export class Canvas {
    */
   public unmarkPort(portId: Identifier): Canvas {
     if (this.graphStore.getPort(portId) === undefined) {
-      throw new CanvasError("failed to unmark non existing port");
+      throw new CanvasError("failed to unmark nonexistent port");
     }
 
     this.graphStore.removePort(portId);
@@ -338,6 +333,16 @@ export class Canvas {
   }
 
   /**
+   * clears canvas from nodes and edges
+   * canvas gets rolled back to initial state and can be reused
+   */
+  public clear(): Canvas {
+    this.graphStore.clear();
+
+    return this;
+  }
+
+  /**
    * applies transformation for viewport matrix
    */
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
@@ -351,16 +356,6 @@ export class Canvas {
    */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.viewportStore.patchContentMatrix(request);
-
-    return this;
-  }
-
-  /**
-   * clears canvas from nodes and edges
-   * canvas gets rolled back to initial state and can be reused
-   */
-  public clear(): Canvas {
-    this.graphStore.clear();
 
     return this;
   }

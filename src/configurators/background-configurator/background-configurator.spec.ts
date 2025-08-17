@@ -1,7 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { Canvas } from "@/canvas";
+import { Canvas, Graph, Viewport } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
 import { createElement, defaultCanvasParams } from "@/mocks";
 import { BackgroundParams } from "./background-params";
@@ -12,8 +12,12 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
   const element = createElement({ width: 2500, height: 1000 });
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const canvas = new Canvas(
+    graph,
+    viewport,
     graphStore,
     viewportStore,
     htmlView,
