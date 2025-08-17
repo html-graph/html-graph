@@ -1,25 +1,12 @@
-{
-  "nodes": [
-    {
-      "nodeId": 0,
-      "ports": [0, 1]
-    },
-    {
-      "nodeId": 1,
-      "ports": [2, 3]
-    },
-    {
-      "nodeId": 2,
-      "ports": [4, 5]
-    },
-    {
-      "nodeId": 3,
-      "ports": [6, 7]
-    }
-  ],
-  "edges": [
-    { "from": 1, "to": 2 },
-    { "from": 1, "to": 4 },
-    { "from": 1, "to": 5 }
-  ]
-}
+[
+  { "id": 0, "from": 1, "to": 2 },
+  { "id": 1, "from": 1, "to": 3 },
+  { "id": 2, "from": 1, "to": 4 },
+  { "id": 3, "from": 2, "to": 5 },
+  { "id": 4, "from": 2, "to": 6 },
+  { "id": 5, "from": 2, "to": 7 },
+  { "id": 6, "from": 7, "to": 1 },
+  { "id": 7, "from": 3, "to": 9 },
+  { "id": 8, "from": 3, "to": 10 },
+  { "id": 9, "from": 3, "to": 11 }
+]

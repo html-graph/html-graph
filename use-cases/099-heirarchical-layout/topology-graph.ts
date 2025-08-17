@@ -1,7 +1,7 @@
 import { Identifier } from "@html-graph/html-graph";
 import { Edge } from "./edge";
 
-export class Graph {
+export class TopologyGraph {
   private readonly nodesInternal = new Set<Identifier>();
 
   public readonly nodes: ReadonlySet<Identifier> = this.nodesInternal;
