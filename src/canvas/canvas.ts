@@ -157,9 +157,9 @@ export class Canvas {
    * adds new node
    */
   public addNode(request: AddNodeRequest): Canvas {
-    const nodeId = this.nodeIdGenerator.create(request.id);
+    const id = this.nodeIdGenerator.create(request.id);
 
-    if (this.graphStore.getNode(nodeId) !== undefined) {
+    if (this.graphStore.getNode(id) !== undefined) {
       throw new CanvasError("failed to add node with existing id");
     }
 
@@ -170,7 +170,7 @@ export class Canvas {
     }
 
     this.graphStore.addNode({
-      id: nodeId,
+      id,
       element: request.element,
       x: request.x,
       y: request.y,
@@ -183,7 +183,7 @@ export class Canvas {
         this.markPort({
           id: port.id,
           element: port.element,
-          nodeId,
+          nodeId: id,
           direction: port.direction,
         });
       }
