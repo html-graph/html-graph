@@ -1,5 +1,9 @@
 # TODO
 
+- layouts
+
+  - make async store
+
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
 - nodes without overlap

@@ -1,57 +1,56 @@
 import {
-  AddEdgeRequest,
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  Identifier,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
-
-import edges from "./graph.json";
 import { TopologyGraph } from "./topology-graph";
 import { SerializedEdge } from "./serialized-edge";
+import { Layout } from "./layout";
+
+import graphData from "./graph.json";
 
 const graph = new TopologyGraph();
 
-edges.forEach((edge: SerializedEdge) => {
-  if (!graph.nodes.has(edge.from)) {
-    graph.addNode(edge.from);
-  }
+graphData.nodes.forEach((nodeId: Identifier) => {
+  graph.addNode(nodeId);
+});
 
-  if (!graph.nodes.has(edge.to)) {
-    graph.addNode(edge.to);
-  }
-
+graphData.edges.forEach((edge: SerializedEdge) => {
   graph.addEdge(edge.id, edge.from, edge.to);
 });
 
-console.log(graph);
+const layout = new Layout(graph, 1);
+
+layout.organize();
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-const canvas: Canvas = builder.build();
+const canvas: Canvas = builder
+  .enableUserDraggableNodes()
+  .enableUserTransformableViewport()
+  .enableBackground()
+  .build();
 
-const addNode1Request: AddNodeRequest = createInOutNode({
-  name: "Node 1",
-  x: 200,
-  y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
+graphData.nodes.forEach((nodeId) => {
+  const coords = layout.nodes.get(nodeId)!;
+
+  const addNodeRequest: AddNodeRequest = createInOutNode({
+    id: nodeId,
+    name: `Node ${nodeId}`,
+    x: coords.x,
+    y: coords.y,
+    frontPortId: `node-${nodeId}-in`,
+    backPortId: `node-${nodeId}-out`,
+  });
+
+  canvas.addNode(addNodeRequest);
 });
 
-const addNode2Request: AddNodeRequest = createInOutNode({
-  name: "Node 2",
-  x: 500,
-  y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
+graphData.edges.forEach((edge) => {
+  const from = `node-${edge.from}-out`;
+  const to = `node-${edge.to}-in`;
+
+  canvas.addEdge({ id: edge.id, from, to });
 });
-
-const addEdgeRequest: AddEdgeRequest = {
-  from: "node-1-out",
-  to: "node-2-in",
-};
-
-canvas
-  .addNode(addNode1Request)
-  .addNode(addNode2Request)
-  .addEdge(addEdgeRequest);
