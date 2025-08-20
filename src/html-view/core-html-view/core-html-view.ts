@@ -10,9 +10,6 @@ import { createContainer } from "./create-container";
 import { prepareNodeElement } from "./prepare-node-element";
 import { Identifier } from "@/identifier";
 
-/**
- * This entity is responsible for HTML modifications
- */
 export class CoreHtmlView implements HtmlView {
   private readonly host = createHost();
 

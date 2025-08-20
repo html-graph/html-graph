@@ -2,7 +2,8 @@
 
 - layouts
 
-  - make async store
+  - make async view
+    undefined coordinates are valid and throw error when trying to attach
 
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
