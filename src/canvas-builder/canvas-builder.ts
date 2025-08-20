@@ -1,4 +1,10 @@
-import { BoxHtmlView, CoreHtmlView, HtmlView, RenderingBox } from "@/html-view";
+import {
+  BoxHtmlView,
+  CoreHtmlView,
+  HtmlView,
+  LayoutHtmlView,
+  RenderingBox,
+} from "@/html-view";
 import { EventSubject } from "@/event-subject";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
@@ -195,6 +201,8 @@ export class CanvasBuilder {
         createBoxHtmlViewParams(this.virtualScrollConfig),
       );
     }
+
+    htmlView = new LayoutHtmlView(htmlView);
 
     const canvasParams = createCanvasParams(this.canvasDefaults);
 

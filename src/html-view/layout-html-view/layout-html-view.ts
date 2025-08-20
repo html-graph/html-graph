@@ -1,7 +1,10 @@
 import { HtmlView } from "../html-view";
 import { Identifier } from "@/identifier";
-
-export class DeferredHtmlView implements HtmlView {
+/**
+ * this entity should inform user if node coordinates are not set
+ * and apply layout if so
+ */
+export class LayoutHtmlView implements HtmlView {
   public constructor(private readonly htmlView: HtmlView) {}
 
   public attachNode(nodeId: Identifier): void {
