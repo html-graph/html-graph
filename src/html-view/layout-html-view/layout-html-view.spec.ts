@@ -14,7 +14,7 @@ const create = (): {
   const viewportStore = new ViewportStore();
   const element = document.createElement("div");
   const coreHtmlView = new CoreHtmlView(graphStore, viewportStore, element);
-  const layoutHtmlView = new LayoutHtmlView(coreHtmlView);
+  const layoutHtmlView = new LayoutHtmlView(coreHtmlView, graphStore);
 
   return {
     graphStore,
@@ -298,5 +298,122 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.destroy();
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("should not attach node on core view when x is null", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    const spy = jest.spyOn(coreHtmlView, "attachNode");
+
+    layoutHtmlView.attachNode("node-1");
+
+    expect(spy).not.toHaveBeenCalledWith("node-1");
+  });
+
+  it("should not attach node on core view when y is null", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    const spy = jest.spyOn(coreHtmlView, "attachNode");
+
+    layoutHtmlView.attachNode("node-1");
+
+    expect(spy).not.toHaveBeenCalledWith("node-1");
+  });
+
+  it("should not throw on detach not attached node", () => {
+    const { graphStore, layoutHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+
+    expect(() => {
+      layoutHtmlView.detachNode("node-1");
+    }).not.toThrow();
+  });
+
+  it("should throw on second detach of not attached node", () => {
+    const { graphStore, layoutHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.detachNode("node-1");
+
+    expect(() => {
+      layoutHtmlView.detachNode("node-1");
+    }).toThrow();
+  });
+
+  it("should not throw on update position of not attached node", () => {
+    const { graphStore, layoutHtmlView } = create();
+    const element = document.createElement("div");
+
+    graphStore.addNode({
+      id: "node-1",
+      element,
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+
+    layoutHtmlView.updateNodePosition("node-1");
+
+    expect(element.style.transform).not.toBe("translate(0px, 0px)");
+  });
+
+  it("should not throw on update priority of not attached node", () => {
+    const { graphStore, layoutHtmlView } = create();
+    const element = document.createElement("div");
+
+    graphStore.addNode({
+      id: "node-1",
+      element,
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 10,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+
+    layoutHtmlView.updateNodePriority("node-1");
+
+    expect(element.style.zIndex).not.toBe("10");
   });
 });

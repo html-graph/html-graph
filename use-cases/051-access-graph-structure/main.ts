@@ -91,8 +91,8 @@ canvas.graph.getAllNodeIds().forEach((nodeId) => {
   const node = canvas.graph.getNode(nodeId)!;
   structure.nodes.push({
     nodeId,
-    x: node.x,
-    y: node.y,
+    x: node.x!,
+    y: node.y!,
   });
 });
 

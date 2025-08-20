@@ -94,9 +94,10 @@ export class CoreHtmlView implements HtmlView {
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
     const center = node.payload.centerFn(width, height);
+    const { payload } = node;
 
-    const x = node.payload.x - viewportScale * center.x;
-    const y = node.payload.y - viewportScale * center.y;
+    const x = payload.x! - viewportScale * center.x;
+    const y = payload.y! - viewportScale * center.y;
 
     node.element.style.transform = `translate(${x}px, ${y}px)`;
   }

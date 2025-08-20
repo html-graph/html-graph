@@ -1,18 +1,31 @@
+import { GraphStore } from "@/graph-store";
 import { HtmlView } from "../html-view";
 import { Identifier } from "@/identifier";
-/**
- * this entity should inform user if node coordinates are not set
- * and apply layout if so
- */
+
 export class LayoutHtmlView implements HtmlView {
-  public constructor(private readonly htmlView: HtmlView) {}
+  private readonly deferredNodes = new Set<Identifier>();
+
+  public constructor(
+    private readonly htmlView: HtmlView,
+    private readonly graphStore: GraphStore,
+  ) {}
 
   public attachNode(nodeId: Identifier): void {
-    this.htmlView.attachNode(nodeId);
+    const node = this.graphStore.getNode(nodeId)!;
+
+    if (node.payload.x !== null && node.payload.y !== null) {
+      this.htmlView.attachNode(nodeId);
+    } else {
+      this.deferredNodes.add(nodeId);
+    }
   }
 
   public detachNode(nodeId: Identifier): void {
-    this.htmlView.detachNode(nodeId);
+    if (!this.deferredNodes.has(nodeId)) {
+      this.htmlView.detachNode(nodeId);
+    } else {
+      this.deferredNodes.delete(nodeId);
+    }
   }
 
   public attachEdge(edgeId: Identifier): void {
@@ -24,11 +37,15 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: Identifier): void {
-    this.htmlView.updateNodePosition(nodeId);
+    if (!this.deferredNodes.has(nodeId)) {
+      this.htmlView.updateNodePosition(nodeId);
+    }
   }
 
   public updateNodePriority(nodeId: Identifier): void {
-    this.htmlView.updateNodePriority(nodeId);
+    if (!this.deferredNodes.has(nodeId)) {
+      this.htmlView.updateNodePriority(nodeId);
+    }
   }
 
   public updateEdgeShape(edgeId: Identifier): void {

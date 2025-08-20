@@ -172,8 +172,8 @@ export class Canvas {
     this.graphStore.addNode({
       id,
       element: request.element,
-      x: request.x,
-      y: request.y,
+      x: request.x ?? null,
+      y: request.y ?? null,
       centerFn: request.centerFn ?? this.params.nodes.centerFn,
       priority: request.priority ?? this.params.nodes.priorityFn(),
     });

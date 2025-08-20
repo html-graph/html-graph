@@ -19,7 +19,7 @@ const dragOptions: DraggableNodesConfig = {
   events: {
     onNodeDrag: (nodeId: Identifier) => {
       const node = canvas.graph.getNode(nodeId)!;
-      positions.set(nodeId, { x: node.x, y: node.y });
+      positions.set(nodeId, { x: node.x!, y: node.y! });
       nodesElement.innerText = JSON.stringify(Object.fromEntries(positions));
     },
   },
@@ -58,7 +58,7 @@ canvas
 canvas.graph.getAllNodeIds().forEach((nodeId) => {
   const node = canvas.graph.getNode(nodeId)!;
 
-  positions.set(nodeId, { x: node.x, y: node.y });
+  positions.set(nodeId, { x: node.x!, y: node.y! });
 });
 
 nodesElement.innerText = JSON.stringify(Object.fromEntries(positions));

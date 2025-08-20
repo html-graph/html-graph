@@ -65,7 +65,7 @@ navigateBtn.addEventListener(
     ];
 
     const [x, y] = nodes.reduce(
-      (acc, cur) => [acc[0] + cur.x, acc[1] + cur.y],
+      (acc, cur) => [acc[0] + cur.x!, acc[1] + cur.y!],
       [0, 0],
     );
 

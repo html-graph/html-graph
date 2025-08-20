@@ -77,8 +77,8 @@ export class UserDraggableNodesConfigurator {
 
     this.grabbedNode = {
       nodeId,
-      dx: cursorContent.x - node.x,
-      dy: cursorContent.y - node.y,
+      dx: cursorContent.x - node.x!,
+      dy: cursorContent.y - node.y!,
     };
 
     setCursor(this.element, this.params.dragCursor);
@@ -127,8 +127,8 @@ export class UserDraggableNodesConfigurator {
 
     this.grabbedNode = {
       nodeId,
-      dx: cursorContent.x - node.x,
-      dy: cursorContent.y - node.y,
+      dx: cursorContent.x - node.x!,
+      dy: cursorContent.y - node.y!,
     };
     this.moveNodeOnTop(nodeId);
 
