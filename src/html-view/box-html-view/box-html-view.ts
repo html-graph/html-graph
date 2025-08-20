@@ -6,9 +6,6 @@ import { RenderingBoxState } from "./rendering-box-state";
 import { BoxHtmlViewParams } from "./box-html-view-params";
 import { Identifier } from "@/identifier";
 
-/**
- * This entity is responsible for HTML rendering optimization regarding for limited rendering box
- */
 export class BoxHtmlView implements HtmlView {
   private readonly attachedNodes = new Set<Identifier>();
 
