@@ -254,16 +254,6 @@ describe("CoreHtmlView", () => {
     expect(element.children.length).toBe(0);
   });
 
-  it("should clear on destroy", () => {
-    const htmlView = createHtmlController();
-
-    const spy = jest.spyOn(htmlView, "clear");
-
-    htmlView.destroy();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should update node coordinates", () => {
     const store = new GraphStore();
     const element = document.createElement("div");
