@@ -18,15 +18,15 @@ import { Viewport } from "@/viewport";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator(
-    (nodeId) => this.graph.getNode(nodeId) !== null,
+    (nodeId) => this.graphStore.getNode(nodeId) !== undefined,
   );
 
   private readonly portIdGenerator = new IdGenerator(
-    (portId) => this.graph.getPort(portId) !== null,
+    (portId) => this.graphStore.getPort(portId) !== undefined,
   );
 
   private readonly edgeIdGenerator = new IdGenerator(
-    (edgeId) => this.graph.getEdge(edgeId) !== null,
+    (edgeId) => this.graphStore.getEdge(edgeId) !== undefined,
   );
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {

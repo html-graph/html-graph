@@ -13,9 +13,7 @@ export class LayoutHtmlView implements HtmlView {
   ) {}
 
   public attachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
-
-    if (node.payload.x !== null && node.payload.y !== null) {
+    if (this.isNodeValid(nodeId)) {
       this.htmlView.attachNode(nodeId);
     } else {
       this.deferredNodes.add(nodeId);
@@ -55,13 +53,17 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: Identifier): void {
-    if (!this.deferredNodes.has(nodeId)) {
+    if (this.deferredNodes.has(nodeId)) {
+      this.tryAttachNode(nodeId);
+    } else {
       this.htmlView.updateNodePosition(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: Identifier): void {
-    if (!this.deferredNodes.has(nodeId)) {
+    if (this.deferredNodes.has(nodeId)) {
+      this.tryAttachNode(nodeId);
+    } else {
       this.htmlView.updateNodePriority(nodeId);
     }
   }
@@ -92,5 +94,18 @@ export class LayoutHtmlView implements HtmlView {
 
   public destroy(): void {
     this.htmlView.destroy();
+  }
+
+  private isNodeValid(nodeId: Identifier): boolean {
+    const node = this.graphStore.getNode(nodeId)!;
+
+    return node.payload.x !== null && node.payload.y !== null;
+  }
+
+  private tryAttachNode(nodeId: Identifier): void {
+    if (this.isNodeValid(nodeId)) {
+      this.deferredNodes.delete(nodeId);
+      this.htmlView.attachNode(nodeId);
+    }
   }
 }

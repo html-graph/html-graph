@@ -1,5 +1,5 @@
 import {
-  BoxHtmlView,
+  VirtualScrollHtmlView,
   CoreHtmlView,
   HtmlView,
   LayoutHtmlView,
@@ -44,7 +44,7 @@ import {
   createVirtualScrollParams,
   VirtualScrollConfig,
 } from "./create-virtual-scroll-params";
-import { createBoxHtmlViewParams } from "./create-box-html-view-params";
+import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-view-params";
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -194,11 +194,11 @@ export class CanvasBuilder {
     );
 
     if (this.virtualScrollConfig !== undefined) {
-      htmlView = new BoxHtmlView(
+      htmlView = new VirtualScrollHtmlView(
         htmlView,
         this.graphStore,
         this.boxRenderingTrigger,
-        createBoxHtmlViewParams(this.virtualScrollConfig),
+        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
       );
     }
 

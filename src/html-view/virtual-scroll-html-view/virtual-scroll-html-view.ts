@@ -3,10 +3,10 @@ import { HtmlView } from "../html-view";
 import { RenderingBox } from "./rendering-box";
 import { EventSubject } from "@/event-subject";
 import { RenderingBoxState } from "./rendering-box-state";
-import { BoxHtmlViewParams } from "./box-html-view-params";
+import { VirtualScrollHtmlViewParams } from "./virtual-scroll-html-view-params";
 import { Identifier } from "@/identifier";
 
-export class BoxHtmlView implements HtmlView {
+export class VirtualScrollHtmlView implements HtmlView {
   private readonly attachedNodes = new Set<Identifier>();
 
   private readonly attachedEdges = new Set<Identifier>();
@@ -81,7 +81,7 @@ export class BoxHtmlView implements HtmlView {
     private readonly htmlView: HtmlView,
     private readonly graphStore: GraphStore,
     private readonly trigger: EventSubject<RenderingBox>,
-    private readonly params: BoxHtmlViewParams,
+    private readonly params: VirtualScrollHtmlViewParams,
   ) {
     this.renderingBox = new RenderingBoxState(this.graphStore);
     this.trigger.subscribe(this.updateViewport);

@@ -1,6 +1,6 @@
 import { Identifier } from "@/identifier";
 
-export interface BoxHtmlViewParams {
+export interface VirtualScrollHtmlViewParams {
   readonly onBeforeNodeAttached: (nodeId: Identifier) => void;
   readonly onAfterNodeDetached: (nodeId: Identifier) => void;
 }

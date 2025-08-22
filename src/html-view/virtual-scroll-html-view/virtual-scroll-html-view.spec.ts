@@ -3,7 +3,7 @@ import { CoreHtmlView } from "../core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "./rendering-box";
-import { BoxHtmlView } from "./box-html-view";
+import { VirtualScrollHtmlView } from "./virtual-scroll-html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { Identifier } from "@/identifier";
@@ -15,14 +15,14 @@ const create = (config?: {
   trigger: EventSubject<RenderingBox>;
   store: GraphStore;
   coreView: CoreHtmlView;
-  boxView: BoxHtmlView;
+  boxView: VirtualScrollHtmlView;
 } => {
   const trigger = new EventSubject<RenderingBox>();
   const store = new GraphStore();
   const transformer = new ViewportStore();
   const element = document.createElement("div");
   const coreView = new CoreHtmlView(store, transformer, element);
-  const boxView = new BoxHtmlView(coreView, store, trigger, {
+  const boxView = new VirtualScrollHtmlView(coreView, store, trigger, {
     onBeforeNodeAttached: config?.onBeforeNodeAttached ?? ((): void => {}),
     onAfterNodeDetached: config?.onAfterNodeDetached ?? ((): void => {}),
   });
@@ -81,7 +81,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
   });
 };
 
-describe("BoxHtmlView", () => {
+describe("VirtualScrollHtmlView", () => {
   it("should clear core view on clear", () => {
     const { coreView, boxView } = create();
     const spy = jest.spyOn(coreView, "clear");

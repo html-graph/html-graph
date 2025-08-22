@@ -828,4 +828,71 @@ describe("LayoutHtmlView", () => {
       layoutHtmlView.detachEdge("edge-1");
     }).toThrow();
   });
+
+  it("should update node position for detached node with defined coordinates", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+
+    const spy = jest.spyOn(coreHtmlView, "updateNodePosition");
+
+    layoutHtmlView.updateNodePosition("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should detach node after updating node position", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+
+    const spy = jest.spyOn(coreHtmlView, "detachNode");
+
+    layoutHtmlView.detachNode("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should update node priority for detached node with defined coordinates", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+
+    const spy = jest.spyOn(coreHtmlView, "updateNodePriority");
+
+    layoutHtmlView.updateNodePriority("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
 });

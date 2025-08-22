@@ -1,9 +1,9 @@
-import { BoxHtmlViewParams } from "@/html-view";
+import { VirtualScrollHtmlViewParams } from "@/html-view";
 import { VirtualScrollConfig } from "../create-virtual-scroll-params";
 
-export const createBoxHtmlViewParams = (
+export const createVirtualScrollHtmlViewParams = (
   config: VirtualScrollConfig | undefined,
-): BoxHtmlViewParams => {
+): VirtualScrollHtmlViewParams => {
   return {
     onAfterNodeDetached:
       config?.events?.onAfterNodeDetached ?? ((): void => {}),
