@@ -74,20 +74,6 @@ describe("Canvas", () => {
     expect(container.children.length).toBe(1);
   });
 
-  it("should set node coordinates to null when not specified", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-    });
-
-    const node = canvas.graph.getNode("node-1")!;
-
-    expect({ x: node.x, y: node.y }).toEqual({ x: null, y: null });
-  });
-
   it("should add node with specified id", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
