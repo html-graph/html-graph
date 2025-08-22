@@ -9,10 +9,6 @@ export interface HtmlView {
 
   detachEdge(edgeId: Identifier): void;
 
-  clear(): void;
-
-  destroy(): void;
-
   updateNodePosition(nodeId: Identifier): void;
 
   updateNodePriority(nodeId: Identifier): void;
@@ -22,4 +18,8 @@ export interface HtmlView {
   renderEdge(edgeId: Identifier): void;
 
   updateEdgePriority(edgeId: Identifier): void;
+
+  clear(): void;
+
+  destroy(): void;
 }

@@ -52,8 +52,8 @@ addNodeRequests.forEach(
       const rect = canvasElement.getBoundingClientRect();
       const sv = canvas.viewport.getViewportMatrix().scale;
 
-      const targetX = node.x - (sv * rect.width) / 2;
-      const targetY = node.y - (sv * rect.height) / 2;
+      const targetX = node.x! - (sv * rect.width) / 2;
+      const targetY = node.y! - (sv * rect.height) / 2;
 
       canvas.patchViewportMatrix({ x: targetX, y: targetY });
     });

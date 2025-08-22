@@ -1,6 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import { RenderingBox } from "../rendering-box";
 import { Identifier } from "@/identifier";
+import { Point } from "@/point";
 
 export class RenderingBoxState {
   private xFrom = Infinity;
@@ -23,20 +24,18 @@ export class RenderingBoxState {
   public hasNode(nodeId: Identifier): boolean {
     const payload = this.graphStore.getNode(nodeId)!.payload;
 
-    return (
-      payload.x >= this.xFrom &&
-      payload.x <= this.xTo &&
-      payload.y >= this.yFrom &&
-      payload.y <= this.yTo
-    );
+    const { x, y } = payload as Point;
+
+    return x >= this.xFrom && x <= this.xTo && y >= this.yFrom && y <= this.yTo;
   }
 
   public hasEdge(edgeId: Identifier): boolean {
     const edge = this.graphStore.getEdge(edgeId)!;
     const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
     const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;
-    const nodePayloadFrom = this.graphStore.getNode(nodeFromId)!.payload;
-    const nodePayloadTo = this.graphStore.getNode(nodeToId)!.payload;
+    const nodePayloadFrom = this.graphStore.getNode(nodeFromId)!
+      .payload as Point;
+    const nodePayloadTo = this.graphStore.getNode(nodeToId)!.payload as Point;
 
     const xFrom = Math.min(nodePayloadFrom.x, nodePayloadTo.x);
     const xTo = Math.max(nodePayloadFrom.x, nodePayloadTo.x);

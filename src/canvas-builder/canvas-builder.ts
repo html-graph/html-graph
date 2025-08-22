@@ -202,7 +202,7 @@ export class CanvasBuilder {
       );
     }
 
-    htmlView = new LayoutHtmlView(htmlView);
+    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
 
     const canvasParams = createCanvasParams(this.canvasDefaults);
 

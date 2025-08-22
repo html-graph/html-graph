@@ -17,6 +17,8 @@ export class CoreHtmlView implements HtmlView {
 
   private readonly edgeIdToElementMap = new Map<Identifier, SVGSVGElement>();
 
+  private readonly attachedNodeIds = new Set<Identifier>();
+
   private readonly applyTransform = (): void => {
     const m = this.viewportStore.getContentMatrix();
 
@@ -39,6 +41,7 @@ export class CoreHtmlView implements HtmlView {
 
     prepareNodeElement(node.element);
 
+    this.attachedNodeIds.add(nodeId);
     this.container.appendChild(node.element);
 
     this.updateNodePosition(nodeId);
@@ -51,6 +54,7 @@ export class CoreHtmlView implements HtmlView {
     const node = this.graphStore.getNode(nodeId)!;
 
     this.container.removeChild(node.element);
+    this.attachedNodeIds.delete(nodeId);
   }
 
   public attachEdge(edgeId: Identifier): void {
@@ -75,15 +79,13 @@ export class CoreHtmlView implements HtmlView {
       this.detachEdge(edgeId);
     });
 
-    this.graphStore.getAllNodeIds().forEach((nodeId) => {
+    this.attachedNodeIds.forEach((nodeId) => {
       this.detachNode(nodeId);
     });
   }
 
   public destroy(): void {
     this.viewportStore.onAfterUpdated.unsubscribe(this.applyTransform);
-
-    this.clear();
 
     this.element.removeChild(this.host);
     this.host.removeChild(this.container);
@@ -94,9 +96,10 @@ export class CoreHtmlView implements HtmlView {
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
     const center = node.payload.centerFn(width, height);
+    const { payload } = node;
 
-    const x = node.payload.x - viewportScale * center.x;
-    const y = node.payload.y - viewportScale * center.y;
+    const x = payload.x! - viewportScale * center.x;
+    const y = payload.y! - viewportScale * center.y;
 
     node.element.style.transform = `translate(${x}px, ${y}px)`;
   }

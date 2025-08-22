@@ -1,4 +1,3 @@
-import { Point } from "@/point";
 import { GraphStore } from "./graph-store";
 import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
@@ -6,7 +5,7 @@ import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
 import { StorePort } from "./store-port";
 import { StoreNode } from "./store-node";
-import { CenterFn } from "@/center-fn";
+import { CenterFn, standardCenterFn } from "@/center-fn";
 import { StoreEdge } from "./store-edge";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
@@ -15,7 +14,7 @@ const createAddNodeRequest1 = (): AddNodeRequest => {
     element: document.createElement("div"),
     x: 0,
     y: 0,
-    centerFn: (): Point => ({ x: 0, y: 0 }),
+    centerFn: standardCenterFn,
     priority: 0,
   };
 };
@@ -26,7 +25,7 @@ const createAddNodeRequest2 = (): AddNodeRequest => {
     element: document.createElement("div"),
     x: 0,
     y: 0,
-    centerFn: (): Point => ({ x: 0, y: 0 }),
+    centerFn: standardCenterFn,
     priority: 0,
   };
 };
@@ -86,8 +85,8 @@ describe("GraphStore", () => {
     const expected: StoreNode = {
       element: addNodeRequest1.element,
       payload: {
-        x: addNodeRequest1.x,
-        y: addNodeRequest1.y,
+        x: 0,
+        y: 0,
         centerFn: addNodeRequest1.centerFn,
         priority: addNodeRequest1.priority,
       },

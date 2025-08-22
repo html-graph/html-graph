@@ -1,5 +1,5 @@
 import { GraphStore } from "@/graph-store";
-import { CoreHtmlView } from "@/html-view";
+import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { createElement } from "@/mocks";
@@ -27,7 +27,8 @@ const createCanvas = (options?: {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
   const element = options?.element ?? document.createElement("div");
-  const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
+  htmlView = new LayoutHtmlView(htmlView, graphStore);
 
   const params: CanvasParams = {
     nodes: {
