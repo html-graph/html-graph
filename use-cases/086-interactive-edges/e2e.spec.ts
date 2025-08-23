@@ -1,9 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should render connection with specified dragging port direction", async ({
-  page,
-}) => {
+test("should change edge appearance on click", async ({ page }) => {
   await page.goto(`${e2eBase}/086-interactive-edges/`);
   await expect(page).toHaveScreenshot("initial.png");
 

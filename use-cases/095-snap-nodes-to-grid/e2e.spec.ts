@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should have draggable nodes", async ({ page }) => {
+test("should snap nodes to grid", async ({ page }) => {
   await page.goto(`${e2eBase}/095-snap-nodes-to-grid/`);
   await expect(page).toHaveScreenshot("initial.png");
 

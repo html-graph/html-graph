@@ -7,7 +7,6 @@ import { HeirarchicalLayout } from "./heirarchical-layout";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
-  .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
@@ -31,9 +30,17 @@ graphData.edges.forEach((edge) => {
 });
 
 const layout = new HeirarchicalLayout(canvas, {
-  startNodeId: "node-1",
-  layerSize: 200,
-  layerSpace: 100,
+  startNodeId: 0,
+  layerSize: 300,
+  layerSpace: 200,
+  transformMatrix: {
+    a: 1,
+    b: 0,
+    c: 200,
+    d: 0,
+    e: 1,
+    f: 400,
+  },
 });
 
 layout.organize();

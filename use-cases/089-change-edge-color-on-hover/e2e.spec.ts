@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should freeze node priority when dragging", async ({ page }) => {
+test("should change edge color on hover", async ({ page }) => {
   await page.goto(`${e2eBase}/089-change-edge-color-on-hover/`);
   await expect(page).toHaveScreenshot("initial.png");
 
