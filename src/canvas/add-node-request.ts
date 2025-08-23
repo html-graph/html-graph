@@ -3,10 +3,10 @@ import { AddNodePorts } from "./add-node-ports";
 import { Identifier } from "@/identifier";
 
 export interface AddNodeRequest {
-  readonly id?: Identifier;
+  readonly id?: Identifier | undefined;
   readonly element: HTMLElement;
-  readonly x: number;
-  readonly y: number;
+  readonly x?: number | null | undefined;
+  readonly y?: number | null | undefined;
   readonly ports?: AddNodePorts | undefined;
   readonly centerFn?: CenterFn | undefined;
   readonly priority?: number | undefined;

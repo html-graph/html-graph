@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should create custom background", async ({ page }) => {
+test("should apply draggable edges", async ({ page }) => {
   await page.goto(`${e2eBase}/093-user-draggable-edges/`);
   await expect(page).toHaveScreenshot("initial.png");
 

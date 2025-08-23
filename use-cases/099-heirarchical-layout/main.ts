@@ -1,46 +1,20 @@
-import {
-  AddNodeRequest,
-  Canvas,
-  CanvasBuilder,
-  Identifier,
-} from "@html-graph/html-graph";
+import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
-import { TopologyGraph } from "./topology-graph";
-import { SerializedEdge } from "./serialized-edge";
-import { Layout } from "./layout";
 
 import graphData from "./graph.json";
-
-const graph = new TopologyGraph();
-
-graphData.nodes.forEach((nodeId: Identifier) => {
-  graph.addNode(nodeId);
-});
-
-graphData.edges.forEach((edge: SerializedEdge) => {
-  graph.addEdge(edge.id, edge.from, edge.to);
-});
-
-const layout = new Layout(graph, 1);
-
-layout.organize();
+import { HeirarchicalLayout } from "./heirarchical-layout";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
-  .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
 
 graphData.nodes.forEach((nodeId) => {
-  const coords = layout.nodes.get(nodeId)!;
-
   const addNodeRequest: AddNodeRequest = createInOutNode({
     id: nodeId,
     name: `Node ${nodeId}`,
-    x: coords.x,
-    y: coords.y,
     frontPortId: `node-${nodeId}-in`,
     backPortId: `node-${nodeId}-out`,
   });
@@ -54,3 +28,19 @@ graphData.edges.forEach((edge) => {
 
   canvas.addEdge({ id: edge.id, from, to });
 });
+
+const layout = new HeirarchicalLayout(canvas, {
+  startNodeId: 0,
+  layerSize: 300,
+  layerSpace: 200,
+  transformMatrix: {
+    a: 1,
+    b: 0,
+    c: 200,
+    d: 0,
+    e: 1,
+    f: 400,
+  },
+});
+
+layout.organize();

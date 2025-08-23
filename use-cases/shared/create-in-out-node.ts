@@ -3,8 +3,8 @@ import { AddNodeRequest, Identifier } from "@html-graph/html-graph";
 export function createInOutNode(params: {
   id?: Identifier;
   name: string;
-  x: number;
-  y: number;
+  x?: number | null;
+  y?: number | null;
   frontPortId: string;
   backPortId: string;
   priority?: number;
