@@ -6,6 +6,7 @@
     undefined coordinates are valid and throw error when trying to attach
 
 - port and node svg elements
+- improve update events
 - user selectable nodes? lasso selection? multiselection?
 - connection preview for connectable ports
 - nodes without overlap

@@ -828,4 +828,398 @@ describe("LayoutHtmlView", () => {
       layoutHtmlView.detachEdge("edge-1");
     }).toThrow();
   });
+
+  it("should update node position for detached node with defined coordinates", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+
+    const spy = jest.spyOn(coreHtmlView, "updateNodePosition");
+
+    layoutHtmlView.updateNodePosition("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should detach node after updating node position", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+
+    const spy = jest.spyOn(coreHtmlView, "detachNode");
+
+    layoutHtmlView.detachNode("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should update node priority for detached node with defined coordinates", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+
+    const spy = jest.spyOn(coreHtmlView, "updateNodePriority");
+
+    layoutHtmlView.updateNodePriority("node-1");
+
+    expect(spy).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should attach edge on edge shape update after source node coordinates update", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+
+    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    layoutHtmlView.updateEdgeShape("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should not attach edge on edge shape update when source coordinates are not defined", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+
+    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    layoutHtmlView.updateEdgeShape("edge-1");
+
+    expect(spy).not.toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should not attach edge on edge shape update when target coordinates are not defined", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+
+    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    layoutHtmlView.updateEdgeShape("edge-1");
+
+    expect(spy).not.toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should attach edge on edge render after source node coordinates update", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+
+    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    layoutHtmlView.renderEdge("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should attach edge on update edge priority after source node coordinates update", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+
+    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    layoutHtmlView.updateEdgePriority("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should detach deferred edge after source node coordinates update", () => {
+    const { graphStore, layoutHtmlView, coreHtmlView } = create();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: null,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-1",
+      nodeId: "node-1",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addPort({
+      id: "port-2",
+      nodeId: "node-2",
+      element: document.createElement("div"),
+      direction: 0,
+    });
+
+    graphStore.addEdge({
+      id: "edge-1",
+      from: "port-1",
+      to: "port-2",
+      shape: new BezierEdgeShape(),
+      priority: 0,
+    });
+
+    layoutHtmlView.attachNode("node-1");
+    layoutHtmlView.attachNode("node-2");
+    layoutHtmlView.attachEdge("edge-1");
+    graphStore.updateNode("node-1", { x: 0, y: 0 });
+    layoutHtmlView.updateNodePosition("node-1");
+    layoutHtmlView.renderEdge("edge-1");
+
+    const spy = jest.spyOn(coreHtmlView, "detachEdge");
+    layoutHtmlView.detachEdge("edge-1");
+
+    expect(spy).toHaveBeenCalledWith("edge-1");
+  });
 });

@@ -13,9 +13,7 @@ export class LayoutHtmlView implements HtmlView {
   ) {}
 
   public attachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
-
-    if (node.payload.x !== null && node.payload.y !== null) {
+    if (this.isNodeValid(nodeId)) {
       this.htmlView.attachNode(nodeId);
     } else {
       this.deferredNodes.add(nodeId);
@@ -23,26 +21,18 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   public detachNode(nodeId: Identifier): void {
-    if (!this.deferredNodes.has(nodeId)) {
-      this.htmlView.detachNode(nodeId);
-    } else {
+    if (this.deferredNodes.has(nodeId)) {
       this.deferredNodes.delete(nodeId);
+    } else {
+      this.htmlView.detachNode(nodeId);
     }
   }
 
   public attachEdge(edgeId: Identifier): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const sourceNode = this.graphStore.getPort(edge.from)!;
-    const targetNode = this.graphStore.getPort(edge.to)!;
-
-    const adjacentNodeDeferred =
-      this.deferredNodes.has(sourceNode.nodeId) ||
-      this.deferredNodes.has(targetNode.nodeId);
-
-    if (adjacentNodeDeferred) {
-      this.deferredEdges.add(edgeId);
-    } else {
+    if (this.isEdgeValid(edgeId)) {
       this.htmlView.attachEdge(edgeId);
+    } else {
+      this.deferredEdges.add(edgeId);
     }
   }
 
@@ -55,31 +45,41 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: Identifier): void {
-    if (!this.deferredNodes.has(nodeId)) {
+    if (this.deferredNodes.has(nodeId)) {
+      this.tryAttachNode(nodeId);
+    } else {
       this.htmlView.updateNodePosition(nodeId);
     }
   }
 
   public updateNodePriority(nodeId: Identifier): void {
-    if (!this.deferredNodes.has(nodeId)) {
+    if (this.deferredNodes.has(nodeId)) {
+      this.tryAttachNode(nodeId);
+    } else {
       this.htmlView.updateNodePriority(nodeId);
     }
   }
 
   public updateEdgeShape(edgeId: Identifier): void {
-    if (!this.deferredEdges.has(edgeId)) {
+    if (this.deferredEdges.has(edgeId)) {
+      this.tryAttachEdge(edgeId);
+    } else {
       this.htmlView.updateEdgeShape(edgeId);
     }
   }
 
   public renderEdge(edgeId: Identifier): void {
-    if (!this.deferredEdges.has(edgeId)) {
+    if (this.deferredEdges.has(edgeId)) {
+      this.tryAttachEdge(edgeId);
+    } else {
       this.htmlView.renderEdge(edgeId);
     }
   }
 
   public updateEdgePriority(edgeId: Identifier): void {
-    if (!this.deferredEdges.has(edgeId)) {
+    if (this.deferredEdges.has(edgeId)) {
+      this.tryAttachEdge(edgeId);
+    } else {
       this.htmlView.updateEdgePriority(edgeId);
     }
   }
@@ -92,5 +92,36 @@ export class LayoutHtmlView implements HtmlView {
 
   public destroy(): void {
     this.htmlView.destroy();
+  }
+
+  private isNodeValid(nodeId: Identifier): boolean {
+    const node = this.graphStore.getNode(nodeId)!;
+
+    return !(node.payload.x === null || node.payload.y === null);
+  }
+
+  private tryAttachNode(nodeId: Identifier): void {
+    if (this.isNodeValid(nodeId)) {
+      this.deferredNodes.delete(nodeId);
+      this.htmlView.attachNode(nodeId);
+    }
+  }
+
+  private isEdgeValid(edgeId: Identifier): boolean {
+    const edge = this.graphStore.getEdge(edgeId)!;
+    const sourcePort = this.graphStore.getPort(edge.from)!;
+    const targetPort = this.graphStore.getPort(edge.to)!;
+
+    return !(
+      this.deferredNodes.has(sourcePort.nodeId) ||
+      this.deferredNodes.has(targetPort.nodeId)
+    );
+  }
+
+  private tryAttachEdge(edgeId: Identifier): void {
+    if (this.isEdgeValid(edgeId)) {
+      this.deferredEdges.delete(edgeId);
+      this.htmlView.attachEdge(edgeId);
+    }
   }
 }

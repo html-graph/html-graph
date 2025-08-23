@@ -1,5 +1,5 @@
 import { EventSubject } from "@/event-subject";
-import { BoxHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
+import { VirtualScrollHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
@@ -34,7 +34,7 @@ const createCanvas = (options?: {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
-  const htmlView = new BoxHtmlView(
+  const htmlView = new VirtualScrollHtmlView(
     new CoreHtmlView(graphStore, viewportStore, element),
     graphStore,
     trigger,
