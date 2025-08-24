@@ -11,9 +11,9 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  ManualLayoutApplicationStrategyConfigurator,
+  LayoutApplicationStrategyConfigurator,
+  LayoutConfig,
   NodeResizeReactiveEdgesConfigurator,
-  TopologyChangeLayoutApplicationStrategyConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
   UserDraggableNodesConfigurator,
@@ -50,8 +50,6 @@ import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { LayoutConfig } from "./layout-config";
-import { TransformLayoutAlgorithm } from "@/layout-algorithm";
 
 export class CanvasBuilder {
   private used = false;
@@ -304,31 +302,10 @@ export class CanvasBuilder {
     }
 
     if (this.layoutConfig !== undefined) {
-      const algorithm = this.layoutConfig.transform
-        ? new TransformLayoutAlgorithm({
-            baseAlgorithm: this.layoutConfig.algorithm,
-            matrix: this.layoutConfig.transform,
-          })
-        : this.layoutConfig.algorithm;
-
-      const strategy = this.layoutConfig.applicationStrategy;
-
-      switch (strategy.type) {
-        case "topologyChange":
-          TopologyChangeLayoutApplicationStrategyConfigurator.configure(
-            canvas,
-            algorithm,
-          );
-          break;
-        case "manual": {
-          ManualLayoutApplicationStrategyConfigurator.configure(
-            canvas,
-            algorithm,
-            strategy.trigger,
-          );
-          break;
-        }
-      }
+      LayoutApplicationStrategyConfigurator.configure(
+        canvas,
+        this.layoutConfig,
+      );
     }
 
     const onBeforeDestroy = (): void => {
