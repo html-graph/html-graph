@@ -11,7 +11,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  LayoutApplicationStrategyConfigurator,
+  LayoutConfigurator,
   LayoutConfig,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
@@ -302,7 +302,7 @@ export class CanvasBuilder {
     }
 
     if (this.layoutConfig !== undefined) {
-      LayoutApplicationStrategyConfigurator.configure(
+      LayoutConfigurator.configure(
         canvas,
         this.layoutConfig,
       );

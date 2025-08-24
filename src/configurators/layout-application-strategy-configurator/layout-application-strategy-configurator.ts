@@ -4,7 +4,7 @@ import { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-
 import { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
 import { Canvas } from "@/canvas";
 
-export class LayoutApplicationStrategyConfigurator {
+export class LayoutConfigurator {
   public static configure(canvas: Canvas, config: LayoutConfig): void {
     const algorithm = config.transform
       ? new TransformLayoutAlgorithm({
