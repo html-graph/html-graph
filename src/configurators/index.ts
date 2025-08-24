@@ -33,5 +33,5 @@ export type {
 
 export type { MouseEventVerifier } from "./shared";
 
-export { LayoutConfigurator } from "./layout-application-strategy-configurator";
-export type { LayoutConfig } from "./layout-application-strategy-configurator";
+export { LayoutConfigurator } from "./layout-configurator";
+export type { LayoutConfig } from "./layout-configurator";
