@@ -32,3 +32,5 @@ export type {
 } from "./user-draggable-edges-configurator";
 
 export type { MouseEventVerifier } from "./shared";
+
+export { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-change-layout-application-strategy-configurator";

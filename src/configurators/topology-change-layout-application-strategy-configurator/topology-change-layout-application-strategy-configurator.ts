@@ -1,0 +1,58 @@
+import { Canvas } from "@/canvas";
+import { LayoutAlgorithm } from "@/layout-algorithm";
+
+export class TopologyChangeLayoutApplicationStrategyConfigurator {
+  private applyScheduled = false;
+
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly layoutAlgorithm: LayoutAlgorithm,
+  ) {
+    this.canvas.graph.onAfterNodeAdded.subscribe(() => {
+      this.scheduleApply();
+    });
+
+    this.canvas.graph.onBeforeNodeRemoved.subscribe(() => {
+      this.scheduleApply();
+    });
+
+    this.canvas.graph.onAfterEdgeAdded.subscribe(() => {
+      this.scheduleApply();
+    });
+
+    this.canvas.graph.onBeforeEdgeRemoved.subscribe(() => {
+      this.scheduleApply();
+    });
+  }
+
+  public static configure(
+    canvas: Canvas,
+    layoutAlgorithm: LayoutAlgorithm,
+  ): void {
+    new TopologyChangeLayoutApplicationStrategyConfigurator(
+      canvas,
+      layoutAlgorithm,
+    );
+  }
+
+  private scheduleApply(): void {
+    if (this.applyScheduled) {
+      return;
+    }
+
+    this.applyScheduled = true;
+
+    setTimeout(() => {
+      this.applyScheduled = false;
+      this.applyLayout();
+    });
+  }
+
+  private applyLayout(): void {
+    const coords = this.layoutAlgorithm.calculateCoordinates(this.canvas.graph);
+
+    coords.forEach((point, nodeId) => {
+      this.canvas.updateNode(nodeId, point);
+    });
+  }
+}

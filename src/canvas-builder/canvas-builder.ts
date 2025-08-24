@@ -12,6 +12,7 @@ import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
   NodeResizeReactiveEdgesConfigurator,
+  TopologyChangeLayoutApplicationStrategyConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
   UserDraggableNodesConfigurator,
@@ -48,6 +49,7 @@ import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { LayoutConfig } from "./layout-config";
 
 export class CanvasBuilder {
   private used = false;
@@ -65,6 +67,8 @@ export class CanvasBuilder {
   private draggableEdgesConfig: DraggableEdgesConfig = {};
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
+
+  private layoutConfig: LayoutConfig | undefined = undefined;
 
   private hasDraggableNode = false;
 
@@ -166,11 +170,23 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables edges dragging by dragging one of the adjacent ports
+   */
   public enableUserDraggableEdges(
     config?: DraggableEdgesConfig,
   ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
     this.draggableEdgesConfig = config ?? {};
+
+    return this;
+  }
+
+  /**
+   * enables nodes positioning with specified layout
+   */
+  public enableLayout(config: LayoutConfig): CanvasBuilder {
+    this.layoutConfig = config;
 
     return this;
   }
@@ -283,6 +299,15 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
       );
+    }
+
+    if (this.layoutConfig !== undefined) {
+      if (this.layoutConfig.strategy.type === "topologyChange") {
+        TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+          canvas,
+          this.layoutConfig.algorithm,
+        );
+      }
     }
 
     const onBeforeDestroy = (): void => {

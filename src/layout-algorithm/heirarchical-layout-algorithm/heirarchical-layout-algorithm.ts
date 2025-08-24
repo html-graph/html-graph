@@ -1,4 +1,7 @@
-import { Graph, Identifier, Point } from "@html-graph/html-graph";
+import { Identifier } from "@/identifier";
+import { LayoutAlgorithm } from "../layout-algorithm";
+import { Graph } from "@/graph";
+import { Point } from "@/point";
 
 interface HeirarchicalLayoutAlgorithmParams {
   readonly startNodeId: Identifier;
@@ -11,19 +14,14 @@ interface AvgEntry {
   readonly avg: number;
 }
 
-export interface LayoutAlgorithm {
-  calculateCoordinates(): ReadonlyMap<Identifier, Point>;
-}
-
 export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
-    private readonly graph: Graph,
     private readonly params: HeirarchicalLayoutAlgorithmParams,
   ) {}
 
-  public calculateCoordinates(): ReadonlyMap<Identifier, Point> {
-    const layers = this.calculateLayers();
-    const nodeY = this.calculateY(layers);
+  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
+    const layers = this.calculateLayers(graph);
+    const nodeY = this.calculateY(layers, graph);
     const coords = new Map<Identifier, Point>();
 
     layers.forEach((layer, depth) => {
@@ -40,6 +38,7 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
 
   private calculateY(
     layers: ReadonlyMap<number, ReadonlySet<Identifier>>,
+    graph: Graph,
   ): ReadonlyMap<Identifier, number> {
     const nodeY = new Map<Identifier, number>();
 
@@ -54,13 +53,13 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
       const layerHalfHeight = (this.params.layerSpace * (layer.size - 1)) / 2;
 
       layer.forEach((nodeId) => {
-        const incomingEdges = this.graph.getNodeIncomingEdgeIds(nodeId)!;
+        const incomingEdges = graph.getNodeIncomingEdgeIds(nodeId)!;
 
         const incomingNodeIds = new Set<Identifier>();
 
         incomingEdges.forEach((edgeId) => {
-          const edge = this.graph.getEdge(edgeId)!;
-          const sourcePort = this.graph.getPort(edge.from)!;
+          const edge = graph.getEdge(edgeId)!;
+          const sourcePort = graph.getPort(edge.from)!;
 
           if (sourcePort.nodeId !== nodeId) {
             incomingNodeIds.add(sourcePort.nodeId);
@@ -94,7 +93,9 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
     return nodeY;
   }
 
-  private calculateLayers(): ReadonlyMap<number, ReadonlySet<Identifier>> {
+  private calculateLayers(
+    graph: Graph,
+  ): ReadonlyMap<number, ReadonlySet<Identifier>> {
     const layers = new Map<number, Set<Identifier>>();
 
     const visited = new Set<Identifier>([this.params.startNodeId]);
@@ -106,12 +107,12 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
       const nextLayerStack: Identifier[] = [];
 
       currentLayerStack.forEach((nodeId) => {
-        const outgoingEdges = this.graph.getNodeOutgoingEdgeIds(nodeId);
+        const outgoingEdges = graph.getNodeOutgoingEdgeIds(nodeId);
 
         if (outgoingEdges !== null) {
           outgoingEdges.forEach((edgeId) => {
-            const edge = this.graph.getEdge(edgeId)!;
-            const port = this.graph.getPort(edge.to)!;
+            const edge = graph.getEdge(edgeId)!;
+            const port = graph.getPort(edge.to)!;
 
             if (!visited.has(port.nodeId)) {
               visited.add(port.nodeId);
