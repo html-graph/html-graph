@@ -1,7 +1,9 @@
-import { Identifier } from "@/identifier";
-import { LayoutAlgorithm } from "../layout-algorithm";
-import { Graph } from "@/graph";
-import { Point } from "@/point";
+import {
+  Graph,
+  Identifier,
+  LayoutAlgorithm,
+  Point,
+} from "@html-graph/html-graph";
 
 interface HeirarchicalLayoutAlgorithmParams {
   readonly startNodeId: Identifier;

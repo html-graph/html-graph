@@ -1,8 +1,15 @@
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { EventHandler } from "@/event-subject";
+import { LayoutAlgorithm, TransformationMatrix } from "@/layout-algorithm";
 
 export interface LayoutConfig {
   readonly algorithm: LayoutAlgorithm;
-  readonly strategy: {
-    readonly type: "topologyChange";
-  };
+  readonly applicationStrategy:
+    | {
+        readonly type: "topologyChange";
+      }
+    | {
+        readonly type: "manual";
+        readonly trigger: EventHandler<void>;
+      };
+  readonly transform?: TransformationMatrix | undefined;
 }

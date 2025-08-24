@@ -1,28 +1,7 @@
-import {
-  AddNodeRequest,
-  Canvas,
-  CanvasBuilder,
-  HeirarchicalLayoutAlgorithm,
-  TransformLayoutAlgorithm,
-} from "@html-graph/html-graph";
+import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 import graphData from "./graph.json";
-
-const layoutAlgorithm = new TransformLayoutAlgorithm({
-  baseAlgorithm: new HeirarchicalLayoutAlgorithm({
-    startNodeId: 0,
-    layerSize: 300,
-    layerSpace: 200,
-  }),
-  matrix: {
-    a: 1,
-    b: 0,
-    c: 200,
-    d: 0,
-    e: 1,
-    f: 400,
-  },
-});
+import { HeirarchicalLayoutAlgorithm } from "./heirarchical-layout-algorithm";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
@@ -30,9 +9,21 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableBackground()
   .enableLayout({
-    algorithm: layoutAlgorithm,
-    strategy: {
+    algorithm: new HeirarchicalLayoutAlgorithm({
+      startNodeId: 0,
+      layerSize: 300,
+      layerSpace: 200,
+    }),
+    applicationStrategy: {
       type: "topologyChange",
+    },
+    transform: {
+      a: 1,
+      b: 0,
+      c: 200,
+      d: 0,
+      e: 1,
+      f: 400,
     },
   })
   .build();
