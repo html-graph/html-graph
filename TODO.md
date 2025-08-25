@@ -3,8 +3,6 @@
 - default layout
 - tree layout
 
-
-
 - port and node svg elements
 - improve update events
 - user selectable nodes? lasso selection? multiselection?
