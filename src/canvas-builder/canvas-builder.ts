@@ -302,10 +302,7 @@ export class CanvasBuilder {
     }
 
     if (this.layoutConfig !== undefined) {
-      LayoutConfigurator.configure(
-        canvas,
-        this.layoutConfig,
-      );
+      LayoutConfigurator.configure(canvas, this.layoutConfig);
     }
 
     const onBeforeDestroy = (): void => {
