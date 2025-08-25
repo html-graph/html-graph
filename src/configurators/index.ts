@@ -33,5 +33,6 @@ export type {
 
 export type { MouseEventVerifier } from "./shared";
 
-export { LayoutConfigurator } from "./layout-configurator";
-export type { LayoutConfig } from "./layout-configurator";
+export { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
+
+export { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-change-layout-application-strategy-configurator";

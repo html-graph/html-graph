@@ -1,8 +1,10 @@
 import { TransformLayoutAlgorithm } from "@/layout-algorithm";
 import { LayoutConfig } from "./layout-config";
-import { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-change-layout-application-strategy-configurator";
-import { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
 import { Canvas } from "@/canvas";
+import {
+  ManualLayoutApplicationStrategyConfigurator,
+  TopologyChangeLayoutApplicationStrategyConfigurator,
+} from "@/configurators";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, config: LayoutConfig): void {

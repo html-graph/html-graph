@@ -8,6 +8,7 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,
+  LayoutConfig,
 } from "./canvas-builder";
 
 export { CanvasError } from "./canvas";
