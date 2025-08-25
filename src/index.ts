@@ -8,6 +8,7 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,
+  LayoutConfig,
 } from "./canvas-builder";
 
 export { CanvasError } from "./canvas";
@@ -77,4 +78,3 @@ export type { Identifier } from "./identifier";
 export type { LayoutAlgorithm, TransformationMatrix } from "./layout-algorithm";
 
 export { EventSubject } from "./event-subject";
-export type { EventEmitter, EventHandler } from "./event-subject";

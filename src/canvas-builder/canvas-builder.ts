@@ -11,8 +11,6 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  LayoutConfigurator,
-  LayoutConfig,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
@@ -50,6 +48,7 @@ import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { LayoutConfig, LayoutConfigurator } from "./layout-configurator";
 
 export class CanvasBuilder {
   private used = false;

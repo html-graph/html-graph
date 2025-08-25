@@ -10,3 +10,4 @@ export type {
   ScaleLimitPreprocessorParams,
 } from "./create-transformable-viewport-params";
 export { CanvasBuilderError } from "./canvas-builder-error";
+export type { LayoutConfig } from "./layout-configurator";
