@@ -9,6 +9,8 @@ import {
   wait,
 } from "@/mocks";
 import { CanvasBuilderError } from "./canvas-builder-error";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { EventSubject } from "@/event-subject";
 
 const setLayersDimensions = (element: HTMLElement): void => {
   for (const child of element.children[0].children) {
@@ -341,5 +343,28 @@ describe("CanvasBuilder", () => {
       priority: 0,
       shape,
     });
+  });
+
+  it("should build canvas with specified layout", () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    const trigger = new EventSubject<void>();
+
+    const canvas = builder
+      .enableLayout({
+        algorithm: new DummyLayoutAlgorithm(),
+        applicationStrategy: {
+          type: "manual",
+          trigger,
+        },
+      })
+      .build();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    trigger.emit();
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 });

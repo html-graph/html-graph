@@ -32,3 +32,6 @@ export type {
 } from "./user-draggable-edges-configurator";
 
 export type { MouseEventVerifier } from "./shared";
+
+export { LayoutConfigurator } from "./layout-configurator";
+export type { LayoutConfig } from "./layout-configurator";

@@ -73,3 +73,8 @@ export type { CenterFn } from "./center-fn";
 export type { PriorityFn } from "./priority";
 
 export type { Identifier } from "./identifier";
+
+export type { LayoutAlgorithm, TransformationMatrix } from "./layout-algorithm";
+
+export { EventSubject } from "./event-subject";
+export type { EventEmitter, EventHandler } from "./event-subject";

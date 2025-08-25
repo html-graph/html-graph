@@ -11,6 +11,8 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
+  LayoutConfigurator,
+  LayoutConfig,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
@@ -65,6 +67,8 @@ export class CanvasBuilder {
   private draggableEdgesConfig: DraggableEdgesConfig = {};
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
+
+  private layoutConfig: LayoutConfig | undefined = undefined;
 
   private hasDraggableNode = false;
 
@@ -166,11 +170,23 @@ export class CanvasBuilder {
     return this;
   }
 
+  /**
+   * enables edges dragging by dragging one of the adjacent ports
+   */
   public enableUserDraggableEdges(
     config?: DraggableEdgesConfig,
   ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
     this.draggableEdgesConfig = config ?? {};
+
+    return this;
+  }
+
+  /**
+   * enables nodes positioning with specified layout
+   */
+  public enableLayout(config: LayoutConfig): CanvasBuilder {
+    this.layoutConfig = config;
 
     return this;
   }
@@ -283,6 +299,10 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
       );
+    }
+
+    if (this.layoutConfig !== undefined) {
+      LayoutConfigurator.configure(canvas, this.layoutConfig);
     }
 
     const onBeforeDestroy = (): void => {
