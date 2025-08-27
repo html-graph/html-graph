@@ -1,5 +1,6 @@
 # TODO
 
+- correct node incoming, outgoing, cycle edges
 - default layout
 - tree layout
 

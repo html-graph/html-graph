@@ -1,0 +1,13 @@
+.node {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: var(--color-node-background);
+  border: 1px solid var(--color-node-border);
+  box-shadow: 0 0 5px var(--color-node-border);
+  border-radius: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
