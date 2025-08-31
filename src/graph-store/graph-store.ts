@@ -308,7 +308,7 @@ export class GraphStore {
 
   public getNodeIncomingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    const res = new Set<Identifier>();
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
       this.getPortIncomingEdgeIds(portId)
@@ -319,7 +319,7 @@ export class GraphStore {
           return sourcePort.nodeId !== nodeId;
         })
         .forEach((edgeId) => {
-          res.add(edgeId);
+          res.push(edgeId);
         });
     });
 
@@ -328,7 +328,7 @@ export class GraphStore {
 
   public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    const res = new Set<Identifier>();
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
       this.getPortOutgoingEdgeIds(portId)
@@ -339,20 +339,20 @@ export class GraphStore {
           return targetPort.nodeId !== nodeId;
         })
         .forEach((edgeId) => {
-          res.add(edgeId);
+          res.push(edgeId);
         });
     });
 
-    return Array.from(res);
+    return res;
   }
 
   public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    const res = new Set<Identifier>();
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
       this.getPortCycleEdgeIds(portId).forEach((edgeId) => {
-        res.add(edgeId);
+        res.push(edgeId);
       });
 
       this.getPortIncomingEdgeIds(portId)
@@ -363,32 +363,32 @@ export class GraphStore {
           return targetPort.nodeId === nodeId;
         })
         .forEach((edgeId) => {
-          res.add(edgeId);
+          res.push(edgeId);
         });
     });
 
-    return Array.from(res);
+    return res;
   }
 
   public getNodeAdjacentEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    const res = new Set<Identifier>();
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
       this.getPortIncomingEdgeIds(portId).forEach((edgeId) => {
-        res.add(edgeId);
+        res.push(edgeId);
       });
 
       this.getPortOutgoingEdgeIds(portId).forEach((edgeId) => {
-        res.add(edgeId);
+        res.push(edgeId);
       });
 
       this.getPortCycleEdgeIds(portId).forEach((edgeId) => {
-        res.add(edgeId);
+        res.push(edgeId);
       });
     });
 
-    return Array.from(res);
+    return res;
   }
 
   private addEdgeInternal(request: AddEdgeRequest): void {

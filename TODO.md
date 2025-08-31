@@ -1,7 +1,6 @@
 # TODO
 
-- correct node incoming, outgoing, cycle edges
-- default layout
+- default force directed layout
 - tree layout
 
 - port and node svg elements
