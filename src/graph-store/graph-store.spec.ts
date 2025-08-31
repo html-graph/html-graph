@@ -233,6 +233,7 @@ describe("GraphStore", () => {
     const store = new GraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
+
     store.addNode(addNodeRequest1);
 
     expect(store.getAllNodeIds()).toEqual([addNodeRequest1.id]);
@@ -353,6 +354,7 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
 
@@ -370,6 +372,7 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
 
@@ -383,6 +386,7 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.removePort(addPortRequestOut1.id);
@@ -421,6 +425,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -451,6 +456,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -468,6 +474,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -507,6 +514,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -533,6 +541,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -570,6 +579,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -594,6 +604,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -611,6 +622,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -633,6 +645,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -673,6 +686,7 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.clear();
@@ -685,8 +699,10 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
+
     store.clear();
 
     expect(store.getNodePortIds(addNodeRequest1.id)).toEqual(undefined);
@@ -700,6 +716,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -718,6 +735,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -737,6 +755,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -754,6 +773,7 @@ describe("GraphStore", () => {
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addEdge(addEdgeRequest11);
@@ -771,6 +791,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -790,6 +811,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -807,6 +829,7 @@ describe("GraphStore", () => {
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addEdge(addEdgeRequest11);
@@ -824,6 +847,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -842,6 +866,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn1 = createAddPortRequestIn1();
     const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addPort(addPortRequestIn1);
@@ -858,6 +883,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -876,6 +902,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn1 = createAddPortRequestIn1();
     const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addPort(addPortRequestIn1);
@@ -890,6 +917,7 @@ describe("GraphStore", () => {
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addEdge(addEdgeRequest11);
@@ -906,6 +934,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn1 = createAddPortRequestIn1();
     const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addPort(addPortRequestIn1);
@@ -924,6 +953,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -943,6 +973,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest12 = createAddEdgeRequest1Out2In();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addNode(addNodeRequest2);
@@ -960,6 +991,7 @@ describe("GraphStore", () => {
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequestOut1);
     store.addEdge(addEdgeRequest11);
@@ -977,6 +1009,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
     store.addPort(addPortRequestOut1);
@@ -1003,6 +1036,7 @@ describe("GraphStore", () => {
     const addPortRequestOut1 = createAddPortRequestOut1();
     const addPortRequestIn2 = createAddPortRequestIn2();
     const addEdgeRequest11 = createAddEdgeRequest1Out1Out();
+
     store.addNode(addNodeRequest1);
     store.addNode(addNodeRequest2);
     store.addPort(addPortRequestOut1);
