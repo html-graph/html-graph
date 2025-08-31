@@ -323,7 +323,7 @@ export class GraphStore {
         });
     });
 
-    return Array.from(res);
+    return res;
   }
 
   public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
