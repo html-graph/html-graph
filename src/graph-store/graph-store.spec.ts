@@ -864,12 +864,12 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1Out = createAddPortRequest1Out();
-    const addPortRequestIn1 = createAddPortRequest1In();
+    const addPortRequest1In = createAddPortRequest1In();
     const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1Out);
-    store.addPort(addPortRequestIn1);
+    store.addPort(addPortRequest1In);
     store.addEdge(addEdgeRequest1Out1In);
 
     expect(store.getNodeIncomingEdgeIds(addNodeRequest1.id)).toEqual([]);
@@ -900,12 +900,12 @@ describe("GraphStore", () => {
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1Out = createAddPortRequest1Out();
-    const addPortRequestIn1 = createAddPortRequest1In();
+    const addPortRequest1In = createAddPortRequest1In();
     const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1Out);
-    store.addPort(addPortRequestIn1);
+    store.addPort(addPortRequest1In);
     store.addEdge(addEdgeRequest1Out1In);
 
     expect(store.getNodeOutgoingEdgeIds(addNodeRequest1.id)).toEqual([]);
@@ -927,17 +927,17 @@ describe("GraphStore", () => {
     ]);
   });
 
-  it("should include port incoming edge with the same source in node cycle edges", () => {
+  it("should include port incoming edge with the same source node in cycle edges", () => {
     const store = new GraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
     const addPortRequest1Out = createAddPortRequest1Out();
-    const addPortRequestIn1 = createAddPortRequest1In();
+    const addPortRequest1In = createAddPortRequest1In();
     const addEdgeRequestOut1In1 = createAddEdgeRequest1Out1In();
 
     store.addNode(addNodeRequest1);
     store.addPort(addPortRequest1Out);
-    store.addPort(addPortRequestIn1);
+    store.addPort(addPortRequest1In);
     store.addEdge(addEdgeRequestOut1In1);
 
     expect(store.getNodeCycleEdgeIds(addNodeRequest1.id)).toEqual([
@@ -945,22 +945,22 @@ describe("GraphStore", () => {
     ]);
   });
 
-  it("should not include port incoming edges to node cycle edges", () => {
+  it("should not include incoming edges from different node to node cycle edges", () => {
     const store = new GraphStore();
 
     const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
     const addPortRequest1Out = createAddPortRequest1Out();
-    const addPortRequestIn1 = createAddPortRequest1In();
-    const addEdgeRequest1Out1In = createAddEdgeRequest1Out1In();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
 
     store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
     store.addPort(addPortRequest1Out);
-    store.addPort(addPortRequestIn1);
-    store.addEdge(addEdgeRequest1Out1In);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out2In);
 
-    expect(store.getNodeCycleEdgeIds(addNodeRequest1.id)).toEqual([
-      addEdgeRequest1Out1In.id,
-    ]);
+    expect(store.getNodeCycleEdgeIds(addNodeRequest1.id)).toEqual([]);
   });
 
   it("should return node incoming edge ids as adjacent edges", () => {
