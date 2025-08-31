@@ -20,11 +20,11 @@ export class GraphStore {
 
   private readonly nodesElementsMap = new Map<HTMLElement, Identifier>();
 
-  private readonly incomingEdges = new Map<Identifier, Set<Identifier>>();
+  private readonly portIncomingEdges = new Map<Identifier, Set<Identifier>>();
 
-  private readonly outcomingEdges = new Map<Identifier, Set<Identifier>>();
+  private readonly portOutcomingEdges = new Map<Identifier, Set<Identifier>>();
 
-  private readonly cycleEdges = new Map<Identifier, Set<Identifier>>();
+  private readonly portCycleEdges = new Map<Identifier, Set<Identifier>>();
 
   private readonly elementPorts = new OneToManyCollection<
     HTMLElement,
@@ -178,9 +178,9 @@ export class GraphStore {
 
     this.elementPorts.addRecord(request.element, request.id);
 
-    this.cycleEdges.set(request.id, new Set());
-    this.incomingEdges.set(request.id, new Set());
-    this.outcomingEdges.set(request.id, new Set());
+    this.portCycleEdges.set(request.id, new Set());
+    this.portIncomingEdges.set(request.id, new Set());
+    this.portOutcomingEdges.set(request.id, new Set());
 
     this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
     this.afterPortAddedEmitter.emit(request.id);
@@ -275,9 +275,9 @@ export class GraphStore {
 
   public clear(): void {
     this.beforeClearEmitter.emit();
-    this.incomingEdges.clear();
-    this.outcomingEdges.clear();
-    this.cycleEdges.clear();
+    this.portIncomingEdges.clear();
+    this.portOutcomingEdges.clear();
+    this.portCycleEdges.clear();
     this.elementPorts.clear();
     this.nodesElementsMap.clear();
 
@@ -287,15 +287,15 @@ export class GraphStore {
   }
 
   public getPortIncomingEdgeIds(portId: Identifier): readonly Identifier[] {
-    return Array.from(this.incomingEdges.get(portId)!);
+    return Array.from(this.portIncomingEdges.get(portId)!);
   }
 
   public getPortOutgoingEdgeIds(portId: Identifier): readonly Identifier[] {
-    return Array.from(this.outcomingEdges.get(portId)!);
+    return Array.from(this.portOutcomingEdges.get(portId)!);
   }
 
   public getPortCycleEdgeIds(portId: Identifier): readonly Identifier[] {
-    return Array.from(this.cycleEdges.get(portId)!);
+    return Array.from(this.portCycleEdges.get(portId)!);
   }
 
   public getPortAdjacentEdgeIds(portId: Identifier): readonly Identifier[] {
@@ -308,10 +308,19 @@ export class GraphStore {
 
   public getNodeIncomingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: Identifier[] = [];
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortIncomingEdgeIds(portId)];
+      this.getPortIncomingEdgeIds(portId)
+        .filter((edgeId) => {
+          const edge = this.getEdge(edgeId)!;
+          const sourcePort = this.getPort(edge.from)!;
+
+          return sourcePort.nodeId !== nodeId;
+        })
+        .forEach((edgeId) => {
+          res.push(edgeId);
+        });
     });
 
     return res;
@@ -319,10 +328,19 @@ export class GraphStore {
 
   public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: Identifier[] = [];
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortOutgoingEdgeIds(portId)];
+      this.getPortOutgoingEdgeIds(portId)
+        .filter((edgeId) => {
+          const edge = this.getEdge(edgeId)!;
+          const targetPort = this.getPort(edge.to)!;
+
+          return targetPort.nodeId !== nodeId;
+        })
+        .forEach((edgeId) => {
+          res.push(edgeId);
+        });
     });
 
     return res;
@@ -330,21 +348,47 @@ export class GraphStore {
 
   public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: Identifier[] = [];
+    const res: Identifier[] = [];
 
     ports.forEach((portId) => {
-      res = [...res, ...this.getPortCycleEdgeIds(portId)];
+      this.getPortCycleEdgeIds(portId).forEach((edgeId) => {
+        res.push(edgeId);
+      });
+
+      this.getPortIncomingEdgeIds(portId)
+        .filter((edgeId) => {
+          const edge = this.getEdge(edgeId)!;
+          const targetPort = this.getPort(edge.to)!;
+
+          return targetPort.nodeId === nodeId;
+        })
+        .forEach((edgeId) => {
+          res.push(edgeId);
+        });
     });
 
     return res;
   }
 
   public getNodeAdjacentEdgeIds(nodeId: Identifier): readonly Identifier[] {
-    return [
-      ...this.getNodeIncomingEdgeIds(nodeId),
-      ...this.getNodeOutgoingEdgeIds(nodeId),
-      ...this.getNodeCycleEdgeIds(nodeId),
-    ];
+    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
+    const res: Identifier[] = [];
+
+    ports.forEach((portId) => {
+      this.getPortIncomingEdgeIds(portId).forEach((edgeId) => {
+        res.push(edgeId);
+      });
+
+      this.getPortOutgoingEdgeIds(portId).forEach((edgeId) => {
+        res.push(edgeId);
+      });
+
+      this.getPortCycleEdgeIds(portId).forEach((edgeId) => {
+        res.push(edgeId);
+      });
+    });
+
+    return res;
   }
 
   private addEdgeInternal(request: AddEdgeRequest): void {
@@ -358,10 +402,10 @@ export class GraphStore {
     });
 
     if (request.from !== request.to) {
-      this.outcomingEdges.get(request.from)!.add(request.id);
-      this.incomingEdges.get(request.to)!.add(request.id);
+      this.portOutcomingEdges.get(request.from)!.add(request.id);
+      this.portIncomingEdges.get(request.to)!.add(request.id);
     } else {
-      this.cycleEdges.get(request.from)!.add(request.id);
+      this.portCycleEdges.get(request.from)!.add(request.id);
     }
   }
 
@@ -370,12 +414,12 @@ export class GraphStore {
     const portFromId = edge.from;
     const portToId = edge.to;
 
-    this.cycleEdges.get(portFromId)!.delete(edgeId);
-    this.cycleEdges.get(portToId)!.delete(edgeId);
-    this.incomingEdges.get(portFromId)!.delete(edgeId);
-    this.incomingEdges.get(portToId)!.delete(edgeId);
-    this.outcomingEdges.get(portFromId)!.delete(edgeId);
-    this.outcomingEdges.get(portToId)!.delete(edgeId);
+    this.portCycleEdges.get(portFromId)!.delete(edgeId);
+    this.portCycleEdges.get(portToId)!.delete(edgeId);
+    this.portIncomingEdges.get(portFromId)!.delete(edgeId);
+    this.portIncomingEdges.get(portToId)!.delete(edgeId);
+    this.portOutcomingEdges.get(portFromId)!.delete(edgeId);
+    this.portOutcomingEdges.get(portToId)!.delete(edgeId);
 
     this.edges.delete(edgeId);
   }

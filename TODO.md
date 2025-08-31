@@ -1,6 +1,6 @@
 # TODO
 
-- default layout
+- default force directed layout
 - tree layout
 
 - port and node svg elements
