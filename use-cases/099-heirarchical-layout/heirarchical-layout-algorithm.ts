@@ -63,9 +63,7 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
           const edge = graph.getEdge(edgeId)!;
           const sourcePort = graph.getPort(edge.from)!;
 
-          if (sourcePort.nodeId !== nodeId) {
-            incomingNodeIds.add(sourcePort.nodeId);
-          }
+          incomingNodeIds.add(sourcePort.nodeId);
         });
 
         const prevLayer = layers.get(depth - 1)!;
