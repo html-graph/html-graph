@@ -308,40 +308,42 @@ export class GraphStore {
 
   public getNodeIncomingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: Identifier[] = [];
+    const res = new Set<Identifier>();
 
     ports.forEach((portId) => {
-      res = [
-        ...res,
-        ...this.getPortIncomingEdgeIds(portId).filter((edgeId) => {
+      this.getPortIncomingEdgeIds(portId)
+        .filter((edgeId) => {
           const edge = this.getEdge(edgeId)!;
           const sourcePort = this.getPort(edge.from)!;
 
           return sourcePort.nodeId !== nodeId;
-        }),
-      ];
+        })
+        .forEach((edgeId) => {
+          res.add(edgeId);
+        });
     });
 
-    return res;
+    return Array.from(res);
   }
 
   public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
     const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
-    let res: Identifier[] = [];
+    const res = new Set<Identifier>();
 
     ports.forEach((portId) => {
-      res = [
-        ...res,
-        ...this.getPortOutgoingEdgeIds(portId).filter((edgeId) => {
+      this.getPortOutgoingEdgeIds(portId)
+        .filter((edgeId) => {
           const edge = this.getEdge(edgeId)!;
           const targetPort = this.getPort(edge.to)!;
 
           return targetPort.nodeId !== nodeId;
-        }),
-      ];
+        })
+        .forEach((edgeId) => {
+          res.add(edgeId);
+        });
     });
 
-    return res;
+    return Array.from(res);
   }
 
   public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] {
