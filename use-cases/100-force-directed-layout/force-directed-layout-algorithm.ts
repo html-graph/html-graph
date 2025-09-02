@@ -43,7 +43,11 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     });
 
     for (let i = 0; i < this.params.iterations; i++) {
-      this.iterate(coords, outgoingSet);
+      this.iterateAdjacent(coords, outgoingSet);
+    }
+
+    for (let i = 0; i < this.params.iterations * 10; i++) {
+      this.iterateAll(coords);
     }
 
     return coords;
@@ -64,7 +68,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     }
   }
 
-  private iterate(
+  private iterateAdjacent(
     coords: Map<Identifier, { x: number; y: number }>,
     outgoingSet: Map<Identifier, Set<Identifier>>,
   ): void {
@@ -103,14 +107,53 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
       vectors.forEach((vector) => {
         const dd = vector.distance - this.params.perfectDistance;
-        console.log(dd);
 
-        dx += vector.ex * dd;
-        dy += vector.ey * dd;
+        dx += vector.ex * dd * 0.5;
+        dy += vector.ey * dd * 0.5;
       });
 
-      coords.set(nodeId, { x: point.x + dx, y: point.y + dy });
+      coords.set(nodeId, {
+        x: point.x + dx / vectors.size,
+        y: point.y + dy / vectors.size,
+      });
     });
+  }
+
+  private iterateAll(coords: Map<Identifier, { x: number; y: number }>): void {
+    const iter = coords.entries();
+    let current = iter.next();
+
+    while (!current.done) {
+      const [nodeId, nodeCoords] = current.value;
+      const iter2 = coords.entries();
+      let current2 = iter2.next();
+
+      let dx = 0;
+      let dy = 0;
+
+      while (!current2.done) {
+        const [nodeId2, nodeCoords2] = current2.value;
+
+        if (nodeId2 !== nodeId) {
+          const x = nodeCoords2.x - nodeCoords.x;
+          const y = nodeCoords2.y - nodeCoords.y;
+          const distance = Math.sqrt(x * x + y * y);
+          const dd = distance - this.params.perfectDistance;
+
+          dx += (x / distance) * dd;
+          dy += (y / distance) * dd;
+        }
+
+        current2 = iter2.next();
+      }
+
+      coords.set(nodeId, {
+        x: nodeCoords.x + (dx / (coords.size - 1)) * 0.5,
+        y: nodeCoords.y + (dy / (coords.size - 1)) * 0.5,
+      });
+
+      current = iter.next();
+    }
   }
 
   private sfc32(a: number, b: number, c: number, d: number) {

@@ -20,13 +20,16 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
+  .enableUserDraggableNodes({
+    moveEdgesOnTop: false,
+  })
   .enableBackground()
   .enableLayout({
     algorithm: new ForceDirectedLayoutAlgorithm({
       boundingWidth: 1000,
       boundingHeight: 1000,
-      iterations: 1,
-      perfectDistance: 200,
+      iterations: 10,
+      perfectDistance: 500,
     }),
     applyOn: {
       type: "topologyChange",
@@ -45,6 +48,7 @@ const canvas: Canvas = builder
 graphData.nodes.forEach((nodeId) => {
   const element = document.createElement("div");
   element.classList.add("node");
+  element.innerText = `${nodeId}`;
 
   canvas.addNode({
     id: nodeId,
@@ -59,5 +63,5 @@ graphData.nodes.forEach((nodeId) => {
 });
 
 graphData.edges.forEach((edge) => {
-  canvas.addEdge({ id: edge.id, from: edge.from, to: edge.to });
+  canvas.addEdge({ from: edge.from, to: edge.to });
 });
