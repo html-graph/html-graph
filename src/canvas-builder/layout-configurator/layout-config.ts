@@ -3,7 +3,7 @@ import { LayoutAlgorithm, TransformationMatrix } from "@/layout-algorithm";
 
 export interface LayoutConfig {
   readonly algorithm: LayoutAlgorithm;
-  readonly applicationStrategy:
+  readonly applyOn:
     | {
         readonly type: "topologyChange";
       }

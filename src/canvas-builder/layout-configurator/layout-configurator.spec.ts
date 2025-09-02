@@ -36,7 +36,7 @@ describe("LayoutConfigurator", () => {
     const canvas = createCanvas();
     const config: LayoutConfig = {
       algorithm: new DummyLayoutAlgorithm(),
-      applicationStrategy: { type: "topologyChange" },
+      applyOn: { type: "topologyChange" },
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -54,7 +54,7 @@ describe("LayoutConfigurator", () => {
     const trigger = new EventSubject<void>();
     const config: LayoutConfig = {
       algorithm: new DummyLayoutAlgorithm(),
-      applicationStrategy: { type: "manual", trigger },
+      applyOn: { type: "manual", trigger },
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -73,7 +73,7 @@ describe("LayoutConfigurator", () => {
     const trigger = new EventSubject<void>();
     const config: LayoutConfig = {
       algorithm: new DummyLayoutAlgorithm(),
-      applicationStrategy: { type: "manual", trigger },
+      applyOn: { type: "manual", trigger },
       transform: {
         a: 1,
         b: 0,

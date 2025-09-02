@@ -15,7 +15,7 @@ export class LayoutConfigurator {
         })
       : config.algorithm;
 
-    const strategy = config.applicationStrategy;
+    const strategy = config.applyOn;
 
     switch (strategy.type) {
       case "topologyChange":
