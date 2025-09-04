@@ -28,7 +28,7 @@ const canvas: Canvas = builder
     algorithm: new ForceDirectedLayoutAlgorithm({
       boundingWidth: 1000,
       boundingHeight: 1000,
-      iterations: 10,
+      iterations: 5,
       perfectDistance: 500,
     }),
     applyOn: {
