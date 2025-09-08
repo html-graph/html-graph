@@ -31,9 +31,7 @@ const canvas: Canvas = builder
       iterations: 5,
       perfectDistance: 500,
     }),
-    applyOn: {
-      type: "topologyChange",
-    },
+    applyOn: "topologyChange",
     transform: {
       a: 1,
       b: 0,

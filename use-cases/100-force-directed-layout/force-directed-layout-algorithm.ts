@@ -5,7 +5,7 @@ import {
   Point,
 } from "@html-graph/html-graph";
 import { MutablePoint } from "./mutable-point";
-import { AlgorithmIteration } from "./algorithm";
+import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
 interface Vector {
   readonly distance: number;
@@ -50,10 +50,13 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     });
 
     for (let i = 0; i < this.params.iterations; i++) {
-      const dt = 1;
-      console.log(i, dt);
-      const iteration = new AlgorithmIteration(graph, coords);
-      iteration.updateCoordinates();
+      const iteration = new PhysicalSimulationIteration(
+        graph,
+        coords,
+        velocities,
+        1,
+      );
+      iteration.next();
       // this.iterateAdjacent(coords, outgoingSet);
     }
 

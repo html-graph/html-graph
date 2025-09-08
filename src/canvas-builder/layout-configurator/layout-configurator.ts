@@ -5,6 +5,7 @@ import {
   ManualLayoutApplicationStrategyConfigurator,
   TopologyChangeLayoutApplicationStrategyConfigurator,
 } from "@/configurators";
+import { EventSubject } from "@/event-subject";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, config: LayoutConfig): void {
@@ -17,21 +18,21 @@ export class LayoutConfigurator {
 
     const strategy = config.applyOn;
 
-    switch (strategy.type) {
+    if (strategy instanceof EventSubject) {
+      ManualLayoutApplicationStrategyConfigurator.configure(
+        canvas,
+        algorithm,
+        strategy,
+      );
+    }
+
+    switch (strategy) {
       case "topologyChange":
         TopologyChangeLayoutApplicationStrategyConfigurator.configure(
           canvas,
           algorithm,
         );
         break;
-      case "manual": {
-        ManualLayoutApplicationStrategyConfigurator.configure(
-          canvas,
-          algorithm,
-          strategy.trigger,
-        );
-        break;
-      }
     }
   }
 }
