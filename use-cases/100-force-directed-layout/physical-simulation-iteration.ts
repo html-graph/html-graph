@@ -1,27 +1,27 @@
 import { Graph, Identifier } from "@html-graph/html-graph";
 import { MutablePoint } from "./mutable-point";
 
-interface NodeDistance {
+interface Vector {
   readonly ex: number;
   readonly ey: number;
   readonly d: number;
 }
 
 export class PhysicalSimulationIteration {
-  private readonly perfectDistance = 500;
-
   private readonly mass = 1;
 
-  private readonly k = 1_000_000;
+  private readonly k: number;
 
-  private readonly elasticity = 0.01;
+  private readonly elasticity = 0.1;
 
   public constructor(
     private readonly graph: Graph,
     private readonly coords: Map<Identifier, MutablePoint>,
-    private readonly velocities: Map<Identifier, MutablePoint>,
     private readonly dt: number,
-  ) {}
+    private readonly perfectDistance: number,
+  ) {
+    this.k = this.perfectDistance * this.perfectDistance * 100;
+  }
 
   public next(): void {
     const forces = new Map<Identifier, MutablePoint>();
@@ -35,12 +35,12 @@ export class PhysicalSimulationIteration {
     let i = 0,
       j;
 
-    const distances = new Map<Identifier, Map<Identifier, NodeDistance>>();
+    const distances = new Map<Identifier, Map<Identifier, Vector>>();
 
     for (; i < nodeIds.length; i++) {
       const nodeIdFrom = nodeIds[i];
       const coordsFrom = this.coords.get(nodeIdFrom)!;
-      const nodeFromDistances = new Map<Identifier, NodeDistance>();
+      const nodeFromDistances = new Map<Identifier, Vector>();
 
       for (j = i + 1; j < nodeIds.length; j++) {
         const nodeIdTo = nodeIds[j];
@@ -74,16 +74,18 @@ export class PhysicalSimulationIteration {
       const portFrom = this.graph.getPort(edge.from)!;
       const portTo = this.graph.getPort(edge.to)!;
 
-      const dist =
+      const has =
         distances.has(portFrom.nodeId) &&
-        distances.get(portFrom.nodeId)!.has(portTo.nodeId)
-          ? distances.get(portFrom.nodeId)!.get(portTo.nodeId)!
-          : distances.get(portTo.nodeId)!.get(portFrom.nodeId)!;
+        distances.get(portFrom.nodeId)!.has(portTo.nodeId);
+
+      const dist = has
+        ? distances.get(portFrom.nodeId)!.get(portTo.nodeId)!
+        : distances.get(portTo.nodeId)!.get(portFrom.nodeId)!;
 
       const offset = dist.d - this.perfectDistance;
 
-      const fx = ((dist.ex * offset) / 2) * this.elasticity;
-      const fy = ((dist.ey * offset) / 2) * this.elasticity;
+      const fx = (((has ? dist.ex : -dist.ex) * offset) / 2) * this.elasticity;
+      const fy = (((has ? dist.ey : -dist.ey) * offset) / 2) * this.elasticity;
 
       const forceFrom = forces.get(portFrom.nodeId)!;
       forceFrom.x += fx;
@@ -94,15 +96,13 @@ export class PhysicalSimulationIteration {
       forceTo.y -= fy;
     });
 
-    forces.forEach((force, nodeId) => {
-      const velocity = this.velocities.get(nodeId)!;
-
-      velocity.x += (force.x / this.mass) * this.dt;
-      velocity.y += (force.y / this.mass) * this.dt;
-    });
-
     this.coords.forEach((coord, nodeId) => {
-      const velocity = this.velocities.get(nodeId)!;
+      const force = forces.get(nodeId)!;
+
+      const velocity: MutablePoint = {
+        x: (force.x / this.mass) * this.dt,
+        y: (force.y / this.mass) * this.dt,
+      };
 
       coord.x += velocity.x * this.dt;
       coord.y += velocity.y * this.dt;

@@ -13,7 +13,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       readonly boundingWidth: number;
       readonly boundingHeight: number;
       readonly iterations: number;
-      readonly perfectDistance: number;
+      readonly equilibriumEdgeLength: number;
     },
   ) {}
 
@@ -22,23 +22,20 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     const rand = this.sfc32(seed[0], seed[1], seed[2], seed[3]);
 
     const coords = new Map<Identifier, MutablePoint>();
-    const velocities = new Map<Identifier, MutablePoint>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
       coords.set(nodeId, {
         x: rand() * this.params.boundingWidth,
         y: rand() * this.params.boundingHeight,
       });
-
-      velocities.set(nodeId, { x: 0, y: 0 });
     });
 
     for (let i = 0; i < this.params.iterations; i++) {
       const iteration = new PhysicalSimulationIteration(
         graph,
         coords,
-        velocities,
         1,
+        this.params.equilibriumEdgeLength,
       );
       iteration.next();
     }
