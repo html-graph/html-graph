@@ -9,6 +9,8 @@ import { EventSubject } from "@/event-subject";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, config: LayoutConfig): void {
+    // this might not work as expected,
+    // as algorithm gets applied each time instead of once
     const algorithm = config.transform
       ? new TransformLayoutAlgorithm({
           baseAlgorithm: config.algorithm,

@@ -7,12 +7,6 @@ import {
 import { MutablePoint } from "./mutable-point";
 import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
-interface Vector {
-  readonly distance: number;
-  readonly ex: number;
-  readonly ey: number;
-}
-
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
     private readonly params: {
@@ -26,11 +20,9 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const seed = this.cyrb128("chstytwwbbnhgj1d");
     const rand = this.sfc32(seed[0], seed[1], seed[2], seed[3]);
-    console.log(graph, rand, this.params);
 
     const coords = new Map<Identifier, MutablePoint>();
     const velocities = new Map<Identifier, MutablePoint>();
-    // const outgoingSet = new Map<Identifier, Set<Identifier>>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
       coords.set(nodeId, {
@@ -39,14 +31,6 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       });
 
       velocities.set(nodeId, { x: 0, y: 0 });
-
-      // const outgoing = new Set(
-      //   graph
-      //     .getNodeOutgoingEdgeIds(nodeId)!
-      //     .map((edgeId) => graph.getPort(graph.getEdge(edgeId)!.to)!.nodeId),
-      // );
-
-      // outgoingSet.set(nodeId, outgoing);
     });
 
     for (let i = 0; i < this.params.iterations; i++) {
@@ -57,118 +41,10 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         1,
       );
       iteration.next();
-      // this.iterateAdjacent(coords, outgoingSet);
     }
-
-    // for (let i = 0; i < this.params.iterations; i++) {
-    //   this.iterateAll(coords);
-    // }
 
     return coords;
   }
-
-  // private addEdge(
-  //   from: Identifier,
-  //   to: Identifier,
-  //   distance: Vector,
-  //   adjacentDistances: Map<Identifier, Map<Identifier, Vector>>,
-  // ): void {
-  //   const ids = adjacentDistances.get(from);
-
-  //   if (ids !== undefined) {
-  //     ids.set(to, distance);
-  //   } else {
-  //     adjacentDistances.set(from, new Map([[to, distance]]));
-  //   }
-  // }
-
-  // private iterateAdjacent(
-  //   coords: Map<Identifier, { x: number; y: number }>,
-  //   outgoingSet: Map<Identifier, Set<Identifier>>,
-  // ): void {
-  //   const adjacentVectors = new Map<Identifier, Map<Identifier, Vector>>();
-
-  //   outgoingSet.forEach((outgoing, fromId) => {
-  //     outgoing.forEach((toId) => {
-  //       const from = coords.get(fromId)!;
-  //       const to = coords.get(toId)!;
-
-  //       const dx = to.x! - from.x!;
-  //       const dy = to.y! - from.y!;
-  //       const distance = Math.sqrt(dx * dx + dy * dy);
-  //       const ex = dx / distance;
-  //       const ey = dy / distance;
-
-  //       this.addEdge(fromId, toId, { distance, ex, ey }, adjacentVectors);
-  //       this.addEdge(
-  //         toId,
-  //         fromId,
-  //         { distance, ex: -ex, ey: -ey },
-  //         adjacentVectors,
-  //       );
-  //     });
-  //   });
-
-  //   coords.forEach((point, nodeId) => {
-  //     const vectors = adjacentVectors.get(nodeId);
-
-  //     if (vectors === undefined) {
-  //       return;
-  //     }
-
-  //     let dx = 0;
-  //     let dy = 0;
-
-  //     vectors.forEach((vector) => {
-  //       const dd = vector.distance - this.params.perfectDistance;
-
-  //       dx += vector.ex * dd * 0.5;
-  //       dy += vector.ey * dd * 0.5;
-  //     });
-
-  //     coords.set(nodeId, {
-  //       x: point.x + dx / vectors.size,
-  //       y: point.y + dy / vectors.size,
-  //     });
-  //   });
-  // }
-
-  // private iterateAll(coords: Map<Identifier, { x: number; y: number }>): void {
-  //   const iter = coords.entries();
-  //   let current = iter.next();
-
-  //   while (!current.done) {
-  //     const [nodeId, nodeCoords] = current.value;
-  //     const iter2 = coords.entries();
-  //     let current2 = iter2.next();
-
-  //     let dx = 0;
-  //     let dy = 0;
-
-  //     while (!current2.done) {
-  //       const [nodeId2, nodeCoords2] = current2.value;
-
-  //       if (nodeId2 !== nodeId) {
-  //         const x = nodeCoords2.x - nodeCoords.x;
-  //         const y = nodeCoords2.y - nodeCoords.y;
-  //         const distance = Math.sqrt(x * x + y * y);
-  //         const dd = distance - this.params.perfectDistance;
-
-  //         dx += (x / distance) * dd;
-  //         dy += (y / distance) * dd;
-  //       }
-
-  //       current2 = iter2.next();
-  //     }
-
-  //     coords.set(nodeId, {
-  //       x: nodeCoords.x + (dx / (coords.size - 1)) * 0.5,
-  //       y: nodeCoords.y + (dy / (coords.size - 1)) * 0.5,
-  //     });
-
-  //     current = iter.next();
-  //   }
-  // }
 
   private sfc32(a: number, b: number, c: number, d: number) {
     return function (): number {
