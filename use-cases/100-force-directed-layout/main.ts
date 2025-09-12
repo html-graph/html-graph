@@ -28,18 +28,10 @@ const canvas: Canvas = builder
     algorithm: new ForceDirectedLayoutAlgorithm({
       boundingWidth: 1000,
       boundingHeight: 1000,
-      iterations: 5,
+      iterations: 15,
       perfectDistance: 500,
     }),
     applyOn: "topologyChange",
-    transform: {
-      a: 1,
-      b: 0,
-      c: 200,
-      d: 0,
-      e: 1,
-      f: 400,
-    },
   })
   .build();
 
