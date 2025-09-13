@@ -8,6 +8,8 @@ import { MutablePoint } from "./mutable-point";
 import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
+  private dt: number;
+
   public constructor(
     private readonly params: {
       readonly boundingWidth: number;
@@ -18,7 +20,9 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       readonly edgeStiffness: number;
       readonly timeDelta: number;
     },
-  ) {}
+  ) {
+    this.dt = this.params.timeDelta;
+  }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const seed = this.cyrb128("chstytwwbbnhgj2d");
@@ -27,25 +31,32 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     const coords = new Map<Identifier, MutablePoint>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
+      const node = graph.getNode(nodeId)!;
+
       coords.set(nodeId, {
-        x: rand() * this.params.boundingWidth,
-        y: rand() * this.params.boundingHeight,
+        x: node.x ?? rand() * this.params.boundingWidth,
+        y: node.y ?? rand() * this.params.boundingHeight,
       });
     });
 
+    const iteration = new PhysicalSimulationIteration(
+      graph,
+      coords,
+      this.dt,
+      this.params.equilibriumEdgeLength,
+      this.params.nodeCharge,
+      this.params.edgeStiffness,
+    );
+
     for (let i = 0; i < this.params.iterations; i++) {
-      const iteration = new PhysicalSimulationIteration(
-        graph,
-        coords,
-        this.params.timeDelta,
-        this.params.equilibriumEdgeLength,
-        this.params.nodeCharge,
-        this.params.edgeStiffness,
-      );
       iteration.next();
     }
 
     return coords;
+  }
+
+  public setTimeDelta(dt: number): void {
+    this.dt = dt;
   }
 
   private sfc32(a: number, b: number, c: number, d: number) {

@@ -1,9 +1,21 @@
-import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import { Canvas, CanvasBuilder, EventSubject } from "@html-graph/html-graph";
 import graphData from "./graph.json";
 import { ForceDirectedLayoutAlgorithm } from "./force-directed-layout-algorithm";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+const trigger = new EventSubject<void>();
+
+const layoutAlgorithm = new ForceDirectedLayoutAlgorithm({
+  boundingWidth: 1000,
+  boundingHeight: 1000,
+  iterations: 1,
+  timeDelta: 0.1,
+  equilibriumEdgeLength: 300,
+  nodeCharge: 5000,
+  edgeStiffness: 0.5,
+});
+
 const canvas: Canvas = builder
   .setDefaults({
     nodes: {
@@ -25,16 +37,8 @@ const canvas: Canvas = builder
   })
   .enableBackground()
   .enableLayout({
-    algorithm: new ForceDirectedLayoutAlgorithm({
-      boundingWidth: 1000,
-      boundingHeight: 1000,
-      iterations: 100,
-      timeDelta: 0.4,
-      equilibriumEdgeLength: 300,
-      nodeCharge: 5000,
-      edgeStiffness: 2,
-    }),
-    applyOn: "topologyChange",
+    algorithm: layoutAlgorithm,
+    applyOn: trigger,
   })
   .build();
 
@@ -58,3 +62,20 @@ graphData.nodes.forEach((nodeId) => {
 graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
+
+let prev: number;
+
+const step = (timestamp: number): void => {
+  if (prev === undefined) {
+    prev = timestamp;
+  } else {
+    const dt = timestamp - prev;
+    prev = timestamp;
+    layoutAlgorithm.setTimeDelta(dt / 100);
+  }
+
+  trigger.emit();
+  requestAnimationFrame(step);
+};
+
+requestAnimationFrame(step);
