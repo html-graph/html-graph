@@ -29,7 +29,10 @@ const canvas: Canvas = builder
       boundingWidth: 1000,
       boundingHeight: 1000,
       iterations: 100,
-      equilibriumEdgeLength: 500,
+      timeDelta: 0.4,
+      equilibriumEdgeLength: 300,
+      nodeCharge: 5000,
+      edgeStiffness: 2,
     }),
     applyOn: "topologyChange",
   })

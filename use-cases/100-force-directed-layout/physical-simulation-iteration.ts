@@ -12,15 +12,15 @@ export class PhysicalSimulationIteration {
 
   private readonly k: number;
 
-  private readonly elasticity = 0.1;
-
   public constructor(
     private readonly graph: Graph,
     private readonly coords: Map<Identifier, MutablePoint>,
     private readonly dt: number,
-    private readonly perfectDistance: number,
+    private readonly equilibriumEdgeLength: number,
+    private readonly nodeCharge: number,
+    private readonly edgeStiffness: number,
   ) {
-    this.k = this.perfectDistance * this.perfectDistance * 100;
+    this.k = this.nodeCharge * this.nodeCharge;
   }
 
   public next(): void {
@@ -82,10 +82,12 @@ export class PhysicalSimulationIteration {
         ? distances.get(portFrom.nodeId)!.get(portTo.nodeId)!
         : distances.get(portTo.nodeId)!.get(portFrom.nodeId)!;
 
-      const offset = dist.d - this.perfectDistance;
+      const offset = dist.d - this.equilibriumEdgeLength;
 
-      const fx = (((has ? dist.ex : -dist.ex) * offset) / 2) * this.elasticity;
-      const fy = (((has ? dist.ey : -dist.ey) * offset) / 2) * this.elasticity;
+      const fx =
+        (((has ? dist.ex : -dist.ex) * offset) / 2) * this.edgeStiffness;
+      const fy =
+        (((has ? dist.ey : -dist.ey) * offset) / 2) * this.edgeStiffness;
 
       const forceFrom = forces.get(portFrom.nodeId)!;
       forceFrom.x += fx;

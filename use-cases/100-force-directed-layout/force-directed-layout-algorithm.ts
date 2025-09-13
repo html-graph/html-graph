@@ -14,11 +14,14 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       readonly boundingHeight: number;
       readonly iterations: number;
       readonly equilibriumEdgeLength: number;
+      readonly nodeCharge: number;
+      readonly edgeStiffness: number;
+      readonly timeDelta: number;
     },
   ) {}
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const seed = this.cyrb128("chstytwwbbnhgj1d");
+    const seed = this.cyrb128("chstytwwbbnhgj2d");
     const rand = this.sfc32(seed[0], seed[1], seed[2], seed[3]);
 
     const coords = new Map<Identifier, MutablePoint>();
@@ -34,8 +37,10 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       const iteration = new PhysicalSimulationIteration(
         graph,
         coords,
-        1,
+        this.params.timeDelta,
         this.params.equilibriumEdgeLength,
+        this.params.nodeCharge,
+        this.params.edgeStiffness,
       );
       iteration.next();
     }
