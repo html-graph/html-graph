@@ -20,30 +20,28 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
+  .enableUserDraggableNodes({
+    moveEdgesOnTop: false,
+  })
   .enableBackground()
   .enableLayout({
     algorithm: new ForceDirectedLayoutAlgorithm({
       boundingWidth: 1000,
       boundingHeight: 1000,
-      iterations: 10,
+      iterations: 100,
+      timeDelta: 0.4,
+      equilibriumEdgeLength: 300,
+      nodeCharge: 5000,
+      edgeStiffness: 2,
     }),
-    applicationStrategy: {
-      type: "topologyChange",
-    },
-    transform: {
-      a: 1,
-      b: 0,
-      c: 200,
-      d: 0,
-      e: 1,
-      f: 400,
-    },
+    applyOn: "topologyChange",
   })
   .build();
 
 graphData.nodes.forEach((nodeId) => {
   const element = document.createElement("div");
   element.classList.add("node");
+  element.innerText = `${nodeId}`;
 
   canvas.addNode({
     id: nodeId,
@@ -58,5 +56,5 @@ graphData.nodes.forEach((nodeId) => {
 });
 
 graphData.edges.forEach((edge) => {
-  canvas.addEdge({ id: edge.id, from: edge.from, to: edge.to });
+  canvas.addEdge({ from: edge.from, to: edge.to });
 });

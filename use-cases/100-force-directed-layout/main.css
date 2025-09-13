@@ -7,7 +7,7 @@
   box-shadow: 0 0 5px var(--color-node-border);
   border-radius: 50%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   user-select: none;
 }

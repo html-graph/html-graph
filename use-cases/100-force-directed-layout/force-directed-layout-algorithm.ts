@@ -4,6 +4,8 @@ import {
   LayoutAlgorithm,
   Point,
 } from "@html-graph/html-graph";
+import { MutablePoint } from "./mutable-point";
+import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
@@ -11,14 +13,18 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       readonly boundingWidth: number;
       readonly boundingHeight: number;
       readonly iterations: number;
+      readonly equilibriumEdgeLength: number;
+      readonly nodeCharge: number;
+      readonly edgeStiffness: number;
+      readonly timeDelta: number;
     },
   ) {}
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const seed = this.cyrb128("chstytwwbbnhgj1d");
-
+    const seed = this.cyrb128("chstytwwbbnhgj2d");
     const rand = this.sfc32(seed[0], seed[1], seed[2], seed[3]);
-    const coords = new Map<Identifier, Point>();
+
+    const coords = new Map<Identifier, MutablePoint>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
       coords.set(nodeId, {
@@ -28,14 +34,18 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     });
 
     for (let i = 0; i < this.params.iterations; i++) {
-      this.iterate();
+      const iteration = new PhysicalSimulationIteration(
+        graph,
+        coords,
+        this.params.timeDelta,
+        this.params.equilibriumEdgeLength,
+        this.params.nodeCharge,
+        this.params.edgeStiffness,
+      );
+      iteration.next();
     }
 
     return coords;
-  }
-
-  private iterate(): void {
-    //
   }
 
   private sfc32(a: number, b: number, c: number, d: number) {

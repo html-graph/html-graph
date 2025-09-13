@@ -352,10 +352,7 @@ describe("CanvasBuilder", () => {
     const canvas = builder
       .enableLayout({
         algorithm: new DummyLayoutAlgorithm(),
-        applicationStrategy: {
-          type: "manual",
-          trigger,
-        },
+        applyOn: trigger,
       })
       .build();
 
