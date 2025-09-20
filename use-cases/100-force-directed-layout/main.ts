@@ -1,34 +1,15 @@
-import {
-  Canvas,
-  CanvasBuilder,
-  EventSubject,
-  Point,
-} from "@html-graph/html-graph";
+import { Canvas, CanvasBuilder, Identifier } from "@html-graph/html-graph";
 import graphData from "./graph.json";
-import { ForceDirectedLayoutAlgorithm } from "./force-directed-layout-algorithm";
 import { sfc32 } from "../shared/sfc32";
 import { cyrb128 } from "../shared/cyrb128";
+import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-const trigger = new EventSubject<void>();
+const staticNodeIds = new Set<Identifier>();
 
 const seed = cyrb128("chstytwwbbnhgj2d");
 const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
-
-const forceDirectedLayoutAlgorithm = new ForceDirectedLayoutAlgorithm({
-  iterations: 1,
-  equilibriumEdgeLength: 300,
-  nodeCharge: 1e5,
-  edgeStiffness: 1e3,
-  timeDelta: 0.1,
-  initialCoordinatesResolver: (node): Point => {
-    return {
-      x: node.x ?? rand() * 1000,
-      y: node.y ?? rand() * 1000,
-    };
-  },
-});
 
 const canvas: Canvas = builder
   .setDefaults({
@@ -50,22 +31,26 @@ const canvas: Canvas = builder
     moveEdgesOnTop: false,
     // TODO: add onNodeDragStarted event
     nodeDragVerifier: (nodeId) => {
-      forceDirectedLayoutAlgorithm.setStaticNode(nodeId);
+      staticNodeIds.add(nodeId);
 
       return true;
     },
     events: {
       onNodeDragFinished: (nodeId) => {
-        forceDirectedLayoutAlgorithm.unsetStaticNode(nodeId);
+        staticNodeIds.delete(nodeId);
       },
     },
   })
   .enableBackground()
-  .enableLayout({
-    algorithm: forceDirectedLayoutAlgorithm,
-    applyOn: trigger,
-  })
   .build();
+
+canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+  staticNodeIds.delete(nodeId);
+});
+
+canvas.graph.onBeforeClear.subscribe(() => {
+  staticNodeIds.clear();
+});
 
 graphData.nodes.forEach((nodeId) => {
   const element = document.createElement("div");
@@ -75,6 +60,8 @@ graphData.nodes.forEach((nodeId) => {
   canvas.addNode({
     id: nodeId,
     element,
+    x: rand() * 1000,
+    y: rand() * 1000,
     ports: [
       {
         id: nodeId,
@@ -88,20 +75,34 @@ graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
 
+const updateCoordinates = (dt: number): void => {
+  const iteration = new PhysicalSimulationIteration({
+    graph: canvas.graph,
+    dt,
+    equilibriumEdgeLength: 300,
+    nodeCharge: 1e5,
+    edgeStiffness: 1e3,
+    staticNodeIds,
+  });
+
+  const nextCoords = iteration.calculateNextCoordinates();
+  nextCoords.forEach((coords, nodeId) => {
+    canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
+  });
+};
+
 let previousTimestamp: number;
 
 const step = (timestamp: number): void => {
   if (previousTimestamp === undefined) {
     previousTimestamp = timestamp;
-    forceDirectedLayoutAlgorithm.setTimeDelta(1e-4);
   } else {
     const dt = (timestamp - previousTimestamp) / 1000;
     previousTimestamp = timestamp;
     const dtLimited = dt > 0.1 ? 0 : dt;
-    forceDirectedLayoutAlgorithm.setTimeDelta(dtLimited);
+    updateCoordinates(dtLimited);
   }
 
-  trigger.emit();
   requestAnimationFrame(step);
 };
 

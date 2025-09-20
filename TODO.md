@@ -1,7 +1,10 @@
 # TODO
 
-- apply until stabilization strategy
 - default force directed layout
+
+  - animated layout
+  - apply until stabilization strategy
+
 - tree layout
 
 - port and node svg elements

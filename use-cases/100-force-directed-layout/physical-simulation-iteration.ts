@@ -1,33 +1,47 @@
-import { Graph, Identifier } from "@html-graph/html-graph";
+import { Graph, Identifier, Point } from "@html-graph/html-graph";
 import { MutablePoint } from "./mutable-point";
-
-interface Vector {
-  readonly ex: number;
-  readonly ey: number;
-  readonly d: number;
-}
+import { Vector } from "./vector";
 
 export class PhysicalSimulationIteration {
   private readonly mass = 1;
 
   private readonly k: number;
 
+  private readonly graph: Graph;
+
+  private readonly equilibriumEdgeLength: number;
+
+  private readonly edgeStiffness: number;
+
+  private readonly staticNodeIds: ReadonlySet<Identifier>;
+
+  private readonly dt: number;
+
   public constructor(
-    private readonly graph: Graph,
-    private readonly coords: Map<Identifier, MutablePoint>,
-    private readonly dt: number,
-    private readonly equilibriumEdgeLength: number,
-    private readonly nodeCharge: number,
-    private readonly edgeStiffness: number,
-    private readonly staticNodeIds: ReadonlySet<Identifier>,
+    private readonly params: {
+      readonly graph: Graph;
+      readonly dt: number;
+      readonly equilibriumEdgeLength: number;
+      readonly nodeCharge: number;
+      readonly edgeStiffness: number;
+      readonly staticNodeIds: ReadonlySet<Identifier>;
+    },
   ) {
-    this.k = this.nodeCharge * this.nodeCharge;
+    const nodeCharge = this.params.nodeCharge;
+
+    this.k = nodeCharge * nodeCharge;
+    this.graph = this.params.graph;
+    this.equilibriumEdgeLength = this.params.equilibriumEdgeLength;
+    this.edgeStiffness = this.params.edgeStiffness;
+    this.staticNodeIds = this.params.staticNodeIds;
+    this.dt = this.params.dt;
   }
 
-  public updateNodeCoords(): void {
+  public calculateNextCoordinates(): ReadonlyMap<Identifier, Point> {
+    const coords = new Map<Identifier, Point>();
     const forces = new Map<Identifier, MutablePoint>();
 
-    this.coords.forEach((_coord, nodeId) => {
+    this.graph.getAllNodeIds().forEach((nodeId) => {
       forces.set(nodeId, { x: 0, y: 0 });
     });
 
@@ -40,14 +54,14 @@ export class PhysicalSimulationIteration {
 
     for (; i < nodeIds.length; i++) {
       const nodeIdFrom = nodeIds[i];
-      const coordsFrom = this.coords.get(nodeIdFrom)!;
+      const coordsFrom = this.graph.getNode(nodeIdFrom)!;
       const nodeFromDistances = new Map<Identifier, Vector>();
 
       for (j = i + 1; j < nodeIds.length; j++) {
         const nodeIdTo = nodeIds[j];
-        const coordsTo = this.coords.get(nodeIdTo)!;
-        const dx = coordsTo.x - coordsFrom.x;
-        const dy = coordsTo.y - coordsFrom.y;
+        const coordsTo = this.graph.getNode(nodeIdTo)!;
+        const dx = coordsTo.x! - coordsFrom.x!;
+        const dy = coordsTo.y! - coordsFrom.y!;
         const d2 = dx * dx + dy * dy;
         const d = Math.sqrt(d2);
         const ex = dx / d;
@@ -99,20 +113,27 @@ export class PhysicalSimulationIteration {
       forceTo.y -= fy;
     });
 
-    this.coords.forEach((coord, nodeId) => {
+    this.graph.getAllNodeIds().forEach((nodeId) => {
       if (this.staticNodeIds.has(nodeId)) {
         return;
       }
 
       const force = forces.get(nodeId)!;
 
-      const velocity: MutablePoint = {
+      const velocity: Point = {
         x: (force.x / this.mass) * this.dt,
         y: (force.y / this.mass) * this.dt,
       };
 
-      coord.x += velocity.x * this.dt;
-      coord.y += velocity.y * this.dt;
+      const node = this.graph.getNode(nodeId)!;
+      const newCoords: Point = {
+        x: node.x! + velocity.x * this.dt,
+        y: node.y! + velocity.y * this.dt,
+      };
+
+      coords.set(nodeId, newCoords);
     });
+
+    return coords;
   }
 }
