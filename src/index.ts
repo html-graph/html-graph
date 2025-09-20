@@ -8,6 +8,8 @@ export type {
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,
+  AnimatedLayoutConfig,
+  LayoutConfig,
 } from "./canvas-builder";
 
 export { CanvasError } from "./canvas";
@@ -32,8 +34,6 @@ export type {
   ConnectionTypeResolver,
   MouseEventVerifier,
   DraggingEdgeResolver,
-  LayoutConfig,
-  AnimatedLayoutConfig,
 } from "./configurators";
 
 export {

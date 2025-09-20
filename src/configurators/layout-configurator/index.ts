@@ -1,2 +1,2 @@
 export { LayoutConfigurator } from "./layout-configurator";
-export type { LayoutConfig } from "./layout-config";
+export type { LayoutParams } from "./layout-config";

@@ -1,34 +1,21 @@
 import { Identifier } from "@/identifier";
-import { AnimatedLayoutConfig } from "./animated-layout-config";
+import { AnimatedLayoutParams } from "./animated-layout-params";
 import { Canvas } from "@/canvas";
 
 export class AnimatedLayoutConfigurator {
-  private previousTimestamp: number | undefined = undefined;
+  private previousTimeStamp: number | undefined = undefined;
 
-  private constructor(
-    private readonly canvas: Canvas,
-    private readonly config: AnimatedLayoutConfig,
-    private readonly staticNodes: Set<Identifier>,
-  ) {
-    canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
-      this.staticNodes.delete(nodeId);
-    });
+  private readonly step = (timeStamp: number): void => {
+    if (this.previousTimeStamp === undefined) {
+      this.previousTimeStamp = timeStamp;
+    } else {
+      const dt = (timeStamp - this.previousTimeStamp) / 1000;
+      this.previousTimeStamp = timeStamp;
 
-    canvas.graph.onBeforeClear.subscribe(() => {
-      this.staticNodes.clear();
-    });
-
-    const step = (timestamp: number): void => {
-      if (this.previousTimestamp === undefined) {
-        this.previousTimestamp = timestamp;
-      } else {
-        const dt = (timestamp - this.previousTimestamp) / 1000;
-        this.previousTimestamp = timestamp;
-        const dtLimited = dt > 0.1 ? 0 : dt;
-
+      if (dt < 0.1) {
         const nextCoords = this.config.algorithm.calculateNextCoordinates(
-          canvas.graph,
-          dtLimited,
+          this.canvas.graph,
+          dt,
           this.staticNodes,
         );
 
@@ -36,16 +23,22 @@ export class AnimatedLayoutConfigurator {
           this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
         });
       }
+    }
 
-      requestAnimationFrame(step);
-    };
+    requestAnimationFrame(this.step);
+  };
 
-    requestAnimationFrame(step);
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly config: AnimatedLayoutParams,
+    private readonly staticNodes: ReadonlySet<Identifier>,
+  ) {
+    requestAnimationFrame(this.step);
   }
 
   public static configure(
     canvas: Canvas,
-    config: AnimatedLayoutConfig,
+    config: AnimatedLayoutParams,
     staticNodes: Set<Identifier>,
   ): void {
     new AnimatedLayoutConfigurator(canvas, config, staticNodes);

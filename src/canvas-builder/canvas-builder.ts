@@ -18,9 +18,7 @@ import {
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
-  LayoutConfig,
   LayoutConfigurator,
-  AnimatedLayoutConfig,
   AnimatedLayoutConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
@@ -54,7 +52,12 @@ import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { Identifier } from "@/identifier";
-import { patchDraggableNodesParams } from "./create-animated-layout-params";
+import {
+  AnimatedLayoutConfig,
+  patchDraggableNodesParams,
+} from "./create-animated-layout-params";
+import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
+import { LayoutConfig } from "./create-layout-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -77,7 +80,7 @@ export class CanvasBuilder {
 
   private animatedLayoutConfig: AnimatedLayoutConfig | undefined = undefined;
 
-  private hasDraggableNode = false;
+  private hasDraggableNodes = false;
 
   private hasTransformableViewport = false;
 
@@ -120,7 +123,7 @@ export class CanvasBuilder {
   public enableUserDraggableNodes(
     config?: DraggableNodesConfig,
   ): CanvasBuilder {
-    this.hasDraggableNode = true;
+    this.hasDraggableNodes = true;
     this.dragConfig = config ?? {};
 
     return this;
@@ -263,7 +266,7 @@ export class CanvasBuilder {
       NodeResizeReactiveEdgesConfigurator.configure(canvas);
     }
 
-    if (this.hasDraggableNode) {
+    if (this.hasDraggableNodes) {
       let draggableNodesParams: DraggableNodesParams =
         createDraggableNodesParams(this.dragConfig);
 
@@ -336,9 +339,17 @@ export class CanvasBuilder {
     }
 
     if (this.animatedLayoutConfig !== undefined) {
+      canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+        this.animationStaticNodes.delete(nodeId);
+      });
+
+      canvas.graph.onBeforeClear.subscribe(() => {
+        this.animationStaticNodes.clear();
+      });
+
       AnimatedLayoutConfigurator.configure(
         canvas,
-        this.animatedLayoutConfig,
+        createAnimatedLayoutParams(this.animatedLayoutConfig),
         this.animationStaticNodes,
       );
     }

@@ -1,2 +1,2 @@
 export { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
-export type { AnimatedLayoutConfig } from "./animated-layout-config";
+export type { AnimatedLayoutParams } from "./animated-layout-params";

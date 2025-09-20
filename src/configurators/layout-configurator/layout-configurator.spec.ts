@@ -5,7 +5,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
-import { LayoutConfig } from "./layout-config";
+import { LayoutParams } from "./layout-config";
 import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
@@ -34,7 +34,7 @@ const createCanvas = (): Canvas => {
 describe("LayoutConfigurator", () => {
   it("should configure topology change layout application strategy", async () => {
     const canvas = createCanvas();
-    const config: LayoutConfig = {
+    const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: "topologyChange",
     };
@@ -52,7 +52,7 @@ describe("LayoutConfigurator", () => {
   it("should configure manual layout application strategy", () => {
     const canvas = createCanvas();
     const trigger = new EventSubject<void>();
-    const config: LayoutConfig = {
+    const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: trigger,
     };
