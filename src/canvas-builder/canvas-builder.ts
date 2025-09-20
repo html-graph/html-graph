@@ -11,6 +11,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
+  DraggableNodesParams,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
@@ -49,6 +50,11 @@ import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { LayoutConfig, LayoutConfigurator } from "./layout-configurator";
+import {
+  AnimatedLayoutConfig,
+  AnimatedLayoutConfigurator,
+} from "./animated-layout-configurator";
+import { Identifier } from "@/identifier";
 
 export class CanvasBuilder {
   private used = false;
@@ -68,6 +74,8 @@ export class CanvasBuilder {
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
   private layoutConfig: LayoutConfig | undefined = undefined;
+
+  private animatedLayoutConfig: AnimatedLayoutConfig | undefined = undefined;
 
   private hasDraggableNode = false;
 
@@ -92,6 +100,8 @@ export class CanvasBuilder {
   private readonly viewport = new Viewport(this.viewportStore);
 
   private readonly window: Window = window;
+
+  private readonly staticNodes = new Set<Identifier>();
 
   public constructor(private readonly element: HTMLElement) {}
 
@@ -186,6 +196,17 @@ export class CanvasBuilder {
    */
   public enableLayout(config: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config;
+    this.animatedLayoutConfig = undefined;
+
+    return this;
+  }
+
+  /**
+   * enables animated nodes positioning with specified layout
+   */
+  public enableAnimatedLayout(config: AnimatedLayoutConfig): CanvasBuilder {
+    this.animatedLayoutConfig = config;
+    this.layoutConfig = undefined;
 
     return this;
   }
@@ -243,11 +264,21 @@ export class CanvasBuilder {
     }
 
     if (this.hasDraggableNode) {
+      let draggableNodesParams: DraggableNodesParams =
+        createDraggableNodesParams(this.dragConfig);
+
+      if (this.animatedLayoutConfig !== undefined) {
+        draggableNodesParams = this.patchDraggableNodesParams(
+          draggableNodesParams,
+          this.staticNodes,
+        );
+      }
+
       UserDraggableNodesConfigurator.configure(
         canvas,
         layers.main,
         this.window,
-        createDraggableNodesParams(this.dragConfig),
+        draggableNodesParams,
       );
     }
 
@@ -304,6 +335,22 @@ export class CanvasBuilder {
       LayoutConfigurator.configure(canvas, this.layoutConfig);
     }
 
+    if (this.animatedLayoutConfig !== undefined) {
+      AnimatedLayoutConfigurator.configure(
+        canvas,
+        this.animatedLayoutConfig,
+        this.staticNodes,
+      );
+
+      canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+        this.staticNodes.delete(nodeId);
+      });
+
+      canvas.graph.onBeforeClear.subscribe(() => {
+        this.staticNodes.clear();
+      });
+    }
+
     const onBeforeDestroy = (): void => {
       layers.destroy();
       canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
@@ -312,5 +359,24 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
+  }
+
+  private patchDraggableNodesParams(
+    params: DraggableNodesParams,
+    staticNodes: Set<Identifier>,
+  ): DraggableNodesParams {
+    return {
+      ...params,
+      nodeDragVerifier: (nodeId): boolean => {
+        staticNodes.add(nodeId);
+
+        return params.nodeDragVerifier(nodeId);
+      },
+      onNodeDragFinished: (nodeId): void => {
+        staticNodes.delete(nodeId);
+
+        params.onNodeDragFinished(nodeId);
+      },
+    };
   }
 }

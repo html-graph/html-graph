@@ -5,6 +5,8 @@
   - animated layout
   - apply until stabilization strategy
 
+- add onNodeDragStarted event
+
 - tree layout
 
 - port and node svg elements

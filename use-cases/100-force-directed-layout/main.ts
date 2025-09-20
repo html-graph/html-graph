@@ -1,12 +1,11 @@
-import { Canvas, CanvasBuilder, Identifier } from "@html-graph/html-graph";
+import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import graphData from "./graph.json";
 import { sfc32 } from "../shared/sfc32";
 import { cyrb128 } from "../shared/cyrb128";
-import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
+import { ForceDirectedLayoutAlgorithm } from "./force-directed-layout-algorithm";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-const staticNodes = new Set<Identifier>();
 
 const seed = cyrb128("chstytwwbbnhgj2d");
 const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
@@ -27,33 +26,21 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  // .enableAnimatedLayout({
-  //   iterationAlgorithm: ForceDirectedLayoutIterationAlgorithm(),
-  // })
+  .enableAnimatedLayout({
+    algorithm: new ForceDirectedLayoutAlgorithm({
+      equilibriumEdgeLength: 300,
+      nodeCharge: 1e5,
+      nodeMass: 1,
+      edgeStiffness: 1e3,
+      xFallbackResolver: (): number => rand() * 1000,
+      yFallbackResolver: (): number => rand() * 1000,
+    }),
+  })
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
-    // TODO: add onNodeDragStarted event
-    nodeDragVerifier: (nodeId) => {
-      staticNodes.add(nodeId);
-
-      return true;
-    },
-    events: {
-      onNodeDragFinished: (nodeId) => {
-        staticNodes.delete(nodeId);
-      },
-    },
   })
   .enableBackground()
   .build();
-
-canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
-  staticNodes.delete(nodeId);
-});
-
-canvas.graph.onBeforeClear.subscribe(() => {
-  staticNodes.clear();
-});
 
 graphData.nodes.forEach((nodeId) => {
   const element = document.createElement("div");
@@ -75,40 +62,3 @@ graphData.nodes.forEach((nodeId) => {
 graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
-
-const iterate = (dt: number): void => {
-  const iteration = new PhysicalSimulationIteration({
-    graph: canvas.graph,
-    dt,
-    equilibriumEdgeLength: 300,
-    nodeCharge: 1e5,
-    nodeMass: 1,
-    edgeStiffness: 1e3,
-    staticNodes,
-    xFallbackResolver: (): number => rand() * 1000,
-    yFallbackResolver: (): number => rand() * 1000,
-  });
-
-  const nextCoords = iteration.calculateNextCoordinates();
-
-  nextCoords.forEach((coords, nodeId) => {
-    canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
-  });
-};
-
-let previousTimestamp: number;
-
-const step = (timestamp: number): void => {
-  if (previousTimestamp === undefined) {
-    previousTimestamp = timestamp;
-  } else {
-    const dt = (timestamp - previousTimestamp) / 1000;
-    previousTimestamp = timestamp;
-    const dtLimited = dt > 0.1 ? 0 : dt;
-    iterate(dtLimited);
-  }
-
-  requestAnimationFrame(step);
-};
-
-requestAnimationFrame(step);

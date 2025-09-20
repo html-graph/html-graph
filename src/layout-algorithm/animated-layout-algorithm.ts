@@ -6,6 +6,6 @@ export interface AnimatedLayoutAlgorithm {
   calculateNextCoordinates(
     graph: Graph,
     dt: number,
-    customNodeWeights: Map<Identifier, number>,
+    staticNodes: ReadonlySet<Identifier>,
   ): ReadonlyMap<Identifier, Point>;
 }
