@@ -46,7 +46,11 @@ export class RandomLayoutAlgorithm implements LayoutAlgorithm {
     const coords = new Map<Identifier, Point>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
-      coords.set(nodeId, { x: this.randomX(), y: this.randomY() });
+      const node = graph.getNode(nodeId)!;
+      coords.set(nodeId, {
+        x: node.x ?? this.randomX(),
+        y: node.y ?? this.randomY(),
+      });
     });
 
     return coords;
