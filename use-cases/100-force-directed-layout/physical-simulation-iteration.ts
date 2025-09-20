@@ -19,11 +19,12 @@ export class PhysicalSimulationIteration {
     private readonly equilibriumEdgeLength: number,
     private readonly nodeCharge: number,
     private readonly edgeStiffness: number,
+    private readonly staticNodeIds: ReadonlySet<Identifier>,
   ) {
     this.k = this.nodeCharge * this.nodeCharge;
   }
 
-  public next(): void {
+  public updateNodeCoords(): void {
     const forces = new Map<Identifier, MutablePoint>();
 
     this.coords.forEach((_coord, nodeId) => {
@@ -99,6 +100,10 @@ export class PhysicalSimulationIteration {
     });
 
     this.coords.forEach((coord, nodeId) => {
+      if (this.staticNodeIds.has(nodeId)) {
+        return;
+      }
+
       const force = forces.get(nodeId)!;
 
       const velocity: MutablePoint = {

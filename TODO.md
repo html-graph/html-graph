@@ -1,5 +1,6 @@
 # TODO
 
+- apply until stabilization strategy
 - default force directed layout
 - tree layout
 

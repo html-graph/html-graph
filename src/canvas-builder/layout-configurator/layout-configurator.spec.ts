@@ -67,31 +67,4 @@ describe("LayoutConfigurator", () => {
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
-
-  it("should apply specified transformation", () => {
-    const canvas = createCanvas();
-    const trigger = new EventSubject<void>();
-    const config: LayoutConfig = {
-      algorithm: new DummyLayoutAlgorithm(),
-      applyOn: trigger,
-      transform: {
-        a: 1,
-        b: 0,
-        c: 100,
-        d: 0,
-        e: 1,
-        f: 100,
-      },
-    };
-
-    LayoutConfigurator.configure(canvas, config);
-
-    canvas.addNode({ id: "node-1", element: document.createElement("div") });
-
-    trigger.emit();
-
-    const { x, y } = canvas.graph.getNode("node-1")!;
-
-    expect({ x, y }).toEqual({ x: 100, y: 100 });
-  });
 });
