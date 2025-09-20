@@ -6,7 +6,7 @@ import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
-const staticNodeIds = new Set<Identifier>();
+const staticNodes = new Set<Identifier>();
 
 const seed = cyrb128("chstytwwbbnhgj2d");
 const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
@@ -28,20 +28,19 @@ const canvas: Canvas = builder
   })
   .enableUserTransformableViewport()
   // .enableAnimatedLayout({
-  //   algorithm: new RandomLayoutAlgorithm(),
   //   iterationAlgorithm: ForceDirectedLayoutIterationAlgorithm(),
   // })
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
     // TODO: add onNodeDragStarted event
     nodeDragVerifier: (nodeId) => {
-      staticNodeIds.add(nodeId);
+      staticNodes.add(nodeId);
 
       return true;
     },
     events: {
       onNodeDragFinished: (nodeId) => {
-        staticNodeIds.delete(nodeId);
+        staticNodes.delete(nodeId);
       },
     },
   })
@@ -49,11 +48,11 @@ const canvas: Canvas = builder
   .build();
 
 canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
-  staticNodeIds.delete(nodeId);
+  staticNodes.delete(nodeId);
 });
 
 canvas.graph.onBeforeClear.subscribe(() => {
-  staticNodeIds.clear();
+  staticNodes.clear();
 });
 
 graphData.nodes.forEach((nodeId) => {
@@ -77,7 +76,7 @@ graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
 
-const updateCoordinates = (dt: number): void => {
+const iterate = (dt: number): void => {
   const iteration = new PhysicalSimulationIteration({
     graph: canvas.graph,
     dt,
@@ -85,9 +84,9 @@ const updateCoordinates = (dt: number): void => {
     nodeCharge: 1e5,
     nodeMass: 1,
     edgeStiffness: 1e3,
-    staticNodeIds,
-    xCoordinateResolver: (): number => rand() * 1000,
-    yCoordinateResolver: (): number => rand() * 1000,
+    staticNodes,
+    xFallbackResolver: (): number => rand() * 1000,
+    yFallbackResolver: (): number => rand() * 1000,
   });
 
   const nextCoords = iteration.calculateNextCoordinates();
@@ -106,7 +105,7 @@ const step = (timestamp: number): void => {
     const dt = (timestamp - previousTimestamp) / 1000;
     previousTimestamp = timestamp;
     const dtLimited = dt > 0.1 ? 0 : dt;
-    updateCoordinates(dtLimited);
+    iterate(dtLimited);
   }
 
   requestAnimationFrame(step);

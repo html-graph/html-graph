@@ -25,9 +25,9 @@ export class PhysicalSimulationIteration {
       readonly nodeCharge: number;
       readonly nodeMass: number;
       readonly edgeStiffness: number;
-      readonly staticNodeIds: ReadonlySet<Identifier>;
-      readonly xCoordinateResolver: (nodeId: Identifier) => number;
-      readonly yCoordinateResolver: (nodeId: Identifier) => number;
+      readonly staticNodes: ReadonlySet<Identifier>;
+      readonly xFallbackResolver: (nodeId: Identifier) => number;
+      readonly yFallbackResolver: (nodeId: Identifier) => number;
     },
   ) {
     const nodeCharge = this.params.nodeCharge;
@@ -36,7 +36,7 @@ export class PhysicalSimulationIteration {
     this.graph = this.params.graph;
     this.equilibriumEdgeLength = this.params.equilibriumEdgeLength;
     this.edgeStiffness = this.params.edgeStiffness;
-    this.staticNodeIds = this.params.staticNodeIds;
+    this.staticNodeIds = this.params.staticNodes;
     this.dt = this.params.dt;
     this.nodeMass = this.params.nodeMass;
   }
@@ -52,8 +52,8 @@ export class PhysicalSimulationIteration {
       const node = this.graph.getNode(nodeId)!;
 
       currentCoords.set(nodeId, {
-        x: node.x ?? this.params.xCoordinateResolver(nodeId),
-        y: node.y ?? this.params.yCoordinateResolver(nodeId),
+        x: node.x ?? this.params.xFallbackResolver(nodeId),
+        y: node.y ?? this.params.yFallbackResolver(nodeId),
       });
     });
 
@@ -81,8 +81,11 @@ export class PhysicalSimulationIteration {
         const forceFrom = forces.get(nodeIdFrom)!;
         const forceTo = forces.get(nodeIdTo)!;
         const totalForce = this.k / d2;
-        const fx = (totalForce * ex) / 2;
-        const fy = (totalForce * ey) / 2;
+        const massFrom = this.nodeMass;
+        const massTo = this.nodeMass;
+        const massTotal = massFrom + massTo;
+        const fx = (totalForce * ex * massFrom) / massTotal;
+        const fy = (totalForce * ey * massTo) / massTotal;
 
         forceFrom.x -= fx;
         forceFrom.y -= fy;
