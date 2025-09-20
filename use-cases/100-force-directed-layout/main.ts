@@ -27,6 +27,10 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
+  // .enableLayout({
+  //   algorithm: new RandomLayoutAlgorithm(),
+  //   iterationAlgorithm: ForceDirectedLayoutIterationAlgorithm(),
+  // })
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
     // TODO: add onNodeDragStarted event
