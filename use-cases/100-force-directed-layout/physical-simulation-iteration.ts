@@ -3,7 +3,7 @@ import { MutablePoint } from "./mutable-point";
 import { Vector } from "./vector";
 
 export class PhysicalSimulationIteration {
-  private readonly mass = 1;
+  private readonly nodeMass: number;
 
   private readonly k: number;
 
@@ -23,8 +23,11 @@ export class PhysicalSimulationIteration {
       readonly dt: number;
       readonly equilibriumEdgeLength: number;
       readonly nodeCharge: number;
+      readonly nodeMass: number;
       readonly edgeStiffness: number;
       readonly staticNodeIds: ReadonlySet<Identifier>;
+      readonly xCoordinateResolver: (nodeId: Identifier) => number;
+      readonly yCoordinateResolver: (nodeId: Identifier) => number;
     },
   ) {
     const nodeCharge = this.params.nodeCharge;
@@ -35,33 +38,39 @@ export class PhysicalSimulationIteration {
     this.edgeStiffness = this.params.edgeStiffness;
     this.staticNodeIds = this.params.staticNodeIds;
     this.dt = this.params.dt;
+    this.nodeMass = this.params.nodeMass;
   }
 
   public calculateNextCoordinates(): ReadonlyMap<Identifier, Point> {
-    const coords = new Map<Identifier, Point>();
+    const currentCoords = new Map<Identifier, Point>();
+    const nextCoords = new Map<Identifier, Point>();
     const forces = new Map<Identifier, MutablePoint>();
 
     this.graph.getAllNodeIds().forEach((nodeId) => {
       forces.set(nodeId, { x: 0, y: 0 });
+
+      const node = this.graph.getNode(nodeId)!;
+
+      currentCoords.set(nodeId, {
+        x: node.x ?? this.params.xCoordinateResolver(nodeId),
+        y: node.y ?? this.params.yCoordinateResolver(nodeId),
+      });
     });
 
     const nodeIds = this.graph.getAllNodeIds();
 
-    let i = 0,
-      j;
-
     const distances = new Map<Identifier, Map<Identifier, Vector>>();
 
-    for (; i < nodeIds.length; i++) {
+    for (let i = 0; i < nodeIds.length; i++) {
       const nodeIdFrom = nodeIds[i];
-      const coordsFrom = this.graph.getNode(nodeIdFrom)!;
+      const coordsFrom = currentCoords.get(nodeIdFrom)!;
       const nodeFromDistances = new Map<Identifier, Vector>();
 
-      for (j = i + 1; j < nodeIds.length; j++) {
+      for (let j = i + 1; j < nodeIds.length; j++) {
         const nodeIdTo = nodeIds[j];
-        const coordsTo = this.graph.getNode(nodeIdTo)!;
-        const dx = coordsTo.x! - coordsFrom.x!;
-        const dy = coordsTo.y! - coordsFrom.y!;
+        const coordsTo = currentCoords.get(nodeIdTo)!;
+        const dx = coordsTo.x - coordsFrom.x;
+        const dy = coordsTo.y - coordsFrom.y;
         const d2 = dx * dx + dy * dy;
         const d = Math.sqrt(d2);
         const ex = dx / d;
@@ -121,19 +130,19 @@ export class PhysicalSimulationIteration {
       const force = forces.get(nodeId)!;
 
       const velocity: Point = {
-        x: (force.x / this.mass) * this.dt,
-        y: (force.y / this.mass) * this.dt,
+        x: (force.x / this.nodeMass) * this.dt,
+        y: (force.y / this.nodeMass) * this.dt,
       };
 
-      const node = this.graph.getNode(nodeId)!;
+      const coords = currentCoords.get(nodeId)!;
       const newCoords: Point = {
-        x: node.x! + velocity.x * this.dt,
-        y: node.y! + velocity.y * this.dt,
+        x: coords.x + velocity.x * this.dt,
+        y: coords.y + velocity.y * this.dt,
       };
 
-      coords.set(nodeId, newCoords);
+      nextCoords.set(nodeId, newCoords);
     });
 
-    return coords;
+    return nextCoords;
   }
 }

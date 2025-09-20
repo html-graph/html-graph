@@ -27,7 +27,7 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  // .enableIterativeLayout({
+  // .enableAnimatedLayout({
   //   algorithm: new RandomLayoutAlgorithm(),
   //   iterationAlgorithm: ForceDirectedLayoutIterationAlgorithm(),
   // })
@@ -64,8 +64,6 @@ graphData.nodes.forEach((nodeId) => {
   canvas.addNode({
     id: nodeId,
     element,
-    x: rand() * 1000,
-    y: rand() * 1000,
     ports: [
       {
         id: nodeId,
@@ -85,11 +83,15 @@ const updateCoordinates = (dt: number): void => {
     dt,
     equilibriumEdgeLength: 300,
     nodeCharge: 1e5,
+    nodeMass: 1,
     edgeStiffness: 1e3,
     staticNodeIds,
+    xCoordinateResolver: (): number => rand() * 1000,
+    yCoordinateResolver: (): number => rand() * 1000,
   });
 
   const nextCoords = iteration.calculateNextCoordinates();
+
   nextCoords.forEach((coords, nodeId) => {
     canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
   });

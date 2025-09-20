@@ -1,7 +1,9 @@
-import { Graph } from "@/graph";
-import { Identifier } from "@/identifier";
-import { Point } from "@/point";
-import { LayoutAlgorithm } from "../layout-algorithm";
+import {
+  Graph,
+  Identifier,
+  LayoutAlgorithm,
+  Point,
+} from "@html-graph/html-graph";
 
 export class RandomLayoutAlgorithm implements LayoutAlgorithm {
   private readonly random: () => number;
@@ -46,11 +48,7 @@ export class RandomLayoutAlgorithm implements LayoutAlgorithm {
     const coords = new Map<Identifier, Point>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
-      const node = graph.getNode(nodeId)!;
-      coords.set(nodeId, {
-        x: node.x ?? this.randomX(),
-        y: node.y ?? this.randomY(),
-      });
+      coords.set(nodeId, { x: this.randomX(), y: this.randomY() });
     });
 
     return coords;
