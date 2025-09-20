@@ -3,19 +3,27 @@ import { AnimatedLayoutConfig } from "./animated-layout-config";
 import { Canvas } from "@/canvas";
 
 export class AnimatedLayoutConfigurator {
+  private previousTimestamp: number | undefined = undefined;
+
   private constructor(
     private readonly canvas: Canvas,
     private readonly config: AnimatedLayoutConfig,
-    private readonly staticNodes: ReadonlySet<Identifier>,
+    private readonly staticNodes: Set<Identifier>,
   ) {
-    let previousTimestamp: number;
+    canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+      this.staticNodes.delete(nodeId);
+    });
+
+    canvas.graph.onBeforeClear.subscribe(() => {
+      this.staticNodes.clear();
+    });
 
     const step = (timestamp: number): void => {
-      if (previousTimestamp === undefined) {
-        previousTimestamp = timestamp;
+      if (this.previousTimestamp === undefined) {
+        this.previousTimestamp = timestamp;
       } else {
-        const dt = (timestamp - previousTimestamp) / 1000;
-        previousTimestamp = timestamp;
+        const dt = (timestamp - this.previousTimestamp) / 1000;
+        this.previousTimestamp = timestamp;
         const dtLimited = dt > 0.1 ? 0 : dt;
 
         const nextCoords = this.config.algorithm.calculateNextCoordinates(
@@ -38,7 +46,7 @@ export class AnimatedLayoutConfigurator {
   public static configure(
     canvas: Canvas,
     config: AnimatedLayoutConfig,
-    staticNodes: ReadonlySet<Identifier>,
+    staticNodes: Set<Identifier>,
   ): void {
     new AnimatedLayoutConfigurator(canvas, config, staticNodes);
   }

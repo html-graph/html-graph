@@ -18,6 +18,10 @@ import {
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
+  LayoutConfig,
+  LayoutConfigurator,
+  AnimatedLayoutConfig,
+  AnimatedLayoutConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
@@ -49,12 +53,8 @@ import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { LayoutConfig, LayoutConfigurator } from "./layout-configurator";
-import {
-  AnimatedLayoutConfig,
-  AnimatedLayoutConfigurator,
-} from "./animated-layout-configurator";
 import { Identifier } from "@/identifier";
+import { patchDraggableNodesParams } from "./create-animated-layout-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -101,7 +101,7 @@ export class CanvasBuilder {
 
   private readonly window: Window = window;
 
-  private readonly staticNodes = new Set<Identifier>();
+  private readonly animationStaticNodes = new Set<Identifier>();
 
   public constructor(private readonly element: HTMLElement) {}
 
@@ -268,9 +268,9 @@ export class CanvasBuilder {
         createDraggableNodesParams(this.dragConfig);
 
       if (this.animatedLayoutConfig !== undefined) {
-        draggableNodesParams = this.patchDraggableNodesParams(
+        draggableNodesParams = patchDraggableNodesParams(
           draggableNodesParams,
-          this.staticNodes,
+          this.animationStaticNodes,
         );
       }
 
@@ -339,16 +339,8 @@ export class CanvasBuilder {
       AnimatedLayoutConfigurator.configure(
         canvas,
         this.animatedLayoutConfig,
-        this.staticNodes,
+        this.animationStaticNodes,
       );
-
-      canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
-        this.staticNodes.delete(nodeId);
-      });
-
-      canvas.graph.onBeforeClear.subscribe(() => {
-        this.staticNodes.clear();
-      });
     }
 
     const onBeforeDestroy = (): void => {
@@ -359,24 +351,5 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
-  }
-
-  private patchDraggableNodesParams(
-    params: DraggableNodesParams,
-    staticNodes: Set<Identifier>,
-  ): DraggableNodesParams {
-    return {
-      ...params,
-      nodeDragVerifier: (nodeId): boolean => {
-        staticNodes.add(nodeId);
-
-        return params.nodeDragVerifier(nodeId);
-      },
-      onNodeDragFinished: (nodeId): void => {
-        staticNodes.delete(nodeId);
-
-        params.onNodeDragFinished(nodeId);
-      },
-    };
   }
 }
