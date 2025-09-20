@@ -15,14 +15,6 @@ const canvas: Canvas = builder
       layerSpace: 200,
     }),
     applyOn: "topologyChange",
-    transform: {
-      a: 1,
-      b: 0,
-      c: 200,
-      d: 0,
-      e: 1,
-      f: 400,
-    },
   })
   .build();
 

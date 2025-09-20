@@ -1,19 +1,33 @@
-import { Canvas, CanvasBuilder, EventSubject } from "@html-graph/html-graph";
+import {
+  Canvas,
+  CanvasBuilder,
+  EventSubject,
+  Point,
+} from "@html-graph/html-graph";
 import graphData from "./graph.json";
 import { ForceDirectedLayoutAlgorithm } from "./force-directed-layout-algorithm";
+import { sfc32 } from "../shared/sfc32";
+import { cyrb128 } from "../shared/cyrb128";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const trigger = new EventSubject<void>();
 
-const layoutAlgorithm = new ForceDirectedLayoutAlgorithm({
-  boundingWidth: 1000,
-  boundingHeight: 1000,
+const seed = cyrb128("chstytwwbbnhgj2d");
+const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
+
+const forceDirectedLayoutAlgorithm = new ForceDirectedLayoutAlgorithm({
   iterations: 1,
-  timeDelta: 0.1,
   equilibriumEdgeLength: 300,
-  nodeCharge: 5000,
-  edgeStiffness: 0.5,
+  nodeCharge: 1e5,
+  edgeStiffness: 1e3,
+  timeDelta: 0.1,
+  initialCoordinatesResolver: (node): Point => {
+    return {
+      x: node.x ?? rand() * 1000,
+      y: node.y ?? rand() * 1000,
+    };
+  },
 });
 
 const canvas: Canvas = builder
@@ -34,10 +48,21 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
+    // TODO: add onNodeDragStarted event
+    nodeDragVerifier: (nodeId) => {
+      forceDirectedLayoutAlgorithm.setStaticNode(nodeId);
+
+      return true;
+    },
+    events: {
+      onNodeDragFinished: (nodeId) => {
+        forceDirectedLayoutAlgorithm.unsetStaticNode(nodeId);
+      },
+    },
   })
   .enableBackground()
   .enableLayout({
-    algorithm: layoutAlgorithm,
+    algorithm: forceDirectedLayoutAlgorithm,
     applyOn: trigger,
   })
   .build();
@@ -63,15 +88,17 @@ graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
 
-let prev: number;
+let previousTimestamp: number;
 
 const step = (timestamp: number): void => {
-  if (prev === undefined) {
-    prev = timestamp;
+  if (previousTimestamp === undefined) {
+    previousTimestamp = timestamp;
+    forceDirectedLayoutAlgorithm.setTimeDelta(1e-4);
   } else {
-    const dt = timestamp - prev;
-    prev = timestamp;
-    layoutAlgorithm.setTimeDelta(dt / 100);
+    const dt = (timestamp - previousTimestamp) / 1000;
+    previousTimestamp = timestamp;
+    const dtLimited = dt > 0.1 ? 0 : dt;
+    forceDirectedLayoutAlgorithm.setTimeDelta(dtLimited);
   }
 
   trigger.emit();
