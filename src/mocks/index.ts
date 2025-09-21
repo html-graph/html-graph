@@ -5,3 +5,5 @@ export { wait } from "./wait.mock";
 export { createTouch } from "./create-touch.mock";
 export { createMouseWheelEvent } from "./create-mouse-wheel-event.mock";
 export { defaultCanvasParams } from "./default-canvas-params";
+export { DummyLayoutAlgorithm } from "./dummy-layout-algorithm.mock";
+export { DummyAnimatedLayoutAlgorithm } from "./dummy-animated-layout-algorithm.mock";

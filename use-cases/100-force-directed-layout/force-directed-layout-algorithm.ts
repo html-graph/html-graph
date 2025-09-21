@@ -21,7 +21,6 @@ export class ForceDirectedLayoutAlgorithm implements AnimatedLayoutAlgorithm {
   public calculateNextCoordinates(
     graph: Graph,
     dt: number,
-    staticNodes: ReadonlySet<Identifier>,
   ): ReadonlyMap<Identifier, Point> {
     const iteration = new PhysicalSimulationIteration({
       graph,
@@ -30,7 +29,6 @@ export class ForceDirectedLayoutAlgorithm implements AnimatedLayoutAlgorithm {
       nodeCharge: this.params.nodeCharge,
       nodeMass: this.params.nodeMass,
       edgeStiffness: this.params.edgeStiffness,
-      staticNodes: staticNodes,
       xFallbackResolver: this.params.xFallbackResolver,
       yFallbackResolver: this.params.yFallbackResolver,
     });

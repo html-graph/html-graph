@@ -6,7 +6,7 @@ import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
 import { LayoutParams } from "./layout-config";
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
 

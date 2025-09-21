@@ -13,14 +13,16 @@ export class AnimatedLayoutConfigurator {
       this.previousTimeStamp = timeStamp;
 
       if (dt < 0.1) {
-        const nextCoords = this.config.algorithm.calculateNextCoordinates(
+        const nextCoords = this.params.algorithm.calculateNextCoordinates(
           this.canvas.graph,
           dt,
           this.staticNodes,
         );
 
         nextCoords.forEach((coords, nodeId) => {
-          this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
+          if (!this.staticNodes.has(nodeId)) {
+            this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
+          }
         });
       }
     }
@@ -30,7 +32,7 @@ export class AnimatedLayoutConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    private readonly config: AnimatedLayoutParams,
+    private readonly params: AnimatedLayoutParams,
     private readonly staticNodes: ReadonlySet<Identifier>,
   ) {
     requestAnimationFrame(this.step);
@@ -38,9 +40,9 @@ export class AnimatedLayoutConfigurator {
 
   public static configure(
     canvas: Canvas,
-    config: AnimatedLayoutParams,
+    params: AnimatedLayoutParams,
     staticNodes: Set<Identifier>,
   ): void {
-    new AnimatedLayoutConfigurator(canvas, config, staticNodes);
+    new AnimatedLayoutConfigurator(canvas, params, staticNodes);
   }
 }

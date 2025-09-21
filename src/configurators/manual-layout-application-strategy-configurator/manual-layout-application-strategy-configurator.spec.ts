@@ -6,7 +6,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams } from "@/mocks";
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
 
 const createCanvas = (): Canvas => {

@@ -9,7 +9,7 @@ import {
   wait,
 } from "@/mocks";
 import { CanvasBuilderError } from "./canvas-builder-error";
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
 
 const setLayersDimensions = (element: HTMLElement): void => {

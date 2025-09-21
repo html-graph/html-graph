@@ -57,7 +57,7 @@ import {
   patchDraggableNodesParams,
 } from "./create-animated-layout-params";
 import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
-import { LayoutConfig } from "./create-layout-params";
+import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -335,7 +335,10 @@ export class CanvasBuilder {
     }
 
     if (this.layoutConfig !== undefined) {
-      LayoutConfigurator.configure(canvas, this.layoutConfig);
+      LayoutConfigurator.configure(
+        canvas,
+        createLayoutParams(this.layoutConfig),
+      );
     }
 
     if (this.animatedLayoutConfig !== undefined) {

@@ -13,8 +13,6 @@ export class PhysicalSimulationIteration {
 
   private readonly edgeStiffness: number;
 
-  private readonly staticNodeIds: ReadonlySet<Identifier>;
-
   private readonly dt: number;
 
   public constructor(
@@ -25,7 +23,6 @@ export class PhysicalSimulationIteration {
       readonly nodeCharge: number;
       readonly nodeMass: number;
       readonly edgeStiffness: number;
-      readonly staticNodes: ReadonlySet<Identifier>;
       readonly xFallbackResolver: (nodeId: Identifier) => number;
       readonly yFallbackResolver: (nodeId: Identifier) => number;
     },
@@ -36,7 +33,6 @@ export class PhysicalSimulationIteration {
     this.graph = this.params.graph;
     this.equilibriumEdgeLength = this.params.equilibriumEdgeLength;
     this.edgeStiffness = this.params.edgeStiffness;
-    this.staticNodeIds = this.params.staticNodes;
     this.dt = this.params.dt;
     this.nodeMass = this.params.nodeMass;
   }
@@ -126,10 +122,6 @@ export class PhysicalSimulationIteration {
     });
 
     this.graph.getAllNodeIds().forEach((nodeId) => {
-      if (this.staticNodeIds.has(nodeId)) {
-        return;
-      }
-
       const force = forces.get(nodeId)!;
 
       const velocity: Point = {
