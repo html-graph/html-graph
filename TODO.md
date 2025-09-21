@@ -2,9 +2,6 @@
 
 - default force directed layout
 
-  - animated layout
-  - apply until stabilization strategy
-
 - add onNodeDragStarted event
 
 - tree layout
