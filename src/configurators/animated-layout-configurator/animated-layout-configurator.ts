@@ -9,13 +9,13 @@ export class AnimatedLayoutConfigurator {
     if (this.previousTimeStamp === undefined) {
       this.previousTimeStamp = timeStamp;
     } else {
-      const dt = (timeStamp - this.previousTimeStamp) / 1000;
+      const dtSec = (timeStamp - this.previousTimeStamp) / 1000;
       this.previousTimeStamp = timeStamp;
 
-      if (dt < 0.1) {
+      if (dtSec < this.params.maxTimeDeltaSec) {
         const nextCoords = this.params.algorithm.calculateNextCoordinates(
           this.canvas.graph,
-          dt,
+          dtSec,
           this.staticNodes,
         );
 
@@ -27,7 +27,7 @@ export class AnimatedLayoutConfigurator {
       }
     }
 
-    requestAnimationFrame(this.step);
+    window.requestAnimationFrame(this.step);
   };
 
   private constructor(
@@ -35,7 +35,7 @@ export class AnimatedLayoutConfigurator {
     private readonly params: AnimatedLayoutParams,
     private readonly staticNodes: ReadonlySet<Identifier>,
   ) {
-    requestAnimationFrame(this.step);
+    window.requestAnimationFrame(this.step);
   }
 
   public static configure(

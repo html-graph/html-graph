@@ -38,10 +38,13 @@ describe("AnimatedLayoutConfigurator", () => {
   beforeEach(() => {
     spy = jest.spyOn(window, "requestAnimationFrame");
 
-    spy.mockImplementation((cb) => {
+    let t = 0;
+
+    spy.mockImplementation((callback) => {
       setTimeout(() => {
-        cb(100);
-      }, 100);
+        callback(t);
+        t += 50;
+      }, 50);
 
       return 0;
     });
@@ -55,12 +58,11 @@ describe("AnimatedLayoutConfigurator", () => {
     const animationStaticNodes = new Set<Identifier>();
     const canvas = createCanvas();
 
-    const spy = jest.spyOn(window, "requestAnimationFrame");
-
     AnimatedLayoutConfigurator.configure(
       canvas,
       {
         algorithm: new DummyAnimatedLayoutAlgorithm(),
+        maxTimeDeltaSec: 0.1,
       },
       animationStaticNodes,
     );
@@ -78,32 +80,71 @@ describe("AnimatedLayoutConfigurator", () => {
       canvas,
       {
         algorithm: new DummyAnimatedLayoutAlgorithm(),
+        maxTimeDeltaSec: 0.1,
       },
       animationStaticNodes,
     );
 
-    await wait(100);
+    await wait(49);
 
     expect(spy).toHaveBeenCalledTimes(2);
   });
 
-  //   it("should calculate coordinates on second animation frame", async () => {
-  //     const animationStaticNodes = new Set<Identifier>();
-  //     const canvas = createCanvas();
+  it("should update node coordinates on second animation frame", async () => {
+    const animationStaticNodes = new Set<Identifier>();
+    const canvas = createCanvas();
 
-  //     const algorithm = new DummyAnimatedLayoutAlgorithm();
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+    });
 
-  //     AnimatedLayoutConfigurator.configure(
-  //       canvas,
-  //       {
-  //         algorithm,
-  //       },
-  //       animationStaticNodes,
-  //     );
+    const algorithm = new DummyAnimatedLayoutAlgorithm();
 
-  //     const spy = jest.spyOn(algorithm, "calculateNextCoordinates");
-  //     await wait(0);
+    AnimatedLayoutConfigurator.configure(
+      canvas,
+      {
+        algorithm,
+        maxTimeDeltaSec: 0.2,
+      },
+      animationStaticNodes,
+    );
 
-  //     expect(spy).toHaveBeenCalled();
-  //   });
+    await wait(101);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should ignore timestamps above the limit", async () => {
+    const animationStaticNodes = new Set<Identifier>();
+    const canvas = createCanvas();
+
+    const algorithm = new DummyAnimatedLayoutAlgorithm();
+
+    AnimatedLayoutConfigurator.configure(
+      canvas,
+      {
+        algorithm,
+        maxTimeDeltaSec: 0.01,
+      },
+      animationStaticNodes,
+    );
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+    });
+
+    await wait(101);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 100, y: 100 });
+  });
 });
