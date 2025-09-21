@@ -52,12 +52,11 @@ import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { Identifier } from "@/identifier";
-import {
-  AnimatedLayoutConfig,
-  patchDraggableNodesParams,
-} from "./create-animated-layout-params";
+import { AnimatedLayoutConfig } from "./create-animated-layout-params";
 import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
 import { createLayoutParams, LayoutConfig } from "./create-layout-params";
+import { patchAnimatedLayoutDraggableNodesParams } from "./patch-draggable-nodes-animated-layout-params";
+import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 
 export class CanvasBuilder {
   private used = false;
@@ -271,7 +270,7 @@ export class CanvasBuilder {
         createDraggableNodesParams(this.dragConfig);
 
       if (this.animatedLayoutConfig !== undefined) {
-        draggableNodesParams = patchDraggableNodesParams(
+        draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
           draggableNodesParams,
           this.animationStaticNodes,
         );
@@ -342,13 +341,10 @@ export class CanvasBuilder {
     }
 
     if (this.animatedLayoutConfig !== undefined) {
-      canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
-        this.animationStaticNodes.delete(nodeId);
-      });
-
-      canvas.graph.onBeforeClear.subscribe(() => {
-        this.animationStaticNodes.clear();
-      });
+      subscribeAnimatedLayoutStaticNodesUpdate(
+        canvas.graph,
+        this.animationStaticNodes,
+      );
 
       AnimatedLayoutConfigurator.configure(
         canvas,

@@ -1,5 +1,5 @@
 import { DraggableNodesParams } from "@/configurators";
-import { patchDraggableNodesParams } from "./patch-draggable-nodes-params";
+import { patchAnimatedLayoutDraggableNodesParams } from "./patch-draggable-nodes-params";
 import { Identifier } from "@/identifier";
 
 const createParams = (): DraggableNodesParams => {
@@ -16,12 +16,15 @@ const createParams = (): DraggableNodesParams => {
   };
 };
 
-describe("patchDraggableNodesParams", () => {
+describe("patchAnimatedLayoutDraggableNodesParams", () => {
   it("should add static node on grab", () => {
     const params = createParams();
     const staticNodes = new Set<Identifier>();
 
-    const patchedParams = patchDraggableNodesParams(params, staticNodes);
+    const patchedParams = patchAnimatedLayoutDraggableNodesParams(
+      params,
+      staticNodes,
+    );
 
     patchedParams.nodeDragVerifier("node-1");
 
@@ -33,7 +36,10 @@ describe("patchDraggableNodesParams", () => {
 
     const staticNodes = new Set<Identifier>();
     const spy = jest.spyOn(params, "nodeDragVerifier");
-    const patchedParams = patchDraggableNodesParams(params, staticNodes);
+    const patchedParams = patchAnimatedLayoutDraggableNodesParams(
+      params,
+      staticNodes,
+    );
 
     patchedParams.nodeDragVerifier("node-1");
 
@@ -44,7 +50,10 @@ describe("patchDraggableNodesParams", () => {
     const params = createParams();
     const staticNodes = new Set<Identifier>();
 
-    const patchedParams = patchDraggableNodesParams(params, staticNodes);
+    const patchedParams = patchAnimatedLayoutDraggableNodesParams(
+      params,
+      staticNodes,
+    );
 
     patchedParams.nodeDragVerifier("node-1");
     patchedParams.onNodeDragFinished("node-1");
@@ -57,7 +66,10 @@ describe("patchDraggableNodesParams", () => {
     const staticNodes = new Set<Identifier>();
 
     const spy = jest.spyOn(params, "onNodeDragFinished");
-    const patchedParams = patchDraggableNodesParams(params, staticNodes);
+    const patchedParams = patchAnimatedLayoutDraggableNodesParams(
+      params,
+      staticNodes,
+    );
 
     patchedParams.onNodeDragFinished("node-1");
 

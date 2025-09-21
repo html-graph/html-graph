@@ -1,7 +1,7 @@
 import { DraggableNodesParams } from "@/configurators";
 import { Identifier } from "@/identifier";
 
-export const patchDraggableNodesParams = (
+export const patchAnimatedLayoutDraggableNodesParams = (
   params: DraggableNodesParams,
   staticNodes: Set<Identifier>,
 ): DraggableNodesParams => {
