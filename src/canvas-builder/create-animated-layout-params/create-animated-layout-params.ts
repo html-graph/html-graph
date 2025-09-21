@@ -1,5 +1,5 @@
 import { AnimatedLayoutParams } from "@/configurators";
-import { AnimatedLayoutConfig } from "@html-graph/html-graph";
+import { AnimatedLayoutConfig } from "./animated-layout-config";
 
 export const createAnimatedLayoutParams = (
   config: AnimatedLayoutConfig,
