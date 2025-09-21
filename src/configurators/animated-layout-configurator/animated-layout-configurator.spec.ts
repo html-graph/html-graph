@@ -41,10 +41,11 @@ describe("AnimatedLayoutConfigurator", () => {
     let t = 0;
 
     spy.mockImplementation((callback) => {
-      setTimeout(() => {
+      (async (): Promise<void> => {
+        await wait(50);
         callback(t);
         t += 50;
-      }, 50);
+      })();
 
       return 0;
     });
@@ -140,6 +141,37 @@ describe("AnimatedLayoutConfigurator", () => {
       x: 100,
       y: 100,
     });
+
+    await wait(101);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 100, y: 100 });
+  });
+
+  it("should not update node coordinates for static node", async () => {
+    const animationStaticNodes = new Set<Identifier>();
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+    });
+
+    animationStaticNodes.add("node-1");
+
+    const algorithm = new DummyAnimatedLayoutAlgorithm();
+
+    AnimatedLayoutConfigurator.configure(
+      canvas,
+      {
+        algorithm,
+        maxTimeDeltaSec: 0.2,
+      },
+      animationStaticNodes,
+    );
 
     await wait(101);
 
