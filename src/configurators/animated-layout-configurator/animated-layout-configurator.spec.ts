@@ -113,7 +113,7 @@ describe("AnimatedLayoutConfigurator", () => {
       animationStaticNodes,
     );
 
-    await wait(101);
+    await wait(150);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
@@ -149,7 +149,7 @@ describe("AnimatedLayoutConfigurator", () => {
     expect({ x, y }).toEqual({ x: 100, y: 100 });
   });
 
-  it("should not update node coordinates for static node", async () => {
+  it("should not update node coordinates for node in the process of dragging", async () => {
     const animationStaticNodes = new Set<Identifier>();
     const canvas = createCanvas();
 
