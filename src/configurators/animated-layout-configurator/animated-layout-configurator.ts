@@ -1,48 +1,42 @@
 import { Identifier } from "@/identifier";
 import { AnimatedLayoutParams } from "./animated-layout-params";
 import { Canvas } from "@/canvas";
+import { AnimationSeries } from "@/animation-series";
 
 export class AnimatedLayoutConfigurator {
-  private previousTimeStamp: number | undefined = undefined;
-
-  private readonly step = (timeStamp: number): void => {
-    if (this.previousTimeStamp === undefined) {
-      this.previousTimeStamp = timeStamp;
-    } else {
-      const dtSec = (timeStamp - this.previousTimeStamp) / 1000;
-      this.previousTimeStamp = timeStamp;
-
-      if (dtSec < this.params.maxTimeDeltaSec) {
-        const nextCoords = this.params.algorithm.calculateNextCoordinates(
-          this.canvas.graph,
-          dtSec,
-          this.staticNodes,
-        );
-
-        nextCoords.forEach((coords, nodeId) => {
-          if (!this.staticNodes.has(nodeId)) {
-            this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
-          }
-        });
-      }
+  private readonly step = (dtSec: number): void => {
+    // TODO: move this param
+    if (dtSec > this.params.maxTimeDeltaSec) {
+      return;
     }
 
-    window.requestAnimationFrame(this.step);
+    const nextCoords = this.params.algorithm.calculateNextCoordinates(
+      this.canvas.graph,
+      dtSec,
+    );
+
+    nextCoords.forEach((coords, nodeId) => {
+      if (!this.staticNodes.has(nodeId)) {
+        this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
+      }
+    });
   };
 
   private constructor(
     private readonly canvas: Canvas,
     private readonly params: AnimatedLayoutParams,
     private readonly staticNodes: ReadonlySet<Identifier>,
+    private readonly win: Window,
   ) {
-    window.requestAnimationFrame(this.step);
+    new AnimationSeries(this.win, this.step);
   }
 
   public static configure(
     canvas: Canvas,
     params: AnimatedLayoutParams,
     staticNodes: Set<Identifier>,
+    win: Window,
   ): void {
-    new AnimatedLayoutConfigurator(canvas, params, staticNodes);
+    new AnimatedLayoutConfigurator(canvas, params, staticNodes, win);
   }
 }
