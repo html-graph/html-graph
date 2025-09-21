@@ -22,4 +22,15 @@ describe("createAnimatedLayoutParams", () => {
 
     expect(params.maxTimeDeltaSec).toBe(0.1);
   });
+
+  it("should set specified time delta limit", () => {
+    const config: AnimatedLayoutConfig = {
+      algorithm: new DummyAnimatedLayoutAlgorithm(),
+      maxTimeDeltaSec: 0.2,
+    };
+
+    const params = createAnimatedLayoutParams(config);
+
+    expect(params.maxTimeDeltaSec).toBe(0.2);
+  });
 });
