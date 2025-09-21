@@ -2,7 +2,7 @@ import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, defaultCanvasParams } from "@/mocks";
+import { defaultCanvasParams } from "@/mocks";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
@@ -11,7 +11,7 @@ import { Identifier } from "@/identifier";
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore();
-  const element = createElement({ width: 2500, height: 1000 });
+  const element = document.createElement("div");
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
