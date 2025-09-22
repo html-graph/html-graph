@@ -10,6 +10,7 @@ export type {
   VirtualScrollConfig,
   AnimatedLayoutConfig,
   LayoutConfig,
+  LayoutApplyOn,
 } from "./canvas-builder";
 
 export { CanvasError } from "./canvas";
@@ -76,9 +77,7 @@ export type { PriorityFn } from "./priority";
 
 export type { Identifier } from "./identifier";
 
-export type {
-  LayoutAlgorithm,
-  AnimatedLayoutAlgorithm,
-} from "./layout-algorithm";
+export type { LayoutAlgorithm } from "./layout-algorithm";
+export type { AnimatedLayoutAlgorithm } from "./animated-layout-algorithm";
 
 export { EventSubject } from "./event-subject";

@@ -60,7 +60,6 @@ describe("AnimatedLayoutConfigurator", () => {
       canvas,
       {
         algorithm,
-        maxTimeDeltaSec: 0.1,
       },
       animationStaticNodes,
       window,
@@ -72,37 +71,6 @@ describe("AnimatedLayoutConfigurator", () => {
     const { x, y } = canvas.graph.getNode("node-1")!;
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
-  });
-
-  it("should ignore steps above the time delta limit", async () => {
-    const animationStaticNodes = new Set<Identifier>();
-    const canvas = createCanvas();
-
-    const algorithm = new DummyAnimatedLayoutAlgorithm();
-
-    AnimatedLayoutConfigurator.configure(
-      canvas,
-      {
-        algorithm,
-        maxTimeDeltaSec: 0.05,
-      },
-      animationStaticNodes,
-      window,
-    );
-
-    canvas.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 100,
-      y: 100,
-    });
-
-    animationMock.timer.emit(0);
-    animationMock.timer.emit(100);
-
-    const { x, y } = canvas.graph.getNode("node-1")!;
-
-    expect({ x, y }).toEqual({ x: 100, y: 100 });
   });
 
   it("should not update node coordinates for node in the process of dragging", async () => {
@@ -124,7 +92,6 @@ describe("AnimatedLayoutConfigurator", () => {
       canvas,
       {
         algorithm,
-        maxTimeDeltaSec: 0.1,
       },
       animationStaticNodes,
       window,

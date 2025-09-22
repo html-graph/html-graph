@@ -14,7 +14,7 @@ const canvas: Canvas = builder
       layerSize: 300,
       layerSpace: 200,
     }),
-    applyOn: "topologyChangeTimeout",
+    applyOn: { type: "topologyChangeTimeout" },
   })
   .build();
 

@@ -1,5 +1,6 @@
 # TODO
 
+- default layout application strategy
 - topology change default timeout parameter
 - default force directed layout
 

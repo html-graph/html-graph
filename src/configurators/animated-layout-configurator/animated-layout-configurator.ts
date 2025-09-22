@@ -5,11 +5,6 @@ import { AnimationSeries } from "@/animation-series";
 
 export class AnimatedLayoutConfigurator {
   private readonly step = (dtSec: number): void => {
-    // TODO: move this param
-    if (dtSec > this.params.maxTimeDeltaSec) {
-      return;
-    }
-
     const nextCoords = this.params.algorithm.calculateNextCoordinates(
       this.canvas.graph,
       dtSec,
