@@ -19,7 +19,7 @@ export class LayoutConfigurator {
     }
 
     switch (strategy) {
-      case "topologyChange":
+      case "topologyChangeTimeout":
         TopologyChangeLayoutApplicationStrategyConfigurator.configure(
           canvas,
           params.algorithm,

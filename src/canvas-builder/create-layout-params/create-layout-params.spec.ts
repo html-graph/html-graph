@@ -5,7 +5,7 @@ import { createLayoutParams } from "./create-layout-params";
 describe("createLayoutParams", () => {
   it("should set specified algorithm", () => {
     const config: LayoutConfig = {
-      applyOn: "topologyChange",
+      applyOn: "topologyChangeTimeout",
       algorithm: new DummyLayoutAlgorithm(),
     };
 
@@ -16,7 +16,7 @@ describe("createLayoutParams", () => {
 
   it("should set specified trigger", () => {
     const config: LayoutConfig = {
-      applyOn: "topologyChange",
+      applyOn: "topologyChangeTimeout",
       algorithm: new DummyLayoutAlgorithm(),
     };
 

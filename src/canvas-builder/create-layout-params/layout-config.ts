@@ -3,5 +3,5 @@ import { LayoutAlgorithm } from "@/layout-algorithm";
 
 export interface LayoutConfig {
   readonly algorithm: LayoutAlgorithm;
-  readonly applyOn: "topologyChange" | EventSubject<void>;
+  readonly applyOn: "topologyChangeTimeout" | EventSubject<void>;
 }

@@ -36,7 +36,7 @@ describe("LayoutConfigurator", () => {
     const canvas = createCanvas();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: "topologyChange",
+      applyOn: "topologyChangeTimeout",
     };
 
     LayoutConfigurator.configure(canvas, config);
