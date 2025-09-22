@@ -77,11 +77,8 @@ export class PhysicalSimulationIteration {
         const forceFrom = forces.get(nodeIdFrom)!;
         const forceTo = forces.get(nodeIdTo)!;
         const totalForce = this.k / d2;
-        const massFrom = this.nodeMass;
-        const massTo = this.nodeMass;
-        const massTotal = massFrom + massTo;
-        const fx = (totalForce * ex * massFrom) / massTotal;
-        const fy = (totalForce * ey * massTo) / massTotal;
+        const fx = (totalForce * ex) / 2;
+        const fy = (totalForce * ey) / 2;
 
         forceFrom.x -= fx;
         forceFrom.y -= fy;

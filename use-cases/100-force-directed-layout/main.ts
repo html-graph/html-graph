@@ -26,6 +26,7 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
+  .enableAnimatedLayout()
   .enableAnimatedLayout({
     algorithm: new ForceDirectedLayoutAlgorithm({
       equilibriumEdgeLength: 300,

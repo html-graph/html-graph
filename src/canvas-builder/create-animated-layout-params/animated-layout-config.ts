@@ -1,5 +1,5 @@
 import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
 
 export interface AnimatedLayoutConfig {
-  readonly algorithm: AnimatedLayoutAlgorithm;
+  readonly algorithm?: AnimatedLayoutAlgorithm | undefined;
 }
