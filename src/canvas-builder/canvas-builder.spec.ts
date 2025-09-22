@@ -5,7 +5,7 @@ import { BezierEdgeShape } from "@/edges";
 import {
   createElement,
   createMouseMoveEvent,
-  // DummyAnimatedLayoutAlgorithm,
+  DummyAnimatedLayoutAlgorithm,
   triggerResizeFor,
   wait,
 } from "@/mocks";
@@ -20,6 +20,41 @@ const setLayersDimensions = (element: HTMLElement): void => {
 };
 
 describe("CanvasBuilder", () => {
+  const callbacks = new Set<(dtSec: number) => void>();
+  const timer = new EventSubject<number>();
+
+  timer.subscribe((dt) => {
+    const p: Array<() => void> = [];
+
+    callbacks.forEach((cb) => {
+      p.push(() => {
+        cb(dt);
+      });
+    });
+
+    callbacks.clear();
+
+    p.forEach((cb) => {
+      cb();
+    });
+  });
+
+  let spy: jest.SpyInstance<number, [callback: FrameRequestCallback], unknown>;
+
+  beforeAll(() => {
+    spy = jest.spyOn(window, "requestAnimationFrame");
+
+    spy.mockImplementation((callback) => {
+      callbacks.add(callback);
+
+      return 0;
+    });
+  });
+
+  afterAll(() => {
+    spy.mockRestore();
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -362,101 +397,105 @@ describe("CanvasBuilder", () => {
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
-  // it("should build canvas with specified animated layout", async () => {
-  //   const builder = new CanvasBuilder(document.createElement("div"));
+  it("should build canvas with specified animated layout", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
 
-  //   const canvas = builder
-  //     .enableAnimatedLayout({
-  //       algorithm: new DummyAnimatedLayoutAlgorithm(),
-  //     })
-  //     .build();
+    const canvas = builder
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(),
+      })
+      .build();
 
-  //   canvas.addNode({ id: "node-1", element: document.createElement("div") });
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-  //   await wait(50);
+    timer.emit(0);
+    timer.emit(100);
 
-  //   const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1")!;
 
-  //   expect({ x, y }).toEqual({ x: 0, y: 0 });
-  // });
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
 
-  // it("should unset canvas layout config when animated layout configured", async () => {
-  //   const builder = new CanvasBuilder(document.createElement("div"));
-  //   const trigger = new EventSubject<void>();
+  it("should unset canvas layout config when animated layout configured", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    const trigger = new EventSubject<void>();
 
-  //   const canvas = builder
-  //     .enableLayout({
-  //       algorithm: new DummyLayoutAlgorithm(),
-  //       applyOn: trigger,
-  //     })
-  //     .enableAnimatedLayout({
-  //       algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
-  //     })
-  //     .build();
+    const canvas = builder
+      .enableLayout({
+        algorithm: new DummyLayoutAlgorithm(),
+        applyOn: trigger,
+      })
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .build();
 
-  //   canvas.addNode({ id: "node-1", element: document.createElement("div") });
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-  //   await wait(50);
+    timer.emit(0);
+    timer.emit(100);
 
-  //   trigger.emit();
+    trigger.emit();
 
-  //   const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1")!;
 
-  //   expect({ x, y }).toEqual({ x: 100, y: 100 });
-  // });
+    expect({ x, y }).toEqual({ x: 100, y: 100 });
+  });
 
-  // it("should unset canvas animated layout config when layout configured", async () => {
-  //   const builder = new CanvasBuilder(document.createElement("div"));
-  //   const trigger = new EventSubject<void>();
+  it("should unset canvas animated layout config when layout configured", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    const trigger = new EventSubject<void>();
 
-  //   const canvas = builder
-  //     .enableAnimatedLayout({
-  //       algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
-  //     })
-  //     .enableLayout({
-  //       algorithm: new DummyLayoutAlgorithm(),
-  //       applyOn: trigger,
-  //     })
-  //     .build();
+    const canvas = builder
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .enableLayout({
+        algorithm: new DummyLayoutAlgorithm(),
+        applyOn: trigger,
+      })
+      .build();
 
-  //   canvas.addNode({ id: "node-1", element: document.createElement("div") });
-  //   trigger.emit();
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+    trigger.emit();
 
-  //   await wait(50);
+    timer.emit(0);
+    timer.emit(100);
 
-  //   const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1")!;
 
-  //   expect({ x, y }).toEqual({ x: 0, y: 0 });
-  // });
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
 
-  // it("should should not animate grabbed node", async () => {
-  //   const canvasElement = createElement({ width: 1000, height: 1000 });
-  //   const builder = new CanvasBuilder(canvasElement);
+  it("should should not animate grabbed node", async () => {
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
 
-  //   const canvas = builder
-  //     .enableUserDraggableNodes()
-  //     .enableAnimatedLayout({
-  //       algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
-  //     })
-  //     .build();
+    const canvas = builder
+      .enableUserDraggableNodes()
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .build();
 
-  //   setLayersDimensions(canvasElement);
+    setLayersDimensions(canvasElement);
 
-  //   const nodeElement = createElement();
+    const nodeElement = createElement();
 
-  //   canvas.addNode({
-  //     id: "node-1",
-  //     element: nodeElement,
-  //     x: 0,
-  //     y: 0,
-  //   });
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
 
-  //   nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
-  //   await wait(50);
+    timer.emit(0);
+    timer.emit(100);
 
-  //   const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1")!;
 
-  //   expect({ x, y }).toEqual({ x: 0, y: 0 });
-  // });
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
 });
