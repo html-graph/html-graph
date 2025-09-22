@@ -6,6 +6,5 @@ export const createAnimatedLayoutParams = (
 ): AnimatedLayoutParams => {
   return {
     algorithm: config.algorithm,
-    maxTimeDeltaSec: config.maxTimeDeltaSec ?? 0.1,
   };
 };

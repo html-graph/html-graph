@@ -1,7 +1,7 @@
-import { EventSubject } from "@/event-subject";
 import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutApplyOn } from "./layout-apply-on";
 
 export interface LayoutConfig {
   readonly algorithm: LayoutAlgorithm;
-  readonly applyOn: "topologyChangeTimeout" | EventSubject<void>;
+  readonly applyOn: LayoutApplyOn;
 }

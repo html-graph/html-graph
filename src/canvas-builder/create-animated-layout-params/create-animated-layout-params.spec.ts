@@ -12,25 +12,4 @@ describe("createAnimatedLayoutParams", () => {
 
     expect(params.algorithm).toBe(config.algorithm);
   });
-
-  it("should set 100ms default time delta limit", () => {
-    const config: AnimatedLayoutConfig = {
-      algorithm: new DummyAnimatedLayoutAlgorithm(),
-    };
-
-    const params = createAnimatedLayoutParams(config);
-
-    expect(params.maxTimeDeltaSec).toBe(0.1);
-  });
-
-  it("should set specified time delta limit", () => {
-    const config: AnimatedLayoutConfig = {
-      algorithm: new DummyAnimatedLayoutAlgorithm(),
-      maxTimeDeltaSec: 0.2,
-    };
-
-    const params = createAnimatedLayoutParams(config);
-
-    expect(params.maxTimeDeltaSec).toBe(0.2);
-  });
 });

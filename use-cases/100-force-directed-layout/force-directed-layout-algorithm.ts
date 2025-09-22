@@ -22,6 +22,10 @@ export class ForceDirectedLayoutAlgorithm implements AnimatedLayoutAlgorithm {
     graph: Graph,
     dt: number,
   ): ReadonlyMap<Identifier, Point> {
+    if (dt > 0.1) {
+      return new Map();
+    }
+
     const iteration = new PhysicalSimulationIteration({
       graph,
       dt,

@@ -1,6 +1,6 @@
+import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
-import { AnimatedLayoutAlgorithm } from "@/layout-algorithm";
 import { Point } from "@/point";
 
 export class DummyAnimatedLayoutAlgorithm implements AnimatedLayoutAlgorithm {

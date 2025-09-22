@@ -1,6 +1,5 @@
-import { AnimatedLayoutAlgorithm } from "@/layout-algorithm";
+import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
 
 export interface AnimatedLayoutParams {
   readonly algorithm: AnimatedLayoutAlgorithm;
-  readonly maxTimeDeltaSec: number;
 }

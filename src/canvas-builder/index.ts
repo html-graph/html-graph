@@ -11,4 +11,4 @@ export type {
 } from "./create-transformable-viewport-params";
 export { CanvasBuilderError } from "./canvas-builder-error";
 export type { AnimatedLayoutConfig } from "./create-animated-layout-params";
-export type { LayoutConfig } from "./create-layout-params";
+export type { LayoutConfig, LayoutApplyOn } from "./create-layout-params";

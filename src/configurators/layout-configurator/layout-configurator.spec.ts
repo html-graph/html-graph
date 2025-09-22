@@ -36,7 +36,7 @@ describe("LayoutConfigurator", () => {
     const canvas = createCanvas();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: "topologyChangeTimeout",
+      applyOn: { type: "topologyChangeTimeout" },
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -54,7 +54,7 @@ describe("LayoutConfigurator", () => {
     const trigger = new EventSubject<void>();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: trigger,
+      applyOn: { type: "manual", trigger },
     };
 
     LayoutConfigurator.configure(canvas, config);
