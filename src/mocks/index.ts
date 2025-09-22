@@ -8,3 +8,4 @@ export { defaultCanvasParams } from "./default-canvas-params";
 export { DummyLayoutAlgorithm } from "./dummy-layout-algorithm.mock";
 export { DummyAnimatedLayoutAlgorithm } from "./dummy-animated-layout-algorithm.mock";
 export { AnimationFrameMock } from "./animation-frame.mock";
+export { createCanvas } from "./create-canvas.mock";
