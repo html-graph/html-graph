@@ -3,6 +3,7 @@ import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import {
+  AnimationFrameMock,
   createElement,
   createMouseMoveEvent,
   DummyAnimatedLayoutAlgorithm,
@@ -20,39 +21,14 @@ const setLayersDimensions = (element: HTMLElement): void => {
 };
 
 describe("CanvasBuilder", () => {
-  const callbacks = new Set<(dtSec: number) => void>();
-  const timer = new EventSubject<number>();
+  const animationMock = new AnimationFrameMock();
 
-  timer.subscribe((dt) => {
-    const p: Array<() => void> = [];
-
-    callbacks.forEach((cb) => {
-      p.push(() => {
-        cb(dt);
-      });
-    });
-
-    callbacks.clear();
-
-    p.forEach((cb) => {
-      cb();
-    });
+  beforeEach(() => {
+    animationMock.hook();
   });
 
-  let spy: jest.SpyInstance<number, [callback: FrameRequestCallback], unknown>;
-
-  beforeAll(() => {
-    spy = jest.spyOn(window, "requestAnimationFrame");
-
-    spy.mockImplementation((callback) => {
-      callbacks.add(callback);
-
-      return 0;
-    });
-  });
-
-  afterAll(() => {
-    spy.mockRestore();
+  afterEach(() => {
+    animationMock.unhook();
   });
 
   afterEach(() => {
@@ -408,8 +384,8 @@ describe("CanvasBuilder", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
@@ -432,8 +408,8 @@ describe("CanvasBuilder", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     trigger.emit();
 
@@ -459,8 +435,8 @@ describe("CanvasBuilder", () => {
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
     trigger.emit();
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
@@ -491,8 +467,8 @@ describe("CanvasBuilder", () => {
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 

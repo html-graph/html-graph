@@ -1,48 +1,23 @@
-import { EventSubject } from "@/event-subject";
 import { AnimationSeries } from "./animation-series";
+import { AnimationFrameMock } from "@/mocks";
 
 describe("AnimationSeries", () => {
-  const callbacks = new Set<(dtSec: number) => void>();
-  const timer = new EventSubject<number>();
+  const animationMock = new AnimationFrameMock();
 
-  timer.subscribe((dt) => {
-    const p: Array<() => void> = [];
-
-    callbacks.forEach((cb) => {
-      p.push(() => {
-        cb(dt);
-      });
-    });
-
-    callbacks.clear();
-
-    p.forEach((cb) => {
-      cb();
-    });
+  beforeEach(() => {
+    animationMock.hook();
   });
 
-  let spy: jest.SpyInstance<number, [callback: FrameRequestCallback], unknown>;
-
-  beforeAll(() => {
-    spy = jest.spyOn(window, "requestAnimationFrame");
-
-    spy.mockImplementation((callback) => {
-      callbacks.add(callback);
-
-      return 0;
-    });
-  });
-
-  afterAll(() => {
-    spy.mockRestore();
+  afterEach(() => {
+    animationMock.unhook();
   });
 
   it("should call callback with latest frames difference", () => {
     const callback = jest.fn();
     new AnimationSeries(window, callback);
 
-    timer.emit(100);
-    timer.emit(300);
+    animationMock.timer.emit(100);
+    animationMock.timer.emit(300);
 
     expect(callback).toHaveBeenCalledWith(0.2);
   });

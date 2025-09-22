@@ -2,12 +2,15 @@ import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import { defaultCanvasParams, DummyAnimatedLayoutAlgorithm } from "@/mocks";
+import {
+  AnimationFrameMock,
+  defaultCanvasParams,
+  DummyAnimatedLayoutAlgorithm,
+} from "@/mocks";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
 import { Identifier } from "@/identifier";
-import { EventSubject } from "@/event-subject";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -30,39 +33,14 @@ const createCanvas = (): Canvas => {
 };
 
 describe("AnimatedLayoutConfigurator", () => {
-  const callbacks = new Set<(dtSec: number) => void>();
-  const timer = new EventSubject<number>();
+  const animationMock = new AnimationFrameMock();
 
-  timer.subscribe((dt) => {
-    const p: Array<() => void> = [];
-
-    callbacks.forEach((cb) => {
-      p.push(() => {
-        cb(dt);
-      });
-    });
-
-    callbacks.clear();
-
-    p.forEach((cb) => {
-      cb();
-    });
+  beforeEach(() => {
+    animationMock.hook();
   });
 
-  let spy: jest.SpyInstance<number, [callback: FrameRequestCallback], unknown>;
-
-  beforeAll(() => {
-    spy = jest.spyOn(window, "requestAnimationFrame");
-
-    spy.mockImplementation((callback) => {
-      callbacks.add(callback);
-
-      return 0;
-    });
-  });
-
-  afterAll(() => {
-    spy.mockRestore();
+  afterEach(() => {
+    animationMock.unhook();
   });
 
   it("should update node coordinates on second animation frame", async () => {
@@ -88,8 +66,8 @@ describe("AnimatedLayoutConfigurator", () => {
       window,
     );
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
@@ -119,8 +97,8 @@ describe("AnimatedLayoutConfigurator", () => {
       y: 100,
     });
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
@@ -152,8 +130,8 @@ describe("AnimatedLayoutConfigurator", () => {
       window,
     );
 
-    timer.emit(0);
-    timer.emit(100);
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 
