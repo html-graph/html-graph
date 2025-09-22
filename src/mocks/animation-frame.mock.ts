@@ -1,7 +1,7 @@
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 export class AnimationFrameMock {
-  private readonly callbacks = new Set<(dtSec: number) => void>();
+  private callbacks: Array<(dtSec: number) => void> = [];
 
   public readonly timerHandler: EventHandler<number>;
 
@@ -25,7 +25,7 @@ export class AnimationFrameMock {
         });
       });
 
-      this.callbacks.clear();
+      this.callbacks = [];
 
       p.forEach((cb) => {
         cb();
@@ -37,7 +37,7 @@ export class AnimationFrameMock {
     this.spy = jest.spyOn(window, "requestAnimationFrame");
 
     this.spy.mockImplementation((callback) => {
-      this.callbacks.add(callback);
+      this.callbacks.push(callback);
 
       return 0;
     });
