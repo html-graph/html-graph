@@ -3,13 +3,15 @@ import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import {
+  AnimationFrameMock,
   createElement,
   createMouseMoveEvent,
+  DummyAnimatedLayoutAlgorithm,
   triggerResizeFor,
   wait,
 } from "@/mocks";
 import { CanvasBuilderError } from "./canvas-builder-error";
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
 
 const setLayersDimensions = (element: HTMLElement): void => {
@@ -19,6 +21,16 @@ const setLayersDimensions = (element: HTMLElement): void => {
 };
 
 describe("CanvasBuilder", () => {
+  const animationMock = new AnimationFrameMock();
+
+  beforeEach(() => {
+    animationMock.hook();
+  });
+
+  afterEach(() => {
+    animationMock.unhook();
+  });
+
   afterEach(() => {
     document.body.innerHTML = "";
   });
@@ -181,16 +193,12 @@ describe("CanvasBuilder", () => {
       element: document.createElement("div"),
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     canvas.addNode({
       element: document.createElement("div"),
       x: 300,
       y: 300,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     await wait(0);
@@ -359,6 +367,108 @@ describe("CanvasBuilder", () => {
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
     trigger.emit();
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should build canvas with specified animated layout", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+
+    const canvas = builder
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(),
+      })
+      .build();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should unset canvas layout config when animated layout configured", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    const trigger = new EventSubject<void>();
+
+    const canvas = builder
+      .enableLayout({
+        algorithm: new DummyLayoutAlgorithm(),
+        applyOn: trigger,
+      })
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .build();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
+
+    trigger.emit();
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 100, y: 100 });
+  });
+
+  it("should unset canvas animated layout config when layout configured", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+    const trigger = new EventSubject<void>();
+
+    const canvas = builder
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .enableLayout({
+        algorithm: new DummyLayoutAlgorithm(),
+        applyOn: trigger,
+      })
+      .build();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+    trigger.emit();
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should should not animate grabbed node", async () => {
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
+
+    const canvas = builder
+      .enableUserDraggableNodes()
+      .enableAnimatedLayout({
+        algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
+      })
+      .build();
+
+    setLayersDimensions(canvasElement);
+
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
 
     const { x, y } = canvas.graph.getNode("node-1")!;
 

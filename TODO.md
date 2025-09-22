@@ -1,7 +1,10 @@
 # TODO
 
-- apply until stabilization strategy
+- topology change default timeout parameter
 - default force directed layout
+
+- add onNodeDragStarted event
+
 - tree layout
 
 - port and node svg elements

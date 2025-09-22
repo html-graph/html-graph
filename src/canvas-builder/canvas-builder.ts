@@ -11,12 +11,15 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
+  DraggableNodesParams,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
   UserDraggableNodesConfigurator,
   UserTransformableViewportConfigurator,
   UserTransformableViewportVirtualScrollConfigurator,
+  LayoutConfigurator,
+  AnimatedLayoutConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
@@ -48,7 +51,12 @@ import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { LayoutConfig, LayoutConfigurator } from "./layout-configurator";
+import { Identifier } from "@/identifier";
+import { AnimatedLayoutConfig } from "./create-animated-layout-params";
+import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
+import { createLayoutParams, LayoutConfig } from "./create-layout-params";
+import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
+import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 
 export class CanvasBuilder {
   private used = false;
@@ -69,7 +77,9 @@ export class CanvasBuilder {
 
   private layoutConfig: LayoutConfig | undefined = undefined;
 
-  private hasDraggableNode = false;
+  private animatedLayoutConfig: AnimatedLayoutConfig | undefined = undefined;
+
+  private hasDraggableNodes = false;
 
   private hasTransformableViewport = false;
 
@@ -93,6 +103,8 @@ export class CanvasBuilder {
 
   private readonly window: Window = window;
 
+  private readonly animationStaticNodes = new Set<Identifier>();
+
   public constructor(private readonly element: HTMLElement) {}
 
   /**
@@ -110,7 +122,7 @@ export class CanvasBuilder {
   public enableUserDraggableNodes(
     config?: DraggableNodesConfig,
   ): CanvasBuilder {
-    this.hasDraggableNode = true;
+    this.hasDraggableNodes = true;
     this.dragConfig = config ?? {};
 
     return this;
@@ -186,6 +198,17 @@ export class CanvasBuilder {
    */
   public enableLayout(config: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config;
+    this.animatedLayoutConfig = undefined;
+
+    return this;
+  }
+
+  /**
+   * enables animated nodes positioning with specified layout
+   */
+  public enableAnimatedLayout(config: AnimatedLayoutConfig): CanvasBuilder {
+    this.animatedLayoutConfig = config;
+    this.layoutConfig = undefined;
 
     return this;
   }
@@ -242,12 +265,22 @@ export class CanvasBuilder {
       NodeResizeReactiveEdgesConfigurator.configure(canvas);
     }
 
-    if (this.hasDraggableNode) {
+    if (this.hasDraggableNodes) {
+      let draggableNodesParams: DraggableNodesParams =
+        createDraggableNodesParams(this.dragConfig);
+
+      if (this.animatedLayoutConfig !== undefined) {
+        draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
+          draggableNodesParams,
+          this.animationStaticNodes,
+        );
+      }
+
       UserDraggableNodesConfigurator.configure(
         canvas,
         layers.main,
         this.window,
-        createDraggableNodesParams(this.dragConfig),
+        draggableNodesParams,
       );
     }
 
@@ -301,7 +334,24 @@ export class CanvasBuilder {
     }
 
     if (this.layoutConfig !== undefined) {
-      LayoutConfigurator.configure(canvas, this.layoutConfig);
+      LayoutConfigurator.configure(
+        canvas,
+        createLayoutParams(this.layoutConfig),
+      );
+    }
+
+    if (this.animatedLayoutConfig !== undefined) {
+      subscribeAnimatedLayoutStaticNodesUpdate(
+        canvas.graph,
+        this.animationStaticNodes,
+      );
+
+      AnimatedLayoutConfigurator.configure(
+        canvas,
+        createAnimatedLayoutParams(this.animatedLayoutConfig),
+        this.animationStaticNodes,
+        this.window,
+      );
     }
 
     const onBeforeDestroy = (): void => {

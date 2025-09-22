@@ -5,8 +5,8 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
-import { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-change-layout-application-strategy-configurator";
+import { DummyLayoutAlgorithm } from "@/mocks";
+import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "./topology-change-timeout-layout-application-strategy-configurator";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -29,12 +29,12 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
+describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on adding a new node", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -51,7 +51,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -74,7 +74,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -102,7 +102,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
