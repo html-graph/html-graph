@@ -350,7 +350,7 @@ export class CanvasBuilder {
         canvas,
         createAnimatedLayoutParams(this.animatedLayoutConfig),
         this.animationStaticNodes,
-        window,
+        this.window,
       );
     }
 
