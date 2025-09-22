@@ -6,7 +6,7 @@ import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
 import { DummyLayoutAlgorithm } from "@/mocks";
-import { TopologyChangeLayoutApplicationStrategyConfigurator } from "./topology-change-layout-application-strategy-configurator";
+import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "./topology-change-timeout-layout-application-strategy-configurator";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -34,7 +34,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -51,7 +51,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -74,7 +74,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );
@@ -102,7 +102,7 @@ describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
     );

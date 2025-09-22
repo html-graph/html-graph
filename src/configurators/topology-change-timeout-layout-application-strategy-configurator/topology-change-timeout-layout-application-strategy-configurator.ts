@@ -1,7 +1,7 @@
 import { Canvas } from "@/canvas";
 import { LayoutAlgorithm } from "@/layout-algorithm";
 
-export class TopologyChangeLayoutApplicationStrategyConfigurator {
+export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
   private applyScheduled = false;
 
   private constructor(
@@ -29,7 +29,7 @@ export class TopologyChangeLayoutApplicationStrategyConfigurator {
     canvas: Canvas,
     layoutAlgorithm: LayoutAlgorithm,
   ): void {
-    new TopologyChangeLayoutApplicationStrategyConfigurator(
+    new TopologyChangeTimeoutLayoutApplicationStrategyConfigurator(
       canvas,
       layoutAlgorithm,
     );

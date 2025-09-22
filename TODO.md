@@ -1,5 +1,6 @@
 # TODO
 
+- topology change default timeout parameter
 - default force directed layout
 
 - add onNodeDragStarted event

@@ -2,7 +2,7 @@ import { LayoutParams } from "./layout-config";
 import { Canvas } from "@/canvas";
 import {
   ManualLayoutApplicationStrategyConfigurator,
-  TopologyChangeLayoutApplicationStrategyConfigurator,
+  TopologyChangeTimeoutLayoutApplicationStrategyConfigurator,
 } from "@/configurators";
 import { EventSubject } from "@/event-subject";
 
@@ -20,7 +20,7 @@ export class LayoutConfigurator {
 
     switch (strategy) {
       case "topologyChangeTimeout":
-        TopologyChangeLayoutApplicationStrategyConfigurator.configure(
+        TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
           canvas,
           params.algorithm,
         );
