@@ -29,7 +29,7 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-describe("TopologyChangeLayoutApplicationStrategyConfigurator", () => {
+describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on adding a new node", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
