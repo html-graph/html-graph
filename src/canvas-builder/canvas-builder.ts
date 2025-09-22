@@ -55,7 +55,7 @@ import { Identifier } from "@/identifier";
 import { AnimatedLayoutConfig } from "./create-animated-layout-params";
 import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
 import { createLayoutParams, LayoutConfig } from "./create-layout-params";
-import { patchAnimatedLayoutDraggableNodesParams } from "./patch-draggable-nodes-animated-layout-params";
+import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 
 export class CanvasBuilder {

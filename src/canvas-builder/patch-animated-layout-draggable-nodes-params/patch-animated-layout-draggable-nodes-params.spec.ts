@@ -1,5 +1,5 @@
 import { DraggableNodesParams } from "@/configurators";
-import { patchAnimatedLayoutDraggableNodesParams } from "./patch-draggable-nodes-params";
+import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { Identifier } from "@/identifier";
 
 const createParams = (): DraggableNodesParams => {
