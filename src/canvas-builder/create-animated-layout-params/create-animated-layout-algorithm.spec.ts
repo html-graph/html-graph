@@ -22,12 +22,16 @@ describe("createAnimatedLayoutParams", () => {
   it("should resolve force based algorithm when config not specified", () => {
     const algorithm = createAnimatedLayoutAlgorithm(undefined);
 
-    expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(true);
+    expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(
+      true,
+    );
   });
 
   it("should resolve force based algorithm when algorithm not specified", () => {
     const algorithm = createAnimatedLayoutAlgorithm({});
 
-    expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(true);
+    expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(
+      true,
+    );
   });
 });
