@@ -1,7 +1,7 @@
 import { createCanvas } from "@/mocks";
-import { ForceBasedAnimatedLayoutAlgorithm } from "./force-based-animated-layout-algorithm";
+import { ForceDirectedAnimatedLayoutAlgorithm } from "./force-directed-animated-layout-algorithm";
 
-describe("ForceBasedAnimatedLayoutAlgorithm", () => {
+describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
   it("should calculate coordinates based on total forces", () => {
     const canvas = createCanvas();
 
@@ -31,7 +31,7 @@ describe("ForceBasedAnimatedLayoutAlgorithm", () => {
       ],
     });
 
-    const algorithm = new ForceBasedAnimatedLayoutAlgorithm({
+    const algorithm = new ForceDirectedAnimatedLayoutAlgorithm({
       rand: (): number => 0,
       maxTimeDeltaSec: 1,
       nodeCharge: 10,
@@ -69,7 +69,7 @@ describe("ForceBasedAnimatedLayoutAlgorithm", () => {
       ],
     });
 
-    const algorithm = new ForceBasedAnimatedLayoutAlgorithm({
+    const algorithm = new ForceDirectedAnimatedLayoutAlgorithm({
       rand: (): number => 0,
       maxTimeDeltaSec: 0.1,
       nodeCharge: 10,

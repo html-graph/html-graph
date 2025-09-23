@@ -3,13 +3,13 @@ import { Point } from "@/point";
 import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
-import { ForceBasedAnimatedLayoutAlgorithmParams } from "./force-based-animated-layout-algorithm-params";
+import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
-export class ForceBasedAnimatedLayoutAlgorithm
+export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
 {
   public constructor(
-    private readonly params: ForceBasedAnimatedLayoutAlgorithmParams,
+    private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
   ) {}
 
   public calculateNextCoordinates(

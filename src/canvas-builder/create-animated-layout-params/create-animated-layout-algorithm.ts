@@ -1,10 +1,10 @@
 import { AnimatedLayoutConfig } from "./animated-layout-config";
 import {
   AnimatedLayoutAlgorithm,
-  ForceBasedAnimatedLayoutAlgorithm,
+  ForceDirectedAnimatedLayoutAlgorithm,
 } from "@/animated-layout-algorithm";
 import { cyrb128, sfc32 } from "@/prng";
-import { forceBasedDefaults } from "./force-based-defaults";
+import { forceDirectedDefaults } from "./force-directed-defaults";
 
 export const createAnimatedLayoutAlgorithm = (
   config: AnimatedLayoutConfig | undefined,
@@ -15,22 +15,22 @@ export const createAnimatedLayoutAlgorithm = (
     }
     default: {
       const algorithm = config?.algorithm;
-      const seed = cyrb128(algorithm?.seed ?? forceBasedDefaults.seed);
+      const seed = cyrb128(algorithm?.seed ?? forceDirectedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
       const resolver = (): number => rand() * 1000;
 
-      return new ForceBasedAnimatedLayoutAlgorithm({
+      return new ForceDirectedAnimatedLayoutAlgorithm({
         rand,
         maxTimeDeltaSec:
-          algorithm?.maxTimeDeltaSec ?? forceBasedDefaults.maxTimeDeltaSec,
-        nodeCharge: algorithm?.nodeCharge ?? forceBasedDefaults.nodeCharge,
-        nodeMass: algorithm?.nodeMass ?? forceBasedDefaults.nodeMass,
+          algorithm?.maxTimeDeltaSec ?? forceDirectedDefaults.maxTimeDeltaSec,
+        nodeCharge: algorithm?.nodeCharge ?? forceDirectedDefaults.nodeCharge,
+        nodeMass: algorithm?.nodeMass ?? forceDirectedDefaults.nodeMass,
         edgeEquilibriumLength:
           algorithm?.edgeEquilibriumLength ??
-          forceBasedDefaults.edgeEquilibriumLength,
-        effectiveDistance: forceBasedDefaults.effectiveDistance,
+          forceDirectedDefaults.edgeEquilibriumLength,
+        effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
-          algorithm?.edgeStiffness ?? forceBasedDefaults.edgeStiffness,
+          algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
         xFallbackResolver: resolver,
         yFallbackResolver: resolver,
       });

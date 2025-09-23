@@ -1,2 +1,2 @@
 export type { AnimatedLayoutAlgorithm } from "./animated-layout-algorithm";
-export { ForceBasedAnimatedLayoutAlgorithm } from "./force-based-animated-layout-algorithm";
+export { ForceDirectedAnimatedLayoutAlgorithm } from "./force-directed-animated-layout-algorithm";

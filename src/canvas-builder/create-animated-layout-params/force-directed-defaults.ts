@@ -1,4 +1,4 @@
-export const forceBasedDefaults = Object.freeze({
+export const forceDirectedDefaults = Object.freeze({
   seed: "HTMLGraph is awesome",
   maxTimeDeltaSec: 0.1,
   nodeCharge: 1e5,
