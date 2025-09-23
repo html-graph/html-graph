@@ -7,7 +7,7 @@ export interface AnimatedLayoutConfig {
         readonly instance: AnimatedLayoutAlgorithm;
       }
     | {
-        readonly type?: "forceBased";
+        readonly type?: "forceDirected";
         readonly maxTimeDeltaSec?: number;
         readonly nodeCharge?: number;
         readonly nodeMass?: number;
