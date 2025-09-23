@@ -1,8 +1,8 @@
 # TODO
 
+- default force directed layout
 - default layout application strategy
 - topology change default timeout parameter
-- default force directed layout
 
 - add onNodeDragStarted event
 
