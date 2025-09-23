@@ -9,26 +9,27 @@ import { forceBasedDefaults } from "./force-based-defaults";
 export const createAnimatedLayoutAlgorithm = (
   config: AnimatedLayoutConfig | undefined,
 ): AnimatedLayoutAlgorithm => {
-  switch (config?.type) {
+  switch (config?.algorithm?.type) {
     case "custom": {
-      return config.algorithm;
+      return config.algorithm.instance;
     }
     default: {
       const seed = cyrb128(forceBasedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
       const resolver = (): number => rand() * 1000;
+      const algorithm = config?.algorithm;
 
       return new ForceBasedAnimatedLayoutAlgorithm({
         rand,
         maxTimeDeltaSec:
-          config?.maxTimeDeltaSec ?? forceBasedDefaults.maxTimeDeltaSec,
-        nodeCharge: config?.nodeCharge ?? forceBasedDefaults.nodeCharge,
-        nodeMass: config?.nodeMass ?? forceBasedDefaults.nodeMass,
+          algorithm?.maxTimeDeltaSec ?? forceBasedDefaults.maxTimeDeltaSec,
+        nodeCharge: algorithm?.nodeCharge ?? forceBasedDefaults.nodeCharge,
+        nodeMass: algorithm?.nodeMass ?? forceBasedDefaults.nodeMass,
         edgeEquilibriumLength:
-          config?.edgeEquilibriumLength ??
+          algorithm?.edgeEquilibriumLength ??
           forceBasedDefaults.edgeEquilibriumLength,
         edgeStiffness:
-          config?.edgeStiffness ?? forceBasedDefaults.edgeStiffness,
+          algorithm?.edgeStiffness ?? forceBasedDefaults.edgeStiffness,
         xFallbackResolver: resolver,
         yFallbackResolver: resolver,
       });
