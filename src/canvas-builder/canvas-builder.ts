@@ -52,8 +52,10 @@ import { CanvasBuilderError } from "./canvas-builder-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { Identifier } from "@/identifier";
-import { AnimatedLayoutConfig } from "./create-animated-layout-params";
-import { createAnimatedLayoutParams } from "./create-animated-layout-params/create-animated-layout-params";
+import {
+  AnimatedLayoutConfig,
+  createAnimatedLayoutAlgorithm,
+} from "./create-animated-layout-params";
 import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
@@ -90,6 +92,8 @@ export class CanvasBuilder {
   private hasUserConnectablePorts = false;
 
   private hasUserDraggableEdges = false;
+
+  private hasAnimatedLayout = false;
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
@@ -199,6 +203,7 @@ export class CanvasBuilder {
   public enableLayout(config: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config;
     this.animatedLayoutConfig = undefined;
+    this.hasAnimatedLayout = false;
 
     return this;
   }
@@ -206,8 +211,9 @@ export class CanvasBuilder {
   /**
    * enables animated nodes positioning with specified layout
    */
-  public enableAnimatedLayout(config: AnimatedLayoutConfig): CanvasBuilder {
+  public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
     this.animatedLayoutConfig = config;
+    this.hasAnimatedLayout = true;
     this.layoutConfig = undefined;
 
     return this;
@@ -269,7 +275,7 @@ export class CanvasBuilder {
       let draggableNodesParams: DraggableNodesParams =
         createDraggableNodesParams(this.dragConfig);
 
-      if (this.animatedLayoutConfig !== undefined) {
+      if (this.hasAnimatedLayout) {
         draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
           draggableNodesParams,
           this.animationStaticNodes,
@@ -340,7 +346,7 @@ export class CanvasBuilder {
       );
     }
 
-    if (this.animatedLayoutConfig !== undefined) {
+    if (this.hasAnimatedLayout) {
       subscribeAnimatedLayoutStaticNodesUpdate(
         canvas.graph,
         this.animationStaticNodes,
@@ -348,7 +354,7 @@ export class CanvasBuilder {
 
       AnimatedLayoutConfigurator.configure(
         canvas,
-        createAnimatedLayoutParams(this.animatedLayoutConfig),
+        createAnimatedLayoutAlgorithm(this.animatedLayoutConfig),
         this.animationStaticNodes,
         this.window,
       );

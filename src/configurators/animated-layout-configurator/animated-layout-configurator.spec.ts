@@ -58,9 +58,7 @@ describe("AnimatedLayoutConfigurator", () => {
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      {
-        algorithm,
-      },
+      algorithm,
       animationStaticNodes,
       window,
     );
@@ -90,9 +88,7 @@ describe("AnimatedLayoutConfigurator", () => {
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      {
-        algorithm,
-      },
+      algorithm,
       animationStaticNodes,
       window,
     );
