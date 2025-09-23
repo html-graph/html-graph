@@ -27,6 +27,7 @@ const canvas: Canvas = builder
   })
   .enableUserTransformableViewport()
   .enableAnimatedLayout({
+    type: "custom",
     algorithm: new ForceDirectedLayoutAlgorithm({
       nodeCharge: 1e5,
       nodeMass: 1,

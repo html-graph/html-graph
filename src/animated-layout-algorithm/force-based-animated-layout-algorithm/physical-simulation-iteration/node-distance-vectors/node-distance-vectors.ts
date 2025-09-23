@@ -5,6 +5,7 @@ import { Point } from "@/point";
 export class NodeDistanceVectors {
   public constructor(
     private readonly coordinates: ReadonlyMap<Identifier, Point>,
+    private readonly rand: () => number,
   ) {}
 
   public getVector(
@@ -19,7 +20,9 @@ export class NodeDistanceVectors {
     const d2 = dx * dx + dy * dy;
 
     if (d2 === 0) {
-      return { ex: 1, ey: 0, d2: 1, d: 1 };
+      const ang = this.rand() * 2 * Math.PI;
+
+      return { ex: Math.cos(ang), ey: Math.sin(ang), d2: 1, d: 1 };
     }
 
     const d = Math.sqrt(d2);

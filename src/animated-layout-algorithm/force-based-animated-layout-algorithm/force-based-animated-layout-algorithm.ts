@@ -21,6 +21,7 @@ export class ForceBasedAnimatedLayoutAlgorithm
     }
 
     const iteration = new PhysicalSimulationIteration(graph, {
+      rand: this.params.rand,
       dtSec,
       nodeMass: this.params.nodeMass,
       nodeCharge: this.params.nodeCharge,

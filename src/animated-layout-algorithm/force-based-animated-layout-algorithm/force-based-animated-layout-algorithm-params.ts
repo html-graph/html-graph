@@ -1,6 +1,7 @@
 import { Identifier } from "@/identifier";
 
 export interface ForceBasedAnimatedLayoutAlgorithmParams {
+  readonly rand: () => number;
   readonly maxTimeDeltaSec: number;
   readonly nodeMass: number;
   readonly nodeCharge: number;

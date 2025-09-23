@@ -50,7 +50,7 @@ export class PhysicalSimulationIteration {
       forces.set(nodeId, { x: 0, y: 0 });
     });
 
-    const vectors = new NodeDistanceVectors(currentCoords);
+    const vectors = new NodeDistanceVectors(currentCoords, this.params.rand);
 
     const size = nodeIds.length;
 

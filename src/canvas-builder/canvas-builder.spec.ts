@@ -378,6 +378,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder
       .enableAnimatedLayout({
+        type: "custom",
         algorithm: new DummyAnimatedLayoutAlgorithm(),
       })
       .build();
@@ -402,6 +403,7 @@ describe("CanvasBuilder", () => {
         applyOn: trigger,
       })
       .enableAnimatedLayout({
+        type: "custom",
         algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
       })
       .build();
@@ -424,6 +426,7 @@ describe("CanvasBuilder", () => {
 
     const canvas = builder
       .enableAnimatedLayout({
+        type: "custom",
         algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
       })
       .enableLayout({
@@ -450,6 +453,7 @@ describe("CanvasBuilder", () => {
     const canvas = builder
       .enableUserDraggableNodes()
       .enableAnimatedLayout({
+        type: "custom",
         algorithm: new DummyAnimatedLayoutAlgorithm(100, 100),
       })
       .build();

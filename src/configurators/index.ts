@@ -41,4 +41,3 @@ export { LayoutConfigurator } from "./layout-configurator";
 export type { LayoutParams, LayourApplyOnParam } from "./layout-configurator";
 
 export { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
-export type { AnimatedLayoutParams } from "./animated-layout-configurator";

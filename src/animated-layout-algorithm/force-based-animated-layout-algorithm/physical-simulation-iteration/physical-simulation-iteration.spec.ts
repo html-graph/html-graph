@@ -6,6 +6,7 @@ describe("PhysicalSimulationIteration", () => {
   it("should return empty map when graph has no nodes", () => {
     const canvas = createCanvas();
     const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
       dtSec: 1,
       nodeCharge: 1e2,
       nodeMass: 1,
@@ -30,6 +31,7 @@ describe("PhysicalSimulationIteration", () => {
     });
 
     const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
       dtSec: 1,
       nodeCharge: 1e2,
       nodeMass: 1,
@@ -52,6 +54,7 @@ describe("PhysicalSimulationIteration", () => {
     });
 
     const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
       dtSec: 1,
       nodeCharge: 1e2,
       nodeMass: 1,
@@ -86,6 +89,7 @@ describe("PhysicalSimulationIteration", () => {
     });
 
     const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
       dtSec: 2,
       nodeCharge: 10,
       nodeMass: 1,
@@ -132,6 +136,7 @@ describe("PhysicalSimulationIteration", () => {
     canvas.addEdge({ from: "port-1", to: "port-2" });
 
     const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
       dtSec: 2,
       nodeCharge: 10,
       nodeMass: 1,

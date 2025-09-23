@@ -32,6 +32,7 @@ describe("ForceBasedAnimatedLayoutAlgorithm", () => {
     });
 
     const algorithm = new ForceBasedAnimatedLayoutAlgorithm({
+      rand: (): number => 0,
       maxTimeDeltaSec: 1,
       nodeCharge: 10,
       nodeMass: 1,
@@ -68,6 +69,7 @@ describe("ForceBasedAnimatedLayoutAlgorithm", () => {
     });
 
     const algorithm = new ForceBasedAnimatedLayoutAlgorithm({
+      rand: (): number => 0,
       maxTimeDeltaSec: 0.1,
       nodeCharge: 10,
       nodeMass: 1,
