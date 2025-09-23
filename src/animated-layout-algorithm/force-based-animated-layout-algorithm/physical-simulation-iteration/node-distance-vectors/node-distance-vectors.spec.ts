@@ -7,9 +7,9 @@ describe("NodeDistanceVectors", () => {
     const x = 10;
     const y = 20;
     const d2 = x * x + y * y;
-    const distance = Math.sqrt(d2);
-    const ex = x / distance;
-    const ey = y / distance;
+    const d = Math.sqrt(d2);
+    const ex = x / d;
+    const ey = y / d;
 
     const coordinates = new Map<Identifier, Point>([
       ["node-1", { x: 0, y: 0 }],
@@ -20,6 +20,19 @@ describe("NodeDistanceVectors", () => {
 
     const vector = vectors.getVector("node-1", "node-2");
 
-    expect(vector).toEqual({ d2, ex, ey });
+    expect(vector).toEqual({ d2, ex, ey, d });
+  });
+
+  it("should calculate fallback vector when two nodes have same coordinates", () => {
+    const coordinates = new Map<Identifier, Point>([
+      ["node-1", { x: 0, y: 0 }],
+      ["node-2", { x: 0, y: 0 }],
+    ]);
+
+    const vectors = new NodeDistanceVectors(coordinates);
+
+    const vector = vectors.getVector("node-1", "node-2");
+
+    expect(vector).toEqual({ d2: 1, ex: 1, ey: 0, d: 1 });
   });
 });

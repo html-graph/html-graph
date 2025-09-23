@@ -26,17 +26,17 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  .enableAnimatedLayout()
   .enableAnimatedLayout({
     algorithm: new ForceDirectedLayoutAlgorithm({
-      equilibriumEdgeLength: 300,
       nodeCharge: 1e5,
       nodeMass: 1,
       edgeStiffness: 1e3,
+      equilibriumEdgeLength: 300,
       xFallbackResolver: (): number => rand() * 1000,
       yFallbackResolver: (): number => rand() * 1000,
     }),
   })
+  .enableAnimatedLayout()
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
   })

@@ -17,10 +17,15 @@ export class NodeDistanceVectors {
     const dx = nodeTo.x - nodeFrom.x;
     const dy = nodeTo.y - nodeFrom.y;
     const d2 = dx * dx + dy * dy;
-    const distance = Math.sqrt(d2);
-    const ex = dx / distance;
-    const ey = dy / distance;
 
-    return { ex, ey, d2 };
+    if (d2 === 0) {
+      return { ex: 1, ey: 0, d2: 1, d: 1 };
+    }
+
+    const d = Math.sqrt(d2);
+    const ex = dx / d;
+    const ey = dy / d;
+
+    return { ex, ey, d2, d };
   }
 }

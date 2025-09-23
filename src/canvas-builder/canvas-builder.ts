@@ -273,7 +273,7 @@ export class CanvasBuilder {
       let draggableNodesParams: DraggableNodesParams =
         createDraggableNodesParams(this.dragConfig);
 
-      if (this.animatedLayoutConfig !== undefined) {
+      if (this.hasAnimatedLayout) {
         draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
           draggableNodesParams,
           this.animationStaticNodes,

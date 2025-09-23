@@ -1,7 +1,7 @@
 import { Identifier } from "@/identifier";
 
-export interface PhysicalSimulationParams {
-  readonly dtSec: number;
+export interface ForceBasedAnimatedLayoutAlgorithmParams {
+  readonly maxTimeDeltaSec: number;
   readonly nodeMass: number;
   readonly nodeCharge: number;
   readonly edgeEquilibriumLength: number;

@@ -5,13 +5,23 @@ import { ForceBasedAnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
 export const createAnimatedLayoutParams = (
   config: AnimatedLayoutConfig | undefined,
 ): AnimatedLayoutParams => {
-  if (config === undefined || config.algorithm === undefined) {
+  const algorithm = config?.algorithm;
+
+  if (algorithm === undefined) {
     return {
-      algorithm: new ForceBasedAnimatedLayoutAlgorithm(),
+      algorithm: new ForceBasedAnimatedLayoutAlgorithm({
+        maxTimeDeltaSec: 0.1,
+        nodeCharge: 1e5,
+        nodeMass: 1,
+        edgeEquilibriumLength: 300,
+        edgeStiffness: 1e3,
+        xFallbackResolver: (): number => 0,
+        yFallbackResolver: (): number => 0,
+      }),
     };
   }
 
   return {
-    algorithm: config.algorithm,
+    algorithm: algorithm,
   };
 };
