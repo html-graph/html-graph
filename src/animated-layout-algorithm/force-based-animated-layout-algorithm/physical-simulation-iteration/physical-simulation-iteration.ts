@@ -16,6 +16,8 @@ export class PhysicalSimulationIteration {
 
   private readonly edgeStiffness: number;
 
+  private readonly effectiveDistance: number;
+
   private readonly xFallbackResolver: (nodeId: Identifier) => number;
 
   private readonly yFallbackResolver: (nodeId: Identifier) => number;
@@ -29,6 +31,7 @@ export class PhysicalSimulationIteration {
     this.nodeMass = this.params.nodeMass;
     this.edgeEquilibriumLength = this.params.edgeEquilibriumLength;
     this.edgeStiffness = this.params.edgeStiffness;
+    this.effectiveDistance = this.params.effectiveDistance;
     this.xFallbackResolver = this.params.xFallbackResolver;
     this.yFallbackResolver = this.params.yFallbackResolver;
   }
@@ -61,6 +64,11 @@ export class PhysicalSimulationIteration {
         const nodeIdTo = nodeIds[j];
 
         const vector = vectors.getVector(nodeIdFrom, nodeIdTo);
+
+        if (vector.d > this.effectiveDistance) {
+          continue;
+        }
+
         const fx = (this.k / vector.d2) * vector.ex;
         const fy = (this.k / vector.d2) * vector.ey;
         const f2x = fx / 2;

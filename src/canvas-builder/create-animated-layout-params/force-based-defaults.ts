@@ -5,4 +5,5 @@ export const forceBasedDefaults = Object.freeze({
   nodeMass: 1,
   edgeEquilibriumLength: 300,
   edgeStiffness: 1e3,
+  effectiveDistance: 1e3,
 });

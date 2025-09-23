@@ -26,6 +26,7 @@ export class ForceBasedAnimatedLayoutAlgorithm
       nodeMass: this.params.nodeMass,
       nodeCharge: this.params.nodeCharge,
       edgeEquilibriumLength: this.params.edgeEquilibriumLength,
+      effectiveDistance: this.params.effectiveDistance,
       edgeStiffness: this.params.edgeStiffness,
       xFallbackResolver: this.params.xFallbackResolver,
       yFallbackResolver: this.params.yFallbackResolver,

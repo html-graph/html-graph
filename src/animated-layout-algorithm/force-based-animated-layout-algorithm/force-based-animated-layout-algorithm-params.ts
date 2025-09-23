@@ -6,6 +6,7 @@ export interface ForceBasedAnimatedLayoutAlgorithmParams {
   readonly nodeMass: number;
   readonly nodeCharge: number;
   readonly edgeEquilibriumLength: number;
+  readonly effectiveDistance: number;
   readonly edgeStiffness: number;
   readonly xFallbackResolver: (nodeId: Identifier) => number;
   readonly yFallbackResolver: (nodeId: Identifier) => number;

@@ -9,4 +9,5 @@ export interface PhysicalSimulationParams {
   readonly edgeStiffness: number;
   readonly xFallbackResolver: (nodeId: Identifier) => number;
   readonly yFallbackResolver: (nodeId: Identifier) => number;
+  readonly effectiveDistance: number;
 }

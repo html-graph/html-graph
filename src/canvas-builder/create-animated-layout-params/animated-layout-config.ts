@@ -13,6 +13,8 @@ export interface AnimatedLayoutConfig {
         readonly nodeMass?: number;
         readonly edgeEquilibriumLength?: number;
         readonly edgeStiffness?: number;
+        readonly seed?: string;
+        readonly effectiveDistance?: number;
       }
     | undefined;
 }
