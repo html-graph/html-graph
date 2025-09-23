@@ -6,18 +6,24 @@ describe("createLayoutParams", () => {
   it("should set specified algorithm", () => {
     const config: LayoutConfig = {
       applyOn: { type: "topologyChangeTimeout" },
-      algorithm: new DummyLayoutAlgorithm(),
+      algorithm: {
+        type: "custom",
+        instance: new DummyLayoutAlgorithm(),
+      },
     };
 
     const params = createLayoutParams(config);
 
-    expect(params.algorithm).toBe(config.algorithm);
+    expect(params.algorithm).toBe(config.algorithm.instance);
   });
 
   it("should set specified trigger", () => {
     const config: LayoutConfig = {
       applyOn: { type: "topologyChangeTimeout" },
-      algorithm: new DummyLayoutAlgorithm(),
+      algorithm: {
+        type: "custom",
+        instance: new DummyLayoutAlgorithm(),
+      },
     };
 
     const params = createLayoutParams(config);

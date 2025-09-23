@@ -4,7 +4,7 @@ import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 
 export const createLayoutParams = (config: LayoutConfig): LayoutParams => {
   return {
-    algorithm: config.algorithm,
+    algorithm: config.algorithm.instance,
     applyOn: resolveLayoutApplyOn(config.applyOn),
   };
 };
