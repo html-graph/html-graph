@@ -9,11 +9,14 @@ const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableBackground()
   .enableLayout({
-    algorithm: new HeirarchicalLayoutAlgorithm({
-      startNodeId: 0,
-      layerSize: 300,
-      layerSpace: 200,
-    }),
+    algorithm: {
+      type: "custom",
+      instance: new HeirarchicalLayoutAlgorithm({
+        startNodeId: 0,
+        layerSize: 300,
+        layerSpace: 200,
+      }),
+    },
     applyOn: { type: "topologyChangeTimeout" },
   })
   .build();
