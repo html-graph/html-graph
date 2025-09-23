@@ -1,6 +1,6 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutAlgorithm } from "@/layouts";
 import { Point } from "@/point";
 
 export class DummyLayoutAlgorithm implements LayoutAlgorithm {

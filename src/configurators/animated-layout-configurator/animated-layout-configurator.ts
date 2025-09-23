@@ -1,7 +1,7 @@
 import { Identifier } from "@/identifier";
 import { Canvas } from "@/canvas";
 import { AnimationSeries } from "@/animation-series";
-import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
+import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export class AnimatedLayoutConfigurator {
   private readonly step = (dtSec: number): void => {

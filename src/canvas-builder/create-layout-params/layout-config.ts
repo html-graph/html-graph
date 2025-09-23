@@ -1,4 +1,4 @@
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutAlgorithm } from "@/layouts";
 import { LayoutApplyOn } from "./layout-apply-on";
 
 export interface LayoutConfig {

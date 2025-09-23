@@ -2,7 +2,7 @@ import { AnimatedLayoutConfig } from "./animated-layout-config";
 import {
   AnimatedLayoutAlgorithm,
   ForceDirectedAnimatedLayoutAlgorithm,
-} from "@/animated-layout-algorithm";
+} from "@/layouts";
 import { cyrb128, sfc32 } from "@/prng";
 import { forceDirectedDefaults } from "./force-directed-defaults";
 

@@ -1,4 +1,4 @@
-import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
+import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export interface AnimatedLayoutConfig {
   readonly algorithm?:

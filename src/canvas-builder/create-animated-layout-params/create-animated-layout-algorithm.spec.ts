@@ -1,7 +1,7 @@
 import { DummyAnimatedLayoutAlgorithm } from "@/mocks";
 import { AnimatedLayoutConfig } from "./animated-layout-config";
 import { createAnimatedLayoutAlgorithm } from "./create-animated-layout-algorithm";
-import { ForceDirectedAnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
+import { ForceDirectedAnimatedLayoutAlgorithm } from "@/layouts";
 
 describe("createAnimatedLayoutParams", () => {
   it("should set specified algorithm", () => {

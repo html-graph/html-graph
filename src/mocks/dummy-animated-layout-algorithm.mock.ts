@@ -1,4 +1,4 @@
-import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
+import { AnimatedLayoutAlgorithm } from "@/layouts";
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";

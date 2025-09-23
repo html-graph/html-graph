@@ -77,7 +77,6 @@ export type { PriorityFn } from "./priority";
 
 export type { Identifier } from "./identifier";
 
-export type { LayoutAlgorithm } from "./layout-algorithm";
-export type { AnimatedLayoutAlgorithm } from "./animated-layout-algorithm";
+export type { LayoutAlgorithm, AnimatedLayoutAlgorithm } from "./layouts";
 
 export { EventSubject } from "./event-subject";
