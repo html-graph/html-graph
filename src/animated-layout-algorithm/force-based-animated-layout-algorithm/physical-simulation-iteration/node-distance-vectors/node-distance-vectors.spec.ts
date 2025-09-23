@@ -3,10 +3,11 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 
 describe("NodeDistanceVectors", () => {
-  it("should fail", () => {
+  it("should calculate direct vector", () => {
     const x = 10;
     const y = 20;
-    const distance = Math.sqrt(x * x + y * y);
+    const d2 = x * x + y * y;
+    const distance = Math.sqrt(d2);
     const ex = x / distance;
     const ey = y / distance;
 
@@ -19,6 +20,6 @@ describe("NodeDistanceVectors", () => {
 
     const vector = vectors.getVector("node-1", "node-2");
 
-    expect(vector).toEqual({ distance, ex, ey });
+    expect(vector).toEqual({ d2, ex, ey });
   });
 });

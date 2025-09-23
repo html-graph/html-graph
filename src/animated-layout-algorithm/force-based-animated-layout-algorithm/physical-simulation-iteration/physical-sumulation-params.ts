@@ -6,4 +6,6 @@ export interface PhysicalSimulationParams {
   readonly dtSec: number;
   readonly xFallbackResolver: (nodeId: Identifier) => number;
   readonly yFallbackResolver: (nodeId: Identifier) => number;
+  readonly edgeEquilibriumLength: number;
+  readonly edgeStiffness: number;
 }
