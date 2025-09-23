@@ -155,4 +155,38 @@ describe("PhysicalSimulationIteration", () => {
 
     expect(nextCoords.get("node-1")).toEqual({ x: 12, y: 0 });
   });
+
+  it("should not apply pulling back forces when effective distance is reached", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 10,
+      y: 0,
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 20,
+      y: 0,
+    });
+
+    const iteration = new PhysicalSimulationIteration(canvas.graph, {
+      rand: (): number => 0,
+      dtSec: 2,
+      nodeCharge: 10,
+      nodeMass: 1,
+      effectiveDistance: 5,
+      edgeEquilibriumLength: 8,
+      edgeStiffness: 1,
+      xFallbackResolver: (): number => 0,
+      yFallbackResolver: (): number => 0,
+    });
+
+    const nextCoords = iteration.calculateNextCoordinates();
+
+    expect(nextCoords.get("node-1")).toEqual({ x: 10, y: 0 });
+  });
 });
