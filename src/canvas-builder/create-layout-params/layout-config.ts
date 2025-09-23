@@ -1,10 +1,7 @@
-import { LayoutAlgorithm } from "@/layouts";
 import { LayoutApplyOn } from "./layout-apply-on";
+import { LayoutAlgorithmConfig } from "./layout-algorithm-config";
 
 export interface LayoutConfig {
-  readonly algorithm: {
-    readonly type: "custom";
-    readonly instance: LayoutAlgorithm;
-  };
-  readonly applyOn: LayoutApplyOn;
+  readonly algorithm?: LayoutAlgorithmConfig | undefined;
+  readonly applyOn?: LayoutApplyOn | undefined;
 }

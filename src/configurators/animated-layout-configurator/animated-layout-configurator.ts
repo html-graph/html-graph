@@ -1,6 +1,6 @@
 import { Identifier } from "@/identifier";
 import { Canvas } from "@/canvas";
-import { AnimationSeries } from "@/animation-series";
+import { AnimationSeries } from "./animation-series";
 import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export class AnimatedLayoutConfigurator {

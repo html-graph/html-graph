@@ -3,7 +3,7 @@ import { LayoutApplyOn } from "../layout-apply-on";
 import { EventSubject } from "@/event-subject";
 
 export const resolveLayoutApplyOn = (
-  applyOn: LayoutApplyOn,
+  applyOn: LayoutApplyOn | undefined,
 ): LayourApplyOnParam => {
   if (applyOn instanceof EventSubject) {
     return {

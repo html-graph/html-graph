@@ -4,7 +4,7 @@ import {
   ForceDirectedAnimatedLayoutAlgorithm,
 } from "@/layouts";
 import { cyrb128, sfc32 } from "@/prng";
-import { forceDirectedDefaults } from "./force-directed-defaults";
+import { forceDirectedDefaults } from "../layout-defaults";
 
 export const createAnimatedLayoutAlgorithm = (
   config: AnimatedLayoutConfig | undefined,
@@ -31,8 +31,8 @@ export const createAnimatedLayoutAlgorithm = (
         effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        xFallbackResolver: resolver,
-        yFallbackResolver: resolver,
+        xFallbackResolver: algorithm?.xFallbackResolver ?? resolver,
+        yFallbackResolver: algorithm?.yFallbackResolver ?? resolver,
       });
     }
   }

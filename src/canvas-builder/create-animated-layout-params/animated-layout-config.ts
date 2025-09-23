@@ -1,3 +1,4 @@
+import { Identifier } from "@/identifier";
 import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export interface AnimatedLayoutConfig {
@@ -15,6 +16,8 @@ export interface AnimatedLayoutConfig {
         readonly edgeStiffness?: number;
         readonly seed?: string;
         readonly effectiveDistance?: number;
+        readonly xFallbackResolver?: (nodeId: Identifier) => number;
+        readonly yFallbackResolver?: (nodeId: Identifier) => number;
       }
     | undefined;
 }

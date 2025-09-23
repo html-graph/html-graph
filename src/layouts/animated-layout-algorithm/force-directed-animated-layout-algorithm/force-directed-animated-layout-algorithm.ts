@@ -2,7 +2,10 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
-import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
+import {
+  createCurrentCoordinates,
+  PhysicalSimulationIteration,
+} from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
 export class ForceDirectedAnimatedLayoutAlgorithm
@@ -20,7 +23,13 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       return new Map();
     }
 
-    const iteration = new PhysicalSimulationIteration(graph, {
+    const currentCoords = createCurrentCoordinates(
+      graph,
+      this.params.xFallbackResolver,
+      this.params.yFallbackResolver,
+    );
+
+    const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
       rand: this.params.rand,
       dtSec,
       nodeMass: this.params.nodeMass,
@@ -28,10 +37,10 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       edgeEquilibriumLength: this.params.edgeEquilibriumLength,
       effectiveDistance: this.params.effectiveDistance,
       edgeStiffness: this.params.edgeStiffness,
-      xFallbackResolver: this.params.xFallbackResolver,
-      yFallbackResolver: this.params.yFallbackResolver,
     });
 
-    return iteration.calculateNextCoordinates();
+    iteration.calculateNextCoordinates();
+
+    return currentCoords;
   }
 }

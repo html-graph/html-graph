@@ -18,12 +18,9 @@ export class PhysicalSimulationIteration {
 
   private readonly effectiveDistance: number;
 
-  private readonly xFallbackResolver: (nodeId: Identifier) => number;
-
-  private readonly yFallbackResolver: (nodeId: Identifier) => number;
-
   public constructor(
     private readonly graph: Graph,
+    private readonly currentCoords: ReadonlyMap<Identifier, MutablePoint>,
     private readonly params: PhysicalSimulationParams,
   ) {
     this.dtSec = this.params.dtSec;
@@ -32,28 +29,21 @@ export class PhysicalSimulationIteration {
     this.edgeEquilibriumLength = this.params.edgeEquilibriumLength;
     this.edgeStiffness = this.params.edgeStiffness;
     this.effectiveDistance = this.params.effectiveDistance;
-    this.xFallbackResolver = this.params.xFallbackResolver;
-    this.yFallbackResolver = this.params.yFallbackResolver;
   }
 
-  public calculateNextCoordinates(): ReadonlyMap<Identifier, Point> {
-    const currentCoords = new Map<Identifier, Point>();
+  public calculateNextCoordinates(): void {
     const forces = new Map<Identifier, MutablePoint>();
 
     const nodeIds = this.graph.getAllNodeIds();
 
     nodeIds.forEach((nodeId) => {
-      const node = this.graph.getNode(nodeId)!;
-
-      currentCoords.set(nodeId, {
-        x: node.x ?? this.xFallbackResolver(nodeId),
-        y: node.y ?? this.yFallbackResolver(nodeId),
-      });
-
       forces.set(nodeId, { x: 0, y: 0 });
     });
 
-    const vectors = new NodeDistanceVectors(currentCoords, this.params.rand);
+    const vectors = new NodeDistanceVectors(
+      this.currentCoords,
+      this.params.rand,
+    );
 
     const size = nodeIds.length;
 
@@ -102,9 +92,7 @@ export class PhysicalSimulationIteration {
       forceTo.y -= f2y;
     });
 
-    const nextCoords = new Map<Identifier, Point>();
-
-    currentCoords.forEach((coords, nodeId) => {
+    this.currentCoords.forEach((coords, nodeId) => {
       const force = forces.get(nodeId)!;
 
       const velocity: Point = {
@@ -112,12 +100,8 @@ export class PhysicalSimulationIteration {
         y: (force.y / this.nodeMass) * this.dtSec,
       };
 
-      nextCoords.set(nodeId, {
-        x: coords.x + velocity.x * this.dtSec,
-        y: coords.y + velocity.y * this.dtSec,
-      });
+      coords.x += velocity.x * this.dtSec;
+      coords.y += velocity.y * this.dtSec;
     });
-
-    return nextCoords;
   }
 }
