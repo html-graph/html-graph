@@ -39,7 +39,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       edgeStiffness: this.params.edgeStiffness,
     });
 
-    iteration.calculateNextCoordinates();
+    iteration.next();
 
     return currentCoords;
   }

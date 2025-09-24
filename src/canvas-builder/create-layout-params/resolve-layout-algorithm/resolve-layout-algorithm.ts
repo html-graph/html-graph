@@ -16,6 +16,7 @@ export const resolveLayoutAlgorithm = (
       const resolver = (): number => rand() * 1000;
 
       return new ForceDirectedLayoutAlgorithm({
+        dtSec: 0.02,
         maxIterations: 100,
         rand,
         maxTimeDeltaSec: 0.1,

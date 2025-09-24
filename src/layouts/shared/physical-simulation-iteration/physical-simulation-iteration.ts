@@ -31,7 +31,7 @@ export class PhysicalSimulationIteration {
     this.effectiveDistance = this.params.effectiveDistance;
   }
 
-  public calculateNextCoordinates(): void {
+  public next(): void {
     const forces = new Map<Identifier, MutablePoint>();
 
     const nodeIds = this.graph.getAllNodeIds();

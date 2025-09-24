@@ -21,11 +21,9 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     );
 
     for (let i = 0; i < this.params.maxIterations; i++) {
-      const dtSec = 0.02;
-
       const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
         rand: this.params.rand,
-        dtSec,
+        dtSec: this.params.dtSec,
         nodeMass: this.params.nodeMass,
         nodeCharge: this.params.nodeCharge,
         edgeEquilibriumLength: this.params.edgeEquilibriumLength,
@@ -33,7 +31,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         edgeStiffness: this.params.edgeStiffness,
       });
 
-      iteration.calculateNextCoordinates();
+      iteration.next();
     }
 
     return currentCoords;

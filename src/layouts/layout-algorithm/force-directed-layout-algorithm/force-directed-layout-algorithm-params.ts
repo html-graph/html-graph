@@ -1,6 +1,7 @@
 import { Identifier } from "@/identifier";
 
 export interface ForceDirectedLayoutAlgorithmParams {
+  readonly dtSec: number;
   readonly maxIterations: number;
   readonly rand: () => number;
   readonly maxTimeDeltaSec: number;

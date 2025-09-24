@@ -47,7 +47,7 @@ describe("PhysicalSimulationIteration", () => {
       },
     );
 
-    iteration.calculateNextCoordinates();
+    iteration.next();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 10 });
   });
@@ -85,7 +85,7 @@ describe("PhysicalSimulationIteration", () => {
       },
     );
 
-    iteration.calculateNextCoordinates();
+    iteration.next();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 8, y: 0 });
   });
@@ -137,7 +137,7 @@ describe("PhysicalSimulationIteration", () => {
       },
     );
 
-    iteration.calculateNextCoordinates();
+    iteration.next();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 12, y: 0 });
   });
@@ -175,7 +175,7 @@ describe("PhysicalSimulationIteration", () => {
       },
     );
 
-    iteration.calculateNextCoordinates();
+    iteration.next();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
   });
