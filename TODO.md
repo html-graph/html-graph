@@ -1,5 +1,7 @@
 # TODO
 
+- cellular layout
+- cellular layout instread of random for force directed layout
 - default force directed layout
 - default layout application strategy
 - topology change default timeout parameter
