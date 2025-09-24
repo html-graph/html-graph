@@ -59,7 +59,7 @@ export class PhysicalSimulationIteration {
           continue;
         }
 
-        const f = Math.max(this.k / vector.d2, 1);
+        const f = this.k / vector.d2;
 
         const fx = f * vector.ex;
         const fy = f * vector.ey;
