@@ -18,6 +18,8 @@ const createNode = (canvas: Canvas, nodeId: Identifier): void => {
   });
 };
 
+const ySide = Math.sqrt(100 * 100 - 50 * 50);
+
 describe("CellularLayoutAlgorithm", () => {
   it("should set first node to zero", () => {
     const canvas = createCanvas();
@@ -60,6 +62,6 @@ describe("CellularLayoutAlgorithm", () => {
 
     const coords = algorithm.calculateCoordinates(canvas.graph);
 
-    expect(coords.get(2)).toEqual({ x: 50, y: Math.sqrt(100 * 100 - 50 * 50) });
+    expect(coords.get(2)).toEqual({ x: 50, y: ySide });
   });
 });
