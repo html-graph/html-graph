@@ -1,3 +1,11 @@
-export class HogweedLayoutAlgorithm {
-  //
+import { Graph } from "@/graph";
+import { Identifier } from "@/identifier";
+import { Point } from "@/point";
+import { LayoutAlgorithm } from "../layout-algorithm";
+
+export class HogweedLayoutAlgorithm implements LayoutAlgorithm {
+  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
+    console.log(graph);
+    throw new Error("Method not implemented.");
+  }
 }
