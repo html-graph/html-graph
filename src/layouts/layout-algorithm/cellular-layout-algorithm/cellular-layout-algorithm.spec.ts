@@ -55,6 +55,8 @@ describe("CellularLayoutAlgorithm", () => {
 
     createNode(canvas, 1);
     createNode(canvas, 2);
+    createNode(canvas, 3);
+    canvas.addEdge({ from: 2, to: 3 });
 
     const algorithm = new CellularLayoutAlgorithm({
       edgeLength: 100,
@@ -62,6 +64,6 @@ describe("CellularLayoutAlgorithm", () => {
 
     const coords = algorithm.calculateCoordinates(canvas.graph);
 
-    expect(coords.get(2)).toEqual({ x: 50, y: ySide });
+    expect(coords.get(3)).toEqual({ x: 50, y: ySide });
   });
 });
