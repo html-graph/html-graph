@@ -47,4 +47,19 @@ describe("CellularLayoutAlgorithm", () => {
 
     expect(coords.get(2)).toEqual({ x: 100, y: 0 });
   });
+
+  it("should place third node near first node", () => {
+    const canvas = createCanvas();
+
+    createNode(canvas, 1);
+    createNode(canvas, 2);
+
+    const algorithm = new CellularLayoutAlgorithm({
+      edgeLength: 100,
+    });
+
+    const coords = algorithm.calculateCoordinates(canvas.graph);
+
+    expect(coords.get(2)).toEqual({ x: 50, y: Math.sqrt(100 * 100 - 50 * 50) });
+  });
 });
