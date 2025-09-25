@@ -17,7 +17,7 @@ export const resolveLayoutAlgorithm = (
 
       return new ForceDirectedLayoutAlgorithm({
         dtSec: 0.1,
-        maxIterations: 100,
+        maxIterations: 0,
         rand,
         maxTimeDeltaSec: 0.1,
         nodeCharge: 1e5,

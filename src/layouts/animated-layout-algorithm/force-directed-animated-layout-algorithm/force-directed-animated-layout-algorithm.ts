@@ -23,7 +23,11 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       return new Map();
     }
 
-    const currentCoords = createCurrentCoordinates(graph, this.params.rand);
+    const currentCoords = createCurrentCoordinates(
+      graph,
+      this.params.rand,
+      this.params.edgeEquilibriumLength,
+    );
 
     const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
       rand: this.params.rand,
