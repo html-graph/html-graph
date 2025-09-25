@@ -14,11 +14,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   ) {}
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const currentCoords = createCurrentCoordinates(
-      graph,
-      this.params.xFallbackResolver,
-      this.params.yFallbackResolver,
-    );
+    const currentCoords = createCurrentCoordinates(graph, this.params.rand);
 
     for (let i = 0; i < this.params.maxIterations; i++) {
       const iteration = new PhysicalSimulationIteration(graph, currentCoords, {

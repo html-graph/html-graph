@@ -5,18 +5,19 @@ import { MutablePoint } from "../physical-simulation-iteration";
 
 export const createCurrentCoordinates = (
   graph: Graph,
-  xFallbackResolver: (nodeId: Identifier) => number,
-  yFallbackResolver: (nodeId: Identifier) => number,
+  rand: () => number,
 ): ReadonlyMap<Identifier, MutablePoint> => {
   const currentCoords = new Map<Identifier, Point>();
   const nodeIds = graph.getAllNodeIds();
+
+  const side = Math.sqrt(nodeIds.length);
 
   nodeIds.forEach((nodeId) => {
     const node = graph.getNode(nodeId)!;
 
     currentCoords.set(nodeId, {
-      x: node.x ?? xFallbackResolver(nodeId),
-      y: node.y ?? yFallbackResolver(nodeId),
+      x: node.x ?? side * rand(),
+      y: node.y ?? side * rand(),
     });
   });
 
