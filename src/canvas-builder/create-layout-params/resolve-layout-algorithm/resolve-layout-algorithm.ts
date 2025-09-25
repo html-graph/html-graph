@@ -13,7 +13,6 @@ export const resolveLayoutAlgorithm = (
     default: {
       const seed = cyrb128(forceDirectedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
-      const resolver = (): number => rand() * 1000;
 
       return new ForceDirectedLayoutAlgorithm({
         dtSec: 0.02,
@@ -25,8 +24,6 @@ export const resolveLayoutAlgorithm = (
         edgeEquilibriumLength: 300,
         edgeStiffness: 1e3,
         effectiveDistance: 1e3,
-        xFallbackResolver: resolver,
-        yFallbackResolver: resolver,
       });
     }
   }

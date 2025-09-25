@@ -39,8 +39,6 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
       edgeEquilibriumLength: 8,
       effectiveDistance: 1000,
       edgeStiffness: 1,
-      xFallbackResolver: (): number => 0,
-      yFallbackResolver: (): number => 0,
     });
 
     const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
@@ -77,8 +75,6 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
       edgeEquilibriumLength: 8,
       effectiveDistance: 1000,
       edgeStiffness: 1,
-      xFallbackResolver: (): number => 0,
-      yFallbackResolver: (): number => 0,
     });
 
     const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);

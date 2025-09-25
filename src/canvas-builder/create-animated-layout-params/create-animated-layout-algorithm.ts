@@ -17,7 +17,6 @@ export const createAnimatedLayoutAlgorithm = (
       const algorithm = config?.algorithm;
       const seed = cyrb128(algorithm?.seed ?? forceDirectedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
-      const resolver = (): number => rand() * 1000;
 
       return new ForceDirectedAnimatedLayoutAlgorithm({
         rand,
@@ -31,8 +30,6 @@ export const createAnimatedLayoutAlgorithm = (
         effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        xFallbackResolver: algorithm?.xFallbackResolver ?? resolver,
-        yFallbackResolver: algorithm?.yFallbackResolver ?? resolver,
       });
     }
   }

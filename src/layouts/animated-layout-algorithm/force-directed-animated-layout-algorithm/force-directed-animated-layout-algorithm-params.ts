@@ -1,5 +1,3 @@
-import { Identifier } from "@/identifier";
-
 export interface ForceDirectedAnimatedLayoutAlgorithmParams {
   readonly rand: () => number;
   readonly maxTimeDeltaSec: number;
@@ -8,6 +6,4 @@ export interface ForceDirectedAnimatedLayoutAlgorithmParams {
   readonly edgeEquilibriumLength: number;
   readonly effectiveDistance: number;
   readonly edgeStiffness: number;
-  readonly xFallbackResolver: (nodeId: Identifier) => number;
-  readonly yFallbackResolver: (nodeId: Identifier) => number;
 }
