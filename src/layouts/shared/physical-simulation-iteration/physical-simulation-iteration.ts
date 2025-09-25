@@ -82,8 +82,9 @@ export class PhysicalSimulationIteration {
       const portTo = this.graph.getPort(edge.to)!;
       const vector = vectors.getVector(portFrom.nodeId, portTo.nodeId);
       const delta = vector.d - this.edgeEquilibriumLength;
-      const f2x = (vector.ex * delta * this.edgeStiffness) / 2;
-      const f2y = (vector.ey * delta * this.edgeStiffness) / 2;
+      const f2 = (delta * this.edgeStiffness) / 2;
+      const f2x = vector.ex * f2;
+      const f2y = vector.ey * f2;
 
       const forceFrom = forces.get(portFrom.nodeId)!;
       const forceTo = forces.get(portTo.nodeId)!;
