@@ -26,8 +26,6 @@ const canvas: Canvas = builder
       effectiveDistance: 1500,
       nodeCharge: 1e5,
       edgeStiffness: 1e3,
-      edgeEquilibriumLength: 500,
-      maxTimeDeltaSec: 0.1,
     },
   })
   .enableUserDraggableNodes({

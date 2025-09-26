@@ -31,7 +31,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
     const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
       rand: this.params.rand,
-      dtSec,
+      dtSec: 0.01,
       nodeMass: this.params.nodeMass,
       nodeCharge: this.params.nodeCharge,
       edgeEquilibriumLength: this.params.edgeEquilibriumLength,
