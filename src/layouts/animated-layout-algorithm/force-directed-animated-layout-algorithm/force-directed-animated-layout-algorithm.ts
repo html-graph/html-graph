@@ -19,10 +19,6 @@ export class ForceDirectedAnimatedLayoutAlgorithm
     graph: Graph,
     dtSec: number,
   ): ReadonlyMap<Identifier, Point> {
-    if (dtSec > this.params.maxTimeDeltaSec) {
-      return new Map();
-    }
-
     const currentCoords = createCurrentCoordinates(
       graph,
       this.params.rand,
@@ -31,7 +27,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
     const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
       rand: this.params.rand,
-      dtSec: 0.01,
+      dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
       nodeMass: this.params.nodeMass,
       nodeCharge: this.params.nodeCharge,
       edgeEquilibriumLength: this.params.edgeEquilibriumLength,
