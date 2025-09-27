@@ -202,7 +202,7 @@ export class CanvasBuilder {
   /**
    * enables nodes positioning with specified layout
    */
-  public enableLayout(config?: LayoutConfig | undefined): CanvasBuilder {
+  public enableLayout(config?: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config;
     this.hasLayout = true;
     this.hasAnimatedLayout = false;
