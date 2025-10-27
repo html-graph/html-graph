@@ -1,7 +1,6 @@
 # TODO
 
-- cellular layout
-- cellular layout instread of random for force directed layout
+- use better initial layout option for force directed layout instead of random
 - default force directed layout
 - default layout application strategy
 - topology change default timeout parameter
