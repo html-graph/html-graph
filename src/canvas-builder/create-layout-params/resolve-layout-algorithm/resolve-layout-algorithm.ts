@@ -11,19 +11,25 @@ export const resolveLayoutAlgorithm = (
       return config.instance;
     }
     default: {
-      const seed = cyrb128(forceDirectedDefaults.seed);
+      const seed = cyrb128(config?.seed ?? forceDirectedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
 
       return new ForceDirectedLayoutAlgorithm({
-        dtSec: 0.02,
-        maxIterations: 100,
+        dtSec: config?.dtSec ?? forceDirectedDefaults.dtSec,
+        maxIterations:
+          config?.maxIterations ?? forceDirectedDefaults.maxIterations,
         rand,
-        maxTimeDeltaSec: 0.1,
-        nodeCharge: 1e5,
-        nodeMass: 1,
-        edgeEquilibriumLength: 300,
-        edgeStiffness: 1e3,
-        effectiveDistance: 1e3,
+        maxTimeDeltaSec:
+          config?.maxTimeDeltaSec ?? forceDirectedDefaults.maxTimeDeltaSec,
+        nodeCharge: config?.nodeCharge ?? forceDirectedDefaults.nodeCharge,
+        nodeMass: config?.nodeMass ?? forceDirectedDefaults.nodeMass,
+        edgeEquilibriumLength:
+          config?.edgeEquilibriumLength ??
+          forceDirectedDefaults.edgeEquilibriumLength,
+        edgeStiffness:
+          config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
+        effectiveDistance:
+          config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
       });
     }
   }
