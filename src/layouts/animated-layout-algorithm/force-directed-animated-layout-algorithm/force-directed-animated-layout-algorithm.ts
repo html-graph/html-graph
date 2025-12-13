@@ -38,7 +38,15 @@ export class ForceDirectedAnimatedLayoutAlgorithm
     const maxDelta = iteration.next();
 
     if (maxDelta < this.params.convergenceDelta) {
-      return new Map();
+      const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {
+        const node = graph.getNode(nodeId)!;
+
+        return node.x === null || node.y === null;
+      });
+
+      if (!hasUnsetCoords) {
+        return new Map();
+      }
     }
 
     return currentCoords;

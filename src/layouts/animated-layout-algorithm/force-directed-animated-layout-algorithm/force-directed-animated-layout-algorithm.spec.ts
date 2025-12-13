@@ -74,4 +74,47 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
 
     expect(nextCoords).toEqual(new Map([]));
   });
+
+  it("should not stop when converged but has unset coordinates", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: null,
+      y: 0,
+      ports: [
+        {
+          id: "port-1",
+          element: document.createElement("div"),
+        },
+      ],
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 10,
+      y: 0,
+      ports: [
+        {
+          id: "port-2",
+          element: document.createElement("div"),
+        },
+      ],
+    });
+
+    const algorithm = createAlgorithm({
+      convergeDelta: 0.5 + 1e10,
+    });
+
+    const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
+
+    expect(nextCoords).toEqual(
+      new Map([
+        ["node-1", { x: -0.5, y: 0 }],
+        ["node-2", { x: 10.5, y: 0 }],
+      ]),
+    );
+  });
 });
