@@ -1,7 +1,7 @@
 import { ForceDirectedLayoutAlgorithm, LayoutAlgorithm } from "@/layouts";
 import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
 import { cyrb128, sfc32 } from "@/prng";
-import { forceDirectedDefaults } from "@/canvas-builder/layout-defaults";
+import { forceDirectedDefaults } from "../../layout-defaults";
 
 export const resolveLayoutAlgorithm = (
   config: LayoutAlgorithmConfig | undefined,
