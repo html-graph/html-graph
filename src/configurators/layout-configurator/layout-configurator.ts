@@ -1,9 +1,7 @@
 import { LayoutParams } from "./layout-config";
 import { Canvas } from "@/canvas";
-import {
-  ManualLayoutApplicationStrategyConfigurator,
-  TopologyChangeTimeoutLayoutApplicationStrategyConfigurator,
-} from "@/configurators";
+import { ManualLayoutApplicationStrategyConfigurator } from "../manual-layout-application-strategy-configurator";
+import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "../topology-change-timeout-layout-application-strategy-configurator";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, params: LayoutParams): void {
