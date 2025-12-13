@@ -18,12 +18,9 @@ export class PhysicalSimulationIteration {
 
   private readonly effectiveDistance: number;
 
-  private readonly xFallbackResolver: (nodeId: Identifier) => number;
-
-  private readonly yFallbackResolver: (nodeId: Identifier) => number;
-
   public constructor(
     private readonly graph: Graph,
+    private readonly currentCoords: ReadonlyMap<Identifier, MutablePoint>,
     private readonly params: PhysicalSimulationParams,
   ) {
     this.dtSec = this.params.dtSec;
@@ -32,28 +29,22 @@ export class PhysicalSimulationIteration {
     this.edgeEquilibriumLength = this.params.edgeEquilibriumLength;
     this.edgeStiffness = this.params.edgeStiffness;
     this.effectiveDistance = this.params.effectiveDistance;
-    this.xFallbackResolver = this.params.xFallbackResolver;
-    this.yFallbackResolver = this.params.yFallbackResolver;
   }
 
-  public calculateNextCoordinates(): ReadonlyMap<Identifier, Point> {
-    const currentCoords = new Map<Identifier, Point>();
+  public next(): number {
+    let maxDelta = 0;
     const forces = new Map<Identifier, MutablePoint>();
 
     const nodeIds = this.graph.getAllNodeIds();
 
     nodeIds.forEach((nodeId) => {
-      const node = this.graph.getNode(nodeId)!;
-
-      currentCoords.set(nodeId, {
-        x: node.x ?? this.xFallbackResolver(nodeId),
-        y: node.y ?? this.yFallbackResolver(nodeId),
-      });
-
       forces.set(nodeId, { x: 0, y: 0 });
     });
 
-    const vectors = new NodeDistanceVectors(currentCoords, this.params.rand);
+    const vectors = new NodeDistanceVectors(
+      this.currentCoords,
+      this.params.rand,
+    );
 
     const size = nodeIds.length;
 
@@ -69,8 +60,10 @@ export class PhysicalSimulationIteration {
           continue;
         }
 
-        const fx = (this.k / vector.d2) * vector.ex;
-        const fy = (this.k / vector.d2) * vector.ey;
+        const f = this.k / vector.d2;
+
+        const fx = f * vector.ex;
+        const fy = f * vector.ey;
         const f2x = fx / 2;
         const f2y = fy / 2;
 
@@ -90,8 +83,9 @@ export class PhysicalSimulationIteration {
       const portTo = this.graph.getPort(edge.to)!;
       const vector = vectors.getVector(portFrom.nodeId, portTo.nodeId);
       const delta = vector.d - this.edgeEquilibriumLength;
-      const f2x = (vector.ex * delta * this.edgeStiffness) / 2;
-      const f2y = (vector.ey * delta * this.edgeStiffness) / 2;
+      const f2 = (delta * this.edgeStiffness) / 2;
+      const f2x = vector.ex * f2;
+      const f2y = vector.ey * f2;
 
       const forceFrom = forces.get(portFrom.nodeId)!;
       const forceTo = forces.get(portTo.nodeId)!;
@@ -102,9 +96,7 @@ export class PhysicalSimulationIteration {
       forceTo.y -= f2y;
     });
 
-    const nextCoords = new Map<Identifier, Point>();
-
-    currentCoords.forEach((coords, nodeId) => {
+    this.currentCoords.forEach((coords, nodeId) => {
       const force = forces.get(nodeId)!;
 
       const velocity: Point = {
@@ -112,12 +104,14 @@ export class PhysicalSimulationIteration {
         y: (force.y / this.nodeMass) * this.dtSec,
       };
 
-      nextCoords.set(nodeId, {
-        x: coords.x + velocity.x * this.dtSec,
-        y: coords.y + velocity.y * this.dtSec,
-      });
+      const dx = velocity.x * this.dtSec;
+      const dy = velocity.y * this.dtSec;
+
+      coords.x += dx;
+      coords.y += dy;
+      maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
 
-    return nextCoords;
+    return maxDelta;
   }
 }

@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutAlgorithm } from "@/layouts";
 
 export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
   private applyScheduled = false;

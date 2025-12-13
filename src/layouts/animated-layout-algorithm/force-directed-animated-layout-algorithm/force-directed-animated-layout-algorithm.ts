@@ -2,7 +2,10 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
-import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
+import {
+  createCurrentCoordinates,
+  PhysicalSimulationIteration,
+} from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
 export class ForceDirectedAnimatedLayoutAlgorithm
@@ -16,22 +19,36 @@ export class ForceDirectedAnimatedLayoutAlgorithm
     graph: Graph,
     dtSec: number,
   ): ReadonlyMap<Identifier, Point> {
-    if (dtSec > this.params.maxTimeDeltaSec) {
-      return new Map();
-    }
+    const currentCoords = createCurrentCoordinates(
+      graph,
+      this.params.rand,
+      this.params.edgeEquilibriumLength,
+    );
 
-    const iteration = new PhysicalSimulationIteration(graph, {
+    const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
       rand: this.params.rand,
-      dtSec,
+      dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
       nodeMass: this.params.nodeMass,
       nodeCharge: this.params.nodeCharge,
       edgeEquilibriumLength: this.params.edgeEquilibriumLength,
       effectiveDistance: this.params.effectiveDistance,
       edgeStiffness: this.params.edgeStiffness,
-      xFallbackResolver: this.params.xFallbackResolver,
-      yFallbackResolver: this.params.yFallbackResolver,
     });
 
-    return iteration.calculateNextCoordinates();
+    const maxDelta = iteration.next();
+
+    if (maxDelta < this.params.convergenceDelta) {
+      const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {
+        const node = graph.getNode(nodeId)!;
+
+        return node.x === null || node.y === null;
+      });
+
+      if (!hasUnsetCoords) {
+        return new Map();
+      }
+    }
+
+    return currentCoords;
   }
 }

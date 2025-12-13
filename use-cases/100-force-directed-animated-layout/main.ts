@@ -20,12 +20,7 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  .enableAnimatedLayout({
-    algorithm: {
-      seed: "fkjhg2gfg",
-      effectiveDistance: 1500,
-    },
-  })
+  .enableAnimatedLayout()
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
   })

@@ -6,4 +6,7 @@ export const forceDirectedDefaults = Object.freeze({
   edgeEquilibriumLength: 300,
   edgeStiffness: 1e3,
   effectiveDistance: 1e3,
+  dtSec: 0.02,
+  maxIterations: 100,
+  convergenceDelta: 1e-3,
 });

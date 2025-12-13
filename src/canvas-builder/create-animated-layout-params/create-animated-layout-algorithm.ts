@@ -2,9 +2,9 @@ import { AnimatedLayoutConfig } from "./animated-layout-config";
 import {
   AnimatedLayoutAlgorithm,
   ForceDirectedAnimatedLayoutAlgorithm,
-} from "@/animated-layout-algorithm";
+} from "@/layouts";
 import { cyrb128, sfc32 } from "@/prng";
-import { forceDirectedDefaults } from "./force-directed-defaults";
+import { forceDirectedDefaults } from "../layout-defaults";
 
 export const createAnimatedLayoutAlgorithm = (
   config: AnimatedLayoutConfig | undefined,
@@ -17,7 +17,6 @@ export const createAnimatedLayoutAlgorithm = (
       const algorithm = config?.algorithm;
       const seed = cyrb128(algorithm?.seed ?? forceDirectedDefaults.seed);
       const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
-      const resolver = (): number => rand() * 1000;
 
       return new ForceDirectedAnimatedLayoutAlgorithm({
         rand,
@@ -31,8 +30,8 @@ export const createAnimatedLayoutAlgorithm = (
         effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        xFallbackResolver: resolver,
-        yFallbackResolver: resolver,
+        convergenceDelta:
+          algorithm?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
       });
     }
   }

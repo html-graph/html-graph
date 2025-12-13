@@ -95,6 +95,8 @@ export class CanvasBuilder {
 
   private hasAnimatedLayout = false;
 
+  private hasLayout = false;
+
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
   private readonly graphStore = new GraphStore();
@@ -200,9 +202,9 @@ export class CanvasBuilder {
   /**
    * enables nodes positioning with specified layout
    */
-  public enableLayout(config: LayoutConfig): CanvasBuilder {
+  public enableLayout(config?: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config;
-    this.animatedLayoutConfig = undefined;
+    this.hasLayout = true;
     this.hasAnimatedLayout = false;
 
     return this;
@@ -214,7 +216,7 @@ export class CanvasBuilder {
   public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
     this.animatedLayoutConfig = config;
     this.hasAnimatedLayout = true;
-    this.layoutConfig = undefined;
+    this.hasLayout = false;
 
     return this;
   }
@@ -339,7 +341,7 @@ export class CanvasBuilder {
       );
     }
 
-    if (this.layoutConfig !== undefined) {
+    if (this.hasLayout) {
       LayoutConfigurator.configure(
         canvas,
         createLayoutParams(this.layoutConfig),

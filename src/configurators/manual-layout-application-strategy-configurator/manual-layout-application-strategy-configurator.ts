@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { EventHandler } from "@/event-subject";
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutAlgorithm } from "@/layouts";
 
 export class ManualLayoutApplicationStrategyConfigurator {
   private constructor(

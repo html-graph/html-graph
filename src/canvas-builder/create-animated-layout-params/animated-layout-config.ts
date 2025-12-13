@@ -1,4 +1,4 @@
-import { AnimatedLayoutAlgorithm } from "@/animated-layout-algorithm";
+import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export interface AnimatedLayoutConfig {
   readonly algorithm?:
@@ -15,6 +15,7 @@ export interface AnimatedLayoutConfig {
         readonly edgeStiffness?: number;
         readonly seed?: string;
         readonly effectiveDistance?: number;
+        readonly convergenceDelta?: number;
       }
     | undefined;
 }

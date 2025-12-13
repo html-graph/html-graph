@@ -1,4 +1,4 @@
-import { LayoutAlgorithm } from "@/layout-algorithm";
+import { LayoutAlgorithm } from "@/layouts";
 import { LayourApplyOnParam } from "./layout-apply-on-param";
 
 export interface LayoutParams {

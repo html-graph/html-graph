@@ -1,0 +1,38 @@
+import { ForceDirectedLayoutAlgorithm, LayoutAlgorithm } from "@/layouts";
+import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
+import { cyrb128, sfc32 } from "@/prng";
+import { forceDirectedDefaults } from "@/canvas-builder/layout-defaults";
+
+export const resolveLayoutAlgorithm = (
+  config: LayoutAlgorithmConfig | undefined,
+): LayoutAlgorithm => {
+  switch (config?.type) {
+    case "custom": {
+      return config.instance;
+    }
+    default: {
+      const seed = cyrb128(config?.seed ?? forceDirectedDefaults.seed);
+      const rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
+
+      return new ForceDirectedLayoutAlgorithm({
+        dtSec: config?.dtSec ?? forceDirectedDefaults.dtSec,
+        maxIterations:
+          config?.maxIterations ?? forceDirectedDefaults.maxIterations,
+        rand,
+        maxTimeDeltaSec:
+          config?.maxTimeDeltaSec ?? forceDirectedDefaults.maxTimeDeltaSec,
+        nodeCharge: config?.nodeCharge ?? forceDirectedDefaults.nodeCharge,
+        nodeMass: config?.nodeMass ?? forceDirectedDefaults.nodeMass,
+        edgeEquilibriumLength:
+          config?.edgeEquilibriumLength ??
+          forceDirectedDefaults.edgeEquilibriumLength,
+        edgeStiffness:
+          config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
+        effectiveDistance:
+          config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
+        convergenceDelta:
+          config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
+      });
+    }
+  }
+};
