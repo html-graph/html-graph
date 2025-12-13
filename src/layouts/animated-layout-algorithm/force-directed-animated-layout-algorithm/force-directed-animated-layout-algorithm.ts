@@ -35,7 +35,11 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       edgeStiffness: this.params.edgeStiffness,
     });
 
-    iteration.next();
+    const maxDelta = iteration.next();
+
+    if (maxDelta < this.params.convergenceDelta) {
+      return new Map();
+    }
 
     return currentCoords;
   }

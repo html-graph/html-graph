@@ -8,4 +8,5 @@ export interface ForceDirectedLayoutAlgorithmParams {
   readonly edgeEquilibriumLength: number;
   readonly effectiveDistance: number;
   readonly edgeStiffness: number;
+  readonly convergenceDelta: number;
 }

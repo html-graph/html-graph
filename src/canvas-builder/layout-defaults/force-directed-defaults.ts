@@ -8,4 +8,5 @@ export const forceDirectedDefaults = Object.freeze({
   effectiveDistance: 1e3,
   dtSec: 0.02,
   maxIterations: 100,
+  convergenceDelta: 1e-3,
 });

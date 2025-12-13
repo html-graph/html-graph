@@ -30,6 +30,8 @@ export const createAnimatedLayoutAlgorithm = (
         effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
+        convergenceDelta:
+          algorithm?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
       });
     }
   }

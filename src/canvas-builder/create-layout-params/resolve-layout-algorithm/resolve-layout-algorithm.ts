@@ -30,6 +30,8 @@ export const resolveLayoutAlgorithm = (
           config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
         effectiveDistance:
           config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
+        convergenceDelta:
+          config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
       });
     }
   }

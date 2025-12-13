@@ -15,6 +15,7 @@ export interface AnimatedLayoutConfig {
         readonly edgeStiffness?: number;
         readonly seed?: string;
         readonly effectiveDistance?: number;
+        readonly convergenceDelta?: number;
       }
     | undefined;
 }

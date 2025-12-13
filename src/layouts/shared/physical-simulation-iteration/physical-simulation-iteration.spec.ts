@@ -179,4 +179,42 @@ describe("PhysicalSimulationIteration", () => {
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
   });
+
+  it("should calculate maximum delta", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 10,
+      y: 0,
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 20,
+      y: 0,
+    });
+
+    const currentCoords = createCurrentCoords(canvas.graph);
+
+    const iteration = new PhysicalSimulationIteration(
+      canvas.graph,
+      currentCoords,
+      {
+        rand: (): number => 0,
+        dtSec: 2,
+        nodeCharge: 10,
+        nodeMass: 1,
+        effectiveDistance: 1000,
+        edgeEquilibriumLength: 8,
+        edgeStiffness: 1,
+      },
+    );
+
+    const maxDelta = iteration.next();
+
+    expect(maxDelta).toBe(2);
+  });
 });

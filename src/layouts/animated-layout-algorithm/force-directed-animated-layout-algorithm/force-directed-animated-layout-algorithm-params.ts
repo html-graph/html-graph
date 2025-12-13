@@ -6,4 +6,5 @@ export interface ForceDirectedAnimatedLayoutAlgorithmParams {
   readonly edgeEquilibriumLength: number;
   readonly effectiveDistance: number;
   readonly edgeStiffness: number;
+  readonly convergenceDelta: number;
 }

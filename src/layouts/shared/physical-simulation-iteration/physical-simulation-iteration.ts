@@ -31,7 +31,8 @@ export class PhysicalSimulationIteration {
     this.effectiveDistance = this.params.effectiveDistance;
   }
 
-  public next(): void {
+  public next(): number {
+    let maxDelta = 0;
     const forces = new Map<Identifier, MutablePoint>();
 
     const nodeIds = this.graph.getAllNodeIds();
@@ -103,8 +104,14 @@ export class PhysicalSimulationIteration {
         y: (force.y / this.nodeMass) * this.dtSec,
       };
 
-      coords.x += velocity.x * this.dtSec;
-      coords.y += velocity.y * this.dtSec;
+      const dx = velocity.x * this.dtSec;
+      const dy = velocity.y * this.dtSec;
+
+      coords.x += dx;
+      coords.y += dy;
+      maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
+
+    return maxDelta;
   }
 }

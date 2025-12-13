@@ -31,10 +31,13 @@ const initCanvas = (canvas: Canvas): void => {
   });
 };
 
-const createAlgorithm = (): LayoutAlgorithm => {
+const createAlgorithm = (params?: {
+  maxIterations?: number;
+  convergeDelta?: number;
+}): LayoutAlgorithm => {
   return new ForceDirectedLayoutAlgorithm({
     dtSec: 1,
-    maxIterations: 1,
+    maxIterations: params?.maxIterations ?? 100,
     rand: (): number => 0,
     maxTimeDeltaSec: 1,
     nodeCharge: 10,
@@ -42,6 +45,7 @@ const createAlgorithm = (): LayoutAlgorithm => {
     edgeEquilibriumLength: 8,
     effectiveDistance: 1000,
     edgeStiffness: 1,
+    convergenceDelta: params?.convergeDelta ?? 1e-3,
   });
 };
 
@@ -50,7 +54,26 @@ describe("ForceDirectedLayoutAlgorithm", () => {
     const canvas = createCanvas();
     initCanvas(canvas);
 
-    const algorithm = createAlgorithm();
+    const algorithm = createAlgorithm({ maxIterations: 1 });
+
+    const nextCoords = algorithm.calculateCoordinates(canvas.graph);
+
+    expect(nextCoords).toEqual(
+      new Map([
+        ["node-1", { x: 9.5, y: 0 }],
+        ["node-2", { x: 20.5, y: 0 }],
+      ]),
+    );
+  });
+
+  it("should stop when converged", () => {
+    const canvas = createCanvas();
+    initCanvas(canvas);
+
+    const algorithm = createAlgorithm({
+      maxIterations: 2,
+      convergeDelta: 0.5 + 1e10,
+    });
 
     const nextCoords = algorithm.calculateCoordinates(canvas.graph);
 

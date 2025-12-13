@@ -31,7 +31,11 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         edgeStiffness: this.params.edgeStiffness,
       });
 
-      iteration.next();
+      const maxDelta = iteration.next();
+
+      if (maxDelta < this.params.convergenceDelta) {
+        break;
+      }
     }
 
     return currentCoords;
