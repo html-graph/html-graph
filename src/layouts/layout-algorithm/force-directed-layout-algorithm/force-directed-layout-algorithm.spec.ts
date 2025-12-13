@@ -39,7 +39,6 @@ const createAlgorithm = (params?: {
     dtSec: 1,
     maxIterations: params?.maxIterations ?? 100,
     rand: (): number => 0,
-    maxTimeDeltaSec: 1,
     nodeCharge: 10,
     nodeMass: 1,
     edgeEquilibriumLength: 8,

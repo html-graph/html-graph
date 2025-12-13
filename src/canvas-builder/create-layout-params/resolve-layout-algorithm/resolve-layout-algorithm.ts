@@ -19,8 +19,6 @@ export const resolveLayoutAlgorithm = (
         maxIterations:
           config?.maxIterations ?? forceDirectedDefaults.maxIterations,
         rand,
-        maxTimeDeltaSec:
-          config?.maxTimeDeltaSec ?? forceDirectedDefaults.maxTimeDeltaSec,
         nodeCharge: config?.nodeCharge ?? forceDirectedDefaults.nodeCharge,
         nodeMass: config?.nodeMass ?? forceDirectedDefaults.nodeMass,
         edgeEquilibriumLength:

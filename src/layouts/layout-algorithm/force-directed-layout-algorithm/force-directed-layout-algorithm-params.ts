@@ -2,7 +2,6 @@ export interface ForceDirectedLayoutAlgorithmParams {
   readonly dtSec: number;
   readonly maxIterations: number;
   readonly rand: () => number;
-  readonly maxTimeDeltaSec: number;
   readonly nodeMass: number;
   readonly nodeCharge: number;
   readonly edgeEquilibriumLength: number;

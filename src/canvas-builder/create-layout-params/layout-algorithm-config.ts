@@ -10,7 +10,6 @@ export type LayoutAlgorithmConfig =
       readonly dtSec?: number;
       readonly maxIterations?: number;
       readonly seed?: string;
-      readonly maxTimeDeltaSec?: number;
       readonly nodeCharge?: number;
       readonly nodeMass?: number;
       readonly edgeEquilibriumLength?: number;
