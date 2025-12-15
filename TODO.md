@@ -2,14 +2,8 @@
 
 - Barnes-Hut optimization for force-directed layout
 - use better initial layout option for force directed layout instead of random
-- default force directed layout
-- default layout application strategy
-- topology change default timeout parameter
-
 - add onNodeDragStarted event
-
 - tree layout
-
 - improve graph model API
 - port and node svg elements
 - improve update events
