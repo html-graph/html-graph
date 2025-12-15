@@ -1,5 +1,6 @@
 # TODO
 
+- static nodes for layout
 - Barnes-Hut optimization for force-directed layout
 - use better initial layout option for force directed layout instead of random
 - add onNodeDragStarted event
