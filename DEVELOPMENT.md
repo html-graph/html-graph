@@ -49,6 +49,7 @@ npx jest --coverage
 ## Release next version
 
 ```
+npm login
 npm run release-next-version:patch // next patch version
 npm run release-next-version:minor // next minor version
 npm run release-next-version:major // next major version
@@ -57,7 +58,7 @@ npm run release-next-version:major // next major version
 ## Create dependency graph
 
 ```
-npm run make-deps-graph // next patch version
+npm run make-deps-graph
 ```
 
 `./deps-graph/deps-graph.dot` will contain dependency graph in GraphViz format. It can be opened by software such as `xdot`.
