@@ -3,8 +3,9 @@ export const createElement = (params?: {
   y?: number;
   width?: number;
   height?: number;
+  tag?: string;
 }): HTMLElement => {
-  const div = document.createElement("div");
+  const div = document.createElement(params?.tag ?? "div");
 
   div.getBoundingClientRect = (): DOMRect => {
     return new DOMRect(

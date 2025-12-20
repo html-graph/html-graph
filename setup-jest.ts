@@ -113,3 +113,25 @@ document.elementsFromPoint = (x: number, y: number): Element[] => {
 
   return res;
 };
+
+ShadowRoot.prototype.elementsFromPoint = function (
+  x: number,
+  y: number,
+): Element[] {
+  let res: Element[] = [];
+
+  for (const element of this.children) {
+    res = [...res, ...processElement(element, x, y)];
+  }
+
+  return res;
+};
+
+class MyCustomElement extends HTMLElement {
+  public constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+}
+
+customElements.define("my-custom-element", MyCustomElement);
