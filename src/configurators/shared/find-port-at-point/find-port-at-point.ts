@@ -2,18 +2,19 @@ import { Point } from "@/point";
 import { findPortForElement } from "./find-port-for-element";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
+import { getElementsAtPoint } from "./get-elements-at-point";
 
 export const findPortAtPoint = (
   graph: Graph,
   point: Point,
 ): Identifier | null => {
-  const elements = document.elementsFromPoint(point.x, point.y);
+  const elements = getElementsAtPoint(document, point);
 
   for (const element of elements) {
-    const draggingPortId = findPortForElement(graph, element);
+    const portId = findPortForElement(graph, element);
 
-    if (draggingPortId !== null) {
-      return draggingPortId;
+    if (portId !== null) {
+      return portId;
     }
   }
 
