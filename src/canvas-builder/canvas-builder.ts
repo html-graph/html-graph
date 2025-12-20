@@ -203,7 +203,7 @@ export class CanvasBuilder {
    * enables nodes positioning with specified layout
    */
   public enableLayout(config?: LayoutConfig): CanvasBuilder {
-    this.layoutConfig = config;
+    this.layoutConfig = config ?? {};
     this.hasLayout = true;
     this.hasAnimatedLayout = false;
 
@@ -214,7 +214,7 @@ export class CanvasBuilder {
    * enables animated nodes positioning with specified layout
    */
   public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
-    this.animatedLayoutConfig = config;
+    this.animatedLayoutConfig = config ?? {};
     this.hasAnimatedLayout = true;
     this.hasLayout = false;
 
