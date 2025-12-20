@@ -353,6 +353,20 @@ describe("CanvasBuilder", () => {
     });
   });
 
+  it("should build canvas with default layout", async () => {
+    const builder = new CanvasBuilder(document.createElement("div"));
+
+    const canvas = builder.enableLayout().build();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    await wait(0);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+
+    expect(x !== null && y !== null).toBe(true);
+  });
+
   it("should build canvas with specified layout", () => {
     const builder = new CanvasBuilder(document.createElement("div"));
     const trigger = new EventSubject<void>();
