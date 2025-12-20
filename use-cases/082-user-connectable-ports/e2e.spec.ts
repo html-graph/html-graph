@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should create custom background", async ({ page }) => {
+test("should connect ports", async ({ page }) => {
   await page.goto(`${e2eBase}/082-user-connectable-ports/`);
   await expect(page).toHaveScreenshot("initial.png");
 

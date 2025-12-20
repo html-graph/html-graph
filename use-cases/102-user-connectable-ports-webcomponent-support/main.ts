@@ -93,15 +93,4 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   backPortId: "node-2-out",
 });
 
-const addNode3Request: AddNodeRequest = createInOutNode({
-  name: "Node 3",
-  x: 700,
-  y: 200,
-  frontPortId: "node-3-in",
-  backPortId: "node-3-out",
-});
-
-canvas
-  .addNode(addNode1Request)
-  .addNode(addNode2Request)
-  .addNode(addNode3Request);
+canvas.addNode(addNode2Request).addNode(addNode1Request);
