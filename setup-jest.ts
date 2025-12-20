@@ -126,3 +126,12 @@ ShadowRoot.prototype.elementsFromPoint = function (
 
   return res;
 };
+
+class MyCustomElement extends HTMLElement {
+  public constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+  }
+}
+
+customElements.define("my-custom-element", MyCustomElement);

@@ -1,18 +1,7 @@
 import { createElement } from "@/mocks";
 import { getElementsAtPoint } from "./get-elements-at-point";
 
-class MyCustomElement extends HTMLElement {
-  public constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
-  }
-}
-
 describe("getElementsAtPoint", () => {
-  beforeAll(() => {
-    customElements.define("my-custom-element", MyCustomElement);
-  });
-
   afterEach(() => {
     document.body.innerHTML = "";
   });
