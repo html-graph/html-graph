@@ -1,9 +1,17 @@
 ## Development
 
 ```
+// install packeges
 npm install
 
+// start development server
 npm run start
+
+// run unit tests on files modification
+npm run test:watch
+
+// run unit tests with code coverage calculation
+npx jest --coverage
 ```
 
 or
