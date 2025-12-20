@@ -77,9 +77,9 @@ export class CanvasBuilder {
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
-  private layoutConfig: LayoutConfig | undefined = undefined;
+  private layoutConfig: LayoutConfig = {};
 
-  private animatedLayoutConfig: AnimatedLayoutConfig | undefined = undefined;
+  private animatedLayoutConfig: AnimatedLayoutConfig = {};
 
   private hasDraggableNodes = false;
 
