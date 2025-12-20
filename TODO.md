@@ -1,5 +1,7 @@
 # TODO
 
+- connectable ports: interrupt port search when node element found
+- connectable ports: use `elementForPoint` when initiating edge creation process
 - static nodes for layout
 - Barnes-Hut optimization for force-directed layout
 - use better initial layout option for force directed layout instead of random
