@@ -1,22 +1,27 @@
 import { Graph } from "@/graph";
-import { Identifier } from "@/identifier";
+import { PortSearchResult } from "./port-search-result";
 
 export const findPortForElement = (
   graph: Graph,
   element: Element,
-): Identifier | null => {
+): PortSearchResult => {
   let elementBuf: Element | null = element;
-  let portId: Identifier | null = null;
 
   while (elementBuf !== null) {
-    portId = graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
+    const portId =
+      graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
 
     if (portId !== null) {
-      break;
+      return {
+        status: "portFound",
+        portId,
+      };
     }
 
     elementBuf = elementBuf.parentElement;
   }
 
-  return portId;
+  return {
+    status: "notFound",
+  };
 };

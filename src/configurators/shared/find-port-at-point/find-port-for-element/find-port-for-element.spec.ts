@@ -58,7 +58,7 @@ describe("findPortForElement", () => {
       document.createElement("div"),
     );
 
-    expect(portId).toBe(null);
+    expect(portId).toEqual({ status: "notFound" });
   });
 
   it("should return port id when element is port element", () => {
@@ -76,7 +76,7 @@ describe("findPortForElement", () => {
 
     const portId = findPortForElement(canvas.graph, portElement);
 
-    expect(portId).toBe("node-1-1");
+    expect(portId).toEqual({ status: "portFound", portId: "node-1-1" });
   });
 
   it("should return port id when element is inside port element", () => {
@@ -96,6 +96,6 @@ describe("findPortForElement", () => {
 
     const portId = findPortForElement(canvas.graph, insideElement);
 
-    expect(portId).toBe("node-1-1");
+    expect(portId).toEqual({ status: "portFound", portId: "node-1-1" });
   });
 });
