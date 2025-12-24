@@ -6,18 +6,17 @@ export const findPortForElement = (
   element: Element,
 ): Identifier | null => {
   let elementBuf: Element | null = element;
-  let draggingPortId: Identifier | null = null;
+  let portId: Identifier | null = null;
 
   while (elementBuf !== null) {
-    draggingPortId =
-      graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
+    portId = graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
 
-    if (draggingPortId !== null) {
+    if (portId !== null) {
       break;
     }
 
     elementBuf = elementBuf.parentElement;
   }
 
-  return draggingPortId;
+  return portId;
 };
