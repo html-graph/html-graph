@@ -89,7 +89,7 @@ const nodesSortFn = (e1: Element, e2: Element): number => {
     const z1 = e1.style.zIndex !== "" ? e1.style.zIndex : "0";
     const z2 = e2.style.zIndex !== "" ? e2.style.zIndex : "0";
 
-    return parseInt(z2, 10) - parseInt(z1, 10);
+    return parseInt(z1, 10) - parseInt(z2, 10);
   }
 
   return 0;
@@ -122,7 +122,7 @@ document.elementsFromPoint = (x: number, y: number): Element[] => {
     res = [...res, ...processElement(element, x, y)];
   }
 
-  return res;
+  return res.reverse();
 };
 
 ShadowRoot.prototype.elementsFromPoint = function (
@@ -135,7 +135,7 @@ ShadowRoot.prototype.elementsFromPoint = function (
     res = [...res, ...processElement(element, x, y)];
   }
 
-  return res;
+  return res.reverse();
 };
 
 class MyCustomElement extends HTMLElement {
