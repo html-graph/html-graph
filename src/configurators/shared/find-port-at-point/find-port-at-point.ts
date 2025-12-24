@@ -16,6 +16,10 @@ export const findPortAtPoint = (
     if (result.status === "portFound") {
       return result.portId;
     }
+
+    if (result.status === "nodeEncountered") {
+      return null;
+    }
   }
 
   return null;

@@ -84,6 +84,17 @@ global.DOMRect = class {
   }
 };
 
+const nodesSortFn = (e1: Element, e2: Element): number => {
+  if (e1 instanceof HTMLElement && e2 instanceof HTMLElement) {
+    const z1 = e1.style.zIndex !== "" ? e1.style.zIndex : "0";
+    const z2 = e2.style.zIndex !== "" ? e2.style.zIndex : "0";
+
+    return parseInt(z2, 10) - parseInt(z1, 10);
+  }
+
+  return 0;
+};
+
 const processElement = (element: Element, x: number, y: number): Element[] => {
   let res: Element[] = [];
   const rect = element.getBoundingClientRect();
@@ -101,7 +112,7 @@ const processElement = (element: Element, x: number, y: number): Element[] => {
     res = [...res, ...processElement(child, x, y)];
   }
 
-  return res;
+  return res.sort(nodesSortFn);
 };
 
 document.elementsFromPoint = (x: number, y: number): Element[] => {
