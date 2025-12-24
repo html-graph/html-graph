@@ -1,23 +1,35 @@
 import { Graph } from "@/graph";
-import { Identifier } from "@/identifier";
+import { PortSearchResult } from "./port-search-result";
 
 export const findPortForElement = (
   graph: Graph,
   element: Element,
-): Identifier | null => {
+): PortSearchResult => {
   let elementBuf: Element | null = element;
-  let draggingPortId: Identifier | null = null;
 
   while (elementBuf !== null) {
-    draggingPortId =
+    const portId =
       graph.getElementPortIds(elementBuf as HTMLElement)[0] ?? null;
 
-    if (draggingPortId !== null) {
-      break;
+    if (portId !== null) {
+      return {
+        status: "portFound",
+        portId,
+      };
+    }
+
+    const nodeId = graph.getElementNodeId(elementBuf as HTMLElement);
+
+    if (nodeId !== null) {
+      return {
+        status: "nodeEncountered",
+      };
     }
 
     elementBuf = elementBuf.parentElement;
   }
 
-  return draggingPortId;
+  return {
+    status: "notFound",
+  };
 };

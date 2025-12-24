@@ -102,7 +102,7 @@ describe("findPortAtPoint", () => {
     expect(portId).toBe("node-1-1");
   });
 
-  it("should return port id if port element is at point under non-port element", () => {
+  it("should return port id if port element is at point under overlay element", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const overlay = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
@@ -130,5 +130,51 @@ describe("findPortAtPoint", () => {
     const portId = findPortAtPoint(canvas.graph, { x: 1, y: 1 });
 
     expect(portId).toBe("node-1-1");
+  });
+
+  it("should return null if node element is encountered over port element", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const overlay = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    document.body.appendChild(element);
+    document.body.appendChild(overlay);
+
+    const nodeElement = document.createElement("div");
+    const portElement = createElement({ x: 0, y: 0, width: 2, height: 2 });
+    nodeElement.appendChild(portElement);
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        {
+          id: "node-1-1",
+          element: portElement,
+        },
+      ],
+      priority: 0,
+    });
+
+    const nodeOverlayElement = createElement({
+      x: -1,
+      y: -1,
+      width: 4,
+      height: 4,
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: nodeOverlayElement,
+      x: 0,
+      y: 0,
+      priority: 1,
+    });
+
+    const portId = findPortAtPoint(canvas.graph, { x: 1, y: 1 });
+
+    expect(portId).toBe(null);
   });
 });

@@ -9,7 +9,7 @@ describe("getElementsAtPoint", () => {
   it("should return empty array when no elements present", () => {
     const elements = getElementsAtPoint(document, { x: 50, y: 50 });
 
-    expect(elements).toEqual([]);
+    expect(Array.from(elements)).toEqual([]);
   });
 
   it("should return single element when one element present", () => {
@@ -18,7 +18,7 @@ describe("getElementsAtPoint", () => {
 
     const elements = getElementsAtPoint(document, { x: 50, y: 50 });
 
-    expect(elements).toEqual([element]);
+    expect(Array.from(elements)).toEqual([element]);
   });
 
   it("should return element inside shadow dom", () => {
@@ -43,6 +43,6 @@ describe("getElementsAtPoint", () => {
 
     const elements = getElementsAtPoint(document, { x: 50, y: 50 });
 
-    expect(elements).toEqual([insideShadowDomElement, element]);
+    expect(Array.from(elements)).toEqual([insideShadowDomElement, element]);
   });
 });

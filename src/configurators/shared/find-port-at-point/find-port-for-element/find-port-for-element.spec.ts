@@ -53,12 +53,12 @@ describe("findPortForElement", () => {
       ports: [{ id: "node-1-1", element: document.createElement("div") }],
     });
 
-    const portId = findPortForElement(
+    const result = findPortForElement(
       canvas.graph,
       document.createElement("div"),
     );
 
-    expect(portId).toBe(null);
+    expect(result).toEqual({ status: "notFound" });
   });
 
   it("should return port id when element is port element", () => {
@@ -74,9 +74,9 @@ describe("findPortForElement", () => {
       ports: [{ id: "node-1-1", element: portElement }],
     });
 
-    const portId = findPortForElement(canvas.graph, portElement);
+    const result = findPortForElement(canvas.graph, portElement);
 
-    expect(portId).toBe("node-1-1");
+    expect(result).toEqual({ status: "portFound", portId: "node-1-1" });
   });
 
   it("should return port id when element is inside port element", () => {
@@ -94,8 +94,27 @@ describe("findPortForElement", () => {
       ports: [{ id: "node-1-1", element: portElement }],
     });
 
-    const portId = findPortForElement(canvas.graph, insideElement);
+    const result = findPortForElement(canvas.graph, insideElement);
 
-    expect(portId).toBe("node-1-1");
+    expect(result).toEqual({ status: "portFound", portId: "node-1-1" });
+  });
+
+  it("should return node encountered when node element found", () => {
+    const canvas = createCanvas();
+
+    const childElement = document.createElement("div");
+    const nodeElement = document.createElement("div");
+    nodeElement.appendChild(childElement);
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const result = findPortForElement(canvas.graph, childElement);
+
+    expect(result).toEqual({ status: "nodeEncountered" });
   });
 });

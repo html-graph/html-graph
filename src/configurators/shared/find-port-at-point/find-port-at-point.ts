@@ -11,10 +11,14 @@ export const findPortAtPoint = (
   const elements = getElementsAtPoint(document, point);
 
   for (const element of elements) {
-    const portId = findPortForElement(graph, element);
+    const result = findPortForElement(graph, element);
 
-    if (portId !== null) {
-      return portId;
+    if (result.status === "portFound") {
+      return result.portId;
+    }
+
+    if (result.status === "nodeEncountered") {
+      return null;
     }
   }
 
