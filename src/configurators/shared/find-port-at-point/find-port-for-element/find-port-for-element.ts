@@ -18,6 +18,14 @@ export const findPortForElement = (
       };
     }
 
+    const nodeId = graph.getElementNodeId(elementBuf as HTMLElement);
+
+    if (nodeId !== null) {
+      return {
+        status: "nodeEncountered",
+      };
+    }
+
     elementBuf = elementBuf.parentElement;
   }
 
