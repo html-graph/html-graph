@@ -4,6 +4,9 @@ import { DraggableNodesConfig } from "./draggable-nodes-config";
 export const createDraggableNodesParams = (
   config: DraggableNodesConfig,
 ): DraggableNodesParams => {
+  const onNodeDragStarted =
+    config.events?.onNodeDragStarted ?? ((): void => {});
+
   const onNodeDrag = config.events?.onNodeDrag ?? ((): void => {});
 
   const nodeDragVerifier = config.nodeDragVerifier ?? ((): boolean => true);
@@ -38,6 +41,7 @@ export const createDraggableNodesParams = (
     gridSize: config.gridSize ?? null,
     mouseDownEventVerifier,
     mouseUpEventVerifier,
+    onNodeDragStarted,
     onNodeDrag,
     nodeDragVerifier,
     onNodeDragFinished,

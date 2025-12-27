@@ -12,6 +12,7 @@ export interface DraggableNodesConfig {
     readonly mouseUpEventVerifier?: MouseEventVerifier;
   };
   readonly events?: {
+    readonly onNodeDragStarted?: (nodeId: Identifier) => void;
     readonly onNodeDrag?: (nodeId: Identifier) => void;
     readonly onNodeDragFinished?: (nodeId: Identifier) => void;
   };

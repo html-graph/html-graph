@@ -68,6 +68,8 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
+    this.params.onNodeDragStarted(nodeId);
+
     event.stopPropagation();
 
     const cursorContent = this.calculateContentPoint({

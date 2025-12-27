@@ -7,10 +7,10 @@ export const patchAnimatedLayoutDraggableNodesParams = (
 ): DraggableNodesParams => {
   return {
     ...params,
-    nodeDragVerifier: (nodeId): boolean => {
+    onNodeDragStarted: (nodeId): void => {
       staticNodes.add(nodeId);
 
-      return params.nodeDragVerifier(nodeId);
+      params.onNodeDragStarted(nodeId);
     },
     onNodeDragFinished: (nodeId): void => {
       staticNodes.delete(nodeId);
