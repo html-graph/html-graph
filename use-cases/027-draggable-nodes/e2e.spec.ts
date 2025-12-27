@@ -7,7 +7,11 @@ test("should have draggable nodes", async ({ page }) => {
 
   await page.mouse.move(170, 390);
   await page.mouse.down();
-  await page.mouse.move(500, 350);
+  await expect(page).toHaveScreenshot("drag-started.png");
 
-  await expect(page).toHaveScreenshot("after-move.png");
+  await page.mouse.move(500, 350);
+  await expect(page).toHaveScreenshot("dragged.png");
+
+  await page.mouse.up();
+  await expect(page).toHaveScreenshot("drag-finished.png");
 });

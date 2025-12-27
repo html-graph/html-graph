@@ -2,6 +2,20 @@ import { createDraggableNodesParams } from "./create-draggable-nodes-params";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
 
 describe("createConfig", () => {
+  it("should set specified onNodeDragStarted", () => {
+    const onNodeDragStarted = (): boolean => true;
+
+    const dragOptions: DraggableNodesConfig = {
+      events: {
+        onNodeDragStarted,
+      },
+    };
+
+    const options = createDraggableNodesParams(dragOptions);
+
+    expect(options.onNodeDragStarted).toBe(onNodeDragStarted);
+  });
+
   it("should set specified onNodeDrag", () => {
     const onNodeDrag = (): boolean => true;
 

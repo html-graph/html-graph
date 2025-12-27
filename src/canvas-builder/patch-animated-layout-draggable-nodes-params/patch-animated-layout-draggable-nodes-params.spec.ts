@@ -10,8 +10,9 @@ const createParams = (): DraggableNodesParams => {
     gridSize: null,
     mouseDownEventVerifier: (event): boolean => event.button === 0,
     mouseUpEventVerifier: (event): boolean => event.button === 0,
-    onNodeDrag: (): void => {},
     nodeDragVerifier: (): boolean => true,
+    onNodeDragStarted: (): void => {},
+    onNodeDrag: (): void => {},
     onNodeDragFinished: (): void => {},
   };
 };
@@ -26,22 +27,22 @@ describe("patchAnimatedLayoutDraggableNodesParams", () => {
       staticNodes,
     );
 
-    patchedParams.nodeDragVerifier("node-1");
+    patchedParams.onNodeDragStarted("node-1");
 
     expect(staticNodes.has("node-1")).toBe(true);
   });
 
-  it("should call original nodeDragVerifier", () => {
+  it("should call original nodeDragStarted", () => {
     const params = createParams();
 
     const staticNodes = new Set<Identifier>();
-    const spy = jest.spyOn(params, "nodeDragVerifier");
+    const spy = jest.spyOn(params, "onNodeDragStarted");
     const patchedParams = patchAnimatedLayoutDraggableNodesParams(
       params,
       staticNodes,
     );
 
-    patchedParams.nodeDragVerifier("node-1");
+    patchedParams.onNodeDragStarted("node-1");
 
     expect(spy).toHaveBeenCalledWith("node-1");
   });
@@ -55,7 +56,7 @@ describe("patchAnimatedLayoutDraggableNodesParams", () => {
       staticNodes,
     );
 
-    patchedParams.nodeDragVerifier("node-1");
+    patchedParams.onNodeDragStarted("node-1");
     patchedParams.onNodeDragFinished("node-1");
 
     expect(staticNodes.has("node-1")).toBe(false);

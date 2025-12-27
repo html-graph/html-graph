@@ -23,10 +23,11 @@ let innerHeight: number;
 const createCanvas = (options?: {
   dragCursor?: string | null;
   element?: HTMLElement;
-  onBeforeNodeDrag?: (nodeId: Identifier) => boolean;
+  nodeDragVerifier?: (nodeId: Identifier) => boolean;
   moveOnTop?: boolean;
   moveEdgesOnTop?: boolean;
   onNodeDragFinished?: (nodeId: Identifier) => void;
+  onNodeDragStarted?: (nodeId: Identifier) => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
   gridSize?: number | null;
@@ -58,8 +59,9 @@ const createCanvas = (options?: {
       ((event): boolean => event.button === 0),
     mouseUpEventVerifier:
       options?.mouseUpEventVerifier ?? ((event): boolean => event.button === 0),
+    nodeDragVerifier: options?.nodeDragVerifier ?? ((): boolean => true),
+    onNodeDragStarted: options?.onNodeDragStarted ?? ((): void => {}),
     onNodeDrag: () => {},
-    nodeDragVerifier: options?.onBeforeNodeDrag ?? ((): boolean => true),
     onNodeDragFinished: options?.onNodeDragFinished ?? ((): void => {}),
   };
 
@@ -473,11 +475,35 @@ describe("UserDraggableNodesConfigurator", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
+  it("should call onNodeDragStarted after node dragging process started", () => {
+    const onNodeDragStarted = jest.fn();
+
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({
+      element,
+      onNodeDragStarted,
+    });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    expect(onNodeDragStarted).toHaveBeenCalledWith("node-1");
+  });
+
   it("should not move node with mouse if drag is not allowed", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      onBeforeNodeDrag: (): boolean => false,
+      nodeDragVerifier: (): boolean => false,
     });
     const nodeElement = createElement();
 
@@ -504,7 +530,7 @@ describe("UserDraggableNodesConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
       element,
-      onBeforeNodeDrag: (): boolean => false,
+      nodeDragVerifier: (): boolean => false,
     });
     const nodeElement = createElement();
 

@@ -9,6 +9,7 @@ export interface DraggableNodesParams {
   readonly nodeDragVerifier: (nodeId: Identifier) => boolean;
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
+  readonly onNodeDragStarted: (nodeId: Identifier) => void;
   readonly onNodeDrag: (nodeId: Identifier) => void;
   readonly onNodeDragFinished: (nodeId: Identifier) => void;
 }

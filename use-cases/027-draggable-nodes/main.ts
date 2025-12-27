@@ -11,15 +11,18 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
+const output = document.getElementById("current") as HTMLElement;
+
 const dragConfig: DraggableNodesConfig = {
   events: {
-    onNodeDrag: (nodeId: Identifier) => {
-      const current = document.getElementById("current") as HTMLElement;
-      current.innerText = nodeId as string;
+    onNodeDragStarted: (nodeId: Identifier) => {
+      output.innerText = `Drag started: ${nodeId as string}`;
     },
-    onNodeDragFinished: () => {
-      const current = document.getElementById("current") as HTMLElement;
-      current.innerText = "";
+    onNodeDrag: (nodeId: Identifier) => {
+      output.innerText = `Currently dragging: ${nodeId as string}`;
+    },
+    onNodeDragFinished: (nodeId) => {
+      output.innerText = `Drag finished: ${nodeId as string}`;
     },
   },
 };
