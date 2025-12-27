@@ -19,7 +19,9 @@ test("should have transformable viewport", async ({ page }) => {
 });
 
 test("should have draggable nodes", async ({ page }) => {
-  await page.goto(`${e2eBase}/027-draggable-nodes/`);
+  await page.goto(
+    `${e2eBase}/029-transformable-viewport-with-draggable-nodes/`,
+  );
   await expect(page).toHaveScreenshot("initial-drag.png");
 
   await page.mouse.move(170, 390);
