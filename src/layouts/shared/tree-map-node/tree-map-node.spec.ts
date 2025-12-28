@@ -50,7 +50,7 @@ describe("TreeMapNode", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
     child.setParent("child", parent);
-    child.unsetParent();
+    child.unsetParent("child");
 
     expect(child.getParent()).toBe(null);
   });
@@ -71,5 +71,23 @@ describe("TreeMapNode", () => {
     parent.setChild("child", child);
 
     expect(child.getParent()).toEqual(parent);
+  });
+
+  it("should unset child's parent when unsetting parent's child", () => {
+    const parent = new TreeMapNode<string, object>({});
+    const child = new TreeMapNode<string, object>({});
+    parent.setChild("child", child);
+    parent.unsetChild("child");
+
+    expect(child.getParent()).toEqual(null);
+  });
+
+  it("should unset parent's child when unsetting childs's parent", () => {
+    const parent = new TreeMapNode<string, object>({});
+    const child = new TreeMapNode<string, object>({});
+    parent.setChild("child", child);
+    child.unsetParent("child");
+
+    expect(parent.getChildren()).toEqual(new Map());
   });
 });

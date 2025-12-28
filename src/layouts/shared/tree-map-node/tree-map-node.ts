@@ -21,7 +21,13 @@ export class TreeMapNode<K, P> {
   }
 
   public unsetChild(key: K): void {
+    const child = this.children.get(key);
+
     this.children.delete(key);
+
+    if (child !== undefined) {
+      child.unsetParent(key);
+    }
   }
 
   public setParent(key: K, node: TreeMapNode<K, P>): void {
@@ -31,7 +37,11 @@ export class TreeMapNode<K, P> {
     }
   }
 
-  public unsetParent(): void {
+  public unsetParent(key: K): void {
+    if (this.parent !== null) {
+      this.parent.unsetChild(key);
+    }
+
     this.parent = null;
   }
 }
