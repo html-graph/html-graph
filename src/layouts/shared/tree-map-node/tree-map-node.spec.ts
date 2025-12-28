@@ -1,7 +1,7 @@
 import { TreeMapNode } from "./tree-map-node";
 
-describe("TreeNode", () => {
-  it("should create node with specified payload", () => {
+describe("TreeMapNode", () => {
+  it("should set node payload", () => {
     const payload = {};
     const node = new TreeMapNode<string, object>(payload);
 
@@ -9,100 +9,67 @@ describe("TreeNode", () => {
   });
 
   it("should create node with 0 children", () => {
-    const node = new TreeMapNode<string, object>({});
+    const payload = {};
+    const node = new TreeMapNode<string, object>(payload);
 
-    const children = node.getChildren();
-
-    expect(children).toEqual(new Map([]));
+    expect(node.payload).toBe(payload);
   });
 
-  it("should set child node for parent node", () => {
-    const parent = new TreeMapNode<string, object>({});
-    const child = new TreeMapNode<string, object>({});
-
-    parent.setChild("child-1", child);
-
-    const children = parent.getChildren();
-
-    expect(children).toEqual(new Map([["child-1", child]]));
-  });
-
-  it("should set null as parent node by default", () => {
+  it("should create node with null parent", () => {
     const node = new TreeMapNode<string, object>({});
 
     expect(node.getParent()).toBe(null);
   });
 
-  it("should set parent node for child node", () => {
+  it("should set parent's child", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+    parent.setChild("child", child);
 
-    child.setParent("child-1", parent);
+    expect(parent.getChildren()).toEqual(new Map([["child", child]]));
+  });
+
+  it("should unset parent's child", () => {
+    const parent = new TreeMapNode<string, object>({});
+    const child = new TreeMapNode<string, object>({});
+    parent.setChild("child", child);
+    parent.unsetChild("child");
+
+    expect(parent.getChildren()).toEqual(new Map());
+  });
+
+  it("should set child's parent", () => {
+    const parent = new TreeMapNode<string, object>({});
+    const child = new TreeMapNode<string, object>({});
+    child.setParent("child", parent);
 
     expect(child.getParent()).toBe(parent);
   });
 
-  it("should set parents's child node for child node", () => {
+  it("should unset child's parent", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+    child.setParent("child", parent);
+    child.unsetParent();
 
-    child.setParent("child-1", parent);
-    const children = parent.getChildren();
-
-    expect(children).toEqual(new Map([["child-1", child]]));
+    expect(child.getParent()).toBe(null);
   });
 
-  it("should set child's parent node for parent node", () => {
+  it("should set parents's child when setting childs's parent", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
 
-    parent.setChild("child-1", child);
-    const childParent = child.getParent();
+    child.setParent("child", parent);
 
-    expect(childParent).toBe(parent);
+    expect(parent.getChildren()).toEqual(new Map([["child", child]]));
   });
 
-  it("should unset child's parent node for child node", () => {
+  it("should set child's parent when setting parents's child", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
 
-    child.setParent("child-1", parent);
-    child.unsetParent("child-1");
-    const childParent = child.getParent();
+    parent.setChild("child", child);
 
-    expect(childParent).toBe(null);
-  });
-
-  it("should unset parents's child node for parent node", () => {
-    const parent = new TreeMapNode<string, object>({});
-    const child = new TreeMapNode<string, object>({});
-
-    parent.setChild("child-1", child);
-    parent.unsetChild("child-1");
-    const children = parent.getChildren();
-
-    expect(children).toEqual(new Map());
-  });
-
-  it("should unset parents's child node for child node", () => {
-    const parent = new TreeMapNode<string, object>({});
-    const child = new TreeMapNode<string, object>({});
-
-    parent.setChild("child-1", child);
-    child.unsetParent("child-1");
-    const children = parent.getChildren();
-
-    expect(children).toEqual(new Map());
-  });
-
-  it("should unset child's parent node for parent node", () => {
-    const parent = new TreeMapNode<string, object>({});
-    const child = new TreeMapNode<string, object>({});
-
-    parent.setChild("child-1", child);
-    parent.unsetChild("child-1");
-    const childParent = child.getParent();
-
-    expect(childParent).toBe(null);
+    expect(child.getParent()).toEqual(parent);
   });
 });
