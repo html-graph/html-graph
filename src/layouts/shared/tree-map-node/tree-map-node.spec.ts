@@ -24,6 +24,7 @@ describe("TreeMapNode", () => {
   it("should set parent's child", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     parent.setChild("child", child);
 
     expect(parent.getChildren()).toEqual(new Map([["child", child]]));
@@ -32,6 +33,7 @@ describe("TreeMapNode", () => {
   it("should unset parent's child", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     parent.setChild("child", child);
     parent.unsetChild("child");
 
@@ -41,6 +43,7 @@ describe("TreeMapNode", () => {
   it("should set child's parent", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     child.setParent("child", parent);
 
     expect(child.getParent()).toBe(parent);
@@ -49,6 +52,7 @@ describe("TreeMapNode", () => {
   it("should unset child's parent", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     child.setParent("child", parent);
     child.unsetParent("child");
 
@@ -76,6 +80,7 @@ describe("TreeMapNode", () => {
   it("should unset child's parent when unsetting parent's child", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     parent.setChild("child", child);
     parent.unsetChild("child");
 
@@ -85,6 +90,7 @@ describe("TreeMapNode", () => {
   it("should unset parent's child when unsetting childs's parent", () => {
     const parent = new TreeMapNode<string, object>({});
     const child = new TreeMapNode<string, object>({});
+
     parent.setChild("child", child);
     child.unsetParent("child");
 
