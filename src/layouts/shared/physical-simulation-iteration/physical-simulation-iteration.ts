@@ -2,7 +2,7 @@ import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { PhysicalSimulationParams } from "./physical-sumulation-params";
-import { MutablePoint } from "./mutable-point";
+import { MutablePoint } from "../mutable-point";
 import { NodeDistanceVectors } from "./node-distance-vectors";
 
 export class PhysicalSimulationIteration {
