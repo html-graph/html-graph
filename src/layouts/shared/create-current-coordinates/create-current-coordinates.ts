@@ -1,7 +1,7 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
-import { MutablePoint } from "../physical-simulation-iteration";
+import { MutablePoint } from "../mutable-point";
 
 export const createCurrentCoordinates = (
   graph: Graph,
