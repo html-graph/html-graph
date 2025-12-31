@@ -2,8 +2,12 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 
 export interface QuadTreeNode {
-  nodeId: Identifier | null;
-  position: Point;
+  readonly nodeId: Identifier | null;
+  readonly position: Point;
+  readonly areaContainingRadius: {
+    readonly horizontal: number;
+    readonly vertical: number;
+  } | null;
   mass: number;
   parent: QuadTreeNode | null;
   lt: QuadTreeNode | null;

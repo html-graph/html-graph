@@ -5,12 +5,24 @@ import { QuadTreeNode } from "./quad-tree-node";
 describe("QuadTree", () => {
   it("should set initial root element", () => {
     const canvas = createCanvas();
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     const expected: QuadTreeNode = {
       nodeId: null,
       mass: 0,
       position: { x: 0, y: 0 },
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
       parent: null,
       lb: null,
       lt: null,
@@ -31,7 +43,15 @@ describe("QuadTree", () => {
       y: 0,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.rt!.nodeId).toBe("node-1");
   });
@@ -46,7 +66,15 @@ describe("QuadTree", () => {
       y: 0,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.lt!.nodeId).toBe("node-1");
   });
@@ -61,7 +89,15 @@ describe("QuadTree", () => {
       y: -1,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.rb!.nodeId).toBe("node-1");
   });
@@ -76,7 +112,15 @@ describe("QuadTree", () => {
       y: -1,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.lb!.nodeId).toBe("node-1");
   });
@@ -91,7 +135,15 @@ describe("QuadTree", () => {
       y: -1,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: -10, y: -10 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: -10, y: -10 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.rt!.nodeId).toBe("node-1");
   });
@@ -106,8 +158,94 @@ describe("QuadTree", () => {
       y: 0,
     });
 
-    const tree = new QuadTree(canvas.graph, { x: 0, y: 0 }, 1);
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
 
     expect(tree.root.rt!.mass).toBe(1);
+  });
+
+  it("should position set node position to node coordinates", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 10,
+      y: 10,
+    });
+
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
+
+    expect(tree.root.rt!.position).toEqual({ x: 10, y: 10 });
+  });
+
+  it("should position set node parent to root node", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
+
+    expect(tree.root.rt!.parent).toBe(tree.root);
+  });
+
+  it("should add intermediate node in the middle", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 10,
+      y: 10,
+    });
+
+    const tree = new QuadTree({
+      graph: canvas.graph,
+      center: { x: 0, y: 0 },
+      mass: 1,
+      areaContainingRadius: {
+        horizontal: 10,
+        vertical: 10,
+      },
+    });
+
+    const intermediate = tree.root.rt!;
+
+    expect(intermediate.position).toEqual({ x: 5, y: 5 });
   });
 });
