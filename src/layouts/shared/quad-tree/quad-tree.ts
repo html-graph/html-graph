@@ -2,19 +2,20 @@ import { Identifier } from "@/identifier";
 import { QuadTreeNode } from "./quad-tree-node";
 import { QuadTreeParams } from "./quad-tree-params";
 import { Point } from "@/point";
+import { MutablePoint } from "../mutable-point";
 
 export class QuadTree {
   public readonly root: QuadTreeNode;
 
   private readonly coords: ReadonlyMap<Identifier, Point>;
 
-  private readonly nodesToProcess: QuadTreeNode[] = [];
-
   private readonly minAreaSize: number;
 
   private readonly nodeMass: number;
 
   private readonly leaves = new Map<Identifier, QuadTreeNode>();
+
+  private readonly sortedNodes: QuadTreeNode[] = [];
 
   public constructor(params: QuadTreeParams) {
     this.coords = params.coords;
@@ -25,6 +26,7 @@ export class QuadTree {
       nodeIds: new Set(params.coords.keys()),
       box: params.box,
       totalMass: 0,
+      massCenter: null,
       parent: null,
       lb: null,
       lt: null,
@@ -32,51 +34,40 @@ export class QuadTree {
       rt: null,
     };
 
-    this.nodesToProcess.push(this.root);
+    let nodesToProcess: QuadTreeNode[] = [this.root];
 
-    while (this.nodesToProcess.length > 0) {
-      const node = this.nodesToProcess.pop()!;
+    while (nodesToProcess.length > 0) {
+      let nextNodesToProcess: QuadTreeNode[] = [];
 
-      this.processNode(node);
-    }
+      while (nodesToProcess.length > 0) {
+        const node = nodesToProcess.pop()!;
 
-    this.leaves.forEach((node) => {
-      this.nodesToProcess.push(node);
-    });
-
-    const nextNodesToProcess = new Set<QuadTreeNode>();
-
-    do {
-      while (this.nodesToProcess.length > 0) {
-        const current = this.nodesToProcess.pop()!;
-
-        const parent = current.parent;
-
-        if (parent !== null) {
-          parent.totalMass += current.totalMass;
-          nextNodesToProcess.add(parent);
-        }
+        nextNodesToProcess = [...nextNodesToProcess, ...this.processNode(node)];
       }
 
-      nextNodesToProcess.forEach((node) => {
-        this.nodesToProcess.push(node);
-      });
+      nodesToProcess = nextNodesToProcess;
+    }
 
-      nextNodesToProcess.clear();
-    } while (this.nodesToProcess.length > 0);
+    this.sortedNodes.reverse().forEach((node) => {
+      if (node.parent !== null) {
+        node.parent.totalMass += node.totalMass;
+      }
+    });
   }
 
-  private processNode(current: QuadTreeNode): void {
+  private processNode(current: QuadTreeNode): readonly QuadTreeNode[] {
+    this.sortedNodes.push(current);
+
     if (current.nodeIds.size < 2) {
-      this.markLeave(current);
-      return;
+      this.setLeaf(current);
+      return [];
     }
 
     const { centerX, centerY, radius } = current.box;
 
     if (radius < this.minAreaSize) {
-      this.markLeave(current);
-      return;
+      this.setLeaf(current);
+      return [];
     }
 
     const rightTopNodes = new Set<Identifier>();
@@ -114,10 +105,13 @@ export class QuadTree {
       rt: null,
     };
 
+    const nextNodesToProcess: QuadTreeNode[] = [];
+
     if (rightTopNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: rightTopNodes,
         totalMass: 0,
+        massCenter: null,
         box: {
           centerX: centerX + halfRadius,
           centerY: centerY + halfRadius,
@@ -127,13 +121,14 @@ export class QuadTree {
       };
 
       current.rt = node;
-      this.nodesToProcess.push(node);
+      nextNodesToProcess.push(node);
     }
 
     if (rightBottomNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: rightBottomNodes,
         totalMass: 0,
+        massCenter: null,
         box: {
           centerX: centerX + halfRadius,
           centerY: centerY - halfRadius,
@@ -143,13 +138,14 @@ export class QuadTree {
       };
 
       current.rb = node;
-      this.nodesToProcess.push(node);
+      nextNodesToProcess.push(node);
     }
 
     if (leftTopNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: leftTopNodes,
         totalMass: 0,
+        massCenter: null,
         box: {
           centerX: centerX - halfRadius,
           centerY: centerY + halfRadius,
@@ -159,13 +155,14 @@ export class QuadTree {
       };
 
       current.lt = node;
-      this.nodesToProcess.push(node);
+      nextNodesToProcess.push(node);
     }
 
     if (leftBottomNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: leftBottomNodes,
         totalMass: 0,
+        massCenter: null,
         box: {
           centerX: centerX - halfRadius,
           centerY: centerY - halfRadius,
@@ -175,14 +172,38 @@ export class QuadTree {
       };
 
       current.lb = node;
-      this.nodesToProcess.push(node);
+      nextNodesToProcess.push(node);
     }
+
+    return nextNodesToProcess;
   }
 
-  private markLeave(current: QuadTreeNode): void {
+  private setLeaf(current: QuadTreeNode): void {
     current.totalMass = this.nodeMass * current.nodeIds.size;
     current.nodeIds.forEach((nodeId) => {
       this.leaves.set(nodeId, current);
     });
+
+    current.massCenter = this.calculateLeafMassCenter(current.nodeIds);
+  }
+
+  private calculateLeafMassCenter(
+    nodeIds: ReadonlySet<Identifier>,
+  ): MutablePoint | null {
+    if (nodeIds.size === 0) {
+      return null;
+    }
+
+    let x = 0;
+    let y = 0;
+
+    nodeIds.forEach((nodeId) => {
+      const node = this.coords.get(nodeId)!;
+
+      x += node.x!;
+      y += node.y!;
+    });
+
+    return { x: x / nodeIds.size, y: y / nodeIds.size };
   }
 }

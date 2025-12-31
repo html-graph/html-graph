@@ -17,6 +17,7 @@ describe("QuadTree", () => {
     const expected: QuadTreeNode = {
       nodeIds: new Set(),
       totalMass: 0,
+      massCenter: null,
       box: {
         centerX: 0,
         centerY: 0,
@@ -243,7 +244,25 @@ describe("QuadTree", () => {
     expect(tree.root.rt!.nodeIds).toEqual(new Set(["node-1", "node-2"]));
   });
 
-  it("should calculate total cell mass", () => {
+  it("should calculate total cell mass for leaf", () => {
+    const tree = new QuadTree({
+      box: {
+        centerX: 0,
+        centerY: 0,
+        radius: 10,
+      },
+      coords: new Map([
+        ["node-1", { x: 1, y: 1 }],
+        ["node-2", { x: 2, y: 2 }],
+      ]),
+      minAreaSize: 6,
+      nodeMass: 1,
+    });
+
+    expect(tree.root.rt!.totalMass).toBe(2);
+  });
+
+  it("should calculate total cell mass for non-leaf", () => {
     const tree = new QuadTree({
       box: {
         centerX: 0,
@@ -259,5 +278,23 @@ describe("QuadTree", () => {
     });
 
     expect(tree.root.rt!.totalMass).toBe(2);
+  });
+
+  it("should calculate center of mass", () => {
+    const tree = new QuadTree({
+      box: {
+        centerX: 0,
+        centerY: 0,
+        radius: 10,
+      },
+      coords: new Map([
+        ["node-1", { x: 1, y: 1 }],
+        ["node-2", { x: 2, y: 2 }],
+      ]),
+      minAreaSize: 1e-3,
+      nodeMass: 1,
+    });
+
+    expect(tree.root.rt!.massCenter).toEqual({ x: 1.5, y: 1.5 });
   });
 });
