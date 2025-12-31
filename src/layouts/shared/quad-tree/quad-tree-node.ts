@@ -1,14 +1,9 @@
 import { Identifier } from "@/identifier";
-import { Point } from "@/point";
+import { AreaBox } from "./area-box";
 
 export interface QuadTreeNode {
-  readonly nodeId: Identifier | null;
-  readonly position: Point;
-  readonly areaContainingRadius: {
-    readonly horizontal: number;
-    readonly vertical: number;
-  } | null;
-  mass: number;
+  nodeIds: Set<Identifier>;
+  box: AreaBox;
   parent: QuadTreeNode | null;
   lt: QuadTreeNode | null;
   lb: QuadTreeNode | null;

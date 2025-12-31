@@ -1,12 +1,8 @@
-import { Graph } from "@/graph";
+import { Identifier } from "@/identifier";
+import { AreaBox } from "./area-box";
 import { Point } from "@/point";
 
 export interface QuadTreeParams {
-  readonly graph: Graph;
-  readonly center: Point;
-  readonly mass: number;
-  readonly areaContainingRadius: {
-    readonly horizontal: number;
-    readonly vertical: number;
-  };
+  readonly box: AreaBox;
+  readonly coords: ReadonlyMap<Identifier, Point>;
 }

@@ -1,31 +1,19 @@
-import { Graph } from "@/graph";
-import { QuadTreeNode } from "./quad-tree-node";
-import { Point } from "@/point";
-import { QuadTreeParams } from "./quad-tree-params";
 import { Identifier } from "@/identifier";
+import { QuadTreeNode } from "./quad-tree-node";
+import { QuadTreeParams } from "./quad-tree-params";
+import { Point } from "@/point";
 
 export class QuadTree {
   public readonly root: QuadTreeNode;
 
-  private readonly graph: Graph;
-
-  private readonly center: Point;
-
-  private readonly mass: number;
+  private readonly coords: ReadonlyMap<Identifier, Point>;
 
   public constructor(params: QuadTreeParams) {
-    this.mass = params.mass;
-    this.center = params.center;
-    this.graph = params.graph;
+    this.coords = params.coords;
 
     this.root = {
-      nodeId: null,
-      mass: 0,
-      position: this.center,
-      areaContainingRadius: {
-        horizontal: params.areaContainingRadius.horizontal,
-        vertical: params.areaContainingRadius.vertical,
-      },
+      nodeIds: new Set(params.coords.keys()),
+      box: params.box,
       parent: null,
       lb: null,
       lt: null,
@@ -33,41 +21,47 @@ export class QuadTree {
       rt: null,
     };
 
-    this.graph.getAllNodeIds().forEach((nodeId) => {
-      this.pushNode(nodeId);
-    });
-  }
+    if (this.root.nodeIds.size < 2) {
+      return;
+    }
 
-  private pushNode(nodeId: Identifier): void {
-    const node = this.graph.getNode(nodeId)!;
     const current = this.root;
 
-    const newTreeNode: QuadTreeNode = {
-      nodeId,
-      mass: this.mass,
-      position: { x: node.x!, y: node.y! },
-      areaContainingRadius: null,
-      parent: current,
-      lb: null,
-      lt: null,
-      rb: null,
-      rt: null,
-    };
+    const rightTopNodes = new Set<Identifier>();
+    const { centerX, centerY, radiusHorizontal, radiusVertical } = current.box;
+    const halfRadiusVertical = radiusVertical / 2;
+    const halfRadiusHorizontal = radiusHorizontal / 2;
 
-    const { x, y } = current.position;
+    current.nodeIds.forEach((nodeId) => {
+      const nodeCoords = this.coords.get(nodeId)!;
 
-    if (node.x! < x) {
-      if (node.y! < y) {
-        current.lb = newTreeNode;
+      if (nodeCoords.x < centerX) {
+        //
       } else {
-        current.lt = newTreeNode;
+        if (nodeCoords.y < centerY) {
+          //
+        } else {
+          rightTopNodes.add(nodeId);
+          current.nodeIds.delete(nodeId);
+        }
       }
-    } else {
-      if (node.y! < y) {
-        current.rb = newTreeNode;
-      } else {
-        current.rt = newTreeNode;
-      }
+    });
+
+    if (rightTopNodes.size > 0) {
+      current.rt = {
+        nodeIds: rightTopNodes,
+        box: {
+          centerX: centerX + halfRadiusHorizontal,
+          centerY: centerY + halfRadiusVertical,
+          radiusVertical: halfRadiusHorizontal,
+          radiusHorizontal: halfRadiusVertical,
+        },
+        parent: current,
+        lb: null,
+        lt: null,
+        rb: null,
+        rt: null,
+      };
     }
   }
 }
