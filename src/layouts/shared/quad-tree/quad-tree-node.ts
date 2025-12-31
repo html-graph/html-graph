@@ -3,6 +3,7 @@ import { AreaBox } from "./area-box";
 
 export interface QuadTreeNode {
   nodeIds: Set<Identifier>;
+  totalMass: number;
   box: AreaBox;
   parent: QuadTreeNode | null;
   lt: QuadTreeNode | null;

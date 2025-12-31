@@ -12,13 +12,19 @@ export class QuadTree {
 
   private readonly minAreaSize: number;
 
+  private readonly nodeMass: number;
+
+  private readonly leaves = new Map<Identifier, QuadTreeNode>();
+
   public constructor(params: QuadTreeParams) {
     this.coords = params.coords;
     this.minAreaSize = params.minAreaSize;
+    this.nodeMass = params.nodeMass;
 
     this.root = {
       nodeIds: new Set(params.coords.keys()),
       box: params.box,
+      totalMass: 0,
       parent: null,
       lb: null,
       lt: null,
@@ -33,19 +39,43 @@ export class QuadTree {
 
       this.processNode(node);
     }
+
+    this.leaves.forEach((node) => {
+      this.nodesToProcess.push(node);
+    });
+
+    const nextNodesToProcess = new Set<QuadTreeNode>();
+
+    do {
+      while (this.nodesToProcess.length > 0) {
+        const current = this.nodesToProcess.pop()!;
+
+        const parent = current.parent;
+
+        if (parent !== null) {
+          parent.totalMass += current.totalMass;
+          nextNodesToProcess.add(parent);
+        }
+      }
+
+      nextNodesToProcess.forEach((node) => {
+        this.nodesToProcess.push(node);
+      });
+
+      nextNodesToProcess.clear();
+    } while (this.nodesToProcess.length > 0);
   }
 
   private processNode(current: QuadTreeNode): void {
     if (current.nodeIds.size < 2) {
+      this.markLeave(current);
       return;
     }
 
-    const { centerX, centerY, radiusHorizontal, radiusVertical } = current.box;
+    const { centerX, centerY, radius } = current.box;
 
-    if (
-      radiusHorizontal < this.minAreaSize &&
-      radiusVertical < this.minAreaSize
-    ) {
+    if (radius < this.minAreaSize) {
+      this.markLeave(current);
       return;
     }
 
@@ -54,8 +84,7 @@ export class QuadTree {
     const leftTopNodes = new Set<Identifier>();
     const leftBottomNodes = new Set<Identifier>();
 
-    const halfRadiusVertical = radiusVertical / 2;
-    const halfRadiusHorizontal = radiusHorizontal / 2;
+    const halfRadius = radius / 2;
 
     current.nodeIds.forEach((nodeId) => {
       const { x, y } = this.coords.get(nodeId)!;
@@ -77,11 +106,6 @@ export class QuadTree {
       current.nodeIds.delete(nodeId);
     });
 
-    const radius = {
-      radiusVertical: halfRadiusHorizontal,
-      radiusHorizontal: halfRadiusVertical,
-    };
-
     const nodeLinks = {
       parent: current,
       lb: null,
@@ -93,10 +117,11 @@ export class QuadTree {
     if (rightTopNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: rightTopNodes,
+        totalMass: 0,
         box: {
-          centerX: centerX + halfRadiusHorizontal,
-          centerY: centerY + halfRadiusVertical,
-          ...radius,
+          centerX: centerX + halfRadius,
+          centerY: centerY + halfRadius,
+          radius: halfRadius,
         },
         ...nodeLinks,
       };
@@ -108,10 +133,11 @@ export class QuadTree {
     if (rightBottomNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: rightBottomNodes,
+        totalMass: 0,
         box: {
-          centerX: centerX + halfRadiusHorizontal,
-          centerY: centerY - halfRadiusVertical,
-          ...radius,
+          centerX: centerX + halfRadius,
+          centerY: centerY - halfRadius,
+          radius: halfRadius,
         },
         ...nodeLinks,
       };
@@ -123,10 +149,11 @@ export class QuadTree {
     if (leftTopNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: leftTopNodes,
+        totalMass: 0,
         box: {
-          centerX: centerX - halfRadiusHorizontal,
-          centerY: centerY + halfRadiusVertical,
-          ...radius,
+          centerX: centerX - halfRadius,
+          centerY: centerY + halfRadius,
+          radius: halfRadius,
         },
         ...nodeLinks,
       };
@@ -138,10 +165,11 @@ export class QuadTree {
     if (leftBottomNodes.size > 0) {
       const node: QuadTreeNode = {
         nodeIds: leftBottomNodes,
+        totalMass: 0,
         box: {
-          centerX: centerX - halfRadiusHorizontal,
-          centerY: centerY - halfRadiusVertical,
-          ...radius,
+          centerX: centerX - halfRadius,
+          centerY: centerY - halfRadius,
+          radius: halfRadius,
         },
         ...nodeLinks,
       };
@@ -149,5 +177,12 @@ export class QuadTree {
       current.lb = node;
       this.nodesToProcess.push(node);
     }
+  }
+
+  private markLeave(current: QuadTreeNode): void {
+    current.totalMass = this.nodeMass * current.nodeIds.size;
+    current.nodeIds.forEach((nodeId) => {
+      this.leaves.set(nodeId, current);
+    });
   }
 }
