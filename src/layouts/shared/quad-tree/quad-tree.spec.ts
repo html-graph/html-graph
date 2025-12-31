@@ -17,7 +17,10 @@ describe("QuadTree", () => {
     const expected: QuadTreeNode = {
       nodeIds: new Set(),
       totalMass: 0,
-      massCenter: null,
+      massCenter: {
+        x: 0,
+        y: 0,
+      },
       box: {
         centerX: 0,
         centerY: 0,
