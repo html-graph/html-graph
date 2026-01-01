@@ -5,7 +5,7 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { ForceDirectedLayoutAlgorithmParams } from "./force-directed-layout-algorithm-params";
 import {
   createCurrentCoordinates,
-  PhysicalSimulationIteration,
+  ForceDirectedAlgorithmIteration,
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
@@ -21,7 +21,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     );
 
     for (let i = 0; i < this.params.maxIterations; i++) {
-      const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
+      const iteration = new ForceDirectedAlgorithmIteration(graph, currentCoords, {
         rand: this.params.rand,
         dtSec: this.params.dtSec,
         nodeMass: this.params.nodeMass,

@@ -1,4 +1,4 @@
-export interface PhysicalSimulationParams {
+export interface ForceDirectedAlgorithmIterationParams {
   readonly rand: () => number;
   readonly dtSec: number;
   readonly nodeMass: number;

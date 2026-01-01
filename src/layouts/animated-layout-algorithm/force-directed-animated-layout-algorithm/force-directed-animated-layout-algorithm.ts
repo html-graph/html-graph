@@ -4,7 +4,7 @@ import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import {
   createCurrentCoordinates,
-  PhysicalSimulationIteration,
+  ForceDirectedAlgorithmIteration,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
@@ -25,7 +25,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       this.params.edgeEquilibriumLength,
     );
 
-    const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
+    const iteration = new ForceDirectedAlgorithmIteration(graph, currentCoords, {
       rand: this.params.rand,
       dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
       nodeMass: this.params.nodeMass,
