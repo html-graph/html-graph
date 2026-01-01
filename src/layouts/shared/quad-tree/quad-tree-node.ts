@@ -3,10 +3,10 @@ import { AreaBox } from "./area-box";
 import { MutablePoint } from "../mutable-point";
 
 export interface QuadTreeNode {
-  nodeIds: Set<Identifier>;
+  readonly nodeIds: Set<Identifier>;
   totalMass: number;
   massCenter: MutablePoint;
-  box: AreaBox;
+  readonly box: AreaBox;
   parent: QuadTreeNode | null;
   lt: QuadTreeNode | null;
   lb: QuadTreeNode | null;

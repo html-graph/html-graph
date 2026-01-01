@@ -41,6 +41,31 @@ export class ForceDirectedAlgorithmIteration {
       forces.set(nodeId, { x: 0, y: 0 });
     });
 
+    this.applyNodeForces(forces);
+    this.applyEdgeForces(forces);
+
+    this.currentCoords.forEach((coords, nodeId) => {
+      const force = forces.get(nodeId)!;
+
+      const velocity: Point = {
+        x: (force.x / this.nodeMass) * this.dtSec,
+        y: (force.y / this.nodeMass) * this.dtSec,
+      };
+
+      const dx = velocity.x * this.dtSec;
+      const dy = velocity.y * this.dtSec;
+
+      coords.x += dx;
+      coords.y += dy;
+      maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
+    });
+
+    return maxDelta;
+  }
+
+  private applyNodeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
+    const nodeIds = Array.from(forces.keys());
+
     const vectors = new NodeDistanceVectors(
       this.currentCoords,
       this.params.rand,
@@ -76,6 +101,13 @@ export class ForceDirectedAlgorithmIteration {
         forceTo.y += f2y;
       }
     }
+  }
+
+  private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
+    const vectors = new NodeDistanceVectors(
+      this.currentCoords,
+      this.params.rand,
+    );
 
     this.graph.getAllEdgeIds().forEach((edgeId) => {
       const edge = this.graph.getEdge(edgeId)!;
@@ -95,23 +127,5 @@ export class ForceDirectedAlgorithmIteration {
       forceTo.x -= f2x;
       forceTo.y -= f2y;
     });
-
-    this.currentCoords.forEach((coords, nodeId) => {
-      const force = forces.get(nodeId)!;
-
-      const velocity: Point = {
-        x: (force.x / this.nodeMass) * this.dtSec,
-        y: (force.y / this.nodeMass) * this.dtSec,
-      };
-
-      const dx = velocity.x * this.dtSec;
-      const dy = velocity.y * this.dtSec;
-
-      coords.x += dx;
-      coords.y += dy;
-      maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
-    });
-
-    return maxDelta;
   }
 }
