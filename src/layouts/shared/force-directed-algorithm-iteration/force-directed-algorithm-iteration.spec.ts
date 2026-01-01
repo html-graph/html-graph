@@ -1,5 +1,5 @@
 import { createCanvas } from "@/mocks";
-import { PhysicalSimulationIteration } from "./physical-simulation-iteration";
+import { ForceDirectedAlgorithmIteration } from "./force-directed-algorithm-iteration";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
@@ -20,7 +20,7 @@ const createCurrentCoords = (graph: Graph): ReadonlyMap<Identifier, Point> => {
   return currentCoords;
 };
 
-describe("PhysicalSimulationIteration", () => {
+describe("ForceDirectedAlgorithmIteration", () => {
   it("should return unchanged coordinates when graph has one node", () => {
     const canvas = createCanvas();
 
@@ -33,7 +33,7 @@ describe("PhysicalSimulationIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const iteration = new PhysicalSimulationIteration(
+    const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
@@ -71,7 +71,7 @@ describe("PhysicalSimulationIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const iteration = new PhysicalSimulationIteration(
+    const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
@@ -123,7 +123,7 @@ describe("PhysicalSimulationIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const iteration = new PhysicalSimulationIteration(
+    const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
@@ -161,7 +161,7 @@ describe("PhysicalSimulationIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const iteration = new PhysicalSimulationIteration(
+    const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
@@ -199,7 +199,7 @@ describe("PhysicalSimulationIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const iteration = new PhysicalSimulationIteration(
+    const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {

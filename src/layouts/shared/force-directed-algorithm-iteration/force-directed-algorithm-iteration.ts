@@ -1,11 +1,11 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
-import { PhysicalSimulationParams } from "./physical-sumulation-params";
-import { MutablePoint } from "./mutable-point";
+import { ForceDirectedAlgorithmIterationParams } from "./force-directed-algorithm-iteration-params";
+import { MutablePoint } from "../mutable-point";
 import { NodeDistanceVectors } from "./node-distance-vectors";
 
-export class PhysicalSimulationIteration {
+export class ForceDirectedAlgorithmIteration {
   private readonly dtSec: number;
 
   private readonly k: number;
@@ -21,7 +21,7 @@ export class PhysicalSimulationIteration {
   public constructor(
     private readonly graph: Graph,
     private readonly currentCoords: ReadonlyMap<Identifier, MutablePoint>,
-    private readonly params: PhysicalSimulationParams,
+    private readonly params: ForceDirectedAlgorithmIterationParams,
   ) {
     this.dtSec = this.params.dtSec;
     this.k = this.params.nodeCharge * this.params.nodeCharge;

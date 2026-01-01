@@ -5,7 +5,7 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { ForceDirectedLayoutAlgorithmParams } from "./force-directed-layout-algorithm-params";
 import {
   createCurrentCoordinates,
-  PhysicalSimulationIteration,
+  ForceDirectedAlgorithmIteration,
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
@@ -21,15 +21,19 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     );
 
     for (let i = 0; i < this.params.maxIterations; i++) {
-      const iteration = new PhysicalSimulationIteration(graph, currentCoords, {
-        rand: this.params.rand,
-        dtSec: this.params.dtSec,
-        nodeMass: this.params.nodeMass,
-        nodeCharge: this.params.nodeCharge,
-        edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-        effectiveDistance: this.params.effectiveDistance,
-        edgeStiffness: this.params.edgeStiffness,
-      });
+      const iteration = new ForceDirectedAlgorithmIteration(
+        graph,
+        currentCoords,
+        {
+          rand: this.params.rand,
+          dtSec: this.params.dtSec,
+          nodeMass: this.params.nodeMass,
+          nodeCharge: this.params.nodeCharge,
+          edgeEquilibriumLength: this.params.edgeEquilibriumLength,
+          effectiveDistance: this.params.effectiveDistance,
+          edgeStiffness: this.params.edgeStiffness,
+        },
+      );
 
       const maxDelta = iteration.next();
 
