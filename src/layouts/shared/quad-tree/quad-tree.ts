@@ -37,18 +37,21 @@ export class QuadTree {
       rt: null,
     };
 
-    let nodesToProcess: QuadTreeNode[] = [this.root];
+    let layer: QuadTreeNode[] = [this.root];
 
-    while (nodesToProcess.length > 0) {
-      let nextNodesToProcess: QuadTreeNode[] = [];
+    while (layer.length > 0) {
+      const nextLayer: QuadTreeNode[] = [];
 
-      while (nodesToProcess.length > 0) {
-        const node = nodesToProcess.pop()!;
+      while (layer.length > 0) {
+        const node = layer.pop()!;
+        const chunk = this.processNode(node);
 
-        nextNodesToProcess = [...nextNodesToProcess, ...this.processNode(node)];
+        chunk.forEach((node) => {
+          nextLayer.push(node);
+        });
       }
 
-      nodesToProcess = nextNodesToProcess;
+      layer = nextLayer;
     }
 
     this.sortedParentNodes.reverse().forEach((node) => {
@@ -80,12 +83,14 @@ export class QuadTree {
         totalMassY += node.rt.massCenter.y * node.rt.totalMass;
       }
 
-      if (totalMass > 0) {
-        node.totalMass = totalMass;
-        node.massCenter.x = totalMassX / totalMass;
-        node.massCenter.y = totalMassY / totalMass;
-      }
+      node.totalMass = totalMass;
+      node.massCenter.x = totalMassX / totalMass;
+      node.massCenter.y = totalMassY / totalMass;
     });
+  }
+
+  public getLeaf(nodeId: Identifier): QuadTreeNode | undefined {
+    return this.leaves.get(nodeId);
   }
 
   private processNode(current: QuadTreeNode): readonly QuadTreeNode[] {
