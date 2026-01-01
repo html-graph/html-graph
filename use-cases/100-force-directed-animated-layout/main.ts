@@ -20,12 +20,7 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  .enableAnimatedLayout({
-    algorithm: {
-      type: "forceDirected",
-      nodeMass: 3,
-    },
-  })
+  .enableAnimatedLayout()
   .enableUserDraggableNodes({
     moveEdgesOnTop: false,
   })
