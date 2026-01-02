@@ -39,7 +39,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       },
     );
 
-    const maxDelta = iteration.next();
+    const maxDelta = iteration.apply();
 
     if (maxDelta < this.params.convergenceDelta) {
       const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {

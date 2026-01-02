@@ -47,7 +47,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 10 });
   });
@@ -85,7 +85,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 8, y: 0 });
   });
@@ -137,7 +137,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 12, y: 0 });
   });
@@ -175,7 +175,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
   });
@@ -213,7 +213,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    const maxDelta = iteration.next();
+    const maxDelta = iteration.apply();
 
     expect(maxDelta).toBe(2);
   });
