@@ -1,5 +1,5 @@
 import { Identifier } from "@/identifier";
-import { MutablePoint } from "../../../mutable-point";
+import { MutablePoint } from "@/point";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 import { DirectSumNodeForcesApplicationStrategyParams } from "./direct-sum-node-forces-application-strategy-params";
 import { NodeDistanceVectors } from "../../node-distance-vectors";

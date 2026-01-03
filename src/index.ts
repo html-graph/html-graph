@@ -46,6 +46,7 @@ export {
   InteractiveEdgeError,
   DirectEdgeShape,
   MidpointEdgeShape,
+  ConnectionCategory,
 } from "./edges";
 export type {
   EdgeShape,
@@ -59,7 +60,6 @@ export type {
   DirectEdgeParams,
   StructuredEdgeShape,
   StructuredEdgeRenderModel,
-  ConnectionCategory,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,

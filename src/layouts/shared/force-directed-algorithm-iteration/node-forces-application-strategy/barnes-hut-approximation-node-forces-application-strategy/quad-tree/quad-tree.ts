@@ -2,7 +2,7 @@ import { Identifier } from "@/identifier";
 import { QuadTreeNode } from "./quad-tree-node";
 import { QuadTreeParams } from "./quad-tree-params";
 import { Point } from "@/point";
-import { MutablePoint } from "../mutable-point";
+import { MutablePoint } from "@/point";
 
 export class QuadTree {
   public readonly root: QuadTreeNode;

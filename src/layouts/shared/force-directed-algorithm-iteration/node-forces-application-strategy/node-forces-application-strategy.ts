@@ -1,6 +1,5 @@
 import { Identifier } from "@/identifier";
-import { MutablePoint } from "../../mutable-point";
-import { Point } from "@/point";
+import type { Point, MutablePoint } from "@/point";
 
 export interface NodeForcesApplicationStrategy {
   apply(

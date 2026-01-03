@@ -1,7 +1,6 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
-import { Point } from "@/point";
-import { MutablePoint } from "../mutable-point";
+import type { Point, MutablePoint } from "@/point";
 
 export const createCurrentCoordinates = (
   graph: Graph,

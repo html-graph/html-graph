@@ -1,6 +1,6 @@
 import { Identifier } from "@/identifier";
 import { AreaBox } from "./area-box";
-import { MutablePoint } from "../mutable-point";
+import { MutablePoint } from "@/point";
 
 export interface QuadTreeNode {
   readonly nodeIds: Set<Identifier>;
