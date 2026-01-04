@@ -82,8 +82,8 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         const fx = f * ex;
         const fy = f * ey;
 
-        totalForce.x = fx;
-        totalForce.y = fy;
+        totalForce.x += fx;
+        totalForce.y += fy;
       } else {
         if (current.rb !== null && !visited.has(current.rb)) {
           nodesStack.push(current.rb);
