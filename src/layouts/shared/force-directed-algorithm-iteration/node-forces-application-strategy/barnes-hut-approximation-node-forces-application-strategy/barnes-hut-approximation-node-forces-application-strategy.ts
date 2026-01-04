@@ -53,11 +53,18 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
   private calculateNodeForce(coords: Point, leaf: QuadTreeNode): Point {
     const nodesStack: QuadTreeNode[] = [leaf];
     const visited = new Set<QuadTreeNode>([leaf]);
-
     const totalForce: MutablePoint = { x: 0, y: 0 };
 
     while (nodesStack.length > 0) {
       const current = nodesStack.pop()!;
+
+      if (current.parent !== null) {
+        nodesStack.push(current.parent);
+      }
+
+      if (visited.has(current)) {
+        continue;
+      }
 
       visited.add(current);
 
@@ -66,8 +73,9 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
       const d2 = dx * dx + dy * dy;
       const d = Math.sqrt(d2);
       const isFarNode = current.box.radius * 2 < this.theta * d;
+      const isLeaf = current.nodeIds.size > 0;
 
-      if (isFarNode || current.nodeIds.size > 0) {
+      if (isFarNode || isLeaf) {
         const ex = dx / d;
         const ey = dy / d;
         const f = (this.nodeCharge * current.totalCharge) / d2;
