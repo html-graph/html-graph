@@ -5,6 +5,7 @@ import { MutablePoint } from "@/point";
 export interface QuadTreeNode {
   readonly nodeIds: Set<Identifier>;
   totalMass: number;
+  totalCharge: number;
   massCenter: MutablePoint;
   readonly box: AreaBox;
   parent: QuadTreeNode | null;

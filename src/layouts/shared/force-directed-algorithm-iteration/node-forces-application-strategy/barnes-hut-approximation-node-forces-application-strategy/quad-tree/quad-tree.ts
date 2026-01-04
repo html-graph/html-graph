@@ -13,6 +13,8 @@ export class QuadTree {
 
   private readonly nodeMass: number;
 
+  private readonly nodeCharge: number;
+
   private readonly leaves = new Map<Identifier, QuadTreeNode>();
 
   private readonly sortedParentNodes: QuadTreeNode[] = [];
@@ -21,11 +23,13 @@ export class QuadTree {
     this.coords = params.coords;
     this.minAreaSize = params.minAreaSize;
     this.nodeMass = params.nodeMass;
+    this.nodeCharge = params.nodeCharge;
 
     this.root = {
       nodeIds: new Set(params.coords.keys()),
       box: params.box,
       totalMass: 0,
+      totalCharge: 0,
       massCenter: {
         x: 0,
         y: 0,
@@ -58,32 +62,38 @@ export class QuadTree {
       let totalMassX = 0;
       let totalMassY = 0;
       let totalMass = 0;
+      let totalCharge = 0;
 
       if (node.lb !== null) {
         totalMass += node.lb.totalMass;
+        totalCharge += node.lb.totalCharge;
         totalMassX += node.lb.massCenter.x * node.lb.totalMass;
         totalMassY += node.lb.massCenter.y * node.lb.totalMass;
       }
 
       if (node.lt !== null) {
         totalMass += node.lt.totalMass;
+        totalCharge += node.lt.totalCharge;
         totalMassX += node.lt.massCenter.x * node.lt.totalMass;
         totalMassY += node.lt.massCenter.y * node.lt.totalMass;
       }
 
       if (node.rb !== null) {
         totalMass += node.rb.totalMass;
+        totalCharge += node.rb.totalCharge;
         totalMassX += node.rb.massCenter.x * node.rb.totalMass;
         totalMassY += node.rb.massCenter.y * node.rb.totalMass;
       }
 
       if (node.rt !== null) {
         totalMass += node.rt.totalMass;
+        totalCharge += node.rt.totalCharge;
         totalMassX += node.rt.massCenter.x * node.rt.totalMass;
         totalMassY += node.rt.massCenter.y * node.rt.totalMass;
       }
 
       node.totalMass = totalMass;
+      node.totalCharge = totalCharge;
       node.massCenter.x = totalMassX / totalMass;
       node.massCenter.y = totalMassY / totalMass;
     });
@@ -149,6 +159,7 @@ export class QuadTree {
       const node: QuadTreeNode = {
         nodeIds: rightTopNodes,
         totalMass: 0,
+        totalCharge: 0,
         massCenter: {
           x: 0,
           y: 0,
@@ -169,6 +180,7 @@ export class QuadTree {
       const node: QuadTreeNode = {
         nodeIds: rightBottomNodes,
         totalMass: 0,
+        totalCharge: 0,
         massCenter: {
           x: 0,
           y: 0,
@@ -189,6 +201,7 @@ export class QuadTree {
       const node: QuadTreeNode = {
         nodeIds: leftTopNodes,
         totalMass: 0,
+        totalCharge: 0,
         massCenter: {
           x: 0,
           y: 0,
@@ -209,6 +222,7 @@ export class QuadTree {
       const node: QuadTreeNode = {
         nodeIds: leftBottomNodes,
         totalMass: 0,
+        totalCharge: 0,
         massCenter: {
           x: 0,
           y: 0,
@@ -230,6 +244,7 @@ export class QuadTree {
 
   private setLeaf(current: QuadTreeNode): void {
     current.totalMass = this.nodeMass * current.nodeIds.size;
+    current.totalCharge = this.nodeCharge * current.nodeIds.size;
     current.nodeIds.forEach((nodeId) => {
       this.leaves.set(nodeId, current);
     });

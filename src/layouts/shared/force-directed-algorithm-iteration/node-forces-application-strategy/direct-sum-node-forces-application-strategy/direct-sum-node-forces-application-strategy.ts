@@ -46,6 +46,7 @@ export class DirectSumNodeForcesApplicationStrategy
 
         const fx = f * vector.ex;
         const fy = f * vector.ey;
+        // division by 2 is incorrect
         const f2x = fx / 2;
         const f2y = fy / 2;
 

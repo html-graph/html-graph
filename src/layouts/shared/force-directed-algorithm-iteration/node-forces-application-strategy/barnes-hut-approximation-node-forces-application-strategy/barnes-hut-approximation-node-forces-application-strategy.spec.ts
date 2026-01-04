@@ -3,8 +3,11 @@ import { BarnesHutApproximationNodeForcesApplicationStrategy } from "./barnes-hu
 describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply repulsive forces by x axis when two nodes exist", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
-      nodeCharge: 100,
+      nodeCharge: 1000,
+      nodeMass: 1,
+      minAreaSize: 1e-2,
       rand: (): number => 0,
+      theta: 1,
     });
 
     const nodeCoords = new Map([

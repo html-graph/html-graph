@@ -7,4 +7,5 @@ export interface QuadTreeParams {
   readonly coords: ReadonlyMap<Identifier, Point>;
   readonly minAreaSize: number;
   readonly nodeMass: number;
+  readonly nodeCharge: number;
 }
