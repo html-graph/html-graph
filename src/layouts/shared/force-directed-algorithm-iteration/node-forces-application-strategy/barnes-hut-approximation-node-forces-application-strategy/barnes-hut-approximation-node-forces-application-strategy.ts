@@ -40,9 +40,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
 
     nodeCoords.forEach((coords, nodeId) => {
-      const leaf = tree.getLeaf(nodeId)!;
-
-      const nodeForce = this.calculateNodeForce(coords, leaf);
+      const nodeForce = this.calculateNodeForce(coords, tree);
       const force = forces.get(nodeId)!;
 
       force.x += nodeForce.x;
@@ -50,32 +48,20 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
   }
 
-  private calculateNodeForce(coords: Point, leaf: QuadTreeNode): Point {
-    const nodesStack: QuadTreeNode[] = [leaf];
-    const visited = new Set<QuadTreeNode>([leaf]);
+  private calculateNodeForce(coords: Point, tree: QuadTree): Point {
+    const nodesStack: QuadTreeNode[] = [tree.root];
     const totalForce: MutablePoint = { x: 0, y: 0 };
 
     while (nodesStack.length > 0) {
       const current = nodesStack.pop()!;
-
-      if (current.parent !== null) {
-        nodesStack.push(current.parent);
-      }
-
-      if (visited.has(current)) {
-        continue;
-      }
-
-      visited.add(current);
 
       const dx = coords.x - current.massCenter.x;
       const dy = coords.y - current.massCenter.y;
       const d2 = dx * dx + dy * dy;
       const d = Math.sqrt(d2);
       const isFarNode = current.box.radius * 2 < this.theta * d;
-      const isLeaf = current.nodeIds.size > 0;
 
-      if (isFarNode || isLeaf) {
+      if (isFarNode) {
         const ex = dx / d;
         const ey = dy / d;
         const f = (this.nodeCharge * current.totalCharge) / d2;
@@ -85,19 +71,19 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         totalForce.x += fx;
         totalForce.y += fy;
       } else {
-        if (current.rb !== null && !visited.has(current.rb)) {
+        if (current.rb !== null) {
           nodesStack.push(current.rb);
         }
 
-        if (current.rt !== null && !visited.has(current.rt)) {
+        if (current.rt !== null) {
           nodesStack.push(current.rt);
         }
 
-        if (current.lb !== null && !visited.has(current.lb)) {
+        if (current.lb !== null) {
           nodesStack.push(current.lb);
         }
 
-        if (current.lt !== null && !visited.has(current.lt)) {
+        if (current.lt !== null) {
           nodesStack.push(current.lt);
         }
       }
