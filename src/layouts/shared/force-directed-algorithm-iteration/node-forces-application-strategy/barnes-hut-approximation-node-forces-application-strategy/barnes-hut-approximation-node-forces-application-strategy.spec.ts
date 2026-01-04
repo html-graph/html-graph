@@ -24,8 +24,8 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
 
     expect(forces).toEqual(
       new Map([
-        ["node-1", { x: -50, y: 0 }],
-        ["node-2", { x: 50, y: 0 }],
+        ["node-1", { x: -100, y: 0 }],
+        ["node-2", { x: 100, y: 0 }],
       ]),
     );
   });

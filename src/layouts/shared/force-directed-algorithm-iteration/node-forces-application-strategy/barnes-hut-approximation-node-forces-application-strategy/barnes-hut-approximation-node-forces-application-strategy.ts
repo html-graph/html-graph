@@ -42,27 +42,59 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     nodeCoords.forEach((coords, nodeId) => {
       const leaf = tree.getLeaf(nodeId)!;
 
-      let current: QuadTreeNode | null = leaf;
+      const nodeForce = this.calculateNodeForce(coords, leaf);
+      const force = forces.get(nodeId)!;
 
-      while (current !== null) {
-        const parent: QuadTreeNode | null = current.parent;
+      force.x += nodeForce.x;
+      force.y += nodeForce.y;
+    });
+  }
 
-        if (parent !== null) {
-          const dx = parent.massCenter.x - coords.x;
-          const dy = parent.massCenter.y - coords.y;
-          const distance = dx * dx + dy * dy;
+  private calculateNodeForce(coords: Point, leaf: QuadTreeNode): Point {
+    const nodesStack: QuadTreeNode[] = [leaf];
+    const visited = new Set<QuadTreeNode>([leaf]);
 
-          if (parent.box.radius / distance < this.theta) {
-            // far nodes
-          } else {
-            // near nodes
-          }
+    const totalForce: MutablePoint = { x: 0, y: 0 };
+
+    while (nodesStack.length > 0) {
+      const current = nodesStack.pop()!;
+
+      visited.add(current);
+
+      const dx = coords.x - current.massCenter.x;
+      const dy = coords.y - current.massCenter.y;
+      const d2 = dx * dx + dy * dy;
+      const d = Math.sqrt(d2);
+      const isFarNode = current.box.radius * 2 < this.theta * d;
+
+      if (isFarNode || current.nodeIds.size > 0) {
+        const ex = dx / d;
+        const ey = dy / d;
+        const f = (this.nodeCharge * current.totalCharge) / d2;
+        const fx = f * ex;
+        const fy = f * ey;
+
+        totalForce.x = fx;
+        totalForce.y = fy;
+      } else {
+        if (current.rb !== null && !visited.has(current.rb)) {
+          nodesStack.push(current.rb);
         }
 
-        current = parent;
-      }
-    });
+        if (current.rt !== null && !visited.has(current.rt)) {
+          nodesStack.push(current.rt);
+        }
 
-    console.log(forces);
+        if (current.lb !== null && !visited.has(current.lb)) {
+          nodesStack.push(current.lb);
+        }
+
+        if (current.lt !== null && !visited.has(current.lt)) {
+          nodesStack.push(current.lt);
+        }
+      }
+    }
+
+    return totalForce;
   }
 }
