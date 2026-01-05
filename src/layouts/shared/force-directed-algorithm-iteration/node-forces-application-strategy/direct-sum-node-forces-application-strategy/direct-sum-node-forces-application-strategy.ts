@@ -21,12 +21,12 @@ export class DirectSumNodeForcesApplicationStrategy
   }
 
   public apply(
-    nodeCoords: ReadonlyMap<Identifier, Point>,
+    nodesCoords: ReadonlyMap<Identifier, Point>,
     forces: ReadonlyMap<Identifier, MutablePoint>,
   ): void {
     const nodeIds = Array.from(forces.keys());
 
-    const vectors = new NodeDistanceVectors(nodeCoords, this.rand);
+    const vectors = new NodeDistanceVectors(nodesCoords, this.rand);
 
     const size = nodeIds.length;
 

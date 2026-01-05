@@ -26,21 +26,25 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
   }
 
   public apply(
-    nodeCoords: ReadonlyMap<Identifier, Point>,
+    nodesCoords: ReadonlyMap<Identifier, Point>,
     forces: ReadonlyMap<Identifier, MutablePoint>,
   ): void {
-    const box = createAreaBox(nodeCoords);
+    const box = createAreaBox(nodesCoords);
 
     const tree = new QuadTree({
       box,
-      coords: nodeCoords,
+      coords: nodesCoords,
       minAreaSize: this.minAreaSize,
       nodeMass: this.nodeMass,
       nodeCharge: this.nodeCharge,
     });
 
-    nodeCoords.forEach((coords, nodeId) => {
-      const nodeForce = this.calculateNodeForce(coords, tree);
+    nodesCoords.forEach((_coords, nodeId) => {
+      const nodeForce = this.calculateForceAtPoint(
+        tree.root,
+        nodesCoords,
+        nodeId,
+      );
       const force = forces.get(nodeId)!;
 
       force.x += nodeForce.x;
@@ -48,15 +52,20 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
   }
 
-  private calculateNodeForce(coords: Point, tree: QuadTree): Point {
-    const nodesStack: QuadTreeNode[] = [tree.root];
+  private calculateForceAtPoint(
+    root: QuadTreeNode,
+    nodesCoords: ReadonlyMap<Identifier, Point>,
+    targetNodeId: Identifier,
+  ): Point {
+    const targetNodeCoords = nodesCoords.get(targetNodeId)!;
+    const nodesStack: QuadTreeNode[] = [root];
     const totalForce: MutablePoint = { x: 0, y: 0 };
 
     while (nodesStack.length > 0) {
       const current = nodesStack.pop()!;
 
-      const dx = coords.x - current.massCenter.x;
-      const dy = coords.y - current.massCenter.y;
+      const dx = targetNodeCoords.x - current.massCenter.x;
+      const dy = targetNodeCoords.y - current.massCenter.y;
       const d2 = dx * dx + dy * dy;
       const d = Math.sqrt(d2);
       const isFarNode = current.box.radius * 2 < this.theta * d;
@@ -70,6 +79,27 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
         totalForce.x += fx;
         totalForce.y += fy;
+      } else if (current.nodeIds.has(targetNodeId)) {
+        current.nodeIds.forEach((nodeId) => {
+          if (nodeId !== targetNodeId) {
+            const nodeCoords = nodesCoords.get(nodeId)!;
+            const dx = targetNodeCoords.x - nodeCoords.x;
+            const dy = targetNodeCoords.y - nodeCoords.y;
+            const d2 = dx * dx + dy * dy;
+            const d = Math.sqrt(d2);
+
+            if (d !== null) {
+              const ex = dx / d;
+              const ey = dy / d;
+              const f = (this.nodeCharge * this.nodeCharge) / d2;
+              const fx = f * ex;
+              const fy = f * ey;
+
+              totalForce.x += fx;
+              totalForce.y += fy;
+            }
+          }
+        });
       } else {
         if (current.rb !== null) {
           nodesStack.push(current.rb);

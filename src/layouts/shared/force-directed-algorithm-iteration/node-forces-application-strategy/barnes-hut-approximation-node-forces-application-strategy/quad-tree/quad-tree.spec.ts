@@ -354,20 +354,4 @@ describe("QuadTree", () => {
 
     expect(tree.root.rt!.massCenter).toEqual({ x: 1.5, y: 1.5 });
   });
-
-  it("should return leaf associated to graph node", () => {
-    const tree = new QuadTree({
-      box: {
-        centerX: 0,
-        centerY: 0,
-        radius: 10,
-      },
-      coords: new Map([["node-1", { x: 0, y: 0 }]]),
-      minAreaSize: 1e-3,
-      nodeMass: 1,
-      nodeCharge: 1,
-    });
-
-    expect(tree.getLeaf("node-1")).toEqual(tree.root);
-  });
 });

@@ -15,8 +15,6 @@ export class QuadTree {
 
   private readonly nodeCharge: number;
 
-  private readonly leaves = new Map<Identifier, QuadTreeNode>();
-
   private readonly sortedParentNodes: QuadTreeNode[] = [];
 
   public constructor(params: QuadTreeParams) {
@@ -97,10 +95,6 @@ export class QuadTree {
       node.massCenter.x = totalMassX / totalMass;
       node.massCenter.y = totalMassY / totalMass;
     });
-  }
-
-  public getLeaf(nodeId: Identifier): QuadTreeNode | undefined {
-    return this.leaves.get(nodeId);
   }
 
   private processNode(current: QuadTreeNode): readonly QuadTreeNode[] {
@@ -245,10 +239,6 @@ export class QuadTree {
   private setLeaf(current: QuadTreeNode): void {
     current.totalMass = this.nodeMass * current.nodeIds.size;
     current.totalCharge = this.nodeCharge * current.nodeIds.size;
-    current.nodeIds.forEach((nodeId) => {
-      this.leaves.set(nodeId, current);
-    });
-
     current.massCenter = this.calculateLeafMassCenter(current.nodeIds);
   }
 
