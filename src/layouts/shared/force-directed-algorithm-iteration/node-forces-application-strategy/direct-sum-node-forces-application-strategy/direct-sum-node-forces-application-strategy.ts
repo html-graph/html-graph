@@ -10,6 +10,8 @@ export class DirectSumNodeForcesApplicationStrategy
 {
   private readonly effectiveDistance: number;
 
+  private readonly equilibriumEdgeLength: number;
+
   private readonly k: number;
 
   private readonly rand: () => number;
@@ -18,6 +20,7 @@ export class DirectSumNodeForcesApplicationStrategy
     this.effectiveDistance = params.effectiveDistance;
     this.k = params.nodeCharge * params.nodeCharge;
     this.rand = params.rand;
+    this.equilibriumEdgeLength = params.equilibriumEdgeLength;
   }
 
   public apply(
@@ -26,7 +29,11 @@ export class DirectSumNodeForcesApplicationStrategy
   ): void {
     const nodeIds = Array.from(forces.keys());
 
-    const vectors = new NodeDistanceVectors(nodesCoords, this.rand);
+    const vectors = new NodeDistanceVectors(
+      nodesCoords,
+      this.rand,
+      this.equilibriumEdgeLength,
+    );
 
     const size = nodeIds.length;
 

@@ -3,9 +3,10 @@ import { QuadTreeNode } from "./quad-tree-node";
 import { QuadTreeParams } from "./quad-tree-params";
 import { Point } from "@/point";
 import { MutablePoint } from "@/point";
+import { MutableQuadTreeNode } from "./mutable-quad-tree-node";
 
 export class QuadTree {
-  public readonly root: QuadTreeNode;
+  private readonly root: MutableQuadTreeNode;
 
   private readonly coords: ReadonlyMap<Identifier, Point>;
 
@@ -15,7 +16,7 @@ export class QuadTree {
 
   private readonly nodeCharge: number;
 
-  private readonly sortedParentNodes: QuadTreeNode[] = [];
+  private readonly sortedParentNodes: MutableQuadTreeNode[] = [];
 
   public constructor(params: QuadTreeParams) {
     this.coords = params.coords;
@@ -39,10 +40,10 @@ export class QuadTree {
       rt: null,
     };
 
-    let layer: QuadTreeNode[] = [this.root];
+    let layer: MutableQuadTreeNode[] = [this.root];
 
     while (layer.length > 0) {
-      const nextLayer: QuadTreeNode[] = [];
+      const nextLayer: MutableQuadTreeNode[] = [];
 
       while (layer.length > 0) {
         const node = layer.pop()!;
@@ -97,7 +98,13 @@ export class QuadTree {
     });
   }
 
-  private processNode(current: QuadTreeNode): readonly QuadTreeNode[] {
+  public getRoot(): QuadTreeNode {
+    return this.root;
+  }
+
+  private processNode(
+    current: MutableQuadTreeNode,
+  ): readonly MutableQuadTreeNode[] {
     if (current.nodeIds.size < 2) {
       this.setLeaf(current);
       return [];
@@ -147,10 +154,10 @@ export class QuadTree {
       rt: null,
     };
 
-    const nextNodesToProcess: QuadTreeNode[] = [];
+    const nextNodesToProcess: MutableQuadTreeNode[] = [];
 
     if (rightTopNodes.size > 0) {
-      const node: QuadTreeNode = {
+      const node: MutableQuadTreeNode = {
         nodeIds: rightTopNodes,
         totalMass: 0,
         totalCharge: 0,
@@ -171,7 +178,7 @@ export class QuadTree {
     }
 
     if (rightBottomNodes.size > 0) {
-      const node: QuadTreeNode = {
+      const node: MutableQuadTreeNode = {
         nodeIds: rightBottomNodes,
         totalMass: 0,
         totalCharge: 0,
@@ -192,7 +199,7 @@ export class QuadTree {
     }
 
     if (leftTopNodes.size > 0) {
-      const node: QuadTreeNode = {
+      const node: MutableQuadTreeNode = {
         nodeIds: leftTopNodes,
         totalMass: 0,
         totalCharge: 0,
@@ -213,7 +220,7 @@ export class QuadTree {
     }
 
     if (leftBottomNodes.size > 0) {
-      const node: QuadTreeNode = {
+      const node: MutableQuadTreeNode = {
         nodeIds: leftBottomNodes,
         totalMass: 0,
         totalCharge: 0,
@@ -236,7 +243,7 @@ export class QuadTree {
     return nextNodesToProcess;
   }
 
-  private setLeaf(current: QuadTreeNode): void {
+  private setLeaf(current: MutableQuadTreeNode): void {
     current.totalMass = this.nodeMass * current.nodeIds.size;
     current.totalCharge = this.nodeCharge * current.nodeIds.size;
     current.massCenter = this.calculateLeafMassCenter(current.nodeIds);

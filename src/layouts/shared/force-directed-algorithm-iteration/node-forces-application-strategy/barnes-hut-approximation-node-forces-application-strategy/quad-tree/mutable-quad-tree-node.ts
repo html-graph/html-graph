@@ -1,13 +1,12 @@
 import { Identifier } from "@/identifier";
-import { MutableQuadTreeNode } from "./mutable-quad-tree-node";
-import { Point } from "@/point";
 import { AreaBox } from "./area-box";
+import { MutablePoint } from "@/point";
 
-export interface QuadTreeNode {
-  readonly nodeIds: ReadonlySet<Identifier>;
+export interface MutableQuadTreeNode {
+  readonly nodeIds: Set<Identifier>;
   totalMass: number;
   totalCharge: number;
-  massCenter: Point;
+  massCenter: MutablePoint;
   readonly box: AreaBox;
   parent: MutableQuadTreeNode | null;
   lt: MutableQuadTreeNode | null;

@@ -35,6 +35,7 @@ export class ForceDirectedAlgorithmIteration {
         nodeCharge: this.params.nodeCharge,
         rand: this.params.rand,
         effectiveDistance: this.params.effectiveDistance,
+        equilibriumEdgeLength: this.edgeEquilibriumLength,
       });
   }
 
@@ -75,6 +76,7 @@ export class ForceDirectedAlgorithmIteration {
     const vectors = new NodeDistanceVectors(
       this.currentCoords,
       this.params.rand,
+      this.edgeEquilibriumLength,
     );
 
     this.graph.getAllEdgeIds().forEach((edgeId) => {
@@ -83,6 +85,7 @@ export class ForceDirectedAlgorithmIteration {
       const portTo = this.graph.getPort(edge.to)!;
       const vector = vectors.getVector(portFrom.nodeId, portTo.nodeId);
       const delta = vector.d - this.edgeEquilibriumLength;
+      // division by 2 is incorrect
       const f2 = (delta * this.edgeStiffness) / 2;
       const f2x = vector.ex * f2;
       const f2y = vector.ey * f2;

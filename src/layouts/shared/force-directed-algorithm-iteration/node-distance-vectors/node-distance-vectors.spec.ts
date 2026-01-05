@@ -16,7 +16,7 @@ describe("NodeDistanceVectors", () => {
       ["node-2", { x, y }],
     ]);
 
-    const vectors = new NodeDistanceVectors(coordinates, (): number => 0);
+    const vectors = new NodeDistanceVectors(coordinates, (): number => 0, 1);
 
     const vector = vectors.getVector("node-1", "node-2");
 
@@ -29,10 +29,10 @@ describe("NodeDistanceVectors", () => {
       ["node-2", { x: 0, y: 0 }],
     ]);
 
-    const vectors = new NodeDistanceVectors(coordinates, (): number => 0);
+    const vectors = new NodeDistanceVectors(coordinates, (): number => 0, 10);
 
     const vector = vectors.getVector("node-1", "node-2");
 
-    expect(vector).toEqual({ d2: 1, ex: 1, ey: 0, d: 1 });
+    expect(vector).toEqual({ d2: 100, ex: 1, ey: 0, d: 10 });
   });
 });

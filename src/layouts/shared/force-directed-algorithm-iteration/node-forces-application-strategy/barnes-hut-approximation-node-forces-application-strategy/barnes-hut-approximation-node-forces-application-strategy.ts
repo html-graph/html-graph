@@ -40,8 +40,8 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
 
     nodesCoords.forEach((_coords, nodeId) => {
-      const nodeForce = this.calculateForceAtPoint(
-        tree.root,
+      const nodeForce = this.calculateForceForNode(
+        tree.getRoot(),
         nodesCoords,
         nodeId,
       );
@@ -52,7 +52,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
   }
 
-  private calculateForceAtPoint(
+  private calculateForceForNode(
     root: QuadTreeNode,
     nodesCoords: ReadonlyMap<Identifier, Point>,
     targetNodeId: Identifier,
@@ -81,24 +81,28 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         totalForce.y += fy;
       } else if (current.nodeIds.has(targetNodeId)) {
         current.nodeIds.forEach((nodeId) => {
-          if (nodeId !== targetNodeId) {
-            const nodeCoords = nodesCoords.get(nodeId)!;
-            const dx = targetNodeCoords.x - nodeCoords.x;
-            const dy = targetNodeCoords.y - nodeCoords.y;
-            const d2 = dx * dx + dy * dy;
-            const d = Math.sqrt(d2);
-
-            if (d !== null) {
-              const ex = dx / d;
-              const ey = dy / d;
-              const f = (this.nodeCharge * this.nodeCharge) / d2;
-              const fx = f * ex;
-              const fy = f * ey;
-
-              totalForce.x += fx;
-              totalForce.y += fy;
-            }
+          if (nodeId === targetNodeId) {
+            return;
           }
+
+          const nodeCoords = nodesCoords.get(nodeId)!;
+          const dx = targetNodeCoords.x - nodeCoords.x;
+          const dy = targetNodeCoords.y - nodeCoords.y;
+          const d2 = dx * dx + dy * dy;
+
+          if (d2 === 0) {
+            return;
+          }
+
+          const d = Math.sqrt(d2);
+          const ex = dx / d;
+          const ey = dy / d;
+          const f = (this.nodeCharge * this.nodeCharge) / d2;
+          const fx = f * ex;
+          const fy = f * ey;
+
+          totalForce.x += fx;
+          totalForce.y += fy;
         });
       } else {
         if (current.rb !== null) {
