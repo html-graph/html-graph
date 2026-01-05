@@ -10,17 +10,14 @@ export class DirectSumNodeForcesApplicationStrategy
 {
   private readonly effectiveDistance: number;
 
-  private readonly equilibriumEdgeLength: number;
-
-  private readonly k: number;
+  private readonly nodeCharge: number;
 
   private readonly rand: () => number;
 
   public constructor(params: DirectSumNodeForcesApplicationStrategyParams) {
     this.effectiveDistance = params.effectiveDistance;
-    this.k = params.nodeCharge * params.nodeCharge;
+    this.nodeCharge = params.nodeCharge;
     this.rand = params.rand;
-    this.equilibriumEdgeLength = params.equilibriumEdgeLength;
   }
 
   public apply(
@@ -29,11 +26,7 @@ export class DirectSumNodeForcesApplicationStrategy
   ): void {
     const nodeIds = Array.from(forces.keys());
 
-    const vectors = new NodeDistanceVectors(
-      nodesCoords,
-      this.rand,
-      this.equilibriumEdgeLength,
-    );
+    const vectors = new NodeDistanceVectors(this.rand);
 
     const size = nodeIds.length;
 
@@ -43,14 +36,16 @@ export class DirectSumNodeForcesApplicationStrategy
       for (let j = i + 1; j < size; j++) {
         const nodeIdTo = nodeIds[j];
 
-        const vector = vectors.getVector(nodeIdFrom, nodeIdTo);
+        const sourceCoords = nodesCoords.get(nodeIdFrom)!;
+        const targetCoords = nodesCoords.get(nodeIdTo)!;
+
+        const vector = vectors.getVector(sourceCoords, targetCoords);
 
         if (vector.d > this.effectiveDistance) {
           continue;
         }
 
-        const f = this.k / vector.d2;
-
+        const f = (this.nodeCharge * this.nodeCharge) / vector.d2;
         const fx = f * vector.ex;
         const fy = f * vector.ey;
         // division by 2 is incorrect

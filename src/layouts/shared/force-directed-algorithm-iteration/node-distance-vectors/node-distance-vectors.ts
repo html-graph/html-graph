@@ -1,21 +1,10 @@
-import { Identifier } from "@/identifier";
-import { DistanceVector } from "../distance-vector";
+import { DistanceVector } from "./distance-vector";
 import { Point } from "@/point";
 
 export class NodeDistanceVectors {
-  public constructor(
-    private readonly coordinates: ReadonlyMap<Identifier, Point>,
-    private readonly rand: () => number,
-    private readonly equilibriumEdgeLength: number,
-  ) {}
+  public constructor(private readonly rand: () => number) {}
 
-  public getVector(
-    nodeIdFrom: Identifier,
-    nodeIdTo: Identifier,
-  ): DistanceVector {
-    const sourceCoords = this.coordinates.get(nodeIdFrom)!;
-    const targetCoords = this.coordinates.get(nodeIdTo)!;
-
+  public getVector(sourceCoords: Point, targetCoords: Point): DistanceVector {
     const dx = targetCoords.x - sourceCoords.x;
     const dy = targetCoords.y - sourceCoords.y;
     const d2 = dx * dx + dy * dy;
@@ -26,8 +15,8 @@ export class NodeDistanceVectors {
       return {
         ex: Math.cos(ang),
         ey: Math.sin(ang),
-        d2: this.equilibriumEdgeLength * this.equilibriumEdgeLength,
-        d: this.equilibriumEdgeLength,
+        d2: 0,
+        d: 0,
       };
     }
 

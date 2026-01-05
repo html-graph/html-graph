@@ -6,7 +6,6 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
       nodeCharge: 1000,
       rand: (): number => 0,
       effectiveDistance: 1000,
-      equilibriumEdgeLength: 10,
     });
 
     const nodeCoords = new Map([["node-1", { x: 10, y: 10 }]]);
@@ -23,7 +22,6 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
       nodeCharge: 100,
       rand: (): number => 0,
       effectiveDistance: 1000,
-      equilibriumEdgeLength: 10,
     });
 
     const nodeCoords = new Map([
@@ -51,7 +49,6 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
       nodeCharge: 100,
       rand: (): number => 0,
       effectiveDistance: 1000,
-      equilibriumEdgeLength: 10,
     });
 
     const nodeCoords = new Map([
@@ -79,7 +76,6 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
       nodeCharge: 100,
       rand: (): number => 0,
       effectiveDistance: 5,
-      equilibriumEdgeLength: 10,
     });
 
     const nodeCoords = new Map([

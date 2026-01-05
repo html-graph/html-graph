@@ -35,7 +35,6 @@ export class ForceDirectedAlgorithmIteration {
         nodeCharge: this.params.nodeCharge,
         rand: this.params.rand,
         effectiveDistance: this.params.effectiveDistance,
-        equilibriumEdgeLength: this.edgeEquilibriumLength,
       });
   }
 
@@ -73,17 +72,15 @@ export class ForceDirectedAlgorithmIteration {
   }
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
-    const vectors = new NodeDistanceVectors(
-      this.currentCoords,
-      this.params.rand,
-      this.edgeEquilibriumLength,
-    );
+    const vectors = new NodeDistanceVectors(this.params.rand);
 
     this.graph.getAllEdgeIds().forEach((edgeId) => {
       const edge = this.graph.getEdge(edgeId)!;
       const portFrom = this.graph.getPort(edge.from)!;
       const portTo = this.graph.getPort(edge.to)!;
-      const vector = vectors.getVector(portFrom.nodeId, portTo.nodeId);
+      const sourceCoords = this.currentCoords.get(portFrom.nodeId)!;
+      const targetCoords = this.currentCoords.get(portTo.nodeId)!;
+      const vector = vectors.getVector(sourceCoords, targetCoords);
       const delta = vector.d - this.edgeEquilibriumLength;
       // division by 2 is incorrect
       const f2 = (delta * this.edgeStiffness) / 2;

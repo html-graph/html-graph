@@ -79,7 +79,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
         totalForce.x += fx;
         totalForce.y += fy;
-      } else if (current.nodeIds.has(targetNodeId)) {
+      } else if (current.nodeIds.size > 0) {
         current.nodeIds.forEach((nodeId) => {
           if (nodeId === targetNodeId) {
             return;

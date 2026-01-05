@@ -1,6 +1,4 @@
 import { NodeDistanceVectors } from "./node-distance-vectors";
-import { Identifier } from "@/identifier";
-import { Point } from "@/point";
 
 describe("NodeDistanceVectors", () => {
   it("should calculate direct vector", () => {
@@ -11,28 +9,18 @@ describe("NodeDistanceVectors", () => {
     const ex = x / d;
     const ey = y / d;
 
-    const coordinates = new Map<Identifier, Point>([
-      ["node-1", { x: 0, y: 0 }],
-      ["node-2", { x, y }],
-    ]);
+    const vectors = new NodeDistanceVectors((): number => 0);
 
-    const vectors = new NodeDistanceVectors(coordinates, (): number => 0, 1);
-
-    const vector = vectors.getVector("node-1", "node-2");
+    const vector = vectors.getVector({ x: 0, y: 0 }, { x, y });
 
     expect(vector).toEqual({ d2, ex, ey, d });
   });
 
-  it("should calculate fallback vector when two nodes have same coordinates", () => {
-    const coordinates = new Map<Identifier, Point>([
-      ["node-1", { x: 0, y: 0 }],
-      ["node-2", { x: 0, y: 0 }],
-    ]);
+  it("should calculate randomize vector direction when two nodes have same coordinates", () => {
+    const vectors = new NodeDistanceVectors((): number => 0);
 
-    const vectors = new NodeDistanceVectors(coordinates, (): number => 0, 10);
+    const vector = vectors.getVector({ x: 0, y: 0 }, { x: 0, y: 0 });
 
-    const vector = vectors.getVector("node-1", "node-2");
-
-    expect(vector).toEqual({ d2: 100, ex: 1, ey: 0, d: 10 });
+    expect(vector).toEqual({ d2: 0, ex: 1, ey: 0, d: 0 });
   });
 });
