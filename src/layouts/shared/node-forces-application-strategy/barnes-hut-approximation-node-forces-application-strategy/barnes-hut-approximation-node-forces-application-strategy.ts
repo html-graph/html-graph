@@ -4,6 +4,7 @@ import { BarnesHutApproximationNodeForcesApplicationStrategyParams } from "./bar
 import type { Point, MutablePoint } from "@/point";
 import { createAreaBox } from "./create-area-box";
 import { QuadTree, QuadTreeNode } from "./quad-tree";
+import { DistanceVectorGenerator } from "../../distance-vector-generator";
 
 export class BarnesHutApproximationNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
@@ -16,6 +17,8 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
   private readonly theta: number;
 
+  private readonly distance: DistanceVectorGenerator;
+
   public constructor(
     params: BarnesHutApproximationNodeForcesApplicationStrategyParams,
   ) {
@@ -23,6 +26,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     this.nodeMass = params.nodeMass;
     this.nodeCharge = params.nodeCharge;
     this.theta = params.theta;
+    this.distance = params.distance;
   }
 
   public apply(
@@ -64,18 +68,15 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     while (nodesStack.length > 0) {
       const current = nodesStack.pop()!;
 
-      const dx = targetNodeCoords.x - current.massCenter.x;
-      const dy = targetNodeCoords.y - current.massCenter.y;
-      const d2 = dx * dx + dy * dy;
-      const d = Math.sqrt(d2);
-      const isFarNode = current.box.radius * 2 < this.theta * d;
+      const vector = this.distance.create(current.massCenter, targetNodeCoords);
+
+      const isFarNode = current.box.radius * 2 < this.theta * vector.d;
 
       if (isFarNode) {
-        const ex = dx / d;
-        const ey = dy / d;
-        const f = (this.nodeCharge * current.totalCharge) / d2;
-        const fx = f * ex;
-        const fy = f * ey;
+        const f =
+          (this.nodeCharge * current.totalCharge) / (vector.d * vector.d);
+        const fx = f * vector.ex;
+        const fy = f * vector.ey;
 
         totalForce.x += fx;
         totalForce.y += fy;
@@ -86,20 +87,17 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
           }
 
           const nodeCoords = nodesCoords.get(nodeId)!;
-          const dx = targetNodeCoords.x - nodeCoords.x;
-          const dy = targetNodeCoords.y - nodeCoords.y;
-          const d2 = dx * dx + dy * dy;
+          const localVector = this.distance.create(
+            nodeCoords,
+            targetNodeCoords,
+          );
 
-          if (d2 === 0) {
-            return;
-          }
-
-          const d = Math.sqrt(d2);
-          const ex = dx / d;
-          const ey = dy / d;
-          const f = (this.nodeCharge * this.nodeCharge) / d2;
-          const fx = f * ex;
-          const fy = f * ey;
+          // d might be 0
+          const f =
+            (this.nodeCharge * this.nodeCharge) /
+            (localVector.d * localVector.d);
+          const fx = f * localVector.ex;
+          const fy = f * localVector.ey;
 
           totalForce.x += fx;
           totalForce.y += fy;

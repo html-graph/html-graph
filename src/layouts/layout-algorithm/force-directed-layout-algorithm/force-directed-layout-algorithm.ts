@@ -8,15 +8,25 @@ import {
   DirectSumNodeForcesApplicationStrategy,
   DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
+  NodeForcesApplicationStrategy,
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   private readonly distance: DistanceVectorGenerator;
 
+  private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
+
   public constructor(
     private readonly params: ForceDirectedLayoutAlgorithmParams,
   ) {
     this.distance = new DistanceVectorGenerator(this.params.rand);
+
+    this.nodeForcesApplicationStrategy =
+      new DirectSumNodeForcesApplicationStrategy({
+        distance: this.distance,
+        nodeCharge: this.params.nodeCharge,
+        effectiveDistance: this.params.effectiveDistance,
+      });
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
@@ -32,12 +42,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         currentCoords,
         {
           distance: this.distance,
-          nodeForcesApplicationStrategy:
-            new DirectSumNodeForcesApplicationStrategy({
-              nodeCharge: this.params.nodeCharge,
-              effectiveDistance: this.params.effectiveDistance,
-              distance: this.distance,
-            }),
+          nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,
           edgeEquilibriumLength: this.params.edgeEquilibriumLength,

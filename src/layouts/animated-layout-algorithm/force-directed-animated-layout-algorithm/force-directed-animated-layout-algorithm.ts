@@ -7,6 +7,7 @@ import {
   DirectSumNodeForcesApplicationStrategy,
   DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
+  NodeForcesApplicationStrategy,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
@@ -15,10 +16,19 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 {
   private readonly distance: DistanceVectorGenerator;
 
+  private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
+
   public constructor(
     private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
   ) {
     this.distance = new DistanceVectorGenerator(params.rand);
+
+    this.nodeForcesApplicationStrategy =
+      new DirectSumNodeForcesApplicationStrategy({
+        nodeCharge: this.params.nodeCharge,
+        effectiveDistance: this.params.effectiveDistance,
+        distance: this.distance,
+      });
   }
 
   public calculateNextCoordinates(
@@ -36,12 +46,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       currentCoords,
       {
         distance: this.distance,
-        nodeForcesApplicationStrategy:
-          new DirectSumNodeForcesApplicationStrategy({
-            nodeCharge: this.params.nodeCharge,
-            effectiveDistance: this.params.effectiveDistance,
-            distance: this.distance,
-          }),
+        nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,
         edgeEquilibriumLength: this.params.edgeEquilibriumLength,

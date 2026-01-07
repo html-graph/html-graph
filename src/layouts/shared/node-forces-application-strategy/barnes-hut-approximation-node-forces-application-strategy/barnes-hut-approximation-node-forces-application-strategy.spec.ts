@@ -1,12 +1,13 @@
+import { DistanceVectorGenerator } from "../../distance-vector-generator";
 import { BarnesHutApproximationNodeForcesApplicationStrategy } from "./barnes-hut-approximation-node-forces-application-strategy";
 
 describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply repulsive forces by x axis when two nodes exist", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
+      distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
-      rand: (): number => 0,
       theta: 1,
     });
 
@@ -32,10 +33,10 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
 
   it("should apply repulsive forces by y axis when two nodes exist", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
+      distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
-      rand: (): number => 0,
       theta: 1,
     });
 
