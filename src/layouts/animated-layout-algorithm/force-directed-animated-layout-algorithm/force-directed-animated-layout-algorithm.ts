@@ -43,7 +43,6 @@ export class ForceDirectedAnimatedLayoutAlgorithm
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,
         edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-        effectiveDistance: this.params.effectiveDistance,
         edgeStiffness: this.params.edgeStiffness,
       },
     );

@@ -38,9 +38,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
             }),
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,
-          nodeCharge: this.params.nodeCharge,
           edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-          effectiveDistance: this.params.effectiveDistance,
           edgeStiffness: this.params.edgeStiffness,
         },
       );
