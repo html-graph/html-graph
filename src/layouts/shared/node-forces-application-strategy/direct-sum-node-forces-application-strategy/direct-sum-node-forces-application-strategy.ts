@@ -43,7 +43,8 @@ export class DirectSumNodeForcesApplicationStrategy
           continue;
         }
 
-        const f = (this.nodeCharge * this.nodeCharge) / vector.d2;
+        // d might be 0
+        const f = (this.nodeCharge * this.nodeCharge) / (vector.d * vector.d);
         const fx = f * vector.ex;
         const fy = f * vector.ey;
         // division by 2 is incorrect

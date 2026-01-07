@@ -17,7 +17,6 @@ export class DistanceVectorGenerator {
       return {
         ex: Math.cos(ang),
         ey: Math.sin(ang),
-        d2: 0,
         d: 0,
       };
     }
@@ -26,6 +25,6 @@ export class DistanceVectorGenerator {
     const ex = dx / d;
     const ey = dy / d;
 
-    return { ex, ey, d2, d };
+    return { ex, ey, d };
   }
 }

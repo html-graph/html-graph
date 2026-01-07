@@ -11,9 +11,13 @@ import {
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
+  private readonly distance: DistanceVectorGenerator;
+
   public constructor(
     private readonly params: ForceDirectedLayoutAlgorithmParams,
-  ) {}
+  ) {
+    this.distance = new DistanceVectorGenerator(this.params.rand);
+  }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const currentCoords = createCurrentCoordinates(
@@ -22,19 +26,17 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       this.params.edgeEquilibriumLength,
     );
 
-    const distance = new DistanceVectorGenerator(this.params.rand);
-
     for (let i = 0; i < this.params.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
         graph,
         currentCoords,
         {
-          distance,
+          distance: this.distance,
           nodeForcesApplicationStrategy:
             new DirectSumNodeForcesApplicationStrategy({
               nodeCharge: this.params.nodeCharge,
               effectiveDistance: this.params.effectiveDistance,
-              distance,
+              distance: this.distance,
             }),
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,

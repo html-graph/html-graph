@@ -13,7 +13,7 @@ describe("DistanceVectorGenerator", () => {
 
     const vector = vectors.create({ x: 0, y: 0 }, { x, y });
 
-    expect(vector).toEqual({ d2, ex, ey, d });
+    expect(vector).toEqual({ ex, ey, d });
   });
 
   it("should calculate randomize vector direction when two nodes have same coordinates", () => {
@@ -21,6 +21,6 @@ describe("DistanceVectorGenerator", () => {
 
     const vector = vectors.create({ x: 0, y: 0 }, { x: 0, y: 0 });
 
-    expect(vector).toEqual({ d2: 0, ex: 1, ey: 0, d: 0 });
+    expect(vector).toEqual({ ex: 1, ey: 0, d: 0 });
   });
 });

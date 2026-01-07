@@ -13,9 +13,13 @@ import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-ani
 export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
 {
+  private readonly distance: DistanceVectorGenerator;
+
   public constructor(
     private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
-  ) {}
+  ) {
+    this.distance = new DistanceVectorGenerator(params.rand);
+  }
 
   public calculateNextCoordinates(
     graph: Graph,
@@ -27,18 +31,16 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       this.params.edgeEquilibriumLength,
     );
 
-    const distance = new DistanceVectorGenerator(this.params.rand);
-
     const iteration = new ForceDirectedAlgorithmIteration(
       graph,
       currentCoords,
       {
-        distance,
+        distance: this.distance,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: this.params.nodeCharge,
             effectiveDistance: this.params.effectiveDistance,
-            distance,
+            distance: this.distance,
           }),
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,
