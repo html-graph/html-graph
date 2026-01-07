@@ -59,8 +59,8 @@ describe("ForceDirectedLayoutAlgorithm", () => {
 
     expect(nextCoords).toEqual(
       new Map([
-        ["node-1", { x: 9.5, y: 0 }],
-        ["node-2", { x: 20.5, y: 0 }],
+        ["node-1", { x: 9, y: 0 }],
+        ["node-2", { x: 21, y: 0 }],
       ]),
     );
   });
@@ -78,8 +78,8 @@ describe("ForceDirectedLayoutAlgorithm", () => {
 
     expect(nextCoords).toEqual(
       new Map([
-        ["node-1", { x: 9.5, y: 0 }],
-        ["node-2", { x: 20.5, y: 0 }],
+        ["node-1", { x: 9, y: 0 }],
+        ["node-2", { x: 21, y: 0 }],
       ]),
     );
   });

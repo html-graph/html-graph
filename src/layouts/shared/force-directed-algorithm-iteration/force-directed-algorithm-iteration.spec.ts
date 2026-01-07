@@ -100,7 +100,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     iteration.apply();
 
-    expect(currentCoords.get("node-1")).toEqual({ x: 8, y: 0 });
+    expect(currentCoords.get("node-1")).toEqual({ x: 6, y: 0 });
   });
 
   it("should account for edge spring forces when two nodes are connected", () => {
@@ -157,7 +157,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     iteration.apply();
 
-    expect(currentCoords.get("node-1")).toEqual({ x: 12, y: 0 });
+    expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
   });
 
   it("should not apply pulling back forces when effective distance is reached", () => {
@@ -243,6 +243,6 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     const maxDelta = iteration.apply();
 
-    expect(maxDelta).toBe(2);
+    expect(maxDelta).toBe(4);
   });
 });

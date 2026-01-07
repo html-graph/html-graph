@@ -67,9 +67,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
     while (nodesStack.length > 0) {
       const current = nodesStack.pop()!;
-
       const vector = this.distance.create(current.massCenter, targetNodeCoords);
-
       const isFarNode = current.box.radius * 2 < this.theta * vector.d;
 
       if (isFarNode) {

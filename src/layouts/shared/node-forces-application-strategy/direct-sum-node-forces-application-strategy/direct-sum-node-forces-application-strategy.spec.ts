@@ -43,8 +43,8 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
 
     expect(forces).toEqual(
       new Map([
-        ["node-1", { x: -50, y: 0 }],
-        ["node-2", { x: 50, y: 0 }],
+        ["node-1", { x: -100, y: 0 }],
+        ["node-2", { x: 100, y: 0 }],
       ]),
     );
   });
@@ -72,8 +72,8 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
 
     expect(forces).toEqual(
       new Map([
-        ["node-1", { x: 0, y: -50 }],
-        ["node-2", { x: 0, y: 50 }],
+        ["node-1", { x: 0, y: -100 }],
+        ["node-2", { x: 0, y: 100 }],
       ]),
     );
   });

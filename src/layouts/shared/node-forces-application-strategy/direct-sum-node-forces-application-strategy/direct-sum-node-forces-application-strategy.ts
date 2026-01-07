@@ -1,8 +1,7 @@
 import { Identifier } from "@/identifier";
-import { MutablePoint } from "@/point";
+import { MutablePoint, Point } from "@/point";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 import { DirectSumNodeForcesApplicationStrategyParams } from "./direct-sum-node-forces-application-strategy-params";
-import { Point } from "@/point";
 import { DistanceVectorGenerator } from "../../../shared";
 
 export class DirectSumNodeForcesApplicationStrategy
@@ -47,17 +46,13 @@ export class DirectSumNodeForcesApplicationStrategy
         const f = (this.nodeCharge * this.nodeCharge) / (vector.d * vector.d);
         const fx = f * vector.ex;
         const fy = f * vector.ey;
-        // division by 2 is incorrect
-        const f2x = fx / 2;
-        const f2y = fy / 2;
-
         const forceFrom = forces.get(nodeIdFrom)!;
         const forceTo = forces.get(nodeIdTo)!;
 
-        forceFrom.x -= f2x;
-        forceFrom.y -= f2y;
-        forceTo.x += f2x;
-        forceTo.y += f2y;
+        forceFrom.x -= fx;
+        forceFrom.y -= fy;
+        forceTo.x += fx;
+        forceTo.y += fy;
       }
     }
   }
