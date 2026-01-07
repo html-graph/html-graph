@@ -1,16 +1,18 @@
 import { DistanceVector } from "./distance-vector";
 import { Point } from "@/point";
 
-export class NodeDistanceVectors {
+export class DistanceVectorGenerator {
+  private readonly PI2 = 2 * Math.PI;
+
   public constructor(private readonly rand: () => number) {}
 
-  public getVector(sourceCoords: Point, targetCoords: Point): DistanceVector {
+  public create(sourceCoords: Point, targetCoords: Point): DistanceVector {
     const dx = targetCoords.x - sourceCoords.x;
     const dy = targetCoords.y - sourceCoords.y;
     const d2 = dx * dx + dy * dy;
 
     if (d2 === 0) {
-      const ang = this.rand() * 2 * Math.PI;
+      const ang = this.PI2 * this.rand();
 
       return {
         ex: Math.cos(ang),

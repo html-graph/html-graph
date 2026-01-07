@@ -3,11 +3,8 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { ForceDirectedAlgorithmIterationParams } from "./force-directed-algorithm-iteration-params";
 import { MutablePoint } from "@/point";
-import { NodeDistanceVectors } from "./node-distance-vectors";
-import {
-  DirectSumNodeForcesApplicationStrategy,
-  NodeForcesApplicationStrategy,
-} from "./node-forces-application-strategy";
+import { DistanceVectorGenerator } from "../distance-vector-generator";
+import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 
 export class ForceDirectedAlgorithmIteration {
   private readonly dt: number;
@@ -20,22 +17,19 @@ export class ForceDirectedAlgorithmIteration {
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
+  private readonly distance: DistanceVectorGenerator;
+
   public constructor(
     private readonly graph: Graph,
     private readonly currentCoords: ReadonlyMap<Identifier, MutablePoint>,
-    private readonly params: ForceDirectedAlgorithmIterationParams,
+    params: ForceDirectedAlgorithmIterationParams,
   ) {
-    this.dt = this.params.dtSec;
-    this.nodeMass = this.params.nodeMass;
-    this.edgeEquilibriumLength = this.params.edgeEquilibriumLength;
-    this.edgeStiffness = this.params.edgeStiffness;
-
-    this.nodeForcesApplicationStrategy =
-      new DirectSumNodeForcesApplicationStrategy({
-        nodeCharge: this.params.nodeCharge,
-        rand: this.params.rand,
-        effectiveDistance: this.params.effectiveDistance,
-      });
+    this.dt = params.dtSec;
+    this.nodeMass = params.nodeMass;
+    this.edgeEquilibriumLength = params.edgeEquilibriumLength;
+    this.edgeStiffness = params.edgeStiffness;
+    this.distance = params.distance;
+    this.nodeForcesApplicationStrategy = params.nodeForcesApplicationStrategy;
   }
 
   public apply(): number {
@@ -72,15 +66,13 @@ export class ForceDirectedAlgorithmIteration {
   }
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
-    const vectors = new NodeDistanceVectors(this.params.rand);
-
     this.graph.getAllEdgeIds().forEach((edgeId) => {
       const edge = this.graph.getEdge(edgeId)!;
       const portFrom = this.graph.getPort(edge.from)!;
       const portTo = this.graph.getPort(edge.to)!;
       const sourceCoords = this.currentCoords.get(portFrom.nodeId)!;
       const targetCoords = this.currentCoords.get(portTo.nodeId)!;
-      const vector = vectors.getVector(sourceCoords, targetCoords);
+      const vector = this.distance.create(sourceCoords, targetCoords);
       const delta = vector.d - this.edgeEquilibriumLength;
       // division by 2 is incorrect
       const f2 = (delta * this.edgeStiffness) / 2;

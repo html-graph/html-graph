@@ -3,6 +3,8 @@ import { ForceDirectedAlgorithmIteration } from "./force-directed-algorithm-iter
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
+import { DistanceVectorGenerator } from "../distance-vector-generator";
+import { DirectSumNodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 
 const createCurrentCoords = (graph: Graph): ReadonlyMap<Identifier, Point> => {
   const currentCoords = new Map<Identifier, Point>();
@@ -33,16 +35,22 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
+    const distance = new DistanceVectorGenerator(() => 0);
+
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 1e2,
+            effectiveDistance: 1000,
+            distance: distance,
+          }),
         dtSec: 1,
-        nodeCharge: 1e2,
         nodeMass: 1,
         edgeEquilibriumLength: 8,
-        effectiveDistance: 1000,
         edgeStiffness: 1,
       },
     );
@@ -70,16 +78,21 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distance = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distance: distance,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 1000,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },
@@ -122,17 +135,22 @@ describe("ForceDirectedAlgorithmIteration", () => {
     canvas.addEdge({ from: "port-1", to: "port-2" });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distance = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distance: distance,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
         edgeEquilibriumLength: 8,
-        effectiveDistance: 1000,
         edgeStiffness: 1,
       },
     );
@@ -160,16 +178,21 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distance = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 5,
+            distance: distance,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 5,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },
@@ -198,16 +221,21 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distance = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distance: distance,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 1000,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },

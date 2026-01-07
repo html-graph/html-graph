@@ -1,10 +1,13 @@
+import { DistanceVectorGenerator } from "../../distance-vector-generator";
 import { DirectSumNodeForcesApplicationStrategy } from "./direct-sum-node-forces-application-strategy";
 
 describe("DirectSumNodeForcesApplicationStrategy", () => {
   it("should not apply force when one node exist", () => {
+    const distance = new DistanceVectorGenerator(() => 0);
+
     const strategy = new DirectSumNodeForcesApplicationStrategy({
       nodeCharge: 1000,
-      rand: (): number => 0,
+      distance,
       effectiveDistance: 1000,
     });
 
@@ -18,9 +21,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
   });
 
   it("should apply repulsive forces by x axis when two nodes exist", () => {
+    const distance = new DistanceVectorGenerator(() => 0);
+
     const strategy = new DirectSumNodeForcesApplicationStrategy({
       nodeCharge: 100,
-      rand: (): number => 0,
+      distance,
       effectiveDistance: 1000,
     });
 
@@ -45,9 +50,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
   });
 
   it("should apply repulsive forces by y axis when two nodes exist", () => {
+    const distance = new DistanceVectorGenerator(() => 0);
+
     const strategy = new DirectSumNodeForcesApplicationStrategy({
       nodeCharge: 100,
-      rand: (): number => 0,
+      distance,
       effectiveDistance: 1000,
     });
 
@@ -72,9 +79,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
   });
 
   it("should not apply pulling back forces when effective distance is reached", () => {
+    const distance = new DistanceVectorGenerator(() => 0);
+
     const strategy = new DirectSumNodeForcesApplicationStrategy({
       nodeCharge: 100,
-      rand: (): number => 0,
+      distance,
       effectiveDistance: 5,
     });
 

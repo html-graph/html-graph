@@ -4,6 +4,8 @@ import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import {
   createCurrentCoordinates,
+  DirectSumNodeForcesApplicationStrategy,
+  DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
@@ -25,14 +27,21 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       this.params.edgeEquilibriumLength,
     );
 
+    const distance = new DistanceVectorGenerator(this.params.rand);
+
     const iteration = new ForceDirectedAlgorithmIteration(
       graph,
       currentCoords,
       {
-        rand: this.params.rand,
+        distance,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: this.params.nodeCharge,
+            effectiveDistance: this.params.effectiveDistance,
+            distance,
+          }),
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,
-        nodeCharge: this.params.nodeCharge,
         edgeEquilibriumLength: this.params.edgeEquilibriumLength,
         effectiveDistance: this.params.effectiveDistance,
         edgeStiffness: this.params.edgeStiffness,

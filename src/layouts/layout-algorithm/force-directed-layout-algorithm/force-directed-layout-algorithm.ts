@@ -5,6 +5,8 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { ForceDirectedLayoutAlgorithmParams } from "./force-directed-layout-algorithm-params";
 import {
   createCurrentCoordinates,
+  DirectSumNodeForcesApplicationStrategy,
+  DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
 } from "../../shared";
 
@@ -20,12 +22,20 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       this.params.edgeEquilibriumLength,
     );
 
+    const distance = new DistanceVectorGenerator(this.params.rand);
+
     for (let i = 0; i < this.params.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
         graph,
         currentCoords,
         {
-          rand: this.params.rand,
+          distance,
+          nodeForcesApplicationStrategy:
+            new DirectSumNodeForcesApplicationStrategy({
+              nodeCharge: this.params.nodeCharge,
+              effectiveDistance: this.params.effectiveDistance,
+              distance,
+            }),
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,
           nodeCharge: this.params.nodeCharge,

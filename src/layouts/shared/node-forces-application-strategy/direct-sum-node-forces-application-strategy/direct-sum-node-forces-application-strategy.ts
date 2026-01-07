@@ -2,8 +2,8 @@ import { Identifier } from "@/identifier";
 import { MutablePoint } from "@/point";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 import { DirectSumNodeForcesApplicationStrategyParams } from "./direct-sum-node-forces-application-strategy-params";
-import { NodeDistanceVectors } from "../../node-distance-vectors";
 import { Point } from "@/point";
+import { DistanceVectorGenerator } from "../../../shared";
 
 export class DirectSumNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
@@ -12,12 +12,12 @@ export class DirectSumNodeForcesApplicationStrategy
 
   private readonly nodeCharge: number;
 
-  private readonly rand: () => number;
+  private readonly distance: DistanceVectorGenerator;
 
   public constructor(params: DirectSumNodeForcesApplicationStrategyParams) {
     this.effectiveDistance = params.effectiveDistance;
     this.nodeCharge = params.nodeCharge;
-    this.rand = params.rand;
+    this.distance = params.distance;
   }
 
   public apply(
@@ -25,8 +25,6 @@ export class DirectSumNodeForcesApplicationStrategy
     forces: ReadonlyMap<Identifier, MutablePoint>,
   ): void {
     const nodeIds = Array.from(forces.keys());
-
-    const vectors = new NodeDistanceVectors(this.rand);
 
     const size = nodeIds.length;
 
@@ -39,7 +37,7 @@ export class DirectSumNodeForcesApplicationStrategy
         const sourceCoords = nodesCoords.get(nodeIdFrom)!;
         const targetCoords = nodesCoords.get(nodeIdTo)!;
 
-        const vector = vectors.getVector(sourceCoords, targetCoords);
+        const vector = this.distance.create(sourceCoords, targetCoords);
 
         if (vector.d > this.effectiveDistance) {
           continue;
