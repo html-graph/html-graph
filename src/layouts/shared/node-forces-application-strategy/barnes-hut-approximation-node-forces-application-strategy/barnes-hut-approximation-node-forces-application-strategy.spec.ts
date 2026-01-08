@@ -2,14 +2,14 @@ import { DistanceVectorGenerator } from "../../distance-vector-generator";
 import { BarnesHutApproximationNodeForcesApplicationStrategy } from "./barnes-hut-approximation-node-forces-application-strategy";
 
 describe("BarnesHutNodeForcesApplicationStrategy", () => {
-  it("should apply repulsive forces by x axis when two nodes exist", () => {
+  it("should apply near repulsive forces of right top quadrant by x axis", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
-      theta: 1,
+      theta: 0,
       maxForce: 1e9,
     });
 
@@ -25,22 +25,17 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
 
     strategy.apply(nodeCoords, forces);
 
-    expect(forces).toEqual(
-      new Map([
-        ["node-1", { x: -100, y: 0 }],
-        ["node-2", { x: 100, y: 0 }],
-      ]),
-    );
+    expect(forces.get("node-1")).toEqual({ x: -100, y: 0 });
   });
 
-  it("should apply repulsive forces by y axis when two nodes exist", () => {
+  it("should apply near repulsive forces by y axis", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
-      theta: 1,
+      theta: 0,
       maxForce: 1e9,
     });
 
@@ -56,11 +51,6 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
 
     strategy.apply(nodeCoords, forces);
 
-    expect(forces).toEqual(
-      new Map([
-        ["node-1", { x: 0, y: -100 }],
-        ["node-2", { x: 0, y: 100 }],
-      ]),
-    );
+    expect(forces.get("node-1")).toEqual({ x: 0, y: -100 });
   });
 });

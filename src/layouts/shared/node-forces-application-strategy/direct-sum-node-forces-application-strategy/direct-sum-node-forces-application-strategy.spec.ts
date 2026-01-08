@@ -7,7 +7,7 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
 
     const strategy = new DirectSumNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      nodeCharge: 1000,
+      nodeCharge: 100,
       distance,
       effectiveDistance: 1000,
       maxForce: 1e9,

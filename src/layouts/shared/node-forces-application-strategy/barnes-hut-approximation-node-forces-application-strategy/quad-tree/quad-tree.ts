@@ -8,6 +8,8 @@ import { MutableQuadTreeNode } from "./mutable-quad-tree-node";
 export class QuadTree {
   private readonly root: MutableQuadTreeNode;
 
+  private readonly leaves = new Map<Identifier, MutableQuadTreeNode>();
+
   private readonly coords: ReadonlyMap<Identifier, Point>;
 
   private readonly minAreaSize: number;
@@ -100,6 +102,10 @@ export class QuadTree {
 
   public getRoot(): QuadTreeNode {
     return this.root;
+  }
+
+  public getLeaf(nodeId: Identifier): QuadTreeNode | undefined {
+    return this.leaves.get(nodeId);
   }
 
   private processNode(
@@ -247,6 +253,9 @@ export class QuadTree {
     current.totalMass = this.nodeMass * current.nodeIds.size;
     current.totalCharge = this.nodeCharge * current.nodeIds.size;
     current.massCenter = this.calculateLeafMassCenter(current.nodeIds);
+    current.nodeIds.forEach((nodeId) => {
+      this.leaves.set(nodeId, current);
+    });
   }
 
   private calculateLeafMassCenter(
