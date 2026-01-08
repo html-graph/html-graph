@@ -118,6 +118,17 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
             totalForce.x += f.x;
             totalForce.y += f.y;
           }
+
+          if (parent.rb !== null && parent.rb !== current) {
+            const f = this.calculateNestedForce(
+              parent.rb,
+              targetNodeCoords,
+              nodesCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
         }
       }
 
@@ -155,7 +166,6 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
       });
 
       if (current.lb !== null) {
-        console.log(targetNodeCoords);
         stack.push(current.lb);
       }
 
@@ -163,13 +173,13 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         stack.push(current.rb);
       }
 
-      // if (current.lt !== null) {
-      //   stack.push(current.lt);
-      // }
+      if (current.lt !== null) {
+        stack.push(current.lt);
+      }
 
-      // if (current.rt !== null) {
-      //   stack.push(current.rt);
-      // }
+      if (current.rt !== null) {
+        stack.push(current.rt);
+      }
     }
 
     return totalForce;
