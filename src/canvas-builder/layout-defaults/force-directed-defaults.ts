@@ -10,6 +10,5 @@ export const forceDirectedDefaults = Object.freeze({
   maxIterations: 1000,
   convergenceDelta: 1e-3,
   maxForce: 1e10,
-  minSignificantForce: 1e2,
   nodeForceCoefficient: 1,
 });

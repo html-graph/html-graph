@@ -33,9 +33,6 @@ export const createAnimatedLayoutAlgorithm = (
         convergenceDelta:
           algorithm?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
         maxForce: algorithm?.maxForce ?? forceDirectedDefaults.maxForce,
-        minSignificantForce:
-          algorithm?.minSignificantForce ??
-          forceDirectedDefaults.minSignificantForce,
         nodeForceCoefficient:
           algorithm?.nodeForceCoefficient ??
           forceDirectedDefaults.nodeForceCoefficient,

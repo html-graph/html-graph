@@ -45,7 +45,6 @@ const createAlgorithm = (params?: {
     effectiveDistance: 1000,
     edgeStiffness: 1,
     convergenceDelta: params?.convergeDelta ?? 1e-3,
-    minSignificantForce: 1e-2,
     maxForce: 1e9,
     nodeForceCoefficient: 1,
   });

@@ -17,7 +17,6 @@ export interface AnimatedLayoutConfig {
         readonly effectiveDistance?: number;
         readonly convergenceDelta?: number;
         readonly maxForce?: number;
-        readonly minSignificantForce?: number;
         readonly nodeForceCoefficient?: number;
       }
     | undefined;

@@ -31,9 +31,6 @@ export const resolveLayoutAlgorithm = (
         convergenceDelta:
           config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
         maxForce: config?.maxForce ?? forceDirectedDefaults.maxForce,
-        minSignificantForce:
-          config?.minSignificantForce ??
-          forceDirectedDefaults.minSignificantForce,
         nodeForceCoefficient:
           config?.nodeForceCoefficient ??
           forceDirectedDefaults.nodeForceCoefficient,
