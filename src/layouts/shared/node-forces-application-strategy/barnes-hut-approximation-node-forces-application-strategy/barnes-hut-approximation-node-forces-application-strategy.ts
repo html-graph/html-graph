@@ -87,26 +87,89 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
           //
         } else {
           if (parent.rt !== null && parent.rt !== current) {
-            const rtVector = this.distance.create(
-              parent.rt.massCenter,
+            const f = this.calculateNestedForce(
+              parent.rt,
               targetNodeCoords,
+              nodesCoords,
             );
 
-            const f = calculateNodeRepulsiveForce({
-              coefficient: this.nodeForceCoefficient,
-              charge1: this.nodeCharge,
-              charge2: parent.rt.totalCharge,
-              distance: rtVector.d,
-              maxForce: this.maxForce,
-            });
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
 
-            totalForce.x += f * rtVector.ex;
-            totalForce.y += f * rtVector.ey;
+          if (parent.lt !== null && parent.lt !== current) {
+            const f = this.calculateNestedForce(
+              parent.lt,
+              targetNodeCoords,
+              nodesCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
+
+          if (parent.lb !== null && parent.lb !== current) {
+            const f = this.calculateNestedForce(
+              parent.lb,
+              targetNodeCoords,
+              nodesCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
           }
         }
       }
 
       current = current.parent;
+    }
+
+    return totalForce;
+  }
+
+  private calculateNestedForce(
+    root: QuadTreeNode,
+    targetNodeCoords: Point,
+    nodesCoords: ReadonlyMap<Identifier, Point>,
+  ): Point {
+    const totalForce: MutablePoint = { x: 0, y: 0 };
+    const stack: QuadTreeNode[] = [root];
+
+    while (stack.length > 0) {
+      const current = stack.pop()!;
+
+      current.nodeIds.forEach((nodeId) => {
+        const coords = nodesCoords.get(nodeId)!;
+        const vector = this.distance.create(coords, targetNodeCoords);
+
+        const f = calculateNodeRepulsiveForce({
+          coefficient: this.nodeForceCoefficient,
+          charge1: this.nodeCharge,
+          charge2: this.nodeCharge,
+          distance: vector.d,
+          maxForce: this.maxForce,
+        });
+
+        totalForce.x += f * vector.ex;
+        totalForce.y += f * vector.ey;
+      });
+
+      if (current.lb !== null) {
+        console.log(targetNodeCoords);
+        stack.push(current.lb);
+      }
+
+      if (current.rb !== null) {
+        stack.push(current.rb);
+      }
+
+      // if (current.lt !== null) {
+      //   stack.push(current.lt);
+      // }
+
+      // if (current.rt !== null) {
+      //   stack.push(current.rt);
+      // }
     }
 
     return totalForce;
