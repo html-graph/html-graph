@@ -5,13 +5,14 @@ import { AreaBox } from "./area-box";
 
 export interface QuadTreeNode {
   readonly nodeIds: ReadonlySet<Identifier>;
-  totalMass: number;
-  totalCharge: number;
-  massCenter: Point;
+  readonly totalMass: number;
+  readonly totalCharge: number;
+  // should be charge center
+  readonly massCenter: Point;
   readonly box: AreaBox;
-  parent: MutableQuadTreeNode | null;
-  lt: MutableQuadTreeNode | null;
-  lb: MutableQuadTreeNode | null;
-  rt: MutableQuadTreeNode | null;
-  rb: MutableQuadTreeNode | null;
+  readonly parent: MutableQuadTreeNode | null;
+  readonly lt: MutableQuadTreeNode | null;
+  readonly lb: MutableQuadTreeNode | null;
+  readonly rt: MutableQuadTreeNode | null;
+  readonly rb: MutableQuadTreeNode | null;
 }

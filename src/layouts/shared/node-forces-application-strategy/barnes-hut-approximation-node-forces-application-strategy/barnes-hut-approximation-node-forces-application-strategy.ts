@@ -84,7 +84,45 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         const isFar = parent.box.radius * 2 < vector.d * this.theta;
 
         if (isFar) {
-          //
+          if (parent.rt !== null && parent.rt !== current) {
+            const f = this.calculateApproximateForce(
+              parent.rt,
+              targetNodeCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
+
+          if (parent.lt !== null && parent.lt !== current) {
+            const f = this.calculateApproximateForce(
+              parent.lt,
+              targetNodeCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
+
+          if (parent.rb !== null && parent.rb !== current) {
+            const f = this.calculateApproximateForce(
+              parent.rb,
+              targetNodeCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
+
+          if (parent.lb !== null && parent.lb !== current) {
+            const f = this.calculateApproximateForce(
+              parent.lb,
+              targetNodeCoords,
+            );
+
+            totalForce.x += f.x;
+            totalForce.y += f.y;
+          }
         } else {
           if (parent.rt !== null && parent.rt !== current) {
             const f = this.calculateNestedForce(
@@ -183,5 +221,25 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     }
 
     return totalForce;
+  }
+
+  private calculateApproximateForce(
+    root: QuadTreeNode,
+    targetNodeCoords: Point,
+  ): Point {
+    const vector = this.distance.create(root.massCenter, targetNodeCoords);
+
+    const f = calculateNodeRepulsiveForce({
+      coefficient: this.nodeForceCoefficient,
+      charge1: this.nodeCharge,
+      charge2: root.totalCharge,
+      distance: vector.d,
+      maxForce: this.maxForce,
+    });
+
+    return {
+      x: f * vector.ex,
+      y: f * vector.ey,
+    };
   }
 }
