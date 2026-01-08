@@ -5,6 +5,7 @@ import type { Point, MutablePoint } from "@/point";
 import { createAreaBox } from "./create-area-box";
 import { QuadTree, QuadTreeNode } from "./quad-tree";
 import { DistanceVectorGenerator } from "../../distance-vector-generator";
+import { calculateNodeRepulsiveForce } from "../../calculate-node-repulsive-force";
 
 export class BarnesHutApproximationNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
@@ -19,6 +20,10 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
   private readonly distance: DistanceVectorGenerator;
 
+  private readonly nodeForceCoefficient: number;
+
+  private readonly maxForce: number;
+
   public constructor(
     params: BarnesHutApproximationNodeForcesApplicationStrategyParams,
   ) {
@@ -27,6 +32,8 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     this.nodeCharge = params.nodeCharge;
     this.theta = params.theta;
     this.distance = params.distance;
+    this.nodeForceCoefficient = params.nodeForceCoefficient;
+    this.maxForce = params.maxForce;
   }
 
   public apply(
@@ -71,8 +78,14 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
       const isFarNode = current.box.radius * 2 < this.theta * vector.d;
 
       if (isFarNode) {
-        const f =
-          (this.nodeCharge * current.totalCharge) / (vector.d * vector.d);
+        const f = calculateNodeRepulsiveForce({
+          coefficient: this.nodeForceCoefficient,
+          charge1: this.nodeCharge,
+          charge2: this.nodeCharge,
+          distance: vector.d,
+          maxForce: this.maxForce,
+        });
+
         const fx = f * vector.ex;
         const fy = f * vector.ey;
 
@@ -90,10 +103,14 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
             targetNodeCoords,
           );
 
-          // d might be 0
-          const f =
-            (this.nodeCharge * this.nodeCharge) /
-            (localVector.d * localVector.d);
+          const f = calculateNodeRepulsiveForce({
+            coefficient: this.nodeForceCoefficient,
+            charge1: this.nodeCharge,
+            charge2: this.nodeCharge,
+            distance: localVector.d,
+            maxForce: this.maxForce,
+          });
+
           const fx = f * localVector.ex;
           const fy = f * localVector.ey;
 

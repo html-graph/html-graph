@@ -74,18 +74,17 @@ export class ForceDirectedAlgorithmIteration {
       const targetCoords = this.currentCoords.get(portTo.nodeId)!;
       const vector = this.distance.create(sourceCoords, targetCoords);
       const delta = vector.d - this.edgeEquilibriumLength;
-      // division by 2 is incorrect
-      const f2 = (delta * this.edgeStiffness) / 2;
-      const f2x = vector.ex * f2;
-      const f2y = vector.ey * f2;
+      const f = delta * this.edgeStiffness;
+      const fx = vector.ex * f;
+      const fy = vector.ey * f;
 
       const forceFrom = forces.get(portFrom.nodeId)!;
       const forceTo = forces.get(portTo.nodeId)!;
 
-      forceFrom.x += f2x;
-      forceFrom.y += f2y;
-      forceTo.x -= f2x;
-      forceTo.y -= f2y;
+      forceFrom.x += fx;
+      forceFrom.y += fy;
+      forceTo.x -= fx;
+      forceTo.y -= fy;
     });
   }
 }

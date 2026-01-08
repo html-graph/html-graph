@@ -4,11 +4,13 @@ import { BarnesHutApproximationNodeForcesApplicationStrategy } from "./barnes-hu
 describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply repulsive forces by x axis when two nodes exist", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
       theta: 1,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([
@@ -33,11 +35,13 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
 
   it("should apply repulsive forces by y axis when two nodes exist", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       minAreaSize: 1e-2,
       theta: 1,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([

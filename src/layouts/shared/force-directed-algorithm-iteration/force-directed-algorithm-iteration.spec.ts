@@ -47,6 +47,8 @@ describe("ForceDirectedAlgorithmIteration", () => {
             nodeCharge: 1e2,
             effectiveDistance: 1000,
             distance: distance,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
           }),
         dtSec: 1,
         nodeMass: 1,
@@ -90,6 +92,8 @@ describe("ForceDirectedAlgorithmIteration", () => {
             nodeCharge: 10,
             effectiveDistance: 1000,
             distance: distance,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
           }),
         dtSec: 2,
         nodeMass: 1,
@@ -147,6 +151,8 @@ describe("ForceDirectedAlgorithmIteration", () => {
             nodeCharge: 10,
             effectiveDistance: 1000,
             distance: distance,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
           }),
         dtSec: 2,
         nodeMass: 1,
@@ -157,7 +163,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     iteration.apply();
 
-    expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
+    expect(currentCoords.get("node-1")).toEqual({ x: 14, y: 0 });
   });
 
   it("should not apply pulling back forces when effective distance is reached", () => {
@@ -190,6 +196,8 @@ describe("ForceDirectedAlgorithmIteration", () => {
             nodeCharge: 10,
             effectiveDistance: 5,
             distance: distance,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
           }),
         dtSec: 2,
         nodeMass: 1,
@@ -233,6 +241,8 @@ describe("ForceDirectedAlgorithmIteration", () => {
             nodeCharge: 10,
             effectiveDistance: 1000,
             distance: distance,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
           }),
         dtSec: 2,
         nodeMass: 1,

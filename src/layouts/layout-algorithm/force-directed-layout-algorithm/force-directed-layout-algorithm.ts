@@ -26,6 +26,8 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         distance: this.distance,
         nodeCharge: this.params.nodeCharge,
         effectiveDistance: this.params.effectiveDistance,
+        maxForce: this.params.maxForce,
+        nodeForceCoefficient: this.params.nodeForceCoefficient,
       });
   }
 

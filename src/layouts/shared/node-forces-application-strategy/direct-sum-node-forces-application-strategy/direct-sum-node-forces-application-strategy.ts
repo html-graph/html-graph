@@ -3,6 +3,7 @@ import { MutablePoint, Point } from "@/point";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 import { DirectSumNodeForcesApplicationStrategyParams } from "./direct-sum-node-forces-application-strategy-params";
 import { DistanceVectorGenerator } from "../../../shared";
+import { calculateNodeRepulsiveForce } from "../../calculate-node-repulsive-force";
 
 export class DirectSumNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
@@ -13,10 +14,13 @@ export class DirectSumNodeForcesApplicationStrategy
 
   private readonly distance: DistanceVectorGenerator;
 
+  private readonly maxForce: number;
+
   public constructor(params: DirectSumNodeForcesApplicationStrategyParams) {
     this.effectiveDistance = params.effectiveDistance;
     this.nodeCharge = params.nodeCharge;
     this.distance = params.distance;
+    this.maxForce = params.maxForce;
   }
 
   public apply(
@@ -42,8 +46,14 @@ export class DirectSumNodeForcesApplicationStrategy
           continue;
         }
 
-        // d might be 0
-        const f = (this.nodeCharge * this.nodeCharge) / (vector.d * vector.d);
+        const f = calculateNodeRepulsiveForce({
+          coefficient: 1,
+          charge1: this.nodeCharge,
+          charge2: this.nodeCharge,
+          distance: vector.d,
+          maxForce: this.maxForce,
+        });
+
         const fx = f * vector.ex;
         const fy = f * vector.ey;
         const forceFrom = forces.get(nodeIdFrom)!;

@@ -28,6 +28,8 @@ export class ForceDirectedAnimatedLayoutAlgorithm
         nodeCharge: this.params.nodeCharge,
         effectiveDistance: this.params.effectiveDistance,
         distance: this.distance,
+        maxForce: this.params.maxForce,
+        nodeForceCoefficient: this.params.nodeForceCoefficient,
       });
   }
 

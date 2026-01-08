@@ -6,9 +6,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
     const distance = new DistanceVectorGenerator(() => 0);
 
     const strategy = new DirectSumNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       nodeCharge: 1000,
       distance,
       effectiveDistance: 1000,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([["node-1", { x: 10, y: 10 }]]);
@@ -24,9 +26,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
     const distance = new DistanceVectorGenerator(() => 0);
 
     const strategy = new DirectSumNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       nodeCharge: 100,
       distance,
       effectiveDistance: 1000,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([
@@ -53,9 +57,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
     const distance = new DistanceVectorGenerator(() => 0);
 
     const strategy = new DirectSumNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       nodeCharge: 100,
       distance,
       effectiveDistance: 1000,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([
@@ -82,9 +88,11 @@ describe("DirectSumNodeForcesApplicationStrategy", () => {
     const distance = new DistanceVectorGenerator(() => 0);
 
     const strategy = new DirectSumNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
       nodeCharge: 100,
       distance,
       effectiveDistance: 5,
+      maxForce: 1e9,
     });
 
     const nodeCoords = new Map([

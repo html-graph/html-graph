@@ -8,4 +8,7 @@ export interface ForceDirectedLayoutAlgorithmParams {
   readonly effectiveDistance: number;
   readonly edgeStiffness: number;
   readonly convergenceDelta: number;
+  readonly maxForce: number;
+  readonly minSignificantForce: number;
+  readonly nodeForceCoefficient: number;
 }
