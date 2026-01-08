@@ -9,7 +9,6 @@ export const resolveNodeForcesApplicationStrategy = (
   params: ResolveNodeForcesApplicationStrategyParams,
 ): NodeForcesApplicationStrategy => {
   if (params.theta !== 0) {
-    console.log(params.theta);
     return new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeCharge: params.nodeCharge,
       nodeForceCoefficient: params.nodeForceCoefficient,
