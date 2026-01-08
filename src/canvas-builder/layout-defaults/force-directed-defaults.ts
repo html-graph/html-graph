@@ -11,4 +11,6 @@ export const forceDirectedDefaults = Object.freeze({
   convergenceDelta: 1e-3,
   maxForce: 1e10,
   nodeForceCoefficient: 1,
+  barnesHutMinAreaSize: 1e-2,
+  barnesHutTheta: 1,
 });

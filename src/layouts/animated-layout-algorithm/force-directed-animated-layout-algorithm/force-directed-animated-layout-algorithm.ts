@@ -4,10 +4,10 @@ import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import {
   createCurrentCoordinates,
-  DirectSumNodeForcesApplicationStrategy,
   DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
   NodeForcesApplicationStrategy,
+  resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
@@ -23,14 +23,16 @@ export class ForceDirectedAnimatedLayoutAlgorithm
   ) {
     this.distance = new DistanceVectorGenerator(params.rand);
 
-    this.nodeForcesApplicationStrategy =
-      new DirectSumNodeForcesApplicationStrategy({
-        nodeCharge: this.params.nodeCharge,
-        effectiveDistance: this.params.effectiveDistance,
-        distance: this.distance,
-        maxForce: this.params.maxForce,
-        nodeForceCoefficient: this.params.nodeForceCoefficient,
-      });
+    this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
+      distance: this.distance,
+      nodeCharge: this.params.nodeCharge,
+      effectiveDistance: this.params.effectiveDistance,
+      maxForce: this.params.maxForce,
+      nodeForceCoefficient: this.params.nodeForceCoefficient,
+      theta: this.params.barnesHutTheta,
+      minAreaSize: this.params.barnesHutMinAreaSize,
+      nodeMass: this.params.nodeMass,
+    });
   }
 
   public calculateNextCoordinates(

@@ -18,4 +18,8 @@ export type LayoutAlgorithmConfig =
       readonly convergenceDelta?: number;
       readonly maxForce?: number;
       readonly nodeForceCoefficient?: number;
+      readonly barnesHut?: {
+        readonly theta?: number;
+        readonly minAreaSize?: number;
+      };
     };

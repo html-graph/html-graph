@@ -51,6 +51,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     });
 
     nodesCoords.forEach((_coords, nodeId) => {
+      // need to account for multiple nodes in one cell
       const nodeForce = this.calculateForceForNode(
         tree.getLeaf(nodeId)!,
         nodeId,

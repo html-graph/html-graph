@@ -9,4 +9,6 @@ export interface ForceDirectedAnimatedLayoutAlgorithmParams {
   readonly convergenceDelta: number;
   readonly maxForce: number;
   readonly nodeForceCoefficient: number;
+  readonly barnesHutTheta: number;
+  readonly barnesHutMinAreaSize: number;
 }
