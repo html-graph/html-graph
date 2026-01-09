@@ -15,6 +15,11 @@ export interface AnimatedLayoutConfig {
         readonly edgeStiffness?: number;
         readonly seed?: string;
         readonly effectiveDistance?: number;
+        /**
+         * @deprecated
+         * this parameter results in slow convergence
+         * use convergenceDelta instead
+         */
         readonly convergenceDelta?: number;
         readonly maxForce?: number;
         readonly nodeForceCoefficient?: number;
