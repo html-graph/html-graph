@@ -31,7 +31,7 @@ export class QuadTree {
       box: params.box,
       totalMass: 0,
       totalCharge: 0,
-      massCenter: {
+      chargeCenter: {
         x: 0,
         y: 0,
       },
@@ -60,43 +60,43 @@ export class QuadTree {
     }
 
     this.sortedParentNodes.reverse().forEach((node) => {
-      let totalMassX = 0;
-      let totalMassY = 0;
+      let totalChargeX = 0;
+      let totalChargeY = 0;
       let totalMass = 0;
       let totalCharge = 0;
 
       if (node.lb !== null) {
         totalMass += node.lb.totalMass;
         totalCharge += node.lb.totalCharge;
-        totalMassX += node.lb.massCenter.x * node.lb.totalMass;
-        totalMassY += node.lb.massCenter.y * node.lb.totalMass;
+        totalChargeX += node.lb.chargeCenter.x * node.lb.totalCharge;
+        totalChargeY += node.lb.chargeCenter.y * node.lb.totalCharge;
       }
 
       if (node.lt !== null) {
         totalMass += node.lt.totalMass;
         totalCharge += node.lt.totalCharge;
-        totalMassX += node.lt.massCenter.x * node.lt.totalMass;
-        totalMassY += node.lt.massCenter.y * node.lt.totalMass;
+        totalChargeX += node.lt.chargeCenter.x * node.lt.totalCharge;
+        totalChargeY += node.lt.chargeCenter.y * node.lt.totalCharge;
       }
 
       if (node.rb !== null) {
         totalMass += node.rb.totalMass;
         totalCharge += node.rb.totalCharge;
-        totalMassX += node.rb.massCenter.x * node.rb.totalMass;
-        totalMassY += node.rb.massCenter.y * node.rb.totalMass;
+        totalChargeX += node.rb.chargeCenter.x * node.rb.totalCharge;
+        totalChargeY += node.rb.chargeCenter.y * node.rb.totalCharge;
       }
 
       if (node.rt !== null) {
         totalMass += node.rt.totalMass;
         totalCharge += node.rt.totalCharge;
-        totalMassX += node.rt.massCenter.x * node.rt.totalMass;
-        totalMassY += node.rt.massCenter.y * node.rt.totalMass;
+        totalChargeX += node.rt.chargeCenter.x * node.rt.totalCharge;
+        totalChargeY += node.rt.chargeCenter.y * node.rt.totalCharge;
       }
 
       node.totalMass = totalMass;
       node.totalCharge = totalCharge;
-      node.massCenter.x = totalMassX / totalMass;
-      node.massCenter.y = totalMassY / totalMass;
+      node.chargeCenter.x = totalChargeX / totalCharge;
+      node.chargeCenter.y = totalChargeY / totalCharge;
     });
   }
 
@@ -167,7 +167,7 @@ export class QuadTree {
         nodeIds: rightTopNodes,
         totalMass: 0,
         totalCharge: 0,
-        massCenter: {
+        chargeCenter: {
           x: 0,
           y: 0,
         },
@@ -188,7 +188,7 @@ export class QuadTree {
         nodeIds: rightBottomNodes,
         totalMass: 0,
         totalCharge: 0,
-        massCenter: {
+        chargeCenter: {
           x: 0,
           y: 0,
         },
@@ -209,7 +209,7 @@ export class QuadTree {
         nodeIds: leftTopNodes,
         totalMass: 0,
         totalCharge: 0,
-        massCenter: {
+        chargeCenter: {
           x: 0,
           y: 0,
         },
@@ -230,7 +230,7 @@ export class QuadTree {
         nodeIds: leftBottomNodes,
         totalMass: 0,
         totalCharge: 0,
-        massCenter: {
+        chargeCenter: {
           x: 0,
           y: 0,
         },
@@ -252,13 +252,13 @@ export class QuadTree {
   private setLeaf(current: MutableQuadTreeNode): void {
     current.totalMass = this.nodeMass * current.nodeIds.size;
     current.totalCharge = this.nodeCharge * current.nodeIds.size;
-    current.massCenter = this.calculateLeafMassCenter(current.nodeIds);
+    current.chargeCenter = this.calculateLeafChargeCenter(current.nodeIds);
     current.nodeIds.forEach((nodeId) => {
       this.leaves.set(nodeId, current);
     });
   }
 
-  private calculateLeafMassCenter(
+  private calculateLeafChargeCenter(
     nodeIds: ReadonlySet<Identifier>,
   ): MutablePoint {
     if (nodeIds.size === 0) {

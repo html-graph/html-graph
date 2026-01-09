@@ -6,7 +6,7 @@ export interface MutableQuadTreeNode {
   readonly nodeIds: Set<Identifier>;
   totalMass: number;
   totalCharge: number;
-  massCenter: MutablePoint;
+  chargeCenter: MutablePoint;
   readonly box: AreaBox;
   parent: MutableQuadTreeNode | null;
   lt: MutableQuadTreeNode | null;

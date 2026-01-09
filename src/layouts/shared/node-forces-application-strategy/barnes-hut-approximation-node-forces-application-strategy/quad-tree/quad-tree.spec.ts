@@ -19,7 +19,7 @@ describe("QuadTree", () => {
       nodeIds: new Set(),
       totalMass: 0,
       totalCharge: 0,
-      massCenter: {
+      chargeCenter: {
         x: 0,
         y: 0,
       },
@@ -352,7 +352,7 @@ describe("QuadTree", () => {
       nodeCharge: 1,
     });
 
-    expect(tree.getRoot().rt!.massCenter).toEqual({ x: 1.5, y: 1.5 });
+    expect(tree.getRoot().rt!.chargeCenter).toEqual({ x: 1.5, y: 1.5 });
   });
 
   it("should return leaf for specified node", () => {

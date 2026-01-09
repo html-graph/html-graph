@@ -95,7 +95,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
       if (parent !== null) {
         const vector = this.distanceVectorGenerator.create(
-          parent.massCenter,
+          parent.chargeCenter,
           targetCoords,
         );
         const isFar = parent.box.radius * 2 < vector.d * this.theta;
@@ -220,7 +220,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     return this.calculateNodeRepulsiveForce({
       sourceCharge: this.nodeCharge,
       targetCharge: root.totalCharge,
-      sourceCoords: root.massCenter,
+      sourceCoords: root.chargeCenter,
       targetCoords,
     });
   }
