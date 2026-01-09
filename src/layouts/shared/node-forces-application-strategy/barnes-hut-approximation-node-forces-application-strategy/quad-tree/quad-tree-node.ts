@@ -7,7 +7,6 @@ export interface QuadTreeNode {
   readonly nodeIds: ReadonlySet<Identifier>;
   readonly totalMass: number;
   readonly totalCharge: number;
-  // should be charge center
   readonly chargeCenter: Point;
   readonly box: AreaBox;
   readonly parent: MutableQuadTreeNode | null;
