@@ -34,6 +34,8 @@ graphData.nodes.forEach((nodeId) => {
 
   canvas.addNode({
     id: nodeId,
+    x: 1000,
+    y: 1000,
     element,
     ports: [
       {

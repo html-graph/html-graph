@@ -9,7 +9,7 @@ export const forceDirectedDefaults = Object.freeze({
   dtSec: 1e-2,
   maxIterations: 1000,
   convergenceDelta: 1e-3,
-  maxForce: 1e10,
+  maxForce: 1e7,
   nodeForceCoefficient: 1,
   barnesHutMinAreaSize: 1e-2,
   barnesHutTheta: 1,
