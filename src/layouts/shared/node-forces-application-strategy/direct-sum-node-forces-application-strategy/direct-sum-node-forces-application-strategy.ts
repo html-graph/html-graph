@@ -48,8 +48,8 @@ export class DirectSumNodeForcesApplicationStrategy
 
         const f = calculateNodeRepulsiveForce({
           coefficient: 1,
-          charge1: this.nodeCharge,
-          charge2: this.nodeCharge,
+          sourceCharge: this.nodeCharge,
+          targetCharge: this.nodeCharge,
           distance: vector.d,
           maxForce: this.maxForce,
         });

@@ -1,7 +1,8 @@
+import { Point } from "@/point";
+
 export interface CalculateNodeRepulsiveForceParams {
-  readonly coefficient: number;
+  readonly sourceCoords: Point;
+  readonly targetCoords: Point;
   readonly sourceCharge: number;
   readonly targetCharge: number;
-  readonly distance: number;
-  readonly maxForce: number;
 }

@@ -4,8 +4,8 @@ describe("calculateNodeRepulsiveForceParams", () => {
   it("should calculate node force", () => {
     const force = calculateNodeRepulsiveForce({
       coefficient: 1,
-      charge1: 10,
-      charge2: 10,
+      sourceCharge: 10,
+      targetCharge: 10,
       distance: 10,
       maxForce: 1e9,
     });
@@ -16,8 +16,8 @@ describe("calculateNodeRepulsiveForceParams", () => {
   it("should account for coefficient", () => {
     const force = calculateNodeRepulsiveForce({
       coefficient: 10,
-      charge1: 10,
-      charge2: 10,
+      sourceCharge: 10,
+      targetCharge: 10,
       distance: 10,
       maxForce: 1e9,
     });
@@ -28,8 +28,8 @@ describe("calculateNodeRepulsiveForceParams", () => {
   it("should limit with maximum force", () => {
     const force = calculateNodeRepulsiveForce({
       coefficient: 10,
-      charge1: 10,
-      charge2: 10,
+      sourceCharge: 10,
+      targetCharge: 10,
       distance: 1e-4,
       maxForce: 1e4,
     });
@@ -40,8 +40,8 @@ describe("calculateNodeRepulsiveForceParams", () => {
   it("should limit with maximum force when distance and charges are 0", () => {
     const force = calculateNodeRepulsiveForce({
       coefficient: 10,
-      charge1: 0,
-      charge2: 0,
+      sourceCharge: 0,
+      targetCharge: 0,
       distance: 0,
       maxForce: 1e4,
     });

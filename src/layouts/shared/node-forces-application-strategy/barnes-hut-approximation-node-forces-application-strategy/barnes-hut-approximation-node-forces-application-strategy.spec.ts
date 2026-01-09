@@ -292,4 +292,33 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       y: f / Math.sqrt(2),
     });
   });
+
+  it("should forces between nodes in the same cell", () => {
+    const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
+      nodeForceCoefficient: 1,
+      distance: new DistanceVectorGenerator(() => 0),
+      nodeCharge: 100,
+      nodeMass: 1,
+      minAreaSize: 1e-2,
+      theta: 10,
+      maxForce: 1e9,
+    });
+
+    const nodeCoords = new Map([
+      ["node-1", { x: 10, y: 0 }],
+      ["node-2", { x: 10, y: 0 }],
+    ]);
+
+    const forces = new Map([
+      ["node-1", { x: 0, y: 0 }],
+      ["node-2", { x: 0, y: 0 }],
+    ]);
+
+    strategy.apply(nodeCoords, forces);
+
+    expect(forces.get("node-1")).toEqual({
+      x: 1e9,
+      y: 0,
+    });
+  });
 });
