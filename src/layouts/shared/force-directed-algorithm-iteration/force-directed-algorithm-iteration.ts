@@ -17,7 +17,7 @@ export class ForceDirectedAlgorithmIteration {
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
-  private readonly distance: DistanceVectorGenerator;
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   public constructor(
     private readonly graph: Graph,
@@ -28,7 +28,7 @@ export class ForceDirectedAlgorithmIteration {
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
     this.edgeStiffness = params.edgeStiffness;
-    this.distance = params.distance;
+    this.distanceVectorGenerator = params.distanceVectorGenerator;
     this.nodeForcesApplicationStrategy = params.nodeForcesApplicationStrategy;
   }
 
@@ -72,7 +72,10 @@ export class ForceDirectedAlgorithmIteration {
       const portTo = this.graph.getPort(edge.to)!;
       const sourceCoords = this.currentCoords.get(portFrom.nodeId)!;
       const targetCoords = this.currentCoords.get(portTo.nodeId)!;
-      const vector = this.distance.create(sourceCoords, targetCoords);
+      const vector = this.distanceVectorGenerator.create(
+        sourceCoords,
+        targetCoords,
+      );
       const delta = vector.d - this.edgeEquilibriumLength;
       const f = delta * this.edgeStiffness;
       const fx = vector.ex * f;

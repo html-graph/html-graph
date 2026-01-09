@@ -12,7 +12,7 @@ export const resolveNodeForcesApplicationStrategy = (
     return new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeCharge: params.nodeCharge,
       nodeForceCoefficient: params.nodeForceCoefficient,
-      distance: params.distance,
+      distanceVectorGenerator: params.distanceVectorGenerator,
       maxForce: params.maxForce,
       theta: params.theta,
       nodeMass: params.nodeMass,
@@ -23,7 +23,7 @@ export const resolveNodeForcesApplicationStrategy = (
   return new DirectSumNodeForcesApplicationStrategy({
     nodeCharge: params.nodeCharge,
     nodeForceCoefficient: params.nodeForceCoefficient,
-    distance: params.distance,
+    distanceVectorGenerator: params.distanceVectorGenerator,
     effectiveDistance: params.effectiveDistance,
     maxForce: params.maxForce,
   });

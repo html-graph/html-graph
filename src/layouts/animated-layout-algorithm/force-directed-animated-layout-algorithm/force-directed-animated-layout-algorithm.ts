@@ -14,17 +14,17 @@ import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-ani
 export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
 {
-  private readonly distance: DistanceVectorGenerator;
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
   public constructor(
     private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
   ) {
-    this.distance = new DistanceVectorGenerator(params.rand);
+    this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 
     this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
-      distance: this.distance,
+      distanceVectorGenerator: this.distanceVectorGenerator,
       nodeCharge: this.params.nodeCharge,
       effectiveDistance: this.params.effectiveDistance,
       maxForce: this.params.maxForce,
@@ -49,7 +49,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       graph,
       currentCoords,
       {
-        distance: this.distance,
+        distanceVectorGenerator: this.distanceVectorGenerator,
         nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,

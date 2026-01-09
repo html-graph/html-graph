@@ -4,6 +4,6 @@ export interface DirectSumNodeForcesApplicationStrategyParams {
   readonly nodeForceCoefficient: number;
   readonly nodeCharge: number;
   readonly effectiveDistance: number;
-  readonly distance: DistanceVectorGenerator;
+  readonly distanceVectorGenerator: DistanceVectorGenerator;
   readonly maxForce: number;
 }

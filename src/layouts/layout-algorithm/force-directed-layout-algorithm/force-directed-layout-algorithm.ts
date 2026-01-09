@@ -12,17 +12,19 @@ import {
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
-  private readonly distance: DistanceVectorGenerator;
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
   public constructor(
     private readonly params: ForceDirectedLayoutAlgorithmParams,
   ) {
-    this.distance = new DistanceVectorGenerator(this.params.rand);
+    this.distanceVectorGenerator = new DistanceVectorGenerator(
+      this.params.rand,
+    );
 
     this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
-      distance: this.distance,
+      distanceVectorGenerator: this.distanceVectorGenerator,
       nodeCharge: this.params.nodeCharge,
       effectiveDistance: this.params.effectiveDistance,
       maxForce: this.params.maxForce,
@@ -45,7 +47,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         graph,
         currentCoords,
         {
-          distance: this.distance,
+          distanceVectorGenerator: this.distanceVectorGenerator,
           nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,

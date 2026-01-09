@@ -19,7 +19,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
 
   private readonly theta: number;
 
-  private readonly distance: DistanceVectorGenerator;
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   private readonly nodeForceCoefficient: number;
 
@@ -32,7 +32,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     this.nodeMass = params.nodeMass;
     this.nodeCharge = params.nodeCharge;
     this.theta = params.theta;
-    this.distance = params.distance;
+    this.distanceVectorGenerator = params.distanceVectorGenerator;
     this.nodeForceCoefficient = params.nodeForceCoefficient;
     this.maxForce = params.maxForce;
   }
@@ -92,7 +92,10 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
       const parent: QuadTreeNode | null = current.parent;
 
       if (parent !== null) {
-        const vector = this.distance.create(parent.massCenter, targetCoords);
+        const vector = this.distanceVectorGenerator.create(
+          parent.massCenter,
+          targetCoords,
+        );
         const isFar = parent.box.radius * 2 < vector.d * this.theta;
 
         if (isFar) {
@@ -198,7 +201,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
   private calculateNodeRepulsiveForce(
     params: CalculateNodeRepulsiveForceParams,
   ): Point {
-    const vector = this.distance.create(
+    const vector = this.distanceVectorGenerator.create(
       params.sourceCoords,
       params.targetCoords,
     );

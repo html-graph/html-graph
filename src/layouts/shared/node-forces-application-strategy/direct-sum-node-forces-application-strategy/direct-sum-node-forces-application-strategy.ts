@@ -12,14 +12,14 @@ export class DirectSumNodeForcesApplicationStrategy
 
   private readonly nodeCharge: number;
 
-  private readonly distance: DistanceVectorGenerator;
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   private readonly maxForce: number;
 
   public constructor(params: DirectSumNodeForcesApplicationStrategyParams) {
     this.effectiveDistance = params.effectiveDistance;
     this.nodeCharge = params.nodeCharge;
-    this.distance = params.distance;
+    this.distanceVectorGenerator = params.distanceVectorGenerator;
     this.maxForce = params.maxForce;
   }
 
@@ -40,7 +40,10 @@ export class DirectSumNodeForcesApplicationStrategy
         const sourceCoords = nodesCoords.get(nodeIdFrom)!;
         const targetCoords = nodesCoords.get(nodeIdTo)!;
 
-        const vector = this.distance.create(sourceCoords, targetCoords);
+        const vector = this.distanceVectorGenerator.create(
+          sourceCoords,
+          targetCoords,
+        );
 
         if (vector.d > this.effectiveDistance) {
           continue;

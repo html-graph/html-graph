@@ -5,7 +5,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply near repulsive forces of right top quadrant by x axis", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -31,7 +31,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply near repulsive forces by y axis", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -57,7 +57,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should descend recursively in right top quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -85,7 +85,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should descend recursively in left bottom quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -113,7 +113,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should descend recursively in right bottom quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -141,7 +141,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should descend recursively in left top quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -169,7 +169,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should descend recursively in right top quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -200,7 +200,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply far forces of top right quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -231,7 +231,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply far forces of right bottom quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -262,7 +262,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should apply far forces of left bottom quadrant", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,
@@ -296,7 +296,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
   it("should forces between nodes in the same cell", () => {
     const strategy = new BarnesHutApproximationNodeForcesApplicationStrategy({
       nodeForceCoefficient: 1,
-      distance: new DistanceVectorGenerator(() => 0),
+      distanceVectorGenerator: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
       areaRadiusThreshold: 1e-2,

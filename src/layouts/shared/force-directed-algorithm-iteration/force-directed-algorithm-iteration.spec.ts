@@ -35,18 +35,18 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
-    const distance = new DistanceVectorGenerator(() => 0);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        distance,
+        distanceVectorGenerator,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 1e2,
             effectiveDistance: 1000,
-            distance: distance,
+            distanceVectorGenerator: distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -80,18 +80,18 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
-    const distance = new DistanceVectorGenerator(() => 0);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        distance,
+        distanceVectorGenerator,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distance: distance,
+            distanceVectorGenerator: distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -139,18 +139,18 @@ describe("ForceDirectedAlgorithmIteration", () => {
     canvas.addEdge({ from: "port-1", to: "port-2" });
 
     const currentCoords = createCurrentCoords(canvas.graph);
-    const distance = new DistanceVectorGenerator(() => 0);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        distance,
+        distanceVectorGenerator,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distance: distance,
+            distanceVectorGenerator: distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -184,18 +184,18 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
-    const distance = new DistanceVectorGenerator(() => 0);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        distance,
+        distanceVectorGenerator,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 5,
-            distance: distance,
+            distanceVectorGenerator: distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -229,18 +229,18 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
-    const distance = new DistanceVectorGenerator(() => 0);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        distance,
+        distanceVectorGenerator,
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distance: distance,
+            distanceVectorGenerator: distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),

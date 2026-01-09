@@ -2,7 +2,7 @@ import { DistanceVectorGenerator } from "../distance-vector-generator";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 
 export interface ForceDirectedAlgorithmIterationParams {
-  readonly distance: DistanceVectorGenerator;
+  readonly distanceVectorGenerator: DistanceVectorGenerator;
   readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
   readonly dtSec: number;
   readonly nodeMass: number;
