@@ -15,7 +15,7 @@ describe("resolveNodeForcesApplicationStrategy", () => {
       effectiveDistance: 1000,
       maxForce: 1e9,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
     });
 
     expect(strategy instanceof DirectSumNodeForcesApplicationStrategy).toBe(
@@ -32,7 +32,7 @@ describe("resolveNodeForcesApplicationStrategy", () => {
       effectiveDistance: 1000,
       maxForce: 1e9,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
     });
 
     expect(

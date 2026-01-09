@@ -20,6 +20,6 @@ export type LayoutAlgorithmConfig =
       readonly nodeForceCoefficient?: number;
       readonly barnesHut?: {
         readonly theta?: number;
-        readonly minAreaSize?: number;
+        readonly areaRadiusThreshold?: number;
       };
     };

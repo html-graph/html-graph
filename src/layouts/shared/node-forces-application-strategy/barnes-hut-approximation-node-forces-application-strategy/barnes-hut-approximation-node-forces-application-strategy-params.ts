@@ -5,7 +5,7 @@ export interface BarnesHutApproximationNodeForcesApplicationStrategyParams {
   readonly distance: DistanceVectorGenerator;
   readonly nodeCharge: number;
   readonly nodeMass: number;
-  readonly minAreaSize: number;
+  readonly areaRadiusThreshold: number;
   readonly theta: number;
   readonly maxForce: number;
 }

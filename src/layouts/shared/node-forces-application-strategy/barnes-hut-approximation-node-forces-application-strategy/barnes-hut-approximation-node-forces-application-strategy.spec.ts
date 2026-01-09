@@ -8,7 +8,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -34,7 +34,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -60,7 +60,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -88,7 +88,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -116,7 +116,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -144,7 +144,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -172,7 +172,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 0,
       maxForce: 1e9,
     });
@@ -203,7 +203,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 10,
       maxForce: 1e9,
     });
@@ -234,7 +234,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 10,
       maxForce: 1e9,
     });
@@ -265,7 +265,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 10,
       maxForce: 1e9,
     });
@@ -299,7 +299,7 @@ describe("BarnesHutNodeForcesApplicationStrategy", () => {
       distance: new DistanceVectorGenerator(() => 0),
       nodeCharge: 100,
       nodeMass: 1,
-      minAreaSize: 1e-2,
+      areaRadiusThreshold: 1e-2,
       theta: 10,
       maxForce: 1e9,
     });

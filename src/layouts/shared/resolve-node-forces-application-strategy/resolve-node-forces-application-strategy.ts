@@ -16,7 +16,7 @@ export const resolveNodeForcesApplicationStrategy = (
       maxForce: params.maxForce,
       theta: params.theta,
       nodeMass: params.nodeMass,
-      minAreaSize: params.minAreaSize,
+      areaRadiusThreshold: params.areaRadiusThreshold,
     });
   }
 

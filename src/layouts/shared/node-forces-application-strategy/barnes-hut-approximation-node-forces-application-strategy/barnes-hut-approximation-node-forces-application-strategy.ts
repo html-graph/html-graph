@@ -11,7 +11,7 @@ import { CalculateNodeRepulsiveForceParams } from "./calculate-node-repulsive-fo
 export class BarnesHutApproximationNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
 {
-  private readonly minAreaSize: number;
+  private readonly areaRadiusThreshold: number;
 
   private readonly nodeMass: number;
 
@@ -28,7 +28,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
   public constructor(
     params: BarnesHutApproximationNodeForcesApplicationStrategyParams,
   ) {
-    this.minAreaSize = params.minAreaSize;
+    this.areaRadiusThreshold = params.areaRadiusThreshold;
     this.nodeMass = params.nodeMass;
     this.nodeCharge = params.nodeCharge;
     this.theta = params.theta;
@@ -46,7 +46,7 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     const tree = new QuadTree({
       box,
       coords: nodesCoords,
-      minAreaSize: this.minAreaSize,
+      areaRadiusThreshold: this.areaRadiusThreshold,
       nodeMass: this.nodeMass,
       nodeCharge: this.nodeCharge,
     });

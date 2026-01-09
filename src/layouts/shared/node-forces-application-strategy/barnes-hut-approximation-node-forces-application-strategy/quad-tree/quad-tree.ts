@@ -12,7 +12,7 @@ export class QuadTree {
 
   private readonly coords: ReadonlyMap<Identifier, Point>;
 
-  private readonly minAreaSize: number;
+  private readonly areaRadiusThreshold: number;
 
   private readonly nodeMass: number;
 
@@ -22,7 +22,7 @@ export class QuadTree {
 
   public constructor(params: QuadTreeParams) {
     this.coords = params.coords;
-    this.minAreaSize = params.minAreaSize;
+    this.areaRadiusThreshold = params.areaRadiusThreshold;
     this.nodeMass = params.nodeMass;
     this.nodeCharge = params.nodeCharge;
 
@@ -118,7 +118,7 @@ export class QuadTree {
 
     const { centerX, centerY, radius } = current.box;
 
-    if (radius < this.minAreaSize) {
+    if (radius < this.areaRadiusThreshold) {
       this.setLeaf(current);
       return [];
     }

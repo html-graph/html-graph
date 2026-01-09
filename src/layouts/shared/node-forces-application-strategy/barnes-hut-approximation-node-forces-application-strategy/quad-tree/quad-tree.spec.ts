@@ -10,7 +10,7 @@ describe("QuadTree", () => {
         radius: 10,
       },
       coords: new Map(),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -46,7 +46,7 @@ describe("QuadTree", () => {
         radius: 10,
       },
       coords: new Map([["node-1", { x: 0, y: 0 }]]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -65,7 +65,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -84,7 +84,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -107,7 +107,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -126,7 +126,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -149,7 +149,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -168,7 +168,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -191,7 +191,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -210,7 +210,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -233,7 +233,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 9, y: 9 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -252,7 +252,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 1, y: 1 }],
       ]),
-      minAreaSize: 6,
+      areaRadiusThreshold: 6,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -271,7 +271,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 6,
+      areaRadiusThreshold: 6,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -290,7 +290,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 6,
+      areaRadiusThreshold: 6,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -309,7 +309,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -328,7 +328,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -347,7 +347,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });
@@ -366,7 +366,7 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
       nodeCharge: 1,
     });

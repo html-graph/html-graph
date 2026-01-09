@@ -8,5 +8,5 @@ export interface ResolveNodeForcesApplicationStrategyParams {
   readonly distance: DistanceVectorGenerator;
   readonly maxForce: number;
   readonly nodeMass: number;
-  readonly minAreaSize: number;
+  readonly areaRadiusThreshold: number;
 }

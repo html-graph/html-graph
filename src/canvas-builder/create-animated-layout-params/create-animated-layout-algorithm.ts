@@ -39,7 +39,7 @@ export const createAnimatedLayoutAlgorithm = (
         barnesHutTheta:
           algorithm?.barnesHut?.theta ?? forceDirectedDefaults.barnesHutTheta,
         barnesHutMinAreaSize:
-          algorithm?.barnesHut?.minAreaSize ??
+          algorithm?.barnesHut?.areaRadiusThreshold ??
           forceDirectedDefaults.barnesHutMinAreaSize,
       });
     }

@@ -37,7 +37,7 @@ export const resolveLayoutAlgorithm = (
         barnesHutTheta:
           config?.barnesHut?.theta ?? forceDirectedDefaults.barnesHutTheta,
         barnesHutMinAreaSize:
-          config?.barnesHut?.minAreaSize ??
+          config?.barnesHut?.areaRadiusThreshold ??
           forceDirectedDefaults.barnesHutMinAreaSize,
       });
     }
