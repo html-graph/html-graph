@@ -46,7 +46,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 1e2,
             effectiveDistance: 1000,
-            distanceVectorGenerator: distanceVectorGenerator,
+            distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -91,7 +91,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distanceVectorGenerator: distanceVectorGenerator,
+            distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -150,7 +150,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distanceVectorGenerator: distanceVectorGenerator,
+            distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -195,7 +195,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 5,
-            distanceVectorGenerator: distanceVectorGenerator,
+            distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),
@@ -240,7 +240,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
             effectiveDistance: 1000,
-            distanceVectorGenerator: distanceVectorGenerator,
+            distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
           }),

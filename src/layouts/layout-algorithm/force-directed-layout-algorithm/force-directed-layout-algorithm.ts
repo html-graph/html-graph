@@ -30,7 +30,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       maxForce: this.params.maxForce,
       nodeForceCoefficient: this.params.nodeForceCoefficient,
       theta: this.params.barnesHutTheta,
-      areaRadiusThreshold: this.params.barnesHutMinAreaSize,
+      areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
       nodeMass: this.params.nodeMass,
     });
   }

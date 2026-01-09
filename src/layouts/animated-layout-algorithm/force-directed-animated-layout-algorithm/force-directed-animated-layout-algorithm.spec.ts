@@ -46,7 +46,7 @@ const createAlgorithm = (params?: {
     maxForce: 1e9,
     nodeForceCoefficient: 1,
     barnesHutTheta: 0,
-    barnesHutMinAreaSize: 1e-2,
+    barnesHutAreaRadiusThreshold: 1e-2,
   });
 };
 describe("ForceDirectedAnimatedLayoutAlgorithm", () => {

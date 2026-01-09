@@ -7,6 +7,8 @@ import { QuadTree, QuadTreeNode } from "./quad-tree";
 import { DistanceVectorGenerator } from "../../distance-vector-generator";
 import { calculateNodeRepulsiveForce } from "../../calculate-node-repulsive-force";
 import { CalculateNodeRepulsiveForceParams } from "./calculate-node-repulsive-force-params";
+import { ApplyFarForceParams } from "./apply-far-force-params";
+import { ApplyNearForceParams } from "./apply-near-force-params";
 
 export class BarnesHutApproximationNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
@@ -99,39 +101,65 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
         const isFar = parent.box.radius * 2 < vector.d * this.theta;
 
         if (isFar) {
-          this.tryApplyFarForce(totalForce, targetCoords, parent.lb, current);
-          this.tryApplyFarForce(totalForce, targetCoords, parent.rb, current);
-          this.tryApplyFarForce(totalForce, targetCoords, parent.rt, current);
-          this.tryApplyFarForce(totalForce, targetCoords, parent.lt, current);
+          this.tryApplyFarForce({
+            totalForce,
+            targetCoords,
+            target: parent.lb,
+            current,
+          });
+
+          this.tryApplyFarForce({
+            totalForce,
+            targetCoords,
+            target: parent.rb,
+            current,
+          });
+
+          this.tryApplyFarForce({
+            totalForce,
+            targetCoords,
+            target: parent.rt,
+            current,
+          });
+
+          this.tryApplyFarForce({
+            totalForce,
+            targetCoords,
+            target: parent.lt,
+            current,
+          });
         } else {
-          this.tryApplyNearForce(
+          this.tryApplyNearForce({
             totalForce,
             targetCoords,
-            parent.lb,
+            target: parent.lb,
             current,
             nodesCoords,
-          );
-          this.tryApplyNearForce(
+          });
+
+          this.tryApplyNearForce({
             totalForce,
             targetCoords,
-            parent.rb,
+            target: parent.rb,
             current,
             nodesCoords,
-          );
-          this.tryApplyNearForce(
+          });
+
+          this.tryApplyNearForce({
             totalForce,
             targetCoords,
-            parent.rt,
+            target: parent.rt,
             current,
             nodesCoords,
-          );
-          this.tryApplyNearForce(
+          });
+
+          this.tryApplyNearForce({
             totalForce,
             targetCoords,
-            parent.lt,
+            target: parent.lt,
             current,
             nodesCoords,
-          );
+          });
         }
       }
 
@@ -155,15 +183,14 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
       current.nodeIds.forEach((nodeId) => {
         const sourceCoords = nodesCoords.get(nodeId)!;
 
-        const f = this.calculateNodeRepulsiveForce({
+        const force = this.calculateNodeRepulsiveForce({
           sourceCharge: this.nodeCharge,
           targetCharge: this.nodeCharge,
           sourceCoords,
           targetCoords,
         });
 
-        totalForce.x += f.x;
-        totalForce.y += f.y;
+        this.applyForce(totalForce, force);
       });
 
       if (current.lb !== null) {
@@ -225,30 +252,26 @@ export class BarnesHutApproximationNodeForcesApplicationStrategy
     totalForce.y += force.y;
   }
 
-  private tryApplyFarForce(
-    totalForce: MutablePoint,
-    targetCoords: Point,
-    target: QuadTreeNode | null,
-    current: QuadTreeNode,
-  ): void {
-    if (target !== null && target !== current) {
-      const force = this.calculateApproximateForce(target, targetCoords);
+  private tryApplyFarForce(params: ApplyFarForceParams): void {
+    if (params.target !== null && params.target !== params.current) {
+      const force = this.calculateApproximateForce(
+        params.target,
+        params.targetCoords,
+      );
 
-      this.applyForce(totalForce, force);
+      this.applyForce(params.totalForce, force);
     }
   }
 
-  private tryApplyNearForce(
-    totalForce: MutablePoint,
-    targetCoords: Point,
-    target: QuadTreeNode | null,
-    current: QuadTreeNode,
-    nodesCoords: ReadonlyMap<Identifier, Point>,
-  ): void {
-    if (target !== null && target !== current) {
-      const force = this.calculateExactForce(target, targetCoords, nodesCoords);
+  private tryApplyNearForce(params: ApplyNearForceParams): void {
+    if (params.target !== null && params.target !== params.current) {
+      const force = this.calculateExactForce(
+        params.target,
+        params.targetCoords,
+        params.nodesCoords,
+      );
 
-      this.applyForce(totalForce, force);
+      this.applyForce(params.totalForce, force);
     }
   }
 }
