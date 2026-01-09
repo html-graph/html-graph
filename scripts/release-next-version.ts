@@ -40,6 +40,7 @@ class ReleaseNextVersion {
     writeFileSync("./package.json", newContent);
 
     const cmdsBeforePublish = [
+      `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
       "npx prettier ./package.json --write",
       "npm install",
       "npm run before-build",
