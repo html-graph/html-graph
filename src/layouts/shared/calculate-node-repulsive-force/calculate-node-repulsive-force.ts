@@ -9,7 +9,8 @@ export const calculateNodeRepulsiveForce = (
 
   const f =
     params.coefficient *
-    ((params.sourceCharge * params.targetCharge) / (params.distance * params.distance));
+    ((params.sourceCharge * params.targetCharge) /
+      (params.distance * params.distance));
 
   return Math.min(f, params.maxForce);
 };
