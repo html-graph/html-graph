@@ -5,13 +5,35 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { ForceDirectedLayoutAlgorithmParams } from "./force-directed-layout-algorithm-params";
 import {
   createCurrentCoordinates,
+  DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
+  NodeForcesApplicationStrategy,
+  resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
+
+  private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
+
   public constructor(
     private readonly params: ForceDirectedLayoutAlgorithmParams,
-  ) {}
+  ) {
+    this.distanceVectorGenerator = new DistanceVectorGenerator(
+      this.params.rand,
+    );
+
+    this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
+      distanceVectorGenerator: this.distanceVectorGenerator,
+      nodeCharge: this.params.nodeCharge,
+      effectiveDistance: this.params.effectiveDistance,
+      maxForce: this.params.maxForce,
+      nodeForceCoefficient: this.params.nodeForceCoefficient,
+      theta: this.params.barnesHutTheta,
+      areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
+      nodeMass: this.params.nodeMass,
+    });
+  }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const currentCoords = createCurrentCoordinates(
@@ -25,17 +47,16 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         graph,
         currentCoords,
         {
-          rand: this.params.rand,
+          distanceVectorGenerator: this.distanceVectorGenerator,
+          nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
           dtSec: this.params.dtSec,
           nodeMass: this.params.nodeMass,
-          nodeCharge: this.params.nodeCharge,
           edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-          effectiveDistance: this.params.effectiveDistance,
           edgeStiffness: this.params.edgeStiffness,
         },
       );
 
-      const maxDelta = iteration.next();
+      const maxDelta = iteration.apply();
 
       if (maxDelta < this.params.convergenceDelta) {
         break;

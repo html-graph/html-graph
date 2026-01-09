@@ -1,4 +1,4 @@
-import { LayoutParams } from "./layout-config";
+import { LayoutParams } from "./layout-params";
 import { Canvas } from "@/canvas";
 import { ManualLayoutApplicationStrategyConfigurator } from "../manual-layout-application-strategy-configurator";
 import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "../topology-change-timeout-layout-application-strategy-configurator";

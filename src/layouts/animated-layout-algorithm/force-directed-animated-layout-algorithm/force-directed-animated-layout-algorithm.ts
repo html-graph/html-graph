@@ -4,16 +4,36 @@ import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import {
   createCurrentCoordinates,
+  DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
+  NodeForcesApplicationStrategy,
+  resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
 
 export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
 {
+  private readonly distanceVectorGenerator: DistanceVectorGenerator;
+
+  private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
+
   public constructor(
     private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
-  ) {}
+  ) {
+    this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
+
+    this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
+      distanceVectorGenerator: this.distanceVectorGenerator,
+      nodeCharge: this.params.nodeCharge,
+      effectiveDistance: this.params.effectiveDistance,
+      maxForce: this.params.maxForce,
+      nodeForceCoefficient: this.params.nodeForceCoefficient,
+      theta: this.params.barnesHutTheta,
+      areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
+      nodeMass: this.params.nodeMass,
+    });
+  }
 
   public calculateNextCoordinates(
     graph: Graph,
@@ -29,17 +49,16 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       graph,
       currentCoords,
       {
-        rand: this.params.rand,
+        distanceVectorGenerator: this.distanceVectorGenerator,
+        nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
         dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
         nodeMass: this.params.nodeMass,
-        nodeCharge: this.params.nodeCharge,
         edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-        effectiveDistance: this.params.effectiveDistance,
         edgeStiffness: this.params.edgeStiffness,
       },
     );
 
-    const maxDelta = iteration.next();
+    const maxDelta = iteration.apply();
 
     if (maxDelta < this.params.convergenceDelta) {
       const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {

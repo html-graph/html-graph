@@ -10,14 +10,16 @@ describe("QuadTree", () => {
         radius: 10,
       },
       coords: new Map(),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
     const expected: QuadTreeNode = {
       nodeIds: new Set(),
       totalMass: 0,
-      massCenter: {
+      totalCharge: 0,
+      chargeCenter: {
         x: 0,
         y: 0,
       },
@@ -33,7 +35,7 @@ describe("QuadTree", () => {
       rt: null,
     };
 
-    expect(tree.root).toEqual(expected);
+    expect(tree.getRoot()).toEqual(expected);
   });
 
   it("should add node", () => {
@@ -44,11 +46,12 @@ describe("QuadTree", () => {
         radius: 10,
       },
       coords: new Map([["node-1", { x: 0, y: 0 }]]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.nodeIds).toEqual(new Set(["node-1"]));
+    expect(tree.getRoot().nodeIds).toEqual(new Set(["node-1"]));
   });
 
   it("should add first node to top right quarter", () => {
@@ -62,11 +65,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.nodeIds).toEqual(new Set(["node-1"]));
+    expect(tree.getRoot().rt!.nodeIds).toEqual(new Set(["node-1"]));
   });
 
   it("should set right top quarter dimensions", () => {
@@ -80,11 +84,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.box).toEqual({
+    expect(tree.getRoot().rt!.box).toEqual({
       centerX: 5,
       centerY: 5,
       radius: 5,
@@ -102,11 +107,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.lb!.nodeIds).toEqual(new Set(["node-2"]));
+    expect(tree.getRoot().lb!.nodeIds).toEqual(new Set(["node-2"]));
   });
 
   it("should set left bottom quarter dimensions", () => {
@@ -120,11 +126,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 0, y: 0 }],
         ["node-2", { x: -1, y: -1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.lb!.box).toEqual({
+    expect(tree.getRoot().lb!.box).toEqual({
       centerX: -5,
       centerY: -5,
       radius: 5,
@@ -142,11 +149,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rb!.nodeIds).toEqual(new Set(["node-1"]));
+    expect(tree.getRoot().rb!.nodeIds).toEqual(new Set(["node-1"]));
   });
 
   it("should set right bottom quarter dimensions", () => {
@@ -160,11 +168,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rb!.box).toEqual({
+    expect(tree.getRoot().rb!.box).toEqual({
       centerX: 5,
       centerY: -5,
       radius: 5,
@@ -182,11 +191,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.lt!.nodeIds).toEqual(new Set(["node-2"]));
+    expect(tree.getRoot().lt!.nodeIds).toEqual(new Set(["node-2"]));
   });
 
   it("should set left top quarter dimensions", () => {
@@ -200,11 +210,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: -1 }],
         ["node-2", { x: -1, y: 1 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.lt!.box).toEqual({
+    expect(tree.getRoot().lt!.box).toEqual({
       centerX: -5,
       centerY: 5,
       radius: 5,
@@ -222,11 +233,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 9, y: 9 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.rt!.nodeIds).toEqual(new Set(["node-2"]));
+    expect(tree.getRoot().rt!.rt!.nodeIds).toEqual(new Set(["node-2"]));
   });
 
   it("should stop when minimum box size reached", () => {
@@ -240,11 +252,12 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 1, y: 1 }],
       ]),
-      minAreaSize: 6,
+      areaRadiusThreshold: 6,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.nodeIds).toEqual(new Set(["node-1", "node-2"]));
+    expect(tree.getRoot().rt!.nodeIds).toEqual(new Set(["node-1", "node-2"]));
   });
 
   it("should calculate total cell mass for leaf", () => {
@@ -258,11 +271,31 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 6,
+      areaRadiusThreshold: 6,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.totalMass).toBe(2);
+    expect(tree.getRoot().rt!.totalMass).toBe(2);
+  });
+
+  it("should calculate total cell charge for leaf", () => {
+    const tree = new QuadTree({
+      box: {
+        centerX: 0,
+        centerY: 0,
+        radius: 10,
+      },
+      coords: new Map([
+        ["node-1", { x: 1, y: 1 }],
+        ["node-2", { x: 2, y: 2 }],
+      ]),
+      areaRadiusThreshold: 6,
+      nodeMass: 1,
+      nodeCharge: 1,
+    });
+
+    expect(tree.getRoot().rt!.totalCharge).toBe(2);
   });
 
   it("should calculate total cell mass for non-leaf", () => {
@@ -276,11 +309,31 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.totalMass).toBe(2);
+    expect(tree.getRoot().rt!.totalMass).toBe(2);
+  });
+
+  it("should calculate total cell charge for non-leaf", () => {
+    const tree = new QuadTree({
+      box: {
+        centerX: 0,
+        centerY: 0,
+        radius: 10,
+      },
+      coords: new Map([
+        ["node-1", { x: 1, y: 1 }],
+        ["node-2", { x: 2, y: 2 }],
+      ]),
+      areaRadiusThreshold: 1e-3,
+      nodeMass: 1,
+      nodeCharge: 1,
+    });
+
+    expect(tree.getRoot().rt!.totalCharge).toBe(2);
   });
 
   it("should calculate center of mass", () => {
@@ -294,25 +347,30 @@ describe("QuadTree", () => {
         ["node-1", { x: 1, y: 1 }],
         ["node-2", { x: 2, y: 2 }],
       ]),
-      minAreaSize: 1e-3,
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.root.rt!.massCenter).toEqual({ x: 1.5, y: 1.5 });
+    expect(tree.getRoot().rt!.chargeCenter).toEqual({ x: 1.5, y: 1.5 });
   });
 
-  it("should return leaf associated to graph node", () => {
+  it("should return leaf for specified node", () => {
     const tree = new QuadTree({
       box: {
         centerX: 0,
         centerY: 0,
         radius: 10,
       },
-      coords: new Map([["node-1", { x: 0, y: 0 }]]),
-      minAreaSize: 1e-3,
+      coords: new Map([
+        ["node-1", { x: 0, y: 0 }],
+        ["node-2", { x: -1, y: -1 }],
+      ]),
+      areaRadiusThreshold: 1e-3,
       nodeMass: 1,
+      nodeCharge: 1,
     });
 
-    expect(tree.getLeaf("node-1")).toEqual(tree.root);
+    expect(tree.getLeaf("node-2")!.parent).toBe(tree.getRoot());
   });
 });

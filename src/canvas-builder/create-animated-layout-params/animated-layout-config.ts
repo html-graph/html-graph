@@ -16,6 +16,12 @@ export interface AnimatedLayoutConfig {
         readonly seed?: string;
         readonly effectiveDistance?: number;
         readonly convergenceDelta?: number;
+        readonly maxForce?: number;
+        readonly nodeForceCoefficient?: number;
+        readonly barnesHut?: {
+          readonly theta?: number;
+          readonly areaRadiusThreshold?: number;
+        };
       }
     | undefined;
 }

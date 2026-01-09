@@ -14,6 +14,17 @@ export type LayoutAlgorithmConfig =
       readonly nodeMass?: number;
       readonly edgeEquilibriumLength?: number;
       readonly edgeStiffness?: number;
+      /**
+       * @deprecated
+       * this parameter results in slow convergence
+       * use convergenceDelta instead
+       */
       readonly effectiveDistance?: number;
       readonly convergenceDelta?: number;
+      readonly maxForce?: number;
+      readonly nodeForceCoefficient?: number;
+      readonly barnesHut?: {
+        readonly theta?: number;
+        readonly areaRadiusThreshold?: number;
+      };
     };

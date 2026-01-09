@@ -5,7 +5,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
-import { LayoutParams } from "./layout-config";
+import { LayoutParams } from "./layout-params";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";

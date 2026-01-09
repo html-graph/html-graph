@@ -3,6 +3,8 @@ import { ForceDirectedAlgorithmIteration } from "./force-directed-algorithm-iter
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { Graph } from "@/graph";
+import { DistanceVectorGenerator } from "../distance-vector-generator";
+import { DirectSumNodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 
 const createCurrentCoords = (graph: Graph): ReadonlyMap<Identifier, Point> => {
   const currentCoords = new Map<Identifier, Point>();
@@ -33,21 +35,29 @@ describe("ForceDirectedAlgorithmIteration", () => {
 
     const currentCoords = createCurrentCoords(canvas.graph);
 
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
+
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 1e2,
+            effectiveDistance: 1000,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
         dtSec: 1,
-        nodeCharge: 1e2,
         nodeMass: 1,
         edgeEquilibriumLength: 8,
-        effectiveDistance: 1000,
         edgeStiffness: 1,
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 10 });
   });
@@ -70,24 +80,31 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 1000,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
-    expect(currentCoords.get("node-1")).toEqual({ x: 8, y: 0 });
+    expect(currentCoords.get("node-1")).toEqual({ x: 6, y: 0 });
   });
 
   it("should account for edge spring forces when two nodes are connected", () => {
@@ -122,24 +139,31 @@ describe("ForceDirectedAlgorithmIteration", () => {
     canvas.addEdge({ from: "port-1", to: "port-2" });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
         edgeEquilibriumLength: 8,
-        effectiveDistance: 1000,
         edgeStiffness: 1,
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
-    expect(currentCoords.get("node-1")).toEqual({ x: 12, y: 0 });
+    expect(currentCoords.get("node-1")).toEqual({ x: 14, y: 0 });
   });
 
   it("should not apply pulling back forces when effective distance is reached", () => {
@@ -160,22 +184,29 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 5,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 5,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },
     );
 
-    iteration.next();
+    iteration.apply();
 
     expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
   });
@@ -198,23 +229,30 @@ describe("ForceDirectedAlgorithmIteration", () => {
     });
 
     const currentCoords = createCurrentCoords(canvas.graph);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       canvas.graph,
       currentCoords,
       {
-        rand: (): number => 0,
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
         dtSec: 2,
-        nodeCharge: 10,
         nodeMass: 1,
-        effectiveDistance: 1000,
         edgeEquilibriumLength: 8,
         edgeStiffness: 1,
       },
     );
 
-    const maxDelta = iteration.next();
+    const maxDelta = iteration.apply();
 
-    expect(maxDelta).toBe(2);
+    expect(maxDelta).toBe(4);
   });
 });

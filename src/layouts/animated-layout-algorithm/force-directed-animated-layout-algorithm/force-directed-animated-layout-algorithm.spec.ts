@@ -43,6 +43,10 @@ const createAlgorithm = (params?: {
     effectiveDistance: 1000,
     edgeStiffness: 1,
     convergenceDelta: params?.convergeDelta ?? 1e-3,
+    maxForce: 1e9,
+    nodeForceCoefficient: 1,
+    barnesHutTheta: 0,
+    barnesHutAreaRadiusThreshold: 1e-2,
   });
 };
 describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
@@ -56,8 +60,8 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
 
     expect(nextCoords).toEqual(
       new Map([
-        ["node-1", { x: 9.5, y: 0 }],
-        ["node-2", { x: 20.5, y: 0 }],
+        ["node-1", { x: 9, y: 0 }],
+        ["node-2", { x: 21, y: 0 }],
       ]),
     );
   });
@@ -112,8 +116,8 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
 
     expect(nextCoords).toEqual(
       new Map([
-        ["node-1", { x: -0.5, y: 0 }],
-        ["node-2", { x: 10.5, y: 0 }],
+        ["node-1", { x: -1, y: 0 }],
+        ["node-2", { x: 11, y: 0 }],
       ]),
     );
   });

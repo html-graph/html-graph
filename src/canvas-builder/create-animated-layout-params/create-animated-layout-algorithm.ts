@@ -32,6 +32,15 @@ export const createAnimatedLayoutAlgorithm = (
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
         convergenceDelta:
           algorithm?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
+        maxForce: algorithm?.maxForce ?? forceDirectedDefaults.maxForce,
+        nodeForceCoefficient:
+          algorithm?.nodeForceCoefficient ??
+          forceDirectedDefaults.nodeForceCoefficient,
+        barnesHutTheta:
+          algorithm?.barnesHut?.theta ?? forceDirectedDefaults.barnesHutTheta,
+        barnesHutAreaRadiusThreshold:
+          algorithm?.barnesHut?.areaRadiusThreshold ??
+          forceDirectedDefaults.barnesHutAreaRadiusThreshold,
       });
     }
   }

@@ -30,6 +30,15 @@ export const resolveLayoutAlgorithm = (
           config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
         convergenceDelta:
           config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
+        maxForce: config?.maxForce ?? forceDirectedDefaults.maxForce,
+        nodeForceCoefficient:
+          config?.nodeForceCoefficient ??
+          forceDirectedDefaults.nodeForceCoefficient,
+        barnesHutTheta:
+          config?.barnesHut?.theta ?? forceDirectedDefaults.barnesHutTheta,
+        barnesHutAreaRadiusThreshold:
+          config?.barnesHut?.areaRadiusThreshold ??
+          forceDirectedDefaults.barnesHutAreaRadiusThreshold,
       });
     }
   }
