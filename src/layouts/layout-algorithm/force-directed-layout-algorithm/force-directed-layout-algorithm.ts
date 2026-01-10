@@ -56,7 +56,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
     this.fillerLayout = new RandomFillerLayoutAlgorithm({
       rand: params.rand,
-      density: params.edgeEquilibriumLength,
+      sparcity: params.edgeEquilibriumLength,
     });
   }
 
