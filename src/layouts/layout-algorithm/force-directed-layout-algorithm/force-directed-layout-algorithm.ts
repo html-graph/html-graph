@@ -16,7 +16,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
-  private readonly fillerLayout: LayoutAlgorithm;
+  private readonly fillerLayoutAlgorithm: LayoutAlgorithm;
 
   private readonly maxIterations: number;
 
@@ -54,14 +54,15 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       nodeMass: params.nodeMass,
     });
 
-    this.fillerLayout = new RandomFillerLayoutAlgorithm({
+    this.fillerLayoutAlgorithm = new RandomFillerLayoutAlgorithm({
       rand: params.rand,
       sparsity: params.edgeEquilibriumLength,
     });
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const currentCoords = this.fillerLayout.calculateCoordinates(graph);
+    const currentCoords =
+      this.fillerLayoutAlgorithm.calculateCoordinates(graph);
 
     for (let i = 0; i < this.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
