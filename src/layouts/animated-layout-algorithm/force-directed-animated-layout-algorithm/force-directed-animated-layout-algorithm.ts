@@ -3,13 +3,16 @@ import { Point } from "@/point";
 import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";
 import { Graph } from "@/graph";
 import {
-  createCurrentCoordinates,
   DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
   NodeForcesApplicationStrategy,
   resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 import { ForceDirectedAnimatedLayoutAlgorithmParams } from "./force-directed-animated-layout-algorithm-params";
+import {
+  LayoutAlgorithm,
+  RandomFillerLayoutAlgorithm,
+} from "../../layout-algorithm";
 
 export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
@@ -30,7 +33,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
   private readonly edgeStiffness: number;
 
-  private readonly rand: () => number;
+  private readonly fillerLayout: LayoutAlgorithm;
 
   public constructor(params: ForceDirectedAnimatedLayoutAlgorithmParams) {
     this.convergenceDelta = params.convergenceDelta;
@@ -39,7 +42,6 @@ export class ForceDirectedAnimatedLayoutAlgorithm
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
     this.edgeStiffness = params.edgeStiffness;
-    this.rand = params.rand;
 
     this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 
@@ -53,17 +55,18 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       areaRadiusThreshold: params.barnesHutAreaRadiusThreshold,
       nodeMass: params.nodeMass,
     });
+
+    this.fillerLayout = new RandomFillerLayoutAlgorithm(
+      params.rand,
+      params.edgeEquilibriumLength,
+    );
   }
 
   public calculateNextCoordinates(
     graph: Graph,
     dtSec: number,
   ): ReadonlyMap<Identifier, Point> {
-    const currentCoords = createCurrentCoordinates(
-      graph,
-      this.rand,
-      this.edgeEquilibriumLength,
-    );
+    const currentCoords = this.fillerLayout.calculateCoordinates(graph);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       graph,

@@ -4,17 +4,19 @@ import { Point } from "@/point";
 import { LayoutAlgorithm } from "../layout-algorithm";
 import { ForceDirectedLayoutAlgorithmParams } from "./force-directed-layout-algorithm-params";
 import {
-  createCurrentCoordinates,
   DistanceVectorGenerator,
   ForceDirectedAlgorithmIteration,
   NodeForcesApplicationStrategy,
   resolveNodeForcesApplicationStrategy,
 } from "../../shared";
+import { RandomFillerLayoutAlgorithm } from "../random-filler-layout-algorithm";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   private readonly distanceVectorGenerator: DistanceVectorGenerator;
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
+
+  private readonly fillerLayout: LayoutAlgorithm;
 
   public constructor(
     private readonly params: ForceDirectedLayoutAlgorithmParams,
@@ -33,14 +35,15 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
       nodeMass: this.params.nodeMass,
     });
-  }
 
-  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const currentCoords = createCurrentCoordinates(
-      graph,
+    this.fillerLayout = new RandomFillerLayoutAlgorithm(
       this.params.rand,
       this.params.edgeEquilibriumLength,
     );
+  }
+
+  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
+    const currentCoords = this.fillerLayout.calculateCoordinates(graph);
 
     for (let i = 0; i < this.params.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
