@@ -56,9 +56,13 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         },
       );
 
-      const maxDelta = iteration.apply();
+      const [maxDelta, maxVelocity] = iteration.apply();
 
       if (maxDelta < this.params.convergenceDelta) {
+        break;
+      }
+
+      if (maxVelocity < this.params.convergenceVelocity) {
         break;
       }
     }

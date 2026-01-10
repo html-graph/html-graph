@@ -30,6 +30,9 @@ export const resolveLayoutAlgorithm = (
           config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
         convergenceDelta:
           config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
+        convergenceVelocity:
+          config?.convergenceVelocity ??
+          forceDirectedDefaults.convergenceVelocity,
         maxForce: config?.maxForce ?? forceDirectedDefaults.maxForce,
         nodeForceCoefficient:
           config?.nodeForceCoefficient ??
