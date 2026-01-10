@@ -54,10 +54,10 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
       nodeMass: params.nodeMass,
     });
 
-    this.fillerLayout = new RandomFillerLayoutAlgorithm(
-      params.rand,
-      params.edgeEquilibriumLength,
-    );
+    this.fillerLayout = new RandomFillerLayoutAlgorithm({
+      rand: params.rand,
+      preferredEdgeLength: params.edgeEquilibriumLength,
+    });
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
