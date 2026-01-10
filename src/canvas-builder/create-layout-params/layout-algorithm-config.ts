@@ -16,11 +16,15 @@ export type LayoutAlgorithmConfig =
       readonly edgeStiffness?: number;
       /**
        * @deprecated
-       * this parameter results in slow convergence
-       * use convergenceDelta instead
+       * use convergenceVelocity instead
        */
       readonly effectiveDistance?: number;
+      /**
+       * @deprecated
+       * use convergenceVelocity instead
+       */
       readonly convergenceDelta?: number;
+      readonly convergenceVelocity?: number;
       readonly maxForce?: number;
       readonly nodeForceCoefficient?: number;
       readonly barnesHut?: {

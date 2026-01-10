@@ -32,8 +32,9 @@ export class ForceDirectedAlgorithmIteration {
     this.nodeForcesApplicationStrategy = params.nodeForcesApplicationStrategy;
   }
 
-  public apply(): number {
+  public apply(): [number, number] {
     let maxDelta = 0;
+    let maxVelocity = 0;
     const forces = new Map<Identifier, MutablePoint>();
 
     const nodeIds = this.graph.getAllNodeIds();
@@ -54,6 +55,11 @@ export class ForceDirectedAlgorithmIteration {
         y: (force.y / this.nodeMass) * this.dt,
       };
 
+      maxVelocity = Math.max(
+        maxVelocity,
+        Math.sqrt(velocity.x * velocity.x + velocity.y * velocity.y),
+      );
+
       const dx = velocity.x * this.dt;
       const dy = velocity.y * this.dt;
 
@@ -62,7 +68,7 @@ export class ForceDirectedAlgorithmIteration {
       maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
 
-    return maxDelta;
+    return [maxDelta, maxVelocity];
   }
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {

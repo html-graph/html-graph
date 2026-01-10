@@ -251,8 +251,53 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    const maxDelta = iteration.apply();
+    const [maxDelta] = iteration.apply();
 
     expect(maxDelta).toBe(4);
+  });
+
+  it("should calculate maximum delta", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 10,
+      y: 0,
+    });
+
+    canvas.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 20,
+      y: 0,
+    });
+
+    const currentCoords = createCurrentCoords(canvas.graph);
+    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
+
+    const iteration = new ForceDirectedAlgorithmIteration(
+      canvas.graph,
+      currentCoords,
+      {
+        distanceVectorGenerator,
+        nodeForcesApplicationStrategy:
+          new DirectSumNodeForcesApplicationStrategy({
+            nodeCharge: 10,
+            effectiveDistance: 1000,
+            distanceVectorGenerator,
+            maxForce: 1e9,
+            nodeForceCoefficient: 1,
+          }),
+        dtSec: 2,
+        nodeMass: 1,
+        edgeEquilibriumLength: 8,
+        edgeStiffness: 1,
+      },
+    );
+
+    const [, maxVelocity] = iteration.apply();
+
+    expect(maxVelocity).toBe(2);
   });
 });

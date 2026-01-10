@@ -18,20 +18,40 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
-  public constructor(
-    private readonly params: ForceDirectedAnimatedLayoutAlgorithmParams,
-  ) {
+  private readonly convergenceDelta: number;
+
+  private readonly convergenceVelocity: number;
+
+  private readonly maxTimeDeltaSec: number;
+
+  private readonly nodeMass: number;
+
+  private readonly edgeEquilibriumLength: number;
+
+  private readonly edgeStiffness: number;
+
+  private readonly rand: () => number;
+
+  public constructor(params: ForceDirectedAnimatedLayoutAlgorithmParams) {
+    this.convergenceDelta = params.convergenceDelta;
+    this.convergenceVelocity = params.convergenceVelocity;
+    this.maxTimeDeltaSec = params.maxTimeDeltaSec;
+    this.nodeMass = params.nodeMass;
+    this.edgeEquilibriumLength = params.edgeEquilibriumLength;
+    this.edgeStiffness = params.edgeStiffness;
+    this.rand = params.rand;
+
     this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 
     this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
       distanceVectorGenerator: this.distanceVectorGenerator,
-      nodeCharge: this.params.nodeCharge,
-      effectiveDistance: this.params.effectiveDistance,
-      maxForce: this.params.maxForce,
-      nodeForceCoefficient: this.params.nodeForceCoefficient,
-      theta: this.params.barnesHutTheta,
-      areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
-      nodeMass: this.params.nodeMass,
+      nodeCharge: params.nodeCharge,
+      effectiveDistance: params.effectiveDistance,
+      maxForce: params.maxForce,
+      nodeForceCoefficient: params.nodeForceCoefficient,
+      theta: params.barnesHutTheta,
+      areaRadiusThreshold: params.barnesHutAreaRadiusThreshold,
+      nodeMass: params.nodeMass,
     });
   }
 
@@ -41,8 +61,8 @@ export class ForceDirectedAnimatedLayoutAlgorithm
   ): ReadonlyMap<Identifier, Point> {
     const currentCoords = createCurrentCoordinates(
       graph,
-      this.params.rand,
-      this.params.edgeEquilibriumLength,
+      this.rand,
+      this.edgeEquilibriumLength,
     );
 
     const iteration = new ForceDirectedAlgorithmIteration(
@@ -51,16 +71,19 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       {
         distanceVectorGenerator: this.distanceVectorGenerator,
         nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
-        dtSec: Math.min(dtSec, this.params.maxTimeDeltaSec),
-        nodeMass: this.params.nodeMass,
-        edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-        edgeStiffness: this.params.edgeStiffness,
+        dtSec: Math.min(dtSec, this.maxTimeDeltaSec),
+        nodeMass: this.nodeMass,
+        edgeEquilibriumLength: this.edgeEquilibriumLength,
+        edgeStiffness: this.edgeStiffness,
       },
     );
 
-    const maxDelta = iteration.apply();
+    const [maxDelta, maxVelocity] = iteration.apply();
 
-    if (maxDelta < this.params.convergenceDelta) {
+    if (
+      maxDelta < this.convergenceDelta ||
+      maxVelocity < this.convergenceVelocity
+    ) {
       const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {
         const node = graph.getNode(nodeId)!;
 
