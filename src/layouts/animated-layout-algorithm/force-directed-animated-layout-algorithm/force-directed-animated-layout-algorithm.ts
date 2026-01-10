@@ -58,7 +58,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
     this.fillerLayout = new RandomFillerLayoutAlgorithm({
       rand: params.rand,
-      preferredEdgeLength: params.edgeEquilibriumLength,
+      density: params.edgeEquilibriumLength,
     });
   }
 

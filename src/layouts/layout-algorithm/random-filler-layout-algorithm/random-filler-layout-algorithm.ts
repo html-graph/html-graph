@@ -11,7 +11,7 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
 
   public constructor(params: RandomFillerLayoutAlgorithmParams) {
     this.rand = params.rand;
-    this.preferredEdgeLength = params.preferredEdgeLength;
+    this.preferredEdgeLength = params.density;
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {

@@ -1,4 +1,4 @@
 export interface RandomFillerLayoutAlgorithmParams {
   readonly rand: () => number;
-  readonly preferredEdgeLength: number;
+  readonly density: number;
 }
