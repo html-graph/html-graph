@@ -18,54 +18,72 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
   private readonly fillerLayout: LayoutAlgorithm;
 
-  public constructor(
-    private readonly params: ForceDirectedLayoutAlgorithmParams,
-  ) {
-    this.distanceVectorGenerator = new DistanceVectorGenerator(
-      this.params.rand,
-    );
+  private readonly maxIterations: number;
+
+  private readonly dtSec: number;
+
+  private readonly nodeMass: number;
+
+  private readonly edgeEquilibriumLength: number;
+
+  private readonly edgeStiffness: number;
+
+  private readonly convergenceDelta: number;
+
+  private readonly convergenceVelocity: number;
+
+  public constructor(params: ForceDirectedLayoutAlgorithmParams) {
+    this.maxIterations = params.maxIterations;
+    this.dtSec = params.dtSec;
+    this.nodeMass = params.nodeMass;
+    this.edgeEquilibriumLength = params.edgeEquilibriumLength;
+    this.edgeStiffness = params.edgeStiffness;
+    this.convergenceDelta = params.convergenceDelta;
+    this.convergenceVelocity = params.convergenceVelocity;
+
+    this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 
     this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
       distanceVectorGenerator: this.distanceVectorGenerator,
-      nodeCharge: this.params.nodeCharge,
-      effectiveDistance: this.params.effectiveDistance,
-      maxForce: this.params.maxForce,
-      nodeForceCoefficient: this.params.nodeForceCoefficient,
-      theta: this.params.barnesHutTheta,
-      areaRadiusThreshold: this.params.barnesHutAreaRadiusThreshold,
-      nodeMass: this.params.nodeMass,
+      nodeCharge: params.nodeCharge,
+      effectiveDistance: params.effectiveDistance,
+      maxForce: params.maxForce,
+      nodeForceCoefficient: params.nodeForceCoefficient,
+      theta: params.barnesHutTheta,
+      areaRadiusThreshold: params.barnesHutAreaRadiusThreshold,
+      nodeMass: params.nodeMass,
     });
 
-    this.fillerLayout = new RandomFillerLayoutAlgorithm(
-      this.params.rand,
-      this.params.edgeEquilibriumLength,
-    );
+    this.fillerLayout = new RandomFillerLayoutAlgorithm({
+      rand: params.rand,
+      sparsity: params.edgeEquilibriumLength,
+    });
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const currentCoords = this.fillerLayout.calculateCoordinates(graph);
 
-    for (let i = 0; i < this.params.maxIterations; i++) {
+    for (let i = 0; i < this.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
         graph,
         currentCoords,
         {
           distanceVectorGenerator: this.distanceVectorGenerator,
           nodeForcesApplicationStrategy: this.nodeForcesApplicationStrategy,
-          dtSec: this.params.dtSec,
-          nodeMass: this.params.nodeMass,
-          edgeEquilibriumLength: this.params.edgeEquilibriumLength,
-          edgeStiffness: this.params.edgeStiffness,
+          dtSec: this.dtSec,
+          nodeMass: this.nodeMass,
+          edgeEquilibriumLength: this.edgeEquilibriumLength,
+          edgeStiffness: this.edgeStiffness,
         },
       );
 
       const [maxDelta, maxVelocity] = iteration.apply();
 
-      if (maxDelta < this.params.convergenceDelta) {
+      if (maxDelta < this.convergenceDelta) {
         break;
       }
 
-      if (maxVelocity < this.params.convergenceVelocity) {
+      if (maxVelocity < this.convergenceVelocity) {
         break;
       }
     }

@@ -17,7 +17,11 @@ describe("RandomFillerLayoutAlgorithm", () => {
       priority: 0,
     });
 
-    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm({
+      rand: (): number => 1,
+      sparsity: 10,
+    });
+
     const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(new Map([["node-1", { x: 10, y: 10 }]]));
@@ -36,7 +40,11 @@ describe("RandomFillerLayoutAlgorithm", () => {
       priority: 0,
     });
 
-    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm({
+      rand: (): number => 1,
+      sparsity: 10,
+    });
+
     const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
@@ -82,7 +90,11 @@ describe("RandomFillerLayoutAlgorithm", () => {
       priority: 0,
     });
 
-    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm({
+      rand: (): number => 1,
+      sparsity: 10,
+    });
+
     const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(

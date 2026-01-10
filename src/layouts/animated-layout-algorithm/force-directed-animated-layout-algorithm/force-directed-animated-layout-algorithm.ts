@@ -56,10 +56,10 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       nodeMass: params.nodeMass,
     });
 
-    this.fillerLayout = new RandomFillerLayoutAlgorithm(
-      params.rand,
-      params.edgeEquilibriumLength,
-    );
+    this.fillerLayout = new RandomFillerLayoutAlgorithm({
+      rand: params.rand,
+      sparsity: params.edgeEquilibriumLength,
+    });
   }
 
   public calculateNextCoordinates(
