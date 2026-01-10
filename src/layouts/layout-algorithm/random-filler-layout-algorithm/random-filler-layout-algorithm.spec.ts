@@ -19,7 +19,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
 
     const layout = new RandomFillerLayoutAlgorithm({
       rand: (): number => 1,
-      sparcity: 10,
+      sparsity: 10,
     });
 
     const coords = layout.calculateCoordinates(graph);
@@ -42,7 +42,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
 
     const layout = new RandomFillerLayoutAlgorithm({
       rand: (): number => 1,
-      sparcity: 10,
+      sparsity: 10,
     });
 
     const coords = layout.calculateCoordinates(graph);
@@ -92,7 +92,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
 
     const layout = new RandomFillerLayoutAlgorithm({
       rand: (): number => 1,
-      sparcity: 10,
+      sparsity: 10,
     });
 
     const coords = layout.calculateCoordinates(graph);
