@@ -1,6 +1,6 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
-import { LayoutAlgorithm } from "@/layouts/layout-algorithm";
+import { LayoutAlgorithm } from "../layout-algorithm";
 import type { Point } from "@/point";
 import { RandomFillerLayoutAlgorithmParams } from "./random-filler-layout-algorithm-params";
 
