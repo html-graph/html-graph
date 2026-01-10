@@ -1,9 +1,9 @@
 import { standardCenterFn } from "@/center-fn";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
-import { createCurrentCoordinates } from "./create-current-coordinates";
+import { RandomFillerLayoutAlgorithm } from "./random-filler-layout-algorithm";
 
-describe("createCurrentCoordinates", () => {
+describe("RandomFillerLayoutAlgorithm", () => {
   it("should set single node coordinates to maximum of specified edge length", () => {
     const graphStore = new GraphStore();
     const graph = new Graph(graphStore);
@@ -17,7 +17,8 @@ describe("createCurrentCoordinates", () => {
       priority: 0,
     });
 
-    const coords = createCurrentCoordinates(graph, () => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(new Map([["node-1", { x: 10, y: 10 }]]));
   });
@@ -35,7 +36,8 @@ describe("createCurrentCoordinates", () => {
       priority: 0,
     });
 
-    const coords = createCurrentCoordinates(graph, () => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
   });
@@ -80,7 +82,8 @@ describe("createCurrentCoordinates", () => {
       priority: 0,
     });
 
-    const coords = createCurrentCoordinates(graph, () => 1, 10);
+    const layout = new RandomFillerLayoutAlgorithm(() => 1, 10);
+    const coords = layout.calculateCoordinates(graph);
 
     expect(coords).toEqual(
       new Map([

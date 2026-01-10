@@ -29,25 +29,23 @@ export class GraphComponentsPartitioner {
     while (stack.length > 0) {
       const currentNodeId = stack.pop()!;
 
-      const outgoingNodeIds = this.graph
-        .getNodeOutgoingEdgeIds(currentNodeId)!
-        .map((edgeId) => {
-          const edge = this.graph.getEdge(edgeId)!;
-          const port = this.graph.getPort(edge.to)!;
+      const adjacentNodeIds = new Set<Identifier>();
 
-          return port.nodeId;
-        });
+      this.graph.getNodeOutgoingEdgeIds(currentNodeId)!.forEach((edgeId) => {
+        const edge = this.graph.getEdge(edgeId)!;
+        const port = this.graph.getPort(edge.to)!;
 
-      const incomingNodeIds = this.graph
-        .getNodeIncomingEdgeIds(currentNodeId)!
-        .map((edgeId) => {
-          const edge = this.graph.getEdge(edgeId)!;
-          const port = this.graph.getPort(edge.from)!;
+        adjacentNodeIds.add(port.nodeId);
+      });
 
-          return port.nodeId;
-        });
+      this.graph.getNodeIncomingEdgeIds(currentNodeId)!.forEach((edgeId) => {
+        const edge = this.graph.getEdge(edgeId)!;
+        const port = this.graph.getPort(edge.from)!;
 
-      [...outgoingNodeIds, ...incomingNodeIds].forEach((nodeId) => {
+        adjacentNodeIds.add(port.nodeId);
+      });
+
+      adjacentNodeIds.forEach((nodeId) => {
         if (this.remainingNodeIds.has(nodeId)) {
           this.remainingNodeIds.delete(nodeId);
           component.add(nodeId);
