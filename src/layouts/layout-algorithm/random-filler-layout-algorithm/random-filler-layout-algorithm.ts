@@ -7,18 +7,18 @@ import { RandomFillerLayoutAlgorithmParams } from "./random-filler-layout-algori
 export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
   private readonly rand: () => number;
 
-  private readonly preferredEdgeLength: number;
+  private readonly sparsity: number;
 
   public constructor(params: RandomFillerLayoutAlgorithmParams) {
     this.rand = params.rand;
-    this.preferredEdgeLength = params.sparsity;
+    this.sparsity = params.sparsity;
   }
 
   public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
     const currentCoords = new Map<Identifier, Point>();
     const nodeIds = graph.getAllNodeIds();
 
-    const side = Math.sqrt(nodeIds.length) * this.preferredEdgeLength;
+    const side = Math.sqrt(nodeIds.length) * this.sparsity;
 
     nodeIds.forEach((nodeId) => {
       const node = graph.getNode(nodeId)!;
