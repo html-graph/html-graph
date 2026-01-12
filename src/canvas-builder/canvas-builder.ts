@@ -232,7 +232,7 @@ export class CanvasBuilder {
     this.used = true;
 
     const layers = new Layers(this.element);
-    const htmlView: HtmlView = this.createHtmlView(layers.main);
+    const htmlView = this.createHtmlView(layers.main);
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
