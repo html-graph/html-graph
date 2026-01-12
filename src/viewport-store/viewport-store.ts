@@ -46,4 +46,8 @@ export class ViewportStore {
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);
     this.afterUpdateEmitter.emit();
   }
+
+  public getDimensions(): null {
+    return null;
+  }
 }
