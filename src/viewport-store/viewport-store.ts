@@ -13,7 +13,7 @@ export class ViewportStore {
 
   public readonly onAfterUpdated: EventHandler<void>;
 
-  public constructor() {
+  public constructor(private readonly host: HTMLElement) {
     [this.afterUpdateEmitter, this.onAfterUpdated] = createPair<void>();
   }
 
