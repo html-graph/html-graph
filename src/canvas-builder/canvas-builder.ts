@@ -233,22 +233,7 @@ export class CanvasBuilder {
 
     const layers = new Layers(this.element);
 
-    let htmlView: HtmlView = new CoreHtmlView(
-      this.graphStore,
-      this.viewportStore,
-      layers.main,
-    );
-
-    if (this.virtualScrollConfig !== undefined) {
-      htmlView = new VirtualScrollHtmlView(
-        htmlView,
-        this.graphStore,
-        this.boxRenderingTrigger,
-        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
-      );
-    }
-
-    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
+    const htmlView: HtmlView = this.createHtmlView(layers.main);
 
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
@@ -370,5 +355,24 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
+  }
+
+  private createHtmlView(host: HTMLElement): HtmlView {
+    let htmlView: HtmlView = new CoreHtmlView(
+      this.graphStore,
+      this.viewportStore,
+      host,
+    );
+
+    if (this.virtualScrollConfig !== undefined) {
+      htmlView = new VirtualScrollHtmlView(
+        htmlView,
+        this.graphStore,
+        this.boxRenderingTrigger,
+        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
+      );
+    }
+
+    return new LayoutHtmlView(htmlView, this.graphStore);
   }
 }
