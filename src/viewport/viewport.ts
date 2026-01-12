@@ -1,11 +1,18 @@
+import { Dimensions } from "@/dimensions";
 import { EventHandler } from "@/event-subject";
 import { ViewportStore, TransformState } from "@/viewport-store";
 
 export class Viewport {
+  public readonly onBeforeUpdated: EventHandler<void>;
+
   public readonly onAfterUpdated: EventHandler<void>;
 
+  public readonly onAfterResize: EventHandler<void>;
+
   public constructor(private readonly viewportStore: ViewportStore) {
+    this.onBeforeUpdated = this.viewportStore.onBeforeUpdated;
     this.onAfterUpdated = this.viewportStore.onAfterUpdated;
+    this.onAfterResize = this.viewportStore.onAfterResize;
   }
 
   public getViewportMatrix(): TransformState {
@@ -14,5 +21,9 @@ export class Viewport {
 
   public getContentMatrix(): TransformState {
     return { ...this.viewportStore.getContentMatrix() };
+  }
+
+  public getDimensions(): Dimensions {
+    return this.viewportStore.getDimensions();
   }
 }

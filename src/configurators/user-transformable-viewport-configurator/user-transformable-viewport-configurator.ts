@@ -59,7 +59,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseUp: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.params.mouseUpEventVerifier(event)) {
+    if (!this.params.mouseUpEventVerifier(event)) {
       return;
     }
 
@@ -165,20 +165,6 @@ export class UserTransformableViewportConfigurator {
     }
   };
 
-  private readonly observer = new ResizeObserver(() => {
-    const prevTransform = this.viewport.getViewportMatrix();
-    const { width, height } = this.element!.getBoundingClientRect();
-    const transform = this.params.transformPreprocessor({
-      prevTransform,
-      nextTransform: prevTransform,
-      canvasWidth: width,
-      canvasHeight: height,
-    });
-    this.params.onResizeTransformStarted();
-    this.canvas.patchViewportMatrix(transform);
-    this.params.onResizeTransformFinished();
-  });
-
   private readonly preventWheelScaleListener = (event: WheelEvent): void => {
     event.preventDefault();
   };
@@ -194,7 +180,13 @@ export class UserTransformableViewportConfigurator {
     });
 
     this.viewport = canvas.viewport;
-    this.observer.observe(this.element);
+
+    this.handleResize();
+
+    this.viewport.onAfterResize.subscribe(() => {
+      this.handleResize();
+    });
+
     this.element.addEventListener("mousedown", this.onMouseDown, {
       passive: true,
     });
@@ -220,7 +212,7 @@ export class UserTransformableViewportConfigurator {
   private moveViewport(dx: number, dy: number): void {
     const prevTransform = this.viewport.getViewportMatrix();
     const nextTransform = move(prevTransform, dx, dy);
-    const { width, height } = this.element.getBoundingClientRect();
+    const { width, height } = this.viewport.getDimensions();
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
@@ -234,7 +226,7 @@ export class UserTransformableViewportConfigurator {
   private scaleViewport(s2: number, cx: number, cy: number): void {
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
-    const { width, height } = this.element.getBoundingClientRect();
+    const { width, height } = this.viewport.getDimensions();
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
@@ -282,5 +274,19 @@ export class UserTransformableViewportConfigurator {
   private finishRegisteredTransform(): void {
     this.transformInProgress = false;
     this.params.onTransformFinished();
+  }
+
+  private handleResize(): void {
+    const prevTransform = this.viewport.getViewportMatrix();
+    const { width, height } = this.viewport.getDimensions();
+    const transform = this.params.transformPreprocessor({
+      prevTransform,
+      nextTransform: prevTransform,
+      canvasWidth: width,
+      canvasHeight: height,
+    });
+    this.params.onResizeTransformStarted();
+    this.canvas.patchViewportMatrix(transform);
+    this.params.onResizeTransformFinished();
   }
 }

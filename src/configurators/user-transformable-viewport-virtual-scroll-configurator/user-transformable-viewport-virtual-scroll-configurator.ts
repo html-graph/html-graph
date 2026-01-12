@@ -6,23 +6,16 @@ import {
   UserTransformableViewportConfigurator,
 } from "../user-transformable-viewport-configurator";
 import { VirtualScrollParams } from "./virtual-scroll-config";
-import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport";
 
 export class UserTransformableViewportVirtualScrollConfigurator {
-  private readonly canvasResizeObserver: ResizeObserver;
-
   private readonly nodeHorizontal: number;
 
   private readonly nodeVertical: number;
 
   private readonly viewport: Viewport;
 
-  private viewportWidth = 0;
-
-  private viewportHeight = 0;
-
-  private viewportMatrix: TransformState;
+  private previousScale: number;
 
   private loadedArea: {
     readonly xFrom: number;
@@ -47,7 +40,6 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   private readonly onAfterViewportUpdated = (): void => {
     if (!this.userTransformInProgress) {
-      this.viewportMatrix = this.viewport.getViewportMatrix();
       this.loadAreaAroundViewport();
     }
   };
@@ -65,14 +57,14 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     this.nodeHorizontal = this.params.nodeVerticalRadius;
     this.nodeVertical = this.params.nodeHorizontalRadius;
 
-    this.canvasResizeObserver = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      this.viewportWidth = entry.contentRect.width;
-      this.viewportHeight = entry.contentRect.height;
+    this.viewport = canvas.viewport;
+
+    this.previousScale = this.viewport.getViewportMatrix().scale;
+    this.scheduleLoadAreaAroundViewport();
+
+    this.viewport.onAfterResize.subscribe(() => {
       this.scheduleLoadAreaAroundViewport();
     });
-
-    this.viewport = canvas.viewport;
 
     const patchedTransformableViewportParams: TransformableViewportParams = {
       ...transformParams,
@@ -90,10 +82,10 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       },
       onTransformChange: () => {
         this.userTransformInProgress = false;
-        const viewportMatrix = this.viewportMatrix;
-        this.viewportMatrix = this.viewport.getViewportMatrix();
+        const previousScale = this.previousScale;
+        this.previousScale = this.viewport.getViewportMatrix().scale;
 
-        if (viewportMatrix.scale !== this.viewportMatrix.scale) {
+        if (previousScale !== this.previousScale) {
           this.scheduleEnsureViewportAreaLoaded();
         }
 
@@ -112,9 +104,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       patchedTransformableViewportParams,
     );
 
-    this.viewportMatrix = this.viewport.getViewportMatrix();
     this.trigger.subscribe(this.updateLoadedArea);
-    this.canvasResizeObserver.observe(this.element);
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
   }
 
@@ -143,42 +133,45 @@ export class UserTransformableViewportVirtualScrollConfigurator {
   }
 
   private scheduleEnsureViewportAreaLoaded(): void {
-    const absoluteViewportWidth =
-      this.viewportWidth * this.viewportMatrix.scale;
-    const absoluteViewportHeight =
-      this.viewportHeight * this.viewportMatrix.scale;
+    setTimeout(() => {
+      const { width, height } = this.viewport.getDimensions();
+      const { scale, x, y } = this.viewport.getViewportMatrix();
 
-    const xViewportFrom = this.viewportMatrix.x - this.nodeHorizontal;
-    const yViewportFrom = this.viewportMatrix.y - this.nodeVertical;
-    const xViewportTo =
-      this.viewportMatrix.x + absoluteViewportWidth + this.nodeHorizontal;
-    const yViewportTo =
-      this.viewportMatrix.y + absoluteViewportHeight + this.nodeVertical;
+      const absoluteViewportWidth = width * scale;
+      const absoluteViewportHeight = height * scale;
+      const xViewportFrom = x - this.nodeHorizontal;
+      const yViewportFrom = y - this.nodeVertical;
+      const xViewportTo = x + absoluteViewportWidth + this.nodeHorizontal;
+      const yViewportTo = y + absoluteViewportHeight + this.nodeVertical;
 
-    const isLoaded =
-      this.loadedArea.xFrom < xViewportFrom &&
-      this.loadedArea.xTo > xViewportTo &&
-      this.loadedArea.yFrom < yViewportFrom &&
-      this.loadedArea.yTo > yViewportTo;
+      const isLoaded =
+        this.loadedArea.xFrom < xViewportFrom &&
+        this.loadedArea.xTo > xViewportTo &&
+        this.loadedArea.yFrom < yViewportFrom &&
+        this.loadedArea.yTo > yViewportTo;
 
-    if (!isLoaded) {
-      this.scheduleLoadAreaAroundViewport();
-    }
+      if (!isLoaded) {
+        this.loadAreaAroundViewport();
+      }
+    });
   }
 
   private loadAreaAroundViewport(): void {
-    const absoluteViewportWidth =
-      this.viewportWidth * this.viewportMatrix.scale;
-    const absoluteViewportHeight =
-      this.viewportHeight * this.viewportMatrix.scale;
+    const { width, height } = this.viewport.getDimensions();
+    const { scale, x, y } = this.viewport.getViewportMatrix();
 
-    const x =
-      this.viewportMatrix.x - absoluteViewportWidth - this.nodeHorizontal;
-    const y =
-      this.viewportMatrix.y - absoluteViewportHeight - this.nodeVertical;
-    const width = 3 * absoluteViewportWidth + 2 * this.nodeHorizontal;
-    const height = 3 * absoluteViewportHeight + 2 * this.nodeVertical;
+    const absoluteViewportWidth = width * scale;
+    const absoluteViewportHeight = height * scale;
+    const totalX = x - absoluteViewportWidth - this.nodeHorizontal;
+    const totalY = y - absoluteViewportHeight - this.nodeVertical;
+    const totalWidth = 3 * absoluteViewportWidth + 2 * this.nodeHorizontal;
+    const totalHeight = 3 * absoluteViewportHeight + 2 * this.nodeVertical;
 
-    this.trigger.emit({ x, y, width, height });
+    this.trigger.emit({
+      x: totalX,
+      y: totalY,
+      width: totalWidth,
+      height: totalHeight,
+    });
   }
 }

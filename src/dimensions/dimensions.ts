@@ -1,4 +1,4 @@
-export interface ViewportDimensions {
+export interface Dimensions {
   readonly width: number;
   readonly height: number;
 }

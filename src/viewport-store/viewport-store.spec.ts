@@ -169,6 +169,17 @@ describe("ViewportStore", () => {
     expect(contentMatrix).toEqual(expected);
   });
 
+  it("should call callback before patching content matrix", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const onBeforeUpdate = jest.fn();
+    viewportStore.onBeforeUpdated.subscribe(onBeforeUpdate);
+
+    viewportStore.patchContentMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
+  });
+
   it("should call callback after patching content matrix", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
@@ -178,6 +189,17 @@ describe("ViewportStore", () => {
     viewportStore.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
     expect(onAfterUpdate).toHaveBeenCalled();
+  });
+
+  it("should call callback before patching viewport matrix", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const onBeforeUpdate = jest.fn();
+    viewportStore.onBeforeUpdated.subscribe(onBeforeUpdate);
+
+    viewportStore.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
   });
 
   it("should call callback after patching viewport matrix", () => {
@@ -199,7 +221,7 @@ describe("ViewportStore", () => {
     expect(dimensions).toEqual({ width: 1000, height: 700 });
   });
 
-  it("should emit resize event", () => {
+  it("should emit after resize event", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
 
     const viewportStore = new ViewportStore(host);
@@ -217,7 +239,7 @@ describe("ViewportStore", () => {
     expect(callback).toHaveBeenCalled();
   });
 
-  it("should not emit resize event after destroy", () => {
+  it("should not emit after resize event after destroy", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
 
     const viewportStore = new ViewportStore(host);

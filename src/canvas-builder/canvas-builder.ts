@@ -99,19 +99,24 @@ export class CanvasBuilder {
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly graphStore = new GraphStore();
+  private readonly graphStore: GraphStore;
 
-  private readonly viewportStore = new ViewportStore(this.element);
+  private readonly viewportStore: ViewportStore;
 
-  private readonly graph = new Graph(this.graphStore);
+  private readonly graph: Graph;
 
-  private readonly viewport = new Viewport(this.viewportStore);
+  private readonly viewport: Viewport;
 
   private readonly window: Window = window;
 
   private readonly animationStaticNodes = new Set<Identifier>();
 
-  public constructor(private readonly element: HTMLElement) {}
+  public constructor(private readonly element: HTMLElement) {
+    this.viewportStore = new ViewportStore(this.element);
+    this.viewport = new Viewport(this.viewportStore);
+    this.graphStore = new GraphStore();
+    this.graph = new Graph(this.graphStore);
+  }
 
   /**
    * specifies default values for graph entities

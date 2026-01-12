@@ -69,7 +69,7 @@ export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 
 export type { Viewport } from "./viewport";
 
-export type { ViewportDimensions } from "./viewport-store";
+export type { Dimensions } from "./dimensions";
 
 export type { Point } from "./point";
 

@@ -1,6 +1,6 @@
 import { ViewportStore, TransformState } from "@/viewport-store";
 import { Viewport } from "./viewport";
-import { createElement } from "@/mocks";
+import { createElement, triggerResizeFor } from "@/mocks";
 
 describe("Viewport", () => {
   it("should return initial viewport matrix", () => {
@@ -79,6 +79,20 @@ describe("Viewport", () => {
     expect(viewportMatrix).not.toBe(matrix);
   });
 
+  it("should call callback before viewport update", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
+    const onBeforeUpdate = jest.fn();
+
+    viewport.onBeforeUpdated.subscribe(onBeforeUpdate);
+
+    viewportStore.patchViewportMatrix({});
+
+    expect(onBeforeUpdate).toHaveBeenCalled();
+  });
+
   it("should call callback after viewport update", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
@@ -91,5 +105,32 @@ describe("Viewport", () => {
     viewportStore.patchViewportMatrix({});
 
     expect(onAfterUpdate).toHaveBeenCalled();
+  });
+
+  it("should return viewport dimensions", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
+    expect(viewport.getDimensions()).toEqual({ width: 1000, height: 700 });
+  });
+
+  it("should emit resize event", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
+    host.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(0, 0, 1100, 800);
+    };
+
+    const callback = jest.fn();
+
+    viewport.onAfterResize.subscribe(callback);
+
+    triggerResizeFor(host);
+
+    expect(callback).toHaveBeenCalled();
   });
 });
