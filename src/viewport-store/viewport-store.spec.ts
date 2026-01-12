@@ -4,7 +4,8 @@ import { ViewportStore } from "./viewport-store";
 
 describe("ViewportStore", () => {
   it("should return initial viewport matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     const viewportMatrix: TransformState = viewportStore.getViewportMatrix();
 
@@ -18,7 +19,8 @@ describe("ViewportStore", () => {
   });
 
   it("should return initial content matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     const contentMatrix: TransformState = viewportStore.getContentMatrix();
 
@@ -32,7 +34,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch viewport matrix scale", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchViewportMatrix({ scale: 2 });
 
@@ -48,7 +51,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch viewport matrix dx", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchViewportMatrix({ x: 1 });
 
@@ -64,7 +68,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch viewport matrix dy", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchViewportMatrix({ y: 1 });
 
@@ -80,7 +85,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch content matrix scale", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchContentMatrix({ scale: 2 });
 
@@ -96,7 +102,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch content matrix dx", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchContentMatrix({ x: 1 });
 
@@ -112,7 +119,8 @@ describe("ViewportStore", () => {
   });
 
   it("should patch content matrix dy", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchContentMatrix({ y: 1 });
 
@@ -128,7 +136,8 @@ describe("ViewportStore", () => {
   });
 
   it("should calculate content matrix when patching viewport matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -144,7 +153,8 @@ describe("ViewportStore", () => {
   });
 
   it("should calculate viewport matrix when patching content matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
 
     viewportStore.patchContentMatrix({ scale: 2, x: 2, y: 2 });
 
@@ -160,7 +170,8 @@ describe("ViewportStore", () => {
   });
 
   it("should call callback after patching content matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
     const onAfterUpdate = jest.fn();
     viewportStore.onAfterUpdated.subscribe(onAfterUpdate);
 
@@ -170,7 +181,8 @@ describe("ViewportStore", () => {
   });
 
   it("should call callback after patching viewport matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
     const onAfterUpdate = jest.fn();
     viewportStore.onAfterUpdated.subscribe(onAfterUpdate);
 
