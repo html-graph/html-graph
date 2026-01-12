@@ -20,9 +20,9 @@ const createDraggablePortsCanvas = (options?: {
   mouseUpEventVerifier?: MouseEventVerifier;
 }): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });
+  const viewportStore = new ViewportStore(element);
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);

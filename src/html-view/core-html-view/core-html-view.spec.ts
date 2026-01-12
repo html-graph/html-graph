@@ -11,14 +11,16 @@ import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
 import { ConnectionCategory } from "@/edges/connection-category";
 
 const createHtmlController = (params?: {
-  transformer?: ViewportStore;
+  viewportStore?: ViewportStore;
   store?: GraphStore;
   element?: HTMLElement;
 }): CoreHtmlView => {
+  const element = params?.element ?? document.createElement("div");
+
   return new CoreHtmlView(
     params?.store ?? new GraphStore(),
-    params?.transformer ?? new ViewportStore(),
-    params?.element ?? document.createElement("div"),
+    params?.viewportStore ?? new ViewportStore(element),
+    element,
   );
 };
 
@@ -118,12 +120,12 @@ describe("CoreHtmlView", () => {
   });
 
   it("should apply transform to container", () => {
-    const transformer = new ViewportStore();
     const element = document.createElement("div");
+    const viewportStore = new ViewportStore(element);
 
-    createHtmlController({ transformer, element });
+    createHtmlController({ viewportStore, element });
 
-    transformer.patchContentMatrix({
+    viewportStore.patchContentMatrix({
       scale: 2,
       x: 3,
       y: 4,

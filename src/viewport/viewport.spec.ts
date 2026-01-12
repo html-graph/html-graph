@@ -1,14 +1,16 @@
 import { ViewportStore, TransformState } from "@/viewport-store";
 import { Viewport } from "./viewport";
+import { createElement } from "@/mocks";
 
 describe("Viewport", () => {
   it("should return initial viewport matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
     jest
       .spyOn(viewportStore, "getViewportMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
-
-    const viewport = new Viewport(viewportStore);
 
     const viewportMatrix = viewport.getViewportMatrix();
 
@@ -22,12 +24,13 @@ describe("Viewport", () => {
   });
 
   it("should return initial content matrix", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
     jest
       .spyOn(viewportStore, "getContentMatrix")
       .mockReturnValue({ scale: 2, x: 1, y: 1 });
-
-    const viewport = new Viewport(viewportStore);
 
     const viewportMatrix = viewport.getContentMatrix();
 
@@ -41,7 +44,10 @@ describe("Viewport", () => {
   });
 
   it("should return viewport matrix as a new object", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
     const matrix: TransformState = {
       scale: 2,
       x: 1,
@@ -50,15 +56,16 @@ describe("Viewport", () => {
 
     jest.spyOn(viewportStore, "getViewportMatrix").mockReturnValue(matrix);
 
-    const viewport = new Viewport(viewportStore);
-
     const viewportMatrix = viewport.getViewportMatrix();
 
     expect(viewportMatrix).not.toBe(matrix);
   });
 
   it("should return content matrix as a new object", () => {
-    const viewportStore = new ViewportStore();
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+    const viewport = new Viewport(viewportStore);
+
     const matrix: TransformState = {
       scale: 2,
       x: 1,
@@ -67,16 +74,14 @@ describe("Viewport", () => {
 
     jest.spyOn(viewportStore, "getContentMatrix").mockReturnValue(matrix);
 
-    const viewport = new Viewport(viewportStore);
-
     const viewportMatrix = viewport.getContentMatrix();
 
     expect(viewportMatrix).not.toBe(matrix);
   });
 
   it("should call callback after viewport update", () => {
-    const viewportStore = new ViewportStore();
-
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
     const viewport = new Viewport(viewportStore);
 
     const onAfterUpdate = jest.fn();

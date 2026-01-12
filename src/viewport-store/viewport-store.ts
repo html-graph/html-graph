@@ -3,6 +3,7 @@ import { calculateReverseMatrix } from "./calculate-reverse-matrix";
 import { initialMatrix } from "./initial-matrix";
 import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
+import { ViewportDimensions } from "./viewport-dimensions";
 
 export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;
@@ -47,7 +48,9 @@ export class ViewportStore {
     this.afterUpdateEmitter.emit();
   }
 
-  public getDimensions(): null {
-    return null;
+  public getDimensions(): ViewportDimensions {
+    const { width, height } = this.host.getBoundingClientRect();
+
+    return { width, height };
   }
 }

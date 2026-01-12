@@ -26,9 +26,9 @@ const createCanvas = (options?: {
   onEdgeCreationPrevented?: () => void;
 }): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const mainElement =
     options?.mainElement ?? createElement({ width: 1000, height: 1000 });
+  const viewportStore = new ViewportStore(mainElement);
   const overlayElement =
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);

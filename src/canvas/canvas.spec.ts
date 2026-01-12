@@ -22,11 +22,11 @@ const createCanvas = (options?: {
   edgeShapeFactory?: EdgeShapeFactory;
   edgesPriorityFn?: PriorityFn;
 }): Canvas => {
+  const element = options?.element ?? document.createElement("div");
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
+  const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const element = options?.element ?? document.createElement("div");
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 

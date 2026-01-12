@@ -101,7 +101,7 @@ export class CanvasBuilder {
 
   private readonly graphStore = new GraphStore();
 
-  private readonly viewportStore = new ViewportStore();
+  private readonly viewportStore = new ViewportStore(this.element);
 
   private readonly graph = new Graph(this.graphStore);
 

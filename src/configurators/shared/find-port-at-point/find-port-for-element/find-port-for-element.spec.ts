@@ -10,10 +10,10 @@ import { Viewport } from "@/viewport";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
+  const element = document.createElement("div");
+  const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const element = document.createElement("div");
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 

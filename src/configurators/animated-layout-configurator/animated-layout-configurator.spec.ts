@@ -14,8 +14,8 @@ import { Identifier } from "@/identifier";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const element = document.createElement("div");
+  const viewportStore = new ViewportStore(element);
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);

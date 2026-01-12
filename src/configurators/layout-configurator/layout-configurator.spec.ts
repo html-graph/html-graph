@@ -12,10 +12,10 @@ import { EventSubject } from "@/event-subject";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
+  const element = document.createElement("div");
+  const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const element = document.createElement("div");
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
