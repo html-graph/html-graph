@@ -404,6 +404,7 @@ export class Canvas {
     this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
 
     this.htmlView.destroy();
+    this.viewportStore.destroy();
 
     this.destroyed = true;
   }

@@ -1,4 +1,4 @@
-import { createElement } from "@/mocks";
+import { createElement, triggerResizeFor } from "@/mocks";
 import { TransformState } from "./transform-state";
 import { ViewportStore } from "./viewport-store";
 
@@ -197,5 +197,42 @@ describe("ViewportStore", () => {
     const dimensions = viewportStore.getDimensions();
 
     expect(dimensions).toEqual({ width: 1000, height: 700 });
+  });
+
+  it("should emit resize event", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+
+    const viewportStore = new ViewportStore(host);
+
+    host.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(0, 0, 1100, 800);
+    };
+
+    const callback = jest.fn();
+
+    viewportStore.onAfterResize.subscribe(callback);
+
+    triggerResizeFor(host);
+
+    expect(callback).toHaveBeenCalled();
+  });
+
+  it("should not emit resize event after destroy", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+
+    const viewportStore = new ViewportStore(host);
+
+    host.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(0, 0, 1100, 800);
+    };
+
+    const callback = jest.fn();
+
+    viewportStore.onAfterResize.subscribe(callback);
+    viewportStore.destroy();
+
+    triggerResizeFor(host);
+
+    expect(callback).not.toHaveBeenCalled();
   });
 });

@@ -14,8 +14,18 @@ export class ViewportStore {
 
   public readonly onAfterUpdated: EventHandler<void>;
 
+  private readonly afterResizeEmitter: EventEmitter<void>;
+
+  public readonly onAfterResize: EventHandler<void>;
+
+  private observer: ResizeObserver = new ResizeObserver(() => {
+    this.afterResizeEmitter.emit();
+  });
+
   public constructor(private readonly host: HTMLElement) {
     [this.afterUpdateEmitter, this.onAfterUpdated] = createPair<void>();
+    [this.afterResizeEmitter, this.onAfterResize] = createPair<void>();
+    this.observer.observe(this.host);
   }
 
   public getViewportMatrix(): TransformState {
@@ -52,5 +62,9 @@ export class ViewportStore {
     const { width, height } = this.host.getBoundingClientRect();
 
     return { width, height };
+  }
+
+  public destroy(): void {
+    this.observer.disconnect();
   }
 }

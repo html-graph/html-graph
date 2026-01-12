@@ -69,6 +69,8 @@ export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 
 export type { Viewport } from "./viewport";
 
+export type { ViewportDimensions } from "./viewport-store";
+
 export type { Point } from "./point";
 
 export type { CenterFn } from "./center-fn";
