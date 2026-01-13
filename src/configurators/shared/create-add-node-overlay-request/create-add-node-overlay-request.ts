@@ -7,13 +7,13 @@ export const createAddNodeOverlayRequest = (
   const element = document.createElement("div");
 
   return {
-    id: payload.overlayId,
+    id: payload.overlayNodeId,
     element,
     x: payload.portCoords.x,
     y: payload.portCoords.y,
     ports: [
       {
-        id: payload.overlayId,
+        id: payload.overlayNodeId,
         element: element,
         direction: payload.portDirection,
       },

@@ -2,7 +2,7 @@ import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 
 export interface OverlayNodeParams {
-  readonly overlayId: Identifier;
+  readonly overlayNodeId: Identifier;
   readonly portCoords: Point;
   readonly portDirection: number;
 }

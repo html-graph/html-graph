@@ -8,7 +8,6 @@ import {
   OverlayNodeParams,
 } from "../shared";
 import { Point } from "@/point";
-import { transformPoint } from "@/transform-point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
@@ -97,27 +96,26 @@ export class UserConnectablePortsConfigurator {
     const portY = portRect.y + portRect.height / 2;
 
     const canvasRect = this.overlayLayer.getBoundingClientRect();
-    const matrix = this.canvas.viewport.getViewportMatrix();
 
-    const portCoords = transformPoint(matrix, {
+    const portPoint = this.canvas.viewport.createContentCoords({
       x: portX - canvasRect.x,
       y: portY - canvasRect.y,
     });
 
-    const cursorCoords = transformPoint(matrix, {
+    const cursorPoint = this.canvas.viewport.createContentCoords({
       x: cursor.x - canvasRect.x,
       y: cursor.y - canvasRect.y,
     });
 
     const staticParams: OverlayNodeParams = {
-      overlayId: OverlayId.Static,
-      portCoords: portCoords,
+      overlayNodeId: OverlayId.StaticNodeId,
+      portCoords: portPoint,
       portDirection: port.direction,
     };
 
     const draggingParams: OverlayNodeParams = {
-      overlayId: OverlayId.Dragging,
-      portCoords: cursorCoords,
+      overlayNodeId: OverlayId.DraggingNodeId,
+      portCoords: cursorPoint,
       portDirection: this.params.dragPortDirection,
     };
 
@@ -130,9 +128,9 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(sourceParams));
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(targetParams));
     this.overlayCanvas.addEdge({
-      from: sourceParams.overlayId,
-      to: targetParams.overlayId,
-      shape: this.params.edgeShapeFactory(OverlayId.Edge),
+      from: sourceParams.overlayNodeId,
+      to: targetParams.overlayNodeId,
+      shape: this.params.edgeShapeFactory(OverlayId.EdgeId),
     });
   }
 
@@ -174,15 +172,12 @@ export class UserConnectablePortsConfigurator {
   private moveDraggingPort(dragPoint: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
-    const nodeViewCoords: Point = {
+    const nodeContentCoords = this.canvas.viewport.createContentCoords({
       x: dragPoint.x - canvasRect.x,
       y: dragPoint.y - canvasRect.y,
-    };
+    });
 
-    const matrix = this.canvas.viewport.getViewportMatrix();
-    const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
-
-    this.overlayCanvas.updateNode(OverlayId.Dragging, {
+    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });

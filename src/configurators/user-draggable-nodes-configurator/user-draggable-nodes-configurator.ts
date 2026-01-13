@@ -1,7 +1,6 @@
 import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
 import { Point } from "@/point";
-import { transformPoint } from "@/transform-point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
 import { Identifier } from "@/identifier";
@@ -326,13 +325,11 @@ export class UserDraggableNodesConfigurator {
 
   private calculateContentPoint(clientPoint: Point): Point {
     const rect = this.element.getBoundingClientRect();
-    const viewportPoint: Point = {
+
+    const contentPoint = this.canvas.viewport.createContentCoords({
       x: clientPoint.x - rect.x,
       y: clientPoint.y - rect.y,
-    };
-
-    const viewportMatrix = this.canvas.viewport.getViewportMatrix();
-    const contentPoint = transformPoint(viewportMatrix, viewportPoint);
+    });
 
     return contentPoint;
   }

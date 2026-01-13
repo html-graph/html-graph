@@ -1,5 +1,6 @@
 import { Dimensions } from "@/dimensions";
 import { EventHandler } from "@/event-subject";
+import { Point } from "@/point";
 import { ViewportStore, TransformState } from "@/viewport-store";
 
 export class Viewport {
@@ -25,5 +26,13 @@ export class Viewport {
 
   public getDimensions(): Dimensions {
     return this.viewportStore.getDimensions();
+  }
+
+  public createContentCoords(viewportCoords: Point): Point {
+    return this.viewportStore.createContentCoords(viewportCoords);
+  }
+
+  public createViewportCoords(contentCoords: Point): Point {
+    return this.viewportStore.createViewportCoords(contentCoords);
   }
 }

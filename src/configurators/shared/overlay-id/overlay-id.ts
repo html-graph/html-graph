@@ -1,5 +1,5 @@
 export enum OverlayId {
-  Static = "static",
-  Dragging = "dragging",
-  Edge = "edge",
+  StaticNodeId = "static",
+  DraggingNodeId = "dragging",
+  EdgeId = "edge",
 }
