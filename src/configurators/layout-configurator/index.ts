@@ -1,3 +1,3 @@
 export { LayoutConfigurator } from "./layout-configurator";
 export type { LayoutParams } from "./layout-params";
-export type { LayourApplyOnParam } from "./layout-apply-on-param";
+export type { LayoutApplyOnParam } from "./layout-apply-on-param";

@@ -27,7 +27,7 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
     const centerViewport: Point = { x: width / 2, y: height / 2 };
     const centerContent: Point = viewport.createContentCoords(centerViewport);
     const halfSide = side / 2;
-    const areaTopLeft: Point = {
+    const areaBottomLeft: Point = {
       x: centerContent.x - halfSide,
       y: centerContent.y - halfSide,
     };
@@ -36,8 +36,8 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
       const node = graph.getNode(nodeId)!;
 
       currentCoords.set(nodeId, {
-        x: node.x ?? areaTopLeft.x + side * this.rand(),
-        y: node.y ?? areaTopLeft.y + side * this.rand(),
+        x: node.x ?? areaBottomLeft.x + side * this.rand(),
+        y: node.y ?? areaBottomLeft.y + side * this.rand(),
       });
     });
 

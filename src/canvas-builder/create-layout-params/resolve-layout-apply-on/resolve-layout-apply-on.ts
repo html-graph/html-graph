@@ -1,10 +1,10 @@
-import { LayourApplyOnParam } from "@/configurators";
+import { LayoutApplyOnParam } from "@/configurators";
 import { LayoutApplyOn } from "../layout-apply-on";
 import { EventSubject } from "@/event-subject";
 
 export const resolveLayoutApplyOn = (
   applyOn: LayoutApplyOn | undefined,
-): LayourApplyOnParam => {
+): LayoutApplyOnParam => {
   if (applyOn instanceof EventSubject) {
     return {
       type: "manual",
@@ -12,7 +12,19 @@ export const resolveLayoutApplyOn = (
     };
   }
 
+  if (applyOn?.type === "topologyChangeMacrotask") {
+    return {
+      type: "topologyChangeMacrotask",
+    };
+  }
+
+  if (applyOn?.type === "topologyChangeTimeout") {
+    return {
+      type: "topologyChangeMacrotask",
+    };
+  }
+
   return {
-    type: "topologyChangeTimeout",
+    type: "topologyChangeMicrotask",
   };
 };

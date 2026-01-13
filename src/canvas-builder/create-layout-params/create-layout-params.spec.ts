@@ -26,7 +26,7 @@ describe("createLayoutParams", () => {
     const params = createLayoutParams(config);
 
     expect(params.applyOn).toEqual({
-      type: "topologyChangeTimeout",
+      type: "topologyChangeMacrotask",
     });
   });
 });

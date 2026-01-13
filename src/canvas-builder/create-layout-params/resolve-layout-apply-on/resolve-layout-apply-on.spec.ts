@@ -2,21 +2,31 @@ import { EventSubject } from "@/event-subject";
 import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 
 describe("resolveLayoutApplyOn", () => {
-  it("should resolve specified topologyChangeTimeout strategy", () => {
+  it("should resolve specified legacy topologyChangeTimeout strategy", () => {
     const params = resolveLayoutApplyOn({
       type: "topologyChangeTimeout",
     });
 
     expect(params).toEqual({
-      type: "topologyChangeTimeout",
+      type: "topologyChangeMacrotask",
     });
   });
 
-  it("should resolve topologyChangeTimeout strategy by default", () => {
+  it("should resolve specified topologyChangeMacrotask strategy", () => {
+    const params = resolveLayoutApplyOn({
+      type: "topologyChangeMacrotask",
+    });
+
+    expect(params).toEqual({
+      type: "topologyChangeMacrotask",
+    });
+  });
+
+  it("should resolve topologyChangeMicrotask strategy by default", () => {
     const params = resolveLayoutApplyOn(undefined);
 
     expect(params).toEqual({
-      type: "topologyChangeTimeout",
+      type: "topologyChangeMicrotask",
     });
   });
 
