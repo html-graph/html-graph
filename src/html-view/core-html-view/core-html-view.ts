@@ -130,10 +130,16 @@ export class CoreHtmlView implements HtmlView {
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
     const rectCanvas = this.host.getBoundingClientRect();
+    const scale = this.viewportStore.getViewportMatrix().scale;
 
-    const from = this.createEdgeRenderPort(portFrom, rectFrom, rectCanvas);
+    const from = this.createEdgeRenderPort(
+      portFrom,
+      rectFrom,
+      rectCanvas,
+      scale,
+    );
 
-    const to = this.createEdgeRenderPort(portTo, rectTo, rectCanvas);
+    const to = this.createEdgeRenderPort(portTo, rectTo, rectCanvas, scale);
 
     let category = ConnectionCategory.Line;
 
@@ -156,15 +162,12 @@ export class CoreHtmlView implements HtmlView {
     port: StorePort,
     rectPort: DOMRect,
     rectCanvas: DOMRect,
+    scale: number,
   ): EdgeRenderPort {
-    const viewportPoint: Point = {
+    const contentPoint: Point = this.viewportStore.createContentCoords({
       x: rectPort.left - rectCanvas.left,
       y: rectPort.top - rectCanvas.top,
-    };
-
-    const contentPoint: Point =
-      this.viewportStore.createContentCoords(viewportPoint);
-    const scale = this.viewportStore.getViewportMatrix().scale;
+    });
 
     return {
       x: contentPoint.x,

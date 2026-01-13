@@ -172,13 +172,10 @@ export class UserConnectablePortsConfigurator {
   private moveDraggingPort(dragPoint: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
-    const nodeViewCoords: Point = {
+    const nodeContentCoords = this.canvas.viewport.createContentCoords({
       x: dragPoint.x - canvasRect.x,
       y: dragPoint.y - canvasRect.y,
-    };
-
-    const nodeContentCoords =
-      this.canvas.viewport.createContentCoords(nodeViewCoords);
+    });
 
     this.overlayCanvas.updateNode(OverlayId.Dragging, {
       x: nodeContentCoords.x,

@@ -325,13 +325,11 @@ export class UserDraggableNodesConfigurator {
 
   private calculateContentPoint(clientPoint: Point): Point {
     const rect = this.element.getBoundingClientRect();
-    const viewportPoint: Point = {
+
+    const contentPoint = this.canvas.viewport.createContentCoords({
       x: clientPoint.x - rect.x,
       y: clientPoint.y - rect.y,
-    };
-
-    const contentPoint =
-      this.canvas.viewport.createContentCoords(viewportPoint);
+    });
 
     return contentPoint;
   }
