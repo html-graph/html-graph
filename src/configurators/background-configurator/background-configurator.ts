@@ -25,21 +25,8 @@ export class BackgroundConfigurator {
 
   private visible = false;
 
-  private readonly resizeObserver = new ResizeObserver((entries) => {
-    const entry = entries[0];
-    const { width, height } = entry.contentRect;
-
-    this.svg.setAttribute("width", `${width}`);
-    this.svg.setAttribute("height", `${height}`);
-
-    this.patternRenderingRectangle.setAttribute("width", `${width}`);
-    this.patternRenderingRectangle.setAttribute("height", `${height}`);
-
-    const patternWidth = this.tileWidth / width;
-    const patternHeight = this.tileHeight / height;
-
-    this.pattern.setAttribute("width", `${patternWidth}`);
-    this.pattern.setAttribute("height", `${patternHeight}`);
+  private readonly resizeObserver = new ResizeObserver(() => {
+    this.updateDimensions();
   });
 
   private readonly onAfterTransformUpdated = (): void => {
@@ -101,5 +88,21 @@ export class BackgroundConfigurator {
       this.visible = true;
       this.backgroundHost.appendChild(this.svg);
     }
+  }
+
+  private updateDimensions(): void {
+    const { width, height } = this.canvas.viewport.getDimensions();
+
+    this.svg.setAttribute("width", `${width}`);
+    this.svg.setAttribute("height", `${height}`);
+
+    this.patternRenderingRectangle.setAttribute("width", `${width}`);
+    this.patternRenderingRectangle.setAttribute("height", `${height}`);
+
+    const patternWidth = this.tileWidth / width;
+    const patternHeight = this.tileHeight / height;
+
+    this.pattern.setAttribute("width", `${patternWidth}`);
+    this.pattern.setAttribute("height", `${patternHeight}`);
   }
 }
