@@ -13,6 +13,7 @@ import {
   LayoutAlgorithm,
   RandomFillerLayoutAlgorithm,
 } from "../../layout-algorithm";
+import { Viewport } from "@/viewport";
 
 export class ForceDirectedAnimatedLayoutAlgorithm
   implements AnimatedLayoutAlgorithm
@@ -65,9 +66,12 @@ export class ForceDirectedAnimatedLayoutAlgorithm
   public calculateNextCoordinates(
     graph: Graph,
     dtSec: number,
+    viewport: Viewport,
   ): ReadonlyMap<Identifier, Point> {
-    const currentCoords =
-      this.fillerLayoutAlgorithm.calculateCoordinates(graph);
+    const currentCoords = this.fillerLayoutAlgorithm.calculateCoordinates(
+      graph,
+      viewport,
+    );
 
     const iteration = new ForceDirectedAlgorithmIteration(
       graph,

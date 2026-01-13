@@ -8,6 +8,7 @@ export class AnimatedLayoutConfigurator {
     const nextCoords = this.algorithm.calculateNextCoordinates(
       this.canvas.graph,
       dtSec,
+      this.canvas.viewport,
     );
 
     nextCoords.forEach((coords, nodeId) => {
