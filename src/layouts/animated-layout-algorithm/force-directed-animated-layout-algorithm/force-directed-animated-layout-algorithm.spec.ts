@@ -36,7 +36,7 @@ const createAlgorithm = (params?: {
   convergeVelocity?: number;
 }): AnimatedLayoutAlgorithm => {
   return new ForceDirectedAnimatedLayoutAlgorithm({
-    rand: (): number => 0,
+    rand: (): number => 0.5,
     maxTimeDeltaSec: 1,
     nodeCharge: 10,
     nodeMass: 1,
@@ -58,7 +58,11 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
 
     const algorithm = createAlgorithm();
 
-    const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
+    const nextCoords = algorithm.calculateNextCoordinates(
+      canvas.graph,
+      1,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(
       new Map([
@@ -76,7 +80,11 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
       convergeDelta: 0.5 + 1e10,
     });
 
-    const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
+    const nextCoords = algorithm.calculateNextCoordinates(
+      canvas.graph,
+      1,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(new Map([]));
   });
@@ -89,7 +97,11 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
       convergeVelocity: 1.1,
     });
 
-    const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
+    const nextCoords = algorithm.calculateNextCoordinates(
+      canvas.graph,
+      1,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(new Map([]));
   });
@@ -127,7 +139,11 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
       convergeVelocity: 1.1,
     });
 
-    const nextCoords = algorithm.calculateNextCoordinates(canvas.graph, 1);
+    const nextCoords = algorithm.calculateNextCoordinates(
+      canvas.graph,
+      1,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(
       new Map([

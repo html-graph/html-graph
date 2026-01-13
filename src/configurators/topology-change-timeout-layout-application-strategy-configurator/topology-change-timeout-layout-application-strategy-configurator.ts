@@ -49,7 +49,10 @@ export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
   }
 
   private applyLayout(): void {
-    const coords = this.layoutAlgorithm.calculateCoordinates(this.canvas.graph);
+    const coords = this.layoutAlgorithm.calculateCoordinates(
+      this.canvas.graph,
+      this.canvas.viewport,
+    );
 
     coords.forEach((point, nodeId) => {
       this.canvas.updateNode(nodeId, point);

@@ -61,7 +61,10 @@ describe("ForceDirectedLayoutAlgorithm", () => {
 
     const algorithm = createAlgorithm({ maxIterations: 1 });
 
-    const nextCoords = algorithm.calculateCoordinates(canvas.graph);
+    const nextCoords = algorithm.calculateCoordinates(
+      canvas.graph,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(
       new Map([
@@ -80,7 +83,10 @@ describe("ForceDirectedLayoutAlgorithm", () => {
       convergeDelta: 0.5 + 1e10,
     });
 
-    const nextCoords = algorithm.calculateCoordinates(canvas.graph);
+    const nextCoords = algorithm.calculateCoordinates(
+      canvas.graph,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(
       new Map([
@@ -99,7 +105,10 @@ describe("ForceDirectedLayoutAlgorithm", () => {
       convergeVelocity: 1.1,
     });
 
-    const nextCoords = algorithm.calculateCoordinates(canvas.graph);
+    const nextCoords = algorithm.calculateCoordinates(
+      canvas.graph,
+      canvas.viewport,
+    );
 
     expect(nextCoords).toEqual(
       new Map([

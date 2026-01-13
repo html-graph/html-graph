@@ -3,6 +3,7 @@ import { Identifier } from "@/identifier";
 import { LayoutAlgorithm } from "../layout-algorithm";
 import type { Point } from "@/point";
 import { RandomFillerLayoutAlgorithmParams } from "./random-filler-layout-algorithm-params";
+import { Viewport } from "@/viewport";
 
 export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
   private readonly rand: () => number;
@@ -14,18 +15,29 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
     this.sparsity = params.sparsity;
   }
 
-  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
+  public calculateCoordinates(
+    graph: Graph,
+    viewport: Viewport,
+  ): ReadonlyMap<Identifier, Point> {
     const currentCoords = new Map<Identifier, Point>();
     const nodeIds = graph.getAllNodeIds();
 
     const side = Math.sqrt(nodeIds.length) * this.sparsity;
+    const { width, height } = viewport.getDimensions();
+    const centerViewport: Point = { x: width / 2, y: height / 2 };
+    const centerContent: Point = viewport.createContentCoords(centerViewport);
+    const halfSide = side / 2;
+    const areaTopLeft: Point = {
+      x: centerContent.x - halfSide,
+      y: centerContent.y - halfSide,
+    };
 
     nodeIds.forEach((nodeId) => {
       const node = graph.getNode(nodeId)!;
 
       currentCoords.set(nodeId, {
-        x: node.x ?? side * this.rand(),
-        y: node.y ?? side * this.rand(),
+        x: node.x ?? areaTopLeft.x + side * this.rand(),
+        y: node.y ?? areaTopLeft.y + side * this.rand(),
       });
     });
 

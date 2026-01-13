@@ -10,6 +10,7 @@ import {
   resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 import { RandomFillerLayoutAlgorithm } from "../random-filler-layout-algorithm";
+import { Viewport } from "@/viewport";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   private readonly distanceVectorGenerator: DistanceVectorGenerator;
@@ -60,9 +61,14 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     });
   }
 
-  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
-    const currentCoords =
-      this.fillerLayoutAlgorithm.calculateCoordinates(graph);
+  public calculateCoordinates(
+    graph: Graph,
+    viewport: Viewport,
+  ): ReadonlyMap<Identifier, Point> {
+    const currentCoords = this.fillerLayoutAlgorithm.calculateCoordinates(
+      graph,
+      viewport,
+    );
 
     for (let i = 0; i < this.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(

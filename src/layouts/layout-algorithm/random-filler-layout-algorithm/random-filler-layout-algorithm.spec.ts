@@ -1,20 +1,13 @@
-import { standardCenterFn } from "@/center-fn";
-import { Graph } from "@/graph";
-import { GraphStore } from "@/graph-store";
 import { RandomFillerLayoutAlgorithm } from "./random-filler-layout-algorithm";
+import { createCanvas, createElement } from "@/mocks";
 
 describe("RandomFillerLayoutAlgorithm", () => {
   it("should set single node coordinates to maximum of specified edge length", () => {
-    const graphStore = new GraphStore();
-    const graph = new Graph(graphStore);
+    const canvas = createCanvas();
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-1",
       element: document.createElement("div"),
-      x: null,
-      y: null,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     const layout = new RandomFillerLayoutAlgorithm({
@@ -22,22 +15,19 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(graph);
+    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
 
-    expect(coords).toEqual(new Map([["node-1", { x: 10, y: 10 }]]));
+    expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
   });
 
   it("should keep existing node coordinates when specified", () => {
-    const graphStore = new GraphStore();
-    const graph = new Graph(graphStore);
+    const canvas = createCanvas();
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-1",
       element: document.createElement("div"),
       x: 5,
       y: 5,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     const layout = new RandomFillerLayoutAlgorithm({
@@ -45,49 +35,32 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(graph);
+    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
 
     expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
   });
 
   it("should limit node coordinates to square root of nodes count", () => {
-    const graphStore = new GraphStore();
-    const graph = new Graph(graphStore);
+    const canvas = createCanvas();
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-1",
       element: document.createElement("div"),
-      x: null,
-      y: null,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-2",
       element: document.createElement("div"),
-      x: null,
-      y: null,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-3",
       element: document.createElement("div"),
-      x: null,
-      y: null,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
-    graphStore.addNode({
+    canvas.addNode({
       id: "node-4",
       element: document.createElement("div"),
-      x: null,
-      y: null,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     const layout = new RandomFillerLayoutAlgorithm({
@@ -95,15 +68,55 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(graph);
+    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
 
     expect(coords).toEqual(
       new Map([
-        ["node-1", { x: 20, y: 20 }],
-        ["node-2", { x: 20, y: 20 }],
-        ["node-3", { x: 20, y: 20 }],
-        ["node-4", { x: 20, y: 20 }],
+        ["node-1", { x: 10, y: 10 }],
+        ["node-2", { x: 10, y: 10 }],
+        ["node-3", { x: 10, y: 10 }],
+        ["node-4", { x: 10, y: 10 }],
       ]),
     );
+  });
+
+  it("should regard for viewport center", () => {
+    const element = createElement({ width: 2000, height: 1000 });
+    const canvas = createCanvas(element);
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+    });
+
+    const layout = new RandomFillerLayoutAlgorithm({
+      rand: (): number => 1,
+      sparsity: 10,
+    });
+
+    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+
+    expect(coords).toEqual(new Map([["node-1", { x: 1005, y: 505 }]]));
+  });
+
+  it("should regard for viewport transformed center", () => {
+    const element = createElement({ width: 2000, height: 1000 });
+    const canvas = createCanvas(element);
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: document.createElement("div"),
+      })
+      .patchViewportMatrix({ x: -100, y: -100 });
+
+    const layout = new RandomFillerLayoutAlgorithm({
+      rand: (): number => 1,
+      sparsity: 10,
+    });
+
+    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+
+    expect(coords).toEqual(new Map([["node-1", { x: 905, y: 405 }]]));
   });
 });
