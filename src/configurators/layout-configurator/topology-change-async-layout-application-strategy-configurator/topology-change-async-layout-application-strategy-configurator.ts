@@ -1,12 +1,26 @@
 import { Canvas } from "@/canvas";
 import { LayoutAlgorithm } from "@/layouts";
 
-export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
+export class TopologyChangeAsyncLayoutApplicationStrategyConfigurator {
   private applyScheduled = false;
+
+  private apply = (): void => {
+    this.applyScheduled = false;
+
+    const coords = this.layoutAlgorithm.calculateCoordinates(
+      this.canvas.graph,
+      this.canvas.viewport,
+    );
+
+    coords.forEach((point, nodeId) => {
+      this.canvas.updateNode(nodeId, point);
+    });
+  };
 
   private constructor(
     private readonly canvas: Canvas,
     private readonly layoutAlgorithm: LayoutAlgorithm,
+    private readonly defererFn: (apply: () => void) => void,
   ) {
     this.canvas.graph.onAfterNodeAdded.subscribe(() => {
       this.scheduleApply();
@@ -28,10 +42,12 @@ export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
   public static configure(
     canvas: Canvas,
     layoutAlgorithm: LayoutAlgorithm,
+    defererFn: (apply: () => void) => void,
   ): void {
-    new TopologyChangeTimeoutLayoutApplicationStrategyConfigurator(
+    new TopologyChangeAsyncLayoutApplicationStrategyConfigurator(
       canvas,
       layoutAlgorithm,
+      defererFn,
     );
   }
 
@@ -42,20 +58,6 @@ export class TopologyChangeTimeoutLayoutApplicationStrategyConfigurator {
 
     this.applyScheduled = true;
 
-    setTimeout(() => {
-      this.applyScheduled = false;
-      this.applyLayout();
-    });
-  }
-
-  private applyLayout(): void {
-    const coords = this.layoutAlgorithm.calculateCoordinates(
-      this.canvas.graph,
-      this.canvas.viewport,
-    );
-
-    coords.forEach((point, nodeId) => {
-      this.canvas.updateNode(nodeId, point);
-    });
+    this.defererFn(this.apply);
   }
 }

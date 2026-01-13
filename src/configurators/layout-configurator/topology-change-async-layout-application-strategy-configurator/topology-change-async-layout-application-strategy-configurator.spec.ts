@@ -6,7 +6,7 @@ import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
 import { DummyLayoutAlgorithm } from "@/mocks";
-import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "./topology-change-timeout-layout-application-strategy-configurator";
+import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -29,14 +29,19 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
+describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on adding a new node", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
+      (apply) => {
+        setTimeout(() => {
+          apply();
+        });
+      },
     );
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
@@ -51,9 +56,14 @@ describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
+      (apply) => {
+        setTimeout(() => {
+          apply();
+        });
+      },
     );
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
@@ -74,9 +84,14 @@ describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
+      (apply) => {
+        setTimeout(() => {
+          apply();
+        });
+      },
     );
 
     canvas.addNode({
@@ -102,9 +117,14 @@ describe("TopologyChangeTimeoutLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
 
-    TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
+    TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
       canvas,
       algorithm,
+      (apply) => {
+        setTimeout(() => {
+          apply();
+        });
+      },
     );
 
     canvas.addNode({

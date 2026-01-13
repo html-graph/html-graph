@@ -32,11 +32,11 @@ const createCanvas = (): Canvas => {
 };
 
 describe("LayoutConfigurator", () => {
-  it("should configure topology change layout application strategy", async () => {
+  it("should configure topology change macrotask layout application strategy", async () => {
     const canvas = createCanvas();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "topologyChangeTimeout" },
+      applyOn: { type: "topologyChangeMacrotask" },
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -44,6 +44,23 @@ describe("LayoutConfigurator", () => {
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
     await wait(0);
+
+    const { x, y } = canvas.graph.getNode("node-1")!;
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should configure topology change microtask layout application strategy", async () => {
+    const canvas = createCanvas();
+    const config: LayoutParams = {
+      algorithm: new DummyLayoutAlgorithm(),
+      applyOn: { type: "topologyChangeMicrotask" },
+    };
+
+    LayoutConfigurator.configure(canvas, config);
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    await Promise.resolve();
 
     const { x, y } = canvas.graph.getNode("node-1")!;
     expect({ x, y }).toEqual({ x: 0, y: 0 });

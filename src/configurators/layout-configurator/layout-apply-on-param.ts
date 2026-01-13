@@ -1,8 +1,11 @@
 import { EventSubject } from "@/event-subject";
 
-export type LayourApplyOnParam =
+export type LayoutApplyOnParam =
   | {
-      readonly type: "topologyChangeTimeout";
+      readonly type: "topologyChangeMicrotask";
+    }
+  | {
+      readonly type: "topologyChangeMacrotask";
     }
   | {
       readonly type: "manual";

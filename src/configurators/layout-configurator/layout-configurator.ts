@@ -1,7 +1,7 @@
 import { LayoutParams } from "./layout-params";
 import { Canvas } from "@/canvas";
-import { ManualLayoutApplicationStrategyConfigurator } from "../manual-layout-application-strategy-configurator";
-import { TopologyChangeTimeoutLayoutApplicationStrategyConfigurator } from "../topology-change-timeout-layout-application-strategy-configurator";
+import { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
+import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, params: LayoutParams): void {
@@ -16,10 +16,29 @@ export class LayoutConfigurator {
         );
         break;
       }
-      case "topologyChangeTimeout": {
-        TopologyChangeTimeoutLayoutApplicationStrategyConfigurator.configure(
+
+      case "topologyChangeMacrotask": {
+        TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
           canvas,
           params.algorithm,
+          (apply) => {
+            setTimeout(() => {
+              apply();
+            });
+          },
+        );
+        break;
+      }
+
+      case "topologyChangeMicrotask": {
+        TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
+          canvas,
+          params.algorithm,
+          (apply) => {
+            queueMicrotask(() => {
+              apply();
+            });
+          },
         );
         break;
       }
