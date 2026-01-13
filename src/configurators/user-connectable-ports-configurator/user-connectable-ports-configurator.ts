@@ -97,25 +97,25 @@ export class UserConnectablePortsConfigurator {
 
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
-    const portCoords = this.canvas.viewport.createContentCoords({
+    const portPoint = this.canvas.viewport.createContentCoords({
       x: portX - canvasRect.x,
       y: portY - canvasRect.y,
     });
 
-    const cursorCoords = this.canvas.viewport.createContentCoords({
+    const cursorPoint = this.canvas.viewport.createContentCoords({
       x: cursor.x - canvasRect.x,
       y: cursor.y - canvasRect.y,
     });
 
     const staticParams: OverlayNodeParams = {
       overlayId: OverlayId.Static,
-      portCoords: portCoords,
+      portCoords: portPoint,
       portDirection: port.direction,
     };
 
     const draggingParams: OverlayNodeParams = {
       overlayId: OverlayId.Dragging,
-      portCoords: cursorCoords,
+      portCoords: cursorPoint,
       portDirection: this.params.dragPortDirection,
     };
 
