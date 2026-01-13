@@ -33,7 +33,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
   private readonly edgeStiffness: number;
 
-  private readonly fillerLayout: LayoutAlgorithm;
+  private readonly fillerLayoutAlgorithm: LayoutAlgorithm;
 
   public constructor(params: ForceDirectedAnimatedLayoutAlgorithmParams) {
     this.convergenceDelta = params.convergenceDelta;
@@ -56,7 +56,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
       nodeMass: params.nodeMass,
     });
 
-    this.fillerLayout = new RandomFillerLayoutAlgorithm({
+    this.fillerLayoutAlgorithm = new RandomFillerLayoutAlgorithm({
       rand: params.rand,
       sparsity: params.edgeEquilibriumLength,
     });
@@ -66,7 +66,8 @@ export class ForceDirectedAnimatedLayoutAlgorithm
     graph: Graph,
     dtSec: number,
   ): ReadonlyMap<Identifier, Point> {
-    const currentCoords = this.fillerLayout.calculateCoordinates(graph);
+    const currentCoords =
+      this.fillerLayoutAlgorithm.calculateCoordinates(graph);
 
     const iteration = new ForceDirectedAlgorithmIteration(
       graph,

@@ -25,23 +25,6 @@ export class BackgroundConfigurator {
 
   private visible = false;
 
-  private readonly resizeObserver = new ResizeObserver((entries) => {
-    const entry = entries[0];
-    const { width, height } = entry.contentRect;
-
-    this.svg.setAttribute("width", `${width}`);
-    this.svg.setAttribute("height", `${height}`);
-
-    this.patternRenderingRectangle.setAttribute("width", `${width}`);
-    this.patternRenderingRectangle.setAttribute("height", `${height}`);
-
-    const patternWidth = this.tileWidth / width;
-    const patternHeight = this.tileHeight / height;
-
-    this.pattern.setAttribute("width", `${patternWidth}`);
-    this.pattern.setAttribute("height", `${patternHeight}`);
-  });
-
   private readonly onAfterTransformUpdated = (): void => {
     const matrix = this.canvas.viewport.getContentMatrix();
     const x = matrix.x - this.halfTileWidth * matrix.scale;
@@ -76,7 +59,10 @@ export class BackgroundConfigurator {
     this.svg.appendChild(defs);
     this.svg.appendChild(this.patternRenderingRectangle);
 
-    this.resizeObserver.observe(this.backgroundHost);
+    this.updateDimensions();
+    this.canvas.viewport.onAfterResize.subscribe(() => {
+      this.updateDimensions();
+    });
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
     this.onAfterTransformUpdated();
@@ -101,5 +87,21 @@ export class BackgroundConfigurator {
       this.visible = true;
       this.backgroundHost.appendChild(this.svg);
     }
+  }
+
+  private updateDimensions(): void {
+    const { width, height } = this.canvas.viewport.getDimensions();
+
+    this.svg.setAttribute("width", `${width}`);
+    this.svg.setAttribute("height", `${height}`);
+
+    this.patternRenderingRectangle.setAttribute("width", `${width}`);
+    this.patternRenderingRectangle.setAttribute("height", `${height}`);
+
+    const patternWidth = this.tileWidth / width;
+    const patternHeight = this.tileHeight / height;
+
+    this.pattern.setAttribute("width", `${patternWidth}`);
+    this.pattern.setAttribute("height", `${patternHeight}`);
   }
 }

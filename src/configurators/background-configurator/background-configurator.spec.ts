@@ -3,15 +3,19 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
-import { createElement, defaultCanvasParams } from "@/mocks";
+import { createElement, defaultCanvasParams, triggerResizeFor } from "@/mocks";
 import { BackgroundParams } from "./background-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 
-const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
+const createCanvas = (): {
+  canvas: Canvas;
+  backgroundElement: HTMLElement;
+  element: HTMLElement;
+} => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const element = createElement({ width: 2500, height: 1000 });
+  const viewportStore = new ViewportStore(element);
   const backgroundElement = createElement({ width: 2500, height: 1000 });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
@@ -35,7 +39,7 @@ const createCanvas = (): { canvas: Canvas; backgroundElement: HTMLElement } => {
 
   BackgroundConfigurator.configure(canvas, params, backgroundElement);
 
-  return { canvas, backgroundElement };
+  return { canvas, backgroundElement, element };
 };
 
 describe("BackgroundConfigurator", () => {
@@ -52,6 +56,22 @@ describe("BackgroundConfigurator", () => {
     const height = svg.getAttribute("height");
 
     expect({ width, height }).toEqual({ width: "2500", height: "1000" });
+  });
+
+  it("should resize svg on canvas resize", () => {
+    const { backgroundElement, element } = createCanvas();
+
+    element.getBoundingClientRect = (): DOMRect => {
+      return new DOMRect(0, 0, 3000, 2000);
+    };
+
+    triggerResizeFor(element);
+
+    const svg = backgroundElement.children[0] as SVGSVGElement;
+    const width = svg.getAttribute("width");
+    const height = svg.getAttribute("height");
+
+    expect({ width, height }).toEqual({ width: "3000", height: "2000" });
   });
 
   it("should create svg defs element", () => {

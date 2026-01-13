@@ -29,8 +29,8 @@ const createCanvas = (options?: {
 }): Canvas => {
   const trigger = new EventSubject<RenderingBox>();
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const element = options?.element ?? document.createElement("div");
+  const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 

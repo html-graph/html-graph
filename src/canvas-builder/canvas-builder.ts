@@ -99,19 +99,24 @@ export class CanvasBuilder {
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly graphStore = new GraphStore();
+  private readonly graphStore: GraphStore;
 
-  private readonly viewportStore = new ViewportStore();
+  private readonly viewportStore: ViewportStore;
 
-  private readonly graph = new Graph(this.graphStore);
+  private readonly graph: Graph;
 
-  private readonly viewport = new Viewport(this.viewportStore);
+  private readonly viewport: Viewport;
 
   private readonly window: Window = window;
 
   private readonly animationStaticNodes = new Set<Identifier>();
 
-  public constructor(private readonly element: HTMLElement) {}
+  public constructor(private readonly element: HTMLElement) {
+    this.viewportStore = new ViewportStore(this.element);
+    this.viewport = new Viewport(this.viewportStore);
+    this.graphStore = new GraphStore();
+    this.graph = new Graph(this.graphStore);
+  }
 
   /**
    * specifies default values for graph entities
@@ -232,24 +237,7 @@ export class CanvasBuilder {
     this.used = true;
 
     const layers = new Layers(this.element);
-
-    let htmlView: HtmlView = new CoreHtmlView(
-      this.graphStore,
-      this.viewportStore,
-      layers.main,
-    );
-
-    if (this.virtualScrollConfig !== undefined) {
-      htmlView = new VirtualScrollHtmlView(
-        htmlView,
-        this.graphStore,
-        this.boxRenderingTrigger,
-        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
-      );
-    }
-
-    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
-
+    const htmlView = this.createHtmlView(layers.main);
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
     const canvas = new Canvas(
@@ -370,5 +358,24 @@ export class CanvasBuilder {
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
     return canvas;
+  }
+
+  private createHtmlView(host: HTMLElement): HtmlView {
+    let htmlView: HtmlView = new CoreHtmlView(
+      this.graphStore,
+      this.viewportStore,
+      host,
+    );
+
+    if (this.virtualScrollConfig !== undefined) {
+      htmlView = new VirtualScrollHtmlView(
+        htmlView,
+        this.graphStore,
+        this.boxRenderingTrigger,
+        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
+      );
+    }
+
+    return new LayoutHtmlView(htmlView, this.graphStore);
   }
 }

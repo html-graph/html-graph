@@ -11,8 +11,8 @@ const create = (): {
   readonly layoutHtmlView: LayoutHtmlView;
 } => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
   const element = document.createElement("div");
+  const viewportStore = new ViewportStore(element);
   const coreHtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const layoutHtmlView = new LayoutHtmlView(coreHtmlView, graphStore);
 

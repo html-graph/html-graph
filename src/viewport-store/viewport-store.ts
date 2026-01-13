@@ -3,18 +3,34 @@ import { calculateReverseMatrix } from "./calculate-reverse-matrix";
 import { initialMatrix } from "./initial-matrix";
 import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
+import { Dimensions } from "@/dimensions";
 
 export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;
 
   private contentMatrix: TransformState = initialMatrix;
 
+  private readonly beforeUpdateEmitter: EventEmitter<void>;
+
+  public readonly onBeforeUpdated: EventHandler<void>;
+
   private readonly afterUpdateEmitter: EventEmitter<void>;
 
   public readonly onAfterUpdated: EventHandler<void>;
 
-  public constructor() {
+  private readonly afterResizeEmitter: EventEmitter<void>;
+
+  public readonly onAfterResize: EventHandler<void>;
+
+  private observer: ResizeObserver = new ResizeObserver(() => {
+    this.afterResizeEmitter.emit();
+  });
+
+  public constructor(private readonly host: HTMLElement) {
     [this.afterUpdateEmitter, this.onAfterUpdated] = createPair<void>();
+    [this.beforeUpdateEmitter, this.onBeforeUpdated] = createPair<void>();
+    [this.afterResizeEmitter, this.onAfterResize] = createPair<void>();
+    this.observer.observe(this.host);
   }
 
   public getViewportMatrix(): TransformState {
@@ -32,6 +48,7 @@ export class ViewportStore {
       y: matrix.y ?? this.viewportMatrix.y,
     };
 
+    this.beforeUpdateEmitter.emit();
     this.contentMatrix = calculateReverseMatrix(this.viewportMatrix);
     this.afterUpdateEmitter.emit();
   }
@@ -43,7 +60,18 @@ export class ViewportStore {
       y: matrix.y ?? this.contentMatrix.y,
     };
 
+    this.beforeUpdateEmitter.emit();
     this.viewportMatrix = calculateReverseMatrix(this.contentMatrix);
     this.afterUpdateEmitter.emit();
+  }
+
+  public getDimensions(): Dimensions {
+    const { width, height } = this.host.getBoundingClientRect();
+
+    return { width, height };
+  }
+
+  public destroy(): void {
+    this.observer.disconnect();
   }
 }

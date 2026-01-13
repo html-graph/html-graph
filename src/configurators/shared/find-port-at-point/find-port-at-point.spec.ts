@@ -11,12 +11,11 @@ import { Viewport } from "@/viewport";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore();
-  const viewportStore = new ViewportStore();
-  const graph = new Graph(graphStore);
-  const viewport = new Viewport(viewportStore);
-
   const element =
     options?.element ?? createElement({ width: 1000, height: 1000 });
+  const viewportStore = new ViewportStore(element);
+  const graph = new Graph(graphStore);
+  const viewport = new Viewport(viewportStore);
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
