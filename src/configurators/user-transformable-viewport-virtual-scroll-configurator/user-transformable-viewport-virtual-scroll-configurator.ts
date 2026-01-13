@@ -15,7 +15,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   private readonly viewport: Viewport;
 
-  private previousScale: number;
+  private currentScale: number;
 
   private loadedArea: {
     readonly xFrom: number;
@@ -59,7 +59,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
     this.viewport = canvas.viewport;
 
-    this.previousScale = this.viewport.getViewportMatrix().scale;
+    this.currentScale = this.viewport.getViewportMatrix().scale;
     this.scheduleLoadAreaAroundViewport();
 
     this.viewport.onAfterResize.subscribe(() => {
@@ -82,10 +82,10 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       },
       onTransformChange: () => {
         this.userTransformInProgress = false;
-        const previousScale = this.previousScale;
-        this.previousScale = this.viewport.getViewportMatrix().scale;
+        const previousScale = this.currentScale;
+        this.currentScale = this.viewport.getViewportMatrix().scale;
 
-        if (previousScale !== this.previousScale) {
+        if (previousScale !== this.currentScale) {
           this.scheduleEnsureViewportAreaLoaded();
         }
 
