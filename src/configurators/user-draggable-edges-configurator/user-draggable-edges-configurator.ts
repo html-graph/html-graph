@@ -2,7 +2,6 @@ import { AddEdgeRequest, Canvas } from "@/canvas";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
-import { transformPoint } from "@/transform-point";
 import {
   createAddNodeOverlayRequest,
   createOverlayCanvas,
@@ -108,15 +107,14 @@ export class UserDraggableEdgesConfigurator {
       y: staticRect.y + staticRect.height / 2,
     };
 
-    const matrix = this.canvas.viewport.getViewportMatrix();
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
-    const staticPoint = transformPoint(matrix, {
+    const staticPoint = this.canvas.viewport.createContentCoords({
       x: staticCoords.x - canvasRect.x,
       y: staticCoords.y - canvasRect.y,
     });
 
-    const draggingPoint = transformPoint(matrix, {
+    const draggingPoint = this.canvas.viewport.createContentCoords({
       x: cursor.x - canvasRect.x,
       y: cursor.y - canvasRect.y,
     });
@@ -180,8 +178,8 @@ export class UserDraggableEdgesConfigurator {
       y: dragPoint.y - canvasRect.y,
     };
 
-    const matrix = this.canvas.viewport.getViewportMatrix();
-    const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
+    const nodeContentCoords =
+      this.canvas.viewport.createContentCoords(nodeViewCoords);
 
     this.overlayCanvas.updateNode(OverlayId.Dragging, {
       x: nodeContentCoords.x,

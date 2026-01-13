@@ -1,6 +1,7 @@
 import { createElement, triggerResizeFor } from "@/mocks";
 import { TransformState } from "./transform-state";
 import { ViewportStore } from "./viewport-store";
+import { Point } from "@/point";
 
 describe("ViewportStore", () => {
   it("should return initial viewport matrix", () => {
@@ -256,5 +257,43 @@ describe("ViewportStore", () => {
     triggerResizeFor(host);
 
     expect(callback).not.toHaveBeenCalled();
+  });
+
+  it("should create content coordinates based on viewport coordinates", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+
+    viewportStore.patchViewportMatrix({ scale: 2, x: 1, y: 1 });
+
+    const contentCoordinates = viewportStore.createContentCoords({
+      x: 2,
+      y: 2,
+    });
+
+    const expected: Point = {
+      x: 5,
+      y: 5,
+    };
+
+    expect(contentCoordinates).toEqual(expected);
+  });
+
+  it("should create viewport coordinates based on content coordinates", () => {
+    const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
+    const viewportStore = new ViewportStore(host);
+
+    viewportStore.patchContentMatrix({ scale: 2, x: 1, y: 1 });
+
+    const viewportCoordinates = viewportStore.createViewportCoords({
+      x: 2,
+      y: 2,
+    });
+
+    const expected: Point = {
+      x: 5,
+      y: 5,
+    };
+
+    expect(viewportCoordinates).toEqual(expected);
   });
 });

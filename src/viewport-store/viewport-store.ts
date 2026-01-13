@@ -4,6 +4,8 @@ import { initialMatrix } from "./initial-matrix";
 import { TransformState } from "./transform-state";
 import { PatchTransformRequest } from "./patch-transform-request";
 import { Dimensions } from "@/dimensions";
+import { Point } from "@/point";
+import { transformPoint } from "./transform-point";
 
 export class ViewportStore {
   private viewportMatrix: TransformState = initialMatrix;
@@ -69,6 +71,14 @@ export class ViewportStore {
     const { width, height } = this.host.getBoundingClientRect();
 
     return { width, height };
+  }
+
+  public createContentCoords(viewportCoords: Point): Point {
+    return transformPoint(this.viewportMatrix, viewportCoords);
+  }
+
+  public createViewportCoords(contentCoords: Point): Point {
+    return transformPoint(this.contentMatrix, contentCoords);
   }
 
   public destroy(): void {

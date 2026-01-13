@@ -8,7 +8,6 @@ import {
   OverlayNodeParams,
 } from "../shared";
 import { Point } from "@/point";
-import { transformPoint } from "@/transform-point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
@@ -97,14 +96,13 @@ export class UserConnectablePortsConfigurator {
     const portY = portRect.y + portRect.height / 2;
 
     const canvasRect = this.overlayLayer.getBoundingClientRect();
-    const matrix = this.canvas.viewport.getViewportMatrix();
 
-    const portCoords = transformPoint(matrix, {
+    const portCoords = this.canvas.viewport.createContentCoords({
       x: portX - canvasRect.x,
       y: portY - canvasRect.y,
     });
 
-    const cursorCoords = transformPoint(matrix, {
+    const cursorCoords = this.canvas.viewport.createContentCoords({
       x: cursor.x - canvasRect.x,
       y: cursor.y - canvasRect.y,
     });
@@ -179,8 +177,8 @@ export class UserConnectablePortsConfigurator {
       y: dragPoint.y - canvasRect.y,
     };
 
-    const matrix = this.canvas.viewport.getViewportMatrix();
-    const nodeContentCoords = transformPoint(matrix, nodeViewCoords);
+    const nodeContentCoords =
+      this.canvas.viewport.createContentCoords(nodeViewCoords);
 
     this.overlayCanvas.updateNode(OverlayId.Dragging, {
       x: nodeContentCoords.x,

@@ -1,9 +1,8 @@
 import { Point } from "@/point";
 import { GraphStore, StorePort } from "@/graph-store";
-import { TransformState, ViewportStore } from "@/viewport-store";
+import { ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
 import { HtmlView } from "../html-view";
-import { transformPoint } from "@/transform-point";
 import { ConnectionCategory } from "@/edges/connection-category";
 import { createHost } from "./create-host";
 import { createContainer } from "./create-container";
@@ -131,21 +130,10 @@ export class CoreHtmlView implements HtmlView {
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
     const rectCanvas = this.host.getBoundingClientRect();
-    const viewportMatrix = this.viewportStore.getViewportMatrix();
 
-    const from = this.createEdgeRenderPort(
-      portFrom,
-      rectFrom,
-      rectCanvas,
-      viewportMatrix,
-    );
+    const from = this.createEdgeRenderPort(portFrom, rectFrom, rectCanvas);
 
-    const to = this.createEdgeRenderPort(
-      portTo,
-      rectTo,
-      rectCanvas,
-      viewportMatrix,
-    );
+    const to = this.createEdgeRenderPort(portTo, rectTo, rectCanvas);
 
     let category = ConnectionCategory.Line;
 
@@ -168,20 +156,21 @@ export class CoreHtmlView implements HtmlView {
     port: StorePort,
     rectPort: DOMRect,
     rectCanvas: DOMRect,
-    viewportMatrix: TransformState,
   ): EdgeRenderPort {
     const viewportPoint: Point = {
       x: rectPort.left - rectCanvas.left,
       y: rectPort.top - rectCanvas.top,
     };
 
-    const contentPoint: Point = transformPoint(viewportMatrix, viewportPoint);
+    const contentPoint: Point =
+      this.viewportStore.createContentCoords(viewportPoint);
+    const scale = this.viewportStore.getViewportMatrix().scale;
 
     return {
       x: contentPoint.x,
       y: contentPoint.y,
-      width: rectPort.width * viewportMatrix.scale,
-      height: rectPort.height * viewportMatrix.scale,
+      width: rectPort.width * scale,
+      height: rectPort.height * scale,
       direction: port.payload.direction,
     };
   }
