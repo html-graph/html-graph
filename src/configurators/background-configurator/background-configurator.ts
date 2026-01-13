@@ -25,10 +25,6 @@ export class BackgroundConfigurator {
 
   private visible = false;
 
-  private readonly resizeObserver = new ResizeObserver(() => {
-    this.updateDimensions();
-  });
-
   private readonly onAfterTransformUpdated = (): void => {
     const matrix = this.canvas.viewport.getContentMatrix();
     const x = matrix.x - this.halfTileWidth * matrix.scale;
@@ -63,7 +59,10 @@ export class BackgroundConfigurator {
     this.svg.appendChild(defs);
     this.svg.appendChild(this.patternRenderingRectangle);
 
-    this.resizeObserver.observe(this.backgroundHost);
+    this.updateDimensions();
+    this.canvas.viewport.onAfterResize.subscribe(() => {
+      this.updateDimensions();
+    });
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterTransformUpdated);
     this.onAfterTransformUpdated();
