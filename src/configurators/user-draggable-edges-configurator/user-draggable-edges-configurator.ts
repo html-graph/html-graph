@@ -130,13 +130,13 @@ export class UserDraggableEdgesConfigurator {
     this.canvas.removeEdge(edgeId);
 
     const staticParams: OverlayNodeParams = {
-      overlayId: OverlayId.Static,
+      overlayNodeId: OverlayId.StaticNodeId,
       portCoords: staticPoint,
       portDirection: staticPort.direction,
     };
 
     const draggingParams: OverlayNodeParams = {
-      overlayId: OverlayId.Dragging,
+      overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: draggingPoint,
       portDirection: draggingPort.direction,
     };
@@ -150,13 +150,13 @@ export class UserDraggableEdgesConfigurator {
 
     const overlayEdgeShape =
       this.params.draggingEdgeShapeFactory !== null
-        ? this.params.draggingEdgeShapeFactory(OverlayId.Edge)
+        ? this.params.draggingEdgeShapeFactory(OverlayId.EdgeId)
         : edge.shape;
 
     this.overlayCanvas.addEdge({
-      id: OverlayId.Edge,
-      from: sourceParams.overlayId,
-      to: targetParams.overlayId,
+      id: OverlayId.EdgeId,
+      from: sourceParams.overlayNodeId,
+      to: targetParams.overlayNodeId,
       shape: overlayEdgeShape,
     });
 
@@ -181,7 +181,7 @@ export class UserDraggableEdgesConfigurator {
     const nodeContentCoords =
       this.canvas.viewport.createContentCoords(nodeViewCoords);
 
-    this.overlayCanvas.updateNode(OverlayId.Dragging, {
+    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });
@@ -189,7 +189,7 @@ export class UserDraggableEdgesConfigurator {
 
   private tryCreateConnection(cursor: Point): void {
     const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
-    this.overlayCanvas.removeEdge(OverlayId.Edge);
+    this.overlayCanvas.removeEdge(OverlayId.EdgeId);
 
     if (draggingPortId === null) {
       const edge = this.draggingEdgePayload!;

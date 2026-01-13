@@ -4,7 +4,7 @@ import { OverlayNodeParams } from "./overlay-node-params";
 describe("createAddNodeOverlayRequest", () => {
   it("should create add node overlay request", () => {
     const params: OverlayNodeParams = {
-      overlayId: "node",
+      overlayNodeId: "node",
       portCoords: { x: 10, y: 20 },
       portDirection: Math.PI,
     };

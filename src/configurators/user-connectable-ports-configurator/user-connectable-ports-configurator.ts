@@ -108,13 +108,13 @@ export class UserConnectablePortsConfigurator {
     });
 
     const staticParams: OverlayNodeParams = {
-      overlayId: OverlayId.Static,
+      overlayNodeId: OverlayId.StaticNodeId,
       portCoords: portPoint,
       portDirection: port.direction,
     };
 
     const draggingParams: OverlayNodeParams = {
-      overlayId: OverlayId.Dragging,
+      overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: cursorPoint,
       portDirection: this.params.dragPortDirection,
     };
@@ -128,9 +128,9 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(sourceParams));
     this.overlayCanvas.addNode(createAddNodeOverlayRequest(targetParams));
     this.overlayCanvas.addEdge({
-      from: sourceParams.overlayId,
-      to: targetParams.overlayId,
-      shape: this.params.edgeShapeFactory(OverlayId.Edge),
+      from: sourceParams.overlayNodeId,
+      to: targetParams.overlayNodeId,
+      shape: this.params.edgeShapeFactory(OverlayId.EdgeId),
     });
   }
 
@@ -177,7 +177,7 @@ export class UserConnectablePortsConfigurator {
       y: dragPoint.y - canvasRect.y,
     });
 
-    this.overlayCanvas.updateNode(OverlayId.Dragging, {
+    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
       x: nodeContentCoords.x,
       y: nodeContentCoords.y,
     });
