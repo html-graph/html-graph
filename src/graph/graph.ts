@@ -84,8 +84,16 @@ export class Graph {
     };
   }
 
+  public findNodeIdByElement(element: HTMLElement): Identifier | null {
+    return this.graphStore.findNodeIdByElement(element) ?? null;
+  }
+
+  /**
+   * @deprecated
+   * use findNodeIdByElement instead
+   */
   public getElementNodeId(element: HTMLElement): Identifier | null {
-    return this.graphStore.getElementNodeId(element) ?? null;
+    return this.graphStore.findNodeIdByElement(element) ?? null;
   }
 
   public getAllNodeIds(): readonly Identifier[] {
@@ -118,8 +126,16 @@ export class Graph {
     return this.graphStore.getNodePortIds(nodeId) ?? null;
   }
 
+  /**
+   * @deprecated
+   * use findNodeIdByElement instead
+   */
   public getElementPortIds(element: HTMLElement): readonly Identifier[] {
-    return [...this.graphStore.getElementPortIds(element)];
+    return this.graphStore.findPortIdsByElement(element);
+  }
+
+  public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {
+    return this.graphStore.findPortIdsByElement(element);
   }
 
   public getAllEdgeIds(): readonly Identifier[] {
