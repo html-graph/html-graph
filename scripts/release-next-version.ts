@@ -4,7 +4,53 @@ import { stdin, stdout } from "process";
 import { execute } from "./execute";
 
 class ReleaseNextVersion {
-  public static do(): void {
+  public static async do(): Promise<void> {
+    const cmdsBuild = [
+      `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
+      "npx prettier ./package.json --write",
+      "npm install",
+      "npm run before-build",
+      "npm run build",
+    ];
+
+    await execute(cmdsBuild.join(" && "));
+
+    const newVersion = this.updateVersion();
+
+    const cmdsBeforePublish = [
+      "npx prettier ./package.json --write",
+      "npm install",
+      "npm run before-build",
+      "npm run build",
+      "git add -A",
+      `git commit -m "release ${newVersion}"`,
+      `git tag -a v${newVersion} -m "new version ${newVersion}"`,
+      "git push",
+      "git push --tags",
+      "git push gitverse master",
+      "git push --tags gitverse master",
+    ];
+
+    await execute(cmdsBeforePublish.join(" && "));
+
+    const otp = await this.askCode();
+
+    await execute(`npm publish --access=public --otp=${otp}`);
+  }
+
+  private static askCode(): Promise<string> {
+    return new Promise((resolve) => {
+      const rl = readline.createInterface({ input: stdin, output: stdout });
+
+      rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
+        resolve(answer);
+
+        rl.close();
+      });
+    });
+  }
+
+  private static updateVersion(): string {
     const content = readFileSync("./package.json", "utf8");
 
     const pkg = JSON.parse(content);
@@ -39,36 +85,7 @@ class ReleaseNextVersion {
 
     writeFileSync("./package.json", newContent);
 
-    const cmdsBeforePublish = [
-      `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
-      "npx prettier ./package.json --write",
-      "npm install",
-      "npm run before-build",
-      "npm run build",
-      "git add -A",
-      `git commit -m "release ${newVersion}"`,
-      `git tag -a v${newVersion} -m "new version ${newVersion}"`,
-      "git push",
-      "git push --tags",
-      "git push gitverse master",
-      "git push --tags gitverse master",
-    ];
-
-    execute(cmdsBeforePublish.join(" && "))
-      .then(() => this.askCode())
-      .then((otp) => execute(`npm publish --access=public --otp=${otp}`));
-  }
-
-  private static askCode(): Promise<string> {
-    return new Promise((resolve) => {
-      const rl = readline.createInterface({ input: stdin, output: stdout });
-
-      rl.question("Ready for publishing! Enter OTP code: ", (answer) => {
-        resolve(answer);
-
-        rl.close();
-      });
-    });
+    return newVersion;
   }
 }
 
