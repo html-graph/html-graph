@@ -128,7 +128,7 @@ export class Graph {
 
   /**
    * @deprecated
-   * use findNodeIdByElement instead
+   * use findPortIdsByElement instead
    */
   public getElementPortIds(element: HTMLElement): readonly Identifier[] {
     return this.graphStore.findPortIdsByElement(element);
