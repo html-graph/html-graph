@@ -19,6 +19,8 @@ jobs:
         run: npm run check-formatting
       - name: Lint code
         run: npm run lint
+      - name: Check dependency cycles
+        run: npm run check-dependency-cycles
       - name: Run unit tests
         run: npm run test:ci
       - name: install e2e testing dependencies

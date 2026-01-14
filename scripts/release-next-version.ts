@@ -11,6 +11,7 @@ class ReleaseNextVersion {
       "npm install",
       "npm run before-build",
       "npm run build",
+      "npm run make-deps-graph",
     ];
 
     await execute(cmdsBuild.join(" && "));
@@ -18,10 +19,6 @@ class ReleaseNextVersion {
     const newVersion = this.updateVersion();
 
     const cmdsBeforePublish = [
-      "npx prettier ./package.json --write",
-      "npm install",
-      "npm run before-build",
-      "npm run build",
       "git add -A",
       `git commit -m "release ${newVersion}"`,
       `git tag -a v${newVersion} -m "new version ${newVersion}"`,
