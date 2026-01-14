@@ -9,15 +9,17 @@ class ReleaseNextVersion {
       `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
     );
 
+    const cmdsBeforeBuild = [
+      "npm install",
+      "npm run before-build",
+      "npm run check-dependency-cycles",
+    ];
+
+    await execute(cmdsBeforeBuild.join(" && "));
+
     const newVersion = this.updateVersion();
 
-    const cmdsBuild = [
-      "npm install",
-      "npx prettier ./package.json --write",
-      "npm run before-build",
-      "npm run build",
-      "npm run make-deps-graph",
-    ];
+    const cmdsBuild = ["npx prettier ./package.json --write", "npm run build"];
 
     await execute(cmdsBuild.join(" && "));
 
