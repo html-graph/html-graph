@@ -9,6 +9,8 @@ class ReleaseNextVersion {
       `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
     );
 
+    const newVersion = this.updateVersion();
+
     const cmdsBuild = [
       "npm install",
       "npx prettier ./package.json --write",
@@ -18,8 +20,6 @@ class ReleaseNextVersion {
     ];
 
     await execute(cmdsBuild.join(" && "));
-
-    const newVersion = this.updateVersion();
 
     const cmdsBeforePublish = [
       "git add -A",
