@@ -1192,7 +1192,9 @@ describe("GraphStore", () => {
 
     store.addNode(addNodeRequest1);
 
-    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual("node-1");
+    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual(
+      "node-1",
+    );
   });
 
   it("should remove node element", () => {
@@ -1203,7 +1205,9 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.removeNode(addNodeRequest1.id);
 
-    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual(undefined);
+    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual(
+      undefined,
+    );
   });
 
   it("should clear node elements", () => {
@@ -1214,6 +1218,8 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.clear();
 
-    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual(undefined);
+    expect(store.findNodeIdByElement(addNodeRequest1.element)).toEqual(
+      undefined,
+    );
   });
 });
