@@ -5,10 +5,13 @@ import { execute } from "./execute";
 
 class ReleaseNextVersion {
   public static async do(): Promise<void> {
-    const cmdsBuild = [
+    await execute(
       `if [ "$(git rev-parse --abbrev-ref HEAD)" != "master" ]; then exit 1; fi`,
-      "npx prettier ./package.json --write",
+    );
+
+    const cmdsBuild = [
       "npm install",
+      "npx prettier ./package.json --write",
       "npm run before-build",
       "npm run build",
       "npm run make-deps-graph",
