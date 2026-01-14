@@ -88,7 +88,7 @@ const createAddEdgeRequest1Out1In = (): AddEdgeRequest => {
 };
 
 describe("GraphStore", () => {
-  it("should return undefined for non-existing node", () => {
+  it("should return undefined for nonexisting node", () => {
     const store = new GraphStore();
 
     expect(store.getNode(1)).toBe(undefined);
@@ -113,6 +113,22 @@ describe("GraphStore", () => {
     };
 
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
+  });
+
+  it("should return false for nonexisting node check", () => {
+    const store = new GraphStore();
+
+    expect(store.hasNode("node-1")).toBe(false);
+  });
+
+  it("should return true for existing node check", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(store.hasNode(addNodeRequest1.id)).toBe(true);
   });
 
   it("should emit event after node added", () => {
@@ -265,10 +281,27 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
-  it("should return undefined for non-existing port", () => {
+  it("should return undefined for nonexisting port", () => {
     const store = new GraphStore();
 
     expect(store.getPort(1)).toBe(undefined);
+  });
+
+  it("should return false for nonexisting port check", () => {
+    const store = new GraphStore();
+
+    expect(store.hasPort("port-1")).toBe(false);
+  });
+
+  it("should return true for existing port check", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+
+    expect(store.hasPort(addPortRequest1Out.id)).toBe(true);
   });
 
   it("should return specified port for existing port", () => {
@@ -361,7 +394,7 @@ describe("GraphStore", () => {
     expect(store.getAllPortIds()).toEqual([addPortRequest1Out.id]);
   });
 
-  it("should return undefined when getting ports of non-existing node", () => {
+  it("should return undefined when getting ports of nonexisting node", () => {
     const store = new GraphStore();
 
     expect(store.getNodePortIds(1)).toBe(undefined);
@@ -411,10 +444,34 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addPortRequest1Out.id);
   });
 
-  it("should return undefined when getting non-existing id", () => {
+  it("should return undefined when getting nonexisting edge id", () => {
     const store = new GraphStore();
 
     expect(store.getEdge(1)).toBe(undefined);
+  });
+
+  it("should return false for nonexisting edge check", () => {
+    const store = new GraphStore();
+
+    expect(store.hasEdge("edge-1")).toBe(false);
+  });
+
+  it("should return true for existing edge check", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out2In);
+
+    expect(store.hasEdge(addEdgeRequest1Out2In.id)).toBe(true);
   });
 
   it("should return specified edge", () => {

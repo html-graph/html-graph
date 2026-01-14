@@ -62,6 +62,10 @@ export class Graph {
     this.onBeforeClear = this.graphStore.onBeforeClear;
   }
 
+  public hasNode(nodeId: Identifier): boolean {
+    return this.graphStore.hasNode(nodeId);
+  }
+
   public getNode(nodeId: Identifier): GraphNode | null {
     const node = this.graphStore.getNode(nodeId);
 
@@ -86,6 +90,10 @@ export class Graph {
 
   public getAllNodeIds(): readonly Identifier[] {
     return this.graphStore.getAllNodeIds();
+  }
+
+  public hasPort(portId: Identifier): boolean {
+    return this.graphStore.hasPort(portId);
   }
 
   public getPort(portId: Identifier): GraphPort | null {
@@ -116,6 +124,10 @@ export class Graph {
 
   public getAllEdgeIds(): readonly Identifier[] {
     return this.graphStore.getAllEdgeIds();
+  }
+
+  public hasEdge(edgeId: Identifier): boolean {
+    return this.graphStore.hasEdge(edgeId);
   }
 
   public getEdge(edgeId: Identifier): GraphEdge | null {

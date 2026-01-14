@@ -3,7 +3,7 @@ module.exports = {
   forbidden: [
     {
       name: "no-circular",
-      severity: "warn",
+      severity: "error",
       comment:
         "This dependency is part of a circular relationship. You might want to revise " +
         "your solution (i.e. use dependency inversion, make sure the modules have a single responsibility) ",
@@ -202,26 +202,26 @@ module.exports = {
        module systems it knows of. It's the default because it's the safe option
        It might come at a performance penalty, though.
        moduleSystems: ['amd', 'cjs', 'es6', 'tsd']
-      
+
        As in practice only commonjs ('cjs') and ecmascript modules ('es6')
        are widely used, you can limit the moduleSystems to those.
      */
 
     // moduleSystems: ['cjs', 'es6'],
 
-    /* 
+    /*
       false: don't look at JSDoc imports (the default)
       true: dependency-cruiser will detect dependencies in JSDoc-style
       import statements. Implies "parser": "tsc", so the dependency-cruiser
       will use the typescript parser for JavaScript files.
-     
+
       For this to work the typescript compiler will need to be installed in the
       same spot as you're running dependency-cruiser from.
      */
     // detectJSDocImports: true,
 
     /* prefix for links in html and svg output (e.g. 'https://github.com/you/yourrepo/blob/main/'
-       to open it on your online repo or `vscode://file/${process.cwd()}/` to 
+       to open it on your online repo or `vscode://file/${process.cwd()}/` to
        open it in visual studio code),
      */
     // prefix: `vscode://file/${process.cwd()}/`,
@@ -266,7 +266,7 @@ module.exports = {
        to './webpack.conf.js'.
 
        The (optional) `env` and `arguments` attributes contain the parameters
-       to be passed if your webpack config is a function and takes them (see 
+       to be passed if your webpack config is a function and takes them (see
         webpack documentation for details)
      */
     // webpackConfig: {
@@ -317,8 +317,8 @@ module.exports = {
          A list of alias fields in package.jsons
          See [this specification](https://github.com/defunctzombie/package-browser-field-spec) and
          the webpack [resolve.alias](https://webpack.js.org/configuration/resolve/#resolvealiasfields)
-         documentation 
-         
+         documentation
+
          Defaults to an empty array (= don't use alias fields).
        */
       // aliasFields: ["browser"],

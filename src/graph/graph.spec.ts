@@ -76,6 +76,24 @@ describe("Graph", () => {
     expect(graph.getNode(1)).toBe(null);
   });
 
+  it("should return false for nonexisting node check", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    expect(graph.hasNode("node-1")).toBe(false);
+  });
+
+  it("should return true for existing node check", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(graph.hasNode(addNodeRequest1.id)).toBe(true);
+  });
+
   it("should return specified node", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
@@ -84,7 +102,7 @@ describe("Graph", () => {
 
     store.addNode(addNodeRequest1);
 
-    expect(graph.getNode("node-1")).toStrictEqual({
+    expect(graph.getNode(addNodeRequest1.id)).toStrictEqual({
       element: addNodeRequest1.element,
       x: addNodeRequest1.x,
       y: addNodeRequest1.y,
@@ -185,6 +203,28 @@ describe("Graph", () => {
     const graph = new Graph(store);
 
     expect(graph.getPort(1)).toBe(null);
+  });
+
+  it("should return false for nonexisting port check", () => {
+    const store = new GraphStore();
+
+    const graph = new Graph(store);
+
+    expect(graph.hasPort("port-1")).toBe(false);
+  });
+
+  it("should return true for existing port check", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    const graph = new Graph(store);
+
+    expect(graph.hasPort(addPortRequest1.id)).toBe(true);
   });
 
   it("should return specified port", () => {
@@ -404,6 +444,32 @@ describe("Graph", () => {
     const graph = new Graph(store);
 
     expect(graph.getEdge(1)).toBe(null);
+  });
+
+  it("should return false for nonexisting edge check", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    expect(graph.hasEdge("edge-1")).toBe(false);
+  });
+
+  it("should return true for existing edge", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    expect(graph.hasEdge(addEdgeRequest12.id)).toBe(true);
   });
 
   it("should return specified edge", () => {
