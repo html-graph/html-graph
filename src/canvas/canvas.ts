@@ -163,7 +163,7 @@ export class Canvas {
       throw new CanvasError("failed to add node with existing id");
     }
 
-    if (this.graphStore.getElementNodeId(request.element) !== undefined) {
+    if (this.graphStore.findNodeIdByElement(request.element) !== undefined) {
       throw new CanvasError(
         "failed to add node with html element already in use by another node",
       );

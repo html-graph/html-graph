@@ -751,7 +751,7 @@ describe("Graph", () => {
     expect(handler).toHaveBeenCalled();
   });
 
-  it("should return marked port ids for element", () => {
+  it("should return marked port ids for element legacy", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
@@ -766,7 +766,22 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return node id for element", () => {
+  it("should return marked port ids for element", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1);
+
+    expect(graph.findPortIdsByElement(addPortRequest1.element)).toEqual([
+      addPortRequest1.id,
+    ]);
+  });
+
+  it("should return node id for element legacy", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
@@ -779,12 +794,34 @@ describe("Graph", () => {
     );
   });
 
-  it("should return null when element is not a node", () => {
+  it("should return null when element is not a node legacy", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
     const element = document.createElement("div");
 
     expect(graph.getElementNodeId(element)).toEqual(null);
+  });
+
+  it("should return node id for element", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(graph.findNodeIdByElement(addNodeRequest1.element)).toEqual(
+      addNodeRequest1.id,
+    );
+  });
+
+  it("should return null when element is not a node", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const element = document.createElement("div");
+
+    expect(graph.findNodeIdByElement(element)).toEqual(null);
   });
 });

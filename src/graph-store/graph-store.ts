@@ -149,7 +149,7 @@ export class GraphStore {
     return Array.from(this.nodes.keys());
   }
 
-  public getElementNodeId(element: HTMLElement): Identifier | undefined {
+  public findNodeIdByElement(element: HTMLElement): Identifier | undefined {
     return this.nodesElementsMap.get(element);
   }
 
@@ -218,7 +218,7 @@ export class GraphStore {
     return Array.from(this.ports.keys());
   }
 
-  public getElementPortIds(element: HTMLElement): readonly Identifier[] {
+  public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {
     return this.elementPorts.getMultiBySingle(element);
   }
 

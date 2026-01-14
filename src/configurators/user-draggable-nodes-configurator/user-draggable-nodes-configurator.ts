@@ -58,7 +58,7 @@ export class UserDraggableNodesConfigurator {
     }
 
     const element = event.currentTarget as HTMLElement;
-    const nodeId = this.graph.getElementNodeId(element)!;
+    const nodeId = this.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.params.nodeDragVerifier(nodeId);
@@ -107,7 +107,7 @@ export class UserDraggableNodesConfigurator {
     const touch = event.touches[0];
 
     const element = event.currentTarget as HTMLElement;
-    const nodeId = this.canvas.graph.getElementNodeId(element)!;
+    const nodeId = this.canvas.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId)!;
 
     const isDragAllowed = this.params.nodeDragVerifier({
