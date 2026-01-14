@@ -113,6 +113,18 @@ export class GraphStore {
     [this.beforeClearEmitter, this.onBeforeClear] = createPair();
   }
 
+  public hasNode(nodeId: Identifier): boolean {
+    return this.nodes.has(nodeId);
+  }
+
+  /**
+   * TODO: v8
+   * throw error when node does not exist
+   */
+  public getNode(nodeId: Identifier): StoreNode | undefined {
+    return this.nodes.get(nodeId);
+  }
+
   public addNode(request: AddNodeRequest): void {
     const ports = new Map<Identifier, HTMLElement>();
 
@@ -135,10 +147,6 @@ export class GraphStore {
 
   public getAllNodeIds(): readonly Identifier[] {
     return Array.from(this.nodes.keys());
-  }
-
-  public getNode(nodeId: Identifier): StoreNode | undefined {
-    return this.nodes.get(nodeId);
   }
 
   public getElementNodeId(element: HTMLElement): Identifier | undefined {
@@ -167,6 +175,18 @@ export class GraphStore {
     this.nodes.delete(nodeId);
   }
 
+  public hasPort(portId: Identifier): boolean {
+    return this.ports.has(portId);
+  }
+
+  /**
+   * TODO: v8
+   * throw error when port does not exist
+   */
+  public getPort(portId: Identifier): StorePort | undefined {
+    return this.ports.get(portId);
+  }
+
   public addPort(request: AddPortRequest): void {
     this.ports.set(request.id, {
       element: request.element,
@@ -184,10 +204,6 @@ export class GraphStore {
 
     this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
     this.afterPortAddedEmitter.emit(request.id);
-  }
-
-  public getPort(portId: Identifier): StorePort | undefined {
-    return this.ports.get(portId);
   }
 
   public updatePort(portId: Identifier, request: UpdatePortRequest): void {
@@ -223,6 +239,18 @@ export class GraphStore {
     this.nodes.get(nodeId)!.ports.delete(portId);
     this.ports.delete(portId);
     this.elementPorts.removeByMulti(portId);
+  }
+
+  public hasEdge(edgeId: Identifier): boolean {
+    return this.edges.has(edgeId);
+  }
+
+  /**
+   * TODO: v8
+   * throw error when edge does not exist
+   */
+  public getEdge(edgeId: Identifier): StoreEdge | undefined {
+    return this.edges.get(edgeId);
   }
 
   public addEdge(request: AddEdgeRequest): void {
@@ -262,10 +290,6 @@ export class GraphStore {
 
   public getAllEdgeIds(): readonly Identifier[] {
     return Array.from(this.edges.keys());
-  }
-
-  public getEdge(edgeId: Identifier): StoreEdge | undefined {
-    return this.edges.get(edgeId);
   }
 
   public removeEdge(edgeId: Identifier): void {

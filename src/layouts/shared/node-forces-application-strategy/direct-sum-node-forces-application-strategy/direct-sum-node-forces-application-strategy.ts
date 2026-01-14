@@ -2,7 +2,7 @@ import { Identifier } from "@/identifier";
 import { MutablePoint, Point } from "@/point";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 import { DirectSumNodeForcesApplicationStrategyParams } from "./direct-sum-node-forces-application-strategy-params";
-import { DistanceVectorGenerator } from "../../../shared";
+import { DistanceVectorGenerator } from "../../distance-vector-generator";
 import { calculateNodeRepulsiveForce } from "../../calculate-node-repulsive-force";
 
 export class DirectSumNodeForcesApplicationStrategy

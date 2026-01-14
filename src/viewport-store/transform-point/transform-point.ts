@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { TransformState } from "@/viewport-store";
+import { TransformState } from "../transform-state";
 
 export const transformPoint = (matrix: TransformState, point: Point): Point => {
   return {

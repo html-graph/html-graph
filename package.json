@@ -40,6 +40,7 @@
     "release-next-version:minor": "tsx ./scripts/release-next-version.ts -- --minor",
     "release-next-version:major": "tsx ./scripts/release-next-version.ts -- --major",
     "make-deps-graph": "npx depcruise src --include-only \"^src\" --output-type dot > ./deps-graph/deps-graph.dot",
+    "check-dependency-cycles": "npm run make-deps-graph && tsx ./scripts/check-dependency-cycles.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --config=./jest-ci.config.ts",

@@ -17,16 +17,16 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 
 export class Canvas {
-  private readonly nodeIdGenerator = new IdGenerator(
-    (nodeId) => this.graphStore.getNode(nodeId) !== undefined,
+  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
+    this.graphStore.hasNode(nodeId),
   );
 
-  private readonly portIdGenerator = new IdGenerator(
-    (portId) => this.graphStore.getPort(portId) !== undefined,
+  private readonly portIdGenerator = new IdGenerator((portId) =>
+    this.graphStore.hasPort(portId),
   );
 
-  private readonly edgeIdGenerator = new IdGenerator(
-    (edgeId) => this.graphStore.getEdge(edgeId) !== undefined,
+  private readonly edgeIdGenerator = new IdGenerator((edgeId) =>
+    this.graphStore.hasEdge(edgeId),
   );
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
@@ -159,7 +159,7 @@ export class Canvas {
   public addNode(request: AddNodeRequest): Canvas {
     const id = this.nodeIdGenerator.create(request.id);
 
-    if (this.graphStore.getNode(id) !== undefined) {
+    if (this.graphStore.hasNode(id)) {
       throw new CanvasError("failed to add node with existing id");
     }
 
@@ -196,9 +196,7 @@ export class Canvas {
    * updates node parameters
    */
   public updateNode(nodeId: Identifier, request?: UpdateNodeRequest): Canvas {
-    const node = this.graphStore.getNode(nodeId);
-
-    if (node === undefined) {
+    if (!this.graphStore.hasNode(nodeId)) {
       throw new CanvasError("failed to update nonexistent node");
     }
 
@@ -213,7 +211,7 @@ export class Canvas {
    * all the edges adjacent to node get removed
    */
   public removeNode(nodeId: Identifier): Canvas {
-    if (this.graphStore.getNode(nodeId) === undefined) {
+    if (!this.graphStore.hasNode(nodeId)) {
       throw new CanvasError("failed to remove nonexistent node");
     }
 
@@ -228,11 +226,11 @@ export class Canvas {
   public markPort(request: MarkPortRequest): Canvas {
     const id = this.portIdGenerator.create(request.id);
 
-    if (this.graphStore.getPort(id) !== undefined) {
+    if (this.graphStore.hasPort(id)) {
       throw new CanvasError("failed to add port with existing id");
     }
 
-    if (this.graphStore.getNode(request.nodeId) === undefined) {
+    if (!this.graphStore.hasNode(request.nodeId)) {
       throw new CanvasError("failed to mark port for nonexistent node");
     }
 
@@ -250,9 +248,7 @@ export class Canvas {
    * updates port and edges attached to it
    */
   public updatePort(portId: Identifier, request?: UpdatePortRequest): Canvas {
-    const port = this.graphStore.getPort(portId);
-
-    if (port === undefined) {
+    if (!this.graphStore.hasPort(portId)) {
       throw new CanvasError("failed to update nonexistent port");
     }
 
@@ -266,7 +262,7 @@ export class Canvas {
    * all the edges adjacent to the port get removed
    */
   public unmarkPort(portId: Identifier): Canvas {
-    if (this.graphStore.getPort(portId) === undefined) {
+    if (!this.graphStore.hasPort(portId)) {
       throw new CanvasError("failed to unmark nonexistent port");
     }
 
@@ -281,15 +277,15 @@ export class Canvas {
   public addEdge(request: AddEdgeRequest): Canvas {
     const id = this.edgeIdGenerator.create(request.id);
 
-    if (this.graphStore.getEdge(id) !== undefined) {
+    if (this.graphStore.hasEdge(id)) {
       throw new CanvasError("failed to add edge with existing id");
     }
 
-    if (this.graphStore.getPort(request.from) === undefined) {
+    if (!this.graphStore.hasPort(request.from)) {
       throw new CanvasError("failed to add edge from nonexistent port");
     }
 
-    if (this.graphStore.getPort(request.to) === undefined) {
+    if (!this.graphStore.hasPort(request.to)) {
       throw new CanvasError("failed to add edge to nonexistent port");
     }
 
@@ -308,9 +304,7 @@ export class Canvas {
    * updates specified edge
    */
   public updateEdge(edgeId: Identifier, request?: UpdateEdgeRequest): Canvas {
-    const edge = this.graphStore.getEdge(edgeId);
-
-    if (edge === undefined) {
+    if (!this.graphStore.hasEdge(edgeId)) {
       throw new CanvasError("failed to update nonexistent edge");
     }
 
@@ -323,7 +317,7 @@ export class Canvas {
    * removes specified edge
    */
   public removeEdge(edgeId: Identifier): Canvas {
-    if (this.graphStore.getEdge(edgeId) === undefined) {
+    if (!this.graphStore.hasEdge(edgeId)) {
       throw new CanvasError("failed to remove nonexistent edge");
     }
 
