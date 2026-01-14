@@ -1,8 +1,7 @@
 import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
-import { Point } from "@/point";
+import { Point, MutablePoint } from "@/point";
 import { ForceDirectedAlgorithmIterationParams } from "./force-directed-algorithm-iteration-params";
-import { MutablePoint } from "@/point";
 import { DistanceVectorGenerator } from "../distance-vector-generator";
 import { NodeForcesApplicationStrategy } from "../node-forces-application-strategy";
 
