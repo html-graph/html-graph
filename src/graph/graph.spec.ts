@@ -316,13 +316,15 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return null when accessing non-existing node port ids", () => {
+  it("should throw error when accessing nonexisting node port ids", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
     const addNodeRequest1 = createAddNodeRequest1();
 
-    expect(graph.getNodePortIds(addNodeRequest1.id)).toEqual(null);
+    expect(() => {
+      graph.getNodePortIds(addNodeRequest1.id);
+    }).toThrow(CanvasError);
   });
 
   it("should emit before port removed", () => {
@@ -786,12 +788,12 @@ describe("Graph", () => {
     );
   });
 
-  it("should return null when element is not a node", () => {
+  it("should return undefined when element is not a node", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
     const element = document.createElement("div");
 
-    expect(graph.findNodeIdByElement(element)).toEqual(null);
+    expect(graph.findNodeIdByElement(element)).toEqual(undefined);
   });
 });

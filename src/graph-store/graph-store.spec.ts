@@ -399,10 +399,12 @@ describe("GraphStore", () => {
     expect(store.getAllPortIds()).toEqual([addPortRequest1Out.id]);
   });
 
-  it("should return undefined when getting ports of nonexisting node", () => {
+  it("should throw error whenaccessing ports of nonexisting node", () => {
     const store = new GraphStore();
 
-    expect(store.getNodePortIds(1)).toBe(undefined);
+    expect(() => {
+      store.getNodePortIds(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return node port id for existing node", () => {
@@ -769,7 +771,9 @@ describe("GraphStore", () => {
 
     store.clear();
 
-    expect(store.getNodePortIds(addNodeRequest1.id)).toEqual(undefined);
+    expect(() => {
+      store.getNodePortIds(addNodeRequest1.id);
+    }).toThrow(CanvasError);
   });
 
   it("should clear edge", () => {
@@ -789,6 +793,14 @@ describe("GraphStore", () => {
     store.clear();
 
     expect(store.hasEdge(addEdgeRequest1Out2In.id)).toBe(false);
+  });
+
+  it("should throw error when trying to access nonexistent port incoming edge ids", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.getPortIncomingEdgeIds(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return port incoming edge ids", () => {
@@ -831,6 +843,14 @@ describe("GraphStore", () => {
     ]);
   });
 
+  it("should throw error when trying to access nonexistent port outgoing edge ids", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.getPortOutgoingEdgeIds(1);
+    }).toThrow(CanvasError);
+  });
+
   it("should return port cycle edge ids", () => {
     const store = new GraphStore();
 
@@ -845,6 +865,14 @@ describe("GraphStore", () => {
     expect(store.getPortCycleEdgeIds(addPortRequest1Out.id)).toEqual([
       addEdgeRequest1Out1Out.id,
     ]);
+  });
+
+  it("should throw error when trying to access nonexistent port cycle edge ids", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.getPortCycleEdgeIds(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return port incoming edge ids as adjacent edge", () => {

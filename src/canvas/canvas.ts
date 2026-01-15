@@ -48,7 +48,7 @@ export class Canvas {
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
+    this.graphStore.getNodePortIds(nodeId).forEach((portId) => {
       this.unmarkPort(portId);
     });
 

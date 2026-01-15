@@ -79,8 +79,8 @@ export class Graph {
     };
   }
 
-  public findNodeIdByElement(element: HTMLElement): Identifier | null {
-    return this.graphStore.findNodeIdByElement(element) ?? null;
+  public findNodeIdByElement(element: HTMLElement): Identifier | undefined {
+    return this.graphStore.findNodeIdByElement(element);
   }
 
   public getAllNodeIds(): readonly Identifier[] {
@@ -105,8 +105,8 @@ export class Graph {
     return this.graphStore.getAllPortIds();
   }
 
-  public getNodePortIds(nodeId: Identifier): readonly Identifier[] | null {
-    return this.graphStore.getNodePortIds(nodeId) ?? null;
+  public getNodePortIds(nodeId: Identifier): readonly Identifier[] {
+    return this.graphStore.getNodePortIds(nodeId);
   }
 
   public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {
