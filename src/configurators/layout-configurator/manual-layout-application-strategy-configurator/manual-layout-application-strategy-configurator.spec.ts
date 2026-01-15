@@ -46,7 +46,7 @@ describe("ManualLayoutApplicationStrategyConfigurator", () => {
 
     trigger.emit();
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });

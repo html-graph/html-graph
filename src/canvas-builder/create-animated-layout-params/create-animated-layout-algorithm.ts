@@ -27,11 +27,8 @@ export const createAnimatedLayoutAlgorithm = (
         edgeEquilibriumLength:
           algorithm?.edgeEquilibriumLength ??
           forceDirectedDefaults.edgeEquilibriumLength,
-        effectiveDistance: forceDirectedDefaults.effectiveDistance,
         edgeStiffness:
           algorithm?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        convergenceDelta:
-          algorithm?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
         convergenceVelocity:
           algorithm?.convergenceVelocity ??
           forceDirectedDefaults.convergenceVelocity,

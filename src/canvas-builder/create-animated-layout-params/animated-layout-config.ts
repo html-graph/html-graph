@@ -14,16 +14,6 @@ export interface AnimatedLayoutConfig {
         readonly edgeEquilibriumLength?: number;
         readonly edgeStiffness?: number;
         readonly seed?: string;
-        /**
-         * @deprecated
-         * use convergenceVelocity instead
-         */
-        readonly effectiveDistance?: number;
-        /**
-         * @deprecated
-         * use convergenceVelocity instead
-         */
-        readonly convergenceDelta?: number;
         readonly convergenceVelocity?: number;
         readonly maxForce?: number;
         readonly nodeForceCoefficient?: number;

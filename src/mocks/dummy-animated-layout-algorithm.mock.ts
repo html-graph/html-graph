@@ -1,5 +1,7 @@
-import { AnimatedLayoutAlgorithm } from "@/layouts";
-import { Graph } from "@/graph";
+import {
+  AnimatedLayoutAlgorithm,
+  AnimatedLayoutAlgorithmParams,
+} from "@/layouts";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 
@@ -10,8 +12,9 @@ export class DummyAnimatedLayoutAlgorithm implements AnimatedLayoutAlgorithm {
   ) {}
 
   public calculateNextCoordinates(
-    graph: Graph,
+    params: AnimatedLayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
+    const { graph } = params;
     const result = new Map<Identifier, Point>();
 
     graph.getAllNodeIds().forEach((nodeId) => {

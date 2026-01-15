@@ -31,7 +31,7 @@ export class ForceDirectedAlgorithmIteration {
     this.nodeForcesApplicationStrategy = params.nodeForcesApplicationStrategy;
   }
 
-  public apply(): [number, number] {
+  public apply(): number {
     let maxDelta = 0;
     let maxVelocity = 0;
     const forces = new Map<Identifier, MutablePoint>();
@@ -67,7 +67,7 @@ export class ForceDirectedAlgorithmIteration {
       maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
 
-    return [maxDelta, maxVelocity];
+    return maxVelocity;
   }
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {

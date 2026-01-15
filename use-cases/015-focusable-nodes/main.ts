@@ -48,7 +48,7 @@ addNodeRequests.forEach(
     canvas.addNode(request);
 
     request.element.addEventListener("focus", () => {
-      const node = canvas.graph.getNode(request.id!)!;
+      const node = canvas.graph.getNode(request.id!);
       const rect = canvasElement.getBoundingClientRect();
       const sv = canvas.viewport.getViewportMatrix().scale;
 

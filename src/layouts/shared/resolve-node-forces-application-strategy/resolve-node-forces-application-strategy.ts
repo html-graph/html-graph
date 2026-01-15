@@ -24,7 +24,6 @@ export const resolveNodeForcesApplicationStrategy = (
     nodeCharge: params.nodeCharge,
     nodeForceCoefficient: params.nodeForceCoefficient,
     distanceVectorGenerator: params.distanceVectorGenerator,
-    effectiveDistance: params.effectiveDistance,
     maxForce: params.maxForce,
   });
 };

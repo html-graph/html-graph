@@ -10,4 +10,3 @@ export type { PatchMatrixRequest } from "./patch-matrix-request";
 export type { CanvasParams } from "./canvas-params";
 export type { EdgeShapeFactory } from "./edge-shape-factory";
 export { Canvas } from "./canvas";
-export { CanvasError } from "./canvas-error";

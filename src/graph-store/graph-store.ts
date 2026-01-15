@@ -10,6 +10,7 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 import { Identifier } from "@/identifier";
+import { CanvasError } from "@/canvas-error";
 
 export class GraphStore {
   private readonly nodes = new Map<Identifier, StoreNode>();
@@ -117,12 +118,14 @@ export class GraphStore {
     return this.nodes.has(nodeId);
   }
 
-  /**
-   * TODO: v8
-   * throw error when node does not exist
-   */
-  public getNode(nodeId: Identifier): StoreNode | undefined {
-    return this.nodes.get(nodeId);
+  public getNode(nodeId: Identifier): StoreNode {
+    const node = this.nodes.get(nodeId);
+
+    if (node === undefined) {
+      throw new CanvasError("failed to access nonexistent node");
+    }
+
+    return node;
   }
 
   public addNode(request: AddNodeRequest): void {

@@ -2,6 +2,7 @@ import {
   Graph,
   Identifier,
   LayoutAlgorithm,
+  LayoutAlgorithmParams,
   Point,
 } from "@html-graph/html-graph";
 
@@ -21,7 +22,11 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
     private readonly params: HeirarchicalLayoutAlgorithmParams,
   ) {}
 
-  public calculateCoordinates(graph: Graph): ReadonlyMap<Identifier, Point> {
+  public calculateCoordinates(
+    params: LayoutAlgorithmParams,
+  ): ReadonlyMap<Identifier, Point> {
+    const { graph } = params;
+
     const layers = this.calculateLayers(graph);
     const nodeY = this.calculateY(layers, graph);
     const coords = new Map<Identifier, Point>();

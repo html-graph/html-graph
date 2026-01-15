@@ -1,4 +1,3 @@
-import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 import { LayoutAlgorithm } from "../layout-algorithm";
@@ -10,7 +9,7 @@ import {
   resolveNodeForcesApplicationStrategy,
 } from "../../shared";
 import { RandomFillerLayoutAlgorithm } from "../random-filler-layout-algorithm";
-import { Viewport } from "@/viewport";
+import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 
 export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   private readonly distanceVectorGenerator: DistanceVectorGenerator;
@@ -29,8 +28,6 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
   private readonly edgeStiffness: number;
 
-  private readonly convergenceDelta: number;
-
   private readonly convergenceVelocity: number;
 
   public constructor(params: ForceDirectedLayoutAlgorithmParams) {
@@ -39,7 +36,6 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
     this.edgeStiffness = params.edgeStiffness;
-    this.convergenceDelta = params.convergenceDelta;
     this.convergenceVelocity = params.convergenceVelocity;
 
     this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
@@ -47,7 +43,6 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     this.nodeForcesApplicationStrategy = resolveNodeForcesApplicationStrategy({
       distanceVectorGenerator: this.distanceVectorGenerator,
       nodeCharge: params.nodeCharge,
-      effectiveDistance: params.effectiveDistance,
       maxForce: params.maxForce,
       nodeForceCoefficient: params.nodeForceCoefficient,
       theta: params.barnesHutTheta,
@@ -62,13 +57,14 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
   }
 
   public calculateCoordinates(
-    graph: Graph,
-    viewport: Viewport,
+    params: LayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
-    const currentCoords = this.fillerLayoutAlgorithm.calculateCoordinates(
+    const { graph, viewport } = params;
+
+    const currentCoords = this.fillerLayoutAlgorithm.calculateCoordinates({
       graph,
       viewport,
-    );
+    });
 
     for (let i = 0; i < this.maxIterations; i++) {
       const iteration = new ForceDirectedAlgorithmIteration(
@@ -84,11 +80,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
         },
       );
 
-      const [maxDelta, maxVelocity] = iteration.apply();
-
-      if (maxDelta < this.convergenceDelta) {
-        break;
-      }
+      const maxVelocity = iteration.apply();
 
       if (maxVelocity < this.convergenceVelocity) {
         break;

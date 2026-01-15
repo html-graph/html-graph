@@ -7,6 +7,7 @@ import { StorePort } from "./store-port";
 import { StoreNode } from "./store-node";
 import { CenterFn, standardCenterFn } from "@/center-fn";
 import { StoreEdge } from "./store-edge";
+import { CanvasError } from "@/canvas-error";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
   return {
@@ -88,10 +89,12 @@ const createAddEdgeRequest1Out1In = (): AddEdgeRequest => {
 };
 
 describe("GraphStore", () => {
-  it("should return undefined for nonexisting node", () => {
+  it("should throw error when accessing nonexisting node", () => {
     const store = new GraphStore();
 
-    expect(store.getNode(1)).toBe(undefined);
+    expect(() => {
+      store.getNode(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return specified node for existing node", () => {
@@ -262,7 +265,7 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.removeNode(addNodeRequest1.id);
 
-    expect(store.getNode(addNodeRequest1.id)).toBe(undefined);
+    expect(store.hasNode(addNodeRequest1.id)).toBe(false);
   });
 
   it("should emit before node removed", () => {
@@ -721,7 +724,7 @@ describe("GraphStore", () => {
     store.addNode(addNodeRequest1);
     store.clear();
 
-    expect(store.getNode(addNodeRequest1.id)).toEqual(undefined);
+    expect(store.hasNode(addNodeRequest1.id)).toBe(false);
   });
 
   it("should emit event before clear", () => {

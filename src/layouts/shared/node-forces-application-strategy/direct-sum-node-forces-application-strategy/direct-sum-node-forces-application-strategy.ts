@@ -8,8 +8,6 @@ import { calculateNodeRepulsiveForce } from "../../calculate-node-repulsive-forc
 export class DirectSumNodeForcesApplicationStrategy
   implements NodeForcesApplicationStrategy
 {
-  private readonly effectiveDistance: number;
-
   private readonly nodeCharge: number;
 
   private readonly distanceVectorGenerator: DistanceVectorGenerator;
@@ -17,7 +15,6 @@ export class DirectSumNodeForcesApplicationStrategy
   private readonly maxForce: number;
 
   public constructor(params: DirectSumNodeForcesApplicationStrategyParams) {
-    this.effectiveDistance = params.effectiveDistance;
     this.nodeCharge = params.nodeCharge;
     this.distanceVectorGenerator = params.distanceVectorGenerator;
     this.maxForce = params.maxForce;
@@ -44,10 +41,6 @@ export class DirectSumNodeForcesApplicationStrategy
           sourceCoords,
           targetCoords,
         );
-
-        if (vector.d > this.effectiveDistance) {
-          continue;
-        }
 
         const f = calculateNodeRepulsiveForce({
           coefficient: 1,

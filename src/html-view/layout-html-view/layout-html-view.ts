@@ -95,7 +95,7 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   private isNodeValid(nodeId: Identifier): boolean {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     return !(node.payload.x === null || node.payload.y === null);
   }

@@ -7,6 +7,7 @@ import {
 } from "@/graph-store";
 import { Graph } from "./graph";
 import { Point } from "@/point";
+import { CanvasError } from "@/canvas-error";
 
 const createAddNodeRequest1 = (): AddNodeRequest => {
   return {
@@ -69,11 +70,13 @@ const createAddEdgeRequest11 = (): AddEdgeRequest => {
 };
 
 describe("Graph", () => {
-  it("should return null when no node in store", () => {
+  it("should throw error when trying to access nonexistent node", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNode(1)).toBe(null);
+    expect(() => {
+      graph.getNode(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return false for nonexisting node check", () => {
@@ -751,21 +754,6 @@ describe("Graph", () => {
     expect(handler).toHaveBeenCalled();
   });
 
-  it("should return marked port ids for element legacy", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-    const addPortRequest1 = createAddPortRequest1();
-
-    store.addNode(addNodeRequest1);
-    store.addPort(addPortRequest1);
-
-    expect(graph.getElementPortIds(addPortRequest1.element)).toEqual([
-      addPortRequest1.id,
-    ]);
-  });
-
   it("should return marked port ids for element", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
@@ -779,28 +767,6 @@ describe("Graph", () => {
     expect(graph.findPortIdsByElement(addPortRequest1.element)).toEqual([
       addPortRequest1.id,
     ]);
-  });
-
-  it("should return node id for element legacy", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const addNodeRequest1 = createAddNodeRequest1();
-
-    store.addNode(addNodeRequest1);
-
-    expect(graph.getElementNodeId(addNodeRequest1.element)).toEqual(
-      addNodeRequest1.id,
-    );
-  });
-
-  it("should return null when element is not a node legacy", () => {
-    const store = new GraphStore();
-    const graph = new Graph(store);
-
-    const element = document.createElement("div");
-
-    expect(graph.getElementNodeId(element)).toEqual(null);
   });
 
   it("should return node id for element", () => {

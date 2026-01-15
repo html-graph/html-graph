@@ -266,7 +266,7 @@ describe("CoreHtmlView", () => {
     store.addNode(addNodeRequest1);
     htmlView.attachNode(addNodeRequest1.id);
 
-    const node = store.getNode(addNodeRequest1.id)!;
+    const node = store.getNode(addNodeRequest1.id);
     node.payload.x = 100;
     node.payload.y = 100;
 
@@ -291,7 +291,7 @@ describe("CoreHtmlView", () => {
     const container = element.children[0].children[0];
     const nodeWrapper = container.children[0] as HTMLDivElement;
 
-    const node = store.getNode(addNodeRequest1.id)!;
+    const node = store.getNode(addNodeRequest1.id);
     node.payload.priority = 10;
     htmlView.updateNodePriority(addNodeRequest1.id);
 

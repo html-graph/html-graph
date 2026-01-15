@@ -15,7 +15,10 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
   });
@@ -35,7 +38,10 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(coords).toEqual(new Map([["node-1", { x: 5, y: 5 }]]));
   });
@@ -68,7 +74,10 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(coords).toEqual(
       new Map([
@@ -94,7 +103,10 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(coords).toEqual(new Map([["node-1", { x: 1005, y: 505 }]]));
   });
@@ -115,7 +127,10 @@ describe("RandomFillerLayoutAlgorithm", () => {
       sparsity: 10,
     });
 
-    const coords = layout.calculateCoordinates(canvas.graph, canvas.viewport);
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(coords).toEqual(new Map([["node-1", { x: 905, y: 405 }]]));
   });

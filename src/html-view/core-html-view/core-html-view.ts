@@ -36,7 +36,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public attachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     prepareNodeElement(node.element);
 
@@ -50,7 +50,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public detachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     this.container.removeChild(node.element);
     this.attachedNodeIds.delete(nodeId);
@@ -91,7 +91,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
     const { payload } = node;
@@ -104,7 +104,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateNodePriority(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     node.element.style.zIndex = `${node.payload.priority}`;
   }

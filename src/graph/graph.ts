@@ -66,14 +66,9 @@ export class Graph {
     return this.graphStore.hasNode(nodeId);
   }
 
-  public getNode(nodeId: Identifier): GraphNode | null {
+  public getNode(nodeId: Identifier): GraphNode {
     const node = this.graphStore.getNode(nodeId);
-
-    if (node === undefined) {
-      return null;
-    }
-
-    const payload = node.payload;
+    const { payload } = node;
 
     return {
       element: node.element,
@@ -85,14 +80,6 @@ export class Graph {
   }
 
   public findNodeIdByElement(element: HTMLElement): Identifier | null {
-    return this.graphStore.findNodeIdByElement(element) ?? null;
-  }
-
-  /**
-   * @deprecated
-   * use findNodeIdByElement instead
-   */
-  public getElementNodeId(element: HTMLElement): Identifier | null {
     return this.graphStore.findNodeIdByElement(element) ?? null;
   }
 
@@ -124,14 +111,6 @@ export class Graph {
 
   public getNodePortIds(nodeId: Identifier): readonly Identifier[] | null {
     return this.graphStore.getNodePortIds(nodeId) ?? null;
-  }
-
-  /**
-   * @deprecated
-   * use findPortIdsByElement instead
-   */
-  public getElementPortIds(element: HTMLElement): readonly Identifier[] {
-    return this.graphStore.findPortIdsByElement(element);
   }
 
   public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {

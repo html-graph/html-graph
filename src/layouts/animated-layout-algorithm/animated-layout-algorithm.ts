@@ -1,16 +1,9 @@
-import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
-import { Viewport } from "@/viewport";
+import { AnimatedLayoutAlgorithmParams } from "./animated-layout-algorithm-params";
 
 export interface AnimatedLayoutAlgorithm {
-  /**
-   * TODO: v8
-   * make single parameter object
-   */
   calculateNextCoordinates(
-    graph: Graph,
-    dt: number,
-    viewport: Viewport,
+    params: AnimatedLayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point>;
 }
