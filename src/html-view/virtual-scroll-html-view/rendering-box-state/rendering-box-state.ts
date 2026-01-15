@@ -30,9 +30,9 @@ export class RenderingBoxState {
   }
 
   public hasEdge(edgeId: Identifier): boolean {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
-    const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;
+    const edge = this.graphStore.getEdge(edgeId);
+    const nodeFromId = this.graphStore.getPort(edge.from).nodeId;
+    const nodeToId = this.graphStore.getPort(edge.to).nodeId;
     const nodePayloadFrom = this.graphStore.getNode(nodeFromId)
       .payload as Point;
     const nodePayloadTo = this.graphStore.getNode(nodeToId).payload as Point;

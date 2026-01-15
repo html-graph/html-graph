@@ -82,15 +82,11 @@ export class UserDraggableEdgesConfigurator {
   private tryStartEdgeDragging(portId: Identifier, cursor: Point): boolean {
     const edgeId = this.params.draggingEdgeResolver(portId);
 
-    if (edgeId === null) {
+    if (edgeId === null || !this.canvas.graph.hasEdge(edgeId)) {
       return false;
     }
 
     const edge = this.canvas.graph.getEdge(edgeId);
-
-    if (edge === null) {
-      return false;
-    }
 
     const isSourceDragging = portId === edge.from;
     const isTargetDragging = portId === edge.to;
@@ -98,8 +94,8 @@ export class UserDraggableEdgesConfigurator {
     const staticPortId = isSourceDragging ? edge.to : edge.from;
     this.staticPortId = staticPortId;
     this.isTargetDragging = isTargetDragging;
-    const draggingPort = this.canvas.graph.getPort(portId)!;
-    const staticPort = this.canvas.graph.getPort(staticPortId)!;
+    const draggingPort = this.canvas.graph.getPort(portId);
+    const staticPort = this.canvas.graph.getPort(staticPortId);
 
     const staticRect = staticPort.element.getBoundingClientRect();
     const staticCoords: Point = {

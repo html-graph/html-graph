@@ -284,10 +284,12 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
-  it("should return undefined for nonexisting port", () => {
+  it("should throw error when accessing nonexisting port", () => {
     const store = new GraphStore();
 
-    expect(store.getPort(1)).toBe(undefined);
+    expect(() => {
+      store.getPort(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return false for nonexisting port check", () => {
@@ -427,7 +429,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest1Out);
     store.removePort(addPortRequest1Out.id);
 
-    expect(store.getPort(addPortRequest1Out.id)).toEqual(undefined);
+    expect(store.hasPort(addPortRequest1Out.id)).toBe(false);
   });
 
   it("should emit before port removed", () => {
@@ -447,10 +449,12 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addPortRequest1Out.id);
   });
 
-  it("should return undefined when getting nonexisting edge id", () => {
+  it("should throw error when trying to access nonexisting edge", () => {
     const store = new GraphStore();
 
-    expect(store.getEdge(1)).toBe(undefined);
+    expect(() => {
+      store.getEdge(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return false for nonexisting edge check", () => {
@@ -690,7 +694,7 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out2In);
     store.removeEdge(addEdgeRequest1Out2In.id);
 
-    expect(store.getEdge(addEdgeRequest1Out2In.id)).toEqual(undefined);
+    expect(store.hasEdge(addEdgeRequest1Out2In.id)).toBe(false);
   });
 
   it("should emit event before edge removed", () => {
@@ -751,7 +755,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest1Out);
     store.clear();
 
-    expect(store.getPort(addPortRequest1Out.id)).toEqual(undefined);
+    expect(store.hasPort(addPortRequest1Out.id)).toBe(false);
   });
 
   it("should clear node ports", () => {
@@ -784,7 +788,7 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out2In);
     store.clear();
 
-    expect(store.getEdge(addEdgeRequest1Out2In.id)).toEqual(undefined);
+    expect(store.hasEdge(addEdgeRequest1Out2In.id)).toBe(false);
   });
 
   it("should return port incoming edge ids", () => {

@@ -85,9 +85,9 @@ const initiateGraph = async (): Promise<void> => {
         canvas.addNode(request);
 
         if (prevPortId !== null) {
-          const nodeFromId = canvas.graph.getPort(prevPortId)!.nodeId;
+          const nodeFromId = canvas.graph.getPort(prevPortId).nodeId;
           const nodeFrom = canvas.graph.getNode(nodeFromId);
-          const nodeToId = canvas.graph.getPort(frontPortId)!.nodeId;
+          const nodeToId = canvas.graph.getPort(frontPortId).nodeId;
           const nodeTo = canvas.graph.getNode(nodeToId);
 
           if (nodeFrom.y === nodeTo.y) {

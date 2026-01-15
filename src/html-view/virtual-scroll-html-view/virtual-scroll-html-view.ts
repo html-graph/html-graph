@@ -35,9 +35,9 @@ export class VirtualScrollHtmlView implements HtmlView {
     this.graphStore.getAllEdgeIds().forEach((edgeId) => {
       const isInViewport = this.renderingBox.hasEdge(edgeId);
       const isAttached = this.attachedEdges.has(edgeId);
-      const edge = this.graphStore.getEdge(edgeId)!;
-      const fromNodeId = this.graphStore.getPort(edge.from)!.nodeId;
-      const toNodeId = this.graphStore.getPort(edge.to)!.nodeId;
+      const edge = this.graphStore.getEdge(edgeId);
+      const fromNodeId = this.graphStore.getPort(edge.from).nodeId;
+      const toNodeId = this.graphStore.getPort(edge.to).nodeId;
 
       if (isInViewport) {
         if (!this.renderingBox.hasNode(fromNodeId)) {
@@ -164,9 +164,9 @@ export class VirtualScrollHtmlView implements HtmlView {
   }
 
   private attachEdgeEntities(edgeId: Identifier): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
-    const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;
+    const edge = this.graphStore.getEdge(edgeId);
+    const nodeFromId = this.graphStore.getPort(edge.from).nodeId;
+    const nodeToId = this.graphStore.getPort(edge.to).nodeId;
 
     if (!this.attachedNodes.has(nodeFromId)) {
       this.handleAttachNode(nodeFromId);

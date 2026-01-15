@@ -108,9 +108,9 @@ export class LayoutHtmlView implements HtmlView {
   }
 
   private isEdgeValid(edgeId: Identifier): boolean {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const sourcePort = this.graphStore.getPort(edge.from)!;
-    const targetPort = this.graphStore.getPort(edge.to)!;
+    const edge = this.graphStore.getEdge(edgeId);
+    const sourcePort = this.graphStore.getPort(edge.from);
+    const targetPort = this.graphStore.getPort(edge.to);
 
     return !(
       this.deferredNodes.has(sourcePort.nodeId) ||

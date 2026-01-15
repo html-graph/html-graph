@@ -33,14 +33,14 @@ export class GraphComponentsPartitioner {
 
       this.graph.getNodeOutgoingEdgeIds(currentNodeId)!.forEach((edgeId) => {
         const edge = this.graph.getEdge(edgeId)!;
-        const port = this.graph.getPort(edge.to)!;
+        const port = this.graph.getPort(edge.to);
 
         adjacentNodeIds.add(port.nodeId);
       });
 
       this.graph.getNodeIncomingEdgeIds(currentNodeId)!.forEach((edgeId) => {
         const edge = this.graph.getEdge(edgeId)!;
-        const port = this.graph.getPort(edge.from)!;
+        const port = this.graph.getPort(edge.from);
 
         adjacentNodeIds.add(port.nodeId);
       });

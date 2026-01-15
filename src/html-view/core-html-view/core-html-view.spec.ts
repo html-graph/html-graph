@@ -319,7 +319,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest2.id);
     htmlView.attachEdge(addEdgeRequest12.id);
 
-    const edge = store.getEdge(addEdgeRequest12.id)!;
+    const edge = store.getEdge(addEdgeRequest12.id);
 
     const newShape = new BezierEdgeShape();
     edge.payload.shape = newShape;
@@ -479,7 +479,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest2.id);
     htmlView.attachEdge(addEdgeRequest12.id);
 
-    const edge = store.getEdge(addEdgeRequest12.id)!;
+    const edge = store.getEdge(addEdgeRequest12.id);
     edge.payload.priority = 10;
     htmlView.updateEdgePriority(addEdgeRequest12.id);
 

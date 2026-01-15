@@ -91,12 +91,8 @@ export class Graph {
     return this.graphStore.hasPort(portId);
   }
 
-  public getPort(portId: Identifier): GraphPort | null {
+  public getPort(portId: Identifier): GraphPort {
     const port = this.graphStore.getPort(portId);
-
-    if (port === undefined) {
-      return null;
-    }
 
     return {
       element: port.element,
@@ -125,14 +121,9 @@ export class Graph {
     return this.graphStore.hasEdge(edgeId);
   }
 
-  public getEdge(edgeId: Identifier): GraphEdge | null {
+  public getEdge(edgeId: Identifier): GraphEdge {
     const edge = this.graphStore.getEdge(edgeId);
-
-    if (edge === undefined) {
-      return null;
-    }
-
-    const payload = edge.payload;
+    const { payload } = edge;
 
     return {
       from: edge.from,

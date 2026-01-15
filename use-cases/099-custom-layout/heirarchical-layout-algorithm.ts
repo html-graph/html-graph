@@ -66,7 +66,7 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
 
         incomingEdges.forEach((edgeId) => {
           const edge = graph.getEdge(edgeId)!;
-          const sourcePort = graph.getPort(edge.from)!;
+          const sourcePort = graph.getPort(edge.from);
 
           incomingNodeIds.add(sourcePort.nodeId);
         });
@@ -117,7 +117,7 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
         if (outgoingEdges !== null) {
           outgoingEdges.forEach((edgeId) => {
             const edge = graph.getEdge(edgeId)!;
-            const port = graph.getPort(edge.to)!;
+            const port = graph.getPort(edge.to);
 
             if (!visited.has(port.nodeId)) {
               visited.add(port.nodeId);

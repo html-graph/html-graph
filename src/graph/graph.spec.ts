@@ -201,11 +201,13 @@ describe("Graph", () => {
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
-  it("should return null for no port in store", () => {
+  it("should throw error when accessing nonexisting port", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPort(1)).toBe(null);
+    expect(() => {
+      graph.getPort(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return false for nonexisting port check", () => {
@@ -442,11 +444,13 @@ describe("Graph", () => {
     expect(graph.getAllEdgeIds()).toEqual([addEdgeRequest12.id]);
   });
 
-  it("should return null for no edge in store", () => {
+  it("should throw error when trying to access nonexisting edge", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getEdge(1)).toBe(null);
+    expect(() => {
+      graph.getEdge(1);
+    }).toThrow(CanvasError);
   });
 
   it("should return false for nonexisting edge check", () => {

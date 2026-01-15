@@ -157,7 +157,7 @@ export class GraphStore {
   }
 
   public updateNode(nodeId: Identifier, request: UpdateNodeRequest): void {
-    const payload = this.nodes.get(nodeId)!.payload;
+    const { payload } = this.nodes.get(nodeId)!;
 
     payload.x = request.x ?? payload.x;
     payload.y = request.y ?? payload.y;
@@ -182,12 +182,14 @@ export class GraphStore {
     return this.ports.has(portId);
   }
 
-  /**
-   * TODO: v8
-   * throw error when port does not exist
-   */
-  public getPort(portId: Identifier): StorePort | undefined {
-    return this.ports.get(portId);
+  public getPort(portId: Identifier): StorePort {
+    const port = this.ports.get(portId);
+
+    if (port === undefined) {
+      throw new CanvasError("failed to access nonexistent port");
+    }
+
+    return port;
   }
 
   public addPort(request: AddPortRequest): void {
@@ -248,12 +250,14 @@ export class GraphStore {
     return this.edges.has(edgeId);
   }
 
-  /**
-   * TODO: v8
-   * throw error when edge does not exist
-   */
-  public getEdge(edgeId: Identifier): StoreEdge | undefined {
-    return this.edges.get(edgeId);
+  public getEdge(edgeId: Identifier): StoreEdge {
+    const edge = this.edges.get(edgeId);
+
+    if (edge === undefined) {
+      throw new CanvasError("failed to access nonexistent edge");
+    }
+
+    return edge;
   }
 
   public addEdge(request: AddEdgeRequest): void {
@@ -340,8 +344,8 @@ export class GraphStore {
     ports.forEach((portId) => {
       this.getPortIncomingEdgeIds(portId)
         .filter((edgeId) => {
-          const edge = this.getEdge(edgeId)!;
-          const sourcePort = this.getPort(edge.from)!;
+          const edge = this.getEdge(edgeId);
+          const sourcePort = this.getPort(edge.from);
 
           return sourcePort.nodeId !== nodeId;
         })
@@ -360,8 +364,8 @@ export class GraphStore {
     ports.forEach((portId) => {
       this.getPortOutgoingEdgeIds(portId)
         .filter((edgeId) => {
-          const edge = this.getEdge(edgeId)!;
-          const targetPort = this.getPort(edge.to)!;
+          const edge = this.getEdge(edgeId);
+          const targetPort = this.getPort(edge.to);
 
           return targetPort.nodeId !== nodeId;
         })
@@ -384,8 +388,8 @@ export class GraphStore {
 
       this.getPortIncomingEdgeIds(portId)
         .filter((edgeId) => {
-          const edge = this.getEdge(edgeId)!;
-          const targetPort = this.getPort(edge.to)!;
+          const edge = this.getEdge(edgeId);
+          const targetPort = this.getPort(edge.to);
 
           return targetPort.nodeId === nodeId;
         })
