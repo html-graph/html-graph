@@ -262,7 +262,7 @@ export class UserDraggableNodesConfigurator {
 
       this.maxNodePriority++;
 
-      const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
+      const edges = this.graph.getNodeAdjacentEdgeIds(nodeId);
 
       edges.forEach((edgeId) => {
         this.canvas.updateEdge(edgeId, { priority: edgePriority });

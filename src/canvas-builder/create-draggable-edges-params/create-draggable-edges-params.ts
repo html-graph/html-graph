@@ -19,7 +19,7 @@ export const createDraggableEdgeParams = (
     event.button === 0;
 
   const defaultDraggingEdgeResolver: DraggingEdgeResolver = (portId) => {
-    const edgeIds = graph.getPortAdjacentEdgeIds(portId)!;
+    const edgeIds = graph.getPortAdjacentEdgeIds(portId);
 
     if (edgeIds.length > 0) {
       return edgeIds[edgeIds.length - 1];

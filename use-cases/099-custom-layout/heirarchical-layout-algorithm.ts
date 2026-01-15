@@ -60,12 +60,12 @@ export class HeirarchicalLayoutAlgorithm implements LayoutAlgorithm {
       const layerHalfHeight = (this.params.layerSpace * (layer.size - 1)) / 2;
 
       layer.forEach((nodeId) => {
-        const incomingEdges = graph.getNodeIncomingEdgeIds(nodeId)!;
+        const incomingEdges = graph.getNodeIncomingEdgeIds(nodeId);
 
         const incomingNodeIds = new Set<Identifier>();
 
         incomingEdges.forEach((edgeId) => {
-          const edge = graph.getEdge(edgeId)!;
+          const edge = graph.getEdge(edgeId);
           const sourcePort = graph.getPort(edge.from);
 
           incomingNodeIds.add(sourcePort.nodeId);

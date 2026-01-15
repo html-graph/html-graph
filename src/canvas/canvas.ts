@@ -36,9 +36,7 @@ export class Canvas {
   private readonly onAfterNodeUpdated = (nodeId: Identifier): void => {
     this.htmlView.updateNodePosition(nodeId);
 
-    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-    edgeIds.forEach((edge) => {
+    this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
   };
@@ -56,9 +54,7 @@ export class Canvas {
   };
 
   private readonly onAfterPortUpdated = (portId: Identifier): void => {
-    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-    edgeIds.forEach((edge) => {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
   };
