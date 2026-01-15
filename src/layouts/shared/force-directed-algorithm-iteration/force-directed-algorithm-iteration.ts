@@ -32,7 +32,6 @@ export class ForceDirectedAlgorithmIteration {
   }
 
   public apply(): number {
-    let maxDelta = 0;
     let maxVelocity = 0;
     const forces = new Map<Identifier, MutablePoint>();
 
@@ -64,7 +63,6 @@ export class ForceDirectedAlgorithmIteration {
 
       coords.x += dx;
       coords.y += dy;
-      maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
 
     return maxVelocity;
