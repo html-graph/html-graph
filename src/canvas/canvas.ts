@@ -11,7 +11,7 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { HtmlView } from "@/html-view";
 import { CanvasParams } from "./canvas-params";
-import { CanvasError } from "./canvas-error";
+import { CanvasError } from "@/canvas-error";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -36,9 +36,7 @@ export class Canvas {
   private readonly onAfterNodeUpdated = (nodeId: Identifier): void => {
     this.htmlView.updateNodePosition(nodeId);
 
-    const edgeIds = this.graphStore.getNodeAdjacentEdgeIds(nodeId);
-
-    edgeIds.forEach((edge) => {
+    this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
   };
@@ -48,7 +46,7 @@ export class Canvas {
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    this.graphStore.getNodePortIds(nodeId)!.forEach((portId) => {
+    this.graphStore.getNodePortIds(nodeId).forEach((portId) => {
       this.unmarkPort(portId);
     });
 
@@ -56,9 +54,7 @@ export class Canvas {
   };
 
   private readonly onAfterPortUpdated = (portId: Identifier): void => {
-    const edgeIds = this.graphStore.getPortAdjacentEdgeIds(portId);
-
-    edgeIds.forEach((edge) => {
+    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edge) => {
       this.htmlView.renderEdge(edge);
     });
   };

@@ -11,7 +11,7 @@ const createCurrentCoords = (graph: Graph): ReadonlyMap<Identifier, Point> => {
   const nodeIds = graph.getAllNodeIds();
 
   nodeIds.forEach((nodeId) => {
-    const node = graph.getNode(nodeId)!;
+    const node = graph.getNode(nodeId);
 
     currentCoords.set(nodeId, {
       x: node.x ?? 0,
@@ -45,7 +45,6 @@ describe("ForceDirectedAlgorithmIteration", () => {
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 1e2,
-            effectiveDistance: 1000,
             distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
@@ -90,7 +89,6 @@ describe("ForceDirectedAlgorithmIteration", () => {
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
-            effectiveDistance: 1000,
             distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
@@ -149,7 +147,6 @@ describe("ForceDirectedAlgorithmIteration", () => {
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
-            effectiveDistance: 1000,
             distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
@@ -166,7 +163,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
     expect(currentCoords.get("node-1")).toEqual({ x: 14, y: 0 });
   });
 
-  it("should not apply pulling back forces when effective distance is reached", () => {
+  it("should calculate maximum velocity", () => {
     const canvas = createCanvas();
 
     canvas.addNode({
@@ -194,7 +191,6 @@ describe("ForceDirectedAlgorithmIteration", () => {
         nodeForcesApplicationStrategy:
           new DirectSumNodeForcesApplicationStrategy({
             nodeCharge: 10,
-            effectiveDistance: 5,
             distanceVectorGenerator,
             maxForce: 1e9,
             nodeForceCoefficient: 1,
@@ -206,97 +202,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
       },
     );
 
-    iteration.apply();
-
-    expect(currentCoords.get("node-1")).toEqual({ x: 10, y: 0 });
-  });
-
-  it("should calculate maximum delta", () => {
-    const canvas = createCanvas();
-
-    canvas.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 10,
-      y: 0,
-    });
-
-    canvas.addNode({
-      id: "node-2",
-      element: document.createElement("div"),
-      x: 20,
-      y: 0,
-    });
-
-    const currentCoords = createCurrentCoords(canvas.graph);
-    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
-
-    const iteration = new ForceDirectedAlgorithmIteration(
-      canvas.graph,
-      currentCoords,
-      {
-        distanceVectorGenerator,
-        nodeForcesApplicationStrategy:
-          new DirectSumNodeForcesApplicationStrategy({
-            nodeCharge: 10,
-            effectiveDistance: 1000,
-            distanceVectorGenerator,
-            maxForce: 1e9,
-            nodeForceCoefficient: 1,
-          }),
-        dtSec: 2,
-        nodeMass: 1,
-        edgeEquilibriumLength: 8,
-        edgeStiffness: 1,
-      },
-    );
-
-    const [maxDelta] = iteration.apply();
-
-    expect(maxDelta).toBe(4);
-  });
-
-  it("should calculate maximum delta", () => {
-    const canvas = createCanvas();
-
-    canvas.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 10,
-      y: 0,
-    });
-
-    canvas.addNode({
-      id: "node-2",
-      element: document.createElement("div"),
-      x: 20,
-      y: 0,
-    });
-
-    const currentCoords = createCurrentCoords(canvas.graph);
-    const distanceVectorGenerator = new DistanceVectorGenerator(() => 0);
-
-    const iteration = new ForceDirectedAlgorithmIteration(
-      canvas.graph,
-      currentCoords,
-      {
-        distanceVectorGenerator,
-        nodeForcesApplicationStrategy:
-          new DirectSumNodeForcesApplicationStrategy({
-            nodeCharge: 10,
-            effectiveDistance: 1000,
-            distanceVectorGenerator,
-            maxForce: 1e9,
-            nodeForceCoefficient: 1,
-          }),
-        dtSec: 2,
-        nodeMass: 1,
-        edgeEquilibriumLength: 8,
-        edgeStiffness: 1,
-      },
-    );
-
-    const [, maxVelocity] = iteration.apply();
+    const maxVelocity = iteration.apply();
 
     expect(maxVelocity).toBe(2);
   });

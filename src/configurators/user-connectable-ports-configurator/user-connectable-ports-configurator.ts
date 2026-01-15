@@ -87,7 +87,7 @@ export class UserConnectablePortsConfigurator {
     cursor: Point,
     connectionType: "direct" | "reverse",
   ): void {
-    const port = this.canvas.graph.getPort(portId)!;
+    const port = this.canvas.graph.getPort(portId);
 
     this.staticPortId = portId;
 

@@ -48,7 +48,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     await wait(0);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
@@ -76,7 +76,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     await wait(0);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
@@ -109,7 +109,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     await wait(0);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
@@ -147,7 +147,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     await wait(0);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 });

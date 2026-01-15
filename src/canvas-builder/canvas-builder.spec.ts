@@ -362,7 +362,7 @@ describe("CanvasBuilder", () => {
 
     await wait(0);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect(x !== null && y !== null).toBe(true);
   });
@@ -385,7 +385,7 @@ describe("CanvasBuilder", () => {
 
     trigger.emit();
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
@@ -400,7 +400,7 @@ describe("CanvasBuilder", () => {
     animationMock.timer.emit(0);
     animationMock.timer.emit(100);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect(x !== null && y !== null).toBe(true);
   });
@@ -432,7 +432,7 @@ describe("CanvasBuilder", () => {
 
     trigger.emit();
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 100, y: 100 });
   });
@@ -463,7 +463,7 @@ describe("CanvasBuilder", () => {
     animationMock.timer.emit(0);
     animationMock.timer.emit(100);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
@@ -493,7 +493,7 @@ describe("CanvasBuilder", () => {
     animationMock.timer.emit(0);
     animationMock.timer.emit(100);
 
-    const { x, y } = canvas.graph.getNode("node-1")!;
+    const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });

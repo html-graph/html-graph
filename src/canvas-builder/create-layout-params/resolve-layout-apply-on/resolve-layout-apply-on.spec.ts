@@ -2,16 +2,6 @@ import { EventSubject } from "@/event-subject";
 import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 
 describe("resolveLayoutApplyOn", () => {
-  it("should resolve specified legacy topologyChangeTimeout strategy", () => {
-    const params = resolveLayoutApplyOn({
-      type: "topologyChangeTimeout",
-    });
-
-    expect(params).toEqual({
-      type: "topologyChangeMacrotask",
-    });
-  });
-
   it("should resolve specified topologyChangeMacrotask strategy", () => {
     const params = resolveLayoutApplyOn({
       type: "topologyChangeMacrotask",

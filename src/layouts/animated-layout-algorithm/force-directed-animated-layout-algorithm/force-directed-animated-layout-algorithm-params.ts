@@ -4,9 +4,7 @@ export interface ForceDirectedAnimatedLayoutAlgorithmParams {
   readonly nodeMass: number;
   readonly nodeCharge: number;
   readonly edgeEquilibriumLength: number;
-  readonly effectiveDistance: number;
   readonly edgeStiffness: number;
-  readonly convergenceDelta: number;
   readonly convergenceVelocity: number;
   readonly maxForce: number;
   readonly nodeForceCoefficient: number;

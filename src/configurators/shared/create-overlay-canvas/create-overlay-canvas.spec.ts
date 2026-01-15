@@ -87,6 +87,6 @@ describe("createOverlayCanvas", () => {
       ports: [{ id: "node-1-1", element: document.createElement("div") }],
     });
 
-    expect(canvas.graph.getPort("node-1-1")!.direction).toBe(0);
+    expect(canvas.graph.getPort("node-1-1").direction).toBe(0);
   });
 });

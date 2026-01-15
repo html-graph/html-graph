@@ -20,7 +20,7 @@ export const findPortForElement = (
 
     const nodeId = graph.findNodeIdByElement(elementBuf as HTMLElement);
 
-    if (nodeId !== null) {
+    if (nodeId !== undefined) {
       return {
         status: "nodeEncountered",
       };

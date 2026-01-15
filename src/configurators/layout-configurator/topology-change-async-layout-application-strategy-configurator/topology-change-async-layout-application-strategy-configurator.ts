@@ -7,10 +7,10 @@ export class TopologyChangeAsyncLayoutApplicationStrategyConfigurator {
   private apply = (): void => {
     this.applyScheduled = false;
 
-    const coords = this.layoutAlgorithm.calculateCoordinates(
-      this.canvas.graph,
-      this.canvas.viewport,
-    );
+    const coords = this.layoutAlgorithm.calculateCoordinates({
+      graph: this.canvas.graph,
+      viewport: this.canvas.viewport,
+    });
 
     coords.forEach((point, nodeId) => {
       this.canvas.updateNode(nodeId, point);

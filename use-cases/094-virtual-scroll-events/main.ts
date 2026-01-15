@@ -33,13 +33,13 @@ const virtualScrollConfig: VirtualScrollConfig = {
   },
   events: {
     onBeforeNodeAttached: (nodeId) => {
-      const element = canvas.graph.getNode(nodeId)!.element
+      const element = canvas.graph.getNode(nodeId).element
         .children[1] as HTMLElement;
 
       element.innerText = `Node ${nodeId}`;
     },
     onAfterNodeDetached: (nodeId) => {
-      const element = canvas.graph.getNode(nodeId)!.element
+      const element = canvas.graph.getNode(nodeId).element
         .children[1] as HTMLElement;
 
       element.innerText = "";

@@ -36,7 +36,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public attachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     prepareNodeElement(node.element);
 
@@ -50,14 +50,14 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public detachNode(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     this.container.removeChild(node.element);
     this.attachedNodeIds.delete(nodeId);
   }
 
   public attachEdge(edgeId: Identifier): void {
-    const svg = this.graphStore.getEdge(edgeId)!.payload.shape.svg;
+    const svg = this.graphStore.getEdge(edgeId).payload.shape.svg;
 
     this.edgeIdToElementMap.set(edgeId, svg);
     this.container.appendChild(svg);
@@ -91,7 +91,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateNodePosition(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
     const { width, height } = node.element.getBoundingClientRect();
     const viewportScale = this.viewportStore.getViewportMatrix().scale;
     const { payload } = node;
@@ -104,7 +104,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateNodePriority(nodeId: Identifier): void {
-    const node = this.graphStore.getNode(nodeId)!;
+    const node = this.graphStore.getNode(nodeId);
 
     node.element.style.zIndex = `${node.payload.priority}`;
   }
@@ -114,7 +114,7 @@ export class CoreHtmlView implements HtmlView {
 
     this.container.removeChild(element);
 
-    const edge = this.graphStore.getEdge(edgeId)!;
+    const edge = this.graphStore.getEdge(edgeId);
 
     const svg = edge.payload.shape.svg;
 
@@ -123,9 +123,9 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public renderEdge(edgeId: Identifier): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const portFrom = this.graphStore.getPort(edge.from)!;
-    const portTo = this.graphStore.getPort(edge.to)!;
+    const edge = this.graphStore.getEdge(edgeId);
+    const portFrom = this.graphStore.getPort(edge.from);
+    const portTo = this.graphStore.getPort(edge.to);
 
     const rectFrom = portFrom.element.getBoundingClientRect();
     const rectTo = portTo.element.getBoundingClientRect();
@@ -153,7 +153,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateEdgePriority(edgeId: Identifier): void {
-    const edge = this.graphStore.getEdge(edgeId)!;
+    const edge = this.graphStore.getEdge(edgeId);
 
     edge.payload.shape.svg.style.zIndex = `${edge.payload.priority}`;
   }

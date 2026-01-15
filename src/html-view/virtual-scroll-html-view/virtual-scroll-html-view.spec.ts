@@ -312,7 +312,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const payload = store.getNode(addNodeRequest.id)!.payload;
+    const payload = store.getNode(addNodeRequest.id).payload;
     payload.x = 11;
     payload.y = 11;
 
@@ -327,7 +327,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
-    const payload = store.getNode(addNodeRequest.id)!.payload;
+    const payload = store.getNode(addNodeRequest.id).payload;
     payload.x = 2;
     payload.y = 2;
 
@@ -342,7 +342,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const payload = store.getNode("node-1")!.payload;
+    const payload = store.getNode("node-1").payload;
     payload.x = 12;
     payload.y = 12;
 

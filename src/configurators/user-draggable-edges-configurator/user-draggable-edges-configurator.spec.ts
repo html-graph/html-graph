@@ -45,7 +45,7 @@ const createCanvas = (options?: {
   );
 
   const defaultResolver = (portId: Identifier): Identifier | null => {
-    const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId)!;
+    const edgeIds = canvas.graph.getPortAdjacentEdgeIds(portId);
 
     if (edgeIds.length > 0) {
       return edgeIds[edgeIds.length - 1];

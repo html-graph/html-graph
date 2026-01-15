@@ -10,7 +10,7 @@ import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
-import { CanvasError } from "./canvas-error";
+import { CanvasError } from "@/canvas-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 
@@ -83,7 +83,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const node = canvas.graph.getNode("node-1")!;
+    const node = canvas.graph.getNode("node-1");
 
     expect({ x: node.x, y: node.y }).toEqual({ x: null, y: null });
   });
@@ -99,7 +99,7 @@ describe("Canvas", () => {
       y: 0,
     });
 
-    const node = canvas.graph.getNode("node-1")!;
+    const node = canvas.graph.getNode("node-1");
 
     expect(node).not.toBe(null);
   });
@@ -386,7 +386,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    expect(canvas.graph.getPort("port-1")).not.toBe(null);
+    expect(canvas.graph.hasPort("port-1")).toBe(true);
   });
 
   it("should throw error when trying to mark port with existing id", () => {
@@ -442,7 +442,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const port = canvas.graph.getPort("port-1")!;
+    const port = canvas.graph.getPort("port-1");
 
     expect(port.direction).toBe(Math.PI);
   });
@@ -465,7 +465,7 @@ describe("Canvas", () => {
       direction: Math.PI,
     });
 
-    const port = canvas.graph.getPort("port-1")!;
+    const port = canvas.graph.getPort("port-1");
 
     expect(port.direction).toBe(Math.PI);
   });
@@ -489,7 +489,7 @@ describe("Canvas", () => {
 
     canvas.updatePort("port-1", { direction: Math.PI });
 
-    const port = canvas.graph.getPort("port-1")!;
+    const port = canvas.graph.getPort("port-1");
 
     expect(port.direction).toBe(Math.PI);
   });

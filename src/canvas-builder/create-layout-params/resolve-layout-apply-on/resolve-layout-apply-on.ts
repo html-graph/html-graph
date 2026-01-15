@@ -18,12 +18,6 @@ export const resolveLayoutApplyOn = (
     };
   }
 
-  if (applyOn?.type === "topologyChangeTimeout") {
-    return {
-      type: "topologyChangeMacrotask",
-    };
-  }
-
   return {
     type: "topologyChangeMicrotask",
   };

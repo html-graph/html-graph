@@ -60,8 +60,8 @@ navigateBtn.addEventListener(
   "click",
   () => {
     const nodes = [
-      canvas.graph.getNode("node-2")!,
-      canvas.graph.getNode("node-3")!,
+      canvas.graph.getNode("node-2"),
+      canvas.graph.getNode("node-3"),
     ];
 
     const [x, y] = nodes.reduce(

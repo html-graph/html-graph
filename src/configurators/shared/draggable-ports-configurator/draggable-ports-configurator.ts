@@ -5,8 +5,8 @@ import { Identifier } from "@/identifier";
 
 export class DraggablePortsConfigurator {
   private readonly onAfterPortMarked = (portId: Identifier): void => {
-    const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
+    const port = this.canvas.graph.getPort(portId);
+    const elementPortIds = this.canvas.graph.findPortIdsByElement(port.element);
 
     if (elementPortIds.length === 1) {
       this.hookPortEvents(port.element);
@@ -14,8 +14,8 @@ export class DraggablePortsConfigurator {
   };
 
   private readonly onBeforePortUnmarked = (portId: Identifier): void => {
-    const port = this.canvas.graph.getPort(portId)!;
-    const elementPortIds = this.canvas.graph.getElementPortIds(port.element);
+    const port = this.canvas.graph.getPort(portId);
+    const elementPortIds = this.canvas.graph.findPortIdsByElement(port.element);
 
     if (elementPortIds.length === 1) {
       this.unhookPortEvents(port.element);
@@ -28,7 +28,7 @@ export class DraggablePortsConfigurator {
     }
 
     const target = event.currentTarget as HTMLElement;
-    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+    const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
     const accepted = this.params.onPortPointerDown(portId, {
       x: event.clientX,
@@ -81,7 +81,7 @@ export class DraggablePortsConfigurator {
 
     const touch = event.touches[0];
     const target = event.currentTarget as HTMLElement;
-    const portId = this.canvas.graph.getElementPortIds(target)[0]!;
+    const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
     const accepted = this.params.onPortPointerDown(portId, {
       x: touch.clientX,
@@ -131,7 +131,7 @@ export class DraggablePortsConfigurator {
 
   private readonly onBeforeClear = (): void => {
     this.canvas.graph.getAllPortIds().forEach((portId) => {
-      const port = this.canvas.graph.getPort(portId)!;
+      const port = this.canvas.graph.getPort(portId);
       this.unhookPortEvents(port.element);
     });
   };

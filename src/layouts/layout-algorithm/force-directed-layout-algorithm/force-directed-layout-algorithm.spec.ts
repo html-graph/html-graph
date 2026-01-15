@@ -33,7 +33,6 @@ const initCanvas = (canvas: Canvas): void => {
 
 const createAlgorithm = (params?: {
   maxIterations?: number;
-  convergeDelta?: number;
   convergeVelocity?: number;
 }): LayoutAlgorithm => {
   return new ForceDirectedLayoutAlgorithm({
@@ -43,9 +42,7 @@ const createAlgorithm = (params?: {
     nodeCharge: 10,
     nodeMass: 1,
     edgeEquilibriumLength: 8,
-    effectiveDistance: 1000,
     edgeStiffness: 1,
-    convergenceDelta: params?.convergeDelta ?? 0,
     convergenceVelocity: params?.convergeVelocity ?? 0,
     maxForce: 1e9,
     nodeForceCoefficient: 1,
@@ -61,32 +58,10 @@ describe("ForceDirectedLayoutAlgorithm", () => {
 
     const algorithm = createAlgorithm({ maxIterations: 1 });
 
-    const nextCoords = algorithm.calculateCoordinates(
-      canvas.graph,
-      canvas.viewport,
-    );
-
-    expect(nextCoords).toEqual(
-      new Map([
-        ["node-1", { x: 9, y: 0 }],
-        ["node-2", { x: 21, y: 0 }],
-      ]),
-    );
-  });
-
-  it("should stop when converged by delta", () => {
-    const canvas = createCanvas();
-    initCanvas(canvas);
-
-    const algorithm = createAlgorithm({
-      maxIterations: 2,
-      convergeDelta: 0.5 + 1e10,
+    const nextCoords = algorithm.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
     });
-
-    const nextCoords = algorithm.calculateCoordinates(
-      canvas.graph,
-      canvas.viewport,
-    );
 
     expect(nextCoords).toEqual(
       new Map([
@@ -105,10 +80,10 @@ describe("ForceDirectedLayoutAlgorithm", () => {
       convergeVelocity: 1.1,
     });
 
-    const nextCoords = algorithm.calculateCoordinates(
-      canvas.graph,
-      canvas.viewport,
-    );
+    const nextCoords = algorithm.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
 
     expect(nextCoords).toEqual(
       new Map([

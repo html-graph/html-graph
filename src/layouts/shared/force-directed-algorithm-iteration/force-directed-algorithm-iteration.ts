@@ -31,7 +31,7 @@ export class ForceDirectedAlgorithmIteration {
     this.nodeForcesApplicationStrategy = params.nodeForcesApplicationStrategy;
   }
 
-  public apply(): [number, number] {
+  public apply(): number {
     let maxDelta = 0;
     let maxVelocity = 0;
     const forces = new Map<Identifier, MutablePoint>();
@@ -67,14 +67,14 @@ export class ForceDirectedAlgorithmIteration {
       maxDelta = Math.max(maxDelta, Math.sqrt(dx * dx + dy * dy));
     });
 
-    return [maxDelta, maxVelocity];
+    return maxVelocity;
   }
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
     this.graph.getAllEdgeIds().forEach((edgeId) => {
       const edge = this.graph.getEdge(edgeId)!;
-      const portFrom = this.graph.getPort(edge.from)!;
-      const portTo = this.graph.getPort(edge.to)!;
+      const portFrom = this.graph.getPort(edge.from);
+      const portTo = this.graph.getPort(edge.to);
       const sourceCoords = this.currentCoords.get(portFrom.nodeId)!;
       const targetCoords = this.currentCoords.get(portTo.nodeId)!;
       const vector = this.distanceVectorGenerator.create(

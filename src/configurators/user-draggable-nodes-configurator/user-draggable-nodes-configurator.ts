@@ -15,7 +15,7 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     this.updateMaxNodePriority(nodeId);
-    const node = this.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId);
 
     node.element.addEventListener("mousedown", this.onMouseDown, {
       passive: true,
@@ -30,7 +30,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    const node = this.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId);
 
     node.element.removeEventListener("mousedown", this.onMouseDown);
     node.element.removeEventListener("touchstart", this.onTouchStart);
@@ -43,7 +43,7 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onBeforeClear = (): void => {
     this.canvas.graph.getAllNodeIds().forEach((nodeId) => {
-      const node = this.canvas.graph.getNode(nodeId)!;
+      const node = this.canvas.graph.getNode(nodeId);
 
       node.element.removeEventListener("mousedown", this.onMouseDown);
       node.element.removeEventListener("touchstart", this.onTouchStart);
@@ -59,7 +59,7 @@ export class UserDraggableNodesConfigurator {
 
     const element = event.currentTarget as HTMLElement;
     const nodeId = this.graph.findNodeIdByElement(element)!;
-    const node = this.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId);
 
     const isDragAllowed = this.params.nodeDragVerifier(nodeId);
 
@@ -108,7 +108,7 @@ export class UserDraggableNodesConfigurator {
 
     const element = event.currentTarget as HTMLElement;
     const nodeId = this.canvas.graph.findNodeIdByElement(element)!;
-    const node = this.graph.getNode(nodeId)!;
+    const node = this.graph.getNode(nodeId);
 
     const isDragAllowed = this.params.nodeDragVerifier({
       nodeId: nodeId,
@@ -229,9 +229,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private moveNode(state: GrabbedNodeState, cursor: Point): void {
-    const node = this.graph.getNode(state.nodeId)!;
-
-    if (node === null) {
+    if (!this.graph.hasNode(state.nodeId)) {
       return;
     }
 
@@ -264,7 +262,7 @@ export class UserDraggableNodesConfigurator {
 
       this.maxNodePriority++;
 
-      const edges = this.graph.getNodeAdjacentEdgeIds(nodeId)!;
+      const edges = this.graph.getNodeAdjacentEdgeIds(nodeId);
 
       edges.forEach((edgeId) => {
         this.canvas.updateEdge(edgeId, { priority: edgePriority });
@@ -275,12 +273,11 @@ export class UserDraggableNodesConfigurator {
   }
 
   private cancelMouseDrag(): void {
-    if (this.grabbedNode !== null) {
-      const node = this.graph.getNode(this.grabbedNode.nodeId);
-
-      if (node !== null) {
-        this.params.onNodeDragFinished(this.grabbedNode.nodeId);
-      }
+    if (
+      this.grabbedNode !== null &&
+      this.graph.hasNode(this.grabbedNode.nodeId)
+    ) {
+      this.params.onNodeDragFinished(this.grabbedNode.nodeId);
     }
 
     this.grabbedNode = null;
@@ -294,17 +291,18 @@ export class UserDraggableNodesConfigurator {
   }
 
   private cancelTouchDrag(): void {
-    if (this.grabbedNode !== null) {
+    if (
+      this.grabbedNode !== null &&
+      this.graph.hasNode(this.grabbedNode.nodeId)
+    ) {
       const node = this.graph.getNode(this.grabbedNode.nodeId);
 
-      if (node !== null) {
-        this.params.onNodeDragFinished({
-          nodeId: this.grabbedNode.nodeId,
-          element: node.element,
-          x: node.x,
-          y: node.y,
-        });
-      }
+      this.params.onNodeDragFinished({
+        nodeId: this.grabbedNode.nodeId,
+        element: node.element,
+        x: node.x,
+        y: node.y,
+      });
     }
 
     this.grabbedNode = null;
@@ -318,7 +316,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private updateMaxNodePriority(nodeId: Identifier): void {
-    const priority = this.graph.getNode(nodeId)!.priority;
+    const priority = this.graph.getNode(nodeId).priority;
 
     this.maxNodePriority = Math.max(this.maxNodePriority, priority);
   }

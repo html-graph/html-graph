@@ -22,7 +22,7 @@ export class RenderingBoxState {
   }
 
   public hasNode(nodeId: Identifier): boolean {
-    const payload = this.graphStore.getNode(nodeId)!.payload;
+    const payload = this.graphStore.getNode(nodeId).payload;
 
     const { x, y } = payload as Point;
 
@@ -30,12 +30,12 @@ export class RenderingBoxState {
   }
 
   public hasEdge(edgeId: Identifier): boolean {
-    const edge = this.graphStore.getEdge(edgeId)!;
-    const nodeFromId = this.graphStore.getPort(edge.from)!.nodeId;
-    const nodeToId = this.graphStore.getPort(edge.to)!.nodeId;
-    const nodePayloadFrom = this.graphStore.getNode(nodeFromId)!
+    const edge = this.graphStore.getEdge(edgeId);
+    const nodeFromId = this.graphStore.getPort(edge.from).nodeId;
+    const nodeToId = this.graphStore.getPort(edge.to).nodeId;
+    const nodePayloadFrom = this.graphStore.getNode(nodeFromId)
       .payload as Point;
-    const nodePayloadTo = this.graphStore.getNode(nodeToId)!.payload as Point;
+    const nodePayloadTo = this.graphStore.getNode(nodeToId).payload as Point;
 
     const xFrom = Math.min(nodePayloadFrom.x, nodePayloadTo.x);
     const xTo = Math.max(nodePayloadFrom.x, nodePayloadTo.x);

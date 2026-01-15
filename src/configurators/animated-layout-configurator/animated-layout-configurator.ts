@@ -4,12 +4,12 @@ import { AnimationSeries } from "./animation-series";
 import { AnimatedLayoutAlgorithm } from "@/layouts";
 
 export class AnimatedLayoutConfigurator {
-  private readonly step = (dtSec: number): void => {
-    const nextCoords = this.algorithm.calculateNextCoordinates(
-      this.canvas.graph,
-      dtSec,
-      this.canvas.viewport,
-    );
+  private readonly step = (dt: number): void => {
+    const nextCoords = this.algorithm.calculateNextCoordinates({
+      graph: this.canvas.graph,
+      dt,
+      viewport: this.canvas.viewport,
+    });
 
     nextCoords.forEach((coords, nodeId) => {
       if (!this.staticNodes.has(nodeId)) {

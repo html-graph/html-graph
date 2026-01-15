@@ -13,7 +13,6 @@ export type {
   LayoutApplyOn,
 } from "./canvas-builder";
 
-export { CanvasError } from "./canvas";
 export type {
   Canvas,
   AddNodeRequest,
@@ -26,6 +25,8 @@ export type {
   UpdateEdgeRequest,
   PatchMatrixRequest,
 } from "./canvas";
+
+export { CanvasError } from "./canvas-error";
 
 export type {
   TransformPayload,
@@ -79,6 +80,11 @@ export type { PriorityFn } from "./priority";
 
 export type { Identifier } from "./identifier";
 
-export type { LayoutAlgorithm, AnimatedLayoutAlgorithm } from "./layouts";
+export type {
+  LayoutAlgorithm,
+  LayoutAlgorithmParams,
+  AnimatedLayoutAlgorithm,
+  AnimatedLayoutAlgorithmParams,
+} from "./layouts";
 
 export { EventSubject } from "./event-subject";

@@ -20,7 +20,7 @@ describe("createLayoutParams", () => {
 
   it("should set specified trigger", () => {
     const config: LayoutConfig = {
-      applyOn: { type: "topologyChangeTimeout" },
+      applyOn: { type: "topologyChangeMacrotask" },
     };
 
     const params = createLayoutParams(config);

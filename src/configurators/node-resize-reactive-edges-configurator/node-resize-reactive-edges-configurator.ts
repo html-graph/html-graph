@@ -7,14 +7,14 @@ export class NodeResizeReactiveEdgesConfigurator {
   private readonly nodesResizeObserver: ResizeObserver;
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.canvas.graph.getNode(nodeId);
 
     this.elementToNodeId.set(node.element, nodeId);
     this.nodesResizeObserver.observe(node.element);
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    const node = this.canvas.graph.getNode(nodeId)!;
+    const node = this.canvas.graph.getNode(nodeId);
 
     this.elementToNodeId.delete(node.element);
     this.nodesResizeObserver.unobserve(node.element);

@@ -1,9 +1,8 @@
-import { Graph } from "@/graph";
 import { Identifier } from "@/identifier";
 import { LayoutAlgorithm } from "../layout-algorithm";
 import type { Point } from "@/point";
 import { RandomFillerLayoutAlgorithmParams } from "./random-filler-layout-algorithm-params";
-import { Viewport } from "@/viewport";
+import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 
 export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
   private readonly rand: () => number;
@@ -16,9 +15,9 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
   }
 
   public calculateCoordinates(
-    graph: Graph,
-    viewport: Viewport,
+    params: LayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
+    const { graph, viewport } = params;
     const currentCoords = new Map<Identifier, Point>();
     const nodeIds = graph.getAllNodeIds();
 
@@ -33,7 +32,7 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
     };
 
     nodeIds.forEach((nodeId) => {
-      const node = graph.getNode(nodeId)!;
+      const node = graph.getNode(nodeId);
 
       currentCoords.set(nodeId, {
         x: node.x ?? areaBottomLeft.x + side * this.rand(),

@@ -26,10 +26,6 @@ export const resolveLayoutAlgorithm = (
           forceDirectedDefaults.edgeEquilibriumLength,
         edgeStiffness:
           config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        effectiveDistance:
-          config?.effectiveDistance ?? forceDirectedDefaults.effectiveDistance,
-        convergenceDelta:
-          config?.convergenceDelta ?? forceDirectedDefaults.convergenceDelta,
         convergenceVelocity:
           config?.convergenceVelocity ??
           forceDirectedDefaults.convergenceVelocity,
