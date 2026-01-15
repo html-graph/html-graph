@@ -689,60 +689,76 @@ describe("Graph", () => {
     ]);
   });
 
-  it("should return null when accessing non-existing port incoming edges", () => {
+  it("should throw error when trying to access nonexisting port incoming edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPortIncomingEdgeIds("port-1")).toEqual(null);
+    expect(() => {
+      graph.getPortIncomingEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing port outgoing edges", () => {
+  it("should throw error when trying to access nonexisting port outgoing edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPortOutgoingEdgeIds("port-1")).toEqual(null);
+    expect(() => {
+      graph.getPortOutgoingEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing port cycle edges", () => {
+  it("should throw error when trying to access nonexisting port cycle edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPortCycleEdgeIds("port-1")).toEqual(null);
+    expect(() => {
+      graph.getPortCycleEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing port adjacent edges", () => {
+  it("should throw error when trying to access nonexisting port adjacent edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getPortAdjacentEdgeIds("port-1")).toEqual(null);
+    expect(() => {
+      graph.getPortAdjacentEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing node incoming edges", () => {
+  it("should throw error when trying to access nonexisting node incoming edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNodeIncomingEdgeIds("node-1")).toEqual(null);
+    expect(() => {
+      graph.getNodeIncomingEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing node outgoing edges", () => {
+  it("should throw error when trying to access nonexisting node outgoing edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNodeOutgoingEdgeIds("node-1")).toEqual(null);
+    expect(() => {
+      graph.getNodeOutgoingEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing node cycle edges", () => {
+  it("should throw error when trying to access nonexisting node cycle edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNodeCycleEdgeIds("node-1")).toEqual(null);
+    expect(() => {
+      graph.getNodeCycleEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
-  it("should return null when accessing non-existing node adjacent edges", () => {
+  it("should throw error when trying to access nonexisting node adjacent edges", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    expect(graph.getNodeAdjacentEdgeIds("node-1")).toEqual(null);
+    expect(() => {
+      graph.getNodeAdjacentEdgeIds("port-1");
+    }).toThrow(CanvasError);
   });
 
   it("should emit event before clear", () => {

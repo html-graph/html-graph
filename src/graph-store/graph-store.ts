@@ -356,7 +356,7 @@ export class GraphStore {
   }
 
   public getNodeIncomingEdgeIds(nodeId: Identifier): readonly Identifier[] {
-    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
+    const ports = Array.from(this.getNode(nodeId).ports.keys());
     const res: Identifier[] = [];
 
     ports.forEach((portId) => {
@@ -376,7 +376,7 @@ export class GraphStore {
   }
 
   public getNodeOutgoingEdgeIds(nodeId: Identifier): readonly Identifier[] {
-    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
+    const ports = Array.from(this.getNode(nodeId).ports.keys());
     const res: Identifier[] = [];
 
     ports.forEach((portId) => {
@@ -396,7 +396,7 @@ export class GraphStore {
   }
 
   public getNodeCycleEdgeIds(nodeId: Identifier): readonly Identifier[] {
-    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
+    const ports = Array.from(this.getNode(nodeId).ports.keys());
     const res: Identifier[] = [];
 
     ports.forEach((portId) => {
@@ -420,7 +420,7 @@ export class GraphStore {
   }
 
   public getNodeAdjacentEdgeIds(nodeId: Identifier): readonly Identifier[] {
-    const ports = Array.from(this.nodes.get(nodeId)!.ports.keys());
+    const ports = Array.from(this.getNode(nodeId).ports.keys());
     const res: Identifier[] = [];
 
     ports.forEach((portId) => {
