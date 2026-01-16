@@ -19,7 +19,11 @@ class ReleaseNextVersion {
 
     const newVersion = this.updateVersion();
 
-    const cmdsBuild = ["npx prettier ./package.json --write", "npm run build"];
+    const cmdsBuild = [
+      "npm install",
+      "npx prettier ./package.json --write",
+      "npm run build",
+    ];
 
     await execute(cmdsBuild.join(" && "));
 

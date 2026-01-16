@@ -1,0 +1,10 @@
+.node {
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.shape {
+  pointer-events: auto;
+}

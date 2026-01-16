@@ -79,7 +79,7 @@ export class Graph {
     };
   }
 
-  public findNodeIdByElement(element: HTMLElement): Identifier | undefined {
+  public findNodeIdByElement(element: Element): Identifier | undefined {
     return this.graphStore.findNodeIdByElement(element);
   }
 
@@ -109,7 +109,7 @@ export class Graph {
     return this.graphStore.getNodePortIds(nodeId);
   }
 
-  public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {
+  public findPortIdsByElement(element: Element): readonly Identifier[] {
     return this.graphStore.findPortIdsByElement(element);
   }
 

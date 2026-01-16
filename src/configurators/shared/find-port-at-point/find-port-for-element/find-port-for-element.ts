@@ -8,8 +8,7 @@ export const findPortForElement = (
   let elementBuf: Element | null = element;
 
   while (elementBuf !== null) {
-    const portId =
-      graph.findPortIdsByElement(elementBuf as HTMLElement)[0] ?? null;
+    const portId = graph.findPortIdsByElement(elementBuf)[0] ?? null;
 
     if (portId !== null) {
       return {
@@ -18,7 +17,7 @@ export const findPortForElement = (
       };
     }
 
-    const nodeId = graph.findNodeIdByElement(elementBuf as HTMLElement);
+    const nodeId = graph.findNodeIdByElement(elementBuf);
 
     if (nodeId !== undefined) {
       return {

@@ -1,4 +1,5 @@
 import { Canvas } from "@/canvas";
+import { NodeElement } from "@/element";
 import { Identifier } from "@/identifier";
 
 export class NodeResizeReactiveEdgesConfigurator {
@@ -28,7 +29,7 @@ export class NodeResizeReactiveEdgesConfigurator {
   private constructor(private readonly canvas: Canvas) {
     this.nodesResizeObserver = new ResizeObserver((entries) => {
       entries.forEach((entry) => {
-        const element = entry.target as HTMLElement;
+        const element = entry.target as NodeElement;
 
         this.handleNodeResize(element);
       });
@@ -43,7 +44,7 @@ export class NodeResizeReactiveEdgesConfigurator {
     new NodeResizeReactiveEdgesConfigurator(canvas);
   }
 
-  private handleNodeResize(element: HTMLElement): void {
+  private handleNodeResize(element: NodeElement): void {
     const nodeId = this.elementToNodeId.get(element)!;
 
     this.canvas.updateNode(nodeId);

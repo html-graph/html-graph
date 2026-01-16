@@ -54,6 +54,13 @@ npx jest --coverage
 
 7. `docker compose exec html-graph-e2e zsh` - enter e2e tests container
 
+## Adding a use case
+
+```
+cd use-cases
+cp -r template xyz-name-of-use-case
+```
+
 ## Release next version
 
 ```

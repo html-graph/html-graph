@@ -1,7 +1,8 @@
+import { PortElement } from "@/element";
 import { Identifier } from "@/identifier";
 
 export interface StorePort {
-  readonly element: HTMLElement;
+  readonly element: PortElement;
   readonly payload: {
     direction: number;
   };
