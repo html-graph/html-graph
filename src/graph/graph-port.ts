@@ -1,7 +1,8 @@
+import { PortElement } from "@/element";
 import { Identifier } from "@/identifier";
 
 export interface GraphPort {
-  readonly element: HTMLElement;
+  readonly element: PortElement;
   readonly direction: number;
   readonly nodeId: Identifier;
 }

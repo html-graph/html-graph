@@ -88,3 +88,5 @@ export type {
 } from "./layouts";
 
 export { EventSubject } from "./event-subject";
+
+export type { NodeElement, PortElement } from "./element";

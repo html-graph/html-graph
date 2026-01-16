@@ -5,6 +5,7 @@ import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
+import { NodeElement } from "@/element";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;
@@ -15,12 +16,12 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     this.updateMaxNodePriority(nodeId);
-    const node = this.graph.getNode(nodeId);
+    const { element } = this.graph.getNode(nodeId);
 
-    node.element.addEventListener("mousedown", this.onMouseDown, {
+    element.addEventListener("mousedown", this.onMouseDown, {
       passive: true,
     });
-    node.element.addEventListener("touchstart", this.onTouchStart, {
+    element.addEventListener("touchstart", this.onTouchStart, {
       passive: true,
     });
   };
@@ -30,10 +31,10 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    const node = this.graph.getNode(nodeId);
+    const { element } = this.graph.getNode(nodeId);
 
-    node.element.removeEventListener("mousedown", this.onMouseDown);
-    node.element.removeEventListener("touchstart", this.onTouchStart);
+    element.removeEventListener("mousedown", this.onMouseDown);
+    element.removeEventListener("touchstart", this.onTouchStart);
   };
 
   private readonly onBeforeDestroy = (): void => {
@@ -43,21 +44,23 @@ export class UserDraggableNodesConfigurator {
 
   private readonly onBeforeClear = (): void => {
     this.canvas.graph.getAllNodeIds().forEach((nodeId) => {
-      const node = this.canvas.graph.getNode(nodeId);
+      const { element } = this.canvas.graph.getNode(nodeId);
 
-      node.element.removeEventListener("mousedown", this.onMouseDown);
-      node.element.removeEventListener("touchstart", this.onTouchStart);
+      element.removeEventListener("mousedown", this.onMouseDown);
+      element.removeEventListener("touchstart", this.onTouchStart);
     });
 
     this.maxNodePriority = 0;
   };
 
-  private readonly onMouseDown = (event: MouseEvent): void => {
-    if (!this.params.mouseDownEventVerifier(event)) {
+  private readonly onMouseDown: EventListener = (event: Event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.params.mouseDownEventVerifier(mouseEvent)) {
       return;
     }
 
-    const element = event.currentTarget as HTMLElement;
+    const element = event.currentTarget as NodeElement;
     const nodeId = this.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId);
 
@@ -72,8 +75,8 @@ export class UserDraggableNodesConfigurator {
     event.stopPropagation();
 
     const cursorContent = this.calculateContentPoint({
-      x: event.clientX,
-      y: event.clientY,
+      x: mouseEvent.clientX,
+      y: mouseEvent.clientY,
     });
 
     this.grabbedNode = {
@@ -95,18 +98,18 @@ export class UserDraggableNodesConfigurator {
     });
   };
 
-  private readonly onTouchStart: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
-    if (event.touches.length !== 1) {
+  private readonly onTouchStart: EventListener = (event: Event) => {
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 1) {
       return;
     }
 
     event.stopPropagation();
 
-    const touch = event.touches[0];
+    const touch = touchEvent.touches[0];
 
-    const element = event.currentTarget as HTMLElement;
+    const element = event.currentTarget as NodeElement;
     const nodeId = this.canvas.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId);
 

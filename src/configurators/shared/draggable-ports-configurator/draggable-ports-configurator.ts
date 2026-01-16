@@ -2,6 +2,7 @@ import { Canvas } from "@/canvas";
 import { isPointInside } from "../is-point-inside";
 import { DraggablePortsParams } from "./draggable-ports-params";
 import { Identifier } from "@/identifier";
+import { PortElement } from "@/element";
 
 export class DraggablePortsConfigurator {
   private readonly onAfterPortMarked = (portId: Identifier): void => {
@@ -22,17 +23,19 @@ export class DraggablePortsConfigurator {
     }
   };
 
-  private readonly onPortMouseDown = (event: MouseEvent): void => {
-    if (!this.params.mouseDownEventVerifier(event)) {
+  private readonly onPortMouseDown: EventListener = (event: Event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.params.mouseDownEventVerifier(mouseEvent)) {
       return;
     }
 
-    const target = event.currentTarget as HTMLElement;
+    const target = event.currentTarget as PortElement;
     const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
     const accepted = this.params.onPortPointerDown(portId, {
-      x: event.clientX,
-      y: event.clientY,
+      x: mouseEvent.clientX,
+      y: mouseEvent.clientY,
     });
 
     if (!accepted) {
@@ -74,13 +77,15 @@ export class DraggablePortsConfigurator {
     this.stopMouseDrag();
   };
 
-  private readonly onPortTouchStart = (event: TouchEvent): void => {
-    if (event.touches.length !== 1) {
+  private readonly onPortTouchStart: EventListener = (event: Event): void => {
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 1) {
       return;
     }
 
-    const touch = event.touches[0];
-    const target = event.currentTarget as HTMLElement;
+    const touch = touchEvent.touches[0];
+    const target = event.currentTarget as PortElement;
     const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
     const accepted = this.params.onPortPointerDown(portId, {
@@ -163,7 +168,7 @@ export class DraggablePortsConfigurator {
     new DraggablePortsConfigurator(canvas, element, win, params);
   }
 
-  private hookPortEvents(element: HTMLElement): void {
+  private hookPortEvents(element: PortElement): void {
     element.addEventListener("mousedown", this.onPortMouseDown, {
       passive: true,
     });
@@ -172,7 +177,7 @@ export class DraggablePortsConfigurator {
     });
   }
 
-  private unhookPortEvents(element: HTMLElement): void {
+  private unhookPortEvents(element: PortElement): void {
     element.removeEventListener("mousedown", this.onPortMouseDown);
     element.removeEventListener("touchstart", this.onPortTouchStart);
   }

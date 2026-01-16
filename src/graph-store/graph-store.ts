@@ -11,6 +11,7 @@ import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 import { Identifier } from "@/identifier";
 import { CanvasError } from "@/canvas-error";
+import { NodeElement, PortElement } from "@/element";
 
 export class GraphStore {
   private readonly nodes = new Map<Identifier, StoreNode>();
@@ -19,7 +20,7 @@ export class GraphStore {
 
   private readonly edges = new Map<Identifier, StoreEdge>();
 
-  private readonly nodesElementsMap = new Map<HTMLElement, Identifier>();
+  private readonly nodesElementsMap = new Map<NodeElement, Identifier>();
 
   private readonly portIncomingEdges = new Map<Identifier, Set<Identifier>>();
 
@@ -28,7 +29,7 @@ export class GraphStore {
   private readonly portCycleEdges = new Map<Identifier, Set<Identifier>>();
 
   private readonly elementPorts = new OneToManyCollection<
-    HTMLElement,
+    PortElement,
     Identifier
   >();
 
@@ -129,7 +130,7 @@ export class GraphStore {
   }
 
   public addNode(request: AddNodeRequest): void {
-    const ports = new Map<Identifier, HTMLElement>();
+    const ports = new Map<Identifier, PortElement>();
 
     const node: StoreNode = {
       element: request.element,
@@ -152,8 +153,8 @@ export class GraphStore {
     return Array.from(this.nodes.keys());
   }
 
-  public findNodeIdByElement(element: HTMLElement): Identifier | undefined {
-    return this.nodesElementsMap.get(element);
+  public findNodeIdByElement(element: Element): Identifier | undefined {
+    return this.nodesElementsMap.get(element as NodeElement);
   }
 
   public updateNode(nodeId: Identifier, request: UpdateNodeRequest): void {
@@ -223,8 +224,8 @@ export class GraphStore {
     return Array.from(this.ports.keys());
   }
 
-  public findPortIdsByElement(element: HTMLElement): readonly Identifier[] {
-    return this.elementPorts.getMultiBySingle(element);
+  public findPortIdsByElement(element: Element): readonly Identifier[] {
+    return this.elementPorts.getMultiBySingle(element as PortElement);
   }
 
   public getNodePortIds(nodeId: Identifier): readonly Identifier[] {
