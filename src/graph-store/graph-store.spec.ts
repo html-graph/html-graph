@@ -148,6 +148,39 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addNodeRequest1.id);
   });
 
+  it("should throw error when trying to add node with existing id", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    store.addNode(addNodeRequest1);
+
+    expect(() => {
+      store.addNode(addNodeRequest1);
+    }).toThrow(CanvasError);
+  });
+
+  it("should throw error when trying to add node with existing element", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+
+    const addNodeRequest2 = {
+      id: "node-2",
+      element: addNodeRequest1.element,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    };
+
+    store.addNode(addNodeRequest1);
+
+    expect(() => {
+      store.addNode(addNodeRequest2);
+    }).toThrow(CanvasError);
+  });
+
   it("should update node coordinates", () => {
     const store = new GraphStore();
 
@@ -176,6 +209,14 @@ describe("GraphStore", () => {
     };
 
     expect(store.getNode(addNodeRequest1.id)).toEqual(expected);
+  });
+
+  it("should throw error when trying to update nonexistent node", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.updateNode("node-1", {});
+    }).toThrow(CanvasError);
   });
 
   it("should emit event after updating node coordinates", () => {
@@ -268,6 +309,14 @@ describe("GraphStore", () => {
     expect(store.hasNode(addNodeRequest1.id)).toBe(false);
   });
 
+  it("should throw error when trying to remove nonexistent node", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.removeNode("node-1");
+    }).toThrow(CanvasError);
+  });
+
   it("should emit before node removed", () => {
     const store = new GraphStore();
 
@@ -328,6 +377,34 @@ describe("GraphStore", () => {
     expect(store.getPort(addPortRequest1Out.id)).toEqual(expected);
   });
 
+  it("should throw error when trying to add port with existing id", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+
+    expect(() => {
+      store.addPort({
+        id: addPortRequest1Out.id,
+        nodeId: addNodeRequest1.id,
+        element: document.createElement("div"),
+        direction: 0,
+      });
+    }).toThrow(CanvasError);
+  });
+
+  it("should throw error when trying to add port to nonexistent node", () => {
+    const store = new GraphStore();
+
+    const addPortRequest1Out = createAddPortRequest1Out();
+
+    expect(() => {
+      store.addPort(addPortRequest1Out);
+    }).toThrow(CanvasError);
+  });
+
   it("should emit after port added", () => {
     const store = new GraphStore();
 
@@ -367,6 +444,14 @@ describe("GraphStore", () => {
     expect(store.getPort(addPortRequest1Out.id)).toEqual(expected);
   });
 
+  it("should throw error when trying to update nonexistent port", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.updatePort("port-1", {});
+    }).toThrow(CanvasError);
+  });
+
   it("should emit after port direction updated", () => {
     const store = new GraphStore();
 
@@ -399,7 +484,7 @@ describe("GraphStore", () => {
     expect(store.getAllPortIds()).toEqual([addPortRequest1Out.id]);
   });
 
-  it("should throw error whenaccessing ports of nonexisting node", () => {
+  it("should throw error when accessing ports of nonexisting node", () => {
     const store = new GraphStore();
 
     expect(() => {
@@ -432,6 +517,14 @@ describe("GraphStore", () => {
     store.removePort(addPortRequest1Out.id);
 
     expect(store.hasPort(addPortRequest1Out.id)).toBe(false);
+  });
+
+  it("should throw error when trying to remove nonexistent port", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.removePort("port-1");
+    }).toThrow(CanvasError);
   });
 
   it("should emit before port removed", () => {
@@ -530,6 +623,60 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out2In);
 
     expect(handler).toHaveBeenCalledWith(addEdgeRequest1Out2In.id);
+  });
+
+  it("should throw error when trying to add edge with existing id", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out2In);
+
+    expect(() => {
+      store.addEdge(addEdgeRequest1Out2In);
+    }).toThrow(CanvasError);
+  });
+
+  it("should throw error when trying to add edge from nonexistent port", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+
+    expect(() => {
+      store.addEdge(addEdgeRequest1Out2In);
+    }).toThrow(CanvasError);
+  });
+
+  it("should throw error when trying to add edge to nonexistent port", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+
+    expect(() => {
+      store.addEdge(addEdgeRequest1Out2In);
+    }).toThrow(CanvasError);
   });
 
   it("should update edge shape", () => {
@@ -662,6 +809,14 @@ describe("GraphStore", () => {
     expect(handler).toHaveBeenCalledWith(addEdgeRequest1Out2In.id);
   });
 
+  it("should throw error when trying to update nonexistent edge", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.updateEdge("edge-1", {});
+    }).toThrow(CanvasError);
+  });
+
   it("should return all edge ids", () => {
     const store = new GraphStore();
 
@@ -697,6 +852,14 @@ describe("GraphStore", () => {
     store.removeEdge(addEdgeRequest1Out2In.id);
 
     expect(store.hasEdge(addEdgeRequest1Out2In.id)).toBe(false);
+  });
+
+  it("should throw error when trying to remove nonexistent edge", () => {
+    const store = new GraphStore();
+
+    expect(() => {
+      store.removeEdge("edge-1");
+    }).toThrow(CanvasError);
   });
 
   it("should emit event before edge removed", () => {
