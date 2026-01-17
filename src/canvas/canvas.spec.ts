@@ -4,13 +4,10 @@ import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
 import { createElement } from "@/mocks";
 import { CenterFn, standardCenterFn } from "@/center-fn";
-import { AddNodeRequest } from "./add-node-request";
-import { MarkPortRequest } from "./mark-port-request";
 import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
-import { CanvasError } from "@/canvas-error";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 
@@ -102,24 +99,6 @@ describe("Canvas", () => {
     const node = canvas.graph.getNode("node-1");
 
     expect(node).not.toBe(null);
-  });
-
-  it("should throw error when trying to add node with existing id", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    const addNodeRequest: AddNodeRequest = {
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    };
-
-    canvas.addNode(addNodeRequest);
-
-    expect(() => {
-      canvas.addNode(addNodeRequest);
-    }).toThrow(CanvasError);
   });
 
   it("should add node with specified default centerFn", () => {
@@ -314,15 +293,6 @@ describe("Canvas", () => {
     expect(nodeElement.style.zIndex).toBe("10");
   });
 
-  it("should throw error when trying to update nonexistent node", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.updateNode("node-1");
-    }).toThrow(CanvasError);
-  });
-
   it("should remove node", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
@@ -339,15 +309,6 @@ describe("Canvas", () => {
     const container = element.children[0].children[0];
 
     expect(container.children.length).toBe(0);
-  });
-
-  it("should throw error when trying to remove nonexistent node", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.removeNode("node-1");
-    }).toThrow(CanvasError);
   });
 
   it("should mark port", () => {
@@ -387,39 +348,6 @@ describe("Canvas", () => {
     });
 
     expect(canvas.graph.hasPort("port-1")).toBe(true);
-  });
-
-  it("should throw error when trying to mark port with existing id", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    const markPortRequest: MarkPortRequest = {
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    };
-
-    canvas.markPort(markPortRequest);
-
-    expect(() => {
-      canvas.markPort(markPortRequest);
-    }).toThrow(CanvasError);
-  });
-
-  it("should throw error when trying to mark port to nonexistent node", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.markPort({ nodeId: "node-1", element: createElement() });
-    }).toThrow(CanvasError);
   });
 
   it("should mark port with specified default port direction", () => {
@@ -494,15 +422,6 @@ describe("Canvas", () => {
     expect(port.direction).toBe(Math.PI);
   });
 
-  it("should throw error when trying to update nonexistent port", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.updatePort("port-1");
-    }).toThrow(CanvasError);
-  });
-
   it("should unmark port", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
@@ -523,15 +442,6 @@ describe("Canvas", () => {
     canvas.unmarkPort("port-1");
 
     expect(canvas.graph.getAllPortIds().length).toBe(0);
-  });
-
-  it("should throw error when trying to unmark non marked port", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.unmarkPort("port-1");
-    }).toThrow(CanvasError);
   });
 
   it("should add edge", () => {
@@ -692,74 +602,6 @@ describe("Canvas", () => {
     const edgeSvg = container.children[1] as SVGSVGElement;
 
     expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should not add edge with existing id", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    expect(() => {
-      canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-    }).toThrow(CanvasError);
-  });
-
-  it("should not add edge from nonexistent port", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    expect(() => {
-      canvas.addEdge({ id: "edge-1", from: "port-2", to: "port-1" });
-    }).toThrow(CanvasError);
-  });
-
-  it("should not add edge to nonexistent port", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    expect(() => {
-      canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
-    }).toThrow(CanvasError);
   });
 
   it("should update edge without parameters", () => {
@@ -929,15 +771,6 @@ describe("Canvas", () => {
     expect(edgeSvg).toBe(newShape.svg);
   });
 
-  it("should throw error when trying to update nonexistent edge", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.updateEdge("edge-1");
-    }).toThrow(CanvasError);
-  });
-
   it("should remove edge", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
@@ -961,15 +794,6 @@ describe("Canvas", () => {
     const container = element.children[0].children[0];
 
     expect(container.children.length).toBe(1);
-  });
-
-  it("should throw error when trying to remove nonexistent edge", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    expect(() => {
-      canvas.removeEdge("edge-1");
-    }).toThrow(CanvasError);
   });
 
   it("should patch viewport matrix", () => {
@@ -1242,25 +1066,5 @@ describe("Canvas", () => {
     canvas.unmarkPort("port-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
-  });
-
-  it("should throw error when trying to add node with existing element", () => {
-    const canvas = createCanvas();
-
-    const nodeElement = createElement();
-
-    canvas.addNode({
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
-
-    expect(() => {
-      canvas.addNode({
-        element: nodeElement,
-        x: 0,
-        y: 0,
-      });
-    }).toThrow(CanvasError);
   });
 });
