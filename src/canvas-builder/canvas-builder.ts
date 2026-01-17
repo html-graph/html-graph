@@ -20,6 +20,7 @@ import {
   UserTransformableViewportVirtualScrollConfigurator,
   LayoutConfigurator,
   AnimatedLayoutConfigurator,
+  AnimatedLayoutParams,
 } from "@/configurators";
 import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
@@ -342,14 +343,23 @@ export class CanvasBuilder {
         this.animationStaticNodes,
       );
 
-      AnimatedLayoutConfigurator.configure(
-        canvas,
-        createAnimatedLayoutParams(
-          this.animatedLayoutConfig,
-          this.animationStaticNodes,
-        ),
-        this.window,
+      let config: AnimatedLayoutParams = createAnimatedLayoutParams(
+        this.animatedLayoutConfig,
       );
+
+      if (this.hasDraggableNodes) {
+        config = {
+          ...config,
+          staticNodeResolver: (nodeId: Identifier): boolean => {
+            return (
+              this.animationStaticNodes.has(nodeId) ||
+              config.staticNodeResolver(nodeId)
+            );
+          },
+        };
+      }
+
+      AnimatedLayoutConfigurator.configure(canvas, config, this.window);
     }
 
     const onBeforeDestroy = (): void => {
