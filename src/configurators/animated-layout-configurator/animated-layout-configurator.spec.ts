@@ -56,9 +56,11 @@ describe("AnimatedLayoutConfigurator", () => {
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      algorithm,
+      {
+        algorithm,
+        staticNodeResolver: () => false,
+      },
       window,
-      () => false,
     );
 
     animationMock.timer.emit(0);
@@ -83,9 +85,11 @@ describe("AnimatedLayoutConfigurator", () => {
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      algorithm,
+      {
+        algorithm,
+        staticNodeResolver: (nodeId) => nodeId === "node-1",
+      },
       window,
-      (nodeId) => nodeId === "node-1",
     );
 
     animationMock.timer.emit(0);

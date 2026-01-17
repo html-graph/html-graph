@@ -1,6 +1,6 @@
 import { DummyAnimatedLayoutAlgorithm } from "@/mocks";
 import { AnimatedLayoutConfig } from "./animated-layout-config";
-import { createAnimatedLayoutAlgorithm } from "./create-animated-layout-algorithm";
+import { createAnimatedLayoutParams } from "./create-animated-layout-params";
 import { ForceDirectedAnimatedLayoutAlgorithm } from "@/layouts";
 
 describe("createAnimatedLayoutParams", () => {
@@ -14,13 +14,13 @@ describe("createAnimatedLayoutParams", () => {
       },
     };
 
-    const algorithm = createAnimatedLayoutAlgorithm(config);
+    const { algorithm } = createAnimatedLayoutParams(config, new Set());
 
     expect(algorithm).toBe(instance);
   });
 
   it("should resolve force based algorithm when config not specified", () => {
-    const algorithm = createAnimatedLayoutAlgorithm(undefined);
+    const { algorithm } = createAnimatedLayoutParams(undefined, new Set());
 
     expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(
       true,
@@ -28,7 +28,7 @@ describe("createAnimatedLayoutParams", () => {
   });
 
   it("should resolve force based algorithm when algorithm not specified", () => {
-    const algorithm = createAnimatedLayoutAlgorithm({});
+    const { algorithm } = createAnimatedLayoutParams({}, new Set());
 
     expect(algorithm instanceof ForceDirectedAnimatedLayoutAlgorithm).toBe(
       true,

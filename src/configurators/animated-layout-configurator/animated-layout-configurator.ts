@@ -1,8 +1,7 @@
-import { Identifier } from "@/identifier";
 import { Canvas } from "@/canvas";
 import { AnimationSeries } from "./animation-series";
-import { AnimatedLayoutAlgorithm } from "@/layouts";
 import { AnimatedLayoutApplier } from "../shared";
+import { AnimatedLayoutParams } from "./animated-layout-params";
 
 export class AnimatedLayoutConfigurator {
   private readonly applier: AnimatedLayoutApplier;
@@ -13,12 +12,11 @@ export class AnimatedLayoutConfigurator {
 
   private constructor(
     canvas: Canvas,
-    algorithm: AnimatedLayoutAlgorithm,
+    params: AnimatedLayoutParams,
     private readonly win: Window,
-    staticNodeResolver: (nodeId: Identifier) => boolean,
   ) {
-    this.applier = new AnimatedLayoutApplier(canvas, algorithm, {
-      staticNodeResolver,
+    this.applier = new AnimatedLayoutApplier(canvas, params.algorithm, {
+      staticNodeResolver: params.staticNodeResolver,
     });
 
     new AnimationSeries(this.win, this.step);
@@ -26,10 +24,9 @@ export class AnimatedLayoutConfigurator {
 
   public static configure(
     canvas: Canvas,
-    params: AnimatedLayoutAlgorithm,
+    params: AnimatedLayoutParams,
     win: Window,
-    staticNodeResolver: (nodeId: Identifier) => boolean,
   ): void {
-    new AnimatedLayoutConfigurator(canvas, params, win, staticNodeResolver);
+    new AnimatedLayoutConfigurator(canvas, params, win);
   }
 }

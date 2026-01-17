@@ -54,7 +54,7 @@ import { Viewport } from "@/viewport";
 import { Identifier } from "@/identifier";
 import {
   AnimatedLayoutConfig,
-  createAnimatedLayoutAlgorithm,
+  createAnimatedLayoutParams,
 } from "./create-animated-layout-params";
 import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
@@ -344,9 +344,11 @@ export class CanvasBuilder {
 
       AnimatedLayoutConfigurator.configure(
         canvas,
-        createAnimatedLayoutAlgorithm(this.animatedLayoutConfig),
+        createAnimatedLayoutParams(
+          this.animatedLayoutConfig,
+          this.animationStaticNodes,
+        ),
         this.window,
-        (nodeId) => this.animationStaticNodes.has(nodeId),
       );
     }
 
