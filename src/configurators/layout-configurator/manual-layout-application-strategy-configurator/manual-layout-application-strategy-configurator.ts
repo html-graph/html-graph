@@ -1,4 +1,4 @@
-import { LayoutApplier } from "@/configurators/shared";
+import { LayoutApplier } from "../../shared";
 import { EventHandler } from "@/event-subject";
 
 export class ManualLayoutApplicationStrategyConfigurator {

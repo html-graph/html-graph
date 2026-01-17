@@ -4,10 +4,9 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams, wait } from "@/mocks";
-import { DummyLayoutAlgorithm } from "@/mocks";
+import { defaultCanvasParams, wait, DummyLayoutAlgorithm } from "@/mocks";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
-import { LayoutApplier } from "@/configurators/shared";
+import { LayoutApplier } from "../../shared";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();

@@ -5,8 +5,7 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams } from "@/mocks";
-import { DummyLayoutAlgorithm } from "@/mocks";
+import { defaultCanvasParams, DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
 import { LayoutApplier } from "../../shared";
 

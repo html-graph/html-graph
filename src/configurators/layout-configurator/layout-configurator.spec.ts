@@ -105,6 +105,6 @@ describe("LayoutConfigurator", () => {
 
     const { x } = canvas.graph.getNode("node-1");
 
-    expect({ x }).toBe(0);
+    expect(x).toBe(null);
   });
 });
