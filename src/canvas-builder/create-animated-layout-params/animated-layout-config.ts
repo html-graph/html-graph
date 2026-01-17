@@ -3,5 +3,5 @@ import { AnimatedLayoutAlgorithmConfig } from "./animated-layout-algorithm-confi
 
 export interface AnimatedLayoutConfig {
   readonly algorithm?: AnimatedLayoutAlgorithmConfig | undefined;
-  readonly staticNodeResolver?: (nodeId: Identifier) => boolean;
+  readonly staticNodeResolver?: ((nodeId: Identifier) => boolean) | undefined;
 }

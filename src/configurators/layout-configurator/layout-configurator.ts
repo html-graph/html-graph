@@ -9,7 +9,7 @@ export class LayoutConfigurator {
     const strategy = params.applyOn;
 
     const applier = new LayoutApplier(canvas, params.algorithm, {
-      staticNodeResolver: (): boolean => false,
+      staticNodeResolver: params.staticNodeResolver,
     });
 
     switch (strategy.type) {

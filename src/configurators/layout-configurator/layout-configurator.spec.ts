@@ -37,6 +37,7 @@ describe("LayoutConfigurator", () => {
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "topologyChangeMacrotask" },
+      staticNodeResolver: () => false,
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -54,6 +55,7 @@ describe("LayoutConfigurator", () => {
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "topologyChangeMicrotask" },
+      staticNodeResolver: () => false,
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -72,6 +74,7 @@ describe("LayoutConfigurator", () => {
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "manual", trigger },
+      staticNodeResolver: () => false,
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -83,5 +86,25 @@ describe("LayoutConfigurator", () => {
     const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should account for specified static nodes", () => {
+    const canvas = createCanvas();
+    const trigger = new EventSubject<void>();
+    const config: LayoutParams = {
+      algorithm: new DummyLayoutAlgorithm(),
+      applyOn: { type: "manual", trigger },
+      staticNodeResolver: (nodeId) => nodeId === "node-1",
+    };
+
+    LayoutConfigurator.configure(canvas, config);
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    trigger.emit();
+
+    const { x } = canvas.graph.getNode("node-1");
+
+    expect({ x }).toBe(0);
   });
 });
