@@ -1,38 +1,32 @@
-import { Identifier } from "@/identifier";
 import { Canvas } from "@/canvas";
 import { AnimationSeries } from "./animation-series";
-import { AnimatedLayoutAlgorithm } from "@/layouts";
+import { AnimatedLayoutApplier } from "../shared";
+import { AnimatedLayoutParams } from "./animated-layout-params";
 
 export class AnimatedLayoutConfigurator {
-  private readonly step = (dt: number): void => {
-    const nextCoords = this.algorithm.calculateNextCoordinates({
-      graph: this.canvas.graph,
-      dt,
-      viewport: this.canvas.viewport,
-    });
+  private readonly applier: AnimatedLayoutApplier;
 
-    nextCoords.forEach((coords, nodeId) => {
-      if (!this.staticNodes.has(nodeId)) {
-        this.canvas.updateNode(nodeId, { x: coords.x, y: coords.y });
-      }
-    });
+  private readonly step = (dt: number): void => {
+    this.applier.apply(dt);
   };
 
   private constructor(
-    private readonly canvas: Canvas,
-    private readonly algorithm: AnimatedLayoutAlgorithm,
-    private readonly staticNodes: ReadonlySet<Identifier>,
+    canvas: Canvas,
+    params: AnimatedLayoutParams,
     private readonly win: Window,
   ) {
+    this.applier = new AnimatedLayoutApplier(canvas, params.algorithm, {
+      staticNodeResolver: params.staticNodeResolver,
+    });
+
     new AnimationSeries(this.win, this.step);
   }
 
   public static configure(
     canvas: Canvas,
-    params: AnimatedLayoutAlgorithm,
-    staticNodes: Set<Identifier>,
+    params: AnimatedLayoutParams,
     win: Window,
   ): void {
-    new AnimatedLayoutConfigurator(canvas, params, staticNodes, win);
+    new AnimatedLayoutConfigurator(canvas, params, win);
   }
 }

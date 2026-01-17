@@ -9,6 +9,7 @@ export type {
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,
   AnimatedLayoutConfig,
+  AnimatedLayoutAlgorithmConfig,
   LayoutConfig,
   LayoutApplyOn,
 } from "./canvas-builder";

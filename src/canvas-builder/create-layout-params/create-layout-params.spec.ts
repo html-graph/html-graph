@@ -1,6 +1,7 @@
-import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
+import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfig } from "./layout-config";
 import { createLayoutParams } from "./create-layout-params";
+import { defaults } from "./defaults";
 
 describe("createLayoutParams", () => {
   it("should set specified algorithm", () => {
@@ -28,5 +29,25 @@ describe("createLayoutParams", () => {
     expect(params.applyOn).toEqual({
       type: "topologyChangeMacrotask",
     });
+  });
+
+  it("should set default static node resolver", () => {
+    const config: LayoutConfig = {};
+
+    const params = createLayoutParams(config);
+
+    expect(params.staticNodeResolver).toEqual(defaults.staticNodeResolver);
+  });
+
+  it("should set specified static node resolver", () => {
+    const resolver = (): boolean => true;
+
+    const config: LayoutConfig = {
+      staticNodeResolver: resolver,
+    };
+
+    const params = createLayoutParams(config);
+
+    expect(params.staticNodeResolver).toEqual(resolver);
   });
 });

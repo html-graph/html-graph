@@ -1,38 +1,20 @@
-import { Canvas } from "@/canvas";
+import { LayoutApplier } from "../../shared";
 import { EventHandler } from "@/event-subject";
-import { LayoutAlgorithm } from "@/layouts";
 
 export class ManualLayoutApplicationStrategyConfigurator {
   private constructor(
-    private readonly canvas: Canvas,
-    private readonly layoutAlgorithm: LayoutAlgorithm,
+    private readonly applier: LayoutApplier,
     private readonly trigger: EventHandler<void>,
   ) {
     this.trigger.subscribe(() => {
-      this.applyLayout();
+      this.applier.apply();
     });
   }
 
   public static configure(
-    canvas: Canvas,
-    layoutAlgorithm: LayoutAlgorithm,
+    applier: LayoutApplier,
     trigger: EventHandler<void>,
   ): void {
-    new ManualLayoutApplicationStrategyConfigurator(
-      canvas,
-      layoutAlgorithm,
-      trigger,
-    );
-  }
-
-  private applyLayout(): void {
-    const coords = this.layoutAlgorithm.calculateCoordinates({
-      graph: this.canvas.graph,
-      viewport: this.canvas.viewport,
-    });
-
-    coords.forEach((point, nodeId) => {
-      this.canvas.updateNode(nodeId, point);
-    });
+    new ManualLayoutApplicationStrategyConfigurator(applier, trigger);
   }
 }

@@ -20,6 +20,7 @@ import {
   UserTransformableViewportVirtualScrollConfigurator,
   LayoutConfigurator,
   AnimatedLayoutConfigurator,
+  AnimatedLayoutParams,
 } from "@/configurators";
 import { Layers } from "./layers";
 import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
@@ -54,11 +55,12 @@ import { Viewport } from "@/viewport";
 import { Identifier } from "@/identifier";
 import {
   AnimatedLayoutConfig,
-  createAnimatedLayoutAlgorithm,
+  createAnimatedLayoutParams,
 } from "./create-animated-layout-params";
 import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
+import { patchDraggableNodesAnimatedLayoutParams } from "./patch-draggable-nodes-animated-layout-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -337,17 +339,23 @@ export class CanvasBuilder {
     }
 
     if (this.hasAnimatedLayout) {
-      subscribeAnimatedLayoutStaticNodesUpdate(
-        canvas.graph,
-        this.animationStaticNodes,
+      let config: AnimatedLayoutParams = createAnimatedLayoutParams(
+        this.animatedLayoutConfig,
       );
 
-      AnimatedLayoutConfigurator.configure(
-        canvas,
-        createAnimatedLayoutAlgorithm(this.animatedLayoutConfig),
-        this.animationStaticNodes,
-        this.window,
-      );
+      if (this.hasDraggableNodes) {
+        subscribeAnimatedLayoutStaticNodesUpdate(
+          canvas.graph,
+          this.animationStaticNodes,
+        );
+
+        config = patchDraggableNodesAnimatedLayoutParams(
+          config,
+          this.animationStaticNodes,
+        );
+      }
+
+      AnimatedLayoutConfigurator.configure(canvas, config, this.window);
     }
 
     const onBeforeDestroy = (): void => {

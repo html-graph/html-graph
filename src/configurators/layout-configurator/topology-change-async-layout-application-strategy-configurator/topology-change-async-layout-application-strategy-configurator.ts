@@ -1,5 +1,5 @@
-import { Canvas } from "@/canvas";
-import { LayoutAlgorithm } from "@/layouts";
+import { LayoutApplier } from "../../shared";
+import { Graph } from "@/graph";
 
 export class TopologyChangeAsyncLayoutApplicationStrategyConfigurator {
   private applyScheduled = false;
@@ -7,46 +7,39 @@ export class TopologyChangeAsyncLayoutApplicationStrategyConfigurator {
   private apply = (): void => {
     this.applyScheduled = false;
 
-    const coords = this.layoutAlgorithm.calculateCoordinates({
-      graph: this.canvas.graph,
-      viewport: this.canvas.viewport,
-    });
-
-    coords.forEach((point, nodeId) => {
-      this.canvas.updateNode(nodeId, point);
-    });
+    this.applier.apply();
   };
 
   private constructor(
-    private readonly canvas: Canvas,
-    private readonly layoutAlgorithm: LayoutAlgorithm,
+    private readonly graph: Graph,
+    private readonly applier: LayoutApplier,
     private readonly defererFn: (apply: () => void) => void,
   ) {
-    this.canvas.graph.onAfterNodeAdded.subscribe(() => {
+    this.graph.onAfterNodeAdded.subscribe(() => {
       this.scheduleApply();
     });
 
-    this.canvas.graph.onBeforeNodeRemoved.subscribe(() => {
+    this.graph.onBeforeNodeRemoved.subscribe(() => {
       this.scheduleApply();
     });
 
-    this.canvas.graph.onAfterEdgeAdded.subscribe(() => {
+    this.graph.onAfterEdgeAdded.subscribe(() => {
       this.scheduleApply();
     });
 
-    this.canvas.graph.onBeforeEdgeRemoved.subscribe(() => {
+    this.graph.onBeforeEdgeRemoved.subscribe(() => {
       this.scheduleApply();
     });
   }
 
   public static configure(
-    canvas: Canvas,
-    layoutAlgorithm: LayoutAlgorithm,
+    graph: Graph,
+    applier: LayoutApplier,
     defererFn: (apply: () => void) => void,
   ): void {
     new TopologyChangeAsyncLayoutApplicationStrategyConfigurator(
-      canvas,
-      layoutAlgorithm,
+      graph,
+      applier,
       defererFn,
     );
   }

@@ -10,7 +10,6 @@ import {
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
-import { Identifier } from "@/identifier";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -44,7 +43,6 @@ describe("AnimatedLayoutConfigurator", () => {
   });
 
   it("should update node coordinates on second animation frame", async () => {
-    const animationStaticNodes = new Set<Identifier>();
     const canvas = createCanvas();
 
     canvas.addNode({
@@ -58,8 +56,10 @@ describe("AnimatedLayoutConfigurator", () => {
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      algorithm,
-      animationStaticNodes,
+      {
+        algorithm,
+        staticNodeResolver: () => false,
+      },
       window,
     );
 
@@ -71,8 +71,7 @@ describe("AnimatedLayoutConfigurator", () => {
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
-  it("should not update node coordinates for node in the process of dragging", async () => {
-    const animationStaticNodes = new Set<Identifier>();
+  it("should not update node coordinates for node declared as static", async () => {
     const canvas = createCanvas();
 
     canvas.addNode({
@@ -82,14 +81,14 @@ describe("AnimatedLayoutConfigurator", () => {
       y: 100,
     });
 
-    animationStaticNodes.add("node-1");
-
     const algorithm = new DummyAnimatedLayoutAlgorithm();
 
     AnimatedLayoutConfigurator.configure(
       canvas,
-      algorithm,
-      animationStaticNodes,
+      {
+        algorithm,
+        staticNodeResolver: (nodeId) => nodeId === "node-1",
+      },
       window,
     );
 

@@ -1,26 +1,7 @@
-import { AnimatedLayoutAlgorithm } from "@/layouts";
+import { Identifier } from "@/identifier";
+import { AnimatedLayoutAlgorithmConfig } from "./animated-layout-algorithm-config";
 
 export interface AnimatedLayoutConfig {
-  readonly algorithm?:
-    | {
-        readonly type: "custom";
-        readonly instance: AnimatedLayoutAlgorithm;
-      }
-    | {
-        readonly type?: "forceDirected";
-        readonly maxTimeDeltaSec?: number;
-        readonly nodeCharge?: number;
-        readonly nodeMass?: number;
-        readonly edgeEquilibriumLength?: number;
-        readonly edgeStiffness?: number;
-        readonly seed?: string;
-        readonly convergenceVelocity?: number;
-        readonly maxForce?: number;
-        readonly nodeForceCoefficient?: number;
-        readonly barnesHut?: {
-          readonly theta?: number;
-          readonly areaRadiusThreshold?: number;
-        };
-      }
-    | undefined;
+  readonly algorithm?: AnimatedLayoutAlgorithmConfig | undefined;
+  readonly staticNodeResolver?: ((nodeId: Identifier) => boolean) | undefined;
 }

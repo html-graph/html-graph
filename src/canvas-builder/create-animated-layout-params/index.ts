@@ -1,2 +1,3 @@
 export type { AnimatedLayoutConfig } from "./animated-layout-config";
-export { createAnimatedLayoutAlgorithm } from "./create-animated-layout-algorithm";
+export type { AnimatedLayoutAlgorithmConfig } from "./animated-layout-algorithm-config";
+export { createAnimatedLayoutParams } from "./create-animated-layout-params";
