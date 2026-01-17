@@ -345,8 +345,8 @@ export class CanvasBuilder {
       AnimatedLayoutConfigurator.configure(
         canvas,
         createAnimatedLayoutAlgorithm(this.animatedLayoutConfig),
-        this.animationStaticNodes,
         this.window,
+        (nodeId) => this.animationStaticNodes.has(nodeId),
       );
     }
 

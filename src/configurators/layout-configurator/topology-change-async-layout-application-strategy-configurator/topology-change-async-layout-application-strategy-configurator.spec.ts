@@ -7,6 +7,7 @@ import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams, wait } from "@/mocks";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
+import { LayoutApplier } from "@/configurators/shared";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -33,10 +34,13 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on adding a new node", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
+    const applier = new LayoutApplier(canvas, algorithm, {
+      staticNodeResolver: (): boolean => false,
+    });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
-      canvas,
-      algorithm,
+      canvas.graph,
+      applier,
       (apply) => {
         setTimeout(() => {
           apply();
@@ -55,10 +59,13 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on removing node", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
+    const applier = new LayoutApplier(canvas, algorithm, {
+      staticNodeResolver: (): boolean => false,
+    });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
-      canvas,
-      algorithm,
+      canvas.graph,
+      applier,
       (apply) => {
         setTimeout(() => {
           apply();
@@ -83,10 +90,13 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on adding new edge", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
+    const applier = new LayoutApplier(canvas, algorithm, {
+      staticNodeResolver: (): boolean => false,
+    });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
-      canvas,
-      algorithm,
+      canvas.graph,
+      applier,
       (apply) => {
         setTimeout(() => {
           apply();
@@ -116,10 +126,13 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
   it("should apply layout on edge remove", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
+    const applier = new LayoutApplier(canvas, algorithm, {
+      staticNodeResolver: (): boolean => false,
+    });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
-      canvas,
-      algorithm,
+      canvas.graph,
+      applier,
       (apply) => {
         setTimeout(() => {
           apply();

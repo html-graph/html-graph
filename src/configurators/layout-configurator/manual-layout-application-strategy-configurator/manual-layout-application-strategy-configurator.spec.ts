@@ -8,6 +8,7 @@ import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { defaultCanvasParams } from "@/mocks";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
+import { LayoutApplier } from "../../shared";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -35,12 +36,11 @@ describe("ManualLayoutApplicationStrategyConfigurator", () => {
     const canvas = createCanvas();
     const algorithm = new DummyLayoutAlgorithm();
     const trigger = new EventSubject<void>();
+    const applier = new LayoutApplier(canvas, algorithm, {
+      staticNodeResolver: (): boolean => false,
+    });
 
-    ManualLayoutApplicationStrategyConfigurator.configure(
-      canvas,
-      algorithm,
-      trigger,
-    );
+    ManualLayoutApplicationStrategyConfigurator.configure(applier, trigger);
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 

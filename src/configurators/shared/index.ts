@@ -9,3 +9,7 @@ export { OverlayId } from "./overlay-id";
 export { createOverlayCanvas } from "./create-overlay-canvas";
 export { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 export type { DraggablePortsParams } from "./draggable-ports-configurator";
+export { LayoutApplier } from "./layout-applier";
+export type { LayoutApplierParams } from "./layout-applier";
+export { AnimatedLayoutApplier } from "./animated-layout-applier";
+export type { AnimatedLayoutApplierParams } from "./animated-layout-applier";
