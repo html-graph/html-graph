@@ -106,14 +106,6 @@ describe("AnimatedLayoutConfigurator", () => {
 
   it("should emit onBeforeApplied event", async () => {
     const canvas = createCanvas();
-
-    canvas.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 100,
-      y: 100,
-    });
-
     const algorithm = new DummyAnimatedLayoutAlgorithm();
     const onBeforeApplied = jest.fn();
 
@@ -136,14 +128,6 @@ describe("AnimatedLayoutConfigurator", () => {
 
   it("should emit onAfterApplied event", async () => {
     const canvas = createCanvas();
-
-    canvas.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 100,
-      y: 100,
-    });
-
     const algorithm = new DummyAnimatedLayoutAlgorithm();
     const onAfterApplied = jest.fn();
 
