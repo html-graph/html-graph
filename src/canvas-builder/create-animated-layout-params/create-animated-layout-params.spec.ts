@@ -69,22 +69,30 @@ describe("createAnimatedLayoutParams", () => {
   });
 
   it("should set specified onBeforeApplied", () => {
+    const onBeforeApplied = (): void => {};
+
     const config: AnimatedLayoutConfig = {
-      onBeforeApplied: () => {},
+      events: {
+        onBeforeApplied,
+      },
     };
 
     const params = createAnimatedLayoutParams(config);
 
-    expect(params.onBeforeApplied).toEqual(config.onBeforeApplied);
+    expect(params.onBeforeApplied).toEqual(onBeforeApplied);
   });
 
   it("should set specified onAfterApplied", () => {
+    const onAfterApplied = (): void => {};
+
     const config: AnimatedLayoutConfig = {
-      onAfterApplied: () => {},
+      events: {
+        onAfterApplied,
+      },
     };
 
     const params = createAnimatedLayoutParams(config);
 
-    expect(params.onAfterApplied).toEqual(config.onAfterApplied);
+    expect(params.onAfterApplied).toEqual(onAfterApplied);
   });
 });
