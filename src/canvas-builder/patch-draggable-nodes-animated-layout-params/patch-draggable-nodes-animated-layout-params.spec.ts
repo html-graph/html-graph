@@ -7,6 +7,8 @@ const createParams = (): AnimatedLayoutParams => {
   return {
     algorithm: new DummyAnimatedLayoutAlgorithm(),
     staticNodeResolver: (nodeId: Identifier) => nodeId === "node-1",
+    onBeforeApplied: (): void => {},
+    onAfterApplied: (): void => {},
   };
 };
 

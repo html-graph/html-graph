@@ -59,6 +59,8 @@ describe("AnimatedLayoutConfigurator", () => {
       {
         algorithm,
         staticNodeResolver: () => false,
+        onBeforeApplied: () => {},
+        onAfterApplied: () => {},
       },
       window,
     );
@@ -88,6 +90,8 @@ describe("AnimatedLayoutConfigurator", () => {
       {
         algorithm,
         staticNodeResolver: (nodeId) => nodeId === "node-1",
+        onBeforeApplied: () => {},
+        onAfterApplied: () => {},
       },
       window,
     );
@@ -98,5 +102,65 @@ describe("AnimatedLayoutConfigurator", () => {
     const { x, y } = canvas.graph.getNode("node-1");
 
     expect({ x, y }).toEqual({ x: 100, y: 100 });
+  });
+
+  it("should emit onBeforeApplied event", async () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+    });
+
+    const algorithm = new DummyAnimatedLayoutAlgorithm();
+    const onBeforeApplied = jest.fn();
+
+    AnimatedLayoutConfigurator.configure(
+      canvas,
+      {
+        algorithm,
+        staticNodeResolver: () => false,
+        onBeforeApplied,
+        onAfterApplied: () => {},
+      },
+      window,
+    );
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
+
+    expect(onBeforeApplied).toHaveBeenCalled();
+  });
+
+  it("should emit onAfterApplied event", async () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+    });
+
+    const algorithm = new DummyAnimatedLayoutAlgorithm();
+    const onAfterApplied = jest.fn();
+
+    AnimatedLayoutConfigurator.configure(
+      canvas,
+      {
+        algorithm,
+        staticNodeResolver: () => false,
+        onBeforeApplied: () => {},
+        onAfterApplied,
+      },
+      window,
+    );
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(100);
+
+    expect(onAfterApplied).toHaveBeenCalled();
   });
 });

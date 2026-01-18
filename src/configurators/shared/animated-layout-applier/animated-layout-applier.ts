@@ -16,10 +16,14 @@ export class AnimatedLayoutApplier {
       dt,
     });
 
+    this.params.onBeforeApplied();
+
     coords.forEach((point, nodeId) => {
       if (!this.params.staticNodeResolver(nodeId)) {
         this.canvas.updateNode(nodeId, point);
       }
     });
+
+    this.params.onAfterApplied();
   }
 }

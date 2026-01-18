@@ -12,5 +12,7 @@ export const createAnimatedLayoutParams = (
     algorithm,
     staticNodeResolver:
       config?.staticNodeResolver ?? defaults.staticNodeResolver,
+    onBeforeApplied: config?.onBeforeApplied ?? defaults.onBeforeApplied,
+    onAfterApplied: config?.onAfterApplied ?? defaults.onAfterApplied,
   };
 };

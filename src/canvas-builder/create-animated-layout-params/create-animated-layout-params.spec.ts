@@ -51,4 +51,40 @@ describe("createAnimatedLayoutParams", () => {
 
     expect(staticNodeResolver).toBe(resolver);
   });
+
+  it("should set default onBeforeApplied", () => {
+    const config: AnimatedLayoutConfig = {};
+
+    const params = createAnimatedLayoutParams(config);
+
+    expect(params.onBeforeApplied).toEqual(defaults.onBeforeApplied);
+  });
+
+  it("should set default onAfterApplied", () => {
+    const config: AnimatedLayoutConfig = {};
+
+    const params = createAnimatedLayoutParams(config);
+
+    expect(params.onAfterApplied).toEqual(defaults.onAfterApplied);
+  });
+
+  it("should set specified onBeforeApplied", () => {
+    const config: AnimatedLayoutConfig = {
+      onBeforeApplied: () => {},
+    };
+
+    const params = createAnimatedLayoutParams(config);
+
+    expect(params.onBeforeApplied).toEqual(config.onBeforeApplied);
+  });
+
+  it("should set specified onAfterApplied", () => {
+    const config: AnimatedLayoutConfig = {
+      onAfterApplied: () => {},
+    };
+
+    const params = createAnimatedLayoutParams(config);
+
+    expect(params.onAfterApplied).toEqual(config.onAfterApplied);
+  });
 });
