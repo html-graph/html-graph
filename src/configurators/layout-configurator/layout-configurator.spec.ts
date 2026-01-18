@@ -38,6 +38,8 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "topologyChangeMacrotask" },
       staticNodeResolver: () => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -56,6 +58,8 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "topologyChangeMicrotask" },
       staticNodeResolver: () => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -75,6 +79,8 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "manual", trigger },
       staticNodeResolver: () => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -95,6 +101,8 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: { type: "manual", trigger },
       staticNodeResolver: (nodeId) => nodeId === "node-1",
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     };
 
     LayoutConfigurator.configure(canvas, config);
@@ -106,5 +114,45 @@ describe("LayoutConfigurator", () => {
     const { x } = canvas.graph.getNode("node-1");
 
     expect(x).toBe(null);
+  });
+
+  it("should emit onBeforeApplied event", async () => {
+    const canvas = createCanvas();
+    const onBeforeApplied = jest.fn();
+    const config: LayoutParams = {
+      algorithm: new DummyLayoutAlgorithm(),
+      applyOn: { type: "topologyChangeMacrotask" },
+      staticNodeResolver: () => false,
+      onBeforeApplied,
+      onAfterApplied: (): void => {},
+    };
+
+    LayoutConfigurator.configure(canvas, config);
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    await wait(0);
+
+    expect(onBeforeApplied).toHaveBeenCalled();
+  });
+
+  it("should emit onAfterApplied event", async () => {
+    const canvas = createCanvas();
+    const onAfterApplied = jest.fn();
+    const config: LayoutParams = {
+      algorithm: new DummyLayoutAlgorithm(),
+      applyOn: { type: "topologyChangeMacrotask" },
+      staticNodeResolver: () => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied,
+    };
+
+    LayoutConfigurator.configure(canvas, config);
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    await wait(0);
+
+    expect(onAfterApplied).toHaveBeenCalled();
   });
 });

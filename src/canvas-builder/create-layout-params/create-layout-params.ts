@@ -12,5 +12,8 @@ export const createLayoutParams = (
     applyOn: resolveLayoutApplyOn(config?.applyOn),
     staticNodeResolver:
       config?.staticNodeResolver ?? defaults.staticNodeResolver,
+    onBeforeApplied:
+      config?.events?.onBeforeApplied ?? defaults.onBeforeApplied,
+    onAfterApplied: config?.events?.onAfterApplied ?? defaults.onAfterApplied,
   };
 };

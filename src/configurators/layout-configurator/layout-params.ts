@@ -6,4 +6,6 @@ export interface LayoutParams {
   readonly algorithm: LayoutAlgorithm;
   readonly applyOn: LayoutApplyOnParam;
   readonly staticNodeResolver: (nodeId: Identifier) => boolean;
+  readonly onBeforeApplied: () => void;
+  readonly onAfterApplied: () => void;
 }

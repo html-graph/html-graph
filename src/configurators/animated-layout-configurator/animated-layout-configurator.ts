@@ -17,6 +17,8 @@ export class AnimatedLayoutConfigurator {
   ) {
     this.applier = new AnimatedLayoutApplier(canvas, params.algorithm, {
       staticNodeResolver: params.staticNodeResolver,
+      onBeforeApplied: params.onBeforeApplied,
+      onAfterApplied: params.onAfterApplied,
     });
 
     new AnimationSeries(this.win, this.step);

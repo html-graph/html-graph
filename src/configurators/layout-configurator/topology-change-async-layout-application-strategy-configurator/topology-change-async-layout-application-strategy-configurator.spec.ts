@@ -35,6 +35,8 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
     const algorithm = new DummyLayoutAlgorithm();
     const applier = new LayoutApplier(canvas, algorithm, {
       staticNodeResolver: (): boolean => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
@@ -60,6 +62,8 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
     const algorithm = new DummyLayoutAlgorithm();
     const applier = new LayoutApplier(canvas, algorithm, {
       staticNodeResolver: (): boolean => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
@@ -91,6 +95,8 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
     const algorithm = new DummyLayoutAlgorithm();
     const applier = new LayoutApplier(canvas, algorithm, {
       staticNodeResolver: (): boolean => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
@@ -127,6 +133,8 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
     const algorithm = new DummyLayoutAlgorithm();
     const applier = new LayoutApplier(canvas, algorithm, {
       staticNodeResolver: (): boolean => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     });
 
     TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
