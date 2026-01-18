@@ -50,4 +50,40 @@ describe("createLayoutParams", () => {
 
     expect(params.staticNodeResolver).toEqual(resolver);
   });
+
+  it("should set default onBeforeApplied", () => {
+    const config: LayoutConfig = {};
+
+    const params = createLayoutParams(config);
+
+    expect(params.onBeforeApplied).toEqual(defaults.onBeforeApplied);
+  });
+
+  it("should set default onAfterApplied", () => {
+    const config: LayoutConfig = {};
+
+    const params = createLayoutParams(config);
+
+    expect(params.onAfterApplied).toEqual(defaults.onAfterApplied);
+  });
+
+  it("should set specified onBeforeApplied", () => {
+    const config: LayoutConfig = {
+      onBeforeApplied: () => {},
+    };
+
+    const params = createLayoutParams(config);
+
+    expect(params.onBeforeApplied).toEqual(config.onBeforeApplied);
+  });
+
+  it("should set specified onAfterApplied", () => {
+    const config: LayoutConfig = {
+      onAfterApplied: () => {},
+    };
+
+    const params = createLayoutParams(config);
+
+    expect(params.onAfterApplied).toEqual(config.onAfterApplied);
+  });
 });

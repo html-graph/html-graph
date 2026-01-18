@@ -10,6 +10,8 @@ export class LayoutConfigurator {
 
     const applier = new LayoutApplier(canvas, params.algorithm, {
       staticNodeResolver: params.staticNodeResolver,
+      onBeforeApplied: params.onBeforeApplied,
+      onAfterApplied: params.onAfterApplied,
     });
 
     switch (strategy.type) {

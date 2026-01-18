@@ -37,6 +37,8 @@ describe("ManualLayoutApplicationStrategyConfigurator", () => {
     const trigger = new EventSubject<void>();
     const applier = new LayoutApplier(canvas, algorithm, {
       staticNodeResolver: (): boolean => false,
+      onBeforeApplied: (): void => {},
+      onAfterApplied: (): void => {},
     });
 
     ManualLayoutApplicationStrategyConfigurator.configure(applier, trigger);

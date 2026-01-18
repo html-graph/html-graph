@@ -6,4 +6,6 @@ export interface LayoutConfig {
   readonly algorithm?: LayoutAlgorithmConfig | undefined;
   readonly applyOn?: LayoutApplyOn | undefined;
   readonly staticNodeResolver?: (nodeId: Identifier) => boolean;
+  readonly onBeforeApplied?: () => void;
+  readonly onAfterApplied?: () => void;
 }
