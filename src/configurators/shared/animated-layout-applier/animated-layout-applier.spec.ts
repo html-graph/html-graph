@@ -1,16 +1,19 @@
 import { createCanvas, DummyAnimatedLayoutAlgorithm } from "@/mocks";
 import { Identifier } from "@/identifier";
 import { AnimatedLayoutApplier } from "./animated-layout-applier";
+import { AnimatedLayoutApplierParams } from "./animated-layout-applier-params";
 
 describe("AnimatedLayoutApplier", () => {
   it("should apply specified layout", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, {
-      staticNodeResolver: (): boolean => false,
-      onBeforeApplied: (): void => {},
-      onAfterApplied: (): void => {},
-    });
+    const params: AnimatedLayoutApplierParams = {
+      staticNodeResolver: () => false,
+      onBeforeApplied: () => {},
+      onAfterApplied: () => {},
+    };
+
+    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, params);
 
     canvas.addNode({
       id: "node-1",
@@ -25,11 +28,13 @@ describe("AnimatedLayoutApplier", () => {
   it("should not apply layout for static nodes", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, {
-      staticNodeResolver: (nodeId: Identifier): boolean => nodeId === "node-1",
-      onBeforeApplied: (): void => {},
-      onAfterApplied: (): void => {},
-    });
+    const params: AnimatedLayoutApplierParams = {
+      staticNodeResolver: (nodeId: Identifier) => nodeId === "node-1",
+      onBeforeApplied: () => {},
+      onAfterApplied: () => {},
+    };
+
+    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, params);
 
     canvas.addNode({
       id: "node-1",
@@ -45,11 +50,14 @@ describe("AnimatedLayoutApplier", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const onBeforeApplied = jest.fn();
-    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, {
-      staticNodeResolver: (): boolean => false,
+
+    const params: AnimatedLayoutApplierParams = {
+      staticNodeResolver: () => false,
       onBeforeApplied,
-      onAfterApplied: (): void => {},
-    });
+      onAfterApplied: () => {},
+    };
+
+    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, params);
 
     applier.apply(1);
 
@@ -60,11 +68,14 @@ describe("AnimatedLayoutApplier", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const onAfterApplied = jest.fn();
-    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, {
-      staticNodeResolver: (): boolean => false,
-      onBeforeApplied: (): void => {},
+
+    const params: AnimatedLayoutApplierParams = {
+      staticNodeResolver: () => false,
+      onBeforeApplied: () => {},
       onAfterApplied,
-    });
+    };
+
+    const applier = new AnimatedLayoutApplier(canvas, layoutAlgorithm, params);
 
     applier.apply(1);
 
