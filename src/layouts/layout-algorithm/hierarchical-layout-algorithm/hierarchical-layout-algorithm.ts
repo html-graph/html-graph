@@ -20,14 +20,13 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
     // 4. traverse tree from root, calculate coords
     // 5. apply transformation
 
-    const { viewport, graph } = params;
-    const { width, height } = viewport.getDimensions();
-    const center: Point = { x: width / 2, y: height / 2 };
+    const { graph } = params;
+    const beginning: Point = { x: 0, y: 0 };
 
     const result = new Map<Identifier, Point>();
 
     graph.getAllNodeIds().forEach((nodeId) => {
-      result.set(nodeId, center);
+      result.set(nodeId, beginning);
     });
 
     return result;

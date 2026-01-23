@@ -1,1 +1,1 @@
-export { SpanningTreeGenerator } from "./spanning-forest-generator";
+export { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";

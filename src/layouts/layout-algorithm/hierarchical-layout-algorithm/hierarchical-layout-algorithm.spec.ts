@@ -1,4 +1,4 @@
-import { createCanvas, createElement } from "@/mocks";
+import { createCanvas } from "@/mocks";
 import { HierarchicalLayoutAlgorithm } from "./hierarchical-layout-algorithm";
 
 describe("HierarchicalLayoutAlgorithm", () => {
@@ -17,9 +17,8 @@ describe("HierarchicalLayoutAlgorithm", () => {
     expect(coords).toEqual(new Map());
   });
 
-  it("should put first node in the center of the viewport", () => {
-    const element = createElement({ width: 2000, height: 1000 });
-    const canvas = createCanvas(element);
+  it("should put first node in the initial position", () => {
+    const canvas = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -35,6 +34,6 @@ describe("HierarchicalLayoutAlgorithm", () => {
       viewport: canvas.viewport,
     });
 
-    expect(coords.get("node-1")).toEqual({ x: 1000, y: 500 });
+    expect(coords.get("node-1")).toEqual({ x: 0, y: 0 });
   });
 });
