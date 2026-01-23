@@ -1,3 +1,3 @@
-export interface HierararchicalLayoutAlgorithmParams {
+export interface HierarchicalLayoutAlgorithmParams {
   readonly layerSize: number;
 }

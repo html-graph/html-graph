@@ -1,7 +1,7 @@
 import { AddNodeRequest, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 import graphData from "./graph.json";
-import { HeirarchicalLayoutAlgorithm } from "./heirarchical-layout-algorithm";
+import { HierarchicalLayoutAlgorithm } from "./heirarchical-layout-algorithm";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
@@ -11,7 +11,7 @@ const canvas: Canvas = builder
   .enableLayout({
     algorithm: {
       type: "custom",
-      instance: new HeirarchicalLayoutAlgorithm({
+      instance: new HierarchicalLayoutAlgorithm({
         startNodeId: 0,
         layerSize: 300,
         layerSpace: 200,
