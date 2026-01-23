@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { exit } from "process";
 
-class CheckDependencyCycles {
+class CheckDirectoryStructure {
   public static do(): void {
     const content = readFileSync("./deps-graph/deps-graph.dot", "utf8");
 
@@ -11,4 +11,4 @@ class CheckDependencyCycles {
   }
 }
 
-CheckDependencyCycles.do();
+CheckDirectoryStructure.do();
