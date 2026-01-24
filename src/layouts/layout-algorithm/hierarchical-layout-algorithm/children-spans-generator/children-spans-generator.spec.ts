@@ -82,4 +82,49 @@ describe("ChildrenSpansGenerator", () => {
 
     expect(diameters.get("node-1")).toEqual(expected);
   });
+
+  it("should regard for non-leaf node spans", () => {
+    const canvas = createCanvas();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: document.createElement("div"),
+        ports: [{ id: "port-1", element: document.createElement("div") }],
+      })
+      .addNode({
+        id: "node-2",
+        element: document.createElement("div"),
+        ports: [{ id: "port-2", element: document.createElement("div") }],
+      })
+      .addNode({
+        id: "node-3",
+        element: document.createElement("div"),
+        ports: [{ id: "port-3", element: document.createElement("div") }],
+      })
+      .addNode({
+        id: "node-4",
+        element: document.createElement("div"),
+        ports: [{ id: "port-4", element: document.createElement("div") }],
+      })
+      .addNode({
+        id: "node-5",
+        element: document.createElement("div"),
+        ports: [{ id: "port-5", element: document.createElement("div") }],
+      })
+      .addEdge({ from: "port-1", to: "port-2" })
+      .addEdge({ from: "port-1", to: "port-3" })
+      .addEdge({ from: "port-3", to: "port-4" })
+      .addEdge({ from: "port-3", to: "port-5" });
+
+    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const [tree] = forestGenerator.generate();
+    const generator = new ChildrenSpansGenerator(tree, { layerSparsity: 100 });
+
+    const diameters = generator.generate();
+
+    const expected: ChildrenSpan = { start: -50, end: 100 };
+
+    expect(diameters.get("node-1")).toEqual(expected);
+  });
 });

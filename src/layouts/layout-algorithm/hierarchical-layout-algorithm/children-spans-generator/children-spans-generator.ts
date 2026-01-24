@@ -15,15 +15,20 @@ export class ChildrenSpansGenerator {
     const reverseSequence = [...this.tree.sequence].reverse();
 
     reverseSequence.forEach((treeNode) => {
-      if (treeNode.children.size === 0) {
-        const span: ChildrenSpan = { start: 0, end: 0 };
+      let start = 0;
+      let end = 0;
 
-        this.childrenSpans.set(treeNode.nodeId, span);
-      } else if (treeNode.children.size === 1) {
-        const span: ChildrenSpan = { start: 0, end: 0 };
+      if (treeNode.children.size === 2) {
+        const diameter =
+          (treeNode.children.size - 1) * this.params.layerSparsity;
+        const radius = diameter / 2;
 
-        this.childrenSpans.set(treeNode.nodeId, span);
+        start = -radius;
+        end = radius;
       }
+
+      const span: ChildrenSpan = { start, end };
+      this.childrenSpans.set(treeNode.nodeId, span);
     });
   }
 
