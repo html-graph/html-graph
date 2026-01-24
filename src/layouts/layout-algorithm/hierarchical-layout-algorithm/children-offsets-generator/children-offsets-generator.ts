@@ -22,17 +22,17 @@ export class ChildrenOffsetsGenerator {
       if (treeNode.children.size === 0) {
         this.radii.set(treeNode.nodeId, this.spaceAroundRadius);
       } else {
-        let totalRadius = 0;
+        let totalChildrenRadius = 0;
 
         treeNode.children.forEach((childNode) => {
           const radius = this.radii.get(childNode.nodeId)!;
 
-          totalRadius += radius;
+          totalChildrenRadius += radius;
         });
 
-        this.radii.set(treeNode.nodeId, totalRadius);
+        this.radii.set(treeNode.nodeId, totalChildrenRadius);
 
-        let currentOffset = -totalRadius;
+        let currentOffset = -totalChildrenRadius;
 
         treeNode.children.forEach((childNode) => {
           const radius = this.radii.get(childNode.nodeId)!;

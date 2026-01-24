@@ -98,7 +98,7 @@ describe("ChildrenOffsetsGenerator", () => {
      *   / \     / \
      *   | |     | |
      *   / \     / \
-     *  5   6   7   8
+     *  4   5   6   7
      */
     const canvas = createCanvas();
 
@@ -159,15 +159,15 @@ describe("ChildrenOffsetsGenerator", () => {
 
   it("should not increase offset of node without children", () => {
     /**
-     *        1
-     *       / \
-     *      /   \
-     *     /     \
-     *    2       3
-     *          // \\
-     *         / | | \
-     *        /  / \  \
-     *       4  5   6  7
+     *      1
+     *     / \
+     *    |   |
+     *    /   \
+     *  2      3
+     *        /|\
+     *       / | \
+     *      /  |  \
+     *     4   5   6
      */
     const canvas = createCanvas();
 
@@ -202,17 +202,11 @@ describe("ChildrenOffsetsGenerator", () => {
         element: document.createElement("div"),
         ports: [{ id: "port-6", element: document.createElement("div") }],
       })
-      .addNode({
-        id: "node-7",
-        element: document.createElement("div"),
-        ports: [{ id: "port-7", element: document.createElement("div") }],
-      })
       .addEdge({ from: "port-1", to: "port-2" })
       .addEdge({ from: "port-1", to: "port-3" })
       .addEdge({ from: "port-3", to: "port-4" })
       .addEdge({ from: "port-3", to: "port-5" })
-      .addEdge({ from: "port-3", to: "port-6" })
-      .addEdge({ from: "port-3", to: "port-7" });
+      .addEdge({ from: "port-3", to: "port-6" });
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
