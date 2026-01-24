@@ -15,7 +15,7 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
     params: LayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
     // 1. make forest
-    // 2. traverse each tree from leaves, calculate diameters
+    // 2. traverse each tree from leaves, calculate children offsets
     // 3. traverse each tree from root, calculate coords
     // 4. apply transformation
 

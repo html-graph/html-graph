@@ -1,6 +1,6 @@
 import { createCanvas } from "@/mocks";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
-import { WidthFirstSpanningForestGenerator } from "../spanning-forest-generator";
+import { WidthFirstSpanningForestGenerator } from "../width-first-spanning-forest-generator";
 
 describe("ChildrenOffsetsGenerator", () => {
   it("should zero delta when node is root", () => {
@@ -14,7 +14,7 @@ describe("ChildrenOffsetsGenerator", () => {
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
     const generator = new ChildrenOffsetsGenerator(tree, {
-      sparsityRadius: 50,
+      spaceAroundRadius: 50,
     });
 
     const result = generator.generate();
@@ -42,7 +42,7 @@ describe("ChildrenOffsetsGenerator", () => {
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
     const generator = new ChildrenOffsetsGenerator(tree, {
-      sparsityRadius: 50,
+      spaceAroundRadius: 50,
     });
 
     const result = generator.generate();
@@ -79,7 +79,7 @@ describe("ChildrenOffsetsGenerator", () => {
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
     const generator = new ChildrenOffsetsGenerator(tree, {
-      sparsityRadius: 50,
+      spaceAroundRadius: 50,
     });
 
     const result = generator.generate();
@@ -133,15 +133,15 @@ describe("ChildrenOffsetsGenerator", () => {
       })
       .addEdge({ from: "port-1", to: "port-2" })
       .addEdge({ from: "port-1", to: "port-3" })
-      .addEdge({ from: "port-3", to: "port-4" })
-      .addEdge({ from: "port-3", to: "port-5" })
-      .addEdge({ from: "port-4", to: "port-6" })
-      .addEdge({ from: "port-4", to: "port-7" });
+      .addEdge({ from: "port-2", to: "port-4" })
+      .addEdge({ from: "port-2", to: "port-5" })
+      .addEdge({ from: "port-3", to: "port-6" })
+      .addEdge({ from: "port-3", to: "port-7" });
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
     const generator = new ChildrenOffsetsGenerator(tree, {
-      sparsityRadius: 50,
+      spaceAroundRadius: 50,
     });
 
     const result = generator.generate();

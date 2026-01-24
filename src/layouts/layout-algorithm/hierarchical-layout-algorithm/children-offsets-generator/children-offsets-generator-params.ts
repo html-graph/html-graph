@@ -1,3 +1,3 @@
 export interface ChildrenOffsetsGeneratorParams {
-  readonly sparsityRadius: number;
+  readonly spaceAroundRadius: number;
 }
