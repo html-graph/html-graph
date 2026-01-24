@@ -1,7 +1,6 @@
 import { Identifier } from "@/identifier";
 import { Tree } from "../tree";
 import { ChildrenSpansGeneratorParams } from "./children-spans-generator-params";
-import { ChildrenSpansGeneratorResult } from "./children-spans-generator-result";
 
 export class ChildrenSpansGenerator {
   private readonly radii = new Map<Identifier, number>();
@@ -42,7 +41,7 @@ export class ChildrenSpansGenerator {
     this.deltas.set(this.tree.root.nodeId, 0);
   }
 
-  public generate(): ChildrenSpansGeneratorResult {
-    return { radii: this.radii, deltas: this.deltas };
+  public generate(): ReadonlyMap<Identifier, number> {
+    return this.deltas;
   }
 }
