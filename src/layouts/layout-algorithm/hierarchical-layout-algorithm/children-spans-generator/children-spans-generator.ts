@@ -3,38 +3,28 @@ import { Tree } from "../tree";
 import { ChildrenSpansGeneratorParams } from "./children-spans-generator-params";
 
 export class ChildrenSpansGenerator {
-  private readonly radii = new Map<Identifier, number>();
-
   private readonly deltas = new Map<Identifier, number>();
+
+  private readonly sparsityRadius: number;
+
+  private readonly sparsityDiameter: number;
 
   public constructor(
     private readonly tree: Tree,
-    private readonly params: ChildrenSpansGeneratorParams,
+    params: ChildrenSpansGeneratorParams,
   ) {
-    const reverseSequence = [...this.tree.sequence].reverse();
+    this.sparsityRadius = params.sparsityRadius;
+    this.sparsityDiameter = 2 * this.sparsityRadius;
 
-    reverseSequence.forEach((treeNode) => {
-      if (treeNode.children.size === 0) {
-        this.radii.set(treeNode.nodeId, this.params.sparsityRadius);
-      } else {
-        let totalRadius = 0;
-
-        treeNode.children.forEach((childNode) => {
-          const childRadius = this.radii.get(childNode.nodeId)!;
-
-          totalRadius += childRadius;
-        });
-
-        let currentDelta =
-          (1 - treeNode.children.size) * this.params.sparsityRadius;
+    this.tree.sequence.forEach((treeNode) => {
+      if (treeNode.children.size > 0) {
+        let currentDelta = (1 - treeNode.children.size) * this.sparsityRadius;
 
         treeNode.children.forEach((childNode) => {
           this.deltas.set(childNode.nodeId, currentDelta);
 
-          currentDelta += 2 * this.params.sparsityRadius;
+          currentDelta += this.sparsityDiameter;
         });
-
-        this.radii.set(treeNode.nodeId, totalRadius);
       }
     });
 
