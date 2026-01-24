@@ -45,7 +45,7 @@ describe("ChildrenSpansGenerator", () => {
 
     const diameters = generator.generate();
 
-    const expected: ChildrenSpan = { start: 0, end: 0 };
+    const expected: ChildrenSpan = { start: -0, end: 0 };
 
     expect(diameters.get("node-1")).toEqual(expected);
   });

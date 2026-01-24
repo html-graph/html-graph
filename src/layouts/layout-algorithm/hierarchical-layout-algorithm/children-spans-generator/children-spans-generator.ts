@@ -10,24 +10,32 @@ export class ChildrenSpansGenerator {
     private readonly tree: Tree,
     private readonly params: ChildrenSpansGeneratorParams,
   ) {
-    console.log(this.params);
-
     const reverseSequence = [...this.tree.sequence].reverse();
 
     reverseSequence.forEach((treeNode) => {
       let start = 0;
       let end = 0;
 
-      if (treeNode.children.size === 2) {
-        const diameter =
+      if (treeNode.children.size > 0) {
+        let childrenTotalSize = 0;
+
+        treeNode.children.forEach((childNode) => {
+          const span = this.childrenSpans.get(childNode.nodeId)!;
+          childrenTotalSize += span.end - span.start;
+        });
+
+        const sparseChildrenTotalSize =
+          childrenTotalSize +
           (treeNode.children.size - 1) * this.params.layerSparsity;
-        const radius = diameter / 2;
+
+        const radius = sparseChildrenTotalSize / 2;
 
         start = -radius;
         end = radius;
       }
 
       const span: ChildrenSpan = { start, end };
+
       this.childrenSpans.set(treeNode.nodeId, span);
     });
   }
