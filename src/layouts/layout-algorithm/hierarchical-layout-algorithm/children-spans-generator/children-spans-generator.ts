@@ -1,10 +1,12 @@
 import { Identifier } from "@/identifier";
 import { Tree } from "../tree";
 import { ChildrenSpansGeneratorParams } from "./children-spans-generator-params";
-import { ChildrenSpan } from "./children-span";
+import { ChildrenSpansGeneratorResult } from "./children-spans-generator-result";
 
 export class ChildrenSpansGenerator {
-  private readonly childrenSpans = new Map<Identifier, ChildrenSpan>();
+  private readonly radii = new Map<Identifier, number>();
+
+  private readonly deltas = new Map<Identifier, number>();
 
   public constructor(
     private readonly tree: Tree,
@@ -13,34 +15,34 @@ export class ChildrenSpansGenerator {
     const reverseSequence = [...this.tree.sequence].reverse();
 
     reverseSequence.forEach((treeNode) => {
-      let start = 0;
-      let end = 0;
-
-      if (treeNode.children.size > 0) {
-        let childrenTotalSize = 0;
+      if (treeNode.children.size === 0) {
+        this.radii.set(treeNode.nodeId, this.params.sparsityRadius);
+      } else {
+        let totalRadius = 0;
 
         treeNode.children.forEach((childNode) => {
-          const span = this.childrenSpans.get(childNode.nodeId)!;
-          childrenTotalSize += span.end - span.start;
+          const childRadius = this.radii.get(childNode.nodeId)!;
+
+          totalRadius += childRadius;
         });
 
-        const sparseChildrenTotalSize =
-          childrenTotalSize +
-          (treeNode.children.size - 1) * this.params.layerSparsity;
+        let currentDelta =
+          (1 - treeNode.children.size) * this.params.sparsityRadius;
 
-        const radius = sparseChildrenTotalSize / 2;
+        treeNode.children.forEach((childNode) => {
+          this.deltas.set(childNode.nodeId, currentDelta);
 
-        start = -radius;
-        end = radius;
+          currentDelta += 2 * this.params.sparsityRadius;
+        });
+
+        this.radii.set(treeNode.nodeId, totalRadius);
       }
-
-      const span: ChildrenSpan = { start, end };
-
-      this.childrenSpans.set(treeNode.nodeId, span);
     });
+
+    this.deltas.set(this.tree.root.nodeId, 0);
   }
 
-  public generate(): ReadonlyMap<Identifier, ChildrenSpan> {
-    return this.childrenSpans;
+  public generate(): ChildrenSpansGeneratorResult {
+    return { radii: this.radii, deltas: this.deltas };
   }
 }

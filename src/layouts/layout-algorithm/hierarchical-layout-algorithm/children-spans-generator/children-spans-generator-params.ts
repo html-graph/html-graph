@@ -1,3 +1,3 @@
 export interface ChildrenSpansGeneratorParams {
-  readonly layerSparsity: number;
+  readonly sparsityRadius: number;
 }
