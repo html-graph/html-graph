@@ -52,6 +52,9 @@ describe("ChildrenOffsetsGenerator", () => {
   });
 
   it("should offset delta by radius when node has two children", () => {
+    /**
+     *   /\
+     */
     const canvas = createCanvas();
 
     canvas
@@ -85,7 +88,11 @@ describe("ChildrenOffsetsGenerator", () => {
     expect(delta).toEqual(-50);
   });
 
-  it("should account for children of children", () => {
+  it("should adjust parent offsets when children overlap", () => {
+    /**
+     *    /\
+     *   /\/\
+     */
     const canvas = createCanvas();
 
     canvas
