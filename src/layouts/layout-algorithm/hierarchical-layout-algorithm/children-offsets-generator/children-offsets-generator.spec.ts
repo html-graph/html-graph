@@ -1,8 +1,8 @@
 import { createCanvas } from "@/mocks";
-import { ChildrenSpansGenerator } from "./children-spans-generator";
+import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { WidthFirstSpanningForestGenerator } from "../spanning-forest-generator";
 
-describe("ChildrenSpansGenerator", () => {
+describe("ChildrenOffsetsGenerator", () => {
   it("should zero delta when node is root", () => {
     const canvas = createCanvas();
 
@@ -13,7 +13,9 @@ describe("ChildrenSpansGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenSpansGenerator(tree, { sparsityRadius: 50 });
+    const generator = new ChildrenOffsetsGenerator(tree, {
+      sparsityRadius: 50,
+    });
 
     const result = generator.generate();
     const delta = result.get("node-1");
@@ -39,7 +41,9 @@ describe("ChildrenSpansGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenSpansGenerator(tree, { sparsityRadius: 50 });
+    const generator = new ChildrenOffsetsGenerator(tree, {
+      sparsityRadius: 50,
+    });
 
     const result = generator.generate();
     const delta = result.get("node-2");
@@ -71,7 +75,9 @@ describe("ChildrenSpansGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenSpansGenerator(tree, { sparsityRadius: 50 });
+    const generator = new ChildrenOffsetsGenerator(tree, {
+      sparsityRadius: 50,
+    });
 
     const result = generator.generate();
     const delta = result.get("node-2");
@@ -127,7 +133,9 @@ describe("ChildrenSpansGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenSpansGenerator(tree, { sparsityRadius: 50 });
+    const generator = new ChildrenOffsetsGenerator(tree, {
+      sparsityRadius: 50,
+    });
 
     const result = generator.generate();
     const delta = result.get("node-2");
