@@ -14,11 +14,10 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   public calculateCoordinates(
     params: LayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
-    // 1. make graph components
-    // 2. make tree
-    // 3. traverse tree from leaves, calculate radii
-    // 4. traverse tree from root, calculate coords
-    // 5. apply transformation
+    // 1. make forest
+    // 2. traverse each tree from leaves, calculate diameters
+    // 3. traverse each tree from root, calculate coords
+    // 4. apply transformation
 
     const { graph } = params;
     const beginning: Point = { x: 0, y: 0 };

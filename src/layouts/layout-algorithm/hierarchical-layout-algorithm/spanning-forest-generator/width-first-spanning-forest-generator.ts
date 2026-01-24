@@ -1,5 +1,5 @@
 import { Graph } from "@/graph";
-import { Tree, MutableTreeNode, TreeNode } from "./tree";
+import { Tree, MutableTreeNode, TreeNode } from "../tree";
 import { Identifier } from "@/identifier";
 
 export class WidthFirstSpanningForestGenerator {
@@ -57,7 +57,9 @@ export class WidthFirstSpanningForestGenerator {
             return port.nodeId;
           });
 
-        [...outgoingNodeIds, ...incomingNodeIds].forEach((nodeId) => {
+        const adjacentNodeIds = [...outgoingNodeIds, ...incomingNodeIds];
+
+        adjacentNodeIds.forEach((nodeId) => {
           if (!this.remainingNodeIds.has(nodeId)) {
             return;
           }
