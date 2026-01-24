@@ -1,6 +1,6 @@
 import { createCanvas } from "@/mocks";
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
-import { TreeNode } from "./tree-node";
+import { TreeNode } from "./tree";
 
 describe("WidthFirstSpanningForestGenerator", () => {
   it("should generate empty forest for graph without nodes", () => {

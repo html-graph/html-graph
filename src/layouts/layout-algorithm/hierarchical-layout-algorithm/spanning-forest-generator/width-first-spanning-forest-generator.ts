@@ -1,6 +1,5 @@
 import { Graph } from "@/graph";
-import { MutableTreeNode, TreeNode } from "./tree-node";
-import { Tree } from "./tree";
+import { Tree, MutableTreeNode, TreeNode } from "./tree";
 import { Identifier } from "@/identifier";
 
 export class WidthFirstSpanningForestGenerator {
