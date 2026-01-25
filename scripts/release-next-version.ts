@@ -12,7 +12,7 @@ class ReleaseNextVersion {
     const cmdsBeforeBuild = [
       "npm install",
       "npm run before-build",
-      "npm run check-dependency-cycles",
+      "npm run check-directory-structure",
     ];
 
     await execute(cmdsBeforeBuild.join(" && "));
