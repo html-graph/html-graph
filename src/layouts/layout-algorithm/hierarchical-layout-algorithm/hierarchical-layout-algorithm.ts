@@ -51,8 +51,6 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
 
         currentLayer = nextLayer;
       }
-
-      currentX += this.params.layerSize;
     });
 
     // 4. apply transformation
