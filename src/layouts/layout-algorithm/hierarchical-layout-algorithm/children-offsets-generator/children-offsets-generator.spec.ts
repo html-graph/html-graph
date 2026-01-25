@@ -52,9 +52,6 @@ describe("ChildrenOffsetsGenerator", () => {
   });
 
   it("should offset node by radius when node has two children", () => {
-    /**
-     *   /\
-     */
     const canvas = createCanvas();
 
     canvas
