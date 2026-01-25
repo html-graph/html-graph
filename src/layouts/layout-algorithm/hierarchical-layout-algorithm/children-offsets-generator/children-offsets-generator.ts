@@ -5,8 +5,6 @@ import { ChildrenOffsetsGeneratorParams } from "./children-offsets-generator-par
 export class ChildrenOffsetsGenerator {
   private readonly offsets = new Map<Identifier, number>();
 
-  private readonly radii = new Map<Identifier, number>();
-
   private readonly spaceAroundRadius: number;
 
   public constructor(
@@ -14,35 +12,11 @@ export class ChildrenOffsetsGenerator {
     params: ChildrenOffsetsGeneratorParams,
   ) {
     this.spaceAroundRadius = params.spaceAroundRadius;
+    console.log(this.spaceAroundRadius);
     this.offsets.set(this.tree.root.nodeId, 0);
 
-    const reverseSequence = [...this.tree.sequence].reverse();
-
-    reverseSequence.forEach((treeNode) => {
-      if (treeNode.children.size === 0) {
-        this.radii.set(treeNode.nodeId, this.spaceAroundRadius);
-      } else {
-        let totalChildrenRadius = 0;
-
-        treeNode.children.forEach((childNode) => {
-          const radius = this.radii.get(childNode.nodeId)!;
-
-          totalChildrenRadius += radius;
-        });
-
-        this.radii.set(treeNode.nodeId, totalChildrenRadius);
-
-        let currentOffset = -totalChildrenRadius;
-
-        treeNode.children.forEach((childNode) => {
-          const radius = this.radii.get(childNode.nodeId)!;
-          currentOffset += radius;
-
-          this.offsets.set(childNode.nodeId, currentOffset);
-
-          currentOffset += radius;
-        });
-      }
+    this.tree.sequence.forEach((treeNode) => {
+      this.offsets.set(treeNode.nodeId, 0);
     });
   }
 
