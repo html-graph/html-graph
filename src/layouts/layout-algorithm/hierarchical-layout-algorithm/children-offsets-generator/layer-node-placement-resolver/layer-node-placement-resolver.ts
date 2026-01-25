@@ -40,9 +40,26 @@ export class LayerNodePlacementResolver {
 
     const parentRadius = parentFillGauge / 2;
 
+    let childOverflow = 0;
+
+    if (childRadii.length > 0) {
+      const lastChildRadius = childRadii[childRadii.length - 1] ?? 0;
+      const lastOffset = parentOffsets[parentOffsets.length - 1];
+
+      childOverflow = Math.max(
+        childOverflow,
+        lastOffset + lastChildRadius - parentFillGauge,
+      );
+
+      const firstChildRadius = childRadii[0] ?? 0;
+      const firstOffset = parentOffsets[0];
+
+      childOverflow = Math.max(childOverflow, firstChildRadius - firstOffset);
+    }
+
     return {
       offsets: parentOffsets.map((offset) => offset - parentRadius),
-      radius: parentRadius,
+      radius: parentRadius + childOverflow,
     };
   }
 }

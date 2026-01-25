@@ -61,13 +61,23 @@ describe("LayerNodePlacementResolver", () => {
     expect(placement.offsets).toEqual([-100, 100]);
   });
 
-  it("should account for child radius when resolving radius", () => {
+  it("should account for child radius overflow at the end when resolving radius", () => {
     const resolver = new LayerNodePlacementResolver({
       radius: 50,
     });
 
-    const placement = resolver.resolve([100, 100]);
+    const placement = resolver.resolve([null, 100, 100]);
 
-    expect(placement.radius).toBe(200);
+    expect(placement.radius).toBe(250);
+  });
+
+  it("should account for child radius overflow at the beginning when resolving radius", () => {
+    const resolver = new LayerNodePlacementResolver({
+      radius: 50,
+    });
+
+    const placement = resolver.resolve([100, 100, null]);
+
+    expect(placement.radius).toBe(250);
   });
 });
