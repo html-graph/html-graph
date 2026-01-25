@@ -6,11 +6,8 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const canvas = createCanvas();
 
     const layout = new HierarchicalLayoutAlgorithm({
-      layerSize: 100,
-      layerSparsityRadius: 50,
-      shiftX: undefined,
-      shiftY: undefined,
-      rotate: undefined,
+      layerWidth: 100,
+      layerSpace: 50,
     });
 
     const coords = layout.calculateCoordinates({
@@ -30,11 +27,8 @@ describe("HierarchicalLayoutAlgorithm", () => {
     });
 
     const layout = new HierarchicalLayoutAlgorithm({
-      layerSize: 100,
-      layerSparsityRadius: 50,
-      shiftX: undefined,
-      shiftY: undefined,
-      rotate: undefined,
+      layerWidth: 100,
+      layerSpace: 50,
     });
 
     const coords = layout.calculateCoordinates({
@@ -62,11 +56,8 @@ describe("HierarchicalLayoutAlgorithm", () => {
       .addEdge({ from: "port-1", to: "port-2" });
 
     const layout = new HierarchicalLayoutAlgorithm({
-      layerSize: 100,
-      layerSparsityRadius: 50,
-      shiftX: undefined,
-      shiftY: undefined,
-      rotate: undefined,
+      layerWidth: 100,
+      layerSpace: 50,
     });
 
     const coords = layout.calculateCoordinates({

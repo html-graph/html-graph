@@ -26,7 +26,7 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
       result.set(tree.root.nodeId, { x: currentX, y: 0 });
 
       const offsetsGenerator = new ChildrenOffsetsGenerator(tree, {
-        spaceAroundRadius: this.params.layerSparsityRadius,
+        spaceAroundRadius: this.params.layerSpace / 2,
       });
 
       const offsets = offsetsGenerator.generate();
@@ -34,7 +34,7 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
 
       while (currentLayer.length > 0) {
         const nextLayer: TreeNode[] = [];
-        currentX += this.params.layerSize;
+        currentX += this.params.layerWidth;
 
         currentLayer.forEach((treeNode) => {
           treeNode.children.forEach((childTreeNode) => {
@@ -52,8 +52,6 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
         currentLayer = nextLayer;
       }
     });
-
-    // 4. apply transformation
 
     return result;
   }

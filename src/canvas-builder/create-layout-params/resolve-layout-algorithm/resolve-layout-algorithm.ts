@@ -1,7 +1,12 @@
-import { ForceDirectedLayoutAlgorithm, LayoutAlgorithm } from "@/layouts";
+import {
+  ForceDirectedLayoutAlgorithm,
+  HierarchicalLayoutAlgorithm,
+  LayoutAlgorithm,
+} from "@/layouts";
 import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
 import { cyrb128, sfc32 } from "@/prng";
-import { forceDirectedDefaults } from "../../layout-defaults";
+import { forceDirectedDefaults } from "../../shared";
+import { defaults } from "../defaults";
 
 export const resolveLayoutAlgorithm = (
   config: LayoutAlgorithmConfig | undefined,
@@ -9,6 +14,12 @@ export const resolveLayoutAlgorithm = (
   switch (config?.type) {
     case "custom": {
       return config.instance;
+    }
+    case "hierarchical": {
+      return new HierarchicalLayoutAlgorithm({
+        layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
+        layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
+      });
     }
     default: {
       const seed = cyrb128(config?.seed ?? forceDirectedDefaults.seed);

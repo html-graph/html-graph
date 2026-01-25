@@ -22,7 +22,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    if (this.element === null || !this.params.mouseDownEventVerifier(event)) {
+    if (!this.params.mouseDownEventVerifier(event)) {
       return;
     }
     setCursor(this.element, this.params.shiftCursor);
