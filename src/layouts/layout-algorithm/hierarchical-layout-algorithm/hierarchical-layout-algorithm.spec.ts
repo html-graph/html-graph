@@ -8,6 +8,9 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerSize: 100,
       layerSparsityRadius: 50,
+      shiftX: undefined,
+      shiftY: undefined,
+      rotate: undefined,
     });
 
     const coords = layout.calculateCoordinates({
@@ -29,6 +32,9 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerSize: 100,
       layerSparsityRadius: 50,
+      shiftX: undefined,
+      shiftY: undefined,
+      rotate: undefined,
     });
 
     const coords = layout.calculateCoordinates({
@@ -58,6 +64,9 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerSize: 100,
       layerSparsityRadius: 50,
+      shiftX: undefined,
+      shiftY: undefined,
+      rotate: undefined,
     });
 
     const coords = layout.calculateCoordinates({
