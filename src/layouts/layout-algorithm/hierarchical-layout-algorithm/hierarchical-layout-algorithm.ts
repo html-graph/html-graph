@@ -1,32 +1,61 @@
 import { Identifier } from "@/identifier";
-import { Point } from "@/point";
+import { MutablePoint, Point } from "@/point";
 import { LayoutAlgorithm } from "../layout-algorithm";
 import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorithm-params";
+import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
+import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
+import { TreeNode } from "./tree";
 
 export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
     private readonly params: HierarchicalLayoutAlgorithmParams,
-  ) {
-    console.log(this.params);
-  }
+  ) {}
 
   public calculateCoordinates(
     params: LayoutAlgorithmParams,
   ): ReadonlyMap<Identifier, Point> {
-    // 1. make forest
-    // 2. traverse each tree from leaves, calculate children offsets
-    // 3. traverse each tree from root, calculate coords
-    // 4. apply transformation
+    const result = new Map<Identifier, MutablePoint>();
 
-    const { graph } = params;
-    const beginning: Point = { x: 0, y: 0 };
+    const forestGenerator = new WidthFirstSpanningForestGenerator(params.graph);
+    const forest = forestGenerator.generate();
 
-    const result = new Map<Identifier, Point>();
+    let currentX = 0;
 
-    graph.getAllNodeIds().forEach((nodeId) => {
-      result.set(nodeId, beginning);
+    forest.forEach((tree) => {
+      result.set(tree.root.nodeId, { x: currentX, y: 0 });
+
+      const offsetsGenerator = new ChildrenOffsetsGenerator(tree, {
+        spaceAroundRadius: this.params.layerSparsityRadius,
+      });
+
+      const offsets = offsetsGenerator.generate();
+      let currentLayer: TreeNode[] = [tree.root];
+
+      while (currentLayer.length > 0) {
+        const nextLayer: TreeNode[] = [];
+        currentX += this.params.layerSize;
+
+        currentLayer.forEach((treeNode) => {
+          treeNode.children.forEach((childTreeNode) => {
+            const parentY = result.get(treeNode.nodeId)!.y;
+
+            result.set(childTreeNode.nodeId, {
+              y: parentY + offsets.get(childTreeNode.nodeId)!,
+              x: currentX,
+            });
+
+            nextLayer.push(childTreeNode);
+          });
+        });
+
+        currentLayer = nextLayer;
+      }
+
+      currentX += this.params.layerSize;
     });
+
+    // 4. apply transformation
 
     return result;
   }
