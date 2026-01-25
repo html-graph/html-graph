@@ -3,7 +3,7 @@ export const defaults = Object.freeze({
   onBeforeApplied: (): void => {},
   onAfterApplied: (): void => {},
   hierarchicalLayout: {
-    layerWidth: 100,
-    layerSpace: 100,
+    layerWidth: 300,
+    layerSpace: 300,
   },
 });

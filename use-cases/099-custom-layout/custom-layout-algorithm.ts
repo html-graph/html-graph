@@ -6,7 +6,7 @@ import {
   Point,
 } from "@html-graph/html-graph";
 
-interface HierarchicalLayoutAlgorithmParams {
+interface CustomLayoutAlgorithmParams {
   readonly startNodeId: Identifier;
   readonly layerSize: number;
   readonly layerSpace: number;
@@ -17,10 +17,8 @@ interface AvgEntry {
   readonly avg: number;
 }
 
-export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
-  public constructor(
-    private readonly params: HierarchicalLayoutAlgorithmParams,
-  ) {}
+export class CustomLayoutAlgorithm implements LayoutAlgorithm {
+  public constructor(private readonly params: CustomLayoutAlgorithmParams) {}
 
   public calculateCoordinates(
     params: LayoutAlgorithmParams,
