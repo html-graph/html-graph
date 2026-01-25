@@ -21,4 +21,9 @@ export type LayoutAlgorithmConfig =
         readonly theta?: number;
         readonly areaRadiusThreshold?: number;
       };
+    }
+  | {
+      readonly type: "hierarchical";
+      readonly layerWidth?: number;
+      readonly layerSpace?: number;
     };

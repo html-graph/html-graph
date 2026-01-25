@@ -1,10 +1,10 @@
-import { forceDirectedDefaults } from "../../layout-defaults";
 import {
   AnimatedLayoutAlgorithm,
   ForceDirectedAnimatedLayoutAlgorithm,
 } from "@/layouts";
 import { cyrb128, sfc32 } from "@/prng";
 import { AnimatedLayoutAlgorithmConfig } from "../animated-layout-algorithm-config";
+import { forceDirectedDefaults } from "../../shared";
 
 export const resolveAnimatedLayoutAlgorithm = (
   config: AnimatedLayoutAlgorithmConfig,

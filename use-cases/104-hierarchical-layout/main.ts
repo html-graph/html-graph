@@ -1,5 +1,6 @@
 import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import graphData from "./graph.json";
+import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
@@ -11,18 +12,16 @@ const canvas: Canvas = builder
     },
     edges: {
       shape: {
-        type: "direct",
-        sourceOffset: 50,
-        targetOffset: 50,
         hasTargetArrow: true,
       },
       priority: 0,
     },
   })
   .enableUserTransformableViewport()
-  .enableLayout()
-  .enableUserDraggableNodes({
-    moveEdgesOnTop: false,
+  .enableLayout({
+    algorithm: {
+      type: "hierarchical",
+    },
   })
   .enableBackground()
   .build();
@@ -36,22 +35,15 @@ canvas.patchContentMatrix({
 });
 
 graphData.nodes.forEach((nodeId) => {
-  const element = document.createElement("div");
-  element.classList.add("node");
-  element.innerText = `${nodeId}`;
-
-  canvas.addNode({
-    id: nodeId,
-    element,
-    ports: [
-      {
-        id: nodeId,
-        element,
-      },
-    ],
+  const createNodeRequest = createInOutNode({
+    name: `${nodeId}`,
+    frontPortId: `${nodeId}-in`,
+    backPortId: `${nodeId}-out`,
   });
+
+  canvas.addNode(createNodeRequest);
 });
 
 graphData.edges.forEach((edge) => {
-  canvas.addEdge({ from: edge.from, to: edge.to });
+  canvas.addEdge({ from: `${edge.from}-out`, to: `${edge.to}-in` });
 });

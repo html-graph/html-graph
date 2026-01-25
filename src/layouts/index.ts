@@ -1,7 +1,11 @@
-export { ForceDirectedLayoutAlgorithm } from "./layout-algorithm";
+export {
+  ForceDirectedLayoutAlgorithm,
+  HierarchicalLayoutAlgorithm,
+} from "./layout-algorithm";
 export type {
   LayoutAlgorithm,
   LayoutAlgorithmParams,
+  HierarchicalLayoutAlgorithmParams,
   ForceDirectedLayoutAlgorithmParams,
 } from "./layout-algorithm";
 

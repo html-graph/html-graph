@@ -20,7 +20,7 @@ jobs:
       - name: Lint code
         run: npm run lint
       - name: Check dependency cycles
-        run: npm run check-dependency-cycles
+        run: npm run check-directory-structure
       - name: Run unit tests
         run: npm run test:ci
       - name: install e2e testing dependencies
