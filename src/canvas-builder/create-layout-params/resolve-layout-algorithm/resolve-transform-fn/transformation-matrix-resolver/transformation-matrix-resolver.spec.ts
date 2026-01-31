@@ -1,8 +1,10 @@
-import { resolveTransformationMatrix } from "./resolve-transformation-matrix";
+import { TransformationMatrixResolver } from "./transformation-matrix-resolver";
 
-describe("resolveTransformMatrix", () => {
+describe("TransformationMatrixResolver", () => {
   it("should resolve idempotent matrix when no parameters provided", () => {
-    expect(resolveTransformationMatrix({})).toEqual({
+    const resolver = new TransformationMatrixResolver();
+
+    expect(resolver.resolve({})).toEqual({
       a: 1,
       b: 0,
       c: 0,
@@ -13,8 +15,10 @@ describe("resolveTransformMatrix", () => {
   });
 
   it("should resolve specified matrix", () => {
+    const resolver = new TransformationMatrixResolver();
+
     expect(
-      resolveTransformationMatrix({
+      resolver.resolve({
         a: 1,
         b: 2,
         c: 3,
@@ -26,16 +30,20 @@ describe("resolveTransformMatrix", () => {
   });
 
   it("should resolve scale matrix", () => {
+    const resolver = new TransformationMatrixResolver();
+
     expect(
-      resolveTransformationMatrix({
+      resolver.resolve({
         scale: 2,
       }),
     ).toEqual({ a: 2, b: 0, c: 0, d: 0, e: 2, f: 0 });
   });
 
   it("should account for scale center", () => {
+    const resolver = new TransformationMatrixResolver();
+
     expect(
-      resolveTransformationMatrix({
+      resolver.resolve({
         scale: 2,
         center: { x: 1, y: 1 },
       }),
@@ -43,7 +51,9 @@ describe("resolveTransformMatrix", () => {
   });
 
   it("should resolve rotate", () => {
-    const result = resolveTransformationMatrix({
+    const resolver = new TransformationMatrixResolver();
+
+    const result = resolver.resolve({
       rotate: Math.PI / 2,
     });
 
@@ -56,7 +66,9 @@ describe("resolveTransformMatrix", () => {
   });
 
   it("should account for rotate center", () => {
-    const result = resolveTransformationMatrix({
+    const resolver = new TransformationMatrixResolver();
+
+    const result = resolver.resolve({
       rotate: Math.PI / 2,
       center: {
         x: 1,

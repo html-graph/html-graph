@@ -6,8 +6,8 @@ import {
 } from "../../coords-transform-config";
 import { Matrix } from "./matrix";
 import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
-import { resolveTransformationMatrix } from "./resolve-transformation-matrix/resolve-transformation-matrix";
 import { defaults } from "../../defaults";
+import { TransformationMatrixResolver } from "./transformation-matrix-resolver";
 
 export const resolveTransformFn = (
   config: CoordsTransformConfig | undefined,
@@ -33,8 +33,10 @@ export const resolveTransformFn = (
     f: 0,
   };
 
+  const resolver = new TransformationMatrixResolver();
+
   transformations.forEach((transformation) => {
-    const matrix = resolveTransformationMatrix(transformation);
+    const matrix = resolver.resolve(transformation);
 
     finalMatrix = multiplyTransformationMatrices(finalMatrix, matrix);
   });
