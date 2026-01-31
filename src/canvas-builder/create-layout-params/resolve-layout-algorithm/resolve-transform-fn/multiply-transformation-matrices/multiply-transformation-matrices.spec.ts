@@ -1,5 +1,5 @@
 import { Matrix } from "../matrix";
-import { multiplyTransformationMatrices } from "./multiply";
+import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
 
 describe("multiplyTransformationMatrices", () => {
   it("should multiply correctly", () => {

@@ -6,8 +6,9 @@ import {
 } from "../../coords-transform-config";
 import { Matrix } from "./matrix";
 import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
+import { resolveTransformationMatrix } from "./resolve-transformation-matrix/resolve-transformation-matrix";
 
-export const resolveTransform = (
+export const resolveTransformFn = (
   config: CoordsTransformConfig,
 ): CoordsTransformFn => {
   if (typeof config === "function") {
@@ -18,7 +19,7 @@ export const resolveTransform = (
     ? config
     : [config];
 
-  let m: Matrix = {
+  let finalMatrix: Matrix = {
     a: 1,
     b: 0,
     c: 0,
@@ -28,15 +29,17 @@ export const resolveTransform = (
   };
 
   transformations.forEach((transformation) => {
-    m = multiplyTransformationMatrices(m, transformation);
+    const matrix = resolveTransformationMatrix(transformation);
+
+    finalMatrix = multiplyTransformationMatrices(finalMatrix, matrix);
   });
 
   return (point: Point) => {
     const { x, y } = point;
 
     return {
-      x: m.a * x + m.b * y + m.c,
-      y: m.d * x + m.e * y + m.f,
+      x: finalMatrix.a * x + finalMatrix.b * y + finalMatrix.c,
+      y: finalMatrix.d * x + finalMatrix.e * y + finalMatrix.f,
     };
   };
 };
