@@ -12,6 +12,8 @@ export type {
   AnimatedLayoutAlgorithmConfig,
   LayoutConfig,
   LayoutApplyOn,
+  CoordsTransformConfig,
+  CoordsTransformDeclaration,
 } from "./canvas-builder";
 
 export type {

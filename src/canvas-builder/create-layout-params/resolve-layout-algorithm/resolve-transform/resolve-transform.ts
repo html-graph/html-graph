@@ -4,6 +4,8 @@ import {
   CoordsTransformConfig,
   CoordsTransformDeclaration,
 } from "../../coords-transform-config";
+import { Matrix } from "./matrix";
+import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
 
 export const resolveTransform = (
   config: CoordsTransformConfig,
@@ -12,22 +14,29 @@ export const resolveTransform = (
     return config;
   }
 
-  const transformers: CoordsTransformDeclaration[] = Array.isArray(config)
+  const transformations: CoordsTransformDeclaration[] = Array.isArray(config)
     ? config
     : [config];
 
-  let scale = 1;
-  let translateX = 0;
-  let translateY = 0;
+  let m: Matrix = {
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 0,
+    e: 1,
+    f: 0,
+  };
 
-  transformers.forEach((transformer) => {
-    scale *= transformer.scale ?? 1;
-    translateX += transformer.translateX ?? 0;
-    translateY += transformer.translateY ?? 0;
+  transformations.forEach((transformation) => {
+    m = multiplyTransformationMatrices(m, transformation);
   });
 
-  return (point: Point) => ({
-    x: scale * point.x + translateX,
-    y: scale * point.y + translateY,
-  });
+  return (point: Point) => {
+    const { x, y } = point;
+
+    return {
+      x: m.a * x + m.b * y + m.c,
+      y: m.d * x + m.e * y + m.f,
+    };
+  };
 };

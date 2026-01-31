@@ -10,27 +10,15 @@ describe("resolveTransform", () => {
     expect(result).toBe(transformFn);
   });
 
-  it("should resolve scale function", () => {
-    const transform = resolveTransform({ scale: 2 });
+  it("should resolve invariant transform when no transformations are provided", () => {
+    const transform = resolveTransform([]);
 
-    expect(transform({ x: 1, y: 2 })).toEqual({ x: 2, y: 4 });
+    expect(transform({ x: 1, y: 2 })).toEqual({ x: 1, y: 2 });
   });
 
-  it("should resolve array of transformers", () => {
-    const transform = resolveTransform([{ scale: 2 }]);
+  it("should resolve specified transform", () => {
+    const transform = resolveTransform({ a: 2, b: 0, c: 1, d: 0, e: 2, f: 1 });
 
-    expect(transform({ x: 1, y: 2 })).toEqual({ x: 2, y: 4 });
-  });
-
-  it("should resolve translate x function", () => {
-    const transform = resolveTransform({ translateX: 2 });
-
-    expect(transform({ x: 1, y: 2 })).toEqual({ x: 3, y: 2 });
-  });
-
-  it("should resolve translate x function", () => {
-    const transform = resolveTransform({ translateY: 2 });
-
-    expect(transform({ x: 1, y: 2 })).toEqual({ x: 1, y: 4 });
+    expect(transform({ x: 1, y: 2 })).toEqual({ x: 3, y: 5 });
   });
 });

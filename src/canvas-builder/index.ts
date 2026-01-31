@@ -14,4 +14,9 @@ export type {
   AnimatedLayoutConfig,
   AnimatedLayoutAlgorithmConfig,
 } from "./create-animated-layout-params";
-export type { LayoutConfig, LayoutApplyOn } from "./create-layout-params";
+export type {
+  LayoutConfig,
+  LayoutApplyOn,
+  CoordsTransformConfig,
+  CoordsTransformDeclaration,
+} from "./create-layout-params";
