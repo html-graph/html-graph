@@ -16,4 +16,8 @@ export type TransformDeclaration =
   | {
       readonly rotate: number;
       readonly center?: Point;
+    }
+  | {
+      readonly mirror: number;
+      readonly center?: Point;
     };

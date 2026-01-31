@@ -83,4 +83,19 @@ describe("TransformationMatrixResolver", () => {
     expect(result.e).toBeCloseTo(0);
     expect(result.f).toBeCloseTo(0);
   });
+
+  it("should resolve mirror", () => {
+    const resolver = new TransformationMatrixResolver();
+
+    const result = resolver.resolve({
+      mirror: Math.PI / 4,
+    });
+
+    expect(result.a).toBeCloseTo(0);
+    expect(result.b).toBeCloseTo(-1);
+    expect(result.c).toBeCloseTo(0);
+    expect(result.d).toBeCloseTo(1);
+    expect(result.e).toBeCloseTo(0);
+    expect(result.f).toBeCloseTo(0);
+  });
 });
