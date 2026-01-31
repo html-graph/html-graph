@@ -1,26 +1,23 @@
 import { CoordsTransformFn } from "@/layouts";
 import { Point } from "@/point";
-import {
-  CoordsTransformConfig,
-  CoordsTransformDeclaration,
-} from "../../coords-transform-config";
 import { Matrix } from "./matrix";
 import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
-import { defaults } from "../../defaults";
 import { TransformationMatrixResolver } from "./transformation-matrix-resolver";
+import { CoordsTransformConfig } from "./coords-transform-config";
+import { TransformDeclaration } from "./transform-declaration";
 
 export const resolveTransformFn = (
   config: CoordsTransformConfig | undefined,
 ): CoordsTransformFn => {
   if (config === undefined) {
-    return defaults.transformFn;
+    return (point) => point;
   }
 
   if (typeof config === "function") {
     return config;
   }
 
-  const transformations: CoordsTransformDeclaration[] = Array.isArray(config)
+  const transformations: TransformDeclaration[] = Array.isArray(config)
     ? config
     : [config];
 

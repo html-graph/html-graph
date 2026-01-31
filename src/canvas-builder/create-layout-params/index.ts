@@ -4,5 +4,5 @@ export type { LayoutApplyOn } from "./layout-apply-on";
 export { createLayoutParams } from "./create-layout-params";
 export type {
   CoordsTransformConfig,
-  CoordsTransformDeclaration,
-} from "./coords-transform-config";
+  TransformDeclaration,
+} from "./resolve-layout-algorithm";

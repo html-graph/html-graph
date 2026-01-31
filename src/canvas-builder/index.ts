@@ -18,5 +18,5 @@ export type {
   LayoutConfig,
   LayoutApplyOn,
   CoordsTransformConfig,
-  CoordsTransformDeclaration,
+  TransformDeclaration,
 } from "./create-layout-params";

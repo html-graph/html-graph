@@ -1,5 +1,3 @@
-import { Point } from "@/point";
-
 export const defaults = Object.freeze({
   staticNodeResolver: (): boolean => false,
   onBeforeApplied: (): void => {},
@@ -8,5 +6,4 @@ export const defaults = Object.freeze({
     layerWidth: 300,
     layerSpace: 300,
   },
-  transformFn: (point: Point): Point => point,
 });

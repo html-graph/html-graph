@@ -13,7 +13,7 @@ export type {
   LayoutConfig,
   LayoutApplyOn,
   CoordsTransformConfig,
-  CoordsTransformDeclaration,
+  TransformDeclaration,
 } from "./canvas-builder";
 
 export type {

@@ -1,10 +1,10 @@
-import { CoordsTransformDeclaration } from "../../../coords-transform-config";
 import { Matrix } from "../matrix";
 import { multiplyTransformationMatrices } from "../multiply-transformation-matrices";
 import { Point } from "@/point";
+import { TransformDeclaration } from "../transform-declaration";
 
 export class TransformationMatrixResolver {
-  public resolve(transform: CoordsTransformDeclaration): Matrix {
+  public resolve(transform: TransformDeclaration): Matrix {
     if ("rotate" in transform) {
       const center = transform.center ?? { x: 0, y: 0 };
 
@@ -58,13 +58,14 @@ export class TransformationMatrixResolver {
 
   private createRelativeTransform(matrix: Matrix, center: Point): Matrix {
     const reverseShiftMatrix = this.createReverseShiftMatrix(center);
-
     const shiftMatrix = this.createShiftMatrix(center);
 
-    return multiplyTransformationMatrices(
-      multiplyTransformationMatrices(reverseShiftMatrix, matrix),
-      shiftMatrix,
+    const intermediateMatrix = multiplyTransformationMatrices(
+      reverseShiftMatrix,
+      matrix,
     );
+
+    return multiplyTransformationMatrices(intermediateMatrix, shiftMatrix);
   }
 
   private createReverseShiftMatrix(shift: Point): Matrix {

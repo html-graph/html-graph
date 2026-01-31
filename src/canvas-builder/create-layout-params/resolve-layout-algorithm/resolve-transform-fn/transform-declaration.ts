@@ -1,6 +1,6 @@
 import { Point } from "@/point";
 
-export type CoordsTransformDeclaration =
+export type TransformDeclaration =
   | {
       readonly a?: number | undefined;
       readonly b?: number | undefined;
