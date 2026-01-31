@@ -29,6 +29,16 @@ describe("TransformationMatrixResolver", () => {
     ).toEqual({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 });
   });
 
+  it("should resolve shift matrix", () => {
+    const resolver = new TransformationMatrixResolver();
+
+    expect(
+      resolver.resolve({
+        shift: { x: 5, y: 10 },
+      }),
+    ).toEqual({ a: 1, b: 0, c: 5, d: 0, e: 1, f: 10 });
+  });
+
   it("should resolve scale matrix", () => {
     const resolver = new TransformationMatrixResolver();
 
@@ -39,15 +49,15 @@ describe("TransformationMatrixResolver", () => {
     ).toEqual({ a: 2, b: 0, c: 0, d: 0, e: 2, f: 0 });
   });
 
-  it("should account for scale center", () => {
+  it("should account for scale origin", () => {
     const resolver = new TransformationMatrixResolver();
 
     expect(
       resolver.resolve({
         scale: 2,
-        center: { x: 1, y: 1 },
+        origin: { x: 1, y: 1 },
       }),
-    ).toEqual({ a: 2, b: 0, c: 1, d: 0, e: 2, f: 1 });
+    ).toEqual({ a: 2, b: 0, c: -1, d: 0, e: 2, f: -1 });
   });
 
   it("should resolve rotate", () => {
@@ -65,12 +75,12 @@ describe("TransformationMatrixResolver", () => {
     expect(result.f).toBeCloseTo(0);
   });
 
-  it("should account for rotate center", () => {
+  it("should account for rotate origin", () => {
     const resolver = new TransformationMatrixResolver();
 
     const result = resolver.resolve({
       rotate: Math.PI / 2,
-      center: {
+      origin: {
         x: 1,
         y: 1,
       },
@@ -78,7 +88,7 @@ describe("TransformationMatrixResolver", () => {
 
     expect(result.a).toBeCloseTo(0);
     expect(result.b).toBeCloseTo(-1);
-    expect(result.c).toBeCloseTo(-2);
+    expect(result.c).toBeCloseTo(2);
     expect(result.d).toBeCloseTo(1);
     expect(result.e).toBeCloseTo(0);
     expect(result.f).toBeCloseTo(0);
@@ -92,10 +102,26 @@ describe("TransformationMatrixResolver", () => {
     });
 
     expect(result.a).toBeCloseTo(0);
-    expect(result.b).toBeCloseTo(-1);
+    expect(result.b).toBeCloseTo(1);
     expect(result.c).toBeCloseTo(0);
     expect(result.d).toBeCloseTo(1);
     expect(result.e).toBeCloseTo(0);
     expect(result.f).toBeCloseTo(0);
+  });
+
+  it("should account for mirror origin", () => {
+    const resolver = new TransformationMatrixResolver();
+
+    const result = resolver.resolve({
+      mirror: Math.PI / 4,
+      origin: { x: 1, y: 0 },
+    });
+
+    expect(result.a).toBeCloseTo(0);
+    expect(result.b).toBeCloseTo(1);
+    expect(result.c).toBeCloseTo(1);
+    expect(result.d).toBeCloseTo(1);
+    expect(result.e).toBeCloseTo(0);
+    expect(result.f).toBeCloseTo(-1);
   });
 });

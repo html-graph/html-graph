@@ -6,20 +6,26 @@ import { calculateReverseMartix } from "./calculate-reverse-matrix";
 
 export class TransformationMatrixResolver {
   public resolve(transform: TransformDeclaration): Matrix {
-    if ("rotate" in transform) {
-      const center = transform.center ?? { x: 0, y: 0 };
+    if ("shift" in transform) {
+      return this.createShiftInitialMatrix(transform.shift);
+    }
 
-      return this.createRotateTransformationMatrix(transform.rotate, center);
+    if ("rotate" in transform) {
+      const origin = transform.origin ?? { x: 0, y: 0 };
+
+      return this.createRotateTransformationMatrix(transform.rotate, origin);
     }
 
     if ("scale" in transform) {
-      const center = transform.center ?? { x: 0, y: 0 };
+      const origin = transform.origin ?? { x: 0, y: 0 };
 
-      return this.createScaleTransformationMatrix(transform.scale, center);
+      return this.createScaleTransformationMatrix(transform.scale, origin);
     }
 
     if ("mirror" in transform) {
-      return this.createMirrorTransformationMatrix(transform.mirror);
+      const origin = transform.origin ?? { x: 0, y: 0 };
+
+      return this.createMirrorTransformationMatrix(transform.mirror, origin);
     }
 
     return {
@@ -34,49 +40,57 @@ export class TransformationMatrixResolver {
 
   private createRotateTransformationMatrix(
     angle: number,
-    center: Point,
+    origin: Point,
   ): Matrix {
-    const rotateMatrix = this.createRotateMatrix(angle);
-    const coordinateMatrix = this.createShiftMatrix(center);
+    const initialMatrix = this.createRotateInitialMatrix(angle);
+    const coordinateMatrix = calculateReverseMartix(
+      this.createShiftInitialMatrix(origin),
+    );
 
-    return this.createRelativeTransform(rotateMatrix, coordinateMatrix);
+    return this.createRelativeTransform(initialMatrix, coordinateMatrix);
   }
 
   private createScaleTransformationMatrix(
     scale: number,
-    center: Point,
+    origin: Point,
   ): Matrix {
-    const scaleMatrix = this.createScaleMatrix(scale);
-    const coordinateMatrix = this.createShiftMatrix(center);
+    const initialMatrix = this.createScaleInitialMatrix(scale);
+    const coordinateMatrix = calculateReverseMartix(
+      this.createShiftInitialMatrix(origin),
+    );
 
-    return this.createRelativeTransform(scaleMatrix, coordinateMatrix);
+    return this.createRelativeTransform(initialMatrix, coordinateMatrix);
   }
 
-  private createMirrorTransformationMatrix(direction: number): Matrix {
-    const mirroYMatrix = this.createMirrorYMatrix();
-    const coordinatesMatrix = this.createRotateTransformationMatrix(direction, {
-      x: 0,
-      y: 0,
-    });
+  private createMirrorTransformationMatrix(
+    direction: number,
+    origin: Point,
+  ): Matrix {
+    const initialMatrix = this.createMirrorYInitialMatrix();
+    const shiftMatrix = this.createShiftInitialMatrix(origin);
+    const rotateMatrix = this.createRotateInitialMatrix(direction);
+    const coordinatesMatrix = calculateReverseMartix(
+      multiplyTransformationMatrices(shiftMatrix, rotateMatrix),
+    );
 
-    return this.createRelativeTransform(mirroYMatrix, coordinatesMatrix);
+    return this.createRelativeTransform(initialMatrix, coordinatesMatrix);
   }
 
   private createRelativeTransform(
-    matrix: Matrix,
+    initialMatrix: Matrix,
     coordinateMatrix: Matrix,
   ): Matrix {
-    const reverseTransformMatrix = calculateReverseMartix(coordinateMatrix);
+    const reverseCoordinatesMatrix = calculateReverseMartix(coordinateMatrix);
 
     const intermediateMatrix = multiplyTransformationMatrices(
-      reverseTransformMatrix,
-      matrix,
+      reverseCoordinatesMatrix,
+      initialMatrix,
     );
 
     return multiplyTransformationMatrices(intermediateMatrix, coordinateMatrix);
   }
 
-  private createShiftMatrix(shift: Point): Matrix {
+  private createShiftInitialMatrix(shift: Point): Matrix {
     return {
       a: 1,
       b: 0,
@@ -87,7 +101,7 @@ export class TransformationMatrixResolver {
     };
   }
 
-  private createScaleMatrix(scale: number): Matrix {
+  private createScaleInitialMatrix(scale: number): Matrix {
     return {
       a: scale,
       b: 0,
@@ -98,7 +112,7 @@ export class TransformationMatrixResolver {
     };
   }
 
-  private createRotateMatrix(angle: number): Matrix {
+  private createRotateInitialMatrix(angle: number): Matrix {
     const sin = Math.sin(angle);
     const cos = Math.cos(angle);
 
@@ -112,7 +126,7 @@ export class TransformationMatrixResolver {
     };
   }
 
-  private createMirrorYMatrix(): Matrix {
+  private createMirrorYInitialMatrix(): Matrix {
     return {
       a: 1,
       b: 0,

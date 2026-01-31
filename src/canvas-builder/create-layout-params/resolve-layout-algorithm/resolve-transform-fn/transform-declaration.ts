@@ -10,14 +10,17 @@ export type TransformDeclaration =
       readonly f?: number | undefined;
     }
   | {
+      readonly shift: Point;
+    }
+  | {
       readonly scale: number;
-      readonly center?: Point;
+      readonly origin?: Point;
     }
   | {
       readonly rotate: number;
-      readonly center?: Point;
+      readonly origin?: Point;
     }
   | {
       readonly mirror: number;
-      readonly center?: Point;
+      readonly origin?: Point;
     };

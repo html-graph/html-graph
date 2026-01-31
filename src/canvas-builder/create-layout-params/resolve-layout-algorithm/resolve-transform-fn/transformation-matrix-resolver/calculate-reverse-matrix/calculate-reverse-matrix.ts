@@ -7,7 +7,7 @@ export const calculateReverseMartix = (matrix: Matrix): Matrix => {
   return {
     a: e / delta,
     b: -b / delta,
-    c: (b * f - e * c) / delta,
+    c: (b * f - c * e) / delta,
     d: -d / delta,
     e: a / delta,
     f: (c * d - a * f) / delta,
