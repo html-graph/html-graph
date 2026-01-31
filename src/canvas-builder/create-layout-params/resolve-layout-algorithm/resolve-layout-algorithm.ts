@@ -19,6 +19,7 @@ export const resolveLayoutAlgorithm = (
       return new HierarchicalLayoutAlgorithm({
         layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
         layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
+        transform: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
       });
     }
     default: {

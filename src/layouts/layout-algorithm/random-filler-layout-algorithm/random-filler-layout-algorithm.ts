@@ -19,9 +19,13 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
   ): ReadonlyMap<Identifier, Point> {
     const { graph, viewport } = params;
     const currentCoords = new Map<Identifier, Point>();
-    const nodeIds = graph.getAllNodeIds();
+    const unsetNodeIds = graph.getAllNodeIds().filter((nodeId) => {
+      const node = graph.getNode(nodeId);
 
-    const side = Math.sqrt(nodeIds.length) * this.sparsity;
+      return node.x === null || node.y === null;
+    });
+
+    const side = Math.sqrt(unsetNodeIds.length) * this.sparsity;
     const { width, height } = viewport.getDimensions();
     const centerViewport: Point = { x: width / 2, y: height / 2 };
     const centerContent: Point = viewport.createContentCoords(centerViewport);
@@ -30,6 +34,8 @@ export class RandomFillerLayoutAlgorithm implements LayoutAlgorithm {
       x: centerContent.x - halfSide,
       y: centerContent.y - halfSide,
     };
+
+    const nodeIds = graph.getAllNodeIds();
 
     nodeIds.forEach((nodeId) => {
       const node = graph.getNode(nodeId);

@@ -9,3 +9,5 @@ export type {
 } from "./node-forces-application-strategy";
 export { resolveNodeForcesApplicationStrategy } from "./resolve-node-forces-application-strategy";
 export type { ResolveNodeForcesApplicationStrategyParams } from "./resolve-node-forces-application-strategy";
+export { applyCoordsTransform } from "./apply-coords-transform";
+export type { CoordsTransformationMatrix } from "./apply-coords-transform";

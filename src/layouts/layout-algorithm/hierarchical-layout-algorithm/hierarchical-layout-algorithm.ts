@@ -6,6 +6,7 @@ import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorit
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { TreeNode } from "./tree";
+import { applyCoordsTransform } from "@/layouts/shared";
 
 export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
@@ -52,6 +53,8 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
         currentLayer = nextLayer;
       }
     });
+
+    applyCoordsTransform(result, this.params.transform);
 
     return result;
   }

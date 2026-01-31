@@ -8,6 +8,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerWidth: 100,
       layerSpace: 50,
+      transform: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
     });
 
     const coords = layout.calculateCoordinates({
@@ -29,6 +30,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerWidth: 100,
       layerSpace: 50,
+      transform: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
     });
 
     const coords = layout.calculateCoordinates({
@@ -58,6 +60,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
     const layout = new HierarchicalLayoutAlgorithm({
       layerWidth: 100,
       layerSpace: 50,
+      transform: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
     });
 
     const coords = layout.calculateCoordinates({
@@ -66,5 +69,27 @@ describe("HierarchicalLayoutAlgorithm", () => {
     });
 
     expect(coords.get("node-2")).toEqual({ x: 100, y: 0 });
+  });
+
+  it("should apply specified transformation", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+    });
+
+    const layout = new HierarchicalLayoutAlgorithm({
+      layerWidth: 100,
+      layerSpace: 50,
+      transform: { a: 1, b: 0, c: 10, d: 0, e: 1, f: 10 },
+    });
+
+    const coords = layout.calculateCoordinates({
+      graph: canvas.graph,
+      viewport: canvas.viewport,
+    });
+
+    expect(coords.get("node-1")).toEqual({ x: 10, y: 10 });
   });
 });
