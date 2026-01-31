@@ -10,51 +10,73 @@ export const resolveTransformationMatrix = (
     const cos = Math.cos(transform.rotate);
     const center = transform.center ?? { x: 0, y: 0 };
 
-    const shiftedMatrix = multiplyTransformationMatrices(
-      {
-        a: 1,
-        b: 0,
-        c: -center.x,
-        d: 0,
-        e: 1,
-        f: -center.y,
-      },
-      { a: cos, b: -sin, c: 0, d: sin, e: cos, f: 0 },
-    );
+    const reverseShiftMatrix: Matrix = {
+      a: 1,
+      b: 0,
+      c: -center.x,
+      d: 0,
+      e: 1,
+      f: -center.y,
+    };
 
-    return multiplyTransformationMatrices(shiftedMatrix, {
+    const rotateMatrix: Matrix = {
+      a: cos,
+      b: -sin,
+      c: 0,
+      d: sin,
+      e: cos,
+      f: 0,
+    };
+
+    const shiftMatrix: Matrix = {
       a: 1,
       b: 0,
       c: center.x,
       d: 0,
       e: 1,
       f: center.y,
-    });
+    };
+
+    return multiplyTransformationMatrices(
+      multiplyTransformationMatrices(reverseShiftMatrix, rotateMatrix),
+      shiftMatrix,
+    );
   }
 
   if ("scale" in transform) {
     const center = transform.center ?? { x: 0, y: 0 };
 
-    const shiftedMatrix = multiplyTransformationMatrices(
-      {
-        a: 1,
-        b: 0,
-        c: -center.x,
-        d: 0,
-        e: 1,
-        f: -center.y,
-      },
-      { a: transform.scale, b: 0, c: 0, d: 0, e: transform.scale, f: 0 },
-    );
+    const reverseShiftMatrix: Matrix = {
+      a: 1,
+      b: 0,
+      c: -center.x,
+      d: 0,
+      e: 1,
+      f: -center.y,
+    };
 
-    return multiplyTransformationMatrices(shiftedMatrix, {
+    const scaleMatrix: Matrix = {
+      a: transform.scale,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: transform.scale,
+      f: 0,
+    };
+
+    const shiftMatrix: Matrix = {
       a: 1,
       b: 0,
       c: center.x,
       d: 0,
       e: 1,
       f: center.y,
-    });
+    };
+
+    return multiplyTransformationMatrices(
+      multiplyTransformationMatrices(reverseShiftMatrix, scaleMatrix),
+      shiftMatrix,
+    );
   }
 
   return {

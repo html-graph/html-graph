@@ -20,10 +20,7 @@ export const resolveLayoutAlgorithm = (
       return new HierarchicalLayoutAlgorithm({
         layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
         layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
-        transform:
-          config.transform !== undefined
-            ? resolveTransformFn(config.transform)
-            : defaults.transformFn,
+        transform: resolveTransformFn(config.transform),
       });
     }
     default: {

@@ -7,10 +7,15 @@ import {
 import { Matrix } from "./matrix";
 import { multiplyTransformationMatrices } from "./multiply-transformation-matrices";
 import { resolveTransformationMatrix } from "./resolve-transformation-matrix/resolve-transformation-matrix";
+import { defaults } from "../../defaults";
 
 export const resolveTransformFn = (
-  config: CoordsTransformConfig,
+  config: CoordsTransformConfig | undefined,
 ): CoordsTransformFn => {
+  if (config === undefined) {
+    return defaults.transformFn;
+  }
+
   if (typeof config === "function") {
     return config;
   }

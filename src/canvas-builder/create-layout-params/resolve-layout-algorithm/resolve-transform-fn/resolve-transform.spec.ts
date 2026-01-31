@@ -2,6 +2,12 @@ import { Point } from "@/point";
 import { resolveTransformFn } from "./resolve-transform";
 
 describe("resolveTransformFn", () => {
+  it("should resolve default transform function when transformation not provided", () => {
+    const result = resolveTransformFn(undefined);
+
+    expect(result({ x: 1, y: 2 })).toEqual({ x: 1, y: 2 });
+  });
+
   it("should resolve specified transform function", () => {
     const transformFn = (point: Point): Point => point;
 
