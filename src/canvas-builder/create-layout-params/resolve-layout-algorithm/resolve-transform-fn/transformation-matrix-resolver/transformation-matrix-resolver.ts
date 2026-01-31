@@ -1,4 +1,4 @@
-import { CoordsTransformDeclaration } from "@/canvas-builder/create-layout-params/coords-transform-config";
+import { CoordsTransformDeclaration } from "../../../coords-transform-config";
 import { Matrix } from "../matrix";
 import { multiplyTransformationMatrices } from "../multiply-transformation-matrices";
 import { Point } from "@/point";
@@ -6,35 +6,15 @@ import { Point } from "@/point";
 export class TransformationMatrixResolver {
   public resolve(transform: CoordsTransformDeclaration): Matrix {
     if ("rotate" in transform) {
-      const sin = Math.sin(transform.rotate);
-      const cos = Math.cos(transform.rotate);
       const center = transform.center ?? { x: 0, y: 0 };
 
-      const rotateMatrix: Matrix = {
-        a: cos,
-        b: -sin,
-        c: 0,
-        d: sin,
-        e: cos,
-        f: 0,
-      };
-
-      return this.createRelativeTransform(rotateMatrix, center);
+      return this.createRotateMatrix(transform.rotate, center);
     }
 
     if ("scale" in transform) {
       const center = transform.center ?? { x: 0, y: 0 };
 
-      const scaleMatrix: Matrix = {
-        a: transform.scale,
-        b: 0,
-        c: 0,
-        d: 0,
-        e: transform.scale,
-        f: 0,
-      };
-
-      return this.createRelativeTransform(scaleMatrix, center);
+      return this.createScaleMatrix(transform.scale, center);
     }
 
     return {
@@ -45,6 +25,35 @@ export class TransformationMatrixResolver {
       e: transform.e ?? 1,
       f: transform.f ?? 0,
     };
+  }
+
+  private createRotateMatrix(angle: number, center: Point): Matrix {
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+
+    const rotateMatrix: Matrix = {
+      a: cos,
+      b: -sin,
+      c: 0,
+      d: sin,
+      e: cos,
+      f: 0,
+    };
+
+    return this.createRelativeTransform(rotateMatrix, center);
+  }
+
+  private createScaleMatrix(scale: number, center: Point): Matrix {
+    const scaleMatrix: Matrix = {
+      a: scale,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: scale,
+      f: 0,
+    };
+
+    return this.createRelativeTransform(scaleMatrix, center);
   }
 
   private createRelativeTransform(matrix: Matrix, center: Point): Matrix {
