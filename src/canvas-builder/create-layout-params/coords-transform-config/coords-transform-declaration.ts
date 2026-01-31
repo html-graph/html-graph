@@ -12,4 +12,8 @@ export type CoordsTransformDeclaration =
   | {
       readonly scale: number;
       readonly center?: Point;
+    }
+  | {
+      readonly rotate: number;
+      readonly center?: Point;
     };

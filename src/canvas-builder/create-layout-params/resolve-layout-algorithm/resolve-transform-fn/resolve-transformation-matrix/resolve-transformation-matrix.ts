@@ -1,20 +1,60 @@
 import { CoordsTransformDeclaration } from "@/canvas-builder/create-layout-params/coords-transform-config";
 import { Matrix } from "../matrix";
+import { multiplyTransformationMatrices } from "../multiply-transformation-matrices";
 
 export const resolveTransformationMatrix = (
   transform: CoordsTransformDeclaration,
 ): Matrix => {
+  if ("rotate" in transform) {
+    const sin = Math.sin(transform.rotate);
+    const cos = Math.cos(transform.rotate);
+    const center = transform.center ?? { x: 0, y: 0 };
+
+    const shiftedMatrix = multiplyTransformationMatrices(
+      {
+        a: 1,
+        b: 0,
+        c: -center.x,
+        d: 0,
+        e: 1,
+        f: -center.y,
+      },
+      { a: cos, b: -sin, c: 0, d: sin, e: cos, f: 0 },
+    );
+
+    return multiplyTransformationMatrices(shiftedMatrix, {
+      a: 1,
+      b: 0,
+      c: center.x,
+      d: 0,
+      e: 1,
+      f: center.y,
+    });
+  }
+
   if ("scale" in transform) {
     const center = transform.center ?? { x: 0, y: 0 };
 
-    return {
-      a: transform.scale,
+    const shiftedMatrix = multiplyTransformationMatrices(
+      {
+        a: 1,
+        b: 0,
+        c: -center.x,
+        d: 0,
+        e: 1,
+        f: -center.y,
+      },
+      { a: transform.scale, b: 0, c: 0, d: 0, e: transform.scale, f: 0 },
+    );
+
+    return multiplyTransformationMatrices(shiftedMatrix, {
+      a: 1,
       b: 0,
-      c: (transform.scale - 1) * center.x,
+      c: center.x,
       d: 0,
-      e: transform.scale,
-      f: (transform.scale - 1) * center.y,
-    };
+      e: 1,
+      f: center.y,
+    });
   }
 
   return {

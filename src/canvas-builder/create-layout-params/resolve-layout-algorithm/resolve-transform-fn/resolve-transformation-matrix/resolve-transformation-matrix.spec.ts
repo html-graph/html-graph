@@ -41,4 +41,34 @@ describe("resolveTransformMatrix", () => {
       }),
     ).toEqual({ a: 2, b: 0, c: 1, d: 0, e: 2, f: 1 });
   });
+
+  it("should resolve rotate", () => {
+    const result = resolveTransformationMatrix({
+      rotate: Math.PI / 2,
+    });
+
+    expect(result.a).toBeCloseTo(0);
+    expect(result.b).toBeCloseTo(-1);
+    expect(result.c).toBeCloseTo(0);
+    expect(result.d).toBeCloseTo(1);
+    expect(result.e).toBeCloseTo(0);
+    expect(result.f).toBeCloseTo(0);
+  });
+
+  it("should account for rotate center", () => {
+    const result = resolveTransformationMatrix({
+      rotate: Math.PI / 2,
+      center: {
+        x: 1,
+        y: 1,
+      },
+    });
+
+    expect(result.a).toBeCloseTo(0);
+    expect(result.b).toBeCloseTo(-1);
+    expect(result.c).toBeCloseTo(-2);
+    expect(result.d).toBeCloseTo(1);
+    expect(result.e).toBeCloseTo(0);
+    expect(result.f).toBeCloseTo(0);
+  });
 });
