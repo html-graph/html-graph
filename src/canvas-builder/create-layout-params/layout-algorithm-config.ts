@@ -1,4 +1,5 @@
 import { LayoutAlgorithm } from "@/layouts";
+import { CoordsTransformConfig } from "./coords-transform-config";
 
 export type LayoutAlgorithmConfig =
   | {
@@ -7,23 +8,26 @@ export type LayoutAlgorithmConfig =
     }
   | {
       readonly type: "forceDirected";
-      readonly dtSec?: number;
-      readonly maxIterations?: number;
-      readonly seed?: string;
-      readonly nodeCharge?: number;
-      readonly nodeMass?: number;
-      readonly edgeEquilibriumLength?: number;
-      readonly edgeStiffness?: number;
-      readonly convergenceVelocity?: number;
-      readonly maxForce?: number;
-      readonly nodeForceCoefficient?: number;
-      readonly barnesHut?: {
-        readonly theta?: number;
-        readonly areaRadiusThreshold?: number;
-      };
+      readonly dtSec?: number | undefined;
+      readonly maxIterations?: number | undefined;
+      readonly seed?: string | undefined;
+      readonly nodeCharge?: number | undefined;
+      readonly nodeMass?: number | undefined;
+      readonly edgeEquilibriumLength?: number | undefined;
+      readonly edgeStiffness?: number | undefined;
+      readonly convergenceVelocity?: number | undefined;
+      readonly maxForce?: number | undefined;
+      readonly nodeForceCoefficient?: number | undefined;
+      readonly barnesHut?:
+        | {
+            readonly theta?: number | undefined;
+            readonly areaRadiusThreshold?: number | undefined;
+          }
+        | undefined;
     }
   | {
       readonly type: "hierarchical";
-      readonly layerWidth?: number;
-      readonly layerSpace?: number;
+      readonly layerWidth?: number | undefined;
+      readonly layerSpace?: number | undefined;
+      readonly transform?: CoordsTransformConfig | undefined;
     };

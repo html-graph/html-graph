@@ -15,3 +15,5 @@ export type {
   AnimatedLayoutAlgorithm,
   AnimatedLayoutAlgorithmParams,
 } from "./animated-layout-algorithm";
+
+export type { CoordsTransformFn } from "./shared";

@@ -6,7 +6,6 @@ import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorit
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { TreeNode } from "./tree";
-import { applyCoordsTransform } from "@/layouts/shared";
 
 export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   public constructor(
@@ -54,7 +53,12 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
       }
     });
 
-    applyCoordsTransform(result, this.params.transform);
+    result.forEach((coord) => {
+      const transformedCoords = this.params.transform(coord);
+
+      coord.x = transformedCoords.x;
+      coord.y = transformedCoords.y;
+    });
 
     return result;
   }

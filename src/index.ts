@@ -86,6 +86,7 @@ export type {
   LayoutAlgorithmParams,
   AnimatedLayoutAlgorithm,
   AnimatedLayoutAlgorithmParams,
+  CoordsTransformFn,
 } from "./layouts";
 
 export { EventSubject } from "./event-subject";

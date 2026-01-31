@@ -7,6 +7,7 @@ import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
 import { cyrb128, sfc32 } from "@/prng";
 import { forceDirectedDefaults } from "../../shared";
 import { defaults } from "../defaults";
+import { resolveTransform } from "./resolve-transform";
 
 export const resolveLayoutAlgorithm = (
   config: LayoutAlgorithmConfig | undefined,
@@ -19,7 +20,10 @@ export const resolveLayoutAlgorithm = (
       return new HierarchicalLayoutAlgorithm({
         layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
         layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
-        transform: { a: 1, b: 0, c: 0, d: 0, e: 1, f: 0 },
+        transform:
+          config.transform !== undefined
+            ? resolveTransform(config.transform)
+            : defaults.transformFn,
       });
     }
     default: {
