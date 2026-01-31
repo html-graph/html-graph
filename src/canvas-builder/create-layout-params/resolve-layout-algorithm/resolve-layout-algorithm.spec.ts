@@ -1,5 +1,5 @@
 import { DummyLayoutAlgorithm } from "@/mocks";
-import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
+import { LayoutAlgorithmConfig } from "./layout-algorithm-config";
 import { resolveLayoutAlgorithm } from "./resolve-layout-algorithm";
 import {
   ForceDirectedLayoutAlgorithm,

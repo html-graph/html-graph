@@ -1,6 +1,6 @@
 import { LayoutApplyOn } from "./layout-apply-on";
-import { LayoutAlgorithmConfig } from "./layout-algorithm-config";
 import { Identifier } from "@/identifier";
+import { LayoutAlgorithmConfig } from "./resolve-layout-algorithm";
 
 export interface LayoutConfig {
   readonly algorithm?: LayoutAlgorithmConfig | undefined;

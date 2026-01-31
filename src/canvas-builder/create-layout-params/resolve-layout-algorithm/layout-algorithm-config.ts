@@ -1,5 +1,5 @@
 import { LayoutAlgorithm } from "@/layouts";
-import { CoordsTransformConfig } from "./resolve-layout-algorithm";
+import { CoordsTransformConfig } from "./resolve-transform-fn";
 
 export type LayoutAlgorithmConfig =
   | {
