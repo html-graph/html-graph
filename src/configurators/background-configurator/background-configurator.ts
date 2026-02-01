@@ -77,8 +77,8 @@ export class BackgroundConfigurator {
   }
 
   private updateVisibility(): void {
-    const viewportScale = this.canvas.viewport.getViewportMatrix().scale;
-    const scaleReached = viewportScale > this.maxViewportScale;
+    const { scale } = this.canvas.viewport.getViewportMatrix();
+    const scaleReached = scale > this.maxViewportScale;
 
     if (scaleReached && this.visible) {
       this.visible = false;

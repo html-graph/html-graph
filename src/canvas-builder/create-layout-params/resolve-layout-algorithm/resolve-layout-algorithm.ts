@@ -3,10 +3,11 @@ import {
   HierarchicalLayoutAlgorithm,
   LayoutAlgorithm,
 } from "@/layouts";
-import { LayoutAlgorithmConfig } from "../layout-algorithm-config";
 import { cyrb128, sfc32 } from "@/prng";
 import { forceDirectedDefaults } from "../../shared";
 import { defaults } from "../defaults";
+import { resolveTransformFn } from "./resolve-transform-fn";
+import { LayoutAlgorithmConfig } from "./layout-algorithm-config";
 
 export const resolveLayoutAlgorithm = (
   config: LayoutAlgorithmConfig | undefined,
@@ -19,6 +20,7 @@ export const resolveLayoutAlgorithm = (
       return new HierarchicalLayoutAlgorithm({
         layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
         layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
+        transform: resolveTransformFn(config.transform),
       });
     }
     default: {

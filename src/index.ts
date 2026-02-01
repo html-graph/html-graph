@@ -12,6 +12,8 @@ export type {
   AnimatedLayoutAlgorithmConfig,
   LayoutConfig,
   LayoutApplyOn,
+  CoordsTransformConfig,
+  TransformDeclaration,
 } from "./canvas-builder";
 
 export type {
@@ -86,6 +88,7 @@ export type {
   LayoutAlgorithmParams,
   AnimatedLayoutAlgorithm,
   AnimatedLayoutAlgorithmParams,
+  CoordsTransformFn,
 } from "./layouts";
 
 export { EventSubject } from "./event-subject";
