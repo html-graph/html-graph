@@ -10,16 +10,16 @@ export class TransformationMatrixResolver {
       return this.createShiftInitialMatrix(transform.shift);
     }
 
-    if ("rotate" in transform) {
-      const origin = transform.origin ?? { x: 0, y: 0 };
-
-      return this.createRotateTransformationMatrix(transform.rotate, origin);
-    }
-
     if ("scale" in transform) {
       const origin = transform.origin ?? { x: 0, y: 0 };
 
       return this.createScaleTransformationMatrix(transform.scale, origin);
+    }
+
+    if ("rotate" in transform) {
+      const origin = transform.origin ?? { x: 0, y: 0 };
+
+      return this.createRotateTransformationMatrix(transform.rotate, origin);
     }
 
     if ("mirror" in transform) {
