@@ -33,6 +33,7 @@ export const createOverlayCanvas = (
     },
     focus: {
       contentOffset: 0,
+      minContentScale: 0,
     },
   };
 

@@ -12,6 +12,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 2, x: 3, y: 4 });
@@ -32,6 +34,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 1, x: 100, y: 100 });
@@ -54,6 +58,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 0.5, x: 50, y: 50 });
@@ -81,6 +87,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 1, x: 50, y: 50 });
@@ -109,6 +117,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 0.5, x: 75, y: 75 });
@@ -136,6 +146,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 0.2, x: -400, y: 100 });
@@ -163,6 +175,8 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 0,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 0.2, x: 100, y: -400 });
@@ -190,8 +204,68 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix({
       contentOffset: 100,
+      nodes: [],
+      minContentScale: 0,
     });
 
     expect(contentMatrix).toEqual({ scale: 0.2, x: -300, y: 100 });
+  });
+
+  it("should focus only specified nodes", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const canvas = createCanvas(element);
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: document.createElement("div"),
+        x: 0,
+        y: 0,
+      })
+      .addNode({
+        id: "node-2",
+        element: document.createElement("div"),
+        x: 100,
+        y: 100,
+      });
+
+    const navigator = new ViewportNavigator(canvas.viewport, canvas.graph);
+
+    const contentMatrix = navigator.createFocusContentMatrix({
+      contentOffset: 0,
+      nodes: ["node-1"],
+      minContentScale: 0,
+    });
+
+    expect(contentMatrix).toEqual({ scale: 1, x: 100, y: 100 });
+  });
+
+  it("should limit minimum content scale", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const canvas = createCanvas(element);
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: document.createElement("div"),
+        x: 0,
+        y: 0,
+      })
+      .addNode({
+        id: "node-2",
+        element: document.createElement("div"),
+        x: 0,
+        y: 1000,
+      });
+
+    const navigator = new ViewportNavigator(canvas.viewport, canvas.graph);
+
+    const contentMatrix = navigator.createFocusContentMatrix({
+      contentOffset: 0,
+      nodes: [],
+      minContentScale: 0.5,
+    });
+
+    expect(contentMatrix).toEqual({ scale: 0.5, x: 100, y: -400 });
   });
 });

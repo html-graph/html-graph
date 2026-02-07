@@ -33,6 +33,7 @@ const createCanvas = (): Canvas => {
     },
     focus: {
       contentOffset: 0,
+      minContentScale: 0,
     },
   };
 

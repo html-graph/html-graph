@@ -16,5 +16,6 @@ export interface CanvasParams {
   };
   readonly focus: {
     readonly contentOffset: number;
+    readonly minContentScale: number;
   };
 }

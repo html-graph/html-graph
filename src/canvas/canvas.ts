@@ -283,6 +283,9 @@ export class Canvas {
   public focus(config?: FocusConfig | undefined): Canvas {
     const contentMatrix = this.navigator.createFocusContentMatrix({
       contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
+      nodes: config?.nodes ?? [],
+      minContentScale:
+        config?.minContentScale ?? this.params.focus.minContentScale,
     });
 
     this.patchContentMatrix(contentMatrix);

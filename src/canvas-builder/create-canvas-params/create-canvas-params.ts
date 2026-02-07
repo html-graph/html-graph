@@ -24,6 +24,7 @@ export const createCanvasParams = (defaults: CanvasDefaults): CanvasParams => {
     },
     focus: {
       contentOffset: defaults.focus?.contentOffset ?? 100,
+      minContentScale: defaults.focus?.minContentScale ?? 0,
     },
   };
 };

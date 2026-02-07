@@ -16,5 +16,6 @@ export const defaultCanvasParams: CanvasParams = {
   },
   focus: {
     contentOffset: 0,
+    minContentScale: 0,
   },
 };

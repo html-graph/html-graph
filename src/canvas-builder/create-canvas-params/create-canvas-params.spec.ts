@@ -111,4 +111,20 @@ describe("createCanvasParams", () => {
 
     expect(options.focus.contentOffset).toBe(200);
   });
+
+  it("should return default minimum content scale", () => {
+    const options = createCanvasParams({});
+
+    expect(options.focus.minContentScale).toBe(0);
+  });
+
+  it("should return specified minimum content scale", () => {
+    const options = createCanvasParams({
+      focus: {
+        minContentScale: 0.25,
+      },
+    });
+
+    expect(options.focus.minContentScale).toBe(0.25);
+  });
 });
