@@ -281,7 +281,6 @@ export class Canvas {
 
   public focus(): Canvas {
     const contentMatrix = this.navigator.createFocusContentMatrix();
-    console.log(contentMatrix);
 
     this.patchContentMatrix(contentMatrix);
 

@@ -29,24 +29,24 @@ export class ViewportNavigator {
     });
 
     if (nodesCount > 0) {
-      const contentHalfWidth = (maxX - minX) / 2;
-      const contentHalfHeight = (maxY - minY) / 2;
-
-      const contentNodesCenter: Point = {
-        x: contentHalfWidth,
-        y: contentHalfHeight,
+      const contentBoxCenter: Point = {
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2,
       };
 
-      const viewportNodesCenter: Point =
-        this.viewport.createViewportCoords(contentNodesCenter);
+      const viewportBoxCenter =
+        this.viewport.createViewportCoords(contentBoxCenter);
 
       const { width, height } = this.viewport.getDimensions();
-      const { scale } = this.viewport.getContentMatrix();
+      const { scale, x, y } = this.viewport.getContentMatrix();
+
+      const dx = width / 2 - viewportBoxCenter.x;
+      const dy = height / 2 - viewportBoxCenter.y;
 
       return {
         scale,
-        x: width / 2 - viewportNodesCenter.x,
-        y: height / 2 - viewportNodesCenter.y,
+        x: x + dx,
+        y: y + dy,
       };
     }
 

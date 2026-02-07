@@ -50,7 +50,7 @@ describe("ViewportNavigator", () => {
 
     const contentMatrix = navigator.createFocusContentMatrix();
 
-    expect(contentMatrix).toEqual({ scale: 0.5, x: 100, y: 100 });
+    expect(contentMatrix).toEqual({ scale: 0.5, x: 50, y: 50 });
   });
 
   it("should calculate content matrix to have two nodes content in the center", () => {
@@ -78,7 +78,7 @@ describe("ViewportNavigator", () => {
     expect(contentMatrix).toEqual({ scale: 1, x: 50, y: 50 });
   });
 
-  it("should should adjust account for scale when has two nodes", () => {
+  it("should account for scale when has two nodes", () => {
     const element = createElement({ width: 200, height: 200 });
     const canvas = createCanvas(element);
 
@@ -103,4 +103,29 @@ describe("ViewportNavigator", () => {
 
     expect(contentMatrix).toEqual({ scale: 0.5, x: 75, y: 75 });
   });
+
+  // it("should adjust viewport scale when current scale doesn't fit", () => {
+  //   const element = createElement({ width: 200, height: 200 });
+  //   const canvas = createCanvas(element);
+
+  //   canvas
+  //     .addNode({
+  //       id: "node-1",
+  //       element: document.createElement("div"),
+  //       x: 0,
+  //       y: 0,
+  //     })
+  //     .addNode({
+  //       id: "node-2",
+  //       element: document.createElement("div"),
+  //       x: 1000,
+  //       y: 1000,
+  //     });
+
+  //   const navigator = new ViewportNavigator(canvas.viewport, canvas.graph);
+
+  //   const contentMatrix = navigator.createFocusContentMatrix();
+
+  //   expect(contentMatrix).toEqual({ scale: 0.2, x: 75, y: 75 });
+  // });
 });
