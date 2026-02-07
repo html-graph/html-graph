@@ -10,6 +10,7 @@ import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -24,6 +25,7 @@ const createCanvas = (options?: {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
@@ -46,6 +48,7 @@ const createCanvas = (options?: {
   const canvas = new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,
@@ -1066,5 +1069,26 @@ describe("Canvas", () => {
     canvas.unmarkPort("port-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should navigate to node", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: nodeElement,
+        x: 100,
+        y: 100,
+      })
+      .focus();
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
+    });
   });
 });

@@ -17,6 +17,7 @@ import { UserTransformableViewportVirtualScrollConfigurator } from "./user-trans
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -33,6 +34,7 @@ const createCanvas = (options?: {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
 
   const htmlView = new VirtualScrollHtmlView(
     new CoreHtmlView(graphStore, viewportStore, element),
@@ -47,6 +49,7 @@ const createCanvas = (options?: {
   const canvas = new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,

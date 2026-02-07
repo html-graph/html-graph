@@ -13,6 +13,7 @@ import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -20,6 +21,7 @@ const createCanvas = (): Canvas => {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
   const params: CanvasParams = {
@@ -39,6 +41,7 @@ const createCanvas = (): Canvas => {
   const canvas = new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,

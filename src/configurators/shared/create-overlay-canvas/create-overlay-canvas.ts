@@ -5,6 +5,7 @@ import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 import { ViewportStore } from "@/viewport-store";
 
 export const createOverlayCanvas = (
@@ -14,6 +15,7 @@ export const createOverlayCanvas = (
   const graphStore = new GraphStore();
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 
@@ -34,6 +36,7 @@ export const createOverlayCanvas = (
   return new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,

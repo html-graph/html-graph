@@ -61,6 +61,7 @@ import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 import { patchDraggableNodesAnimatedLayoutParams } from "./patch-draggable-nodes-animated-layout-params";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 export class CanvasBuilder {
   private used = false;
@@ -109,6 +110,8 @@ export class CanvasBuilder {
 
   private readonly viewport: Viewport;
 
+  private readonly navigator: ViewportNavigator;
+
   private readonly window: Window = window;
 
   private readonly animationStaticNodes = new Set<Identifier>();
@@ -118,6 +121,7 @@ export class CanvasBuilder {
     this.viewport = new Viewport(this.viewportStore);
     this.graphStore = new GraphStore();
     this.graph = new Graph(this.graphStore);
+    this.navigator = new ViewportNavigator(this.viewport, this.graph);
   }
 
   /**
@@ -245,6 +249,7 @@ export class CanvasBuilder {
     const canvas = new Canvas(
       this.graph,
       this.viewport,
+      this.navigator,
       this.graphStore,
       this.viewportStore,
       htmlView,

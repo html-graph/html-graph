@@ -14,6 +14,7 @@ import { CanvasParams } from "./canvas-params";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
@@ -92,7 +93,7 @@ export class Canvas {
     this.htmlView.clear();
   };
 
-  private readonly onBeforeDestroyEmitter: EventEmitter<void>;
+  private readonly beforeDestroyEmitter: EventEmitter<void>;
 
   private destroyed = false;
 
@@ -110,6 +111,7 @@ export class Canvas {
      * provides api for accessing viewport state
      */
     public readonly viewport: Viewport,
+    private readonly navigator: ViewportNavigator,
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
@@ -145,7 +147,7 @@ export class Canvas {
 
     this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
 
-    [this.onBeforeDestroyEmitter, this.onBeforeDestroy] = createPair();
+    [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
 
   /**
@@ -277,6 +279,15 @@ export class Canvas {
     return this;
   }
 
+  public focus(): Canvas {
+    const contentMatrix = this.navigator.createFocusContentMatrix();
+    console.log(contentMatrix);
+
+    this.patchContentMatrix(contentMatrix);
+
+    return this;
+  }
+
   /**
    * applies transformation for viewport matrix
    */
@@ -306,7 +317,7 @@ export class Canvas {
 
     this.clear();
 
-    this.onBeforeDestroyEmitter.emit();
+    this.beforeDestroyEmitter.emit();
 
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
