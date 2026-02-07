@@ -34,17 +34,29 @@ export class ViewportNavigator {
         y: (minY + maxY) / 2,
       };
 
+      const halfContentBoxWidth = (maxX - minX) / 2;
+      const halfContentBoxHeight = (maxY - minY) / 2;
+
       const viewportBoxCenter =
         this.viewport.createViewportCoords(contentBoxCenter);
 
       const { width, height } = this.viewport.getDimensions();
       const { scale, x, y } = this.viewport.getContentMatrix();
 
-      const dx = width / 2 - viewportBoxCenter.x;
-      const dy = height / 2 - viewportBoxCenter.y;
+      const halfWidth = width / 2;
+      const halfHeight = height / 2;
+
+      const dx = halfWidth - viewportBoxCenter.x;
+      const dy = halfHeight - viewportBoxCenter.y;
+
+      const ratio = Math.max(
+        halfContentBoxWidth / halfWidth,
+        halfContentBoxHeight / halfHeight,
+      );
+      const adjustedScale = ratio > 1 ? scale / ratio : scale;
 
       return {
-        scale,
+        scale: adjustedScale,
         x: x + dx,
         y: y + dy,
       };
