@@ -14,4 +14,8 @@ export interface CanvasParams {
     readonly shapeFactory: EdgeShapeFactory;
     readonly priorityFn: PriorityFn;
   };
+  readonly focus: {
+    readonly contentOffset: number;
+    readonly minContentScale: number;
+  };
 }

@@ -8,6 +8,7 @@ import { BezierEdgeShape } from "@/edges";
 import { createElement } from "@/mocks";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore();
@@ -16,6 +17,7 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
@@ -31,11 +33,16 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     ports: {
       direction: 0,
     },
+    focus: {
+      contentOffset: 0,
+      minContentScale: 0,
+    },
   };
 
   return new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,

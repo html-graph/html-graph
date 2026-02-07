@@ -95,4 +95,36 @@ describe("createCanvasParams", () => {
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });
+
+  it("should return default focus content offset", () => {
+    const options = createCanvasParams({});
+
+    expect(options.focus.contentOffset).toBe(100);
+  });
+
+  it("should return specified focus content offset", () => {
+    const options = createCanvasParams({
+      focus: {
+        contentOffset: 200,
+      },
+    });
+
+    expect(options.focus.contentOffset).toBe(200);
+  });
+
+  it("should return default minimum content scale", () => {
+    const options = createCanvasParams({});
+
+    expect(options.focus.minContentScale).toBe(0);
+  });
+
+  it("should return specified minimum content scale", () => {
+    const options = createCanvasParams({
+      focus: {
+        minContentScale: 0.25,
+      },
+    });
+
+    expect(options.focus.minContentScale).toBe(0.25);
+  });
 });

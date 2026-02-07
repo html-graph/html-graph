@@ -14,4 +14,8 @@ export const defaultCanvasParams: CanvasParams = {
     shapeFactory: () => new BezierEdgeShape(),
     priorityFn: () => 0,
   },
+  focus: {
+    contentOffset: 0,
+    minContentScale: 0,
+  },
 };

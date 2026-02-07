@@ -14,6 +14,8 @@ import { CanvasParams } from "./canvas-params";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
+import { FocusConfig } from "./focus-config";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
@@ -92,7 +94,7 @@ export class Canvas {
     this.htmlView.clear();
   };
 
-  private readonly onBeforeDestroyEmitter: EventEmitter<void>;
+  private readonly beforeDestroyEmitter: EventEmitter<void>;
 
   private destroyed = false;
 
@@ -110,6 +112,7 @@ export class Canvas {
      * provides api for accessing viewport state
      */
     public readonly viewport: Viewport,
+    private readonly navigator: ViewportNavigator,
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly htmlView: HtmlView,
@@ -145,7 +148,7 @@ export class Canvas {
 
     this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
 
-    [this.onBeforeDestroyEmitter, this.onBeforeDestroy] = createPair();
+    [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
 
   /**
@@ -277,6 +280,19 @@ export class Canvas {
     return this;
   }
 
+  public focus(config?: FocusConfig | undefined): Canvas {
+    const contentMatrix = this.navigator.createFocusContentMatrix({
+      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
+      nodes: config?.nodes ?? [],
+      minContentScale:
+        config?.minContentScale ?? this.params.focus.minContentScale,
+    });
+
+    this.patchContentMatrix(contentMatrix);
+
+    return this;
+  }
+
   /**
    * applies transformation for viewport matrix
    */
@@ -306,7 +322,7 @@ export class Canvas {
 
     this.clear();
 
-    this.onBeforeDestroyEmitter.emit();
+    this.beforeDestroyEmitter.emit();
 
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 

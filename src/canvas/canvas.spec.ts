@@ -10,6 +10,7 @@ import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -24,6 +25,7 @@ const createCanvas = (options?: {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+  const navigator = new ViewportNavigator(viewport, graph);
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
@@ -41,11 +43,16 @@ const createCanvas = (options?: {
         ((): BezierEdgeShape => new BezierEdgeShape()),
       priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
     },
+    focus: {
+      contentOffset: 100,
+      minContentScale: 0,
+    },
   };
 
   const canvas = new Canvas(
     graph,
     viewport,
+    navigator,
     graphStore,
     viewportStore,
     htmlView,
@@ -1066,5 +1073,99 @@ describe("Canvas", () => {
     canvas.unmarkPort("port-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
+  });
+
+  it("should account for default focus content offset", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: nodeElement,
+        x: 0,
+        y: 0,
+      })
+      .focus();
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: 50,
+      y: 50,
+    });
+  });
+
+  it("should account for specified focus content offset", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: nodeElement,
+        x: 0,
+        y: 0,
+      })
+      .focus({ contentOffset: 200 });
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 0.25,
+      x: 50,
+      y: 50,
+    });
+  });
+
+  it("should account for specified focus nodes", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const canvas = createCanvas({ element });
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: createElement(),
+        x: 0,
+        y: 0,
+      })
+      .addNode({
+        id: "node-2",
+        element: createElement(),
+        x: 200,
+        y: 200,
+      })
+      .focus({ nodes: ["node-1"] });
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
+    });
+  });
+
+  it("should account for specified focus minimum content scale", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const canvas = createCanvas({ element });
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: createElement(),
+        x: 0,
+        y: 0,
+      })
+      .addNode({
+        id: "node-2",
+        element: createElement(),
+        x: 200,
+        y: 200,
+      })
+      .focus({ minContentScale: 1 });
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
   });
 });

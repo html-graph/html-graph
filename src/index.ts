@@ -27,6 +27,7 @@ export type {
   UpdatePortRequest,
   UpdateEdgeRequest,
   PatchMatrixRequest,
+  FocusConfig,
 } from "./canvas";
 
 export { CanvasError } from "./canvas-error";
