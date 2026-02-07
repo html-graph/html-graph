@@ -36,7 +36,7 @@ export class LayoutConfigurator {
         break;
       }
 
-      case "topologyChangeMicrotask": {
+      default: {
         TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
           canvas.graph,
           applier,
