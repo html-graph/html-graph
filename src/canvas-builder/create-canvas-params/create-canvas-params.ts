@@ -4,9 +4,7 @@ import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { CanvasDefaults } from "./canvas-defaults";
 import { CanvasParams } from "@/canvas";
 
-export const createCanvasParams: (defaults: CanvasDefaults) => CanvasParams = (
-  defaults: CanvasDefaults,
-) => {
+export const createCanvasParams = (defaults: CanvasDefaults): CanvasParams => {
   const priorities = resolvePriority(
     defaults.nodes?.priority,
     defaults.edges?.priority,
@@ -23,6 +21,9 @@ export const createCanvasParams: (defaults: CanvasDefaults) => CanvasParams = (
     edges: {
       shapeFactory: resolveEdgeShapeFactory(defaults.edges?.shape ?? {}),
       priorityFn: priorities.edgesPriorityFn,
+    },
+    focus: {
+      contentOffset: defaults.focus?.contentOffset ?? 100,
     },
   };
 };

@@ -2,6 +2,7 @@ import { Graph } from "@/graph";
 import { Point } from "@/point";
 import { TransformState } from "@/viewport-store";
 import { Viewport } from "@/viewport/viewport";
+import { ViewportNavigatorFocusParams } from "./viewport-navigator-focus-params";
 
 export class ViewportNavigator {
   public constructor(
@@ -9,7 +10,9 @@ export class ViewportNavigator {
     private readonly graph: Graph,
   ) {}
 
-  public createFocusContentMatrix(): TransformState {
+  public createFocusContentMatrix(
+    params: ViewportNavigatorFocusParams,
+  ): TransformState {
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -34,14 +37,13 @@ export class ViewportNavigator {
         y: (minY + maxY) / 2,
       };
 
-      const halfContentBoxWidth = (maxX - minX) / 2;
-      const halfContentBoxHeight = (maxY - minY) / 2;
+      const halfContentBoxWidth = (maxX - minX) / 2 + params.contentOffset;
+      const halfContentBoxHeight = (maxY - minY) / 2 + params.contentOffset;
 
       const viewportBoxCenter =
         this.viewport.createViewportCoords(contentBoxCenter);
 
       const { width, height } = this.viewport.getDimensions();
-      const { scale, x, y } = this.viewport.getContentMatrix();
 
       const halfWidth = width / 2;
       const halfHeight = height / 2;
@@ -53,6 +55,8 @@ export class ViewportNavigator {
         halfContentBoxWidth / halfWidth,
         halfContentBoxHeight / halfHeight,
       );
+
+      const { scale, x, y } = this.viewport.getContentMatrix();
       const adjustedScale = ratio > 1 ? scale / ratio : scale;
 
       return {

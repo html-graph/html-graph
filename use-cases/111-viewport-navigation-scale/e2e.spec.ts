@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should adjust viewport for all nodes on canvas", async ({ page }) => {
-  await page.goto(`${e2eBase}/110-viewport-navigation-all-nodes/`);
+test("should scale viewport to fit all nodes", async ({ page }) => {
+  await page.goto(`${e2eBase}/111-viewport-navigation-scale/`);
 
   await expect(page).toHaveScreenshot("initial.png");
 });

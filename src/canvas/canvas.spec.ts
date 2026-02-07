@@ -43,6 +43,9 @@ const createCanvas = (options?: {
         ((): BezierEdgeShape => new BezierEdgeShape()),
       priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
     },
+    focus: {
+      contentOffset: 100,
+    },
   };
 
   const canvas = new Canvas(
@@ -1071,8 +1074,8 @@ describe("Canvas", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
-  it("should navigate to node", () => {
-    const element = createElement({ width: 200, height: 200 });
+  it("should account for default focus content offset", () => {
+    const element = createElement({ width: 100, height: 100 });
     const canvas = createCanvas({ element });
     const nodeElement = createElement();
 
@@ -1086,9 +1089,30 @@ describe("Canvas", () => {
       .focus();
 
     expect(canvas.viewport.getContentMatrix()).toEqual({
-      scale: 1,
-      x: 100,
-      y: 100,
+      scale: 0.5,
+      x: 50,
+      y: 50,
+    });
+  });
+
+  it("should account for specified focus content offset", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: nodeElement,
+        x: 0,
+        y: 0,
+      })
+      .focus({ contentOffset: 200 });
+
+    expect(canvas.viewport.getContentMatrix()).toEqual({
+      scale: 0.25,
+      x: 50,
+      y: 50,
     });
   });
 });

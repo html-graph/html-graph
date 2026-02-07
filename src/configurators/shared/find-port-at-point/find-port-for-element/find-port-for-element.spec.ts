@@ -31,6 +31,9 @@ const createCanvas = (): Canvas => {
     ports: {
       direction: 0,
     },
+    focus: {
+      contentOffset: 0,
+    },
   };
 
   return new Canvas(

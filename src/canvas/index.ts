@@ -9,4 +9,5 @@ export type { UpdatePortRequest } from "./update-port-request";
 export type { PatchMatrixRequest } from "./patch-matrix-request";
 export type { CanvasParams } from "./canvas-params";
 export type { EdgeShapeFactory } from "./edge-shape-factory";
+export type { FocusConfig } from "./focus-config";
 export { Canvas } from "./canvas";

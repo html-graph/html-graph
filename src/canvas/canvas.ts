@@ -15,6 +15,7 @@ import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { ViewportNavigator } from "@/viewport-navigator";
+import { FocusConfig } from "./focus-config";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
@@ -279,8 +280,10 @@ export class Canvas {
     return this;
   }
 
-  public focus(): Canvas {
-    const contentMatrix = this.navigator.createFocusContentMatrix();
+  public focus(config?: FocusConfig | undefined): Canvas {
+    const contentMatrix = this.navigator.createFocusContentMatrix({
+      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
+    });
 
     this.patchContentMatrix(contentMatrix);
 

@@ -95,4 +95,20 @@ describe("createCanvasParams", () => {
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
   });
+
+  it("should return default focus content offset", () => {
+    const options = createCanvasParams({});
+
+    expect(options.focus.contentOffset).toBe(100);
+  });
+
+  it("should return specified focus content offset", () => {
+    const options = createCanvasParams({
+      focus: {
+        contentOffset: 200,
+      },
+    });
+
+    expect(options.focus.contentOffset).toBe(200);
+  });
 });

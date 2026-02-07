@@ -33,6 +33,9 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     ports: {
       direction: 0,
     },
+    focus: {
+      contentOffset: 0,
+    },
   };
 
   return new Canvas(
