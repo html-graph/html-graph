@@ -16,7 +16,6 @@ import { MouseEventVerifier } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { ViewportNavigator } from "@/viewport-navigator";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -39,12 +38,10 @@ const createCanvas = (options?: {
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const navigator = new ViewportNavigator(viewport, graph);
 
   const canvas = new Canvas(
     graph,
     viewport,
-    navigator,
     graphStore,
     viewportStore,
     htmlView,

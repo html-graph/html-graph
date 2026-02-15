@@ -14,7 +14,6 @@ import { ConnectionPreprocessor } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph, GraphEdge } from "@/graph";
 import { Viewport } from "@/viewport";
-import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -35,12 +34,10 @@ const createCanvas = (options?: {
   const htmlView = new CoreHtmlView(graphStore, viewportStore, mainElement);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const navigator = new ViewportNavigator(viewport, graph);
 
   const canvas = new Canvas(
     graph,
     viewport,
-    navigator,
     graphStore,
     viewportStore,
     htmlView,

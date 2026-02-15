@@ -7,7 +7,6 @@ import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 import { Identifier } from "@/identifier";
-import { ViewportNavigator } from "@/viewport-navigator";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -17,12 +16,10 @@ const createCanvas = (): Canvas => {
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-  const navigator = new ViewportNavigator(viewport, graph);
 
   const canvas = new Canvas(
     graph,
     viewport,
-    navigator,
     graphStore,
     viewportStore,
     htmlView,
