@@ -17,6 +17,11 @@ import { Viewport } from "@/viewport";
 import { ViewportNavigator } from "./viewport-navigator";
 import { FocusConfig } from "./focus-config";
 
+// Responsibilities:
+// 1. generating IDs
+// 2. hooking events
+// 3. providing defaults
+
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
     this.graphStore.hasNode(nodeId),
@@ -98,19 +103,10 @@ export class Canvas {
 
   private destroyed = false;
 
-  /**
-   * emits event just before destruction of canvas
-   */
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
-    /**
-     * provides api for accessing model of rendered graph
-     */
     public readonly graph: Graph,
-    /**
-     * provides api for accessing viewport state
-     */
     public readonly viewport: Viewport,
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
@@ -150,14 +146,11 @@ export class Canvas {
     [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
 
-  /**
-   * adds new node
-   */
   public addNode(request: AddNodeRequest): Canvas {
-    const id = this.nodeIdGenerator.create(request.id);
+    const nodeId = this.nodeIdGenerator.create(request.id);
 
     this.graphStore.addNode({
-      id,
+      id: nodeId,
       element: request.element,
       x: request.x ?? null,
       y: request.y ?? null,
@@ -170,7 +163,7 @@ export class Canvas {
         this.markPort({
           id: port.id,
           element: port.element,
-          nodeId: id,
+          nodeId,
           direction: port.direction,
         });
       }
@@ -179,9 +172,6 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * updates node parameters
-   */
   public updateNode(
     nodeId: Identifier,
     request?: UpdateNodeRequest | undefined,
@@ -191,25 +181,17 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * removes specified node
-   * all the ports of node get unmarked
-   * all the edges adjacent to node get removed
-   */
   public removeNode(nodeId: Identifier): Canvas {
     this.graphStore.removeNode(nodeId);
 
     return this;
   }
 
-  /**
-   * marks specified element as a port for specified node
-   */
   public markPort(request: MarkPortRequest): Canvas {
-    const id = this.portIdGenerator.create(request.id);
+    const portId = this.portIdGenerator.create(request.id);
 
     this.graphStore.addPort({
-      id,
+      id: portId,
       element: request.element,
       nodeId: request.nodeId,
       direction: request.direction ?? this.params.ports.direction,
@@ -218,9 +200,6 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * updates port and edges attached to it
-   */
   public updatePort(
     portId: Identifier,
     request?: UpdatePortRequest | undefined,
@@ -230,36 +209,26 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * unmarks specified port
-   * all the edges adjacent to the port get removed
-   */
   public unmarkPort(portId: Identifier): Canvas {
     this.graphStore.removePort(portId);
 
     return this;
   }
 
-  /**
-   * adds new edge
-   */
   public addEdge(request: AddEdgeRequest): Canvas {
-    const id = this.edgeIdGenerator.create(request.id);
+    const edgeId = this.edgeIdGenerator.create(request.id);
 
     this.graphStore.addEdge({
-      id,
+      id: edgeId,
       from: request.from,
       to: request.to,
-      shape: request.shape ?? this.params.edges.shapeFactory(id),
+      shape: request.shape ?? this.params.edges.shapeFactory(edgeId),
       priority: request.priority ?? this.params.edges.priorityFn(),
     });
 
     return this;
   }
 
-  /**
-   * updates specified edge
-   */
   public updateEdge(
     edgeId: Identifier,
     request?: UpdateEdgeRequest | undefined,
@@ -269,19 +238,12 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * removes specified edge
-   */
   public removeEdge(edgeId: Identifier): Canvas {
     this.graphStore.removeEdge(edgeId);
 
     return this;
   }
 
-  /**
-   * clears canvas from nodes and edges
-   * canvas gets rolled back to initial state and can be reused
-   */
   public clear(): Canvas {
     this.graphStore.clear();
 
@@ -303,28 +265,18 @@ export class Canvas {
     return this;
   }
 
-  /**
-   * applies transformation for viewport matrix
-   */
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
     this.viewportStore.patchViewportMatrix(request);
 
     return this;
   }
 
-  /**
-   * applies transformation for content matrix
-   */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
     this.viewportStore.patchContentMatrix(request);
 
     return this;
   }
 
-  /**
-   * destroys canvas
-   * canvas element gets rolled back to initial state, and can not be reused
-   */
   public destroy(): void {
     if (this.destroyed) {
       return;
