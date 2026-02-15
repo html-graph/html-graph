@@ -14,6 +14,8 @@ import { CanvasParams } from "./canvas-params";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { ViewportNavigator } from "./viewport-navigator";
+import { FocusConfig } from "./focus-config";
 
 export class Canvas {
   private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
@@ -92,7 +94,7 @@ export class Canvas {
     this.htmlView.clear();
   };
 
-  private readonly onBeforeDestroyEmitter: EventEmitter<void>;
+  private readonly beforeDestroyEmitter: EventEmitter<void>;
 
   private destroyed = false;
 
@@ -145,7 +147,7 @@ export class Canvas {
 
     this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
 
-    [this.onBeforeDestroyEmitter, this.onBeforeDestroy] = createPair();
+    [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
 
   /**
@@ -180,7 +182,10 @@ export class Canvas {
   /**
    * updates node parameters
    */
-  public updateNode(nodeId: Identifier, request?: UpdateNodeRequest): Canvas {
+  public updateNode(
+    nodeId: Identifier,
+    request?: UpdateNodeRequest | undefined,
+  ): Canvas {
     this.graphStore.updateNode(nodeId, request ?? {});
 
     return this;
@@ -216,7 +221,10 @@ export class Canvas {
   /**
    * updates port and edges attached to it
    */
-  public updatePort(portId: Identifier, request?: UpdatePortRequest): Canvas {
+  public updatePort(
+    portId: Identifier,
+    request?: UpdatePortRequest | undefined,
+  ): Canvas {
     this.graphStore.updatePort(portId, request ?? {});
 
     return this;
@@ -252,7 +260,10 @@ export class Canvas {
   /**
    * updates specified edge
    */
-  public updateEdge(edgeId: Identifier, request?: UpdateEdgeRequest): Canvas {
+  public updateEdge(
+    edgeId: Identifier,
+    request?: UpdateEdgeRequest | undefined,
+  ): Canvas {
     this.graphStore.updateEdge(edgeId, request ?? {});
 
     return this;
@@ -273,6 +284,21 @@ export class Canvas {
    */
   public clear(): Canvas {
     this.graphStore.clear();
+
+    return this;
+  }
+
+  public focus(config?: FocusConfig | undefined): Canvas {
+    const navigator = new ViewportNavigator(this.viewport, this.graph);
+
+    const contentMatrix = navigator.createFocusContentMatrix({
+      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
+      nodes: config?.nodes ?? [],
+      minContentScale:
+        config?.minContentScale ?? this.params.focus.minContentScale,
+    });
+
+    this.viewportStore.patchContentMatrix(contentMatrix);
 
     return this;
   }
@@ -306,7 +332,7 @@ export class Canvas {
 
     this.clear();
 
-    this.onBeforeDestroyEmitter.emit();
+    this.beforeDestroyEmitter.emit();
 
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 

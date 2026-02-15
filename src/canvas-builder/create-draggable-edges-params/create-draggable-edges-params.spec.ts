@@ -34,6 +34,10 @@ const createCanvas = (): Canvas => {
       shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
       priorityFn: (): number => 0,
     },
+    focus: {
+      contentOffset: 100,
+      minContentScale: 0,
+    },
   };
 
   const canvas = new Canvas(

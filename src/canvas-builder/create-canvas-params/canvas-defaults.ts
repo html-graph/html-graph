@@ -39,4 +39,8 @@ export interface CanvasDefaults {
      */
     readonly priority?: Priority;
   };
+  readonly focus?: {
+    readonly contentOffset?: number;
+    readonly minContentScale?: number;
+  };
 }

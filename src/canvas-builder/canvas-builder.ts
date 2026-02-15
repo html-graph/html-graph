@@ -384,6 +384,8 @@ export class CanvasBuilder {
       );
     }
 
-    return new LayoutHtmlView(htmlView, this.graphStore);
+    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
+
+    return htmlView;
   }
 }

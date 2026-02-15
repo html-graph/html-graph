@@ -14,7 +14,6 @@ const createCanvas = (): Canvas => {
   const viewportStore = new ViewportStore(element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
-
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
   const defaults: CanvasParams = {
@@ -28,6 +27,10 @@ const createCanvas = (): Canvas => {
     },
     ports: {
       direction: 0,
+    },
+    focus: {
+      contentOffset: 0,
+      minContentScale: 0,
     },
   };
 
