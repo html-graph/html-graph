@@ -4,7 +4,7 @@ import { WidthFirstSpanningForestGenerator } from "../width-first-spanning-fores
 
 describe("ChildrenOffsetsGenerator", () => {
   it("should zero offset when node is root", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -24,7 +24,7 @@ describe("ChildrenOffsetsGenerator", () => {
   });
 
   it("should set offset to zero for single child node", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas
       .addNode({
@@ -52,7 +52,7 @@ describe("ChildrenOffsetsGenerator", () => {
   });
 
   it("should offset node by radius when node has two children", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas
       .addNode({

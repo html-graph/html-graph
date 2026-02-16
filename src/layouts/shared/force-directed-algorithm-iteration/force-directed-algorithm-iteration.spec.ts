@@ -24,7 +24,7 @@ const createCurrentCoords = (graph: Graph): ReadonlyMap<Identifier, Point> => {
 
 describe("ForceDirectedAlgorithmIteration", () => {
   it("should return unchanged coordinates when graph has one node", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -62,7 +62,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
   });
 
   it("should apply for pulling back forces when two nodes are not connected", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -106,7 +106,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
   });
 
   it("should account for edge spring forces when two nodes are connected", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -164,7 +164,7 @@ describe("ForceDirectedAlgorithmIteration", () => {
   });
 
   it("should calculate maximum velocity", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",

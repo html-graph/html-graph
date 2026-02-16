@@ -3,7 +3,7 @@ import { createCanvas, createElement } from "@/mocks";
 
 describe("RandomFillerLayoutAlgorithm", () => {
   it("should set single node coordinates to maximum of specified edge length", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -24,7 +24,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
   });
 
   it("should keep existing node coordinates when specified", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -47,7 +47,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
   });
 
   it("should limit node coordinates to square root of nodes count", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -91,7 +91,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
 
   it("should regard for viewport center", () => {
     const element = createElement({ width: 2000, height: 1000 });
-    const canvas = createCanvas(element);
+    const { canvas } = createCanvas(element);
 
     canvas.addNode({
       id: "node-1",
@@ -113,7 +113,7 @@ describe("RandomFillerLayoutAlgorithm", () => {
 
   it("should regard for viewport transformed center", () => {
     const element = createElement({ width: 2000, height: 1000 });
-    const canvas = createCanvas(element);
+    const { canvas } = createCanvas(element);
 
     canvas
       .addNode({

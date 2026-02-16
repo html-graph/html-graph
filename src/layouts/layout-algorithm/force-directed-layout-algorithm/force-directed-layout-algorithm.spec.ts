@@ -53,7 +53,7 @@ const createAlgorithm = (params?: {
 
 describe("ForceDirectedLayoutAlgorithm", () => {
   it("should calculate coordinates based on total forces", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
     initCanvas(canvas);
 
     const algorithm = createAlgorithm({ maxIterations: 1 });
@@ -72,7 +72,7 @@ describe("ForceDirectedLayoutAlgorithm", () => {
   });
 
   it("should stop when converged by velocity", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
     initCanvas(canvas);
 
     const algorithm = createAlgorithm({

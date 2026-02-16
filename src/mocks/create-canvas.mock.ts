@@ -6,7 +6,9 @@ import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { defaultCanvasParams } from "./default-canvas-params";
 
-export const createCanvas = (element?: HTMLElement): Canvas => {
+export const createCanvas = (
+  element?: HTMLElement,
+): { canvas: Canvas; viewportStore: ViewportStore; graphStore: GraphStore } => {
   const graphStore = new GraphStore();
   const canvasHost = element ?? document.createElement("div");
   const viewportStore = new ViewportStore(canvasHost);
@@ -26,5 +28,5 @@ export const createCanvas = (element?: HTMLElement): Canvas => {
     defaultCanvasParams,
   );
 
-  return canvas;
+  return { canvas, viewportStore, graphStore };
 };

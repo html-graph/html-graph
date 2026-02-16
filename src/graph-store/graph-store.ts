@@ -24,7 +24,7 @@ export class GraphStore {
 
   private readonly portIncomingEdges = new Map<Identifier, Set<Identifier>>();
 
-  private readonly portOutcomingEdges = new Map<Identifier, Set<Identifier>>();
+  private readonly portOutgoingEdges = new Map<Identifier, Set<Identifier>>();
 
   private readonly portCycleEdges = new Map<Identifier, Set<Identifier>>();
 
@@ -232,7 +232,7 @@ export class GraphStore {
 
     this.portCycleEdges.set(request.id, new Set());
     this.portIncomingEdges.set(request.id, new Set());
-    this.portOutcomingEdges.set(request.id, new Set());
+    this.portOutgoingEdges.set(request.id, new Set());
 
     this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
     this.afterPortAddedEmitter.emit(request.id);
@@ -362,7 +362,7 @@ export class GraphStore {
   public clear(): void {
     this.beforeClearEmitter.emit();
     this.portIncomingEdges.clear();
-    this.portOutcomingEdges.clear();
+    this.portOutgoingEdges.clear();
     this.portCycleEdges.clear();
     this.elementPorts.clear();
     this.nodesElementsMap.clear();
@@ -383,7 +383,7 @@ export class GraphStore {
   }
 
   public getPortOutgoingEdgeIds(portId: Identifier): readonly Identifier[] {
-    const edgeIds = this.portOutcomingEdges.get(portId);
+    const edgeIds = this.portOutgoingEdges.get(portId);
 
     if (edgeIds === undefined) {
       throw new CanvasError("failed to access edges for nonexistent port");
@@ -506,7 +506,7 @@ export class GraphStore {
     });
 
     if (request.from !== request.to) {
-      this.portOutcomingEdges.get(request.from)!.add(request.id);
+      this.portOutgoingEdges.get(request.from)!.add(request.id);
       this.portIncomingEdges.get(request.to)!.add(request.id);
     } else {
       this.portCycleEdges.get(request.from)!.add(request.id);
@@ -522,8 +522,8 @@ export class GraphStore {
     this.portCycleEdges.get(portToId)!.delete(edgeId);
     this.portIncomingEdges.get(portFromId)!.delete(edgeId);
     this.portIncomingEdges.get(portToId)!.delete(edgeId);
-    this.portOutcomingEdges.get(portFromId)!.delete(edgeId);
-    this.portOutcomingEdges.get(portToId)!.delete(edgeId);
+    this.portOutgoingEdges.get(portFromId)!.delete(edgeId);
+    this.portOutgoingEdges.get(portToId)!.delete(edgeId);
 
     this.edges.delete(edgeId);
   }

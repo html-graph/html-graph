@@ -50,7 +50,7 @@ const createAlgorithm = (params?: {
 };
 describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
   it("should calculate coordinates based on total forces", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
     initCanvas(canvas);
 
     const algorithm = createAlgorithm();
@@ -70,7 +70,7 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
   });
 
   it("should stop when converged by velocity", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
     initCanvas(canvas);
 
     const algorithm = createAlgorithm({
@@ -87,7 +87,7 @@ describe("ForceDirectedAnimatedLayoutAlgorithm", () => {
   });
 
   it("should not stop when converged but has unset coordinates", () => {
-    const canvas = createCanvas();
+    const { canvas } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
