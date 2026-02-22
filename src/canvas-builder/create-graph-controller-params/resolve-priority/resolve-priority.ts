@@ -4,7 +4,7 @@ import {
   PriorityFn,
   standardPriorityFn,
 } from "@/priority";
-import { Priority } from "../priority";
+import { Priority } from "../../shared";
 import { Priorities } from "./priorities";
 
 export const resolvePriority: (

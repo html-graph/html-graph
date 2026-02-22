@@ -1,12 +1,12 @@
 import { Point } from "@/point";
-import { createCanvasParams } from "./create-canvas-params";
+import { createGraphControllerParams } from "./create-graph-controller-params";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
 import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
 
-describe("createCanvasParams", () => {
+describe("createGraphControllerParams", () => {
   it("should return standard nodes center fn", () => {
-    const { graphControllerParams } = createCanvasParams({});
+    const graphControllerParams = createGraphControllerParams({});
 
     expect(graphControllerParams.nodes.centerFn).toBe(standardCenterFn);
   });
@@ -14,7 +14,7 @@ describe("createCanvasParams", () => {
   it("should return specified nodes center fn", () => {
     const fn = (): Point => ({ x: 0, y: 0 });
 
-    const { graphControllerParams } = createCanvasParams({
+    const graphControllerParams = createGraphControllerParams({
       nodes: {
         centerFn: fn,
       },
@@ -24,7 +24,7 @@ describe("createCanvasParams", () => {
   });
 
   it("should return standard nodes priority fn", () => {
-    const { graphControllerParams } = createCanvasParams({});
+    const graphControllerParams = createGraphControllerParams({});
 
     expect(graphControllerParams.nodes.priorityFn).toBe(standardPriorityFn);
   });
@@ -32,7 +32,7 @@ describe("createCanvasParams", () => {
   it("should return specified nodes priority fn", () => {
     const fn = (): number => 0;
 
-    const { graphControllerParams } = createCanvasParams({
+    const graphControllerParams = createGraphControllerParams({
       nodes: {
         priority: fn,
       },
@@ -42,13 +42,13 @@ describe("createCanvasParams", () => {
   });
 
   it("should return standard ports direction", () => {
-    const { graphControllerParams } = createCanvasParams({});
+    const graphControllerParams = createGraphControllerParams({});
 
     expect(graphControllerParams.ports.direction).toBe(0);
   });
 
   it("should return specified ports direction", () => {
-    const { graphControllerParams } = createCanvasParams({
+    const graphControllerParams = createGraphControllerParams({
       ports: {
         direction: Math.PI,
       },
@@ -58,7 +58,7 @@ describe("createCanvasParams", () => {
   });
 
   it("should return standard edges priority fn", () => {
-    const { graphControllerParams } = createCanvasParams({});
+    const graphControllerParams = createGraphControllerParams({});
 
     expect(graphControllerParams.edges.priorityFn).toBe(standardPriorityFn);
   });
@@ -66,7 +66,7 @@ describe("createCanvasParams", () => {
   it("should return specified edges priority fn", () => {
     const fn = (): number => 0;
 
-    const { graphControllerParams } = createCanvasParams({
+    const graphControllerParams = createGraphControllerParams({
       edges: {
         priority: fn,
       },
@@ -76,14 +76,14 @@ describe("createCanvasParams", () => {
   });
 
   it("should return standard edges shape factory", () => {
-    const { graphControllerParams } = createCanvasParams({});
+    const graphControllerParams = createGraphControllerParams({});
     const shape = graphControllerParams.edges.shapeFactory("123");
 
     expect(shape instanceof BezierEdgeShape).toBe(true);
   });
 
   it("should return specified edges shape factory", () => {
-    const { graphControllerParams } = createCanvasParams({
+    const graphControllerParams = createGraphControllerParams({
       edges: {
         shape: {
           type: "straight",
@@ -94,37 +94,5 @@ describe("createCanvasParams", () => {
     const shape = graphControllerParams.edges.shapeFactory("123");
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
-  });
-
-  it("should return default focus content offset", () => {
-    const { viewportControllerParams } = createCanvasParams({});
-
-    expect(viewportControllerParams.focus.contentOffset).toBe(100);
-  });
-
-  it("should return specified focus content offset", () => {
-    const { viewportControllerParams } = createCanvasParams({
-      focus: {
-        contentOffset: 200,
-      },
-    });
-
-    expect(viewportControllerParams.focus.contentOffset).toBe(200);
-  });
-
-  it("should return default minimum content scale", () => {
-    const { viewportControllerParams } = createCanvasParams({});
-
-    expect(viewportControllerParams.focus.minContentScale).toBe(0);
-  });
-
-  it("should return specified minimum content scale", () => {
-    const { viewportControllerParams } = createCanvasParams({
-      focus: {
-        minContentScale: 0.25,
-      },
-    });
-
-    expect(viewportControllerParams.focus.minContentScale).toBe(0.25);
   });
 });
