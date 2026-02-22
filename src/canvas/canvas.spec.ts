@@ -6,11 +6,17 @@ import { createElement } from "@/mocks";
 import { CenterFn, standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";
-import { CanvasParams } from "./canvas-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { EdgeShapeFactory, GraphController } from "@/graph-controller";
-import { ViewportController } from "@/viewport-controller";
+import {
+  EdgeShapeFactory,
+  GraphController,
+  GraphControllerParams,
+} from "@/graph-controller";
+import {
+  ViewportController,
+  ViewportControllerParams,
+} from "@/viewport-controller";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -28,39 +34,39 @@ const createCanvas = (options?: {
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
-  const params: CanvasParams = {
-    graphControllerParams: {
-      nodes: {
-        centerFn: options?.nodesCenterFn ?? standardCenterFn,
-        priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
-      },
-      ports: {
-        direction: options?.portsDirection ?? 0,
-      },
-      edges: {
-        shapeFactory:
-          options?.edgeShapeFactory ??
-          ((): BezierEdgeShape => new BezierEdgeShape()),
-        priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
-      },
+  const graphControllerParams: GraphControllerParams = {
+    nodes: {
+      centerFn: options?.nodesCenterFn ?? standardCenterFn,
+      priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
     },
-    viewportControllerParams: {
-      focus: {
-        contentOffset: 100,
-        minContentScale: 0,
-      },
+    ports: {
+      direction: options?.portsDirection ?? 0,
+    },
+    edges: {
+      shapeFactory:
+        options?.edgeShapeFactory ??
+        ((): BezierEdgeShape => new BezierEdgeShape()),
+      priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
     },
   };
 
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    params.graphControllerParams,
+    graphControllerParams,
   );
+
+  const viewportControllerParams: ViewportControllerParams = {
+    focus: {
+      contentOffset: 100,
+      minContentScale: 0,
+    },
+  };
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    params.viewportControllerParams,
+    viewportControllerParams,
   );
 
   const canvas = new Canvas(

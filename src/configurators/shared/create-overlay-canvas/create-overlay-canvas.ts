@@ -1,12 +1,15 @@
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
 import { DirectEdgeShape } from "@/edges";
 import { Graph } from "@/graph";
-import { GraphController } from "@/graph-controller";
+import { GraphController, GraphControllerParams } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { Viewport } from "@/viewport";
-import { ViewportController } from "@/viewport-controller";
+import {
+  ViewportController,
+  ViewportControllerParams,
+} from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 
 export const createOverlayCanvas = (
@@ -19,37 +22,37 @@ export const createOverlayCanvas = (
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 
-  const defaults: CanvasParams = {
-    graphControllerParams: {
-      nodes: {
-        centerFn: standardCenterFn,
-        priorityFn: (): number => 0,
-      },
-      edges: {
-        shapeFactory: () => new DirectEdgeShape(),
-        priorityFn: (): number => 0,
-      },
-      ports: {
-        direction: 0,
-      },
+  const graphControllerParams: GraphControllerParams = {
+    nodes: {
+      centerFn: standardCenterFn,
+      priorityFn: (): number => 0,
     },
-    viewportControllerParams: {
-      focus: {
-        contentOffset: 0,
-        minContentScale: 0,
-      },
+    edges: {
+      shapeFactory: () => new DirectEdgeShape(),
+      priorityFn: (): number => 0,
+    },
+    ports: {
+      direction: 0,
     },
   };
 
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaults.graphControllerParams,
+    graphControllerParams,
   );
+
+  const viewportControllerParams: ViewportControllerParams = {
+    focus: {
+      contentOffset: 0,
+      minContentScale: 0,
+    },
+  };
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaults.viewportControllerParams,
+    viewportControllerParams,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);
