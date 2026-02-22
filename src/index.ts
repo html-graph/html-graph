@@ -16,8 +16,9 @@ export type {
   TransformDeclaration,
 } from "./canvas-builder";
 
+export type { Canvas } from "./canvas";
+
 export type {
-  Canvas,
   AddNodeRequest,
   AddEdgeRequest,
   AddNodePorts,
@@ -26,9 +27,9 @@ export type {
   UpdateNodeRequest,
   UpdatePortRequest,
   UpdateEdgeRequest,
-  PatchMatrixRequest,
-  FocusConfig,
-} from "./canvas";
+} from "./graph-controller";
+
+export type { PatchMatrixRequest, FocusConfig } from "./viewport-controller";
 
 export { CanvasError } from "./canvas-error";
 

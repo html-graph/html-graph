@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { ViewportStore } from "@/viewport-store";
 import {
   createAddNodeOverlayRequest,
@@ -11,6 +11,7 @@ import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
+import { AddEdgeRequest } from "@/graph-controller";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;

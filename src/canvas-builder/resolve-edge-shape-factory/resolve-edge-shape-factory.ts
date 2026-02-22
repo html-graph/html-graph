@@ -6,7 +6,7 @@ import {
   VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShapeConfig } from "./edge-shape-config";
-import { EdgeShapeFactory } from "@/canvas";
+import { EdgeShapeFactory } from "@/graph-controller";
 
 export const resolveEdgeShapeFactory = (
   config: EdgeShapeConfig,

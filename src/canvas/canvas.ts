@@ -1,24 +1,21 @@
-import { AddEdgeRequest } from "./add-edge-request";
-import { AddNodeRequest } from "./add-node-request";
-import { MarkPortRequest } from "./mark-port-request";
-import { PatchMatrixRequest } from "./patch-matrix-request";
-import { UpdateEdgeRequest } from "./update-edge-request";
-import { UpdateNodeRequest } from "./update-node-request";
-import { UpdatePortRequest } from "./update-port-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { FocusConfig } from "./focus-config";
-import { GraphController } from "@/graph-controller";
-import { ViewportController } from "@/viewport-controller";
-
-// Responsibilities:
-// 1. checking existing IDs
-// 2. hooking events
-// 3. providing defaults
-
-// split into GraphController and ViewportController
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  GraphController,
+  MarkPortRequest,
+  UpdateEdgeRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
+} from "@/graph-controller";
+import {
+  FocusConfig,
+  PatchMatrixRequest,
+  ViewportController,
+} from "@/viewport-controller";
 
 export class Canvas {
   private readonly beforeDestroyEmitter: EventEmitter<void>;
@@ -46,7 +43,7 @@ export class Canvas {
     nodeId: Identifier,
     request?: UpdateNodeRequest | undefined,
   ): Canvas {
-    this.graphController.updateNode(nodeId, request ?? {});
+    this.graphController.updateNode(nodeId, request);
 
     return this;
   }
@@ -67,7 +64,7 @@ export class Canvas {
     portId: Identifier,
     request?: UpdatePortRequest | undefined,
   ): Canvas {
-    this.graphController.updatePort(portId, request ?? {});
+    this.graphController.updatePort(portId, request);
 
     return this;
   }
@@ -88,7 +85,7 @@ export class Canvas {
     edgeId: Identifier,
     request?: UpdateEdgeRequest | undefined,
   ): Canvas {
-    this.graphController.updateEdge(edgeId, request ?? {});
+    this.graphController.updateEdge(edgeId, request);
 
     return this;
   }

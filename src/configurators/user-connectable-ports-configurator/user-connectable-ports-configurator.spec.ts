@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -15,7 +15,7 @@ import { ConnectionPreprocessor } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { GraphController } from "@/graph-controller";
+import { AddEdgeRequest, GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (options?: {

@@ -1,7 +1,7 @@
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import { ConnectionPreprocessor, MouseEventVerifier } from "../shared";
-import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
 import { Identifier } from "@/identifier";
+import { AddEdgeRequest, EdgeShapeFactory } from "@/graph-controller";
 
 export interface UserConnectablePortsParams {
   readonly edgeShapeFactory: EdgeShapeFactory;

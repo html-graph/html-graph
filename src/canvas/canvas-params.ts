@@ -1,6 +1,6 @@
 import { CenterFn } from "@/center-fn";
+import { EdgeShapeFactory } from "@/graph-controller";
 import { PriorityFn } from "@/priority";
-import { EdgeShapeFactory } from "./edge-shape-factory";
 
 export interface CanvasParams {
   readonly nodes: {

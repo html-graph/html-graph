@@ -1,11 +1,6 @@
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
 import { createDraggableEdgeParams } from "./create-draggable-edges-params";
-import {
-  AddEdgeRequest,
-  Canvas,
-  CanvasParams,
-  EdgeShapeFactory,
-} from "@/canvas";
+import { Canvas, CanvasParams } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
@@ -13,7 +8,11 @@ import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { GraphController } from "@/graph-controller";
+import {
+  AddEdgeRequest,
+  EdgeShapeFactory,
+  GraphController,
+} from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {

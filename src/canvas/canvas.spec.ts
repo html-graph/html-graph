@@ -7,10 +7,9 @@ import { CenterFn, standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";
 import { CanvasParams } from "./canvas-params";
-import { EdgeShapeFactory } from "./edge-shape-factory";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import { GraphController } from "@/graph-controller";
+import { EdgeShapeFactory, GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (options?: {

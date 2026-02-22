@@ -1,4 +1,3 @@
-import { AddEdgeRequest, AddNodeRequest } from "@/canvas";
 import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
@@ -13,6 +12,7 @@ import {
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
+import { AddEdgeRequest, AddNodeRequest } from "@/graph-controller";
 
 const setLayersDimensions = (element: HTMLElement): void => {
   for (const child of element.children[0].children) {
