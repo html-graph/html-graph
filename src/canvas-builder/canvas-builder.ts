@@ -242,17 +242,18 @@ export class CanvasBuilder {
 
     const layers = new Layers(this.element);
     const htmlView = this.createHtmlView(layers.main);
-    const canvasParams = createCanvasParams(this.canvasDefaults);
+    const { graphControllerParams, viewportControllerParams } =
+      createCanvasParams(this.canvasDefaults);
 
     const graphController = new GraphController(
       this.graphStore,
       htmlView,
-      canvasParams,
+      graphControllerParams,
     );
     const viewportController = new ViewportController(
       this.graphStore,
       this.viewportStore,
-      canvasParams,
+      viewportControllerParams,
     );
 
     const canvas = new Canvas(
@@ -296,8 +297,8 @@ export class CanvasBuilder {
     if (this.hasUserConnectablePorts) {
       const params = createConnectablePortsParams(
         this.connectablePortsConfig,
-        canvasParams.edges.shapeFactory,
-        canvasParams.ports.direction,
+        graphControllerParams.edges.shapeFactory,
+        graphControllerParams.ports.direction,
       );
 
       UserConnectablePortsConfigurator.configure(

@@ -29,30 +29,38 @@ const createCanvas = (options?: {
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
   const params: CanvasParams = {
-    nodes: {
-      centerFn: options?.nodesCenterFn ?? standardCenterFn,
-      priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
+    graphControllerParams: {
+      nodes: {
+        centerFn: options?.nodesCenterFn ?? standardCenterFn,
+        priorityFn: options?.nodesPriorityFn ?? ((): number => 0),
+      },
+      ports: {
+        direction: options?.portsDirection ?? 0,
+      },
+      edges: {
+        shapeFactory:
+          options?.edgeShapeFactory ??
+          ((): BezierEdgeShape => new BezierEdgeShape()),
+        priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
+      },
     },
-    ports: {
-      direction: options?.portsDirection ?? 0,
-    },
-    edges: {
-      shapeFactory:
-        options?.edgeShapeFactory ??
-        ((): BezierEdgeShape => new BezierEdgeShape()),
-      priorityFn: options?.edgesPriorityFn ?? ((): number => 0),
-    },
-    focus: {
-      contentOffset: 100,
-      minContentScale: 0,
+    viewportControllerParams: {
+      focus: {
+        contentOffset: 100,
+        minContentScale: 0,
+      },
     },
   };
 
-  const graphController = new GraphController(graphStore, htmlView, params);
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    params.graphControllerParams,
+  );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    params,
+    params.viewportControllerParams,
   );
 
   const canvas = new Canvas(

@@ -1,10 +1,9 @@
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
 import { createDraggableEdgeParams } from "./create-draggable-edges-params";
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { standardCenterFn } from "@/center-fn";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -14,6 +13,7 @@ import {
   GraphController,
 } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { defaultCanvasParams } from "@/mocks";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -23,29 +23,15 @@ const createCanvas = (): Canvas => {
   const viewport = new Viewport(viewportStore);
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const params: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    edges: {
-      shapeFactory: (): BezierEdgeShape => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-    focus: {
-      contentOffset: 100,
-      minContentScale: 0,
-    },
-  };
-
-  const graphController = new GraphController(graphStore, htmlView, params);
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams.graphControllerParams,
+  );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    params,
+    defaultCanvasParams.viewportControllerParams,
   );
 
   const canvas = new Canvas(

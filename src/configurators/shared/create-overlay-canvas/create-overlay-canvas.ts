@@ -20,28 +20,36 @@ export const createOverlayCanvas = (
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 
   const defaults: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
+    graphControllerParams: {
+      nodes: {
+        centerFn: standardCenterFn,
+        priorityFn: (): number => 0,
+      },
+      edges: {
+        shapeFactory: () => new DirectEdgeShape(),
+        priorityFn: (): number => 0,
+      },
+      ports: {
+        direction: 0,
+      },
     },
-    edges: {
-      shapeFactory: () => new DirectEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    focus: {
-      contentOffset: 0,
-      minContentScale: 0,
+    viewportControllerParams: {
+      focus: {
+        contentOffset: 0,
+        minContentScale: 0,
+      },
     },
   };
 
-  const graphController = new GraphController(graphStore, htmlView, defaults);
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaults.graphControllerParams,
+  );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaults,
+    defaults.viewportControllerParams,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);

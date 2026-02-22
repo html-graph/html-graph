@@ -24,12 +24,12 @@ export const createCanvas = (
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams,
+    defaultCanvasParams.graphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams,
+    defaultCanvasParams.viewportControllerParams,
   );
 
   const canvas = new Canvas(

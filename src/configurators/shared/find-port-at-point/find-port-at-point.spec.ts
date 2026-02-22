@@ -1,11 +1,9 @@
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { findPortAtPoint } from "./find-port-at-point";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
-import { createElement } from "@/mocks";
+import { createElement, defaultCanvasParams } from "@/mocks";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
@@ -20,29 +18,15 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const viewport = new Viewport(viewportStore);
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
 
-  const defaults: CanvasParams = {
-    nodes: {
-      centerFn: standardCenterFn,
-      priorityFn: (): number => 0,
-    },
-    edges: {
-      shapeFactory: () => new BezierEdgeShape(),
-      priorityFn: (): number => 0,
-    },
-    ports: {
-      direction: 0,
-    },
-    focus: {
-      contentOffset: 0,
-      minContentScale: 0,
-    },
-  };
-
-  const graphController = new GraphController(graphStore, htmlView, defaults);
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams.graphControllerParams,
+  );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaults,
+    defaultCanvasParams.viewportControllerParams,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);

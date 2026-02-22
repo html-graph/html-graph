@@ -4,27 +4,35 @@ import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { CanvasDefaults } from "./canvas-defaults";
 import { CanvasParams } from "@/canvas";
 
-export const createCanvasParams = (defaults: CanvasDefaults): CanvasParams => {
+export const createCanvasParams = (
+  canvasDefaults: CanvasDefaults,
+): CanvasParams => {
   const priorities = resolvePriority(
-    defaults.nodes?.priority,
-    defaults.edges?.priority,
+    canvasDefaults.nodes?.priority,
+    canvasDefaults.edges?.priority,
   );
 
   return {
-    nodes: {
-      centerFn: defaults.nodes?.centerFn ?? standardCenterFn,
-      priorityFn: priorities.nodesPriorityFn,
+    graphControllerParams: {
+      nodes: {
+        centerFn: canvasDefaults.nodes?.centerFn ?? standardCenterFn,
+        priorityFn: priorities.nodesPriorityFn,
+      },
+      ports: {
+        direction: canvasDefaults.ports?.direction ?? 0,
+      },
+      edges: {
+        shapeFactory: resolveEdgeShapeFactory(
+          canvasDefaults.edges?.shape ?? {},
+        ),
+        priorityFn: priorities.edgesPriorityFn,
+      },
     },
-    ports: {
-      direction: defaults.ports?.direction ?? 0,
-    },
-    edges: {
-      shapeFactory: resolveEdgeShapeFactory(defaults.edges?.shape ?? {}),
-      priorityFn: priorities.edgesPriorityFn,
-    },
-    focus: {
-      contentOffset: defaults.focus?.contentOffset ?? 100,
-      minContentScale: defaults.focus?.minContentScale ?? 0,
+    viewportControllerParams: {
+      focus: {
+        contentOffset: canvasDefaults.focus?.contentOffset ?? 100,
+        minContentScale: canvasDefaults.focus?.minContentScale ?? 0,
+      },
     },
   };
 };
