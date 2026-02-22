@@ -6,7 +6,8 @@ import {
   createMouseMoveEvent,
   createMouseWheelEvent,
   createTouch,
-  defaultCanvasParams,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
   wait,
 } from "@/mocks";
 import { Canvas } from "@/canvas";
@@ -49,12 +50,12 @@ const createCanvas = (options?: {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

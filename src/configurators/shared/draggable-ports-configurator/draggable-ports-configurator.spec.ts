@@ -1,7 +1,12 @@
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, createTouch, defaultCanvasParams } from "@/mocks";
+import {
+  createElement,
+  createTouch,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+} from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
 import { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 import { Point } from "@/point";
@@ -32,12 +37,12 @@ const createDraggablePortsCanvas = (options?: {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

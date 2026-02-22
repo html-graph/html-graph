@@ -4,7 +4,12 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams, wait, DummyLayoutAlgorithm } from "@/mocks";
+import {
+  wait,
+  DummyLayoutAlgorithm,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+} from "@/mocks";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
 import { LayoutApplier } from "../../shared";
 import { GraphController } from "@/graph-controller";
@@ -22,12 +27,12 @@ const createCanvas = (): Canvas => {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

@@ -3,7 +3,11 @@ import { findPortAtPoint } from "./find-port-at-point";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { createElement, defaultCanvasParams } from "@/mocks";
+import {
+  createElement,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+} from "@/mocks";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
@@ -21,12 +25,12 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);

@@ -13,7 +13,10 @@ import {
   GraphController,
 } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { defaultCanvasParams } from "@/mocks";
+import {
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+} from "@/mocks";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -26,12 +29,13 @@ const createCanvas = (): Canvas => {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

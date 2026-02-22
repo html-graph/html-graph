@@ -3,7 +3,12 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
-import { createElement, defaultCanvasParams, triggerResizeFor } from "@/mocks";
+import {
+  createElement,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+  triggerResizeFor,
+} from "@/mocks";
 import { BackgroundParams } from "./background-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -26,12 +31,12 @@ const createCanvas = (): {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

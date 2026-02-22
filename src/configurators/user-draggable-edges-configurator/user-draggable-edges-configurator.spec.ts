@@ -5,7 +5,8 @@ import { CoreHtmlView } from "@/html-view";
 import {
   createElement,
   createMouseMoveEvent,
-  defaultCanvasParams,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
 } from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
@@ -44,12 +45,12 @@ const createCanvas = (options?: {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

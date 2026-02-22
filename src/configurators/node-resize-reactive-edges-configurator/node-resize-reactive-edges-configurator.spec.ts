@@ -4,7 +4,11 @@ import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
+import {
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+  triggerResizeFor,
+} from "@/mocks";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -22,12 +26,12 @@ const createCanvas = (): Canvas => {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(

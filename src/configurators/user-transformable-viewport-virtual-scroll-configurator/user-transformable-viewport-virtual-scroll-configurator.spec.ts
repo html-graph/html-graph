@@ -8,7 +8,8 @@ import {
   createElement,
   createMouseMoveEvent,
   createMouseWheelEvent,
-  defaultCanvasParams,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
   triggerResizeFor,
   wait,
 } from "@/mocks";
@@ -49,12 +50,12 @@ const createCanvas = (options?: {
   const graphController = new GraphController(
     graphStore,
     htmlView,
-    defaultCanvasParams.graphControllerParams,
+    defaultGraphControllerParams,
   );
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    defaultCanvasParams.viewportControllerParams,
+    defaultViewportControllerParams,
   );
 
   const canvas = new Canvas(
