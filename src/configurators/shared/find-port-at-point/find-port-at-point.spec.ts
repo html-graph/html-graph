@@ -8,6 +8,8 @@ import { BezierEdgeShape } from "@/edges";
 import { createElement } from "@/mocks";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore();
@@ -36,14 +38,14 @@ const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
     },
   };
 
-  return new Canvas(
-    graph,
-    viewport,
+  const graphController = new GraphController(graphStore, htmlView, defaults);
+  const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    htmlView,
     defaults,
   );
+
+  return new Canvas(graph, viewport, graphController, viewportController);
 };
 
 describe("findPortAtPoint", () => {

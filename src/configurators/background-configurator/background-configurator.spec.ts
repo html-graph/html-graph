@@ -7,6 +7,8 @@ import { createElement, defaultCanvasParams, triggerResizeFor } from "@/mocks";
 import { BackgroundParams } from "./background-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): {
   canvas: Canvas;
@@ -21,13 +23,22 @@ const createCanvas = (): {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams,
+  );
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultCanvasParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   const params: BackgroundParams = {

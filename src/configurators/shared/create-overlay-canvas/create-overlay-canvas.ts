@@ -2,9 +2,11 @@ import { Canvas, CanvasParams } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
 import { DirectEdgeShape } from "@/edges";
 import { Graph } from "@/graph";
+import { GraphController } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { Viewport } from "@/viewport";
+import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 
 export const createOverlayCanvas = (
@@ -35,12 +37,12 @@ export const createOverlayCanvas = (
     },
   };
 
-  return new Canvas(
-    graph,
-    viewport,
+  const graphController = new GraphController(graphStore, htmlView, defaults);
+  const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    htmlView,
     defaults,
   );
+
+  return new Canvas(graph, viewport, graphController, viewportController);
 };

@@ -5,6 +5,8 @@ import { CoreHtmlView, LayoutHtmlView } from "@/html-view";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { defaultCanvasParams } from "./default-canvas-params";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 export const createCanvas = (
   element?: HTMLElement,
@@ -19,13 +21,22 @@ export const createCanvas = (
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams,
+  );
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultCanvasParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return { canvas, viewportStore, graphStore };

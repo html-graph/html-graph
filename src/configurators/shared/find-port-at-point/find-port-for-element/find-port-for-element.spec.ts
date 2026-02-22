@@ -7,6 +7,8 @@ import { ViewportStore } from "@/viewport-store";
 import { findPortForElement } from "./find-port-for-element";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -34,14 +36,14 @@ const createCanvas = (): Canvas => {
     },
   };
 
-  return new Canvas(
-    graph,
-    viewport,
+  const graphController = new GraphController(graphStore, htmlView, defaults);
+  const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    htmlView,
     defaults,
   );
+
+  return new Canvas(graph, viewport, graphController, viewportController);
 };
 
 describe("findPortForElement", () => {

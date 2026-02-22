@@ -10,6 +10,8 @@ import { CanvasParams } from "./canvas-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -47,13 +49,18 @@ const createCanvas = (options?: {
     },
   };
 
+  const graphController = new GraphController(graphStore, htmlView, params);
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    params,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    params,
+    graphController,
+    viewportController,
   );
 
   return canvas;
@@ -189,10 +196,7 @@ describe("Canvas", () => {
 
   it("should mark specified ports when adding node", () => {
     const element = document.createElement("div");
-
     const canvas = createCanvas({ element });
-
-    const spy = jest.spyOn(canvas, "markPort");
 
     const portElement = createElement();
 
@@ -209,8 +213,8 @@ describe("Canvas", () => {
       ],
     });
 
-    expect(spy).toHaveBeenCalledWith({
-      id: "port-1",
+    expect(canvas.graph.getPort("port-1")).toEqual({
+      direction: 0,
       nodeId: "node-1",
       element: portElement,
     });
@@ -919,17 +923,6 @@ describe("Canvas", () => {
     expect(canvas.graph.getAllEdgeIds()).toEqual([0]);
   });
 
-  it("should clear before destroy", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    const spy = jest.spyOn(canvas, "clear");
-
-    canvas.destroy();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should clear html on destroy", () => {
     const element = document.createElement("div");
     const canvas = createCanvas({ element });
@@ -1011,11 +1004,9 @@ describe("Canvas", () => {
       ],
     });
 
-    const spy = jest.spyOn(canvas, "unmarkPort");
-
     canvas.removeNode("node-1");
 
-    expect(spy).toHaveBeenCalledWith("port-1");
+    expect(canvas.graph.hasPort("port-1")).toBe(false);
   });
 
   it("should render adjacent edges when updating port", () => {
@@ -1065,11 +1056,9 @@ describe("Canvas", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(canvas, "removeEdge");
-
     canvas.unmarkPort("port-1");
 
-    expect(spy).toHaveBeenCalledWith("edge-1");
+    expect(canvas.graph.hasEdge("edge-1")).toBe(false);
   });
 
   it("should account for default focus content offset", () => {

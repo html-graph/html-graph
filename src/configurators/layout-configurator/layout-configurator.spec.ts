@@ -9,6 +9,8 @@ import { LayoutParams } from "./layout-params";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -19,13 +21,22 @@ const createCanvas = (): Canvas => {
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams,
+  );
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultCanvasParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return canvas;

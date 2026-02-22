@@ -8,6 +8,8 @@ import { defaultCanvasParams, triggerResizeFor } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -17,13 +19,22 @@ const createCanvas = (): Canvas => {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultCanvasParams,
+  );
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultCanvasParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   NodeResizeReactiveEdgesConfigurator.configure(canvas);

@@ -61,6 +61,8 @@ import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 import { patchDraggableNodesAnimatedLayoutParams } from "./patch-draggable-nodes-animated-layout-params";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 export class CanvasBuilder {
   private used = false;
@@ -242,13 +244,22 @@ export class CanvasBuilder {
     const htmlView = this.createHtmlView(layers.main);
     const canvasParams = createCanvasParams(this.canvasDefaults);
 
+    const graphController = new GraphController(
+      this.graphStore,
+      htmlView,
+      canvasParams,
+    );
+    const viewportController = new ViewportController(
+      this.graphStore,
+      this.viewportStore,
+      canvasParams,
+    );
+
     const canvas = new Canvas(
       this.graph,
       this.viewport,
-      this.graphStore,
-      this.viewportStore,
-      htmlView,
-      canvasParams,
+      graphController,
+      viewportController,
     );
 
     if (this.hasBackground) {
