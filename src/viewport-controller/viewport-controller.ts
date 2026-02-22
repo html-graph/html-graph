@@ -1,9 +1,11 @@
 import { PatchMatrixRequest } from "./patch-matrix-request";
 import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
+import { TransformState, ViewportStore } from "@/viewport-store";
 import { ViewportControllerParams } from "./viewport-controller-params";
-import { ViewportNavigator } from "./viewport-navigator";
 import { FocusConfig } from "./focus-config";
+import { ViewportFocusParams } from "./viewport-focus-params";
+import { Identifier } from "@/identifier";
+import { Point } from "@/point";
 
 export class ViewportController {
   public constructor(
@@ -12,28 +14,86 @@ export class ViewportController {
     private readonly params: ViewportControllerParams,
   ) {}
 
-  public focus(config?: FocusConfig | undefined): void {
-    const navigator = new ViewportNavigator(
-      this.viewportStore,
-      this.graphStore,
-    );
-
-    const contentMatrix = navigator.createFocusContentMatrix({
-      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
-      nodes: config?.nodes ?? [],
-      minContentScale:
-        config?.minContentScale ?? this.params.focus.minContentScale,
-    });
-
-    this.viewportStore.patchContentMatrix(contentMatrix);
-  }
-
   public patchViewportMatrix(request: PatchMatrixRequest): void {
     this.viewportStore.patchViewportMatrix(request);
   }
 
   public patchContentMatrix(request: PatchMatrixRequest): void {
     this.viewportStore.patchContentMatrix(request);
+  }
+
+  public focus(config?: FocusConfig | undefined): void {
+    const params: ViewportFocusParams = {
+      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
+      nodes: config?.nodes ?? [],
+      minContentScale:
+        config?.minContentScale ?? this.params.focus.minContentScale,
+    };
+
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+    let nodesCount = 0;
+
+    const focusNodes = new Set<Identifier>();
+
+    for (const nodeId of params.nodes) {
+      focusNodes.add(nodeId);
+    }
+
+    this.graphStore.getAllNodeIds().forEach((nodeId) => {
+      const { payload } = this.graphStore.getNode(nodeId);
+
+      if (
+        payload.x !== null &&
+        payload.y !== null &&
+        (focusNodes.size === 0 || focusNodes.has(nodeId))
+      ) {
+        minX = Math.min(payload.x, minX);
+        maxX = Math.max(payload.x, maxX);
+        minY = Math.min(payload.y, minY);
+        maxY = Math.max(payload.y, maxY);
+        nodesCount++;
+      }
+    });
+
+    if (nodesCount > 0) {
+      const contentBoxCenter: Point = {
+        x: (minX + maxX) / 2,
+        y: (minY + maxY) / 2,
+      };
+
+      const halfContentBoxWidth = (maxX - minX) / 2 + params.contentOffset;
+      const halfContentBoxHeight = (maxY - minY) / 2 + params.contentOffset;
+
+      const viewportBoxCenter =
+        this.viewportStore.createViewportCoords(contentBoxCenter);
+
+      const { width, height } = this.viewportStore.getDimensions();
+
+      const halfWidth = width / 2;
+      const halfHeight = height / 2;
+
+      const dx = halfWidth - viewportBoxCenter.x;
+      const dy = halfHeight - viewportBoxCenter.y;
+
+      const ratio = Math.max(
+        halfContentBoxWidth / halfWidth,
+        halfContentBoxHeight / halfHeight,
+      );
+
+      const { scale, x, y } = this.viewportStore.getContentMatrix();
+      const adjustedScale = ratio > 1 ? scale / ratio : scale;
+
+      const state: TransformState = {
+        scale: Math.max(adjustedScale, params.minContentScale),
+        x: x + dx,
+        y: y + dy,
+      };
+
+      this.viewportStore.patchContentMatrix(state);
+    }
   }
 
   public destroy(): void {

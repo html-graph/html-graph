@@ -85,30 +85,24 @@ const createCanvas = (options?: {
 
 describe("Canvas", () => {
   it("should add node", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     const spy = jest.spyOn(graphController, "addNode");
 
     canvas.addNode({
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     expect(spy).toHaveBeenCalled();
   });
 
   it("should update node", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
     const nodeElement = createElement();
 
     canvas.addNode({
       id: "node-1",
       element: nodeElement,
-      x: 0,
-      y: 0,
     });
 
     const spy = jest.spyOn(graphController, "updateNode");
@@ -119,14 +113,11 @@ describe("Canvas", () => {
   });
 
   it("should remove node", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     const spy = jest.spyOn(graphController, "removeNode");
@@ -137,14 +128,11 @@ describe("Canvas", () => {
   });
 
   it("should mark port", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     const spy = jest.spyOn(graphController, "markPort");
@@ -158,14 +146,11 @@ describe("Canvas", () => {
   });
 
   it("should update port", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     canvas.markPort({
@@ -182,14 +167,11 @@ describe("Canvas", () => {
   });
 
   it("should unmark port", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     canvas.markPort({
@@ -206,14 +188,11 @@ describe("Canvas", () => {
   });
 
   it("should add edge", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     canvas.markPort({
@@ -230,14 +209,11 @@ describe("Canvas", () => {
   });
 
   it("should update edge", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
     });
 
     const portElement = createElement();
@@ -258,14 +234,11 @@ describe("Canvas", () => {
   });
 
   it("should remove edge", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     canvas.addNode({
       id: "node-1",
       element: createElement(),
-      x: 0,
-      y: 0,
       ports: [
         {
           id: "port-1",
@@ -284,8 +257,7 @@ describe("Canvas", () => {
   });
 
   it("should clear graph", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     const spy = jest.spyOn(graphController, "clear");
 
@@ -295,30 +267,27 @@ describe("Canvas", () => {
   });
 
   it("should patch viewport matrix", () => {
-    const element = document.createElement("div");
-    const { canvas, viewportController } = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas();
 
     const spy = jest.spyOn(viewportController, "patchViewportMatrix");
 
-    canvas.patchViewportMatrix({ scale: 2, x: 3, y: 4 });
+    canvas.patchViewportMatrix({});
 
     expect(spy).toHaveBeenCalled();
   });
 
   it("should patch content matrix", () => {
-    const element = document.createElement("div");
-    const { canvas, viewportController } = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas();
 
     const spy = jest.spyOn(viewportController, "patchContentMatrix");
 
-    canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
+    canvas.patchContentMatrix({});
 
     expect(spy).toHaveBeenCalled();
   });
 
   it("should destroy graph controller on destroy", () => {
-    const element = document.createElement("div");
-    const { canvas, graphController } = createCanvas({ element });
+    const { canvas, graphController } = createCanvas();
 
     const spy = jest.spyOn(graphController, "destroy");
 
@@ -328,8 +297,7 @@ describe("Canvas", () => {
   });
 
   it("should destroy viewport controller on destroy", () => {
-    const element = document.createElement("div");
-    const { canvas, viewportController } = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas();
 
     const spy = jest.spyOn(viewportController, "destroy");
 
@@ -339,8 +307,7 @@ describe("Canvas", () => {
   });
 
   it("should emit event before destroy", () => {
-    const element = document.createElement("div");
-    const { canvas } = createCanvas({ element });
+    const { canvas } = createCanvas();
 
     const onBeforeDestroy = jest.fn();
 
@@ -352,8 +319,7 @@ describe("Canvas", () => {
   });
 
   it("should not emit destroy event twice", () => {
-    const element = document.createElement("div");
-    const { canvas } = createCanvas({ element });
+    const { canvas } = createCanvas();
 
     const onBeforeDestroy = jest.fn();
 
@@ -366,8 +332,7 @@ describe("Canvas", () => {
   });
 
   it("should focus viewport", () => {
-    const element = createElement({ width: 100, height: 100 });
-    const { canvas, viewportController } = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas();
 
     const spy = jest.spyOn(viewportController, "focus");
 

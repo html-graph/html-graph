@@ -7,6 +7,8 @@ import { ViewportControllerParams } from "./viewport-controller-params";
 
 const createViewportController = (options?: {
   element?: HTMLElement;
+  contentOffset?: number;
+  minContentScale?: number;
 }): {
   viewportController: ViewportController;
   graphStore: GraphStore;
@@ -18,8 +20,8 @@ const createViewportController = (options?: {
 
   const params: ViewportControllerParams = {
     focus: {
-      contentOffset: 100,
-      minContentScale: 0,
+      contentOffset: options?.contentOffset ?? 0,
+      minContentScale: options?.minContentScale ?? 0,
     },
   };
 
@@ -60,6 +62,7 @@ describe("ViewportController", () => {
     const { viewportController, graphStore, viewportStore } =
       createViewportController({
         element,
+        contentOffset: 100,
       });
     const nodeElement = createElement();
 
@@ -182,5 +185,296 @@ describe("ViewportController", () => {
     viewportController.destroy();
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("should keep content matrix as is when no nodes", () => {
+    const element = createElement();
+    const { viewportController, viewportStore } = createViewportController({
+      element,
+    });
+
+    viewportStore.patchContentMatrix({ scale: 2, x: 3, y: 4 });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({ scale: 2, x: 3, y: 4 });
+  });
+
+  it("should calculate content matrix to have single node in the center", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
+    });
+  });
+
+  it("should keep content matrix scale", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportStore.patchViewportMatrix({ scale: 2 });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: 50,
+      y: 50,
+    });
+  });
+
+  it("should calculate content matrix to have two nodes content in the center", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 50,
+      y: 50,
+    });
+  });
+
+  it("should account for scale when has two nodes", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportStore.patchViewportMatrix({ scale: 2 });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: 75,
+      y: 75,
+    });
+  });
+
+  it("should adjust viewport scale when current scale doesn't fit horizontally", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 1000,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.2,
+      x: -400,
+      y: 100,
+    });
+  });
+
+  it("should adjust viewport scale when current scale doesn't fit vertically", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 1000,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.2,
+      x: 100,
+      y: -400,
+    });
+  });
+
+  it("should account for specified offset", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 800,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus({ contentOffset: 100 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.2,
+      x: -300,
+      y: 100,
+    });
+  });
+
+  it("should focus only specified nodes", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 100,
+      y: 100,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus({
+      nodes: ["node-1"],
+    });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
+    });
+  });
+
+  it("should limit minimum content scale", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 1000,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus({
+      minContentScale: 0.5,
+    });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: 100,
+      y: -400,
+    });
   });
 });

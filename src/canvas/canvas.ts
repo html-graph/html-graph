@@ -125,11 +125,11 @@ export class Canvas {
       return;
     }
 
+    this.destroyed = true;
+
     this.beforeDestroyEmitter.emit();
 
     this.graphController.destroy();
     this.viewportController.destroy();
-
-    this.destroyed = true;
   }
 }

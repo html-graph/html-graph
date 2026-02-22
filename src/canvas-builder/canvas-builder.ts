@@ -124,18 +124,12 @@ export class CanvasBuilder {
     this.graph = new Graph(this.graphStore);
   }
 
-  /**
-   * specifies default values for graph entities
-   */
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
 
     return this;
   }
 
-  /**
-   * enables nodes draggable by user
-   */
   public enableUserDraggableNodes(
     config?: DraggableNodesConfig,
   ): CanvasBuilder {
@@ -145,9 +139,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables viewport transformable by user
-   */
   public enableUserTransformableViewport(
     config?: ViewportTransformConfig,
   ): CanvasBuilder {
@@ -157,28 +148,18 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables automatic edges update on node resize
-   */
   public enableNodeResizeReactiveEdges(): CanvasBuilder {
     this.hasNodeResizeReactiveEdges = true;
 
     return this;
   }
 
-  /**
-   * enables built-in virtual scroll behavior, when only nodes and edges close
-   * to viewport are rendered
-   */
   public enableVirtualScroll(config: VirtualScrollConfig): CanvasBuilder {
     this.virtualScrollConfig = config;
 
     return this;
   }
 
-  /**
-   * enables built-in background rendering
-   */
   public enableBackground(config?: BackgroundConfig): CanvasBuilder {
     this.hasBackground = true;
     this.backgroundConfig = config ?? {};
@@ -186,9 +167,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables edge creation by dragging one port to another
-   */
   public enableUserConnectablePorts(
     config?: ConnectablePortsConfig,
   ): CanvasBuilder {
@@ -198,9 +176,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables edges dragging by dragging one of the adjacent ports
-   */
   public enableUserDraggableEdges(
     config?: DraggableEdgesConfig,
   ): CanvasBuilder {
@@ -210,9 +185,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables nodes positioning with specified layout
-   */
   public enableLayout(config?: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config ?? {};
     this.hasLayout = true;
@@ -221,9 +193,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables animated nodes positioning with specified layout
-   */
   public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
     this.animatedLayoutConfig = config ?? {};
     this.hasAnimatedLayout = true;
@@ -232,9 +201,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * builds final canvas
-   */
   public build(): Canvas {
     if (this.used) {
       throw new CanvasBuilderError("CanvasBuilder is a single use object");
