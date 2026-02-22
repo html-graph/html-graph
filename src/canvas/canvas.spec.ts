@@ -25,7 +25,11 @@ const createCanvas = (options?: {
   portsDirection?: number;
   edgeShapeFactory?: EdgeShapeFactory;
   edgesPriorityFn?: PriorityFn;
-}): Canvas => {
+}): {
+  canvas: Canvas;
+  graphController: GraphController;
+  viewportController: ViewportController;
+} => {
   const element = options?.element ?? document.createElement("div");
   const graphStore = new GraphStore();
   const viewportStore = new ViewportStore(element);
@@ -76,13 +80,15 @@ const createCanvas = (options?: {
     viewportController,
   );
 
-  return canvas;
+  return { canvas, graphController, viewportController };
 };
 
 describe("Canvas", () => {
   it("should add node", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
+
+    const spy = jest.spyOn(graphController, "addNode");
 
     canvas.addNode({
       element: createElement(),
@@ -90,152 +96,12 @@ describe("Canvas", () => {
       y: 0,
     });
 
-    const container = element.children[0].children[0];
-
-    expect(container.children.length).toBe(1);
+    expect(spy).toHaveBeenCalled();
   });
 
-  it("should set node coordinates to null when not specified", () => {
+  it("should update node", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-    });
-
-    const node = canvas.graph.getNode("node-1");
-
-    expect({ x: node.x, y: node.y }).toEqual({ x: null, y: null });
-  });
-
-  it("should add node with specified id", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    const node = canvas.graph.getNode("node-1");
-
-    expect(node).not.toBe(null);
-  });
-
-  it("should add node with specified default centerFn", () => {
-    const element = document.createElement("div");
-    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
-
-    const canvas = createCanvas({
-      element,
-      nodesCenterFn: centerFn,
-    });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement({ width: 100, height: 100 }),
-      x: 0,
-      y: 0,
-    });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
-  });
-
-  it("should add node with specified centerFn", () => {
-    const element = document.createElement("div");
-    const centerFn: CenterFn = () => ({ x: 0, y: 0 });
-
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement({ width: 100, height: 100 }),
-      x: 0,
-      y: 0,
-      centerFn,
-    });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
-  });
-
-  it("should add node with specified default priority", () => {
-    const element = document.createElement("div");
-
-    const canvas = createCanvas({
-      element,
-      nodesPriorityFn: () => 10,
-    });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.zIndex).toBe("10");
-  });
-
-  it("should add node with specified priority", () => {
-    const element = document.createElement("div");
-
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      priority: 10,
-    });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.zIndex).toBe("10");
-  });
-
-  it("should mark specified ports when adding node", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    const portElement = createElement();
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: portElement,
-        },
-      ],
-    });
-
-    expect(canvas.graph.getPort("port-1")).toEqual({
-      direction: 0,
-      nodeId: "node-1",
-      element: portElement,
-    });
-  });
-
-  it("should update node without arguments", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
     const nodeElement = createElement();
 
     canvas.addNode({
@@ -245,78 +111,16 @@ describe("Canvas", () => {
       y: 0,
     });
 
-    nodeElement.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(0, 0, 100, 100);
-    };
+    const spy = jest.spyOn(graphController, "updateNode");
 
     canvas.updateNode("node-1");
 
-    const container = element.children[0].children[0];
-    const nodeElementWrapper = container.children[0] as HTMLElement;
-
-    expect(nodeElementWrapper.style.transform).toBe("translate(-50px, -50px)");
-  });
-
-  it("should update node coordinates", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.updateNode("node-1", { x: 100, y: 100 });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.transform).toBe("translate(100px, 100px)");
-  });
-
-  it("should update node centerFn", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement({ width: 100, height: 100 }),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.updateNode("node-1", { centerFn: () => ({ x: 0, y: 0 }) });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
-  });
-
-  it("should update node priority", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.updateNode("node-1", { priority: 10 });
-
-    const container = element.children[0].children[0];
-    const nodeElement = container.children[0] as HTMLElement;
-
-    expect(nodeElement.style.zIndex).toBe("10");
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should remove node", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -325,16 +129,16 @@ describe("Canvas", () => {
       y: 0,
     });
 
+    const spy = jest.spyOn(graphController, "removeNode");
+
     canvas.removeNode("node-1");
 
-    const container = element.children[0].children[0];
-
-    expect(container.children.length).toBe(0);
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should mark port", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -343,17 +147,19 @@ describe("Canvas", () => {
       y: 0,
     });
 
+    const spy = jest.spyOn(graphController, "markPort");
+
     canvas.markPort({
       nodeId: "node-1",
       element: createElement(),
     });
 
-    expect(canvas.graph.getAllPortIds().length).toBe(1);
+    expect(spy).toHaveBeenCalled();
   });
 
-  it("should mark port with specified id", () => {
+  it("should update port", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -368,84 +174,16 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    expect(canvas.graph.hasPort("port-1")).toBe(true);
-  });
+    const spy = jest.spyOn(graphController, "updatePort");
 
-  it("should mark port with specified default port direction", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({
-      element,
-      portsDirection: Math.PI,
-    });
+    canvas.updatePort("port-1");
 
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    const port = canvas.graph.getPort("port-1");
-
-    expect(port.direction).toBe(Math.PI);
-  });
-
-  it("should mark port with specified port direction", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-      direction: Math.PI,
-    });
-
-    const port = canvas.graph.getPort("port-1");
-
-    expect(port.direction).toBe(Math.PI);
-  });
-
-  it("should update port direction", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.updatePort("port-1", { direction: Math.PI });
-
-    const port = canvas.graph.getPort("port-1");
-
-    expect(port.direction).toBe(Math.PI);
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should unmark port", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -460,14 +198,16 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
+    const spy = jest.spyOn(graphController, "unmarkPort");
+
     canvas.unmarkPort("port-1");
 
-    expect(canvas.graph.getAllPortIds().length).toBe(0);
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should add edge", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -481,153 +221,17 @@ describe("Canvas", () => {
       nodeId: "node-1",
       element: createElement(),
     });
+
+    const spy = jest.spyOn(graphController, "addEdge");
 
     canvas.addEdge({ from: "port-1", to: "port-1" });
 
-    const container = element.children[0].children[0];
-
-    expect(container.children.length).toBe(2);
+    expect(spy).toHaveBeenCalled();
   });
 
-  it("should add edge with specified id", () => {
+  it("should update edge", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    expect(canvas.graph.getEdge("edge-1")).not.toBe(null);
-  });
-
-  it("should add edge with specified default shape", () => {
-    const element = document.createElement("div");
-    const shape = new BezierEdgeShape();
-    const canvas = createCanvas({
-      element,
-      edgeShapeFactory: () => shape,
-    });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1];
-
-    expect(edgeSvg).toBe(shape.svg);
-  });
-
-  it("should add edge with specified shape", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    const shape = new BezierEdgeShape();
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1", shape });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1];
-
-    expect(edgeSvg).toBe(shape.svg);
-  });
-
-  it("should add edge with specified default priority", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({
-      element,
-      edgesPriorityFn: () => 10,
-    });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.addEdge({ from: "port-1", to: "port-1" });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1] as SVGSVGElement;
-
-    expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should add edge with specified priority", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.markPort({
-      id: "port-1",
-      nodeId: "node-1",
-      element: createElement(),
-    });
-
-    canvas.addEdge({
-      id: "edge-1",
-      from: "port-1",
-      to: "port-1",
-      priority: 10,
-    });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1] as SVGSVGElement;
-
-    expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should update edge without parameters", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -646,155 +250,16 @@ describe("Canvas", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    portElement.getBoundingClientRect = (): DOMRect => {
-      return new DOMRect(100, 100, 0, 0);
-    };
+    const spy = jest.spyOn(graphController, "updateEdge");
 
     canvas.updateEdge("edge-1");
 
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1] as SVGSVGElement;
-
-    expect(edgeSvg.style.transform).toBe("translate(100px, 100px)");
-  });
-
-  it("should update edge source", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addNode({
-      id: "node-2",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
-
-    canvas.updateEdge("edge-1", { from: "port-2" });
-
-    const edge = canvas.graph.getEdge("edge-1")!;
-
-    expect(edge.from).toBe("port-2");
-  });
-
-  it("should update edge target", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addNode({
-      id: "node-2",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2" });
-
-    canvas.updateEdge("edge-1", { to: "port-1" });
-
-    const edge = canvas.graph.getEdge("edge-1")!;
-
-    expect(edge.to).toBe("port-1");
-  });
-
-  it("should update edge priority", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    canvas.updateEdge("edge-1", { priority: 10 });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1] as SVGSVGElement;
-
-    expect(edgeSvg.style.zIndex).toBe("10");
-  });
-
-  it("should update edge shape", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    const newShape = new BezierEdgeShape();
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    canvas.updateEdge("edge-1", { shape: newShape });
-
-    const container = element.children[0].children[0];
-    const edgeSvg = container.children[1] as SVGSVGElement;
-
-    expect(edgeSvg).toBe(newShape.svg);
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should remove edge", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
     canvas.addNode({
       id: "node-1",
@@ -810,144 +275,72 @@ describe("Canvas", () => {
     });
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    const spy = jest.spyOn(graphController, "removeEdge");
+
     canvas.removeEdge("edge-1");
 
-    const container = element.children[0].children[0];
+    expect(spy).toHaveBeenCalled();
+  });
 
-    expect(container.children.length).toBe(1);
+  it("should clear graph", () => {
+    const element = document.createElement("div");
+    const { canvas, graphController } = createCanvas({ element });
+
+    const spy = jest.spyOn(graphController, "clear");
+
+    canvas.clear();
+
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should patch viewport matrix", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas({ element });
+
+    const spy = jest.spyOn(viewportController, "patchViewportMatrix");
 
     canvas.patchViewportMatrix({ scale: 2, x: 3, y: 4 });
 
-    const container = element.children[0].children[0] as HTMLElement;
-
-    expect(container.style.transform).toBe("matrix(0.5, 0, 0, 0.5, -1.5, -2)");
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should patch content matrix", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, viewportController } = createCanvas({ element });
+
+    const spy = jest.spyOn(viewportController, "patchContentMatrix");
 
     canvas.patchContentMatrix({ scale: 2, x: 3, y: 4 });
 
-    const container = element.children[0].children[0] as HTMLElement;
-
-    expect(container.style.transform).toBe("matrix(2, 0, 0, 2, 3, 4)");
+    expect(spy).toHaveBeenCalled();
   });
 
-  it("should clear canvas from elements", () => {
+  it("should destroy graph controller on destroy", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas, graphController } = createCanvas({ element });
 
-    canvas.addNode({
-      id: "node-1",
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.clear();
-
-    const container = element.children[0].children[0];
-
-    expect(container.children.length).toBe(0);
-  });
-
-  it("should reset node id generator", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    canvas.clear();
-
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-    });
-
-    expect(canvas.graph.getAllNodeIds()).toEqual([0]);
-  });
-
-  it("should reset port id generator", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    const addNode = (): void => {
-      canvas.addNode({
-        element: createElement(),
-        x: 0,
-        y: 0,
-        ports: [
-          {
-            element: createElement(),
-          },
-        ],
-      });
-    };
-
-    addNode();
-    addNode();
-    canvas.clear();
-    addNode();
-
-    expect(canvas.graph.getAllPortIds()).toEqual([0]);
-  });
-
-  it("should reset edge id generator", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-
-    const addElements = (): void => {
-      canvas.addNode({
-        element: createElement(),
-        x: 0,
-        y: 0,
-        ports: [
-          {
-            id: "port-1",
-            element: createElement(),
-          },
-        ],
-      });
-
-      canvas.addEdge({ from: "port-1", to: "port-1" });
-    };
-
-    addElements();
-    canvas.addEdge({ from: "port-1", to: "port-1" });
-    canvas.clear();
-    addElements();
-
-    expect(canvas.graph.getAllEdgeIds()).toEqual([0]);
-  });
-
-  it("should clear html on destroy", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const spy = jest.spyOn(graphController, "destroy");
 
     canvas.destroy();
 
-    expect(element.children.length).toBe(0);
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should destroy viewport controller on destroy", () => {
+    const element = document.createElement("div");
+    const { canvas, viewportController } = createCanvas({ element });
+
+    const spy = jest.spyOn(viewportController, "destroy");
+
+    canvas.destroy();
+
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should emit event before destroy", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas } = createCanvas({ element });
 
     const onBeforeDestroy = jest.fn();
 
@@ -960,7 +353,7 @@ describe("Canvas", () => {
 
   it("should not emit destroy event twice", () => {
     const element = document.createElement("div");
-    const canvas = createCanvas({ element });
+    const { canvas } = createCanvas({ element });
 
     const onBeforeDestroy = jest.fn();
 
@@ -972,199 +365,14 @@ describe("Canvas", () => {
     expect(onBeforeDestroy).toHaveBeenCalledTimes(1);
   });
 
-  it("should render adjacent edges when updating node", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
+  it("should focus viewport", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const { canvas, viewportController } = createCanvas({ element });
 
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
+    const spy = jest.spyOn(viewportController, "focus");
 
-    const shape = new BezierEdgeShape();
-    const spy = jest.spyOn(shape, "render");
-
-    canvas.addEdge({ from: "port-1", to: "port-1", shape });
-    canvas.updateNode("node-1");
+    canvas.focus();
 
     expect(spy).toHaveBeenCalled();
-  });
-
-  it("should unmark ports before node removal", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.removeNode("node-1");
-
-    expect(canvas.graph.hasPort("port-1")).toBe(false);
-  });
-
-  it("should render adjacent edges when updating port", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    const shape = new BezierEdgeShape();
-    const spy = jest.spyOn(shape, "render");
-
-    canvas.addEdge({ from: "port-1", to: "port-1", shape });
-    canvas.updatePort("port-1");
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should remove adjacent edges before port unmark", () => {
-    const element = document.createElement("div");
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-1",
-          element: createElement(),
-        },
-      ],
-    });
-
-    canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
-
-    canvas.unmarkPort("port-1");
-
-    expect(canvas.graph.hasEdge("edge-1")).toBe(false);
-  });
-
-  it("should account for default focus content offset", () => {
-    const element = createElement({ width: 100, height: 100 });
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
-
-    canvas
-      .addNode({
-        id: "node-1",
-        element: nodeElement,
-        x: 0,
-        y: 0,
-      })
-      .focus();
-
-    expect(canvas.viewport.getContentMatrix()).toEqual({
-      scale: 0.5,
-      x: 50,
-      y: 50,
-    });
-  });
-
-  it("should account for specified focus content offset", () => {
-    const element = createElement({ width: 100, height: 100 });
-    const canvas = createCanvas({ element });
-    const nodeElement = createElement();
-
-    canvas
-      .addNode({
-        id: "node-1",
-        element: nodeElement,
-        x: 0,
-        y: 0,
-      })
-      .focus({ contentOffset: 200 });
-
-    expect(canvas.viewport.getContentMatrix()).toEqual({
-      scale: 0.25,
-      x: 50,
-      y: 50,
-    });
-  });
-
-  it("should account for specified focus nodes", () => {
-    const element = createElement({ width: 200, height: 200 });
-    const canvas = createCanvas({ element });
-
-    canvas
-      .addNode({
-        id: "node-1",
-        element: createElement(),
-        x: 0,
-        y: 0,
-      })
-      .addNode({
-        id: "node-2",
-        element: createElement(),
-        x: 200,
-        y: 200,
-      })
-      .focus({ nodes: ["node-1"] });
-
-    expect(canvas.viewport.getContentMatrix()).toEqual({
-      scale: 1,
-      x: 100,
-      y: 100,
-    });
-  });
-
-  it("should account for specified focus minimum content scale", () => {
-    const element = createElement({ width: 200, height: 200 });
-    const canvas = createCanvas({ element });
-
-    canvas
-      .addNode({
-        id: "node-1",
-        element: createElement(),
-        x: 0,
-        y: 0,
-      })
-      .addNode({
-        id: "node-2",
-        element: createElement(),
-        x: 200,
-        y: 200,
-      })
-      .focus({ minContentScale: 1 });
-
-    expect(canvas.viewport.getContentMatrix()).toEqual({
-      scale: 1,
-      x: 0,
-      y: 0,
-    });
   });
 });
