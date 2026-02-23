@@ -5,6 +5,7 @@ import { ViewportControllerParams } from "./viewport-controller-params";
 import { FocusConfig } from "./focus-config";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
+import { createFocusParams, FocusParams } from "./create-focus-params";
 
 export class ViewportController {
   public constructor(
@@ -22,6 +23,16 @@ export class ViewportController {
   }
 
   public focus(config?: FocusConfig | undefined): void {
+    const params = createFocusParams(config ?? {}, this.params);
+
+    this.navigate(params);
+  }
+
+  public destroy(): void {
+    this.viewportStore.destroy();
+  }
+
+  private navigate(params: FocusParams): void {
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -29,9 +40,8 @@ export class ViewportController {
     let nodesCount = 0;
 
     const focusNodes = new Set<Identifier>();
-    const nodes = config?.nodes ?? [];
 
-    for (const nodeId of nodes) {
+    for (const nodeId of params.nodes) {
       focusNodes.add(nodeId);
     }
 
@@ -57,11 +67,8 @@ export class ViewportController {
         y: (minY + maxY) / 2,
       };
 
-      const contentOffset =
-        config?.contentOffset ?? this.params.focus.contentOffset;
-
-      const halfContentBoxWidth = (maxX - minX) / 2 + contentOffset;
-      const halfContentBoxHeight = (maxY - minY) / 2 + contentOffset;
+      const halfContentBoxWidth = (maxX - minX) / 2 + params.contentOffset;
+      const halfContentBoxHeight = (maxY - minY) / 2 + params.contentOffset;
 
       const viewportBoxCenter =
         this.viewportStore.createViewportCoords(contentBoxCenter);
@@ -82,20 +89,13 @@ export class ViewportController {
       const { scale, x, y } = this.viewportStore.getContentMatrix();
       const adjustedScale = ratio > 1 ? scale / ratio : scale;
 
-      const minContentScale =
-        config?.minContentScale ?? this.params.focus.minContentScale;
-
       const focusContentMatrix: TransformState = {
-        scale: Math.max(adjustedScale, minContentScale),
+        scale: Math.max(adjustedScale, params.minContentScale),
         x: x + dx,
         y: y + dy,
       };
 
       this.viewportStore.patchContentMatrix(focusContentMatrix);
     }
-  }
-
-  public destroy(): void {
-    this.viewportStore.destroy();
   }
 }

@@ -57,34 +57,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({ scale: 2, x: 3, y: 4 });
   });
 
-  it("should account for default focus content offset", () => {
-    const element = createElement({ width: 100, height: 100 });
-    const { viewportController, graphStore, viewportStore } =
-      createViewportController({
-        element,
-        contentOffset: 100,
-      });
-    const nodeElement = createElement();
-
-    graphStore.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    viewportController.focus();
-
-    expect(viewportStore.getContentMatrix()).toEqual({
-      scale: 0.5,
-      x: 50,
-      y: 50,
-    });
-  });
-
-  it("should account for specified focus content offset", () => {
+  it("should account for focus content offset", () => {
     const element = createElement({ width: 100, height: 100 });
     const { viewportController, graphStore, viewportStore } =
       createViewportController({ element });
@@ -108,7 +81,7 @@ describe("ViewportController", () => {
     });
   });
 
-  it("should account for specified focus nodes", () => {
+  it("should account for focus nodes", () => {
     const element = createElement({ width: 200, height: 200 });
     const { viewportController, graphStore, viewportStore } =
       createViewportController({
@@ -142,7 +115,7 @@ describe("ViewportController", () => {
     });
   });
 
-  it("should account for specified focus minimum content scale", () => {
+  it("should account for focus minimum content scale", () => {
     const element = createElement({ width: 200, height: 200 });
     const { viewportController, graphStore, viewportStore } =
       createViewportController({ element });
@@ -375,38 +348,6 @@ describe("ViewportController", () => {
       scale: 0.2,
       x: 100,
       y: -400,
-    });
-  });
-
-  it("should account for specified offset", () => {
-    const element = createElement({ width: 200, height: 200 });
-    const { viewportController, viewportStore, graphStore } =
-      createViewportController({ element });
-
-    graphStore.addNode({
-      id: "node-1",
-      element: document.createElement("div"),
-      x: 0,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    graphStore.addNode({
-      id: "node-2",
-      element: document.createElement("div"),
-      x: 800,
-      y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
-    });
-
-    viewportController.focus({ contentOffset: 100 });
-
-    expect(viewportStore.getContentMatrix()).toEqual({
-      scale: 0.2,
-      x: -300,
-      y: 100,
     });
   });
 
