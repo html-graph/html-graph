@@ -39,6 +39,7 @@ const createDraggablePortsCanvas = (options?: {
     htmlView,
     defaultGraphControllerParams,
   );
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
