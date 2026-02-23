@@ -12,7 +12,7 @@ describe("resolveLayoutApplyOn", () => {
     ).toBe(true);
   });
 
-  it("should resolve topologyChangeMicrotask strategy by default", async () => {
+  it("should resolve topologyChangeMacrotask strategy", async () => {
     const params = resolveLayoutApplyOn({ type: "topologyChangeMacrotask" });
 
     expect(

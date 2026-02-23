@@ -15,7 +15,7 @@ import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { ScheduleFn } from "@/schedule-fn";
+import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -31,6 +31,7 @@ const createCanvas = (): Canvas => {
     htmlView,
     defaultGraphControllerParams,
   );
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
@@ -47,18 +48,6 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-const microtaskSchedule: ScheduleFn = (apply) => {
-  queueMicrotask(() => {
-    apply();
-  });
-};
-
-const macrotaskSchedule: ScheduleFn = (apply) => {
-  setTimeout(() => {
-    apply();
-  });
-};
-
 describe("LayoutConfigurator", () => {
   it("should configure topology change schedule layout application strategy", async () => {
     const canvas = createCanvas();
@@ -66,7 +55,7 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
         type: "topologyChangeSchedule",
-        schedule: microtaskSchedule,
+        schedule: microtaskScheduleFn,
       },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},
@@ -134,7 +123,7 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
         type: "topologyChangeSchedule",
-        schedule: macrotaskSchedule,
+        schedule: macrotaskScheduleFn,
       },
       staticNodeResolver: () => false,
       onBeforeApplied,
@@ -157,7 +146,7 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
         type: "topologyChangeSchedule",
-        schedule: macrotaskSchedule,
+        schedule: macrotaskScheduleFn,
       },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},

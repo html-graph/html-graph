@@ -27,6 +27,7 @@ const createCanvas = (): Canvas => {
     htmlView,
     defaultGraphControllerParams,
   );
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
