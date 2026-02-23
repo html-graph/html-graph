@@ -25,7 +25,9 @@ export class ViewportController {
   public focus(config?: FocusConfig | undefined): void {
     const params = createFocusParams(config ?? {}, this.params);
 
-    this.navigate(params);
+    this.params.focus.schedule(() => {
+      this.navigate(params);
+    });
   }
 
   public destroy(): void {

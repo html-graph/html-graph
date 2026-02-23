@@ -1,15 +1,20 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { ViewportController } from "./viewport-controller";
-import { createElement } from "@/mocks";
+import { createElement, waitMicrotask } from "@/mocks";
 import { standardCenterFn } from "@/center-fn";
 import { ViewportControllerParams } from "./viewport-controller-params";
-import { immediateScheduleFn } from "@/schedule-fn";
+import {
+  immediateScheduleFn,
+  microtaskScheduleFn,
+  ScheduleFn,
+} from "@/schedule-fn";
 
 const createViewportController = (options?: {
   element?: HTMLElement;
   contentOffset?: number;
   minContentScale?: number;
+  schedule?: ScheduleFn;
 }): {
   viewportController: ViewportController;
   graphStore: GraphStore;
@@ -23,7 +28,7 @@ const createViewportController = (options?: {
     focus: {
       contentOffset: options?.contentOffset ?? 0,
       minContentScale: options?.minContentScale ?? 0,
-      schedule: immediateScheduleFn,
+      schedule: options?.schedule ?? immediateScheduleFn,
     },
   };
 
@@ -175,7 +180,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({ scale: 2, x: 3, y: 4 });
   });
 
-  it("should calculate content matrix to have single node in the center", () => {
+  it("should set content matrix to have single node in the center", () => {
     const element = createElement({ width: 200, height: 200 });
     const { viewportController, viewportStore, graphStore } =
       createViewportController({ element });
@@ -418,6 +423,37 @@ describe("ViewportController", () => {
       scale: 0.5,
       x: 100,
       y: -400,
+    });
+  });
+
+  it("should regard for specified schedule function", async () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element, schedule: microtaskScheduleFn });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
+
+    await waitMicrotask();
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
     });
   });
 });
