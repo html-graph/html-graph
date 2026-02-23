@@ -1,10 +1,12 @@
 export { createElement } from "./create-element.mock";
 export { triggerResizeFor } from "./trigger-resize-for.mock";
 export { createMouseMoveEvent } from "./create-mouse-move-event.mock";
-export { wait } from "./wait.mock";
+export { waitMacrotask } from "./wait-macrotask.mock";
+export { waitMicrotask } from "./wait-microtask.mock";
 export { createTouch } from "./create-touch.mock";
 export { createMouseWheelEvent } from "./create-mouse-wheel-event.mock";
-export { defaultCanvasParams } from "./default-canvas-params";
+export { defaultViewportControllerParams } from "./default-viewport-controller-params";
+export { defaultGraphControllerParams } from "./default-graph-controller-params";
 export { DummyLayoutAlgorithm } from "./dummy-layout-algorithm.mock";
 export { DummyAnimatedLayoutAlgorithm } from "./dummy-animated-layout-algorithm.mock";
 export { AnimationFrameMock } from "./animation-frame.mock";

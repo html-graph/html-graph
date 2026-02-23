@@ -1,13 +1,12 @@
 import { EventSubject } from "@/event-subject";
+import { ScheduleFn } from "@/schedule-fn";
 
 export type LayoutApplyOnParam =
   | {
-      readonly type: "topologyChangeMicrotask";
+      readonly type: "topologyChangeSchedule";
+      readonly schedule: ScheduleFn;
     }
   | {
-      readonly type: "topologyChangeMacrotask";
-    }
-  | {
-      readonly type: "manual";
+      readonly type: "trigger";
       readonly trigger: EventSubject<void>;
     };

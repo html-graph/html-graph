@@ -5,7 +5,6 @@ export type { DraggableNodesParams } from "./user-draggable-nodes-configurator";
 
 export { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 export type {
-  TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
   TransformableViewportParams,

@@ -4,9 +4,9 @@ import {
   MouseEventVerifier,
 } from "@/configurators";
 import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
-import { AddEdgeRequest } from "@/canvas";
-import { Identifier } from "@/identifier";
 import { GraphEdge } from "@/graph";
+import { Identifier } from "@/identifier";
+import { AddEdgeRequest } from "@/graph-controller";
 
 export interface DraggableEdgesConfig {
   readonly connectionPreprocessor?: ConnectionPreprocessor;

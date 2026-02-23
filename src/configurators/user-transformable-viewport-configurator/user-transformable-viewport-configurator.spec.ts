@@ -1,22 +1,24 @@
 import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
+import { TransformState, ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import {
   createElement,
   createMouseMoveEvent,
   createMouseWheelEvent,
   createTouch,
-  defaultCanvasParams,
-  wait,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+  waitMacrotask,
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
-import { TransformPayload } from "./transform-payload";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -44,13 +46,23 @@ const createCanvas = (options?: {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   const params: TransformableViewportParams = {
@@ -66,7 +78,7 @@ const createCanvas = (options?: {
       options?.onResizeTransformFinished ?? ((): void => {}),
     transformPreprocessor:
       options?.transformPreprocessor ??
-      ((transform): TransformPayload => transform.nextTransform),
+      ((transform): TransformState => transform.nextTransform),
     shiftCursor: options?.shiftCursor ?? "grab",
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ??
@@ -344,7 +356,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(500);
+    await waitMacrotask(500);
     expect(onTransformFinished).toHaveBeenCalled();
   });
 
@@ -365,9 +377,9 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(100);
+    await waitMacrotask(100);
     element.dispatchEvent(wheelEvent);
-    await wait(500);
+    await waitMacrotask(500);
 
     expect(onTransformFinished).toHaveBeenCalledTimes(1);
   });
@@ -388,9 +400,9 @@ describe("UserTransformableViewportConfigurator", () => {
     });
 
     element.dispatchEvent(wheelEvent);
-    await wait(100);
+    await waitMacrotask(100);
     element.dispatchEvent(wheelEvent);
-    await wait(500);
+    await waitMacrotask(500);
 
     expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
@@ -736,7 +748,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(1000);
+    await waitMacrotask(1000);
 
     expect(onTransformFinished).not.toHaveBeenCalled();
   });

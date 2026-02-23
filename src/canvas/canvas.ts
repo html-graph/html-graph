@@ -1,346 +1,143 @@
-import { IdGenerator } from "./id-generator";
-import { AddEdgeRequest } from "./add-edge-request";
-import { AddNodeRequest } from "./add-node-request";
-import { MarkPortRequest } from "./mark-port-request";
-import { PatchMatrixRequest } from "./patch-matrix-request";
-import { UpdateEdgeRequest } from "./update-edge-request";
-import { UpdateNodeRequest } from "./update-node-request";
-import { UpdatePortRequest } from "./update-port-request";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
-import { HtmlView } from "@/html-view";
-import { CanvasParams } from "./canvas-params";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  GraphController,
+  MarkPortRequest,
+  UpdateEdgeRequest,
+  UpdateNodeRequest,
+  UpdatePortRequest,
+} from "@/graph-controller";
+import {
+  CenterConfig,
+  FocusConfig,
+  PatchMatrixRequest,
+  ViewportController,
+} from "@/viewport-controller";
+import { Point } from "@/point";
 
 export class Canvas {
-  private readonly nodeIdGenerator = new IdGenerator((nodeId) =>
-    this.graphStore.hasNode(nodeId),
-  );
-
-  private readonly portIdGenerator = new IdGenerator((portId) =>
-    this.graphStore.hasPort(portId),
-  );
-
-  private readonly edgeIdGenerator = new IdGenerator((edgeId) =>
-    this.graphStore.hasEdge(edgeId),
-  );
-
-  private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
-    this.htmlView.attachNode(nodeId);
-  };
-
-  private readonly onAfterNodeUpdated = (nodeId: Identifier): void => {
-    this.htmlView.updateNodePosition(nodeId);
-
-    this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edge) => {
-      this.htmlView.renderEdge(edge);
-    });
-  };
-
-  private readonly onAfterNodePriorityUpdated = (nodeId: Identifier): void => {
-    this.htmlView.updateNodePriority(nodeId);
-  };
-
-  private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
-    this.graphStore.getNodePortIds(nodeId).forEach((portId) => {
-      this.unmarkPort(portId);
-    });
-
-    this.htmlView.detachNode(nodeId);
-  };
-
-  private readonly onAfterPortUpdated = (portId: Identifier): void => {
-    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edge) => {
-      this.htmlView.renderEdge(edge);
-    });
-  };
-
-  private readonly onBeforePortUnmarked = (portId: Identifier): void => {
-    this.graphStore.getPortAdjacentEdgeIds(portId).forEach((edgeId) => {
-      this.removeEdge(edgeId);
-    });
-  };
-
-  private readonly onAfterEdgeAdded = (edgeId: Identifier): void => {
-    this.htmlView.attachEdge(edgeId);
-  };
-
-  private readonly onAfterEdgeShapeUpdated = (edgeId: Identifier): void => {
-    this.htmlView.updateEdgeShape(edgeId);
-  };
-
-  private readonly onAfterEdgeUpdated = (edgeId: Identifier): void => {
-    this.htmlView.renderEdge(edgeId);
-  };
-
-  private readonly onAfterEdgePriorityUpdated = (edgeId: Identifier): void => {
-    this.htmlView.updateEdgePriority(edgeId);
-  };
-
-  private readonly onBeforeEdgeRemoved = (edgeId: Identifier): void => {
-    this.htmlView.detachEdge(edgeId);
-  };
-
-  private readonly onBeforeClear = (): void => {
-    this.nodeIdGenerator.reset();
-    this.portIdGenerator.reset();
-    this.edgeIdGenerator.reset();
-
-    this.htmlView.clear();
-  };
-
-  private readonly onBeforeDestroyEmitter: EventEmitter<void>;
+  private readonly beforeDestroyEmitter: EventEmitter<void>;
 
   private destroyed = false;
 
-  /**
-   * emits event just before destruction of canvas
-   */
   public readonly onBeforeDestroy: EventHandler<void>;
 
   public constructor(
-    /**
-     * provides api for accessing model of rendered graph
-     */
     public readonly graph: Graph,
-    /**
-     * provides api for accessing viewport state
-     */
     public readonly viewport: Viewport,
-    private readonly graphStore: GraphStore,
-    private readonly viewportStore: ViewportStore,
-    private readonly htmlView: HtmlView,
-    private readonly params: CanvasParams,
+    private readonly graphController: GraphController,
+    private readonly viewportController: ViewportController,
   ) {
-    this.graphStore.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
-
-    this.graphStore.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
-
-    this.graphStore.onAfterNodePriorityUpdated.subscribe(
-      this.onAfterNodePriorityUpdated,
-    );
-
-    this.graphStore.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
-
-    this.graphStore.onAfterPortUpdated.subscribe(this.onAfterPortUpdated);
-
-    this.graphStore.onBeforePortRemoved.subscribe(this.onBeforePortUnmarked);
-
-    this.graphStore.onAfterEdgeAdded.subscribe(this.onAfterEdgeAdded);
-
-    this.graphStore.onAfterEdgeShapeUpdated.subscribe(
-      this.onAfterEdgeShapeUpdated,
-    );
-
-    this.graphStore.onAfterEdgeUpdated.subscribe(this.onAfterEdgeUpdated);
-
-    this.graphStore.onAfterEdgePriorityUpdated.subscribe(
-      this.onAfterEdgePriorityUpdated,
-    );
-
-    this.graphStore.onBeforeEdgeRemoved.subscribe(this.onBeforeEdgeRemoved);
-
-    this.graphStore.onBeforeClear.subscribe(this.onBeforeClear);
-
-    [this.onBeforeDestroyEmitter, this.onBeforeDestroy] = createPair();
+    [this.beforeDestroyEmitter, this.onBeforeDestroy] = createPair();
   }
 
-  /**
-   * adds new node
-   */
   public addNode(request: AddNodeRequest): Canvas {
-    const id = this.nodeIdGenerator.create(request.id);
-
-    this.graphStore.addNode({
-      id,
-      element: request.element,
-      x: request.x ?? null,
-      y: request.y ?? null,
-      centerFn: request.centerFn ?? this.params.nodes.centerFn,
-      priority: request.priority ?? this.params.nodes.priorityFn(),
-    });
-
-    if (request.ports !== undefined) {
-      for (const port of request.ports) {
-        this.markPort({
-          id: port.id,
-          element: port.element,
-          nodeId: id,
-          direction: port.direction,
-        });
-      }
-    }
+    this.graphController.addNode(request);
 
     return this;
   }
 
-  /**
-   * updates node parameters
-   */
-  public updateNode(nodeId: Identifier, request?: UpdateNodeRequest): Canvas {
-    this.graphStore.updateNode(nodeId, request ?? {});
+  public updateNode(
+    nodeId: Identifier,
+    request?: UpdateNodeRequest | undefined,
+  ): Canvas {
+    this.graphController.updateNode(nodeId, request);
 
     return this;
   }
 
-  /**
-   * removes specified node
-   * all the ports of node get unmarked
-   * all the edges adjacent to node get removed
-   */
   public removeNode(nodeId: Identifier): Canvas {
-    this.graphStore.removeNode(nodeId);
+    this.graphController.removeNode(nodeId);
 
     return this;
   }
 
-  /**
-   * marks specified element as a port for specified node
-   */
   public markPort(request: MarkPortRequest): Canvas {
-    const id = this.portIdGenerator.create(request.id);
-
-    this.graphStore.addPort({
-      id,
-      element: request.element,
-      nodeId: request.nodeId,
-      direction: request.direction ?? this.params.ports.direction,
-    });
+    this.graphController.markPort(request);
 
     return this;
   }
 
-  /**
-   * updates port and edges attached to it
-   */
-  public updatePort(portId: Identifier, request?: UpdatePortRequest): Canvas {
-    this.graphStore.updatePort(portId, request ?? {});
+  public updatePort(
+    portId: Identifier,
+    request?: UpdatePortRequest | undefined,
+  ): Canvas {
+    this.graphController.updatePort(portId, request);
 
     return this;
   }
 
-  /**
-   * unmarks specified port
-   * all the edges adjacent to the port get removed
-   */
   public unmarkPort(portId: Identifier): Canvas {
-    this.graphStore.removePort(portId);
+    this.graphController.unmarkPort(portId);
 
     return this;
   }
 
-  /**
-   * adds new edge
-   */
   public addEdge(request: AddEdgeRequest): Canvas {
-    const id = this.edgeIdGenerator.create(request.id);
-
-    this.graphStore.addEdge({
-      id,
-      from: request.from,
-      to: request.to,
-      shape: request.shape ?? this.params.edges.shapeFactory(id),
-      priority: request.priority ?? this.params.edges.priorityFn(),
-    });
+    this.graphController.addEdge(request);
 
     return this;
   }
 
-  /**
-   * updates specified edge
-   */
-  public updateEdge(edgeId: Identifier, request?: UpdateEdgeRequest): Canvas {
-    this.graphStore.updateEdge(edgeId, request ?? {});
+  public updateEdge(
+    edgeId: Identifier,
+    request?: UpdateEdgeRequest | undefined,
+  ): Canvas {
+    this.graphController.updateEdge(edgeId, request);
 
     return this;
   }
 
-  /**
-   * removes specified edge
-   */
   public removeEdge(edgeId: Identifier): Canvas {
-    this.graphStore.removeEdge(edgeId);
+    this.graphController.removeEdge(edgeId);
 
     return this;
   }
 
-  /**
-   * clears canvas from nodes and edges
-   * canvas gets rolled back to initial state and can be reused
-   */
   public clear(): Canvas {
-    this.graphStore.clear();
+    this.graphController.clear();
 
     return this;
   }
 
-  /**
-   * applies transformation for viewport matrix
-   */
+  public focus(config?: FocusConfig | undefined): Canvas {
+    this.viewportController.focus(config);
+
+    return this;
+  }
+
+  public center(target: Point, config?: CenterConfig | undefined): Canvas {
+    this.viewportController.center(target, config);
+
+    return this;
+  }
+
   public patchViewportMatrix(request: PatchMatrixRequest): Canvas {
-    this.viewportStore.patchViewportMatrix(request);
+    this.viewportController.patchViewportMatrix(request);
 
     return this;
   }
 
-  /**
-   * applies transformation for content matrix
-   */
   public patchContentMatrix(request: PatchMatrixRequest): Canvas {
-    this.viewportStore.patchContentMatrix(request);
+    this.viewportController.patchContentMatrix(request);
 
     return this;
   }
 
-  /**
-   * destroys canvas
-   * canvas element gets rolled back to initial state, and can not be reused
-   */
   public destroy(): void {
     if (this.destroyed) {
       return;
     }
 
-    this.clear();
-
-    this.onBeforeDestroyEmitter.emit();
-
-    this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
-
-    this.graphStore.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);
-
-    this.graphStore.onAfterNodePriorityUpdated.unsubscribe(
-      this.onAfterNodePriorityUpdated,
-    );
-
-    this.graphStore.onBeforeNodeRemoved.unsubscribe(this.onBeforeNodeRemoved);
-
-    this.graphStore.onAfterPortUpdated.unsubscribe(this.onAfterPortUpdated);
-
-    this.graphStore.onBeforePortRemoved.unsubscribe(this.onBeforePortUnmarked);
-
-    this.graphStore.onAfterEdgeAdded.unsubscribe(this.onAfterEdgeAdded);
-
-    this.graphStore.onAfterEdgeShapeUpdated.unsubscribe(
-      this.onAfterEdgeShapeUpdated,
-    );
-
-    this.graphStore.onAfterEdgeUpdated.unsubscribe(this.onAfterEdgeUpdated);
-
-    this.graphStore.onAfterEdgePriorityUpdated.unsubscribe(
-      this.onAfterEdgePriorityUpdated,
-    );
-
-    this.graphStore.onBeforeEdgeRemoved.unsubscribe(this.onBeforeEdgeRemoved);
-
-    this.graphStore.onBeforeClear.unsubscribe(this.onBeforeClear);
-
-    this.htmlView.destroy();
-    this.viewportStore.destroy();
-
     this.destroyed = true;
+
+    this.beforeDestroyEmitter.emit();
+
+    this.graphController.destroy();
+    this.viewportController.destroy();
   }
 }

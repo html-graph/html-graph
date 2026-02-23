@@ -27,14 +27,6 @@ const canvas: Canvas = builder
   .enableBackground()
   .build();
 
-const { width, height } = canvas.viewport.getDimensions();
-
-canvas.patchContentMatrix({
-  x: width / 2,
-  y: height / 2,
-  scale: 0.3,
-});
-
 graphData.nodes.forEach((nodeId) => {
   const element = document.createElement("div");
   element.classList.add("node");

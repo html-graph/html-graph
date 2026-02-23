@@ -4,9 +4,16 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams, wait, DummyLayoutAlgorithm } from "@/mocks";
+import {
+  waitMacrotask,
+  DummyLayoutAlgorithm,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+} from "@/mocks";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
 import { LayoutApplier } from "../../shared";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -17,13 +24,23 @@ const createCanvas = (): Canvas => {
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return canvas;
@@ -51,7 +68,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
@@ -79,12 +96,12 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
     canvas.addNode({ id: "node-2", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     canvas.updateNode("node-1", { x: 100, y: 100 });
     canvas.removeNode("node-2");
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
@@ -122,7 +139,7 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
@@ -160,12 +177,12 @@ describe("TopologyChangeAsyncLayoutApplicationStrategyConfigurator", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     canvas.updateNode("node-1", { x: 100, y: 100 });
     canvas.removeEdge("edge-1");
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });

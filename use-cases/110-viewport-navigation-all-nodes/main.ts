@@ -1,0 +1,42 @@
+import {
+  AddEdgeRequest,
+  AddNodeRequest,
+  Canvas,
+  CanvasBuilder,
+} from "@html-graph/html-graph";
+import { createInOutNode } from "../shared/create-in-out-node";
+
+const canvasElement: HTMLElement = document.getElementById("canvas")!;
+const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
+const canvas: Canvas = builder
+  .enableBackground()
+  .enableUserTransformableViewport()
+  .build();
+
+const addNode1Request: AddNodeRequest = createInOutNode({
+  name: "Node 1",
+  x: 0,
+  y: 0,
+  frontPortId: "node-1-in",
+  backPortId: "node-1-out",
+});
+
+const addNode2Request: AddNodeRequest = createInOutNode({
+  name: "Node 2",
+  x: 300,
+  y: 300,
+  frontPortId: "node-2-in",
+  backPortId: "node-2-out",
+});
+
+const addEdgeRequest: AddEdgeRequest = {
+  from: "node-1-out",
+  to: "node-2-in",
+};
+
+canvas
+  .addNode(addNode1Request)
+  .addNode(addNode2Request)
+  .addEdge(addEdgeRequest)
+  .patchViewportMatrix({ scale: 1.5 })
+  .focus();

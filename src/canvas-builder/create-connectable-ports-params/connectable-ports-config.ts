@@ -1,4 +1,3 @@
-import { AddEdgeRequest } from "@/canvas";
 import {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
@@ -6,6 +5,7 @@ import {
 } from "@/configurators";
 import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
 import { Identifier } from "@/identifier";
+import { AddEdgeRequest } from "@/graph-controller";
 
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;

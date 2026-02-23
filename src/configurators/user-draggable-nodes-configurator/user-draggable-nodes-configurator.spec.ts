@@ -7,7 +7,8 @@ import {
   createElement,
   createMouseMoveEvent,
   createTouch,
-  defaultCanvasParams,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
@@ -16,6 +17,8 @@ import { MouseEventVerifier } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 let innerWidth: number;
 let innerHeight: number;
@@ -39,13 +42,23 @@ const createCanvas = (options?: {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   const params: DraggableNodesParams = {

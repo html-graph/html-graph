@@ -21,9 +21,9 @@ import {
   LayoutConfigurator,
   AnimatedLayoutConfigurator,
   AnimatedLayoutParams,
+  LayoutParams,
 } from "@/configurators";
 import { Layers } from "./layers";
-import { CanvasDefaults, createCanvasParams } from "./create-canvas-params";
 import {
   createDraggableNodesParams,
   DraggableNodesConfig,
@@ -61,6 +61,11 @@ import { createLayoutParams, LayoutConfig } from "./create-layout-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
 import { patchDraggableNodesAnimatedLayoutParams } from "./patch-draggable-nodes-animated-layout-params";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
+import { createGraphControllerParams } from "./create-graph-controller-params";
+import { createViewportControllerParams } from "./create-viewport-controller-params";
+import { CanvasDefaults } from "./shared";
 
 export class CanvasBuilder {
   private used = false;
@@ -120,18 +125,12 @@ export class CanvasBuilder {
     this.graph = new Graph(this.graphStore);
   }
 
-  /**
-   * specifies default values for graph entities
-   */
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
 
     return this;
   }
 
-  /**
-   * enables nodes draggable by user
-   */
   public enableUserDraggableNodes(
     config?: DraggableNodesConfig,
   ): CanvasBuilder {
@@ -141,9 +140,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables viewport transformable by user
-   */
   public enableUserTransformableViewport(
     config?: ViewportTransformConfig,
   ): CanvasBuilder {
@@ -153,28 +149,18 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables automatic edges update on node resize
-   */
   public enableNodeResizeReactiveEdges(): CanvasBuilder {
     this.hasNodeResizeReactiveEdges = true;
 
     return this;
   }
 
-  /**
-   * enables built-in virtual scroll behavior, when only nodes and edges close
-   * to viewport are rendered
-   */
   public enableVirtualScroll(config: VirtualScrollConfig): CanvasBuilder {
     this.virtualScrollConfig = config;
 
     return this;
   }
 
-  /**
-   * enables built-in background rendering
-   */
   public enableBackground(config?: BackgroundConfig): CanvasBuilder {
     this.hasBackground = true;
     this.backgroundConfig = config ?? {};
@@ -182,9 +168,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables edge creation by dragging one port to another
-   */
   public enableUserConnectablePorts(
     config?: ConnectablePortsConfig,
   ): CanvasBuilder {
@@ -194,9 +177,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables edges dragging by dragging one of the adjacent ports
-   */
   public enableUserDraggableEdges(
     config?: DraggableEdgesConfig,
   ): CanvasBuilder {
@@ -206,9 +186,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables nodes positioning with specified layout
-   */
   public enableLayout(config?: LayoutConfig): CanvasBuilder {
     this.layoutConfig = config ?? {};
     this.hasLayout = true;
@@ -217,9 +194,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * enables animated nodes positioning with specified layout
-   */
   public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
     this.animatedLayoutConfig = config ?? {};
     this.hasAnimatedLayout = true;
@@ -228,9 +202,6 @@ export class CanvasBuilder {
     return this;
   }
 
-  /**
-   * builds final canvas
-   */
   public build(): Canvas {
     if (this.used) {
       throw new CanvasBuilderError("CanvasBuilder is a single use object");
@@ -240,15 +211,36 @@ export class CanvasBuilder {
 
     const layers = new Layers(this.element);
     const htmlView = this.createHtmlView(layers.main);
-    const canvasParams = createCanvasParams(this.canvasDefaults);
+
+    const graphControllerParams = createGraphControllerParams(
+      this.canvasDefaults,
+    );
+
+    const graphController = new GraphController(
+      this.graphStore,
+      htmlView,
+      graphControllerParams,
+    );
+
+    const layoutParams: LayoutParams = createLayoutParams(this.layoutConfig);
+
+    const viewportControllerParams = createViewportControllerParams({
+      canvasDefaults: this.canvasDefaults,
+      hasLayout: this.hasLayout,
+      layoutParams,
+    });
+
+    const viewportController = new ViewportController(
+      this.graphStore,
+      this.viewportStore,
+      viewportControllerParams,
+    );
 
     const canvas = new Canvas(
       this.graph,
       this.viewport,
-      this.graphStore,
-      this.viewportStore,
-      htmlView,
-      canvasParams,
+      graphController,
+      viewportController,
     );
 
     if (this.hasBackground) {
@@ -285,8 +277,8 @@ export class CanvasBuilder {
     if (this.hasUserConnectablePorts) {
       const params = createConnectablePortsParams(
         this.connectablePortsConfig,
-        canvasParams.edges.shapeFactory,
-        canvasParams.ports.direction,
+        graphControllerParams.edges.shapeFactory,
+        graphControllerParams.ports.direction,
       );
 
       UserConnectablePortsConfigurator.configure(
@@ -332,10 +324,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasLayout) {
-      LayoutConfigurator.configure(
-        canvas,
-        createLayoutParams(this.layoutConfig),
-      );
+      LayoutConfigurator.configure(canvas, layoutParams);
     }
 
     if (this.hasAnimatedLayout) {
@@ -384,6 +373,8 @@ export class CanvasBuilder {
       );
     }
 
-    return new LayoutHtmlView(htmlView, this.graphStore);
+    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
+
+    return htmlView;
   }
 }

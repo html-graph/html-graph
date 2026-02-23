@@ -4,7 +4,10 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView, LayoutHtmlView } from "@/html-view";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
-import { defaultCanvasParams } from "./default-canvas-params";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
+import { defaultGraphControllerParams } from "./default-graph-controller-params";
+import { defaultViewportControllerParams } from "./default-viewport-controller-params";
 
 export const createCanvas = (element?: HTMLElement): Canvas => {
   const graphStore = new GraphStore();
@@ -14,16 +17,27 @@ export const createCanvas = (element?: HTMLElement): Canvas => {
     new CoreHtmlView(graphStore, viewportStore, canvasHost),
     graphStore,
   );
+
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
+
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
 
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return canvas;

@@ -1,4 +1,4 @@
-import { AddEdgeRequest, Canvas } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -6,7 +6,8 @@ import { UserConnectablePortsConfigurator } from "./user-connectable-ports-confi
 import {
   createElement,
   createMouseMoveEvent,
-  defaultCanvasParams,
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
 } from "@/mocks";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
@@ -15,6 +16,8 @@ import { ConnectionPreprocessor } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
+import { AddEdgeRequest, GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -35,13 +38,23 @@ const createCanvas = (options?: {
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   const params: UserConnectablePortsParams = {

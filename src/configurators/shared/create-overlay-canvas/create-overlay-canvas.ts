@@ -1,10 +1,16 @@
-import { Canvas, CanvasParams } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
 import { DirectEdgeShape } from "@/edges";
 import { Graph } from "@/graph";
+import { GraphController, GraphControllerParams } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
+import { immediateScheduleFn } from "@/schedule-fn";
 import { Viewport } from "@/viewport";
+import {
+  ViewportController,
+  ViewportControllerParams,
+} from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 
 export const createOverlayCanvas = (
@@ -17,7 +23,7 @@ export const createOverlayCanvas = (
 
   const htmlView = new CoreHtmlView(graphStore, viewportStore, overlayLayer);
 
-  const defaults: CanvasParams = {
+  const graphControllerParams: GraphControllerParams = {
     nodes: {
       centerFn: standardCenterFn,
       priorityFn: (): number => 0,
@@ -31,12 +37,25 @@ export const createOverlayCanvas = (
     },
   };
 
-  return new Canvas(
-    graph,
-    viewport,
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    graphControllerParams,
+  );
+
+  const viewportControllerParams: ViewportControllerParams = {
+    focus: {
+      contentOffset: 0,
+      minContentScale: 0,
+      schedule: immediateScheduleFn,
+    },
+  };
+
+  const viewportController = new ViewportController(
     graphStore,
     viewportStore,
-    htmlView,
-    defaults,
+    viewportControllerParams,
   );
+
+  return new Canvas(graph, viewport, graphController, viewportController);
 };

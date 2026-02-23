@@ -1,10 +1,10 @@
-import { AddEdgeRequest, EdgeShapeFactory } from "@/canvas";
 import { createConnectablePortsParams } from "./create-connectable-ports-params";
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
 import {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
 } from "@/configurators";
+import { AddEdgeRequest, EdgeShapeFactory } from "@/graph-controller";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {

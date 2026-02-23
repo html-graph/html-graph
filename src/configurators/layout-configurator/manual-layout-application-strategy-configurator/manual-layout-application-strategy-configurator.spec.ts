@@ -5,9 +5,15 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams, DummyLayoutAlgorithm } from "@/mocks";
+import {
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+  DummyLayoutAlgorithm,
+} from "@/mocks";
 import { EventSubject } from "@/event-subject";
 import { LayoutApplier } from "../../shared";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -18,13 +24,23 @@ const createCanvas = (): Canvas => {
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return canvas;

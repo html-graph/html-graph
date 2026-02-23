@@ -1,9 +1,10 @@
-import { Canvas, PatchMatrixRequest } from "@/canvas";
+import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
-import { move, scale } from "./transformations";
+import { move, scale } from "@/transformations";
 import { processTouch, TouchState } from "./process-touch";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { Viewport } from "@/viewport";
+import { PatchMatrixRequest } from "@/viewport-controller";
 
 export class UserTransformableViewportConfigurator {
   private readonly viewport: Viewport;

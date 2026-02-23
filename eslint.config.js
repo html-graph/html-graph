@@ -15,6 +15,13 @@ export default tseslint.config(
       "@typescript-eslint/explicit-function-return-type": "error",
       eqeqeq: "error",
       "lines-between-class-members": "error",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ExportAllDeclaration",
+          message: "Wildcard exports (export *) are forbidden.",
+        },
+      ],
     },
   },
   {

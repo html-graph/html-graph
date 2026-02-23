@@ -16,8 +16,9 @@ export type {
   TransformDeclaration,
 } from "./canvas-builder";
 
+export type { Canvas } from "./canvas";
+
 export type {
-  Canvas,
   AddNodeRequest,
   AddEdgeRequest,
   AddNodePorts,
@@ -26,13 +27,17 @@ export type {
   UpdateNodeRequest,
   UpdatePortRequest,
   UpdateEdgeRequest,
+} from "./graph-controller";
+
+export type {
   PatchMatrixRequest,
-} from "./canvas";
+  FocusConfig,
+  CenterConfig,
+} from "./viewport-controller";
 
 export { CanvasError } from "./canvas-error";
 
 export type {
-  TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
   ConnectionPreprocessor,
@@ -40,6 +45,15 @@ export type {
   MouseEventVerifier,
   DraggingEdgeResolver,
 } from "./configurators";
+
+export type {
+  TransformState,
+  /**
+   * @deprecated
+   * use TransformState instead
+   */
+  TransformState as TransformPayload,
+} from "./viewport-store";
 
 export {
   BezierEdgeShape,

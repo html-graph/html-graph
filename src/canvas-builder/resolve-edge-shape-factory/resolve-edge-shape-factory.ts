@@ -6,85 +6,85 @@ import {
   VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShapeConfig } from "./edge-shape-config";
-import { EdgeShapeFactory } from "@/canvas";
+import { EdgeShapeFactory } from "@/graph-controller";
 
-export const resolveEdgeShapeFactory: (
-  options: EdgeShapeConfig,
-) => EdgeShapeFactory = (options: EdgeShapeConfig) => {
-  if (typeof options === "function") {
-    return options;
+export const resolveEdgeShapeFactory = (
+  config: EdgeShapeConfig,
+): EdgeShapeFactory => {
+  if (typeof config === "function") {
+    return config;
   }
 
-  switch (options.type) {
+  switch (config.type) {
     case "straight":
       return () =>
         new StraightEdgeShape({
-          color: options.color,
-          width: options.width,
-          arrowLength: options.arrowLength,
-          arrowOffset: options.arrowOffset,
-          arrowRenderer: options.arrowRenderer,
-          hasSourceArrow: options.hasSourceArrow,
-          hasTargetArrow: options.hasTargetArrow,
-          cycleSquareSide: options.cycleSquareSide,
-          roundness: options.roundness,
-          detourDistance: options.detourDistance,
-          detourDirection: options.detourDirection,
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowOffset: config.arrowOffset,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          cycleSquareSide: config.cycleSquareSide,
+          roundness: config.roundness,
+          detourDistance: config.detourDistance,
+          detourDirection: config.detourDirection,
         });
     case "horizontal":
       return () =>
         new HorizontalEdgeShape({
-          color: options.color,
-          width: options.width,
-          arrowLength: options.arrowLength,
-          arrowOffset: options.arrowOffset,
-          arrowRenderer: options.arrowRenderer,
-          hasSourceArrow: options.hasSourceArrow,
-          hasTargetArrow: options.hasTargetArrow,
-          cycleSquareSide: options.cycleSquareSide,
-          roundness: options.roundness,
-          detourDistance: options.detourDistance,
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowOffset: config.arrowOffset,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          cycleSquareSide: config.cycleSquareSide,
+          roundness: config.roundness,
+          detourDistance: config.detourDistance,
         });
     case "vertical":
       return () =>
         new VerticalEdgeShape({
-          color: options.color,
-          width: options.width,
-          arrowLength: options.arrowLength,
-          arrowOffset: options.arrowOffset,
-          arrowRenderer: options.arrowRenderer,
-          hasSourceArrow: options.hasSourceArrow,
-          hasTargetArrow: options.hasTargetArrow,
-          cycleSquareSide: options.cycleSquareSide,
-          roundness: options.roundness,
-          detourDistance: options.detourDistance,
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowOffset: config.arrowOffset,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          cycleSquareSide: config.cycleSquareSide,
+          roundness: config.roundness,
+          detourDistance: config.detourDistance,
         });
     case "direct":
       return () =>
         new DirectEdgeShape({
-          color: options.color,
-          width: options.width,
-          arrowLength: options.arrowLength,
-          arrowRenderer: options.arrowRenderer,
-          hasSourceArrow: options.hasSourceArrow,
-          hasTargetArrow: options.hasTargetArrow,
-          sourceOffset: options.sourceOffset,
-          targetOffset: options.targetOffset,
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          sourceOffset: config.sourceOffset,
+          targetOffset: config.targetOffset,
         });
     default:
       return () =>
         new BezierEdgeShape({
-          color: options.color,
-          width: options.width,
-          arrowLength: options.arrowLength,
-          arrowRenderer: options.arrowRenderer,
-          hasSourceArrow: options.hasSourceArrow,
-          hasTargetArrow: options.hasTargetArrow,
-          cycleRadius: options.cycleRadius,
-          smallCycleRadius: options.smallCycleRadius,
-          curvature: options.curvature,
-          detourDistance: options.detourDistance,
-          detourDirection: options.detourDirection,
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          cycleRadius: config.cycleRadius,
+          smallCycleRadius: config.smallCycleRadius,
+          curvature: config.curvature,
+          detourDistance: config.detourDistance,
+          detourDirection: config.detourDirection,
         });
   }
 };

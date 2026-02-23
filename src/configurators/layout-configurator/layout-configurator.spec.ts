@@ -4,11 +4,18 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import { defaultCanvasParams, wait } from "@/mocks";
+import {
+  defaultGraphControllerParams,
+  defaultViewportControllerParams,
+  waitMacrotask,
+} from "@/mocks";
 import { LayoutParams } from "./layout-params";
 import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
+import { GraphController } from "@/graph-controller";
+import { ViewportController } from "@/viewport-controller";
+import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -19,24 +26,37 @@ const createCanvas = (): Canvas => {
   let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, element);
   htmlView = new LayoutHtmlView(htmlView, graphStore);
 
+  const graphController = new GraphController(
+    graphStore,
+    htmlView,
+    defaultGraphControllerParams,
+  );
+
+  const viewportController = new ViewportController(
+    graphStore,
+    viewportStore,
+    defaultViewportControllerParams,
+  );
+
   const canvas = new Canvas(
     graph,
     viewport,
-    graphStore,
-    viewportStore,
-    htmlView,
-    defaultCanvasParams,
+    graphController,
+    viewportController,
   );
 
   return canvas;
 };
 
 describe("LayoutConfigurator", () => {
-  it("should configure topology change macrotask layout application strategy", async () => {
+  it("should configure topology change schedule layout application strategy", async () => {
     const canvas = createCanvas();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "topologyChangeMacrotask" },
+      applyOn: {
+        type: "topologyChangeSchedule",
+        schedule: microtaskScheduleFn,
+      },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},
       onAfterApplied: (): void => {},
@@ -46,38 +66,18 @@ describe("LayoutConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
-  it("should configure topology change microtask layout application strategy", async () => {
-    const canvas = createCanvas();
-    const config: LayoutParams = {
-      algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "topologyChangeMicrotask" },
-      staticNodeResolver: () => false,
-      onBeforeApplied: (): void => {},
-      onAfterApplied: (): void => {},
-    };
-
-    LayoutConfigurator.configure(canvas, config);
-
-    canvas.addNode({ id: "node-1", element: document.createElement("div") });
-
-    await Promise.resolve();
-
-    const { x, y } = canvas.graph.getNode("node-1");
-    expect({ x, y }).toEqual({ x: 0, y: 0 });
-  });
-
-  it("should configure manual layout application strategy", () => {
+  it("should configure trigger layout application strategy", () => {
     const canvas = createCanvas();
     const trigger = new EventSubject<void>();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "manual", trigger },
+      applyOn: { type: "trigger", trigger },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},
       onAfterApplied: (): void => {},
@@ -99,7 +99,7 @@ describe("LayoutConfigurator", () => {
     const trigger = new EventSubject<void>();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "manual", trigger },
+      applyOn: { type: "trigger", trigger },
       staticNodeResolver: (nodeId) => nodeId === "node-1",
       onBeforeApplied: (): void => {},
       onAfterApplied: (): void => {},
@@ -121,7 +121,10 @@ describe("LayoutConfigurator", () => {
     const onBeforeApplied = jest.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "topologyChangeMacrotask" },
+      applyOn: {
+        type: "topologyChangeSchedule",
+        schedule: macrotaskScheduleFn,
+      },
       staticNodeResolver: () => false,
       onBeforeApplied,
       onAfterApplied: (): void => {},
@@ -131,7 +134,7 @@ describe("LayoutConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     expect(onBeforeApplied).toHaveBeenCalled();
   });
@@ -141,7 +144,10 @@ describe("LayoutConfigurator", () => {
     const onAfterApplied = jest.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
-      applyOn: { type: "topologyChangeMacrotask" },
+      applyOn: {
+        type: "topologyChangeSchedule",
+        schedule: macrotaskScheduleFn,
+      },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},
       onAfterApplied,
@@ -151,7 +157,7 @@ describe("LayoutConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     expect(onAfterApplied).toHaveBeenCalled();
   });

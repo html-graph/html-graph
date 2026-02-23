@@ -4,16 +4,13 @@ import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 import { resolveLayoutAlgorithm } from "./resolve-layout-algorithm";
 import { defaults } from "./defaults";
 
-export const createLayoutParams = (
-  config: LayoutConfig | undefined,
-): LayoutParams => {
+export const createLayoutParams = (config: LayoutConfig): LayoutParams => {
   return {
-    algorithm: resolveLayoutAlgorithm(config?.algorithm),
-    applyOn: resolveLayoutApplyOn(config?.applyOn),
+    algorithm: resolveLayoutAlgorithm(config.algorithm),
+    applyOn: resolveLayoutApplyOn(config.applyOn),
     staticNodeResolver:
-      config?.staticNodeResolver ?? defaults.staticNodeResolver,
-    onBeforeApplied:
-      config?.events?.onBeforeApplied ?? defaults.onBeforeApplied,
-    onAfterApplied: config?.events?.onAfterApplied ?? defaults.onAfterApplied,
+      config.staticNodeResolver ?? defaults.staticNodeResolver,
+    onBeforeApplied: config.events?.onBeforeApplied ?? defaults.onBeforeApplied,
+    onAfterApplied: config.events?.onAfterApplied ?? defaults.onAfterApplied,
   };
 };

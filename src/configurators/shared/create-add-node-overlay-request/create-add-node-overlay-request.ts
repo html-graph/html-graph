@@ -1,4 +1,4 @@
-import { AddNodeRequest } from "@/canvas";
+import { AddNodeRequest } from "@/graph-controller";
 import { OverlayNodeParams } from "./overlay-node-params";
 
 export const createAddNodeOverlayRequest = (
