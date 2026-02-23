@@ -1,7 +1,7 @@
 import { TransformState } from "@/viewport-store";
 import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
-import { TransformPayload, TransformPreprocessorParams } from "@/configurators";
+import { TransformPreprocessorParams } from "@/configurators";
 
 describe("createConfig", () => {
   it("should set default wheel velocity if not specified", () => {
@@ -44,7 +44,7 @@ describe("createConfig", () => {
   it("should set specified single transform preprocessor", () => {
     const transformPreprocessor = (
       params: TransformPreprocessorParams,
-    ): TransformPayload => {
+    ): TransformState => {
       return params.nextTransform;
     };
 
@@ -69,7 +69,7 @@ describe("createConfig", () => {
   it("should set specified multiple transform preprocessor", () => {
     const transformPreprocessor = (
       params: TransformPreprocessorParams,
-    ): TransformPayload => {
+    ): TransformState => {
       return params.nextTransform;
     };
 

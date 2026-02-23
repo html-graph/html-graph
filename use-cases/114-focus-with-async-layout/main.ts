@@ -21,9 +21,6 @@ const canvas: Canvas = builder
   })
   .enableUserTransformableViewport()
   .enableLayout()
-  .enableUserDraggableNodes({
-    moveEdgesOnTop: false,
-  })
   .enableBackground()
   .build();
 
@@ -47,3 +44,5 @@ graphData.nodes.forEach((nodeId) => {
 graphData.edges.forEach((edge) => {
   canvas.addEdge({ from: edge.from, to: edge.to });
 });
+
+canvas.focus();

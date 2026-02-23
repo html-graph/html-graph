@@ -1,5 +1,5 @@
 import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
+import { TransformState, ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import {
   createElement,
@@ -15,7 +15,6 @@ import { UserTransformableViewportConfigurator } from "./user-transformable-view
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
 import { MouseEventVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
-import { TransformPayload } from "./transform-payload";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
@@ -78,7 +77,7 @@ const createCanvas = (options?: {
       options?.onResizeTransformFinished ?? ((): void => {}),
     transformPreprocessor:
       options?.transformPreprocessor ??
-      ((transform): TransformPayload => transform.nextTransform),
+      ((transform): TransformState => transform.nextTransform),
     shiftCursor: options?.shiftCursor ?? "grab",
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ??

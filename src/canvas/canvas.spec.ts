@@ -342,4 +342,14 @@ describe("Canvas", () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it("should center viewport", () => {
+    const { canvas, viewportController } = createCanvas();
+
+    const spy = jest.spyOn(viewportController, "center");
+
+    canvas.center({ x: 0, y: 0 });
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

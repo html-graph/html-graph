@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
-import { move, scale } from "./transformations";
+import { move, scale } from "@/transformations";
 import { processTouch, TouchState } from "./process-touch";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { Viewport } from "@/viewport";

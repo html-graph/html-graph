@@ -1,11 +1,11 @@
-import { TransformPayload } from "../../transform-payload";
+import { TransformState } from "@/viewport-store";
 
 export const scale = (
-  prevTransform: TransformPayload,
+  prevTransform: TransformState,
   s2: number,
   cx: number,
   cy: number,
-): TransformPayload => {
+): TransformState => {
   /**
    * s2 - scale
    * cx - scale center x

@@ -1,8 +1,8 @@
-import { TransformPayload } from "./transform-payload";
+import { TransformState } from "@/viewport-store";
 
 export interface TransformPreprocessorParams {
-  readonly prevTransform: TransformPayload;
-  readonly nextTransform: TransformPayload;
+  readonly prevTransform: TransformState;
+  readonly nextTransform: TransformState;
   readonly canvasWidth: number;
   readonly canvasHeight: number;
 }

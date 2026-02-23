@@ -456,4 +456,34 @@ describe("ViewportController", () => {
       y: 100,
     });
   });
+
+  it("should center viewport at specified point", async () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore } = createViewportController({
+      element,
+    });
+
+    viewportController.center({ x: 200, y: 200 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 100,
+      y: 100,
+    });
+  });
+
+  it("should scale centered viewport", async () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore } = createViewportController({
+      element,
+    });
+
+    viewportController.center({ x: 200, y: 200 }, { contentScale: 0.5 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: -0,
+      y: -0,
+    });
+  });
 });

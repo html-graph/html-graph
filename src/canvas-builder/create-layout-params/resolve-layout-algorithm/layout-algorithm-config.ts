@@ -7,7 +7,7 @@ export type LayoutAlgorithmConfig =
       readonly instance: LayoutAlgorithm;
     }
   | {
-      readonly type: "forceDirected";
+      readonly type?: "forceDirected";
       readonly dtSec?: number | undefined;
       readonly maxIterations?: number | undefined;
       readonly seed?: string | undefined;

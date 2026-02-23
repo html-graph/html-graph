@@ -1,6 +1,6 @@
-import { TransformPayload } from "./transform-payload";
+import { TransformState } from "@/viewport-store";
 import { TransformPreprocessorParams } from "./transform-preprocessor-params";
 
 export type TransformPreprocessorFn = (
   params: TransformPreprocessorParams,
-) => TransformPayload;
+) => TransformState;

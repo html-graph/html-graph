@@ -12,10 +12,12 @@ import {
   UpdatePortRequest,
 } from "@/graph-controller";
 import {
+  CenterConfig,
   FocusConfig,
   PatchMatrixRequest,
   ViewportController,
 } from "@/viewport-controller";
+import { Point } from "@/point";
 
 export class Canvas {
   private readonly beforeDestroyEmitter: EventEmitter<void>;
@@ -104,6 +106,12 @@ export class Canvas {
 
   public focus(config?: FocusConfig | undefined): Canvas {
     this.viewportController.focus(config);
+
+    return this;
+  }
+
+  public center(target: Point, config?: CenterConfig | undefined): Canvas {
+    this.viewportController.center(target, config);
 
     return this;
   }

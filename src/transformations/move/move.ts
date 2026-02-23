@@ -1,10 +1,10 @@
-import { TransformPayload } from "../../transform-payload";
+import { TransformState } from "@/viewport-store";
 
 export const move = (
-  prevTransform: TransformPayload,
+  prevTransform: TransformState,
   dx: number,
   dy: number,
-): TransformPayload => {
+): TransformState => {
   /**
    * dx2 - translate x
    * dy2 - translate y

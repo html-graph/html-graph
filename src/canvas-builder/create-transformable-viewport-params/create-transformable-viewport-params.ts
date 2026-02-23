@@ -1,12 +1,12 @@
 import {
   TransformableViewportParams,
-  TransformPayload,
   TransformPreprocessorFn,
   TransformPreprocessorParams,
 } from "@/configurators";
 import { createCombinedTransformPreprocessor } from "./preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { ViewportTransformConfig } from "./viewport-transform-config";
+import { TransformState } from "@/viewport-store";
 
 export const createTransformableViewportParams = (
   transformConfig: ViewportTransformConfig | undefined,
@@ -32,7 +32,7 @@ export const createTransformableViewportParams = (
   } else {
     transformPreprocessor = (
       params: TransformPreprocessorParams,
-    ): TransformPayload => {
+    ): TransformState => {
       return params.nextTransform;
     };
   }

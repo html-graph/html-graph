@@ -1,10 +1,9 @@
 import { TransformState } from "@/viewport-store";
-import { TransformPayload } from "../../transform-payload";
 import { move } from "./move";
 
 describe("move", () => {
   it("should move", () => {
-    const matrix: TransformPayload = {
+    const matrix: TransformState = {
       scale: 1,
       x: 0,
       y: 0,

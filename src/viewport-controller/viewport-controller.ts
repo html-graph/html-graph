@@ -1,11 +1,13 @@
 import { PatchMatrixRequest } from "./patch-matrix-request";
 import { GraphStore } from "@/graph-store";
-import { TransformState, ViewportStore } from "@/viewport-store";
+import { ViewportStore } from "@/viewport-store";
 import { ViewportControllerParams } from "./viewport-controller-params";
 import { FocusConfig } from "./focus-config";
 import { Identifier } from "@/identifier";
-import { Point } from "@/point";
 import { createFocusParams, FocusParams } from "./create-focus-params";
+import { Point } from "@/point";
+import { CenterConfig } from "./center-config";
+import { move, scale } from "@/transformations";
 
 export class ViewportController {
   public constructor(
@@ -20,6 +22,34 @@ export class ViewportController {
 
   public patchContentMatrix(request: PatchMatrixRequest): void {
     this.viewportStore.patchContentMatrix(request);
+  }
+
+  public center(target: Point, config?: CenterConfig | undefined): void {
+    const { width, height } = this.viewportStore.getDimensions();
+
+    const contentCenter = this.viewportStore.createContentCoords({
+      x: width / 2,
+      y: height / 2,
+    });
+
+    const viewportMatrix = this.viewportStore.getViewportMatrix();
+
+    const dx = contentCenter.x - target.x;
+    const dy = contentCenter.y - target.y;
+
+    const viewportScale =
+      config?.contentScale !== undefined
+        ? 1 / config.contentScale
+        : viewportMatrix.scale;
+
+    const nextViewportMatrix = scale(
+      move(viewportMatrix, dx, dy),
+      viewportScale,
+      dx,
+      dy,
+    );
+
+    this.viewportStore.patchViewportMatrix(nextViewportMatrix);
   }
 
   public focus(config?: FocusConfig | undefined): void {
@@ -64,13 +94,18 @@ export class ViewportController {
     });
 
     if (nodesCount > 0) {
+      minX -= params.contentOffset;
+      minY -= params.contentOffset;
+      maxX += params.contentOffset;
+      maxY += params.contentOffset;
+
       const contentBoxCenter: Point = {
         x: (minX + maxX) / 2,
         y: (minY + maxY) / 2,
       };
 
-      const halfContentBoxWidth = (maxX - minX) / 2 + params.contentOffset;
-      const halfContentBoxHeight = (maxY - minY) / 2 + params.contentOffset;
+      const halfContentBoxWidth = (maxX - minX) / 2;
+      const halfContentBoxHeight = (maxY - minY) / 2;
 
       const viewportBoxCenter =
         this.viewportStore.createViewportCoords(contentBoxCenter);
@@ -90,9 +125,10 @@ export class ViewportController {
 
       const { scale, x, y } = this.viewportStore.getContentMatrix();
       const adjustedScale = ratio > 1 ? scale / ratio : scale;
+      const thresholdScale = Math.max(adjustedScale, params.minContentScale);
 
-      const focusContentMatrix: TransformState = {
-        scale: Math.max(adjustedScale, params.minContentScale),
+      const focusContentMatrix: PatchMatrixRequest = {
+        scale: thresholdScale,
         x: x + dx,
         y: y + dy,
       };
