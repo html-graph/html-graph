@@ -3,7 +3,6 @@ import { GraphStore } from "@/graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
 import { ViewportControllerParams } from "./viewport-controller-params";
 import { FocusConfig } from "./focus-config";
-import { ViewportFocusParams } from "./viewport-focus-params";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";
 
@@ -23,13 +22,6 @@ export class ViewportController {
   }
 
   public focus(config?: FocusConfig | undefined): void {
-    const params: ViewportFocusParams = {
-      contentOffset: config?.contentOffset ?? this.params.focus.contentOffset,
-      nodes: config?.nodes ?? [],
-      minContentScale:
-        config?.minContentScale ?? this.params.focus.minContentScale,
-    };
-
     let minX = Infinity;
     let maxX = -Infinity;
     let minY = Infinity;
@@ -37,8 +29,9 @@ export class ViewportController {
     let nodesCount = 0;
 
     const focusNodes = new Set<Identifier>();
+    const nodes = config?.nodes ?? [];
 
-    for (const nodeId of params.nodes) {
+    for (const nodeId of nodes) {
       focusNodes.add(nodeId);
     }
 
@@ -64,8 +57,11 @@ export class ViewportController {
         y: (minY + maxY) / 2,
       };
 
-      const halfContentBoxWidth = (maxX - minX) / 2 + params.contentOffset;
-      const halfContentBoxHeight = (maxY - minY) / 2 + params.contentOffset;
+      const contentOffset =
+        config?.contentOffset ?? this.params.focus.contentOffset;
+
+      const halfContentBoxWidth = (maxX - minX) / 2 + contentOffset;
+      const halfContentBoxHeight = (maxY - minY) / 2 + contentOffset;
 
       const viewportBoxCenter =
         this.viewportStore.createViewportCoords(contentBoxCenter);
@@ -86,13 +82,16 @@ export class ViewportController {
       const { scale, x, y } = this.viewportStore.getContentMatrix();
       const adjustedScale = ratio > 1 ? scale / ratio : scale;
 
-      const state: TransformState = {
-        scale: Math.max(adjustedScale, params.minContentScale),
+      const minContentScale =
+        config?.minContentScale ?? this.params.focus.minContentScale;
+
+      const focusContentMatrix: TransformState = {
+        scale: Math.max(adjustedScale, minContentScale),
         x: x + dx,
         y: y + dy,
       };
 
-      this.viewportStore.patchContentMatrix(state);
+      this.viewportStore.patchContentMatrix(focusContentMatrix);
     }
   }
 
