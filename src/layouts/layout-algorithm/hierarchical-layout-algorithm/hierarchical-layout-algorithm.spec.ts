@@ -4,7 +4,7 @@ import { Point } from "@/point";
 
 describe("HierarchicalLayoutAlgorithm", () => {
   it("should return empty map when graph has no nodes", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     const layout = new HierarchicalLayoutAlgorithm({
       layerWidth: 100,
@@ -21,7 +21,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
   });
 
   it("should put first node in the initial position", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -43,7 +43,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
   });
 
   it("should put second node in the second layer", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas
       .addNode({
@@ -73,7 +73,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
   });
 
   it("should apply specified transformation", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas.addNode({
       id: "node-1",

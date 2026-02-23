@@ -4,7 +4,7 @@ import { TreeNode } from "../tree";
 
 describe("WidthFirstSpanningForestGenerator", () => {
   it("should generate empty forest for graph without nodes", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const forest = forestGenerator.generate();
@@ -13,7 +13,7 @@ describe("WidthFirstSpanningForestGenerator", () => {
   });
 
   it("should generate single node tree for single node graph", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas.addNode({
       id: "node-1",
@@ -32,7 +32,7 @@ describe("WidthFirstSpanningForestGenerator", () => {
   });
 
   it("should generate tree for two connected nodes", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas
       .addNode({
@@ -59,7 +59,7 @@ describe("WidthFirstSpanningForestGenerator", () => {
   });
 
   it("should regard for incoming edges", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas
       .addNode({
@@ -86,7 +86,7 @@ describe("WidthFirstSpanningForestGenerator", () => {
   });
 
   it("should generate traversal sequence", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
 
     canvas.addNode({
       id: "node-1",

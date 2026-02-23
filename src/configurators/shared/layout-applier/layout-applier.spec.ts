@@ -5,7 +5,7 @@ import { LayoutApplierParams } from "./layout-applier-params";
 
 describe("LayoutApplier", () => {
   it("should apply specified layout", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
     const params: LayoutApplierParams = {
       staticNodeResolver: (): boolean => false,
@@ -26,7 +26,7 @@ describe("LayoutApplier", () => {
   });
 
   it("should not apply layout for static nodes", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
     const params: LayoutApplierParams = {
       staticNodeResolver: (nodeId: Identifier): boolean => nodeId === "node-1",
@@ -47,7 +47,7 @@ describe("LayoutApplier", () => {
   });
 
   it("should emit onBeforeApplied event", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
     const onBeforeApplied = jest.fn();
     const params: LayoutApplierParams = {
@@ -64,7 +64,7 @@ describe("LayoutApplier", () => {
   });
 
   it("should emit onAfterApplied event", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
     const onAfterApplied = jest.fn();
     const params: LayoutApplierParams = {

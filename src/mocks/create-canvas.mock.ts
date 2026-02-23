@@ -9,9 +9,7 @@ import { ViewportController } from "@/viewport-controller";
 import { defaultGraphControllerParams } from "./default-graph-controller-params";
 import { defaultViewportControllerParams } from "./default-viewport-controller-params";
 
-export const createCanvas = (
-  element?: HTMLElement,
-): { canvas: Canvas; viewportStore: ViewportStore; graphStore: GraphStore } => {
+export const createCanvas = (element?: HTMLElement): Canvas => {
   const graphStore = new GraphStore();
   const canvasHost = element ?? document.createElement("div");
   const viewportStore = new ViewportStore(canvasHost);
@@ -19,6 +17,7 @@ export const createCanvas = (
     new CoreHtmlView(graphStore, viewportStore, canvasHost),
     graphStore,
   );
+
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
 
@@ -27,6 +26,7 @@ export const createCanvas = (
     htmlView,
     defaultGraphControllerParams,
   );
+
   const viewportController = new ViewportController(
     graphStore,
     viewportStore,
@@ -40,5 +40,5 @@ export const createCanvas = (
     viewportController,
   );
 
-  return { canvas, viewportStore, graphStore };
+  return canvas;
 };

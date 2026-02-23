@@ -5,7 +5,7 @@ import { AnimatedLayoutApplierParams } from "./animated-layout-applier-params";
 
 describe("AnimatedLayoutApplier", () => {
   it("should apply specified layout", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: () => false,
@@ -26,7 +26,7 @@ describe("AnimatedLayoutApplier", () => {
   });
 
   it("should not apply layout for static nodes", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: (nodeId: Identifier) => nodeId === "node-1",
@@ -47,7 +47,7 @@ describe("AnimatedLayoutApplier", () => {
   });
 
   it("should emit onBeforeApplied event", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const onBeforeApplied = jest.fn();
 
@@ -65,7 +65,7 @@ describe("AnimatedLayoutApplier", () => {
   });
 
   it("should emit onAfterApplied event", () => {
-    const { canvas } = createCanvas();
+    const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
     const onAfterApplied = jest.fn();
 
