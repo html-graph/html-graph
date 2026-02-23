@@ -15,7 +15,7 @@ import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { ApplyScheduleFn } from "./apply-schedule-fn";
+import { ScheduleFn } from "@/schedule-fn";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -47,13 +47,13 @@ const createCanvas = (): Canvas => {
   return canvas;
 };
 
-const microtaskSchedule: ApplyScheduleFn = (apply) => {
+const microtaskSchedule: ScheduleFn = (apply) => {
   queueMicrotask(() => {
     apply();
   });
 };
 
-const macrotaskSchedule: ApplyScheduleFn = (apply) => {
+const macrotaskSchedule: ScheduleFn = (apply) => {
   setTimeout(() => {
     apply();
   });

@@ -1,8 +1,7 @@
 import { LayoutApplyOnParam } from "@/configurators";
 import { LayoutApplyOn } from "../layout-apply-on";
 import { EventSubject } from "@/event-subject";
-import { microtaskScheduleFn } from "./microtask-schedule-fn";
-import { macrotaskScheduleFn } from "./macrotask-schedule-fn";
+import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
 
 export const resolveLayoutApplyOn = (
   applyOn: LayoutApplyOn | undefined,

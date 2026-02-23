@@ -1,10 +1,10 @@
 import { EventSubject } from "@/event-subject";
-import { ApplyScheduleFn } from "./apply-schedule-fn";
+import { ScheduleFn } from "@/schedule-fn";
 
 export type LayoutApplyOnParam =
   | {
       readonly type: "topologyChangeSchedule";
-      readonly schedule: ApplyScheduleFn;
+      readonly schedule: ScheduleFn;
     }
   | {
       readonly type: "trigger";

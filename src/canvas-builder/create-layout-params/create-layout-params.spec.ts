@@ -2,8 +2,8 @@ import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfig } from "./layout-config";
 import { createLayoutParams } from "./create-layout-params";
 import { defaults } from "./defaults";
-import { macrotaskScheduleFn } from "./resolve-layout-apply-on";
 import { LayoutApplyOnParam } from "@/configurators";
+import { macrotaskScheduleFn } from "@/schedule-fn";
 
 describe("createLayoutParams", () => {
   it("should set specified algorithm", () => {

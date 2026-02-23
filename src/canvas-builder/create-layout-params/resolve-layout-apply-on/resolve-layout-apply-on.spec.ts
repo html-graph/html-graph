@@ -1,7 +1,6 @@
 import { EventSubject } from "@/event-subject";
 import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
-import { microtaskScheduleFn } from "./microtask-schedule-fn";
-import { macrotaskScheduleFn } from "./macrotask-schedule-fn";
+import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
 
 describe("resolveLayoutApplyOn", () => {
   it("should resolve topologyChangeMicrotask strategy by default", async () => {
