@@ -34,7 +34,11 @@ export type {
 export type { MouseEventVerifier } from "./shared";
 
 export { LayoutConfigurator } from "./layout-configurator";
-export type { LayoutParams, LayoutApplyOnParam } from "./layout-configurator";
+export type {
+  LayoutParams,
+  LayoutApplyOnParam,
+  ApplyScheduleFn,
+} from "./layout-configurator";
 
 export { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
 export type { AnimatedLayoutParams } from "./animated-layout-configurator";

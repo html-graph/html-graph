@@ -8,7 +8,7 @@ import {
   createTouch,
   defaultGraphControllerParams,
   defaultViewportControllerParams,
-  wait,
+  waitMacrotask,
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
@@ -356,7 +356,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(500);
+    await waitMacrotask(500);
     expect(onTransformFinished).toHaveBeenCalled();
   });
 
@@ -377,9 +377,9 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(100);
+    await waitMacrotask(100);
     element.dispatchEvent(wheelEvent);
-    await wait(500);
+    await waitMacrotask(500);
 
     expect(onTransformFinished).toHaveBeenCalledTimes(1);
   });
@@ -400,9 +400,9 @@ describe("UserTransformableViewportConfigurator", () => {
     });
 
     element.dispatchEvent(wheelEvent);
-    await wait(100);
+    await waitMacrotask(100);
     element.dispatchEvent(wheelEvent);
-    await wait(500);
+    await waitMacrotask(500);
 
     expect(onTransformStarted).toHaveBeenCalledTimes(1);
   });
@@ -748,7 +748,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(1000);
+    await waitMacrotask(1000);
 
     expect(onTransformFinished).not.toHaveBeenCalled();
   });

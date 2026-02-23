@@ -7,7 +7,7 @@ import {
   createMouseMoveEvent,
   DummyAnimatedLayoutAlgorithm,
   triggerResizeFor,
-  wait,
+  waitMacrotask,
 } from "@/mocks";
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { DummyLayoutAlgorithm } from "@/mocks";
@@ -201,7 +201,7 @@ describe("CanvasBuilder", () => {
       y: 300,
     });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container =
       canvasElement.children[0].children[1].children[0].children[0];
@@ -360,7 +360,7 @@ describe("CanvasBuilder", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const { x, y } = canvas.graph.getNode("node-1");
 

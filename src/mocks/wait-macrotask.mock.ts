@@ -1,4 +1,4 @@
-export const wait = (timeout: number): Promise<void> => {
+export const waitMacrotask = (timeout: number): Promise<void> => {
   return new Promise((res) => {
     setTimeout(() => {
       res(undefined);

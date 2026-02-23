@@ -15,7 +15,7 @@ export class LayoutConfigurator {
     });
 
     switch (strategy.type) {
-      case "manual": {
+      case "trigger": {
         ManualLayoutApplicationStrategyConfigurator.configure(
           applier,
           strategy.trigger,
@@ -23,28 +23,11 @@ export class LayoutConfigurator {
         break;
       }
 
-      case "topologyChangeMacrotask": {
+      case "topologyChangeSchedule": {
         TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
           canvas.graph,
           applier,
-          (apply) => {
-            setTimeout(() => {
-              apply();
-            });
-          },
-        );
-        break;
-      }
-
-      case "topologyChangeMicrotask": {
-        TopologyChangeAsyncLayoutApplicationStrategyConfigurator.configure(
-          canvas.graph,
-          applier,
-          (apply) => {
-            queueMicrotask(() => {
-              apply();
-            });
-          },
+          strategy.schedule,
         );
         break;
       }

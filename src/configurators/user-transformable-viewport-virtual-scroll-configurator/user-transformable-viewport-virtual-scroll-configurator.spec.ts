@@ -11,7 +11,7 @@ import {
   defaultGraphControllerParams,
   defaultViewportControllerParams,
   triggerResizeFor,
-  wait,
+  waitMacrotask,
 } from "@/mocks";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
@@ -172,7 +172,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(3);
@@ -184,7 +184,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     element.getBoundingClientRect = (): DOMRect => {
       return new DOMRect(0, 0, 200, 200);
@@ -192,7 +192,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     triggerResizeFor(element);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
@@ -204,7 +204,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     canvas.patchViewportMatrix({ x: 250, y: 250 });
 
@@ -218,7 +218,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     canvas.patchContentMatrix({ x: -250, y: -250 });
 
@@ -232,7 +232,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -244,7 +244,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
@@ -259,7 +259,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -269,7 +269,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(5);
@@ -286,7 +286,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -310,7 +310,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -320,7 +320,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(500);
+    await waitMacrotask(500);
 
     expect(onTransformFinished).toHaveBeenCalled();
   });
@@ -334,7 +334,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
@@ -344,7 +344,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     element.dispatchEvent(wheelEvent);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const container = element.children[0].children[0];
     expect(container.children.length).toBe(3);
@@ -395,7 +395,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
 
     configureEdgeGraph(canvas);
 
-    await wait(0);
+    await waitMacrotask(0);
 
     const wheelEvent = createMouseWheelEvent({
       clientX: 0,
