@@ -149,8 +149,8 @@ describe("ViewportController", () => {
 
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 1,
-      x: 0,
-      y: 0,
+      x: -0,
+      y: -0,
     });
   });
 
@@ -321,7 +321,7 @@ describe("ViewportController", () => {
 
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 0.2,
-      x: -400,
+      x: -0,
       y: 100,
     });
   });
@@ -354,7 +354,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 0.2,
       x: 100,
-      y: -400,
+      y: -0,
     });
   });
 
@@ -422,7 +422,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 0.5,
       x: 100,
-      y: -400,
+      y: -150,
     });
   });
 
@@ -467,8 +467,8 @@ describe("ViewportController", () => {
 
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 1,
-      x: 100,
-      y: 100,
+      x: -100,
+      y: -100,
     });
   });
 

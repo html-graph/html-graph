@@ -26,28 +26,28 @@ export class ViewportController {
 
   public center(target: Point, config?: CenterConfig | undefined): void {
     const { width, height } = this.viewportStore.getDimensions();
-
-    const contentCenter = this.viewportStore.createContentCoords({
-      x: width / 2,
-      y: height / 2,
-    });
+    const viewportCenter: Point = { x: width / 2, y: height / 2 };
 
     const viewportMatrix = this.viewportStore.getViewportMatrix();
+    const viewportTarget = this.viewportStore.createViewportCoords(target);
 
-    const dx = contentCenter.x - target.x;
-    const dy = contentCenter.y - target.y;
+    const dx = viewportTarget.x - viewportCenter.x;
+    const dy = viewportTarget.y - viewportCenter.y;
 
-    const viewportScale =
-      config?.contentScale !== undefined
-        ? 1 / config.contentScale
-        : viewportMatrix.scale;
+    let nextViewportMatrix = move(viewportMatrix, dx, dy);
 
-    const nextViewportMatrix = scale(
-      move(viewportMatrix, dx, dy),
-      viewportScale,
-      dx,
-      dy,
-    );
+    const contentScale = config?.contentScale;
+
+    if (contentScale !== undefined) {
+      const viewportScale = 1 / contentScale;
+
+      nextViewportMatrix = scale(
+        nextViewportMatrix,
+        viewportScale / viewportMatrix.scale,
+        viewportCenter.x,
+        viewportCenter.y,
+      );
+    }
 
     this.viewportStore.patchViewportMatrix(nextViewportMatrix);
   }
@@ -107,33 +107,21 @@ export class ViewportController {
       const halfContentBoxWidth = (maxX - minX) / 2;
       const halfContentBoxHeight = (maxY - minY) / 2;
 
-      const viewportBoxCenter =
-        this.viewportStore.createViewportCoords(contentBoxCenter);
-
       const { width, height } = this.viewportStore.getDimensions();
 
       const halfWidth = width / 2;
       const halfHeight = height / 2;
-
-      const dx = halfWidth - viewportBoxCenter.x;
-      const dy = halfHeight - viewportBoxCenter.y;
 
       const ratio = Math.max(
         halfContentBoxWidth / halfWidth,
         halfContentBoxHeight / halfHeight,
       );
 
-      const { scale, x, y } = this.viewportStore.getContentMatrix();
-      const adjustedScale = ratio > 1 ? scale / ratio : scale;
-      const thresholdScale = Math.max(adjustedScale, params.minContentScale);
+      const { scale: contentScale } = this.viewportStore.getContentMatrix();
+      const fitContentScale = ratio > 1 ? contentScale / ratio : contentScale;
+      const thresholdScale = Math.max(fitContentScale, params.minContentScale);
 
-      const focusContentMatrix: PatchMatrixRequest = {
-        scale: thresholdScale,
-        x: x + dx,
-        y: y + dy,
-      };
-
-      this.viewportStore.patchContentMatrix(focusContentMatrix);
+      this.center(contentBoxCenter, { contentScale: thresholdScale });
     }
   }
 }

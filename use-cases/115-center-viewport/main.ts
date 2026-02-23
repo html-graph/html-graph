@@ -1,5 +1,4 @@
 import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
-import graphData from "./graph.json";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
@@ -20,29 +19,26 @@ const canvas: Canvas = builder
     },
   })
   .enableUserTransformableViewport()
-  .enableLayout()
   .enableBackground()
   .build();
 
-graphData.nodes.forEach((nodeId) => {
-  const element = document.createElement("div");
-  element.classList.add("node");
-  element.innerText = `${nodeId}`;
+const element = document.createElement("div");
+element.classList.add("node");
+element.innerText = `Node 1`;
 
-  canvas.addNode({
-    id: nodeId,
-    element,
-    ports: [
-      {
-        id: nodeId,
-        element,
-      },
-    ],
-  });
+canvas.addNode({
+  id: "node-1",
+  element,
+  x: 0,
+  y: 0,
+  ports: [
+    {
+      id: "node-1",
+      element,
+    },
+  ],
 });
 
-graphData.edges.forEach((edge) => {
-  canvas.addEdge({ from: edge.from, to: edge.to });
-});
+canvas.patchContentMatrix({ scale: 0.5 });
 
-canvas.center({ x: 500, y: 500 });
+canvas.center({ x: 200, y: 200 });
