@@ -1,7 +1,7 @@
-import { ScheduleFn } from "../apply-schedule-fn";
+import { ScheduleFn } from "../schedule-fn";
 
-export const macrotaskScheduleFn: ScheduleFn = (apply): void => {
+export const macrotaskScheduleFn: ScheduleFn = (callback): void => {
   setTimeout(() => {
-    apply();
+    callback();
   });
 };

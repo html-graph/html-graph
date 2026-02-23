@@ -4,6 +4,7 @@ import { ViewportController } from "./viewport-controller";
 import { createElement } from "@/mocks";
 import { standardCenterFn } from "@/center-fn";
 import { ViewportControllerParams } from "./viewport-controller-params";
+import { immediateScheduleFn } from "@/schedule-fn";
 
 const createViewportController = (options?: {
   element?: HTMLElement;
@@ -22,6 +23,7 @@ const createViewportController = (options?: {
     focus: {
       contentOffset: options?.contentOffset ?? 0,
       minContentScale: options?.minContentScale ?? 0,
+      schedule: immediateScheduleFn,
     },
   };
 

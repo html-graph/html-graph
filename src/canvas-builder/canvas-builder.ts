@@ -21,6 +21,7 @@ import {
   LayoutConfigurator,
   AnimatedLayoutConfigurator,
   AnimatedLayoutParams,
+  LayoutParams,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -221,9 +222,13 @@ export class CanvasBuilder {
       graphControllerParams,
     );
 
-    const viewportControllerParams = createViewportControllerParams(
-      this.canvasDefaults,
-    );
+    const layoutParams: LayoutParams = createLayoutParams(this.layoutConfig);
+
+    const viewportControllerParams = createViewportControllerParams({
+      canvasDefaults: this.canvasDefaults,
+      hasLayout: this.hasLayout,
+      layoutParams,
+    });
 
     const viewportController = new ViewportController(
       this.graphStore,
@@ -319,10 +324,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasLayout) {
-      LayoutConfigurator.configure(
-        canvas,
-        createLayoutParams(this.layoutConfig),
-      );
+      LayoutConfigurator.configure(canvas, layoutParams);
     }
 
     if (this.hasAnimatedLayout) {

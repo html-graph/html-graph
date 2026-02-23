@@ -1,7 +1,7 @@
-import { ScheduleFn } from "../apply-schedule-fn";
+import { ScheduleFn } from "../schedule-fn";
 
-export const microtaskScheduleFn: ScheduleFn = (apply): void => {
+export const microtaskScheduleFn: ScheduleFn = (callback): void => {
   queueMicrotask(() => {
-    apply();
+    callback();
   });
 };

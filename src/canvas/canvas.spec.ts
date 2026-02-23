@@ -17,6 +17,7 @@ import {
   ViewportController,
   ViewportControllerParams,
 } from "@/viewport-controller";
+import { immediateScheduleFn } from "@/schedule-fn";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -64,6 +65,7 @@ const createCanvas = (options?: {
     focus: {
       contentOffset: 100,
       minContentScale: 0,
+      schedule: immediateScheduleFn,
     },
   };
 

@@ -1,1 +1,1 @@
-export { createViewportControllerParams } from "./create-canvas-params";
+export { createViewportControllerParams } from "./create-viewport-controller-params";

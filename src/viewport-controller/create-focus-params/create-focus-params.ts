@@ -6,7 +6,7 @@ export const createFocusParams = (
   config: FocusConfig,
   controllerParams: ViewportControllerParams,
 ): FocusParams => {
-  return config !== undefined && Symbol.iterator in config
+  return Symbol.iterator in config
     ? {
         minContentScale: controllerParams.focus.minContentScale,
         nodes: config,

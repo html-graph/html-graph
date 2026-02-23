@@ -5,6 +5,7 @@ import { Graph } from "@/graph";
 import { GraphController, GraphControllerParams } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
+import { immediateScheduleFn } from "@/schedule-fn";
 import { Viewport } from "@/viewport";
 import {
   ViewportController,
@@ -46,6 +47,7 @@ export const createOverlayCanvas = (
     focus: {
       contentOffset: 0,
       minContentScale: 0,
+      schedule: immediateScheduleFn,
     },
   };
 

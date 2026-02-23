@@ -1,3 +1,4 @@
+import { immediateScheduleFn } from "@/schedule-fn";
 import { ViewportControllerParams } from "../viewport-controller-params";
 import { createFocusParams } from "./create-focus-params";
 import { FocusParams } from "./focus-params";
@@ -6,6 +7,7 @@ const controllerParams: ViewportControllerParams = {
   focus: {
     minContentScale: 0.5,
     contentOffset: 100,
+    schedule: immediateScheduleFn,
   },
 };
 
