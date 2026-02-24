@@ -451,13 +451,28 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDown).not.toHaveBeenCalled();
   });
 
-  it("should call onPointerDown after clear", () => {
+  it("should not call onPointerDown after clear", () => {
     const onPointerDown = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDown });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
     canvas.clear();
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerDown).not.toHaveBeenCalled();
+  });
+
+  it("should not call onPointerDown after destroy", () => {
+    const onPointerDown = jest.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerDown });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+    canvas.destroy();
 
     portElement.dispatchEvent(
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),

@@ -50,10 +50,7 @@ describe("subscribeAnimatedLayoutStaticNodesUpdate", () => {
     const animationStaticNodes = new Set<Identifier>();
     const canvas = createCanvas();
 
-    subscribeAnimatedLayoutStaticNodesUpdate(
-      canvas.graph,
-      animationStaticNodes,
-    );
+    subscribeAnimatedLayoutStaticNodesUpdate(canvas, animationStaticNodes);
 
     canvas.addNode({
       id: "node-1",
@@ -71,10 +68,7 @@ describe("subscribeAnimatedLayoutStaticNodesUpdate", () => {
     const animationStaticNodes = new Set<Identifier>();
     const canvas = createCanvas();
 
-    subscribeAnimatedLayoutStaticNodesUpdate(
-      canvas.graph,
-      animationStaticNodes,
-    );
+    subscribeAnimatedLayoutStaticNodesUpdate(canvas, animationStaticNodes);
 
     canvas.addNode({
       id: "node-1",
@@ -84,6 +78,24 @@ describe("subscribeAnimatedLayoutStaticNodesUpdate", () => {
     animationStaticNodes.add("node-1");
 
     canvas.clear();
+
+    expect(animationStaticNodes.has("node-1")).toBe(false);
+  });
+
+  it("should remove static node when canvas destroyed", () => {
+    const animationStaticNodes = new Set<Identifier>();
+    const canvas = createCanvas();
+
+    subscribeAnimatedLayoutStaticNodesUpdate(canvas, animationStaticNodes);
+
+    canvas.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+    });
+
+    animationStaticNodes.add("node-1");
+
+    canvas.destroy();
 
     expect(animationStaticNodes.has("node-1")).toBe(false);
   });

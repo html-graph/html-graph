@@ -1,39 +1,39 @@
-import { resetNodeElement } from "./reset-node-element";
+import { restoreNodeElement } from "./restore-node-element";
 
-describe("resetNodeElement", () => {
-  it("should reset element positioning", () => {
+describe("restoreNodeElement", () => {
+  it("should restore element positioning", () => {
     const element = document.createElement("div");
-    resetNodeElement(element);
+    restoreNodeElement(element);
 
     expect(element.style.position).toBe("");
   });
 
-  it("should reset element visibility", () => {
+  it("should restore element visibility", () => {
     const element = document.createElement("div");
-    resetNodeElement(element);
+    restoreNodeElement(element);
 
     expect(element.style.visibility).toBe("");
   });
 
-  it("should reset element top", () => {
+  it("should restore element top", () => {
     const element = document.createElement("div");
-    resetNodeElement(element);
+    restoreNodeElement(element);
 
     expect(element.style.top).toBe("");
   });
 
-  it("should reset element left", () => {
+  it("should restore element left", () => {
     const element = document.createElement("div");
-    resetNodeElement(element);
+    restoreNodeElement(element);
 
     expect(element.style.left).toBe("");
   });
 
-  it("should reset element transform", () => {
+  it("should restore element transform", () => {
     const element = document.createElement("div");
     element.style.transform = "translate(1px, 2px)";
 
-    resetNodeElement(element);
+    restoreNodeElement(element);
 
     expect(element.style.transform).toBe("");
   });

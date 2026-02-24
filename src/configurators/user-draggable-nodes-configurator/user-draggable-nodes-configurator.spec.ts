@@ -630,6 +630,27 @@ describe("UserDraggableNodesConfigurator", () => {
     expect(element.style.cursor).toBe("");
   });
 
+  it("should not change cursor on grab after destroy", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.destroy();
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    expect(element.style.cursor).toBe("");
+  });
+
   it("should handle gracefully drag removed node", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
@@ -916,7 +937,7 @@ describe("UserDraggableNodesConfigurator", () => {
       createMouseMoveEvent({ movementX: 100, movementY: 100 }),
     );
 
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+    expect(nodeElement.style.transform).toBe("");
   });
 
   it("should not move grabbed node with touch after canvas destroy", () => {
@@ -947,7 +968,7 @@ describe("UserDraggableNodesConfigurator", () => {
       }),
     );
 
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+    expect(nodeElement.style.transform).toBe("");
   });
 
   it("should snap node to grid", () => {

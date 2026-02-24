@@ -334,7 +334,7 @@ export class CanvasBuilder {
 
       if (this.hasDraggableNodes) {
         subscribeAnimatedLayoutStaticNodesUpdate(
-          canvas.graph,
+          canvas,
           this.animationStaticNodes,
         );
 

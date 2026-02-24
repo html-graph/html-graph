@@ -890,17 +890,6 @@ describe("GraphController", () => {
     expect(graphStore.getAllEdgeIds()).toEqual([0]);
   });
 
-  it("should clear before destroy", () => {
-    const element = document.createElement("div");
-    const { graphController } = createGraphController({ element });
-
-    const spy = jest.spyOn(graphController, "clear");
-
-    graphController.destroy();
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should clear html on destroy", () => {
     const element = document.createElement("div");
     const { graphController } = createGraphController({ element });

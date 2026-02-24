@@ -115,6 +115,29 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
+  it("should not react to node changes on destroyed canvas", () => {
+    const canvas = createCanvas();
+
+    const element = document.createElement("div");
+
+    canvas.addNode({
+      id: "node-1",
+      element,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    canvas.destroy();
+
+    const spy = jest.spyOn(canvas, "updateNode");
+
+    triggerResizeFor(element);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it("should react to edge node changes", () => {
     const canvas = createCanvas();
 

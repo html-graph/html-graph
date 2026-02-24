@@ -256,6 +256,20 @@ describe("CoreHtmlView", () => {
     expect(element.children.length).toBe(0);
   });
 
+  it("should restore node elements on destroy", () => {
+    const store: GraphStore = new GraphStore();
+    const element = document.createElement("div");
+    const htmlView = createHtmlController({ store, element });
+
+    const addNodeRequest1 = createAddNode1Request();
+    store.addNode(addNodeRequest1);
+
+    htmlView.attachNode(addNodeRequest1.id);
+    htmlView.destroy();
+
+    expect(addNodeRequest1.element.style.position).toBe("");
+  });
+
   it("should update node coordinates", () => {
     const store = new GraphStore();
     const element = document.createElement("div");
