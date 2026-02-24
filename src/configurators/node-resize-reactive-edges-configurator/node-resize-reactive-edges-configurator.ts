@@ -21,7 +21,7 @@ export class NodeResizeReactiveEdgesConfigurator {
     this.nodesResizeObserver.unobserve(node.element);
   };
 
-  private readonly restore = (): void => {
+  private readonly revert = (): void => {
     this.nodesResizeObserver.disconnect();
     this.elementToNodeId.clear();
   };
@@ -37,8 +37,8 @@ export class NodeResizeReactiveEdgesConfigurator {
 
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
-    this.canvas.graph.onBeforeClear.subscribe(this.restore);
-    this.canvas.onBeforeDestroy.subscribe(this.restore);
+    this.canvas.graph.onBeforeClear.subscribe(this.revert);
+    this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
   public static configure(canvas: Canvas): void {

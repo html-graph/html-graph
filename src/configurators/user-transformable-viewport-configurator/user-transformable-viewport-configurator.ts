@@ -15,7 +15,7 @@ export class UserTransformableViewportConfigurator {
 
   private transformInProgress = false;
 
-  private readonly restore = (): void => {
+  private readonly revert = (): void => {
     this.removeMouseDragListeners();
     this.removeTouchDragListeners();
   };
@@ -198,7 +198,7 @@ export class UserTransformableViewportConfigurator {
       passive: true,
     });
 
-    canvas.onBeforeDestroy.subscribe(this.restore);
+    canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
   public static configure(
