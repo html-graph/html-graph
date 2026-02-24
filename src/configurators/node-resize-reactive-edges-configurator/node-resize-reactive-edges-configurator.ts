@@ -41,7 +41,7 @@ export class NodeResizeReactiveEdgesConfigurator {
 
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
-    this.canvas.graph.onBeforeClear.subscribe(this.revert);
+    this.canvas.graph.onBeforeClear.subscribe(this.reset);
     this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
