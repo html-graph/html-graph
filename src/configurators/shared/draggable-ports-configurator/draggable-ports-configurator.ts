@@ -134,7 +134,7 @@ export class DraggablePortsConfigurator {
     this.stopTouchDrag();
   };
 
-  private readonly clear = (): void => {
+  private readonly reset = (): void => {
     this.canvas.graph.getAllPortIds().forEach((portId) => {
       const port = this.canvas.graph.getPort(portId);
       this.unhookPortEvents(port.element);
@@ -143,7 +143,7 @@ export class DraggablePortsConfigurator {
 
   private readonly revert = (): void => {
     this.params.onStopDrag();
-    this.clear();
+    this.reset();
     this.removeWindowMouseListeners();
     this.removeWindowTouchListeners();
   };
@@ -156,7 +156,7 @@ export class DraggablePortsConfigurator {
   ) {
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.subscribe(this.onBeforePortUnmarked);
-    this.canvas.graph.onBeforeClear.subscribe(this.clear);
+    this.canvas.graph.onBeforeClear.subscribe(this.reset);
     this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 

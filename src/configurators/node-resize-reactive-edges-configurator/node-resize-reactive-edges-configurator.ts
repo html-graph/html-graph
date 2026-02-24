@@ -21,9 +21,13 @@ export class NodeResizeReactiveEdgesConfigurator {
     this.nodesResizeObserver.unobserve(node.element);
   };
 
-  private readonly revert = (): void => {
+  private readonly reset = (): void => {
     this.nodesResizeObserver.disconnect();
     this.elementToNodeId.clear();
+  };
+
+  private readonly revert = (): void => {
+    this.reset();
   };
 
   private constructor(private readonly canvas: Canvas) {
