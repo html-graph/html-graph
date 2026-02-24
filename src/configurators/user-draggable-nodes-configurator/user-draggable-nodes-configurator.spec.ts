@@ -937,7 +937,7 @@ describe("UserDraggableNodesConfigurator", () => {
       createMouseMoveEvent({ movementX: 100, movementY: 100 }),
     );
 
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+    expect(nodeElement.style.transform).toBe("");
   });
 
   it("should not move grabbed node with touch after canvas destroy", () => {
@@ -968,7 +968,7 @@ describe("UserDraggableNodesConfigurator", () => {
       }),
     );
 
-    expect(nodeElement.style.transform).toBe("translate(0px, 0px)");
+    expect(nodeElement.style.transform).toBe("");
   });
 
   it("should snap node to grid", () => {

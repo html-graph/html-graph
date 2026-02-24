@@ -8,6 +8,7 @@ import { createHost } from "./create-host";
 import { createContainer } from "./create-container";
 import { prepareNodeElement } from "./prepare-node-element";
 import { Identifier } from "@/identifier";
+import { resetNodeElement } from "./reset-node-element";
 
 export class CoreHtmlView implements HtmlView {
   private readonly host = createHost();
@@ -52,6 +53,7 @@ export class CoreHtmlView implements HtmlView {
   public detachNode(nodeId: Identifier): void {
     const node = this.graphStore.getNode(nodeId);
 
+    resetNodeElement(node.element);
     this.container.removeChild(node.element);
     this.attachedNodeIds.delete(nodeId);
   }
@@ -84,6 +86,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public destroy(): void {
+    this.clear();
     this.viewportStore.onAfterUpdated.unsubscribe(this.applyTransform);
 
     this.element.removeChild(this.host);
