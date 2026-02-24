@@ -37,11 +37,6 @@ export class UserDraggableNodesConfigurator {
     element.removeEventListener("touchstart", this.onTouchStart);
   };
 
-  private readonly onBeforeDestroy = (): void => {
-    this.removeMouseDragListeners();
-    this.removeTouchDragListeners();
-  };
-
   private readonly onBeforeClear = (): void => {
     this.canvas.graph.getAllNodeIds().forEach((nodeId) => {
       const { element } = this.canvas.graph.getNode(nodeId);
@@ -51,6 +46,12 @@ export class UserDraggableNodesConfigurator {
     });
 
     this.maxNodePriority = 0;
+  };
+
+  private readonly restore = (): void => {
+    this.onBeforeClear();
+    this.removeMouseDragListeners();
+    this.removeTouchDragListeners();
   };
 
   private readonly onMouseDown: EventListener = (event: Event): void => {
@@ -219,7 +220,7 @@ export class UserDraggableNodesConfigurator {
     this.graph.onAfterNodeUpdated.subscribe(this.onAfterNodeUpdated);
     this.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
     this.graph.onBeforeClear.subscribe(this.onBeforeClear);
-    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
+    this.canvas.onBeforeDestroy.subscribe(this.restore);
   }
 
   public static configure(

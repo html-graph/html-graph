@@ -208,8 +208,6 @@ export class GraphController {
   }
 
   public destroy(): void {
-    this.clear();
-
     this.graphStore.onAfterNodeAdded.unsubscribe(this.onAfterNodeAdded);
 
     this.graphStore.onAfterNodeUpdated.unsubscribe(this.onAfterNodeUpdated);

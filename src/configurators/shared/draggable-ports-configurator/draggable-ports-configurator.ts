@@ -141,8 +141,9 @@ export class DraggablePortsConfigurator {
     });
   };
 
-  private readonly onBeforeDestroy = (): void => {
+  private readonly restore = (): void => {
     this.params.onStopDrag();
+    this.onBeforeClear();
     this.removeWindowMouseListeners();
     this.removeWindowTouchListeners();
   };
@@ -156,7 +157,7 @@ export class DraggablePortsConfigurator {
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
     this.canvas.graph.onBeforePortUnmarked.subscribe(this.onBeforePortUnmarked);
     this.canvas.graph.onBeforeClear.subscribe(this.onBeforeClear);
-    this.canvas.onBeforeDestroy.subscribe(this.onBeforeDestroy);
+    this.canvas.onBeforeDestroy.subscribe(this.restore);
   }
 
   public static configure(

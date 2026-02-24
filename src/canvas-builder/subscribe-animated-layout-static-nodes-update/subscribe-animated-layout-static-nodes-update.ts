@@ -1,15 +1,19 @@
-import { Graph } from "@/graph";
+import { Canvas } from "@/canvas/canvas";
 import { Identifier } from "@/identifier";
 
 export const subscribeAnimatedLayoutStaticNodesUpdate = (
-  graph: Graph,
+  canvas: Canvas,
   animationStaticNodes: Set<Identifier>,
 ): void => {
-  graph.onBeforeNodeRemoved.subscribe((nodeId) => {
+  canvas.graph.onBeforeNodeRemoved.subscribe((nodeId) => {
     animationStaticNodes.delete(nodeId);
   });
 
-  graph.onBeforeClear.subscribe(() => {
+  canvas.graph.onBeforeClear.subscribe(() => {
+    animationStaticNodes.clear();
+  });
+
+  canvas.onBeforeDestroy.subscribe(() => {
     animationStaticNodes.clear();
   });
 };
