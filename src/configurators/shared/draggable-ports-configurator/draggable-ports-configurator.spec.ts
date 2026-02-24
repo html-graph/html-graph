@@ -451,7 +451,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDown).not.toHaveBeenCalled();
   });
 
-  it("should call onPointerDown after clear", () => {
+  it("should not call onPointerDown after clear", () => {
     const onPointerDown = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDown });
 
@@ -466,7 +466,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDown).not.toHaveBeenCalled();
   });
 
-  it("should call onPointerDown after destroy", () => {
+  it("should not call onPointerDown after destroy", () => {
     const onPointerDown = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDown });
 
