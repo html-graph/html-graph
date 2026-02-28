@@ -4,7 +4,8 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorithm-params";
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
-import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
+import { LegacyChildrenOffsetsGenerator } from "./legacy-children-offsets-generator";
+// import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { TreeNode } from "./tree";
 
 export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
@@ -25,7 +26,7 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
     forest.forEach((tree) => {
       result.set(tree.root.nodeId, { x: currentX, y: 0 });
 
-      const offsetsGenerator = new ChildrenOffsetsGenerator(tree, {
+      const offsetsGenerator = new LegacyChildrenOffsetsGenerator(tree, {
         spaceAroundRadius: this.params.layerSpace / 2,
       });
 
@@ -53,11 +54,8 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
       }
     });
 
-    result.forEach((coord) => {
-      const transformedCoords = this.params.transform(coord);
-
-      coord.x = transformedCoords.x;
-      coord.y = transformedCoords.y;
+    result.forEach((coord, nodeId) => {
+      result.set(nodeId, this.params.transform(coord));
     });
 
     return result;

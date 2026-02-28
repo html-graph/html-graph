@@ -26,13 +26,17 @@ export class UserTransformableViewportConfigurator {
     if (!this.params.mouseDownEventVerifier(event)) {
       return;
     }
+
     setCursor(this.element, this.params.shiftCursor);
+
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
     });
+
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
     });
+
     this.startRegisteredTransform();
   };
 
@@ -112,15 +116,19 @@ export class UserTransformableViewportConfigurator {
     }
 
     this.prevTouches = processTouch(event);
+
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
     });
+
     this.window.addEventListener("touchend", this.onWindowTouchFinish, {
       passive: true,
     });
+
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
       passive: true,
     });
+
     this.startRegisteredTransform();
   };
 
@@ -150,6 +158,7 @@ export class UserTransformableViewportConfigurator {
       const y = this.prevTouches!.y - top;
       const deltaScale = currentTouches.scale / this.prevTouches!.scale;
       const deltaViewScale = 1 / deltaScale;
+
       this.scaleViewport(deltaViewScale, x, y);
     }
 
@@ -191,9 +200,11 @@ export class UserTransformableViewportConfigurator {
     this.element.addEventListener("mousedown", this.onMouseDown, {
       passive: true,
     });
+
     this.element.addEventListener("wheel", this.onWheelScroll, {
       passive: true,
     });
+
     this.element.addEventListener("touchstart", this.onTouchStart, {
       passive: true,
     });
@@ -228,6 +239,7 @@ export class UserTransformableViewportConfigurator {
     const prevTransform = this.canvas.viewport.getViewportMatrix();
     const nextTransform = scale(prevTransform, s2, cx, cy);
     const { width, height } = this.viewport.getDimensions();
+
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
@@ -240,6 +252,7 @@ export class UserTransformableViewportConfigurator {
 
   private stopMouseDrag(): void {
     setCursor(this.element, null);
+
     this.removeMouseDragListeners();
     this.finishRegisteredTransform();
   }
@@ -251,6 +264,7 @@ export class UserTransformableViewportConfigurator {
 
   private stopTouchDrag(): void {
     this.prevTouches = null;
+
     this.removeTouchDragListeners();
     this.finishRegisteredTransform();
   }
@@ -280,12 +294,14 @@ export class UserTransformableViewportConfigurator {
   private handleResize(): void {
     const prevTransform = this.viewport.getViewportMatrix();
     const { width, height } = this.viewport.getDimensions();
+
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform: prevTransform,
       canvasWidth: width,
       canvasHeight: height,
     });
+
     this.params.onResizeTransformStarted();
     this.canvas.patchViewportMatrix(transform);
     this.params.onResizeTransformFinished();

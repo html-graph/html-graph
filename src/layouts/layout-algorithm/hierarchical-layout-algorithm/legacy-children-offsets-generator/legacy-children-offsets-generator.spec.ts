@@ -1,8 +1,8 @@
 import { createCanvas } from "@/mocks";
+import { LegacyChildrenOffsetsGenerator } from "./legacy-children-offsets-generator";
 import { WidthFirstSpanningForestGenerator } from "../width-first-spanning-forest-generator";
-import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 
-describe("ChildrenOffsetsGenerator", () => {
+describe("LegacyChildrenOffsetsGenerator", () => {
   it("should zero offset when node is root", () => {
     const canvas = createCanvas();
 
@@ -13,7 +13,7 @@ describe("ChildrenOffsetsGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenOffsetsGenerator(tree, {
+    const generator = new LegacyChildrenOffsetsGenerator(tree, {
       spaceAroundRadius: 50,
     });
 
@@ -41,7 +41,7 @@ describe("ChildrenOffsetsGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenOffsetsGenerator(tree, {
+    const generator = new LegacyChildrenOffsetsGenerator(tree, {
       spaceAroundRadius: 50,
     });
 
@@ -75,7 +75,7 @@ describe("ChildrenOffsetsGenerator", () => {
 
     const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
     const [tree] = forestGenerator.generate();
-    const generator = new ChildrenOffsetsGenerator(tree, {
+    const generator = new LegacyChildrenOffsetsGenerator(tree, {
       spaceAroundRadius: 50,
     });
 

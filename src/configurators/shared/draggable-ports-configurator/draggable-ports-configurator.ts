@@ -102,9 +102,11 @@ export class DraggablePortsConfigurator {
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
     });
+
     this.window.addEventListener("touchend", this.onWindowTouchFinish, {
       passive: true,
     });
+
     this.window.addEventListener("touchcancel", this.onWindowTouchFinish, {
       passive: true,
     });
@@ -173,6 +175,7 @@ export class DraggablePortsConfigurator {
     element.addEventListener("mousedown", this.onPortMouseDown, {
       passive: true,
     });
+
     element.addEventListener("touchstart", this.onPortTouchStart, {
       passive: true,
     });
