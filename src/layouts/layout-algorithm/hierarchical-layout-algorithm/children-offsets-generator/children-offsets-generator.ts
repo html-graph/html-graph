@@ -20,11 +20,11 @@ export class ChildrenOffsetsGenerator {
     });
 
     [...this.tree.sequence].reverse().forEach((treeNode) => {
-      const subtreeLayers = Array.from(treeNode.children).map(
+      const subtreeSpans = Array.from(treeNode.children).map(
         (childNode) => this.treeSpans.get(childNode.nodeId)!,
       );
 
-      const aggregatedTree = generator.generate(subtreeLayers);
+      const aggregatedTree = generator.generate(subtreeSpans);
 
       let index = 0;
 
