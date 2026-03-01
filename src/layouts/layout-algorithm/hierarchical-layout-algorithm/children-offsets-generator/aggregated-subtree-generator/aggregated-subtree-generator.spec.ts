@@ -2,7 +2,7 @@ import { TreeSpans } from "../tree-spans";
 import { AggregatedSubtreeGenerator } from "./aggregated-subtree-generator";
 
 describe("AggregatedSubtreeGenerator", () => {
-  it("should position single subree at 0", () => {
+  it("should position single subtree at 0", () => {
     const subtreeLayers: TreeSpans = [{ start: -50, end: 50 }];
 
     const generator = new AggregatedSubtreeGenerator({
