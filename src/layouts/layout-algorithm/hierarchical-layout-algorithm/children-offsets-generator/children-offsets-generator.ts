@@ -20,31 +20,23 @@ export class ChildrenOffsetsGenerator {
     });
 
     [...this.tree.sequence].reverse().forEach((treeNode) => {
-      if (treeNode.children.size === 0) {
-        this.offsets.set(treeNode.nodeId, 0);
-        this.treeSpans.set(treeNode.nodeId, [{ start: -radius, end: radius }]);
-      } else {
-        const subtreeLayers = Array.from(treeNode.children).map(
-          (childNode) => this.treeSpans.get(childNode.nodeId)!,
-        );
+      const subtreeLayers = Array.from(treeNode.children).map(
+        (childNode) => this.treeSpans.get(childNode.nodeId)!,
+      );
 
-        const aggregatedTree = generator.generate(subtreeLayers);
+      const aggregatedTree = generator.generate(subtreeLayers);
 
-        let index = 0;
+      let index = 0;
 
-        treeNode.children.forEach((childNode) => {
-          this.offsets.set(
-            childNode.nodeId,
-            aggregatedTree.childOffsets[index],
-          );
-          index++;
-        });
+      treeNode.children.forEach((childNode) => {
+        this.offsets.set(childNode.nodeId, aggregatedTree.childOffsets[index]);
+        index++;
+      });
 
-        this.treeSpans.set(treeNode.nodeId, [
-          { start: -radius, end: radius },
-          ...aggregatedTree.subtreeSpans,
-        ]);
-      }
+      this.treeSpans.set(treeNode.nodeId, [
+        { start: -radius, end: radius },
+        ...aggregatedTree.subtreeSpans,
+      ]);
 
       treeNode.children.forEach((childNode) => {
         this.treeSpans.delete(childNode.nodeId);
