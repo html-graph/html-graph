@@ -4,7 +4,6 @@ import { LayoutAlgorithm } from "../layout-algorithm";
 import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorithm-params";
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
-// import { LegacyChildrenOffsetsGenerator } from "./legacy-children-offsets-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { TreeNode } from "./tree";
 
