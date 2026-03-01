@@ -40,7 +40,10 @@ export class ChildrenOffsetsGenerator {
           index++;
         });
 
-        this.treeSpans.set(treeNode.nodeId, aggregatedTree.subtreeSpans);
+        this.treeSpans.set(treeNode.nodeId, [
+          { start: -radius, end: radius },
+          ...aggregatedTree.subtreeSpans,
+        ]);
       }
 
       treeNode.children.forEach((childNode) => {

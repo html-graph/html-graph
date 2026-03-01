@@ -28,9 +28,7 @@ export class AggregatedSubtreeGenerator {
             end: current + span.end,
           };
         } else {
-          subtree.forEach((span, i) => {
-            absoluteSpans[i].end = current + span.end;
-          });
+          absoluteSpans[i].end = current + span.end;
         }
       });
 
