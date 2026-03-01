@@ -62,7 +62,7 @@ export class AggregatedSubtreeGenerator {
     const layersCnt = Math.min(leftLayers.length, rightLayers.length);
 
     for (let i = 0; i < layersCnt; i++) {
-      const diff = rightLayers[i].end - leftLayers[i].start;
+      const diff = leftLayers[i].end - rightLayers[i].start;
 
       maxDiff = Math.max(maxDiff, diff);
     }
