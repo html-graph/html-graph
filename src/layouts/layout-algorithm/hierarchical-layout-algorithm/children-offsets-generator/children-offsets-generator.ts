@@ -1,41 +1,46 @@
 import { Identifier } from "@/identifier";
-import { Tree } from "../tree";
 import { ChildrenOffsetsGeneratorParams } from "./children-offsets-generator-params";
-import { LayerNodePlacementResolver } from "./layer-node-placement-resolver";
+import { Tree } from "../tree";
+import { TreeSpans } from "./tree-spans";
+import { AggregatedSubtreeGenerator } from "./aggregated-subtree-generator";
 
 export class ChildrenOffsetsGenerator {
   private readonly offsets = new Map<Identifier, number>();
 
-  private readonly childrenRadii = new Map<Identifier, number | null>();
-
-  private readonly layerNodePlacementResolver: LayerNodePlacementResolver;
+  private readonly treeSpans = new Map<Identifier, TreeSpans>();
 
   public constructor(
     private readonly tree: Tree,
     params: ChildrenOffsetsGeneratorParams,
   ) {
-    this.layerNodePlacementResolver = new LayerNodePlacementResolver({
-      radius: params.spaceAroundRadius,
+    const radius = params.spaceAroundRadius;
+
+    const generator = new AggregatedSubtreeGenerator({
+      spaceAroundRadius: radius,
     });
 
     [...this.tree.sequence].reverse().forEach((treeNode) => {
-      if (treeNode.children.size === 0) {
-        this.childrenRadii.set(treeNode.nodeId, null);
-      } else {
-        const childRadii: (number | null)[] = Array.from(treeNode.children).map(
-          (child) => this.childrenRadii.get(child.nodeId)!,
-        );
+      const subtreeSpans = Array.from(treeNode.children).map(
+        (childNode) => this.treeSpans.get(childNode.nodeId)!,
+      );
 
-        const placement = this.layerNodePlacementResolver.resolve(childRadii);
+      const aggregatedTree = generator.generate(subtreeSpans);
 
-        this.childrenRadii.set(treeNode.nodeId, placement.radius);
-        let i = 0;
+      let index = 0;
 
-        treeNode.children.forEach((child) => {
-          this.offsets.set(child.nodeId, placement.offsets[i]);
-          i++;
-        });
-      }
+      treeNode.children.forEach((childNode) => {
+        this.offsets.set(childNode.nodeId, aggregatedTree.childOffsets[index]);
+        index++;
+      });
+
+      this.treeSpans.set(treeNode.nodeId, [
+        { start: -radius, end: radius },
+        ...aggregatedTree.subtreeSpans,
+      ]);
+
+      treeNode.children.forEach((childNode) => {
+        this.treeSpans.delete(childNode.nodeId);
+      });
     });
 
     this.offsets.set(this.tree.root.nodeId, 0);

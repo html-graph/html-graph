@@ -106,24 +106,11 @@ export class CanvasBuilder {
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
-  private readonly graphStore: GraphStore;
-
-  private readonly viewportStore: ViewportStore;
-
-  private readonly graph: Graph;
-
-  private readonly viewport: Viewport;
-
   private readonly window: Window = window;
 
   private readonly animationStaticNodes = new Set<Identifier>();
 
-  public constructor(private readonly element: HTMLElement) {
-    this.viewportStore = new ViewportStore(this.element);
-    this.viewport = new Viewport(this.viewportStore);
-    this.graphStore = new GraphStore();
-    this.graph = new Graph(this.graphStore);
-  }
+  public constructor(private readonly element: HTMLElement) {}
 
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
@@ -209,15 +196,22 @@ export class CanvasBuilder {
 
     this.used = true;
 
+    const viewportStore = new ViewportStore(this.element);
+    const graphStore = new GraphStore();
+
     const layers = new Layers(this.element);
-    const htmlView = this.createHtmlView(layers.main);
+    const htmlView = this.createHtmlView(
+      layers.main,
+      graphStore,
+      viewportStore,
+    );
 
     const graphControllerParams = createGraphControllerParams(
       this.canvasDefaults,
     );
 
     const graphController = new GraphController(
-      this.graphStore,
+      graphStore,
       htmlView,
       graphControllerParams,
     );
@@ -231,14 +225,17 @@ export class CanvasBuilder {
     });
 
     const viewportController = new ViewportController(
-      this.graphStore,
-      this.viewportStore,
+      graphStore,
+      viewportStore,
       viewportControllerParams,
     );
 
+    const viewport = new Viewport(viewportStore);
+    const graph = new Graph(graphStore);
+
     const canvas = new Canvas(
-      this.graph,
-      this.viewport,
+      graph,
+      viewport,
       graphController,
       viewportController,
     );
@@ -284,7 +281,7 @@ export class CanvasBuilder {
       UserConnectablePortsConfigurator.configure(
         canvas,
         layers.overlayConnectablePorts,
-        this.viewportStore,
+        viewportStore,
         this.window,
         params,
       );
@@ -299,7 +296,7 @@ export class CanvasBuilder {
       UserDraggableEdgesConfigurator.configure(
         canvas,
         layers.overlayDraggableEdges,
-        this.viewportStore,
+        viewportStore,
         this.window,
         dragEdgeParams,
       );
@@ -357,23 +354,23 @@ export class CanvasBuilder {
     return canvas;
   }
 
-  private createHtmlView(host: HTMLElement): HtmlView {
-    let htmlView: HtmlView = new CoreHtmlView(
-      this.graphStore,
-      this.viewportStore,
-      host,
-    );
+  private createHtmlView(
+    host: HTMLElement,
+    graphStore: GraphStore,
+    viewportStore: ViewportStore,
+  ): HtmlView {
+    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, host);
 
     if (this.virtualScrollConfig !== undefined) {
       htmlView = new VirtualScrollHtmlView(
         htmlView,
-        this.graphStore,
+        graphStore,
         this.boxRenderingTrigger,
         createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
       );
     }
 
-    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
+    htmlView = new LayoutHtmlView(htmlView, graphStore);
 
     return htmlView;
   }

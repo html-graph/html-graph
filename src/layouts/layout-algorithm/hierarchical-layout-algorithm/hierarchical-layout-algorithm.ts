@@ -53,11 +53,8 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
       }
     });
 
-    result.forEach((coord) => {
-      const transformedCoords = this.params.transform(coord);
-
-      coord.x = transformedCoords.x;
-      coord.y = transformedCoords.y;
+    result.forEach((coord, nodeId) => {
+      result.set(nodeId, this.params.transform(coord));
     });
 
     return result;
