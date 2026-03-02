@@ -33,13 +33,21 @@ export class AggregatedSubtreeGenerator {
       });
 
       result.push(current);
-      current += this.params.spaceAroundRadius;
 
       if (index !== last) {
         const nextSubtree = absoluteSubtreeLayers[index + 1];
 
-        current += this.calculateMaxDiff(subtree, nextSubtree);
+        current += this.calculateMaxDiff(
+          // subtree,
+          // TODO: consider finer options
+          absoluteSpans.map((span) => ({
+            start: span.start - current,
+            end: span.end - current,
+          })),
+          nextSubtree,
+        );
       }
+      current += this.params.spaceAroundRadius;
     });
 
     const half = current / 2;
