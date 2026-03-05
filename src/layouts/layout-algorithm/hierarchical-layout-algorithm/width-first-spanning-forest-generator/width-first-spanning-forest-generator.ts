@@ -57,7 +57,10 @@ export class WidthFirstSpanningForestGenerator {
             return port.nodeId;
           });
 
-        const adjacentNodeIds = [...outgoingNodeIds, ...incomingNodeIds];
+        const adjacentNodeIds = new Set([
+          ...outgoingNodeIds,
+          ...incomingNodeIds,
+        ]);
 
         adjacentNodeIds.forEach((nodeId) => {
           if (!this.remainingNodeIds.has(nodeId)) {
