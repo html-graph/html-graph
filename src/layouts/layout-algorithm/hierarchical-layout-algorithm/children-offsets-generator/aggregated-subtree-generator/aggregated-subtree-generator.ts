@@ -37,13 +37,12 @@ export class AggregatedSubtreeGenerator {
       if (index !== last) {
         const nextSubtree = absoluteSubtreeLayers[index + 1];
 
-        current += this.calculateMaxDiff(
-          absoluteSpans.map((span) => ({
-            start: span.start - current,
-            end: span.end - current,
-          })),
-          nextSubtree,
-        );
+        const relativeSpans = absoluteSpans.map((span) => ({
+          start: span.start - current,
+          end: span.end - current,
+        }));
+
+        current += this.calculateMaxDiff(relativeSpans, nextSubtree);
       }
       current += this.params.spaceAroundRadius;
     });
