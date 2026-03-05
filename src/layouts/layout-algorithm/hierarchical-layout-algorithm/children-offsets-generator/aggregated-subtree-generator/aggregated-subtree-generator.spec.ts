@@ -71,4 +71,30 @@ describe("AggregatedSubtreeGenerator", () => {
 
     expect(result.subtreeSpans).toEqual([{ start: -100, end: 100 }]);
   });
+
+  it("should generate space between subtrees", () => {
+    const subtreeLayers1: TreeSpans = [
+      { start: -50, end: 50 },
+      { start: -150, end: 150 },
+    ];
+
+    const subtreeLayers2: TreeSpans = [{ start: -50, end: 50 }];
+
+    const subtreeLayers3: TreeSpans = [
+      { start: -50, end: 50 },
+      { start: -150, end: 150 },
+    ];
+
+    const generator = new AggregatedSubtreeGenerator({
+      spaceAroundRadius: 50,
+    });
+
+    const result = generator.generate([
+      subtreeLayers1,
+      subtreeLayers2,
+      subtreeLayers3,
+    ]);
+
+    expect(result.subtreeSpans[1]).toEqual({ start: -300, end: 300 });
+  });
 });
