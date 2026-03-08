@@ -486,4 +486,37 @@ describe("ViewportController", () => {
       y: -0,
     });
   });
+
+  it("should account for over the limit current scale when limiting minimum content scale", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore, graphStore } =
+      createViewportController({ element });
+
+    graphStore.addNode({
+      id: "node-1",
+      element: document.createElement("div"),
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    graphStore.addNode({
+      id: "node-2",
+      element: document.createElement("div"),
+      x: 0,
+      y: 1000,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.patchContentMatrix({ scale: 10 });
+    viewportController.focus({ minContentScale: 0.5 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 0.5,
+      x: 100,
+      y: -150,
+    });
+  });
 });
