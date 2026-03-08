@@ -1,6 +1,6 @@
 import { TransformState } from "@/viewport-store";
 
-export const scale = (
+export const applyMatrixScale = (
   prevTransform: TransformState,
   s2: number,
   cx: number,

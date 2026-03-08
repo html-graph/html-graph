@@ -1,7 +1,7 @@
 import { TransformState } from "@/viewport-store";
-import { scale } from "./scale";
+import { applyMatrixScale } from "./apply-matrix-scale";
 
-describe("scale", () => {
+describe("applyMatrixScale", () => {
   it("should scale", () => {
     const matrix: TransformState = {
       scale: 1,
@@ -9,7 +9,7 @@ describe("scale", () => {
       y: 0,
     };
 
-    const scaledMatrix = scale(matrix, 2, 3, 4);
+    const scaledMatrix = applyMatrixScale(matrix, 2, 3, 4);
 
     const expected: TransformState = {
       scale: 2,

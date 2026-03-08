@@ -7,7 +7,7 @@ import { Identifier } from "@/identifier";
 import { createFocusParams, FocusParams } from "./create-focus-params";
 import { Point } from "@/point";
 import { CenterConfig } from "./center-config";
-import { move, scale } from "@/transformations";
+import { applyMatrixMove, applyMatrixScale } from "@/transformations";
 
 export class ViewportController {
   public constructor(
@@ -34,14 +34,14 @@ export class ViewportController {
     const dx = viewportTarget.x - viewportCenter.x;
     const dy = viewportTarget.y - viewportCenter.y;
 
-    let nextViewportMatrix = move(viewportMatrix, dx, dy);
+    let nextViewportMatrix = applyMatrixMove(viewportMatrix, dx, dy);
 
     const contentScale = config?.contentScale;
 
     if (contentScale !== undefined) {
       const viewportScale = 1 / contentScale;
 
-      nextViewportMatrix = scale(
+      nextViewportMatrix = applyMatrixScale(
         nextViewportMatrix,
         viewportScale / viewportMatrix.scale,
         viewportCenter.x,
@@ -104,21 +104,19 @@ export class ViewportController {
         y: (minY + maxY) / 2,
       };
 
-      const halfContentBoxWidth = (maxX - minX) / 2;
-      const halfContentBoxHeight = (maxY - minY) / 2;
+      const { scale } = this.viewportStore.getContentMatrix();
+
+      const viewportBoxHeight = (maxY - minY) * scale;
+      const viewportBoxWidth = (maxX - minX) * scale;
 
       const { width, height } = this.viewportStore.getDimensions();
 
-      const halfWidth = width / 2;
-      const halfHeight = height / 2;
-
       const ratio = Math.max(
-        halfContentBoxWidth / halfWidth,
-        halfContentBoxHeight / halfHeight,
+        viewportBoxWidth / width,
+        viewportBoxHeight / height,
       );
 
-      const { scale: contentScale } = this.viewportStore.getContentMatrix();
-      const fitContentScale = ratio > 1 ? contentScale / ratio : contentScale;
+      const fitContentScale = ratio > 1 ? scale / ratio : scale;
       const thresholdScale = Math.max(fitContentScale, params.minContentScale);
 
       this.center(contentBoxCenter, { contentScale: thresholdScale });
