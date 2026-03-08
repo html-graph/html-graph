@@ -1,6 +1,6 @@
 import { TransformState } from "@/viewport-store";
 
-export const move = (
+export const applyMatrixMove = (
   prevTransform: TransformState,
   dx: number,
   dy: number,

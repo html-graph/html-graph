@@ -1,7 +1,7 @@
 import { TransformState } from "@/viewport-store";
-import { move } from "./move";
+import { applyMatrixMove } from "./apply-matrix-move";
 
-describe("move", () => {
+describe("applyMatrixMove", () => {
   it("should move", () => {
     const matrix: TransformState = {
       scale: 1,
@@ -9,7 +9,7 @@ describe("move", () => {
       y: 0,
     };
 
-    const movedMatrix = move(matrix, 2, 3);
+    const movedMatrix = applyMatrixMove(matrix, 2, 3);
 
     const expected: TransformState = {
       scale: 1,

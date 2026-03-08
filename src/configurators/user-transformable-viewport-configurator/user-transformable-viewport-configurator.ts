@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { isPointInside, setCursor } from "../shared";
-import { move, applyMatrixScale } from "@/transformations";
+import { applyMatrixMove, applyMatrixScale } from "@/transformations";
 import { processTouch, TouchState } from "./process-touch";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { Viewport } from "@/viewport";
@@ -223,7 +223,7 @@ export class UserTransformableViewportConfigurator {
 
   private moveViewport(dx: number, dy: number): void {
     const prevTransform = this.viewport.getViewportMatrix();
-    const nextTransform = move(prevTransform, dx, dy);
+    const nextTransform = applyMatrixMove(prevTransform, dx, dy);
     const { width, height } = this.viewport.getDimensions();
     const transform = this.params.transformPreprocessor({
       prevTransform,
