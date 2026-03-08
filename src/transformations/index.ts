@@ -1,2 +1,2 @@
 export { move } from "./move";
-export { applyMatrixScale } from "./scale";
+export { applyMatrixScale } from "./apply-matrix-scale";
