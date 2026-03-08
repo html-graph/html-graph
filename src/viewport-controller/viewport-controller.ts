@@ -7,7 +7,7 @@ import { Identifier } from "@/identifier";
 import { createFocusParams, FocusParams } from "./create-focus-params";
 import { Point } from "@/point";
 import { CenterConfig } from "./center-config";
-import { move, scale } from "@/transformations";
+import { move, applyMatrixScale } from "@/transformations";
 
 export class ViewportController {
   public constructor(
@@ -41,7 +41,7 @@ export class ViewportController {
     if (contentScale !== undefined) {
       const viewportScale = 1 / contentScale;
 
-      nextViewportMatrix = scale(
+      nextViewportMatrix = applyMatrixScale(
         nextViewportMatrix,
         viewportScale / viewportMatrix.scale,
         viewportCenter.x,

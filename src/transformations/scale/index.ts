@@ -1,1 +1,1 @@
-export { scale } from "./scale";
+export { applyMatrixScale } from "./apply-matrix-scale";
