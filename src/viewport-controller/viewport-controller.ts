@@ -104,10 +104,10 @@ export class ViewportController {
         y: (minY + maxY) / 2,
       };
 
-      const { scale: contentScale } = this.viewportStore.getContentMatrix();
+      const { scale } = this.viewportStore.getContentMatrix();
 
-      const viewportBoxHeight = (maxY - minY) * contentScale;
-      const viewportBoxWidth = (maxX - minX) * contentScale;
+      const viewportBoxHeight = (maxY - minY) * scale;
+      const viewportBoxWidth = (maxX - minX) * scale;
 
       const { width, height } = this.viewportStore.getDimensions();
 
@@ -116,7 +116,7 @@ export class ViewportController {
         viewportBoxHeight / height,
       );
 
-      const fitContentScale = ratio > 1 ? contentScale / ratio : contentScale;
+      const fitContentScale = ratio > 1 ? scale / ratio : scale;
       const thresholdScale = Math.max(fitContentScale, params.minContentScale);
 
       this.center(contentBoxCenter, { contentScale: thresholdScale });
