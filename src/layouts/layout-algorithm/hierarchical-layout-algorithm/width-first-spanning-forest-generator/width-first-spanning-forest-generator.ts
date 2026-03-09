@@ -31,13 +31,13 @@ export class WidthFirstSpanningForestGenerator {
     this.forest.add({ root, sequence });
 
     let layer: MutableTreeNode[] = [root];
+    this.remainingNodeIds.delete(root.nodeId);
 
     while (layer.length > 0) {
       const nextLayer: MutableTreeNode[] = [];
 
       layer.forEach((current) => {
         sequence.push(current);
-        this.remainingNodeIds.delete(current.nodeId);
 
         const outgoingNodeIds = this.graph
           .getNodeOutgoingEdgeIds(current.nodeId)
@@ -66,6 +66,8 @@ export class WidthFirstSpanningForestGenerator {
           if (!this.remainingNodeIds.has(nodeId)) {
             return;
           }
+
+          this.remainingNodeIds.delete(nodeId);
 
           const child: MutableTreeNode = {
             nodeId,
