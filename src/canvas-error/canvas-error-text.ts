@@ -2,52 +2,52 @@ import { Identifier } from "@/identifier";
 
 export const canvasErrorText = {
   accessNonexistingNode: (nodeId: Identifier): string =>
-    `failed to access nonexistent node with ID of ${JSON.stringify(nodeId)}`,
+    `Failed to access node with ID ${JSON.stringify(nodeId)} because it does not exist`,
   addNodeWithExistingId: (nodeId: Identifier): string =>
-    `failed to add node with existing ID of ${JSON.stringify(nodeId)}`,
+    `Failed to add node with ID ${JSON.stringify(nodeId)} because a node with this ID already exists`,
   addNodeWithElementInUse: (
     nodeId: Identifier,
     useNodeId: Identifier,
   ): string =>
-    `failed to add node with ID of ${JSON.stringify(nodeId)} with html element already in use by another node with ID of ${JSON.stringify(useNodeId)}`,
+    `Failed to add node with ID ${JSON.stringify(nodeId)} because its HTML element is already attached to node with ID ${JSON.stringify(useNodeId)}`,
   updateNonexistentNode: (nodeId: Identifier): string =>
-    `failed to update nonexistent node with ID of ${JSON.stringify(nodeId)}`,
+    `Failed to update node with ID ${JSON.stringify(nodeId)} because it does not exist`,
   removeNonexistentNode: (nodeId: Identifier): string =>
-    `failed to remove nonexistent node with ID of ${JSON.stringify(nodeId)}`,
+    `Failed to remove node with ID ${JSON.stringify(nodeId)} because it does not exist`,
   accessNonexistentPort: (portId: Identifier): string =>
-    `failed to access nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to access port with ID ${JSON.stringify(portId)} because it does not exist`,
   addPortWithExistingId: (portId: Identifier): string =>
-    `failed to add port with existing ID of ${JSON.stringify(portId)}`,
-  addPortToNonexistentNode: (nodeId: Identifier): string =>
-    `failed to add port to nonexistent node with ID of ${JSON.stringify(nodeId)}`,
+    `Failed to add port with ID ${JSON.stringify(portId)} because a port with this ID already exists`,
+  addPortToNonexistentNode: (portId: Identifier, nodeId: Identifier): string =>
+    `Failed to add port with ID ${JSON.stringify(portId)} to node with ID ${JSON.stringify(nodeId)} because the node does not exist`,
   updateNonexistentPort: (portId: Identifier): string =>
-    `failed to update nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to update port with ID ${JSON.stringify(portId)} because it does not exist`,
   accessPortsOfNonexistentNode: (nodeId: Identifier): string =>
-    `failed to access ports of nonexistent node with ID of ${JSON.stringify(nodeId)}`,
+    `Failed to access ports of node with ID ${JSON.stringify(nodeId)} because the node does not exist`,
   removeNonexistentPort: (portId: Identifier): string =>
-    `failed to remove nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to remove port with ID ${JSON.stringify(portId)} because it does not exist`,
   accessNonexistentEdge: (edgeId: Identifier): string =>
-    `failed to access nonexistent edge with ID of ${JSON.stringify(edgeId)}`,
+    `Failed to access edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   addEdgeWithExistingId: (edgeId: Identifier): string =>
-    `failed to add edge with existing ID of ${JSON.stringify(edgeId)}`,
+    `Failed to add edge with ID ${JSON.stringify(edgeId)} because an edge with this ID already exists`,
   addEdgeFromNonexistentPort: (portId: Identifier): string =>
-    `failed to add edge from nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to add edge from port with ID ${JSON.stringify(portId)} because the port does not exist`,
   addEdgeToNonexistentPort: (portId: Identifier): string =>
-    `failed to add edge to nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to add edge to port with ID ${JSON.stringify(portId)} because the port does not exist`,
   updateNonexistentEdge: (edgeId: Identifier): string =>
-    `failed to update nonexistent edge with ID of ${JSON.stringify(edgeId)}`,
+    `Failed to update edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   updateNonexistentEdgeSource: (
     edgeId: Identifier,
     portId: Identifier,
   ): string =>
-    `failed to update edge with ID of ${JSON.stringify(edgeId)} with nonexistent source port with ID of ${JSON.stringify(portId)}`,
+    `Failed to update source of edge with ID ${JSON.stringify(edgeId)} because source port with ID ${JSON.stringify(portId)} does not exist`,
   updateNonexistentEdgeTarget: (
     edgeId: Identifier,
     portId: Identifier,
   ): string =>
-    `failed to update edge with ID of ${JSON.stringify(edgeId)} with nonexistent target port with ID of ${JSON.stringify(portId)}`,
+    `Failed to update target of edge with ID ${JSON.stringify(edgeId)} because target port with ID ${JSON.stringify(portId)} does not exist`,
   removeNonexistentEdge: (edgeId: Identifier): string =>
-    `failed to remove nonexistent edge with ID of ${JSON.stringify(edgeId)}`,
+    `Failed to remove edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   accessEdgesForNonexistentPort: (portId: Identifier): string =>
-    `failed to access edges for nonexistent port with ID of ${JSON.stringify(portId)}`,
+    `Failed to access edges for port with ID ${JSON.stringify(portId)} because the port does not exist`,
 };

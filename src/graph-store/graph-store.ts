@@ -220,7 +220,7 @@ export class GraphStore {
 
     if (!this.hasNode(request.nodeId)) {
       throw new CanvasError(
-        canvasErrorText.addPortToNonexistentNode(request.nodeId),
+        canvasErrorText.addPortToNonexistentNode(request.id, request.nodeId),
       );
     }
 
@@ -542,16 +542,14 @@ export class GraphStore {
   }
 
   private removeEdgeInternal(edgeId: Identifier): void {
-    const edge = this.getEdge(edgeId);
-    const portFromId = edge.from;
-    const portToId = edge.to;
+    const { from, to } = this.getEdge(edgeId);
 
-    this.portCycleEdges.get(portFromId)!.delete(edgeId);
-    this.portCycleEdges.get(portToId)!.delete(edgeId);
-    this.portIncomingEdges.get(portFromId)!.delete(edgeId);
-    this.portIncomingEdges.get(portToId)!.delete(edgeId);
-    this.portOutgoingEdges.get(portFromId)!.delete(edgeId);
-    this.portOutgoingEdges.get(portToId)!.delete(edgeId);
+    this.portCycleEdges.get(from)!.delete(edgeId);
+    this.portCycleEdges.get(to)!.delete(edgeId);
+    this.portIncomingEdges.get(from)!.delete(edgeId);
+    this.portIncomingEdges.get(to)!.delete(edgeId);
+    this.portOutgoingEdges.get(from)!.delete(edgeId);
+    this.portOutgoingEdges.get(to)!.delete(edgeId);
 
     this.edges.delete(edgeId);
   }
