@@ -308,13 +308,13 @@ export class GraphStore {
 
     if (!this.hasPort(request.from)) {
       throw new CanvasError(
-        canvasErrorText.addEdgeFromNonexistentPort(request.from),
+        canvasErrorText.addEdgeFromNonexistentPort(request.id, request.from),
       );
     }
 
     if (!this.hasPort(request.to)) {
       throw new CanvasError(
-        canvasErrorText.addEdgeToNonexistentPort(request.to),
+        canvasErrorText.addEdgeToNonexistentPort(request.id, request.to),
       );
     }
 

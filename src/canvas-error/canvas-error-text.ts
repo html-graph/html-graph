@@ -1,6 +1,6 @@
 import { Identifier } from "@/identifier";
 
-export const canvasErrorText = {
+export const canvasErrorText = Object.freeze({
   accessNonexistingNode: (nodeId: Identifier): string =>
     `Failed to access node with ID ${JSON.stringify(nodeId)} because it does not exist`,
   addNodeWithExistingId: (nodeId: Identifier): string =>
@@ -30,10 +30,13 @@ export const canvasErrorText = {
     `Failed to access edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   addEdgeWithExistingId: (edgeId: Identifier): string =>
     `Failed to add edge with ID ${JSON.stringify(edgeId)} because an edge with this ID already exists`,
-  addEdgeFromNonexistentPort: (portId: Identifier): string =>
-    `Failed to add edge from port with ID ${JSON.stringify(portId)} because the port does not exist`,
-  addEdgeToNonexistentPort: (portId: Identifier): string =>
-    `Failed to add edge to port with ID ${JSON.stringify(portId)} because the port does not exist`,
+  addEdgeFromNonexistentPort: (
+    edgeId: Identifier,
+    portId: Identifier,
+  ): string =>
+    `Failed to add edge with ID ${JSON.stringify(edgeId)} from port with ID ${JSON.stringify(portId)} because the port does not exist`,
+  addEdgeToNonexistentPort: (edgeId: Identifier, portId: Identifier): string =>
+    `Failed to add edge with ID ${JSON.stringify(edgeId)} to port with ID ${JSON.stringify(portId)} because the port does not exist`,
   updateNonexistentEdge: (edgeId: Identifier): string =>
     `Failed to update edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   updateNonexistentEdgeSource: (
@@ -50,4 +53,4 @@ export const canvasErrorText = {
     `Failed to remove edge with ID ${JSON.stringify(edgeId)} because it does not exist`,
   accessEdgesForNonexistentPort: (portId: Identifier): string =>
     `Failed to access edges for port with ID ${JSON.stringify(portId)} because the port does not exist`,
-};
+});
