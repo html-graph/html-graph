@@ -10,7 +10,7 @@ import { UpdateEdgeRequest } from "./update-edge-request";
 import { UpdatePortRequest } from "./update-port-request";
 import { OneToManyCollection } from "./one-to-many-collection";
 import { Identifier } from "@/identifier";
-import { CanvasError } from "@/canvas-error";
+import { CanvasError, canvasErrorText } from "@/canvas-error";
 import { NodeElement, PortElement } from "@/element";
 
 export class GraphStore {
@@ -123,7 +123,7 @@ export class GraphStore {
     const node = this.nodes.get(nodeId);
 
     if (node === undefined) {
-      throw new CanvasError("failed to access nonexistent node");
+      throw new CanvasError(canvasErrorText.accessNonexistingNode(nodeId));
     }
 
     return node;
@@ -131,12 +131,14 @@ export class GraphStore {
 
   public addNode(request: AddNodeRequest): void {
     if (this.hasNode(request.id)) {
-      throw new CanvasError("failed to add node with existing id");
+      throw new CanvasError(canvasErrorText.addNodeWithExistingId(request.id));
     }
 
-    if (this.findNodeIdByElement(request.element) !== undefined) {
+    const elementNodeId = this.findNodeIdByElement(request.element);
+
+    if (elementNodeId !== undefined) {
       throw new CanvasError(
-        "failed to add node with html element already in use by another node",
+        canvasErrorText.addNodeWithElementInUse(elementNodeId),
       );
     }
 
@@ -169,7 +171,7 @@ export class GraphStore {
 
   public updateNode(nodeId: Identifier, request: UpdateNodeRequest): void {
     if (!this.hasNode(nodeId)) {
-      throw new CanvasError("failed to update nonexistent node");
+      throw new CanvasError(canvasErrorText.updateNonexistentNode(nodeId));
     }
 
     const { payload } = this.nodes.get(nodeId)!;
@@ -188,11 +190,11 @@ export class GraphStore {
 
   public removeNode(nodeId: Identifier): void {
     if (!this.hasNode(nodeId)) {
-      throw new CanvasError("failed to remove nonexistent node");
+      throw new CanvasError(canvasErrorText.removeNonexistentNode(nodeId));
     }
 
     this.beforeNodeRemovedEmitter.emit(nodeId);
-    const node = this.nodes.get(nodeId)!;
+    const node = this.getNode(nodeId);
     this.nodesElementsMap.delete(node.element);
     this.nodes.delete(nodeId);
   }
@@ -205,7 +207,7 @@ export class GraphStore {
     const port = this.ports.get(portId);
 
     if (port === undefined) {
-      throw new CanvasError("failed to access nonexistent port");
+      throw new CanvasError(canvasErrorText.accessNonexistentPort(portId));
     }
 
     return port;
@@ -213,11 +215,13 @@ export class GraphStore {
 
   public addPort(request: AddPortRequest): void {
     if (this.hasPort(request.id)) {
-      throw new CanvasError("failed to add port with existing id");
+      throw new CanvasError(canvasErrorText.addPortWithExistingId(request.id));
     }
 
     if (!this.hasNode(request.nodeId)) {
-      throw new CanvasError("failed to add port to nonexistent node");
+      throw new CanvasError(
+        canvasErrorText.addPortToNonexistentNode(request.nodeId),
+      );
     }
 
     this.ports.set(request.id, {
@@ -234,16 +238,16 @@ export class GraphStore {
     this.portIncomingEdges.set(request.id, new Set());
     this.portOutgoingEdges.set(request.id, new Set());
 
-    this.nodes.get(request.nodeId)!.ports!.set(request.id, request.element);
+    this.getNode(request.nodeId).ports.set(request.id, request.element);
     this.afterPortAddedEmitter.emit(request.id);
   }
 
   public updatePort(portId: Identifier, request: UpdatePortRequest): void {
     if (!this.hasPort(portId)) {
-      throw new CanvasError("failed to update nonexistent port");
+      throw new CanvasError(canvasErrorText.updateNonexistentPort(portId));
     }
 
-    const payload = this.ports.get(portId)!.payload;
+    const payload = this.getPort(portId).payload;
 
     payload.direction = request.direction ?? payload.direction;
 
@@ -262,7 +266,9 @@ export class GraphStore {
     const node = this.nodes.get(nodeId);
 
     if (node === undefined) {
-      throw new CanvasError("failed to access port ids of nonexistent node");
+      throw new CanvasError(
+        canvasErrorText.accessPortsOfNonexistentNode(nodeId),
+      );
     }
 
     return Array.from(node.ports.keys());
@@ -270,13 +276,13 @@ export class GraphStore {
 
   public removePort(portId: Identifier): void {
     if (!this.hasPort(portId)) {
-      throw new CanvasError("failed to remove nonexistent port");
+      throw new CanvasError(canvasErrorText.removeNonexistentPort(portId));
     }
 
-    const nodeId = this.ports.get(portId)!.nodeId;
+    const nodeId = this.getPort(portId).nodeId;
 
     this.beforePortRemovedEmitter.emit(portId);
-    this.nodes.get(nodeId)!.ports.delete(portId);
+    this.getNode(nodeId).ports.delete(portId);
     this.ports.delete(portId);
     this.elementPorts.removeByMulti(portId);
   }
@@ -289,7 +295,7 @@ export class GraphStore {
     const edge = this.edges.get(edgeId);
 
     if (edge === undefined) {
-      throw new CanvasError("failed to access nonexistent edge");
+      throw new CanvasError(canvasErrorText.accessNonexistentEdge(edgeId));
     }
 
     return edge;
@@ -297,15 +303,19 @@ export class GraphStore {
 
   public addEdge(request: AddEdgeRequest): void {
     if (this.hasEdge(request.id)) {
-      throw new CanvasError("failed to add edge with existing id");
+      throw new CanvasError(canvasErrorText.addEdgeWithExistingId(request.id));
     }
 
     if (!this.hasPort(request.from)) {
-      throw new CanvasError("failed to add edge from nonexistent port");
+      throw new CanvasError(
+        canvasErrorText.addEdgeFromNonexistentPort(request.from),
+      );
     }
 
     if (!this.hasPort(request.to)) {
-      throw new CanvasError("failed to add edge to nonexistent port");
+      throw new CanvasError(
+        canvasErrorText.addEdgeToNonexistentPort(request.to),
+      );
     }
 
     this.addEdgeInternal(request);
@@ -314,11 +324,12 @@ export class GraphStore {
 
   public updateEdge(edgeId: Identifier, request: UpdateEdgeRequest): void {
     if (!this.hasEdge(edgeId)) {
-      throw new CanvasError("failed to update nonexistent edge");
+      throw new CanvasError(canvasErrorText.updateNonexistentEdge(edgeId));
     }
 
+    // check from and to validity
     if (request.from !== undefined || request.to !== undefined) {
-      const edge = this.edges.get(edgeId)!;
+      const edge = this.getEdge(edgeId);
       const payload = edge.payload;
 
       this.removeEdgeInternal(edgeId);
@@ -352,7 +363,7 @@ export class GraphStore {
 
   public removeEdge(edgeId: Identifier): void {
     if (!this.hasEdge(edgeId)) {
-      throw new CanvasError("failed to remove nonexistent edge");
+      throw new CanvasError(canvasErrorText.removeNonexistentEdge(edgeId));
     }
 
     this.beforeEdgeRemovedEmitter.emit(edgeId);
@@ -376,7 +387,9 @@ export class GraphStore {
     const edgeIds = this.portIncomingEdges.get(portId);
 
     if (edgeIds === undefined) {
-      throw new CanvasError("failed to access edges for nonexistent port");
+      throw new CanvasError(
+        canvasErrorText.accessEdgesForNonexistentPort(portId),
+      );
     }
 
     return Array.from(edgeIds);
@@ -386,7 +399,9 @@ export class GraphStore {
     const edgeIds = this.portOutgoingEdges.get(portId);
 
     if (edgeIds === undefined) {
-      throw new CanvasError("failed to access edges for nonexistent port");
+      throw new CanvasError(
+        canvasErrorText.accessEdgesForNonexistentPort(portId),
+      );
     }
 
     return Array.from(edgeIds);
@@ -396,7 +411,9 @@ export class GraphStore {
     const edgeIds = this.portCycleEdges.get(portId);
 
     if (edgeIds === undefined) {
-      throw new CanvasError("failed to access edges for nonexistent port");
+      throw new CanvasError(
+        canvasErrorText.accessEdgesForNonexistentPort(portId),
+      );
     }
 
     return Array.from(edgeIds);
@@ -514,7 +531,7 @@ export class GraphStore {
   }
 
   private removeEdgeInternal(edgeId: Identifier): void {
-    const edge = this.edges.get(edgeId)!;
+    const edge = this.getEdge(edgeId);
     const portFromId = edge.from;
     const portToId = edge.to;
 
