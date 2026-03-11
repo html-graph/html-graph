@@ -138,7 +138,7 @@ export class GraphStore {
 
     if (elementNodeId !== undefined) {
       throw new CanvasError(
-        canvasErrorText.addNodeWithElementInUse(elementNodeId),
+        canvasErrorText.addNodeWithElementInUse(request.id, elementNodeId),
       );
     }
 
@@ -327,8 +327,19 @@ export class GraphStore {
       throw new CanvasError(canvasErrorText.updateNonexistentEdge(edgeId));
     }
 
-    // check from and to validity
     if (request.from !== undefined || request.to !== undefined) {
+      if (request.from !== undefined && !this.hasPort(request.from)) {
+        throw new CanvasError(
+          canvasErrorText.updateNonexistentEdgeSource(edgeId, request.from),
+        );
+      }
+
+      if (request.to !== undefined && !this.hasPort(request.to)) {
+        throw new CanvasError(
+          canvasErrorText.updateNonexistentEdgeTarget(edgeId, request.to),
+        );
+      }
+
       const edge = this.getEdge(edgeId);
       const payload = edge.payload;
 

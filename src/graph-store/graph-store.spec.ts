@@ -817,6 +817,46 @@ describe("GraphStore", () => {
     }).toThrow(CanvasError);
   });
 
+  it("should throw error when trying to update existing edge with nonexistent source", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out2In);
+
+    expect(() => {
+      store.updateEdge(addEdgeRequest1Out2In.id, { from: "port-3-out" });
+    }).toThrow(CanvasError);
+  });
+
+  it("should throw error when trying to update existing edge with nonexistent target", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out2In);
+
+    expect(() => {
+      store.updateEdge(addEdgeRequest1Out2In.id, { to: "port-4-in" });
+    }).toThrow(CanvasError);
+  });
+
   it("should return all edge ids", () => {
     const store = new GraphStore();
 
