@@ -191,7 +191,9 @@ export class CanvasBuilder {
 
   public build(): Canvas {
     if (this.used) {
-      throw new CanvasBuilderError("CanvasBuilder is a single use object");
+      throw new CanvasBuilderError(
+        "Failed to build Canvas because CanvasBuilder is a single-use object",
+      );
     }
 
     this.used = true;
