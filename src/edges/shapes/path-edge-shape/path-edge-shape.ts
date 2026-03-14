@@ -1,5 +1,5 @@
 import { EdgeRenderParams } from "../../edge-render-params";
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { PathEdgeParams } from "./path-edge-params";
 import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
@@ -16,6 +16,7 @@ import {
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
+import { zeroPoint } from "../../zero-point";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -109,7 +110,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     if (this.sourceArrow) {
       sourceArrowPath = this.arrowRenderer({
         direction: sourceDirection,
-        shift: zero,
+        shift: zeroPoint,
         arrowLength: this.params.arrowLength,
       });
 

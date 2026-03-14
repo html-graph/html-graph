@@ -1,6 +1,7 @@
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { createRotatedPoint, flipPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { zeroPoint } from "../../zero-point";
 
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
@@ -24,11 +25,11 @@ export class DetourBezierEdgePath implements EdgePath {
   ) {
     const beginArrow: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zero.y },
+          { x: this.params.arrowLength, y: zeroPoint.y },
           this.params.sourceDirection,
-          zero,
+          zeroPoint,
         )
-      : zero;
+      : zeroPoint;
 
     const endArrow: Point = this.params.hasTargetArrow
       ? createRotatedPoint(
@@ -52,9 +53,9 @@ export class DetourBezierEdgePath implements EdgePath {
     const flipDetourY = detourY * this.params.flipY;
 
     const beginLine1: Point = createRotatedPoint(
-      { x: gap, y: zero.y },
+      { x: gap, y: zeroPoint.y },
       this.params.sourceDirection,
-      zero,
+      zeroPoint,
     );
     const beginLine2: Point = {
       x: beginLine1.x + flipDetourX,

@@ -1,7 +1,8 @@
 import { createRotatedPoint } from "../../geometry";
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { ArrowRenderer } from "../arrow-renderer";
 import { ArrowRenderingParams } from "../arrow-rendering-params";
+import { zeroPoint } from "../../zero-point";
 
 export const createWedgeArrowRenderer = (params: {
   readonly smallRadius: number;
@@ -26,11 +27,11 @@ export const createWedgeArrowRenderer = (params: {
       },
     );
 
-    const arrowPoints: Point[] = [zero, { x: p.x, y: -p.y }, p];
+    const arrowPoints: Point[] = [zeroPoint, { x: p.x, y: -p.y }, p];
 
     const points: readonly Point[] = arrowPoints
       .map((point) =>
-        createRotatedPoint(point, renderingParams.direction, zero),
+        createRotatedPoint(point, renderingParams.direction, zeroPoint),
       )
       .map((point) => ({
         x: point.x + renderingParams.shift.x,

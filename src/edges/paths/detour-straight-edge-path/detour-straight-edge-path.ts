@@ -1,7 +1,8 @@
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { createRotatedPoint, flipPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { zeroPoint } from "../../zero-point";
 
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;
@@ -26,11 +27,11 @@ export class DetourStraightEdgePath implements EdgePath {
   ) {
     const pba: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zero.y },
+          { x: this.params.arrowLength, y: zeroPoint.y },
           this.params.sourceDirection,
-          zero,
+          zeroPoint,
         )
-      : zero;
+      : zeroPoint;
     const pea: Point = this.params.hasTargetArrow
       ? createRotatedPoint(
           {
@@ -45,9 +46,9 @@ export class DetourStraightEdgePath implements EdgePath {
     const gap1 = this.params.arrowLength + this.params.arrowOffset;
 
     const pbl1: Point = createRotatedPoint(
-      { x: gap1, y: zero.y },
+      { x: gap1, y: zeroPoint.y },
       this.params.sourceDirection,
-      zero,
+      zeroPoint,
     );
 
     const detourX =

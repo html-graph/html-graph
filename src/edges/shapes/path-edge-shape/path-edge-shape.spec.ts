@@ -20,9 +20,10 @@ const createBezierEdge = (
     hasTargetArrow,
     createLinePath: () =>
       new BezierEdgePath({
+        from: { x: 0, y: 0 },
         to: { x: 0, y: 0 },
-        sourceDirection: { x: 1, y: 0 },
-        targetDirection: { x: 1, y: 0 },
+        fromDir: { x: 1, y: 0 },
+        toDir: { x: 1, y: 0 },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
@@ -44,7 +45,7 @@ const createBezierEdge = (
       }),
     createCyclePath: () =>
       new CycleCircleEdgePath({
-        sourceDirection: { x: 1, y: 0 },
+        sourceDir: { x: 1, y: 0 },
         radius: 10,
         smallRadius: 2,
         hasTargetArrow: false,

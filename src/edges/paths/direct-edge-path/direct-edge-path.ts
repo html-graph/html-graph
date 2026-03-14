@@ -1,5 +1,6 @@
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { EdgePath } from "../edge-path";
+import { zeroPoint } from "../../zero-point";
 
 export class DirectEdgePath implements EdgePath {
   public readonly path: string;
@@ -39,7 +40,7 @@ export class DirectEdgePath implements EdgePath {
       offset: this.params.sourceOffset,
       hasArrow: this.params.hasSourceArrow,
       flip: 1,
-      shift: zero,
+      shift: zeroPoint,
     });
 
     const target = this.createDirectLinePoint({

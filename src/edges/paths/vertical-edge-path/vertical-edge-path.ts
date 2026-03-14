@@ -1,7 +1,8 @@
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { zeroPoint } from "../../zero-point";
 
 export class VerticalEdgePath implements EdgePath {
   public readonly path: string;
@@ -27,11 +28,11 @@ export class VerticalEdgePath implements EdgePath {
 
     const beginArrow: Point = this.params.hasSourceArrow
       ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zero.y },
+          { x: this.params.arrowLength, y: zeroPoint.y },
           this.params.sourceDirection,
-          zero,
+          zeroPoint,
         )
-      : zero;
+      : zeroPoint;
     const endArrow: Point = this.params.hasTargetArrow
       ? createRotatedPoint(
           {
@@ -47,9 +48,9 @@ export class VerticalEdgePath implements EdgePath {
     const gapRoundness = gap - this.params.roundness;
 
     const beginLine = createRotatedPoint(
-      { x: gapRoundness, y: zero.y },
+      { x: gapRoundness, y: zeroPoint.y },
       this.params.sourceDirection,
-      zero,
+      zeroPoint,
     );
     const endLine = createRotatedPoint(
       { x: this.params.to.x - gapRoundness, y: this.params.to.y },

@@ -1,6 +1,7 @@
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { zeroPoint } from "../../zero-point";
 
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,7 +10,7 @@ export class CycleCircleEdgePath implements EdgePath {
 
   public constructor(
     private readonly params: {
-      readonly sourceDirection: Point;
+      readonly sourceDir: Point;
       readonly radius: number;
       readonly smallRadius: number;
       readonly arrowLength: number;
@@ -17,24 +18,24 @@ export class CycleCircleEdgePath implements EdgePath {
       readonly hasTargetArrow: boolean;
     },
   ) {
-    const smallRadius = this.params.smallRadius;
-    const radius = this.params.radius;
+    const { arrowLength, radius, smallRadius } = this.params;
+
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
     const distance = Math.sqrt(diagonal * diagonal - smallRadius * smallRadius);
     const jointX = (distance * smallRadius) / diagonal;
-    const farPoint = distance + radius + this.params.arrowLength;
-    const totalX = this.params.arrowLength + jointX;
+    const farPoint = distance + radius + arrowLength;
+    const totalX = arrowLength + jointX;
 
     const points: Point[] = [
-      { x: this.params.arrowLength, y: zero.y },
+      { x: arrowLength, y: 0 },
       { x: totalX, y: jointY },
       { x: totalX, y: -jointY },
       { x: farPoint, y: 0 },
     ];
 
     const rotatedPoints = points.map((p) =>
-      createRotatedPoint(p, this.params.sourceDirection, zero),
+      createRotatedPoint(p, this.params.sourceDir, zeroPoint),
     );
 
     const c = [
