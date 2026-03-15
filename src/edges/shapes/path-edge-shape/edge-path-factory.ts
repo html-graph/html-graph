@@ -2,9 +2,8 @@ import { Point } from "@/point";
 import { EdgePath } from "../../paths";
 
 export type EdgePathFactory = (
-  sourceDirection: Point,
-  targetDirection: Point,
+  from: Point,
   to: Point,
-  flipX: number,
-  flipY: number,
+  fromDir: Point,
+  toDir: Point,
 ) => EdgePath;

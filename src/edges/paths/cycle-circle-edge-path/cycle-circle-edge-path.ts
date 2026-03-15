@@ -9,14 +9,14 @@ export class CycleCircleEdgePath implements EdgePath {
 
   public constructor(params: {
     readonly origin: Point;
-    readonly sourceDir: Point;
+    readonly dir: Point;
     readonly radius: number;
     readonly smallRadius: number;
     readonly arrowLength: number;
     readonly hasSourceArrow: boolean;
     readonly hasTargetArrow: boolean;
   }) {
-    const { arrowLength, radius, smallRadius, sourceDir, origin } = params;
+    const { arrowLength, radius, smallRadius, dir, origin } = params;
 
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
@@ -33,7 +33,7 @@ export class CycleCircleEdgePath implements EdgePath {
     ];
 
     const absPoints = points
-      .map((p) => createRotatedPoint(p, sourceDir, { x: 0, y: 0 }))
+      .map((p) => createRotatedPoint(p, dir, { x: 0, y: 0 }))
       .map((p) => ({ x: p.x + origin.x, y: p.y + origin.y }));
 
     const c = [

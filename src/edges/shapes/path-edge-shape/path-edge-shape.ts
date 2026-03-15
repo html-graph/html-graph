@@ -16,7 +16,6 @@ import {
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
-import { zeroPoint } from "../../zero-point";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -58,30 +57,24 @@ export class PathEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+    const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const sourceDirection = createFlipDirectionVector(
       params.from.direction,
-      flipX,
-      flipY,
+      1,
+      1,
     );
 
     const targetDirection = createFlipDirectionVector(
       params.to.direction,
-      flipX,
-      flipY,
+      1,
+      1,
     );
-
-    const to: Point = {
-      x: width,
-      y: height,
-    };
 
     let targetVect: Point = { x: -targetDirection.x, y: -targetDirection.y };
     let createPathFn: EdgePathFactory;
@@ -95,13 +88,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
       createPathFn = this.params.createLinePath;
     }
 
-    const edgePath = createPathFn(
-      sourceDirection,
-      targetDirection,
-      to,
-      flipX,
-      flipY,
-    );
+    const edgePath = createPathFn(from, to, sourceDirection, targetDirection);
 
     this.line.setAttribute("d", edgePath.path);
 
@@ -110,7 +97,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     if (this.sourceArrow) {
       sourceArrowPath = this.arrowRenderer({
         direction: sourceDirection,
-        shift: zeroPoint,
+        shift: from,
         arrowLength: this.params.arrowLength,
       });
 

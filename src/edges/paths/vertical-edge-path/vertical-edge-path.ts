@@ -13,7 +13,6 @@ export class VerticalEdgePath implements EdgePath {
     readonly to: Point;
     readonly fromDir: Point;
     readonly toDir: Point;
-    readonly flipY: number;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -30,7 +29,6 @@ export class VerticalEdgePath implements EdgePath {
       fromDir,
       toDir,
       roundness,
-      flipY,
     } = params;
 
     this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
@@ -73,14 +71,14 @@ export class VerticalEdgePath implements EdgePath {
 
     const begin1: Point = {
       x: beginLine.x,
-      y: flipY > 0 ? halfHeight : -gap,
+      y: halfHeight,
     };
 
     const begin2: Point = { x: halfWidth, y: begin1.y };
 
     const end1: Point = {
       x: endLine.x,
-      y: flipY > 0 ? to.y - halfHeight : to.y + gap,
+      y: to.y - halfHeight,
     };
 
     const end2: Point = { x: halfWidth, y: end1.y };

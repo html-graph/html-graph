@@ -45,11 +45,13 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
-    sourceDirection: Point,
+    from: Point,
+    _to: Point,
+    fromDir: Point,
   ) =>
     new CycleCircleEdgePath({
-      origin: { x: 0, y: 0 },
-      sourceDir: sourceDirection,
+      origin: from,
+      dir: fromDir,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
@@ -58,19 +60,16 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
-    flipX: number,
-    flipY: number,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new DetourBezierEdgePath({
-      from: { x: 0, y: 0 },
+      from,
       to,
-      fromDir: sourceDirection,
-      toDir: targetDirection,
-      flipX,
-      flipY,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
@@ -80,15 +79,16 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new BezierEdgePath({
-      from: { x: 0, y: 0 },
+      from,
       to,
-      fromDir: sourceDirection,
-      toDir: targetDirection,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,

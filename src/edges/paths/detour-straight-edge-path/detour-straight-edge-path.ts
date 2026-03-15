@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { createRotatedPoint, flipPoint } from "../../geometry";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 
@@ -13,10 +13,8 @@ export class DetourStraightEdgePath implements EdgePath {
     readonly to: Point;
     readonly fromDir: Point;
     readonly toDir: Point;
-    readonly flipX: number;
-    readonly flipY: number;
-    readonly arrowLength: number;
     readonly arrowOffset: number;
+    readonly arrowLength: number;
     readonly roundness: number;
     readonly detourDir: number;
     readonly detourDistance: number;
@@ -34,8 +32,6 @@ export class DetourStraightEdgePath implements EdgePath {
       arrowOffset,
       detourDir,
       detourDistance,
-      flipX,
-      flipY,
       roundness,
     } = params;
 
@@ -69,23 +65,17 @@ export class DetourStraightEdgePath implements EdgePath {
     const detourX = Math.cos(detourDir) * detourDistance;
     const detourY = Math.sin(detourDir) * detourDistance;
 
-    const flipDetourX = detourX * flipX;
-    const flipDetourY = detourY * flipY;
-
-    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
+    const pbl2: Point = { x: pbl1.x + detourX, y: pbl1.y + detourY };
     const pel1: Point = createRotatedPoint(
       { x: to.x - gap, y: to.y },
       toDir,
       to,
     );
-    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
+    const pel2: Point = { x: pel1.x + detourX, y: pel1.y + detourY };
 
     const center = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
 
-    this.midpoint = flipPoint(center, flipX, flipY, {
-      x: from.x + to.x,
-      y: from.y + to.y,
-    });
+    this.midpoint = center;
 
     this.path = createRoundedPath(
       [pba, pbl1, pbl2, pel2, pel1, pea],

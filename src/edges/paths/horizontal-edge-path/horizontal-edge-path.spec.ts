@@ -10,7 +10,6 @@ describe("HorizontalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      flipX: 1,
       hasSourceArrow: false,
       hasTargetArrow: false,
     });
@@ -29,7 +28,6 @@ describe("HorizontalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      flipX: -1,
       hasSourceArrow: false,
       hasTargetArrow: false,
     });
@@ -48,7 +46,6 @@ describe("HorizontalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      flipX: 1,
       hasSourceArrow: true,
       hasTargetArrow: false,
     });
@@ -67,7 +64,6 @@ describe("HorizontalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      flipX: 1,
       hasSourceArrow: false,
       hasTargetArrow: true,
     });
@@ -86,7 +82,6 @@ describe("HorizontalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      flipX: 1,
       hasSourceArrow: false,
       hasTargetArrow: false,
     });

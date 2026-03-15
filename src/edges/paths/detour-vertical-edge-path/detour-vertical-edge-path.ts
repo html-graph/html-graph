@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { createRotatedPoint, flipPoint } from "../../geometry";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 
@@ -11,10 +11,8 @@ export class DetourVerticalEdgePath implements EdgePath {
   public constructor(params: {
     readonly from: Point;
     readonly to: Point;
-    readonly sourceDirection: Point;
-    readonly targetDirection: Point;
-    readonly flipX: number;
-    readonly flipY: number;
+    readonly fromDir: Point;
+    readonly toDir: Point;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -26,21 +24,19 @@ export class DetourVerticalEdgePath implements EdgePath {
       hasSourceArrow,
       hasTargetArrow,
       arrowLength,
-      sourceDirection,
-      targetDirection,
+      fromDir,
+      toDir,
       from,
       to,
       arrowOffset,
       detourDistance,
-      flipX,
-      flipY,
       roundness,
     } = params;
 
     const beginArrow: Point = hasSourceArrow
       ? createRotatedPoint(
           { x: from.x + arrowLength, y: from.y },
-          sourceDirection,
+          fromDir,
           from,
         )
       : from;
@@ -51,7 +47,7 @@ export class DetourVerticalEdgePath implements EdgePath {
             x: to.x - arrowLength,
             y: to.y,
           },
-          targetDirection,
+          toDir,
           to,
         )
       : to;
@@ -60,30 +56,27 @@ export class DetourVerticalEdgePath implements EdgePath {
 
     const beginLine1: Point = createRotatedPoint(
       { x: from.x + gap, y: from.y },
-      sourceDirection,
+      fromDir,
       from,
     );
 
     const endLine1: Point = createRotatedPoint(
       { x: to.x - gap, y: to.y },
-      targetDirection,
+      toDir,
       to,
     );
 
     const flipDetour = detourDistance > 0 ? 1 : -1;
     const halfWidth = (from.x + to.x) / 2;
     const centerDetour = halfWidth + Math.abs(detourDistance);
-    const sideX = halfWidth + centerDetour * flipX * flipDetour;
+    const sideX = halfWidth + centerDetour * flipDetour;
 
     const center = {
       x: sideX,
       y: (beginLine1.y + endLine1.y) / 2,
     };
 
-    this.midpoint = flipPoint(center, flipX, flipY, {
-      x: from.x + to.x,
-      y: from.y + to.y,
-    });
+    this.midpoint = center;
 
     this.path = createRoundedPath(
       [

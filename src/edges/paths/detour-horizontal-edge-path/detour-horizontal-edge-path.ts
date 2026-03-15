@@ -1,5 +1,5 @@
 import { Point } from "@/point";
-import { createRotatedPoint, flipPoint } from "../../geometry";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 
@@ -13,8 +13,6 @@ export class DetourHorizontalEdgePath implements EdgePath {
     readonly to: Point;
     readonly fromDir: Point;
     readonly toDir: Point;
-    readonly flipX: number;
-    readonly flipY: number;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -31,8 +29,6 @@ export class DetourHorizontalEdgePath implements EdgePath {
       fromDir,
       toDir,
       arrowOffset,
-      flipX,
-      flipY,
       roundness,
       detourDistance,
     } = params;
@@ -73,17 +69,14 @@ export class DetourHorizontalEdgePath implements EdgePath {
     const flipDetour = detourDistance > 0 ? 1 : -1;
     const halfHeight = (from.y + to.y) / 2;
     const centerDetour = halfHeight + Math.abs(detourDistance);
-    const sideY = halfHeight + centerDetour * flipY * flipDetour;
+    const sideY = halfHeight + centerDetour * flipDetour;
 
     const center = {
       x: (beginLine1.x + endLine1.x) / 2,
       y: sideY,
     };
 
-    this.midpoint = flipPoint(center, flipX, flipY, {
-      x: from.x + to.x,
-      y: from.y + to.y,
-    });
+    this.midpoint = center;
 
     this.path = createRoundedPath(
       [

@@ -10,7 +10,7 @@ export class CycleSquareEdgePath implements EdgePath {
 
   public constructor(params: {
     readonly origin: Point;
-    readonly fromDir: Point;
+    readonly dir: Point;
     readonly arrowLength: number;
     readonly side: number;
     readonly arrowOffset: number;
@@ -18,7 +18,7 @@ export class CycleSquareEdgePath implements EdgePath {
     readonly hasSourceArrow: boolean;
     readonly hasTargetArrow: boolean;
   }) {
-    const { side, arrowLength, arrowOffset, fromDir, origin } = params;
+    const { side, arrowLength, arrowOffset, dir, origin } = params;
     const x1 = arrowLength + arrowOffset;
     const x2 = x1 + 2 * side;
 
@@ -34,7 +34,7 @@ export class CycleSquareEdgePath implements EdgePath {
     ];
 
     const rp = linePoints
-      .map((p) => createRotatedPoint(p, fromDir, { x: 0, y: 0 }))
+      .map((p) => createRotatedPoint(p, dir, { x: 0, y: 0 }))
       .map((p) => ({ x: p.x + origin.x, y: p.y + origin.y }));
 
     const preLine = `M ${origin.x} ${origin.y} L ${rp[0].x} ${rp[0].y} `;

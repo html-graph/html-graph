@@ -13,7 +13,6 @@ export class HorizontalEdgePath implements EdgePath {
     readonly to: Point;
     readonly fromDir: Point;
     readonly toDir: Point;
-    readonly flipX: number;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -30,7 +29,6 @@ export class HorizontalEdgePath implements EdgePath {
       fromDir,
       toDir,
       roundness,
-      flipX,
     } = params;
 
     this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
@@ -73,14 +71,14 @@ export class HorizontalEdgePath implements EdgePath {
     const halfHeight = (from.y + to.y) / 2;
 
     const begin1: Point = {
-      x: flipX > 0 ? halfWidth : -gap,
+      x: halfWidth,
       y: beginLine.y,
     };
 
     const begin2: Point = { x: begin1.x, y: halfHeight };
 
     const end1: Point = {
-      x: flipX > 0 ? to.x - halfWidth : to.x + gap,
+      x: to.x - halfWidth,
       y: endLine.y,
     };
     const end2: Point = { x: end1.x, y: halfHeight };

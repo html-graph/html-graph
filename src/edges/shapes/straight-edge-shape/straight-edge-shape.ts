@@ -45,11 +45,13 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
-    sourceDirection: Point,
+    from: Point,
+    _to: Point,
+    fromDir: Point,
   ) =>
     new CycleSquareEdgePath({
-      origin: { x: 0, y: 0 },
-      fromDir: sourceDirection,
+      origin: from,
+      dir: fromDir,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
@@ -59,19 +61,16 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
-    flipX: number,
-    flipY: number,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new DetourStraightEdgePath({
-      from: { x: 0, y: 0 },
+      from,
       to,
-      fromDir: sourceDirection,
-      toDir: targetDirection,
-      flipX,
-      flipY,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -82,15 +81,16 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new StraightEdgePath({
-      from: { x: 0, y: 0 },
+      from,
       to,
-      fromDir: sourceDirection,
-      toDir: targetDirection,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
