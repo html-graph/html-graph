@@ -1,71 +1,83 @@
 import { Point } from "@/point";
 import { createRotatedPoint, flipPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { zeroPoint } from "../../zero-point";
 
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
 
   public readonly midpoint: Point;
 
-  public constructor(
-    private readonly params: {
-      readonly to: Point;
-      readonly sourceDirection: Point;
-      readonly targetDirection: Point;
-      readonly flipX: number;
-      readonly arrowLength: number;
-      readonly detourDirection: number;
-      readonly flipY: number;
-      readonly detourDistance: number;
-      readonly curvature: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-    },
-  ) {
-    const beginArrow: Point = this.params.hasSourceArrow
-      ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zeroPoint.y },
-          this.params.sourceDirection,
-          zeroPoint,
-        )
-      : zeroPoint;
+  public constructor(params: {
+    readonly from: Point;
+    readonly to: Point;
+    readonly fromDir: Point;
+    readonly toDir: Point;
+    readonly flipX: number;
+    readonly arrowLength: number;
+    readonly detourDir: number;
+    readonly flipY: number;
+    readonly detourDistance: number;
+    readonly curvature: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+  }) {
+    const {
+      hasSourceArrow,
+      hasTargetArrow,
+      curvature,
+      fromDir,
+      toDir,
+      detourDir,
+      from,
+      to,
+      arrowLength,
+      detourDistance,
+      flipX,
+      flipY,
+    } = params;
 
-    const endArrow: Point = this.params.hasTargetArrow
+    const beginArrow: Point = hasSourceArrow
+      ? createRotatedPoint(
+          { x: from.x + arrowLength, y: from.y },
+          fromDir,
+          from,
+        )
+      : from;
+
+    const endArrow: Point = hasTargetArrow
       ? createRotatedPoint(
           {
-            x: this.params.to.x - this.params.arrowLength,
-            y: this.params.to.y,
+            x: to.x - arrowLength,
+            y: to.y,
           },
-          this.params.targetDirection,
-          this.params.to,
+          toDir,
+          to,
         )
-      : this.params.to;
+      : to;
 
-    const gap = this.params.arrowLength;
+    const detourX = Math.cos(detourDir) * detourDistance;
+    const detourY = Math.sin(detourDir) * detourDistance;
 
-    const detourX =
-      Math.cos(this.params.detourDirection) * this.params.detourDistance;
-    const detourY =
-      Math.sin(this.params.detourDirection) * this.params.detourDistance;
-
-    const flipDetourX = detourX * this.params.flipX;
-    const flipDetourY = detourY * this.params.flipY;
+    const flipDetourX = detourX * flipX;
+    const flipDetourY = detourY * flipY;
 
     const beginLine1: Point = createRotatedPoint(
-      { x: gap, y: zeroPoint.y },
-      this.params.sourceDirection,
-      zeroPoint,
+      { x: from.x + arrowLength, y: from.y },
+      fromDir,
+      from,
     );
+
     const beginLine2: Point = {
       x: beginLine1.x + flipDetourX,
       y: beginLine1.y + flipDetourY,
     };
+
     const endLine1: Point = createRotatedPoint(
-      { x: this.params.to.x - gap, y: this.params.to.y },
-      this.params.targetDirection,
-      this.params.to,
+      { x: to.x - arrowLength, y: to.y },
+      toDir,
+      to,
     );
+
     const endLine2: Point = {
       x: endLine1.x + flipDetourX,
       y: endLine1.y + flipDetourY,
@@ -77,19 +89,20 @@ export class DetourBezierEdgePath implements EdgePath {
     };
 
     const beginCurve1: Point = {
-      x: beginLine1.x + this.params.curvature * this.params.sourceDirection.x,
-      y: beginLine1.y + this.params.curvature * this.params.sourceDirection.y,
+      x: beginLine1.x + curvature * fromDir.x,
+      y: beginLine1.y + curvature * fromDir.y,
     };
 
     const endCurve1: Point = {
-      x: endLine1.x - this.params.curvature * this.params.targetDirection.x,
-      y: endLine1.y - this.params.curvature * this.params.targetDirection.y,
+      x: endLine1.x - curvature * toDir.x,
+      y: endLine1.y - curvature * toDir.y,
     };
 
     const beginCurve2: Point = {
       x: beginLine1.x + flipDetourX,
       y: beginLine1.y + flipDetourY,
     };
+
     const endCurve2: Point = {
       x: endLine1.x + flipDetourX,
       y: endLine1.y + flipDetourY,
@@ -103,6 +116,9 @@ export class DetourBezierEdgePath implements EdgePath {
       `L ${endArrow.x} ${endArrow.y}`,
     ].join(" ");
 
-    this.midpoint = flipPoint(center, params.flipX, params.flipY, params.to);
+    this.midpoint = flipPoint(center, flipX, flipY, {
+      x: from.x + to.x,
+      y: from.y + to.y,
+    });
   }
 }

@@ -1,12 +1,10 @@
-import { Point } from "@/point";
 import { DirectEdgePath } from "./direct-edge-path";
 
 describe("DirectEdgePath", () => {
   it("should create line path", () => {
-    const to: Point = { x: 10, y: 0 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 10, y: 0 },
       sourceOffset: 0,
       targetOffset: 0,
       hasSourceArrow: false,
@@ -18,10 +16,9 @@ describe("DirectEdgePath", () => {
   });
 
   it("should consider source offset", () => {
-    const to: Point = { x: 10, y: 0 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 10, y: 0 },
       sourceOffset: 1,
       targetOffset: 0,
       hasSourceArrow: false,
@@ -33,10 +30,9 @@ describe("DirectEdgePath", () => {
   });
 
   it("should consider target offset", () => {
-    const to: Point = { x: 10, y: 0 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 10, y: 0 },
       sourceOffset: 0,
       targetOffset: 1,
       hasSourceArrow: false,
@@ -48,10 +44,9 @@ describe("DirectEdgePath", () => {
   });
 
   it("should account for source arrow", () => {
-    const to: Point = { x: 10, y: 0 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 10, y: 0 },
       sourceOffset: 0,
       targetOffset: 0,
       hasSourceArrow: true,
@@ -63,10 +58,9 @@ describe("DirectEdgePath", () => {
   });
 
   it("should account for target arrow", () => {
-    const to: Point = { x: 10, y: 0 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 10, y: 0 },
       sourceOffset: 0,
       targetOffset: 0,
       hasSourceArrow: false,
@@ -78,10 +72,9 @@ describe("DirectEdgePath", () => {
   });
 
   it("should calculate midpoint in the center", () => {
-    const to: Point = { x: 100, y: 200 };
-
     const edgePath = new DirectEdgePath({
-      to,
+      from: { x: 0, y: 0 },
+      to: { x: 100, y: 200 },
       sourceOffset: 0,
       targetOffset: 0,
       hasSourceArrow: false,

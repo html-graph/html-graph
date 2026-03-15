@@ -3,9 +3,10 @@ import { VerticalEdgePath } from "./vertical-edge-path";
 describe("VerticalEdgePath", () => {
   it("should create vertical line path without arrows", () => {
     const edgePath = new VerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -15,15 +16,16 @@ describe("VerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 0 0 C 10 0 10 0 10 10 L 10 90 C 10 100 10 100 20 100 L 40 100 C 50 100 50 100 50 100 L 50 100 C 50 100 50 100 60 100 L 80 100 C 90 100 90 100 90 110 L 90 190 C 90 200 90 200 100 200 L 100 200",
+      "M 100 100 L 100 100 C 110 100 110 100 110 110 L 110 190 C 110 200 110 200 120 200 L 140 200 C 150 200 150 200 150 190 L 150 110 C 150 100 150 100 160 100 L 180 100 C 190 100 190 100 190 110 L 190 290 C 190 300 190 300 200 300 L 200 300",
     );
   });
 
   it("should create flipped vertical line path without arrows", () => {
     const edgePath = new VerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -33,15 +35,16 @@ describe("VerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 0 0 C 10 0 10 0 10 -10 L 10 -10 C 10 -20 10 -20 20 -20 L 40 -20 C 50 -20 50 -20 50 -10 L 50 210 C 50 220 50 220 60 220 L 80 220 C 90 220 90 220 90 210 L 90 210 C 90 200 90 200 100 200 L 100 200",
+      "M 100 100 L 100 100 C 110 100 110 100 110 90 L 110 -10 C 110 -20 110 -20 120 -20 L 140 -20 C 150 -20 150 -20 150 -10 L 150 310 C 150 320 150 320 160 320 L 180 320 C 190 320 190 320 190 310 L 190 310 C 190 300 190 300 200 300 L 200 300",
     );
   });
 
   it("should create vertical line path with source arrow", () => {
     const edgePath = new VerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -51,15 +54,16 @@ describe("VerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 15 0 L 15 0 C 10 0 10 0 10 10 L 10 90 C 10 100 10 100 20 100 L 40 100 C 50 100 50 100 50 100 L 50 100 C 50 100 50 100 60 100 L 80 100 C 90 100 90 100 90 110 L 90 190 C 90 200 90 200 100 200 L 100 200",
+      "M 115 100 L 115 100 C 110 100 110 100 110 110 L 110 190 C 110 200 110 200 120 200 L 140 200 C 150 200 150 200 150 190 L 150 110 C 150 100 150 100 160 100 L 180 100 C 190 100 190 100 190 110 L 190 290 C 190 300 190 300 200 300 L 200 300",
     );
   });
 
   it("should create vertical line path with target arrow", () => {
     const edgePath = new VerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -69,15 +73,16 @@ describe("VerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 0 0 C 10 0 10 0 10 10 L 10 90 C 10 100 10 100 20 100 L 40 100 C 50 100 50 100 50 100 L 50 100 C 50 100 50 100 60 100 L 80 100 C 90 100 90 100 90 110 L 90 190 C 90 200 90 200 85 200 L 85 200",
+      "M 100 100 L 100 100 C 110 100 110 100 110 110 L 110 190 C 110 200 110 200 120 200 L 140 200 C 150 200 150 200 150 190 L 150 110 C 150 100 150 100 160 100 L 180 100 C 190 100 190 100 190 110 L 190 290 C 190 300 190 300 185 300 L 185 300",
     );
   });
 
   it("should calculate midpoint in the center", () => {
     const edgePath = new VerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -86,6 +91,6 @@ describe("VerticalEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 50, y: 100 });
+    expect(edgePath.midpoint).toEqual({ x: 150, y: 200 });
   });
 });

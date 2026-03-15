@@ -1,6 +1,5 @@
 import { Point } from "@/point";
 import { EdgePath } from "../edge-path";
-import { zeroPoint } from "../../zero-point";
 
 export class DirectEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,45 +8,55 @@ export class DirectEdgePath implements EdgePath {
 
   public readonly diagonalDistance: number;
 
-  public constructor(
-    private readonly params: {
-      readonly to: Point;
-      readonly sourceOffset: number;
-      readonly targetOffset: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-      readonly arrowLength: number;
-    },
-  ) {
-    const to = this.params.to;
+  public constructor(params: {
+    readonly from: Point;
+    readonly to: Point;
+    readonly sourceOffset: number;
+    readonly targetOffset: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+    readonly arrowLength: number;
+  }) {
+    const {
+      from,
+      to,
+      sourceOffset,
+      targetOffset,
+      hasSourceArrow,
+      hasTargetArrow,
+      arrowLength,
+    } = params;
 
-    this.midpoint = { x: to.x / 2, y: to.y / 2 };
+    this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 
-    this.diagonalDistance = Math.sqrt(
-      this.params.to.x * this.params.to.x + this.params.to.y * this.params.to.y,
-    );
+    const width = to.x - from.x;
+    const height = to.y - from.y;
 
-    const diagonalDistance = Math.sqrt(
-      this.params.to.x * this.params.to.x + this.params.to.y * this.params.to.y,
-    );
+    this.diagonalDistance = Math.sqrt(width * width + height * height);
 
-    if (diagonalDistance === 0) {
+    if (this.diagonalDistance === 0) {
       this.path = "";
       return;
     }
 
+    const dir: Point = { x: width, y: height };
+
     const source = this.createDirectLinePoint({
-      offset: this.params.sourceOffset,
-      hasArrow: this.params.hasSourceArrow,
+      offset: sourceOffset,
+      hasArrow: hasSourceArrow,
       flip: 1,
-      shift: zeroPoint,
+      shift: from,
+      arrowLength,
+      dir,
     });
 
     const target = this.createDirectLinePoint({
-      offset: this.params.targetOffset,
-      hasArrow: this.params.hasTargetArrow,
+      offset: targetOffset,
+      hasArrow: hasTargetArrow,
       flip: -1,
-      shift: this.params.to,
+      shift: to,
+      arrowLength,
+      dir,
     });
 
     this.path = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
@@ -58,14 +67,17 @@ export class DirectEdgePath implements EdgePath {
     readonly hasArrow: boolean;
     readonly flip: number;
     readonly shift: Point;
+    readonly arrowLength: number;
+    readonly dir: Point;
   }): Point {
-    const arrowOffset = params.hasArrow ? this.params.arrowLength : 0;
+    const arrowOffset = params.hasArrow ? params.arrowLength : 0;
     const totalOffset = params.offset + arrowOffset;
     const targetRatio = (params.flip * totalOffset) / this.diagonalDistance;
+    const { dir, shift } = params;
 
     return {
-      x: this.params.to.x * targetRatio + params.shift.x,
-      y: this.params.to.y * targetRatio + params.shift.y,
+      x: dir.x * targetRatio + shift.x,
+      y: dir.y * targetRatio + shift.y,
     };
   }
 }

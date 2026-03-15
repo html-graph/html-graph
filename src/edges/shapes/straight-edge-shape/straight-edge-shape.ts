@@ -66,15 +66,16 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     flipY: number,
   ) =>
     new DetourStraightEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      detourDirection: this.detourDirection,
+      detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
@@ -86,9 +87,10 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     to: Point,
   ) =>
     new StraightEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,

@@ -3,13 +3,14 @@ import { DetourBezierEdgePath } from "./detour-bezier-edge-path";
 describe("DetourBezierEdgePath", () => {
   it("should create detour bezier path without flip", () => {
     const edgePath = new DetourBezierEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
-      detourDirection: -Math.PI / 2,
+      detourDir: -Math.PI / 2,
       detourDistance: 100,
       curvature: 100,
       hasSourceArrow: false,
@@ -17,19 +18,20 @@ describe("DetourBezierEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 100 200",
+      "M 100 100 L 110 100 C 210 100 110 0 150 100 C 190 200 90 300 190 300 L 200 300",
     );
   });
 
   it("should create detour bezier path with flip", () => {
     const edgePath = new DetourBezierEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       flipX: -1,
       flipY: -1,
       arrowLength: 10,
-      detourDirection: -Math.PI / 2,
+      detourDir: -Math.PI / 2,
       detourDistance: 100,
       curvature: 100,
       hasSourceArrow: false,
@@ -37,19 +39,20 @@ describe("DetourBezierEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 110 0 9.999999999999995 100 50 200 C 90 300 -10 200 90 200 L 100 200",
+      "M 100 100 L 110 100 C 210 100 110 200 150 300 C 190 400 90 300 190 300 L 200 300",
     );
   });
 
   it("should create detour bezier path with source arrow", () => {
     const edgePath = new DetourBezierEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
-      detourDirection: -Math.PI / 2,
+      detourDir: -Math.PI / 2,
       detourDistance: 100,
       curvature: 100,
       hasSourceArrow: true,
@@ -57,19 +60,20 @@ describe("DetourBezierEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 10 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 100 200",
+      "M 110 100 L 110 100 C 210 100 110 0 150 100 C 190 200 90 300 190 300 L 200 300",
     );
   });
 
   it("should create detour bezier path with target arrow", () => {
     const edgePath = new DetourBezierEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
-      detourDirection: -Math.PI / 2,
+      detourDir: -Math.PI / 2,
       detourDistance: 100,
       curvature: 100,
       hasSourceArrow: false,
@@ -77,25 +81,26 @@ describe("DetourBezierEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 110 0 10.000000000000005 -100 50 0 C 90 100 -10 200 90 200 L 90 200",
+      "M 100 100 L 110 100 C 210 100 110 0 150 100 C 190 200 90 300 190 300 L 190 300",
     );
   });
 
   it("should calculate midpoint in between detour points", () => {
     const edgePath = new DetourBezierEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       flipX: 1,
       flipY: 1,
       arrowLength: 10,
-      detourDirection: -Math.PI / 2,
+      detourDir: -Math.PI / 2,
       detourDistance: 100,
       curvature: 100,
       hasSourceArrow: false,
       hasTargetArrow: false,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 50, y: 0 });
+    expect(edgePath.midpoint).toEqual({ x: 150, y: 100 });
   });
 });

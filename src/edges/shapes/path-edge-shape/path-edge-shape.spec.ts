@@ -31,9 +31,10 @@ const createBezierEdge = (
       }),
     createDetourPath: () =>
       new DetourBezierEdgePath({
+        from: { x: 0, y: 0 },
         to: { x: 0, y: 0 },
-        sourceDirection: { x: 1, y: 0 },
-        targetDirection: { x: 1, y: 0 },
+        fromDir: { x: 1, y: 0 },
+        toDir: { x: 1, y: 0 },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
@@ -41,7 +42,7 @@ const createBezierEdge = (
         flipX: 1,
         flipY: 1,
         detourDistance: 100,
-        detourDirection: 0,
+        detourDir: 0,
       }),
     createCyclePath: () =>
       new CycleCircleEdgePath({

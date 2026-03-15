@@ -7,18 +7,16 @@ export class BezierEdgePath implements EdgePath {
 
   public readonly midpoint: Point;
 
-  public constructor(
-    private readonly params: {
-      readonly from: Point;
-      readonly to: Point;
-      readonly fromDir: Point;
-      readonly toDir: Point;
-      readonly arrowLength: number;
-      readonly curvature: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-    },
-  ) {
+  public constructor(params: {
+    readonly from: Point;
+    readonly to: Point;
+    readonly fromDir: Point;
+    readonly toDir: Point;
+    readonly arrowLength: number;
+    readonly curvature: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+  }) {
     const {
       from,
       to,
@@ -28,7 +26,7 @@ export class BezierEdgePath implements EdgePath {
       curvature,
       hasSourceArrow,
       hasTargetArrow,
-    } = this.params;
+    } = params;
 
     this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 

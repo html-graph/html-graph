@@ -2,60 +2,66 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
-import { zeroPoint } from "../../zero-point";
 
 export class StraightEdgePath implements EdgePath {
   public readonly path: string;
 
   public readonly midpoint: Point;
 
-  public constructor(
-    private readonly params: {
-      readonly to: Point;
-      readonly sourceDirection: Point;
-      readonly targetDirection: Point;
-      readonly arrowLength: number;
-      readonly arrowOffset: number;
-      readonly roundness: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-    },
-  ) {
-    const to = this.params.to;
+  public constructor(params: {
+    readonly from: Point;
+    readonly to: Point;
+    readonly fromDir: Point;
+    readonly toDir: Point;
+    readonly arrowLength: number;
+    readonly arrowOffset: number;
+    readonly roundness: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+  }) {
+    const {
+      from,
+      to,
+      hasSourceArrow,
+      hasTargetArrow,
+      arrowLength,
+      fromDir,
+      toDir,
+      arrowOffset,
+      roundness,
+    } = params;
 
-    this.midpoint = { x: to.x / 2, y: to.y / 2 };
+    this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 
-    const pba: Point = this.params.hasSourceArrow
+    const pba: Point = hasSourceArrow
       ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zeroPoint.y },
-          this.params.sourceDirection,
-          zeroPoint,
+          { x: from.x + arrowLength, y: from.y },
+          fromDir,
+          from,
         )
-      : zeroPoint;
-    const pea: Point = this.params.hasTargetArrow
+      : from;
+
+    const pea: Point = hasTargetArrow
       ? createRotatedPoint(
           {
-            x: this.params.to.x - this.params.arrowLength,
-            y: this.params.to.y,
+            x: to.x - arrowLength,
+            y: to.y,
           },
-          this.params.targetDirection,
-          this.params.to,
+          toDir,
+          to,
         )
-      : this.params.to;
+      : to;
 
-    const gap = this.params.arrowLength + this.params.arrowOffset;
+    const gap = arrowLength + arrowOffset;
 
     const pbl = createRotatedPoint(
-      { x: gap, y: zeroPoint.y },
-      this.params.sourceDirection,
-      zeroPoint,
-    );
-    const pel = createRotatedPoint(
-      { x: this.params.to.x - gap, y: this.params.to.y },
-      this.params.targetDirection,
-      this.params.to,
+      { x: from.x + gap, y: from.y },
+      fromDir,
+      from,
     );
 
-    this.path = createRoundedPath([pba, pbl, pel, pea], this.params.roundness);
+    const pel = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
+
+    this.path = createRoundedPath([pba, pbl, pel, pea], roundness);
   }
 }

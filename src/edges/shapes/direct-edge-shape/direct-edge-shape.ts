@@ -82,6 +82,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const to: Point = { x: width, y: height };
 
     const edgePath = new DirectEdgePath({
+      from: { x: 0, y: 0 },
       to,
       sourceOffset: this.sourceOffset,
       targetOffset: this.targetOffset,

@@ -64,6 +64,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
     flipY: number,
   ) =>
     new DetourVerticalEdgePath({
+      from: { x: 0, y: 0 },
       to,
       sourceDirection,
       targetDirection,
@@ -85,9 +86,10 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
     flipY: number,
   ) =>
     new VerticalEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       flipY,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,

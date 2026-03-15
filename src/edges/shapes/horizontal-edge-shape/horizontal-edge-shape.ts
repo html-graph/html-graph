@@ -64,9 +64,10 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     flipY: number,
   ) =>
     new DetourHorizontalEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
@@ -84,9 +85,10 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     flipX: number,
   ) =>
     new HorizontalEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       flipX,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,

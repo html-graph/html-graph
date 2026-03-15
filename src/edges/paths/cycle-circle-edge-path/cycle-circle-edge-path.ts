@@ -7,18 +7,16 @@ export class CycleCircleEdgePath implements EdgePath {
 
   public readonly midpoint: Point;
 
-  public constructor(
-    private readonly params: {
-      readonly origin: Point;
-      readonly sourceDir: Point;
-      readonly radius: number;
-      readonly smallRadius: number;
-      readonly arrowLength: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-    },
-  ) {
-    const { arrowLength, radius, smallRadius, sourceDir, origin } = this.params;
+  public constructor(params: {
+    readonly origin: Point;
+    readonly sourceDir: Point;
+    readonly radius: number;
+    readonly smallRadius: number;
+    readonly arrowLength: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+  }) {
+    const { arrowLength, radius, smallRadius, sourceDir, origin } = params;
 
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
@@ -47,7 +45,7 @@ export class CycleCircleEdgePath implements EdgePath {
 
     const preLine = `M ${origin.x} ${origin.y} L ${absPoints[0].x} ${absPoints[0].y} `;
 
-    const hasArrow = this.params.hasSourceArrow || this.params.hasTargetArrow;
+    const hasArrow = params.hasSourceArrow || params.hasTargetArrow;
     this.path = `${hasArrow ? "" : preLine}${c}`;
 
     this.midpoint = absPoints[3];

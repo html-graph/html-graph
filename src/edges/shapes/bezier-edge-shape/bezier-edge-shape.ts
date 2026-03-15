@@ -65,13 +65,14 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     flipY: number,
   ) =>
     new DetourBezierEdgePath({
+      from: { x: 0, y: 0 },
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir: sourceDirection,
+      toDir: targetDirection,
       flipX,
       flipY,
       arrowLength: this.arrowLength,
-      detourDirection: this.detourDirection,
+      detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
       curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,
