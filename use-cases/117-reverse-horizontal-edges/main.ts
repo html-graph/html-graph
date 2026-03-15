@@ -4,8 +4,43 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  Identifier,
 } from "@html-graph/html-graph";
-import { createInOutNode } from "../shared/create-in-out-node";
+
+export function createInOutNode(params: {
+  id?: Identifier;
+  name: string;
+  x: number;
+  y: number;
+  frontPortId: string;
+  backPortId: string;
+}): AddNodeRequest {
+  const node = document.createElement("div");
+  node.classList.add("node");
+
+  const backPort = document.createElement("div");
+  backPort.classList.add("node-port");
+  node.appendChild(backPort);
+
+  const text = document.createElement("div");
+  text.innerText = params.name;
+  node.appendChild(text);
+
+  const frontPort = document.createElement("div");
+  frontPort.classList.add("node-port");
+  node.appendChild(frontPort);
+
+  return {
+    id: params.id,
+    element: node,
+    x: params.x,
+    y: params.y,
+    ports: [
+      { id: params.frontPortId, element: frontPort, direction: -Math.PI },
+      { id: params.backPortId, element: backPort, direction: -Math.PI },
+    ],
+  };
+}
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
