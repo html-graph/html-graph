@@ -31,5 +31,7 @@ export const createEdgeRectangle = (
     height,
     flipX,
     flipY,
+    from: { x: from.x - x, y: from.y - y },
+    to: { x: to.x - x, y: to.y - y },
   };
 };

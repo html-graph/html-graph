@@ -28,6 +28,8 @@ describe("createEdgeRectangle", () => {
       width: 200,
       x: -95,
       y: -95,
+      from: { x: 0, y: 0 },
+      to: { x: 200, y: 200 },
     });
   });
 
@@ -41,6 +43,8 @@ describe("createEdgeRectangle", () => {
       width: 200,
       x: -95,
       y: -95,
+      from: { x: 200, y: 200 },
+      to: { x: 0, y: 0 },
     });
   });
 });

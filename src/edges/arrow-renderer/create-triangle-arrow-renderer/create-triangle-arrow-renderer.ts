@@ -2,21 +2,20 @@ import { createRotatedPoint } from "../../geometry";
 import { Point } from "@/point";
 import { ArrowRenderer } from "../arrow-renderer";
 import { ArrowRenderingParams } from "../arrow-rendering-params";
-import { zeroPoint } from "../../zero-point";
 
 export const createTriangleArrowRenderer = (params: {
   readonly radius: number;
 }): ArrowRenderer => {
   return (renderingParams: ArrowRenderingParams): string => {
     const arrowPoints: Point[] = [
-      zeroPoint,
+      { x: 0, y: 0 },
       { x: renderingParams.arrowLength, y: params.radius },
       { x: renderingParams.arrowLength, y: -params.radius },
     ];
 
     const points: readonly Point[] = arrowPoints
       .map((point) =>
-        createRotatedPoint(point, renderingParams.direction, zeroPoint),
+        createRotatedPoint(point, renderingParams.direction, { x: 0, y: 0 }),
       )
       .map((point) => ({
         x: point.x + renderingParams.shift.x,

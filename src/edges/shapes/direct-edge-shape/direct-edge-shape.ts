@@ -71,18 +71,15 @@ export class DirectEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+    const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
-
-    const to: Point = { x: width, y: height };
 
     const edgePath = new DirectEdgePath({
-      from: { x: 0, y: 0 },
+      from,
       to,
       sourceOffset: this.sourceOffset,
       targetOffset: this.targetOffset,
@@ -109,8 +106,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       }
     } else {
       const direction: Point = {
-        x: to.x / diagonal,
-        y: to.y / diagonal,
+        x: (to.x - from.x) / diagonal,
+        y: (to.y - from.y) / diagonal,
       };
 
       if (this.sourceArrow) {

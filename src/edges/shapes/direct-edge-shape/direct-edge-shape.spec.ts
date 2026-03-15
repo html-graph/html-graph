@@ -29,32 +29,6 @@ describe("DirectEdgeShape", () => {
     expect(childrenCount).toBe(3);
   });
 
-  it("should apply specified mirroring to group", () => {
-    const shape = new DirectEdgeShape();
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0] as SVGGElement;
-
-    expect(g.style.transform).toBe("scale(1, -1)");
-  });
-
   it("should create line path", () => {
     const shape = new DirectEdgeShape();
 
