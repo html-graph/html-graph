@@ -1,7 +1,6 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { zeroPoint } from "../../zero-point";
 
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
@@ -10,6 +9,7 @@ export class CycleCircleEdgePath implements EdgePath {
 
   public constructor(
     private readonly params: {
+      readonly origin: Point;
       readonly sourceDir: Point;
       readonly radius: number;
       readonly smallRadius: number;
@@ -18,7 +18,7 @@ export class CycleCircleEdgePath implements EdgePath {
       readonly hasTargetArrow: boolean;
     },
   ) {
-    const { arrowLength, radius, smallRadius } = this.params;
+    const { arrowLength, radius, smallRadius, sourceDir, origin } = this.params;
 
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
@@ -34,21 +34,22 @@ export class CycleCircleEdgePath implements EdgePath {
       { x: farPoint, y: 0 },
     ];
 
-    const rotatedPoints = points.map((p) =>
-      createRotatedPoint(p, this.params.sourceDir, zeroPoint),
-    );
+    const absPoints = points
+      .map((p) => createRotatedPoint(p, sourceDir, { x: 0, y: 0 }))
+      .map((p) => ({ x: p.x + origin.x, y: p.y + origin.y }));
 
     const c = [
-      `M ${rotatedPoints[0].x} ${rotatedPoints[0].y}`,
-      `A ${smallRadius} ${smallRadius} 0 0 1 ${rotatedPoints[1].x} ${rotatedPoints[1].y}`,
-      `A ${radius} ${radius} 0 1 0 ${rotatedPoints[2].x} ${rotatedPoints[2].y}`,
-      `A ${smallRadius} ${smallRadius} 0 0 1 ${rotatedPoints[0].x} ${rotatedPoints[0].y}`,
+      `M ${absPoints[0].x} ${absPoints[0].y}`,
+      `A ${smallRadius} ${smallRadius} 0 0 1 ${absPoints[1].x} ${absPoints[1].y}`,
+      `A ${radius} ${radius} 0 1 0 ${absPoints[2].x} ${absPoints[2].y}`,
+      `A ${smallRadius} ${smallRadius} 0 0 1 ${absPoints[0].x} ${absPoints[0].y}`,
     ].join(" ");
 
-    const preLine = `M ${0} ${0} L ${rotatedPoints[0].x} ${rotatedPoints[0].y} `;
+    const preLine = `M ${origin.x} ${origin.y} L ${absPoints[0].x} ${absPoints[0].y} `;
 
-    this.path = `${this.params.hasSourceArrow || this.params.hasTargetArrow ? "" : preLine}${c}`;
+    const hasArrow = this.params.hasSourceArrow || this.params.hasTargetArrow;
+    this.path = `${hasArrow ? "" : preLine}${c}`;
 
-    this.midpoint = rotatedPoints[3];
+    this.midpoint = absPoints[3];
   }
 }

@@ -46,7 +46,8 @@ export class HorizontalEdgeShape implements StructuredEdgeShape {
     sourceDirection: Point,
   ) =>
     new CycleSquareEdgePath({
-      sourceDirection,
+      origin: { x: 0, y: 0 },
+      fromDir: sourceDirection,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,

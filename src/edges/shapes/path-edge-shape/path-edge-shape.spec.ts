@@ -45,6 +45,7 @@ const createBezierEdge = (
       }),
     createCyclePath: () =>
       new CycleCircleEdgePath({
+        origin: { x: 0, y: 0 },
         sourceDir: { x: 1, y: 0 },
         radius: 10,
         smallRadius: 2,

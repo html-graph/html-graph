@@ -48,6 +48,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     sourceDirection: Point,
   ) =>
     new CycleCircleEdgePath({
+      origin: { x: 0, y: 0 },
       sourceDir: sourceDirection,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
