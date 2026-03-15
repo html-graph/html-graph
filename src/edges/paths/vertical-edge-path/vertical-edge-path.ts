@@ -65,20 +65,20 @@ export class VerticalEdgePath implements EdgePath {
       to,
     );
 
-    const isTopToBottom = to.y > from.y;
-    const halfWidth = (beginLine.x + endLine.x) / 2;
+    const halfWidth = (from.x + to.x) / 2;
     const halfHeight = Math.max((beginLine.y + endLine.y) / 2, gap);
+    const isBackward = to.y > from.y;
 
     const begin1: Point = {
       x: beginLine.x,
-      y: isTopToBottom ? halfHeight : from.y + gap,
+      y: isBackward ? halfHeight : from.y + gap,
     };
 
     const begin2: Point = { x: halfWidth, y: begin1.y };
 
     const end1: Point = {
       x: endLine.x,
-      y: isTopToBottom ? to.y - halfHeight : -gap,
+      y: isBackward ? to.y - halfHeight : -gap,
     };
 
     const end2: Point = { x: halfWidth, y: end1.y };

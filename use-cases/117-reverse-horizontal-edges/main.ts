@@ -12,23 +12,23 @@ export function createInOutNode(params: {
   name: string;
   x: number;
   y: number;
-  frontPortId: string;
-  backPortId: string;
+  inPortId: string;
+  outPortId: string;
 }): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
 
-  const backPort = document.createElement("div");
-  backPort.classList.add("node-port");
-  node.appendChild(backPort);
+  const outPort = document.createElement("div");
+  outPort.classList.add("node-port");
+  node.appendChild(outPort);
 
   const text = document.createElement("div");
   text.innerText = params.name;
   node.appendChild(text);
 
-  const frontPort = document.createElement("div");
-  frontPort.classList.add("node-port");
-  node.appendChild(frontPort);
+  const inPort = document.createElement("div");
+  inPort.classList.add("node-port");
+  node.appendChild(inPort);
 
   return {
     id: params.id,
@@ -36,8 +36,8 @@ export function createInOutNode(params: {
     x: params.x,
     y: params.y,
     ports: [
-      { id: params.frontPortId, element: frontPort, direction: -Math.PI },
-      { id: params.backPortId, element: backPort, direction: -Math.PI },
+      { id: params.inPortId, element: inPort, direction: -Math.PI },
+      { id: params.outPortId, element: outPort, direction: -Math.PI },
     ],
   };
 }
@@ -64,24 +64,24 @@ const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 500,
   y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
+  inPortId: "node-1-in",
+  outPortId: "node-1-out",
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 200,
   y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
+  inPortId: "node-2-in",
+  outPortId: "node-2-out",
 });
 
 const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
   x: 500,
   y: 650,
-  frontPortId: "node-3-in",
-  backPortId: "node-3-out",
+  inPortId: "node-3-in",
+  outPortId: "node-3-out",
 });
 
 const addEdge1Request: AddEdgeRequest = {

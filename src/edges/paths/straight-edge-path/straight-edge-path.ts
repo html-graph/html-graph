@@ -31,37 +31,54 @@ export class StraightEdgePath implements EdgePath {
       roundness,
     } = params;
 
-    this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
+    const beginArrow: Point = this.createArrowPoint(
+      hasSourceArrow,
+      fromDir,
+      from,
+      arrowLength,
+    );
 
-    const pba: Point = hasSourceArrow
-      ? createRotatedPoint(
-          { x: from.x + arrowLength, y: from.y },
-          fromDir,
-          from,
-        )
-      : from;
-
-    const pea: Point = hasTargetArrow
-      ? createRotatedPoint(
-          {
-            x: to.x - arrowLength,
-            y: to.y,
-          },
-          toDir,
-          to,
-        )
-      : to;
+    const endArrow: Point = this.createArrowPoint(
+      hasTargetArrow,
+      toDir,
+      to,
+      -arrowLength,
+    );
 
     const gap = arrowLength + arrowOffset;
 
-    const pbl = createRotatedPoint(
-      { x: from.x + gap, y: from.y },
-      fromDir,
-      from,
+    const beginGap: Point = { x: from.x + gap, y: from.y };
+    const beginLine = createRotatedPoint(beginGap, fromDir, from);
+
+    const endGap: Point = { x: to.x - gap, y: to.y };
+    const endLine = createRotatedPoint(endGap, toDir, to);
+
+    this.path = createRoundedPath(
+      [beginArrow, beginLine, endLine, endArrow],
+      roundness,
     );
 
-    const pel = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
+    const centerX = (beginLine.x + endLine.x) / 2;
+    const centerY = (beginLine.y + endLine.y) / 2;
 
-    this.path = createRoundedPath([pba, pbl, pel, pea], roundness);
+    this.midpoint = { x: centerX, y: centerY };
+  }
+
+  private createArrowPoint(
+    hasArrow: boolean,
+    dir: Point,
+    shift: Point,
+    offsetLength: number,
+  ): Point {
+    if (!hasArrow) {
+      return shift;
+    }
+
+    const offsetPoint: Point = {
+      x: shift.x + offsetLength,
+      y: shift.y,
+    };
+
+    return createRotatedPoint(offsetPoint, dir, shift);
   }
 }

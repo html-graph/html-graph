@@ -10,7 +10,6 @@ import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ArrowRenderer, resolveArrowRenderer } from "@/edges/arrow-renderer";
 import {
   createEdgeArrow,
-  createEdgeGroup,
   createEdgePath,
   createEdgeSvg,
   setSvgRectangle,
@@ -19,7 +18,10 @@ import {
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
-  public readonly group = createEdgeGroup();
+  public readonly group = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g",
+  );
 
   public readonly line: SVGPathElement;
 

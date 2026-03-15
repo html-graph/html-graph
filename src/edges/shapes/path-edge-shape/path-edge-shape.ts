@@ -10,7 +10,6 @@ import { ConnectionCategory } from "../../connection-category";
 import { ArrowRenderer } from "../../arrow-renderer";
 import {
   createEdgeArrow,
-  createEdgeGroup,
   createEdgePath,
   createEdgeSvg,
   setSvgRectangle,
@@ -20,7 +19,10 @@ import { createDirectionVector } from "./create-direction-vector";
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
-  public readonly group = createEdgeGroup();
+  public readonly group = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g",
+  );
 
   public readonly line: SVGPathElement;
 

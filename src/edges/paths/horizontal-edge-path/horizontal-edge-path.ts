@@ -2,6 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { createLine } from "./create-line";
 
 export class HorizontalEdgePath implements EdgePath {
   public readonly path: string;
@@ -51,43 +52,33 @@ export class HorizontalEdgePath implements EdgePath {
       : to;
 
     const gap = arrowLength + arrowOffset;
-    const gapRoundness = gap - roundness;
 
     const beginLine = createRotatedPoint(
-      { x: from.x + gapRoundness, y: from.y },
+      { x: from.x + gap, y: from.y },
       fromDir,
       from,
     );
 
-    const endLine = createRotatedPoint(
-      { x: to.x - gapRoundness, y: to.y },
-      toDir,
-      to,
+    const endLine = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
+
+    const line = createLine(
+      {
+        x: beginLine.x,
+        y: beginLine.y,
+        dirX: fromDir.x,
+      },
+      {
+        x: endLine.x,
+        y: endLine.y,
+        dirX: toDir.x,
+      },
     );
 
-    const halfWidth = Math.max((beginLine.x + endLine.x) / 2, gap);
-    const halfHeight = (beginLine.y + endLine.y) / 2;
-    const isLeftToRight = to.x > from.x;
-
-    const begin1: Point = {
-      x: isLeftToRight ? halfWidth : from.x + gap,
-      y: beginLine.y,
-    };
-
-    const begin2: Point = { x: begin1.x, y: halfHeight };
-
-    const end1: Point = {
-      x: isLeftToRight ? to.x - halfWidth : -gap,
-      y: endLine.y,
-    };
-
-    const end2: Point = { x: end1.x, y: halfHeight };
-
     this.path = createRoundedPath(
-      [beginArrow, beginLine, begin1, begin2, end2, end1, endLine, endArrow],
+      [beginArrow, ...line.points, endArrow],
       roundness,
     );
 
-    this.midpoint = { x: halfWidth, y: halfHeight };
+    this.midpoint = line.midpoint;
   }
 }
