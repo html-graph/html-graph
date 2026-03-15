@@ -55,8 +55,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
   private readonly createDetourPath: EdgePathFactory = (

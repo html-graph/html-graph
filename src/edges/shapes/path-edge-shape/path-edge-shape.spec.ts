@@ -48,8 +48,7 @@ const createBezierEdge = (
         dir: { x: 1, y: 0 },
         radius: 10,
         smallRadius: 2,
-        hasTargetArrow: false,
-        hasSourceArrow: false,
+        hasArrow: false,
         arrowLength: 10,
       }),
   });
@@ -78,32 +77,6 @@ describe("PathEdgeShape", () => {
     const childrenCount = shape.svg.children[0].children.length;
 
     expect(childrenCount).toBe(3);
-  });
-
-  it("should apply specified mirroring to group", () => {
-    const shape = createBezierEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0] as SVGGElement;
-
-    expect(g.style.transform).toBe("scale(1, -1)");
   });
 
   it("should create path for target arrow", () => {

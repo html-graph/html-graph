@@ -5,8 +5,6 @@ export interface EdgeRectangle {
   readonly y: number;
   readonly width: number;
   readonly height: number;
-  readonly flipX: number;
-  readonly flipY: number;
   readonly from: Point;
   readonly to: Point;
 }

@@ -54,8 +54,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
   private readonly createDetourPath: EdgePathFactory = (

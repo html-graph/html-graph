@@ -19,24 +19,6 @@ describe("HorizontalEdgePath", () => {
     );
   });
 
-  it("should create flipped horizontal line path without arrows", () => {
-    const edgePath = new HorizontalEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
-      arrowLength: 15,
-      arrowOffset: 5,
-      roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
-    });
-
-    expect(edgePath.path).toBe(
-      "M 100 100 L 100 100 C 110 100 110 100 100 100 L -10 100 C -20 100 -20 100 -20 110 L -20 190 C -20 200 -20 200 -10 200 L 210 200 C 220 200 220 200 220 210 L 220 290 C 220 300 220 300 210 300 L 200 300 C 190 300 190 300 200 300 L 200 300",
-    );
-  });
-
   it("should create horizontal line path with source arrow", () => {
     const edgePath = new HorizontalEdgePath({
       from: { x: 100, y: 100 },

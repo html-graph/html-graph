@@ -21,16 +21,11 @@ export const createEdgeRectangle = (
   const width = Math.abs(to.x - from.x);
   const height = Math.abs(to.y - from.y);
 
-  const flipX = from.x <= to.x ? 1 : -1;
-  const flipY = from.y <= to.y ? 1 : -1;
-
   return {
     x,
     y,
     width,
     height,
-    flipX,
-    flipY,
     from: { x: from.x - x, y: from.y - y },
     to: { x: to.x - x, y: to.y - y },
   };

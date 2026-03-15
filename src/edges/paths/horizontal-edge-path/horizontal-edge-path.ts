@@ -22,16 +22,14 @@ export class HorizontalEdgePath implements EdgePath {
     const {
       from,
       to,
-      hasSourceArrow,
-      hasTargetArrow,
-      arrowLength,
-      arrowOffset,
       fromDir,
       toDir,
+      arrowLength,
+      arrowOffset,
       roundness,
+      hasSourceArrow,
+      hasTargetArrow,
     } = params;
-
-    this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 
     const beginArrow: Point = hasSourceArrow
       ? createRotatedPoint(
@@ -68,24 +66,28 @@ export class HorizontalEdgePath implements EdgePath {
     );
 
     const halfWidth = Math.max((beginLine.x + endLine.x) / 2, gap);
-    const halfHeight = (from.y + to.y) / 2;
+    const halfHeight = (beginLine.y + endLine.y) / 2;
+    const isLeftToRight = to.x > from.x;
 
     const begin1: Point = {
-      x: halfWidth,
+      x: isLeftToRight ? halfWidth : from.x + gap,
       y: beginLine.y,
     };
 
     const begin2: Point = { x: begin1.x, y: halfHeight };
 
     const end1: Point = {
-      x: to.x - halfWidth,
+      x: isLeftToRight ? to.x - halfWidth : -gap,
       y: endLine.y,
     };
+
     const end2: Point = { x: end1.x, y: halfHeight };
 
     this.path = createRoundedPath(
       [beginArrow, beginLine, begin1, begin2, end2, end1, endLine, endArrow],
       roundness,
     );
+
+    this.midpoint = { x: halfWidth, y: halfHeight };
   }
 }

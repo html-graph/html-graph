@@ -1,7 +1,6 @@
 import { EdgeRenderParams } from "../../edge-render-params";
 import { Point } from "@/point";
 import { PathEdgeParams } from "./path-edge-params";
-import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { createEdgeRectangle } from "../../geometry";
@@ -16,6 +15,7 @@ import {
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
+import { createDirectionVector } from "./create-direction-vector";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -64,17 +64,8 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
     setSvgRectangle(this.svg, { x, y, width, height });
 
-    const sourceDirection = createFlipDirectionVector(
-      params.from.direction,
-      1,
-      1,
-    );
-
-    const targetDirection = createFlipDirectionVector(
-      params.to.direction,
-      1,
-      1,
-    );
+    const sourceDirection = createDirectionVector(params.from.direction);
+    const targetDirection = createDirectionVector(params.to.direction);
 
     let targetVect: Point = { x: -targetDirection.x, y: -targetDirection.y };
     let createPathFn: EdgePathFactory;

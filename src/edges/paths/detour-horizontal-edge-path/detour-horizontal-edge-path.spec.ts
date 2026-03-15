@@ -1,7 +1,7 @@
 import { DetourHorizontalEdgePath } from "./detour-horizontal-edge-path";
 
 describe("DetourHorizontalEdgePath", () => {
-  it("should create detour horizontal path without flip Y", () => {
+  it("should create detour horizontal path", () => {
     const edgePath = new DetourHorizontalEdgePath({
       from: { x: 100, y: 100 },
       to: { x: 200, y: 300 },
@@ -30,25 +30,6 @@ describe("DetourHorizontalEdgePath", () => {
       arrowOffset: 10,
       roundness: 10,
       detourDistance: -100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
-    });
-
-    expect(edgePath.path).toBe(
-      "M 100 100 L 110 100 C 120 100 120 100 120 90 L 120 -90 C 120 -100 120 -100 130 -100 L 170 -100 C 180 -100 180 -100 180 -90 L 180 290 C 180 300 180 300 190 300 L 200 300",
-    );
-  });
-
-  it("should create detour horizontal path with flip Y", () => {
-    const edgePath = new DetourHorizontalEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
-      arrowLength: 10,
-      arrowOffset: 10,
-      roundness: 10,
-      detourDistance: 100,
       hasSourceArrow: false,
       hasTargetArrow: false,
     });

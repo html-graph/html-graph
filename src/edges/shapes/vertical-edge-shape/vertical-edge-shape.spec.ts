@@ -30,7 +30,7 @@ const createVerticalEdge = (
 };
 
 describe("VerticalEdgeShape", () => {
-  it("should create line path without arrows without flip y", () => {
+  it("should create line path without arrows", () => {
     const shape = createVerticalEdge(false, false);
 
     shape.render({
@@ -56,35 +56,6 @@ describe("VerticalEdgeShape", () => {
 
     expect(line.getAttribute("d")).toBe(
       "M 0 0 L 10 0 C 15 0 15 0 15 5 L 15 45 C 15 50 15 50 20 50 L 45 50 C 50 50 50 50 50 50 L 50 50 C 50 50 50 50 55 50 L 80 50 C 85 50 85 50 85 55 L 85 95 C 85 100 85 100 90 100 L 100 100",
-    );
-  });
-
-  it("should create line path without arrows with flip y", () => {
-    const shape = createVerticalEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 15 0 15 0 15 -5 L 15 -15 C 15 -20 15 -20 20 -20 L 45 -20 C 50 -20 50 -20 50 -15 L 50 115 C 50 120 50 120 55 120 L 80 120 C 85 120 85 120 85 115 L 85 105 C 85 100 85 100 90 100 L 100 100",
     );
   });
 

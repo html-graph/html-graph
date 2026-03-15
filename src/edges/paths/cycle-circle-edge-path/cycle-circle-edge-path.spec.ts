@@ -8,8 +8,7 @@ describe("CycleCircleEdgePath", () => {
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
+      hasArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -17,31 +16,14 @@ describe("CycleCircleEdgePath", () => {
     );
   });
 
-  it("should create cycle circle path with source arrow", () => {
+  it("should create cycle circle path with arrow", () => {
     const edgePath = new CycleCircleEdgePath({
       origin: { x: 100, y: 100 },
       dir: { x: 1, y: 0 },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
-    });
-
-    expect(edgePath.path).toBe(
-      "M 115 100 A 10 10 0 0 1 124.79795897113272 108 A 40 40 0 1 0 124.79795897113272 92 A 10 10 0 0 1 115 100",
-    );
-  });
-
-  it("should create cycle circle path with target arrow", () => {
-    const edgePath = new CycleCircleEdgePath({
-      origin: { x: 100, y: 100 },
-      dir: { x: 1, y: 0 },
-      radius: 40,
-      smallRadius: 10,
-      arrowLength: 15,
-      hasSourceArrow: false,
-      hasTargetArrow: true,
+      hasArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -56,8 +38,7 @@ describe("CycleCircleEdgePath", () => {
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
+      hasArrow: false,
     });
 
     const x = 15 + 40 + Math.sqrt(50 * 50 - 10 * 10) + 100;

@@ -13,10 +13,9 @@ export class CycleCircleEdgePath implements EdgePath {
     readonly radius: number;
     readonly smallRadius: number;
     readonly arrowLength: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
+    readonly hasArrow: boolean;
   }) {
-    const { arrowLength, radius, smallRadius, dir, origin } = params;
+    const { arrowLength, radius, smallRadius, dir, origin, hasArrow } = params;
 
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
@@ -45,7 +44,6 @@ export class CycleCircleEdgePath implements EdgePath {
 
     const preLine = `M ${origin.x} ${origin.y} L ${absPoints[0].x} ${absPoints[0].y} `;
 
-    const hasArrow = params.hasSourceArrow || params.hasTargetArrow;
     this.path = `${hasArrow ? "" : preLine}${c}`;
 
     this.midpoint = absPoints[3];

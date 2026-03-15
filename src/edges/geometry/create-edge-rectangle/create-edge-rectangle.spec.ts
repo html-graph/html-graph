@@ -22,8 +22,6 @@ describe("createEdgeRectangle", () => {
     const res = createEdgeRectangle(source, target);
 
     expect(res).toStrictEqual({
-      flipX: 1,
-      flipY: 1,
       height: 200,
       width: 200,
       x: -95,
@@ -37,8 +35,6 @@ describe("createEdgeRectangle", () => {
     const res = createEdgeRectangle(target, source);
 
     expect(res).toStrictEqual({
-      flipX: -1,
-      flipY: -1,
       height: 200,
       width: 200,
       x: -95,
