@@ -13,12 +13,12 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: {
-      type: "horizontal",
+      type: "vertical",
       hasTargetArrow: true,
     },
   },
   ports: {
-    direction: -Math.PI,
+    direction: -Math.PI / 2,
   },
 };
 
@@ -30,36 +30,36 @@ const canvas: Canvas = builder
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
-  x: 500,
-  y: 400,
-  frontPort: { id: "node-1-front" },
-  backPort: { id: "node-1-back" },
+  x: 300,
+  y: 300,
+  frontPort: { id: "node-1-top" },
+  backPort: { id: "node-1-bottom" },
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
-  x: 200,
+  x: 500,
   y: 500,
-  frontPort: { id: "node-2-front" },
-  backPort: { id: "node-2-back" },
+  frontPort: { id: "node-2-top" },
+  backPort: { id: "node-2-bottom" },
 });
 
 const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
-  x: 500,
-  y: 650,
-  frontPort: { id: "node-3-front" },
-  backPort: { id: "node-3-back" },
+  x: 700,
+  y: 200,
+  frontPort: { id: "node-3-top" },
+  backPort: { id: "node-3-bottom" },
 });
 
 const addEdge1Request: AddEdgeRequest = {
-  from: "node-1-front",
-  to: "node-2-back",
+  from: "node-1-top",
+  to: "node-2-bottom",
 };
 
 const addEdge2Request: AddEdgeRequest = {
-  from: "node-2-front",
-  to: "node-3-back",
+  from: "node-2-top",
+  to: "node-3-bottom",
 };
 
 canvas
