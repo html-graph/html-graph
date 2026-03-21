@@ -3,20 +3,31 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  EdgeShape,
+  MidpointEdgeShape,
   VerticalEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
+import { createMidpoint } from "../shared/create-midpoint";
+
+const createEdgeShape = (detourDistance: number): EdgeShape => {
+  const baseShape = new VerticalEdgeShape({
+    hasTargetArrow: true,
+    detourDistance,
+  });
+
+  const midpoint = createMidpoint();
+  const midpointShape = new MidpointEdgeShape(baseShape, midpoint);
+
+  return midpointShape;
+};
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .setDefaults({
     edges: {
-      shape: {
-        type: "vertical",
-        hasTargetArrow: true,
-        detourDistance: 100,
-      },
+      shape: () => createEdgeShape(100),
     },
     ports: {
       direction: Math.PI / 2,
@@ -69,10 +80,7 @@ addNode3Request.element.classList.add("forward");
 const addEdge3Request: AddEdgeRequest = {
   from: "node-3-out",
   to: "node-3-in",
-  shape: new VerticalEdgeShape({
-    hasTargetArrow: true,
-    detourDistance: -100,
-  }),
+  shape: createEdgeShape(-100),
 };
 
 const addNode4Request: AddNodeRequest = createInOutNode({
@@ -88,10 +96,7 @@ addNode4Request.element.classList.add("backward");
 const addEdge4Request: AddEdgeRequest = {
   from: "node-4-out",
   to: "node-4-in",
-  shape: new VerticalEdgeShape({
-    hasTargetArrow: true,
-    detourDistance: -100,
-  }),
+  shape: createEdgeShape(-100),
 };
 
 canvas

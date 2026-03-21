@@ -56,29 +56,38 @@ export class DetourStraightEdgePath implements EdgePath {
 
     const gap = arrowLength + arrowOffset;
 
-    const pbl1: Point = createRotatedPoint(
+    const detourX = Math.cos(detourDir) * detourDistance;
+    const detourY = Math.sin(detourDir) * detourDistance;
+
+    const startLineStart: Point = createRotatedPoint(
       { x: from.x + gap, y: from.y },
       fromDir,
       from,
     );
 
-    const detourX = Math.cos(detourDir) * detourDistance;
-    const detourY = Math.sin(detourDir) * detourDistance;
+    const startLineEnd: Point = {
+      x: startLineStart.x + detourX,
+      y: startLineStart.y + detourY,
+    };
 
-    const pbl2: Point = { x: pbl1.x + detourX, y: pbl1.y + detourY };
-    const pel1: Point = createRotatedPoint(
+    const endLineStart: Point = createRotatedPoint(
       { x: to.x - gap, y: to.y },
       toDir,
       to,
     );
-    const pel2: Point = { x: pel1.x + detourX, y: pel1.y + detourY };
 
-    const center = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+    const endLineEnd: Point = {
+      x: endLineStart.x + detourX,
+      y: endLineStart.y + detourY,
+    };
 
-    this.midpoint = center;
+    this.midpoint = {
+      x: (startLineEnd.x + endLineEnd.x) / 2,
+      y: (startLineEnd.y + endLineEnd.y) / 2,
+    };
 
     this.path = createRoundedPath(
-      [pba, pbl1, pbl2, pel2, pel1, pea],
+      [pba, startLineStart, startLineEnd, endLineEnd, endLineStart, pea],
       roundness,
     );
   }

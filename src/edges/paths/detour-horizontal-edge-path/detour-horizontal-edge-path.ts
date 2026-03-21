@@ -2,6 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { calculateDotourY } from "./calculate-detour-y";
 
 export class DetourHorizontalEdgePath implements EdgePath {
   public readonly path: string;
@@ -54,37 +55,32 @@ export class DetourHorizontalEdgePath implements EdgePath {
 
     const gap = arrowLength + arrowOffset;
 
-    const beginLine1: Point = createRotatedPoint(
+    const lineBegin: Point = createRotatedPoint(
       { x: from.x + gap, y: from.y },
       fromDir,
       from,
     );
 
-    const endLine1: Point = createRotatedPoint(
+    const lineEnd: Point = createRotatedPoint(
       { x: to.x - gap, y: to.y },
       toDir,
       to,
     );
 
-    const flipDetour = detourDistance > 0 ? 1 : -1;
-    const halfHeight = (from.y + to.y) / 2;
-    const centerDetour = halfHeight + Math.abs(detourDistance);
-    const sideY = halfHeight + centerDetour * flipDetour;
+    const detourY = calculateDotourY(lineBegin, lineEnd, detourDistance);
 
-    const center = {
-      x: (beginLine1.x + endLine1.x) / 2,
-      y: sideY,
+    this.midpoint = {
+      x: (lineBegin.x + lineEnd.x) / 2,
+      y: detourY,
     };
-
-    this.midpoint = center;
 
     this.path = createRoundedPath(
       [
         beginArrow,
-        beginLine1,
-        { x: beginLine1.x, y: sideY },
-        { x: endLine1.x, y: sideY },
-        endLine1,
+        lineBegin,
+        { x: lineBegin.x, y: detourY },
+        { x: lineEnd.x, y: detourY },
+        lineEnd,
         endArrow,
       ],
       roundness,
