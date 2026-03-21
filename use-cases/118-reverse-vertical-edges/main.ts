@@ -4,17 +4,26 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  VerticalEdgeShape,
+  MidpointEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
+import { createMidpoint } from "../shared/create-midpoint";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: {
-      type: "vertical",
-      hasTargetArrow: true,
+    shape: () => {
+      const baseShape = new VerticalEdgeShape({
+        hasTargetArrow: true,
+      });
+
+      const midpoint = createMidpoint();
+      const midpointShape = new MidpointEdgeShape(baseShape, midpoint);
+
+      return midpointShape;
     },
   },
   ports: {
@@ -26,6 +35,7 @@ const canvas: Canvas = builder
   .setDefaults(canvasDefaults)
   .enableUserTransformableViewport()
   .enableUserDraggableNodes()
+  .enableBackground()
   .build();
 
 const addNode1Request: AddNodeRequest = createInOutNode({
