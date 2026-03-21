@@ -5,6 +5,7 @@ import { EdgeRenderPort } from "../../edge-render-port";
 export const createEdgeRectangle = (
   source: EdgeRenderPort,
   target: EdgeRenderPort,
+  padding: number,
 ): EdgeRectangle => {
   const from: Point = {
     x: source.x + source.width / 2,
@@ -16,10 +17,11 @@ export const createEdgeRectangle = (
     y: target.y + target.height / 2,
   };
 
-  const x = Math.min(from.x, to.x);
-  const y = Math.min(from.y, to.y);
-  const width = Math.abs(to.x - from.x);
-  const height = Math.abs(to.y - from.y);
+  const x = Math.min(from.x, to.x) - padding;
+  const y = Math.min(from.y, to.y) - padding;
+  const doublePadding = 2 * padding;
+  const width = Math.abs(to.x - from.x) + doublePadding;
+  const height = Math.abs(to.y - from.y) + doublePadding;
 
   return {
     x,

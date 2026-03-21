@@ -76,6 +76,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
+      0,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });
