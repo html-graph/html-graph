@@ -12,6 +12,7 @@ import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
+import { svgPadding } from "../../svg-padding";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -119,6 +120,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       createCyclePath: this.createCyclePath,
       createDetourPath: this.createDetourPath,
       createLinePath: this.createLinePath,
+      padding: svgPadding,
     });
 
     this.svg = this.pathShape.svg;

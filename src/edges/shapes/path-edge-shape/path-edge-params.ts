@@ -11,4 +11,5 @@ export interface PathEdgeParams {
   readonly createCyclePath: EdgePathFactory;
   readonly createDetourPath: EdgePathFactory;
   readonly createLinePath: EdgePathFactory;
+  readonly padding: number;
 }

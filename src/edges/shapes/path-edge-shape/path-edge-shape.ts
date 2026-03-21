@@ -62,7 +62,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
-      0,
+      this.params.padding,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });

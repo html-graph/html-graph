@@ -55,7 +55,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 M 10 0 C 50 0, 50 100, 90 100 M 90 100 L 100 100",
+      "M 50 50 L 60 50 M 60 50 C 100 50, 100 150, 140 150 M 140 150 L 150 150",
     );
   });
 
@@ -84,7 +84,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 M 10 0 C 50 0, 50 100, 90 100",
+      "M 50 50 L 60 50 M 60 50 C 100 50, 100 150, 140 150",
     );
   });
 
@@ -113,7 +113,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 10 0 C 50 0, 50 100, 90 100 M 90 100 L 100 100",
+      "M 60 50 C 100 50, 100 150, 140 150 M 140 150 L 150 150",
     );
   });
 
@@ -141,7 +141,7 @@ describe("BezierEdgeShape", () => {
     const line = shape.svg.children[0].children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 M 10 0 A 20 20 0 0 1 28.33030277982336 12 A 30 30 0 1 0 28.33030277982336 -12 A 20 20 0 0 1 10 0",
+      "M 50 50 L 60 50 M 60 50 A 20 20 0 0 1 78.33030277982336 62 A 30 30 0 1 0 78.33030277982336 38 A 20 20 0 0 1 60 50",
     );
   });
 
@@ -170,7 +170,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 100 100",
+      "M 50 50 L 60 50 C 100 50 60.00000000000001 -50 100 0 C 140 50 100 150 140 150 L 150 150",
     );
   });
 
@@ -199,7 +199,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 90 100",
+      "M 50 50 L 60 50 C 100 50 60.00000000000001 -50 100 0 C 140 50 100 150 140 150 L 140 150",
     );
   });
 
@@ -228,7 +228,7 @@ describe("BezierEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 10 0 L 10 0 C 50 0 10.000000000000005 -100 50 -50 C 90 0 50 100 90 100 L 100 100",
+      "M 60 50 L 60 50 C 100 50 60.00000000000001 -50 100 0 C 140 50 100 150 140 150 L 150 150",
     );
   });
 });

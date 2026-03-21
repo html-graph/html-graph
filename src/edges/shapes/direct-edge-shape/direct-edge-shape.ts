@@ -14,6 +14,7 @@ import {
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
+import { svgPadding } from "@/edges/svg-padding";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -76,7 +77,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
-      0,
+      svgPadding,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });

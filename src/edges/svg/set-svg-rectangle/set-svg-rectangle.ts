@@ -8,6 +8,6 @@ export const setSvgRectangle = (
   },
 ): void => {
   svg.style.transform = `translate(${params.x}px, ${params.y}px)`;
-  svg.style.width = `${Math.max(params.width, 1)}px`;
-  svg.style.height = `${Math.max(params.height, 1)}px`;
+  svg.style.width = `${params.width}px`;
+  svg.style.height = `${params.height}px`;
 };

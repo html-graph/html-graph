@@ -53,7 +53,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[0];
 
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 100 0");
+    expect(arrow.getAttribute("d")).toBe("M 50 50 L 150 50");
   });
 
   it("should create path for source arrow", () => {
@@ -113,7 +113,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 100 0 L 80 -4 L 80 4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 150 50 L 130 46 L 130 54 Z");
   });
 
   it("should render empty line when diagonal distance is 0", () => {
@@ -256,6 +256,6 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 90 0 L 70 -4 L 70 4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 140 50 L 120 46 L 120 54 Z");
   });
 });

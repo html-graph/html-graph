@@ -51,6 +51,7 @@ const createBezierEdge = (
         hasArrow: false,
         arrowLength: 10,
       }),
+    padding: 0,
   });
 };
 
