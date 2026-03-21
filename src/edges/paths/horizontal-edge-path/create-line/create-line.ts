@@ -39,20 +39,21 @@ export const createLine = (from: PortParams, to: PortParams): Line => {
   }
 
   const isSameSourceDir = fromPortDir === horizontalLineDir;
+  const centerY = (from.y + to.y) / 2;
 
   if (isSameSourceDir) {
-    const midpoint: Point = { x: to.x, y: from.y };
+    const joint: Point = { x: to.x, y: from.y };
 
     return {
-      points: [{ x: from.x, y: from.y }, midpoint, { x: to.x, y: to.y }],
-      midpoint,
+      points: [{ x: from.x, y: from.y }, joint, { x: to.x, y: to.y }],
+      midpoint: { x: joint.x, y: centerY },
     };
   }
 
-  const midpoint: Point = { x: from.x, y: to.y };
+  const joint: Point = { x: from.x, y: to.y };
 
   return {
-    points: [{ x: from.x, y: from.y }, midpoint, { x: to.x, y: to.y }],
-    midpoint,
+    points: [{ x: from.x, y: from.y }, joint, { x: to.x, y: to.y }],
+    midpoint: { x: joint.x, y: centerY },
   };
 };

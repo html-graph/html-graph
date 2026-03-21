@@ -79,7 +79,7 @@ describe("createLinePoints", () => {
       { x: 100, y: 100, dirX: -1 },
     );
 
-    expect(line.midpoint).toEqual({ x: 100, y: 0 });
+    expect(line.midpoint).toEqual({ x: 100, y: 50 });
   });
 
   it("should create midpoint when source port direction is opposite to connection direction", () => {
@@ -88,6 +88,6 @@ describe("createLinePoints", () => {
       { x: 100, y: 100, dirX: 1 },
     );
 
-    expect(line.midpoint).toEqual({ x: 0, y: 100 });
+    expect(line.midpoint).toEqual({ x: 0, y: 50 });
   });
 });
