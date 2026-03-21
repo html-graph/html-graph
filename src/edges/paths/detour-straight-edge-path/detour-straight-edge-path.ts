@@ -1,5 +1,5 @@
-import { Point, zero } from "@/point";
-import { createRotatedPoint, flipPoint } from "../../geometry";
+import { Point } from "@/point";
+import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 
@@ -8,71 +8,87 @@ export class DetourStraightEdgePath implements EdgePath {
 
   public readonly midpoint: Point;
 
-  public constructor(
-    private readonly params: {
-      readonly to: Point;
-      readonly sourceDirection: Point;
-      readonly targetDirection: Point;
-      readonly flipX: number;
-      readonly flipY: number;
-      readonly arrowLength: number;
-      readonly arrowOffset: number;
-      readonly roundness: number;
-      readonly detourDirection: number;
-      readonly detourDistance: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-    },
-  ) {
-    const pba: Point = this.params.hasSourceArrow
+  public constructor(params: {
+    readonly from: Point;
+    readonly to: Point;
+    readonly fromDir: Point;
+    readonly toDir: Point;
+    readonly arrowOffset: number;
+    readonly arrowLength: number;
+    readonly roundness: number;
+    readonly detourDir: number;
+    readonly detourDistance: number;
+    readonly hasSourceArrow: boolean;
+    readonly hasTargetArrow: boolean;
+  }) {
+    const {
+      hasSourceArrow,
+      hasTargetArrow,
+      from,
+      to,
+      arrowLength,
+      fromDir,
+      toDir,
+      arrowOffset,
+      detourDir,
+      detourDistance,
+      roundness,
+    } = params;
+
+    const pba: Point = hasSourceArrow
       ? createRotatedPoint(
-          { x: this.params.arrowLength, y: zero.y },
-          this.params.sourceDirection,
-          zero,
+          { x: from.x + arrowLength, y: from.y },
+          fromDir,
+          from,
         )
-      : zero;
-    const pea: Point = this.params.hasTargetArrow
+      : from;
+
+    const pea: Point = hasTargetArrow
       ? createRotatedPoint(
           {
-            x: this.params.to.x - this.params.arrowLength,
-            y: this.params.to.y,
+            x: to.x - arrowLength,
+            y: to.y,
           },
-          this.params.targetDirection,
-          this.params.to,
+          toDir,
+          to,
         )
-      : this.params.to;
+      : to;
 
-    const gap1 = this.params.arrowLength + this.params.arrowOffset;
+    const gap = arrowLength + arrowOffset;
 
-    const pbl1: Point = createRotatedPoint(
-      { x: gap1, y: zero.y },
-      this.params.sourceDirection,
-      zero,
+    const detourX = Math.cos(detourDir) * detourDistance;
+    const detourY = Math.sin(detourDir) * detourDistance;
+
+    const startLineStart: Point = createRotatedPoint(
+      { x: from.x + gap, y: from.y },
+      fromDir,
+      from,
     );
 
-    const detourX =
-      Math.cos(this.params.detourDirection) * this.params.detourDistance;
-    const detourY =
-      Math.sin(this.params.detourDirection) * this.params.detourDistance;
+    const startLineEnd: Point = {
+      x: startLineStart.x + detourX,
+      y: startLineStart.y + detourY,
+    };
 
-    const flipDetourX = detourX * this.params.flipX;
-    const flipDetourY = detourY * this.params.flipY;
-
-    const pbl2: Point = { x: pbl1.x + flipDetourX, y: pbl1.y + flipDetourY };
-    const pel1: Point = createRotatedPoint(
-      { x: this.params.to.x - gap1, y: this.params.to.y },
-      this.params.targetDirection,
-      this.params.to,
+    const endLineStart: Point = createRotatedPoint(
+      { x: to.x - gap, y: to.y },
+      toDir,
+      to,
     );
-    const pel2: Point = { x: pel1.x + flipDetourX, y: pel1.y + flipDetourY };
 
-    const center = { x: (pbl2.x + pel2.x) / 2, y: (pbl2.y + pel2.y) / 2 };
+    const endLineEnd: Point = {
+      x: endLineStart.x + detourX,
+      y: endLineStart.y + detourY,
+    };
 
-    this.midpoint = flipPoint(center, params.flipX, params.flipY, params.to);
+    this.midpoint = {
+      x: (startLineEnd.x + endLineEnd.x) / 2,
+      y: (startLineEnd.y + endLineEnd.y) / 2,
+    };
 
     this.path = createRoundedPath(
-      [pba, pbl1, pbl2, pel2, pel1, pea],
-      this.params.roundness,
+      [pba, startLineStart, startLineEnd, endLineEnd, endLineStart, pea],
+      roundness,
     );
   }
 }

@@ -12,6 +12,7 @@ import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
+import { svgPadding } from "@/edges/svg-padding";
 
 export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -43,31 +44,31 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
   private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
-    sourceDirection: Point,
+    from: Point,
+    _to: Point,
+    fromDir: Point,
   ) =>
     new CycleSquareEdgePath({
-      sourceDirection,
+      origin: from,
+      dir: fromDir,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
-    flipX: number,
-    flipY: number,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new DetourVerticalEdgePath({
+      from,
       to,
-      sourceDirection,
-      targetDirection,
-      flipX,
-      flipY,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -77,17 +78,16 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
-    _flipX: number,
-    flipY: number,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new VerticalEdgePath({
+      from,
       to,
-      sourceDirection,
-      targetDirection,
-      flipY,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -125,6 +125,7 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
       createCyclePath: this.createCyclePath,
       createDetourPath: this.createDetourPath,
       createLinePath: this.createLinePath,
+      padding: svgPadding,
     });
 
     this.svg = this.pathShape.svg;

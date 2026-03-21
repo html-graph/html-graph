@@ -30,7 +30,7 @@ const createVerticalEdge = (
 };
 
 describe("VerticalEdgeShape", () => {
-  it("should create line path without arrows without flip y", () => {
+  it("should create line path without arrows", () => {
     const shape = createVerticalEdge(false, false);
 
     shape.render({
@@ -55,36 +55,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 15 0 15 0 15 5 L 15 45 C 15 50 15 50 20 50 L 45 50 C 50 50 50 50 50 50 L 50 50 C 50 50 50 50 55 50 L 80 50 C 85 50 85 50 85 55 L 85 95 C 85 100 85 100 90 100 L 100 100",
-    );
-  });
-
-  it("should create line path without arrows with flip y", () => {
-    const shape = createVerticalEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0];
-    const line = g.children[0];
-
-    expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 15 0 15 0 15 -5 L 15 -15 C 15 -20 15 -20 20 -20 L 45 -20 C 50 -20 50 -20 50 -15 L 50 115 C 50 120 50 120 55 120 L 80 120 C 85 120 85 120 85 115 L 85 105 C 85 100 85 100 90 100 L 100 100",
+      "M 50 50 L 65 50 C 70 50 70 50 70 55 L 70 95 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 130 105 L 130 145 C 130 150 130 150 135 150 L 150 150",
     );
   });
 
@@ -113,7 +84,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 C 15 0 15 0 15 5 L 15 45 C 15 50 15 50 20 50 L 45 50 C 50 50 50 50 50 50 L 50 50 C 50 50 50 50 55 50 L 80 50 C 85 50 85 50 85 55 L 85 95 C 85 100 85 100 90 100 L 90 100",
+      "M 50 50 L 65 50 C 70 50 70 50 70 55 L 70 95 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 130 105 L 130 145 C 130 150 130 150 135 150 L 140 150",
     );
   });
 
@@ -142,7 +113,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 10 0 L 10 0 C 15 0 15 0 15 5 L 15 45 C 15 50 15 50 20 50 L 45 50 C 50 50 50 50 50 50 L 50 50 C 50 50 50 50 55 50 L 80 50 C 85 50 85 50 85 55 L 85 95 C 85 100 85 100 90 100 L 100 100",
+      "M 60 50 L 65 50 C 70 50 70 50 70 55 L 70 95 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 130 105 L 130 145 C 130 150 130 150 135 150 L 150 150",
     );
   });
 
@@ -171,7 +142,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 10 0 M 10 0 L 15 0 C 20 0 20 0 20 5 L 20 45 C 20 50 20 50 25 50 L 115 50 C 120 50 120 50 120 45 L 120 -45 C 120 -50 120 -50 115 -50 L 25 -50 C 20 -50 20 -50 20 -45 L 20 -5 C 20 0 20 0 15 0 L 10 0",
+      "M 50 50 L 60 50 M 60 50 L 65 50 C 70 50 70 50 70 55 L 70 95 C 70 100 70 100 75 100 L 165 100 C 170 100 170 100 170 95 L 170 5 C 170 0 170 0 165 0 L 75 0 C 70 0 70 0 70 5 L 70 45 C 70 50 70 50 65 50 L 60 50",
     );
   });
 
@@ -200,7 +171,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 15 0 C 20 0 20 0 25 0 L 195 0 C 200 0 200 0 200 5 L 200 95 C 200 100 200 100 195 100 L 85 100 C 80 100 80 100 85 100 L 100 100",
+      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 150 150",
     );
   });
 
@@ -229,7 +200,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 0 0 L 15 0 C 20 0 20 0 25 0 L 195 0 C 200 0 200 0 200 5 L 200 95 C 200 100 200 100 195 100 L 85 100 C 80 100 80 100 85 100 L 90 100",
+      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 140 150",
     );
   });
 
@@ -258,7 +229,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 10 0 L 15 0 C 20 0 20 0 25 0 L 195 0 C 200 0 200 0 200 5 L 200 95 C 200 100 200 100 195 100 L 85 100 C 80 100 80 100 85 100 L 100 100",
+      "M 60 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 150 150",
     );
   });
 });

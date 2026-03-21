@@ -25,8 +25,8 @@ const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 300,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
+  frontPort: { id: "node-1-in" },
+  backPort: { id: "node-1-out" },
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
@@ -34,8 +34,8 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 500,
   y: 400,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
+  frontPort: { id: "node-2-in" },
+  backPort: { id: "node-2-out" },
 });
 
 const addEdge1Request: AddEdgeRequest = {

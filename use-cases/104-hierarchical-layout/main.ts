@@ -37,8 +37,8 @@ canvas.patchContentMatrix({
 graphData.nodes.forEach((nodeId) => {
   const createNodeRequest = createInOutNode({
     name: `${nodeId}`,
-    frontPortId: `${nodeId}-in`,
-    backPortId: `${nodeId}-out`,
+    frontPort: { id: `${nodeId}-in` },
+    backPort: { id: `${nodeId}-out` },
   });
 
   canvas.addNode(createNodeRequest);

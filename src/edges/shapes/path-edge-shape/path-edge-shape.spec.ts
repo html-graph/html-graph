@@ -20,9 +20,10 @@ const createBezierEdge = (
     hasTargetArrow,
     createLinePath: () =>
       new BezierEdgePath({
+        from: { x: 0, y: 0 },
         to: { x: 0, y: 0 },
-        sourceDirection: { x: 1, y: 0 },
-        targetDirection: { x: 1, y: 0 },
+        fromDir: { x: 1, y: 0 },
+        toDir: { x: 1, y: 0 },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
@@ -30,27 +31,27 @@ const createBezierEdge = (
       }),
     createDetourPath: () =>
       new DetourBezierEdgePath({
+        from: { x: 0, y: 0 },
         to: { x: 0, y: 0 },
-        sourceDirection: { x: 1, y: 0 },
-        targetDirection: { x: 1, y: 0 },
+        fromDir: { x: 1, y: 0 },
+        toDir: { x: 1, y: 0 },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
         hasSourceArrow: false,
-        flipX: 1,
-        flipY: 1,
         detourDistance: 100,
-        detourDirection: 0,
+        detourDir: 0,
       }),
     createCyclePath: () =>
       new CycleCircleEdgePath({
-        sourceDirection: { x: 1, y: 0 },
+        origin: { x: 0, y: 0 },
+        dir: { x: 1, y: 0 },
         radius: 10,
         smallRadius: 2,
-        hasTargetArrow: false,
-        hasSourceArrow: false,
+        hasArrow: false,
         arrowLength: 10,
       }),
+    padding: 0,
   });
 };
 
@@ -77,32 +78,6 @@ describe("PathEdgeShape", () => {
     const childrenCount = shape.svg.children[0].children.length;
 
     expect(childrenCount).toBe(3);
-  });
-
-  it("should apply specified mirroring to group", () => {
-    const shape = createBezierEdge(false, false);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.Line,
-    });
-
-    const g = shape.svg.children[0] as SVGGElement;
-
-    expect(g.style.transform).toBe("scale(1, -1)");
   });
 
   it("should create path for target arrow", () => {

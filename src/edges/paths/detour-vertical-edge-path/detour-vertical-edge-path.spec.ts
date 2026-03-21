@@ -1,13 +1,12 @@
 import { DetourVerticalEdgePath } from "./detour-vertical-edge-path";
 
 describe("DetourVerticalEdgePath", () => {
-  it("should create detour vertical path without flip Y", () => {
+  it("should create detour vertical path", () => {
     const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: 1,
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -17,17 +16,16 @@ describe("DetourVerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 20 0 20 0 30 0 L 190 0 C 200 0 200 0 200 10 L 200 190 C 200 200 200 200 190 200 L 90 200 C 80 200 80 200 90 200 L 100 200",
+      "M 100 100 L 110 100 C 120 100 120 100 130 100 L 270 100 C 280 100 280 100 280 110 L 280 290 C 280 300 280 300 270 300 L 190 300 C 180 300 180 300 190 300 L 200 300",
     );
   });
 
   it("should create detour vertical path accounting for negative detour distance", () => {
     const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: 1,
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -37,37 +35,16 @@ describe("DetourVerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 20 0 20 0 10 0 L -90 0 C -100 0 -100 0 -100 10 L -100 190 C -100 200 -100 200 -90 200 L 70 200 C 80 200 80 200 90 200 L 100 200",
-    );
-  });
-
-  it("should create detour vertical path with flip Y", () => {
-    const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: -1,
-      arrowLength: 10,
-      arrowOffset: 10,
-      roundness: 10,
-      detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
-    });
-
-    expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 20 0 20 0 30 0 L 190 0 C 200 0 200 0 200 10 L 200 190 C 200 200 200 200 190 200 L 90 200 C 80 200 80 200 90 200 L 100 200",
+      "M 100 100 L 110 100 C 120 100 120 100 110 100 L 30 100 C 20 100 20 100 20 110 L 20 290 C 20 300 20 300 30 300 L 170 300 C 180 300 180 300 190 300 L 200 300",
     );
   });
 
   it("should create detour vertical path with source arrow", () => {
     const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: 1,
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -77,17 +54,16 @@ describe("DetourVerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 10 0 L 10 0 C 20 0 20 0 30 0 L 190 0 C 200 0 200 0 200 10 L 200 190 C 200 200 200 200 190 200 L 90 200 C 80 200 80 200 90 200 L 100 200",
+      "M 110 100 L 110 100 C 120 100 120 100 130 100 L 270 100 C 280 100 280 100 280 110 L 280 290 C 280 300 280 300 270 300 L 190 300 C 180 300 180 300 190 300 L 200 300",
     );
   });
 
   it("should create detour vertical path with target arrow", () => {
     const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: 1,
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -97,17 +73,16 @@ describe("DetourVerticalEdgePath", () => {
     });
 
     expect(edgePath.path).toBe(
-      "M 0 0 L 10 0 C 20 0 20 0 30 0 L 190 0 C 200 0 200 0 200 10 L 200 190 C 200 200 200 200 190 200 L 90 200 C 80 200 80 200 90 200 L 90 200",
+      "M 100 100 L 110 100 C 120 100 120 100 130 100 L 270 100 C 280 100 280 100 280 110 L 280 290 C 280 300 280 300 270 300 L 190 300 C 180 300 180 300 190 300 L 190 300",
     );
   });
 
   it("should calculate midpoint in between detour points", () => {
     const edgePath = new DetourVerticalEdgePath({
-      to: { x: 100, y: 200 },
-      sourceDirection: { x: 1, y: 0 },
-      targetDirection: { x: 1, y: 0 },
-      flipX: 1,
-      flipY: 1,
+      from: { x: 100, y: 100 },
+      to: { x: 200, y: 300 },
+      fromDir: { x: 1, y: 0 },
+      toDir: { x: 1, y: 0 },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -116,6 +91,6 @@ describe("DetourVerticalEdgePath", () => {
       hasTargetArrow: false,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 200, y: 100 });
+    expect(edgePath.midpoint).toEqual({ x: 280, y: 200 });
   });
 });

@@ -1,7 +1,6 @@
 import { EdgeRenderParams } from "../../edge-render-params";
-import { Point, zero } from "@/point";
+import { Point } from "@/point";
 import { PathEdgeParams } from "./path-edge-params";
-import { createFlipDirectionVector } from "./create-flip-direction-vector";
 import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { createEdgeRectangle } from "../../geometry";
@@ -11,16 +10,19 @@ import { ConnectionCategory } from "../../connection-category";
 import { ArrowRenderer } from "../../arrow-renderer";
 import {
   createEdgeArrow,
-  createEdgeGroup,
   createEdgePath,
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
+import { createDirectionVector } from "./create-direction-vector";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
-  public readonly group = createEdgeGroup();
+  public readonly group = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g",
+  );
 
   public readonly line: SVGPathElement;
 
@@ -57,30 +59,16 @@ export class PathEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+    const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
+      this.params.padding,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
-    const sourceDirection = createFlipDirectionVector(
-      params.from.direction,
-      flipX,
-      flipY,
-    );
-
-    const targetDirection = createFlipDirectionVector(
-      params.to.direction,
-      flipX,
-      flipY,
-    );
-
-    const to: Point = {
-      x: width,
-      y: height,
-    };
+    const sourceDirection = createDirectionVector(params.from.direction);
+    const targetDirection = createDirectionVector(params.to.direction);
 
     let targetVect: Point = { x: -targetDirection.x, y: -targetDirection.y };
     let createPathFn: EdgePathFactory;
@@ -94,13 +82,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
       createPathFn = this.params.createLinePath;
     }
 
-    const edgePath = createPathFn(
-      sourceDirection,
-      targetDirection,
-      to,
-      flipX,
-      flipY,
-    );
+    const edgePath = createPathFn(from, to, sourceDirection, targetDirection);
 
     this.line.setAttribute("d", edgePath.path);
 
@@ -109,7 +91,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
     if (this.sourceArrow) {
       sourceArrowPath = this.arrowRenderer({
         direction: sourceDirection,
-        shift: zero,
+        shift: from,
         arrowLength: this.params.arrowLength,
       });
 

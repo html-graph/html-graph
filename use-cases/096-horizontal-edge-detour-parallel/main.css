@@ -44,3 +44,12 @@
   background: var(--color-edge);
   border-radius: calc(2 * var(--port-size));
 }
+
+.remove-button {
+  --remove-color: #e88b74;
+  --remove-background: white;
+}
+
+.remove-button:hover {
+  --remove-color: #f93707;
+}

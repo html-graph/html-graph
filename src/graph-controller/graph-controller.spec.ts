@@ -631,7 +631,7 @@ describe("GraphController", () => {
     const container = element.children[0].children[0];
     const edgeSvg = container.children[1] as SVGSVGElement;
 
-    expect(edgeSvg.style.transform).toBe("translate(100px, 100px)");
+    expect(edgeSvg.style.transform).toBe("translate(50px, 50px)");
   });
 
   it("should update edge source", () => {

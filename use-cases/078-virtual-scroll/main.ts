@@ -78,8 +78,8 @@ const initiateGraph = async (): Promise<void> => {
           name: `Node ${iter}`,
           x: i * 300,
           y: j * 300,
-          frontPortId,
-          backPortId,
+          frontPort: { id: frontPortId },
+          backPort: { id: backPortId },
         });
 
         canvas.addNode(request);

@@ -12,6 +12,7 @@ import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
+import { svgPadding } from "@/edges/svg-padding";
 
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -45,49 +46,51 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   private readonly pathShape: PathEdgeShape;
 
   private readonly createCyclePath: EdgePathFactory = (
-    sourceDirection: Point,
+    from: Point,
+    _to: Point,
+    fromDir: Point,
   ) =>
     new CycleSquareEdgePath({
-      sourceDirection,
+      origin: from,
+      dir: fromDir,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
-    flipX: number,
-    flipY: number,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new DetourStraightEdgePath({
+      from,
       to,
-      sourceDirection,
-      targetDirection,
-      flipX,
-      flipY,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      detourDirection: this.detourDirection,
+      detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    sourceDirection: Point,
-    targetDirection: Point,
+    from: Point,
     to: Point,
+    fromDir: Point,
+    toDir: Point,
   ) =>
     new StraightEdgePath({
+      from,
       to,
-      sourceDirection,
-      targetDirection,
+      fromDir,
+      toDir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -129,6 +132,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       createCyclePath: this.createCyclePath,
       createDetourPath: this.createDetourPath,
       createLinePath: this.createLinePath,
+      padding: svgPadding,
     });
 
     this.svg = this.pathShape.svg;

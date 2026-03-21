@@ -44,6 +44,6 @@ describe("MidpointEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    expect(midpointElement.style.transform).toBe("translate(50px, 50px)");
+    expect(midpointElement.style.transform).toBe("translate(100px, 100px)");
   });
 });

@@ -10,16 +10,19 @@ import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ArrowRenderer, resolveArrowRenderer } from "@/edges/arrow-renderer";
 import {
   createEdgeArrow,
-  createEdgeGroup,
   createEdgePath,
   createEdgeSvg,
   setSvgRectangle,
 } from "../../svg";
+import { svgPadding } from "@/edges/svg-padding";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
-  public readonly group = createEdgeGroup();
+  public readonly group = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "g",
+  );
 
   public readonly line: SVGPathElement;
 
@@ -71,17 +74,16 @@ export class DirectEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, flipX, flipY } = createEdgeRectangle(
+    const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
+      svgPadding,
     );
 
     setSvgRectangle(this.svg, { x, y, width, height });
-    this.group.style.transform = `scale(${flipX}, ${flipY})`;
-
-    const to: Point = { x: width, y: height };
 
     const edgePath = new DirectEdgePath({
+      from,
       to,
       sourceOffset: this.sourceOffset,
       targetOffset: this.targetOffset,
@@ -108,8 +110,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       }
     } else {
       const direction: Point = {
-        x: to.x / diagonal,
-        y: to.y / diagonal,
+        x: (to.x - from.x) / diagonal,
+        y: (to.y - from.y) / diagonal,
       };
 
       if (this.sourceArrow) {
