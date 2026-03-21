@@ -69,8 +69,8 @@ canvas
       name: "Node 4",
       x: 400,
       y: 500,
-      frontPortId: "node-4-in",
-      backPortId: "node-4-out",
+      frontPort: { id: "node-1-in" },
+      backPort: { id: "node-1-out" },
     }),
   )
-  .addEdge({ from: "node-4-out", to: "node-4-in" });
+  .addEdge({ from: "node-1-out", to: "node-1-in" });

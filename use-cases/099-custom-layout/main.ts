@@ -25,8 +25,8 @@ graphData.nodes.forEach((nodeId) => {
   const addNodeRequest: AddNodeRequest = createInOutNode({
     id: nodeId,
     name: `Node ${nodeId}`,
-    frontPortId: `node-${nodeId}-in`,
-    backPortId: `node-${nodeId}-out`,
+    frontPort: { id: `node-${nodeId}-in` },
+    backPort: { id: `node-${nodeId}-out` },
   });
 
   canvas.addNode(addNodeRequest);

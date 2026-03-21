@@ -5,8 +5,8 @@ export function createInOutNode(params: {
   name: string;
   x?: number | null;
   y?: number | null;
-  frontPortId: string;
-  backPortId: string;
+  frontPort: { id: string };
+  backPort: { id: string };
   priority?: number;
 }): AddNodeRequest {
   const node = document.createElement("div");
@@ -30,8 +30,8 @@ export function createInOutNode(params: {
     x: params.x,
     y: params.y,
     ports: [
-      { id: params.frontPortId, element: frontPort },
-      { id: params.backPortId, element: backPort },
+      { id: params.frontPort.id, element: frontPort },
+      { id: params.backPort.id, element: backPort },
     ],
     priority: params.priority,
   };

@@ -52,8 +52,8 @@ class NodesDragHandler {
         name: value.name,
         x: value.x,
         y: value.y,
-        frontPortId: value.input,
-        backPortId: value.output,
+        frontPort: { id: value.input },
+        backPort: { id: value.output },
       });
 
       addNodeRequest.element.addEventListener(

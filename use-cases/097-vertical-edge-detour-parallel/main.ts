@@ -30,8 +30,8 @@ const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 500,
   y: 300,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
+  frontPort: { id: "node-1-in" },
+  backPort: { id: "node-1-out" },
 });
 
 addNode1Request.element.classList.add("forward");
@@ -45,8 +45,8 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 800,
   y: 300,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
+  frontPort: { id: "node-2-in" },
+  backPort: { id: "node-2-out" },
 });
 
 addNode2Request.element.classList.add("backward");
@@ -60,8 +60,8 @@ const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
   x: 500,
   y: 600,
-  frontPortId: "node-3-in",
-  backPortId: "node-3-out",
+  frontPort: { id: "node-3-in" },
+  backPort: { id: "node-3-out" },
 });
 
 addNode3Request.element.classList.add("forward");
@@ -79,8 +79,8 @@ const addNode4Request: AddNodeRequest = createInOutNode({
   name: "Node 4",
   x: 800,
   y: 600,
-  frontPortId: "node-4-in",
-  backPortId: "node-4-out",
+  frontPort: { id: "node-4-in" },
+  backPort: { id: "node-4-out" },
 });
 
 addNode4Request.element.classList.add("backward");

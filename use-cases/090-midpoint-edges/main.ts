@@ -76,8 +76,8 @@ canvas
       name: "Node 1",
       x: 200,
       y: 100,
-      frontPortId: "node-1-in",
-      backPortId: "node-1-out",
+      frontPort: { id: "node-1-in" },
+      backPort: { id: "node-1-out" },
     }),
   )
   .addNode(
@@ -85,8 +85,8 @@ canvas
       name: "Node 2",
       x: 500,
       y: 200,
-      frontPortId: "node-2-in",
-      backPortId: "node-2-out",
+      frontPort: { id: "node-2-in" },
+      backPort: { id: "node-2-out" },
     }),
   )
   .addNode(
@@ -94,8 +94,8 @@ canvas
       name: "Node 3",
       x: 200,
       y: 350,
-      frontPortId: "node-3-in",
-      backPortId: "node-3-out",
+      frontPort: { id: "node-3-in" },
+      backPort: { id: "node-3-out" },
     }),
   )
   .addNode(
@@ -103,8 +103,8 @@ canvas
       name: "Node 4",
       x: 400,
       y: 500,
-      frontPortId: "node-4-in",
-      backPortId: "node-4-out",
+      frontPort: { id: "node-4-in" },
+      backPort: { id: "node-4-out" },
     }),
   )
   .addNode(
@@ -112,8 +112,8 @@ canvas
       name: "Node 5",
       x: 600,
       y: 500,
-      frontPortId: "node-5-in",
-      backPortId: "node-5-out",
+      frontPort: { id: "node-5-in" },
+      backPort: { id: "node-5-out" },
     }),
   )
   .addEdge({ from: "node-1-out", to: "node-2-in" })
