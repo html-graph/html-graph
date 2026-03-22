@@ -4,17 +4,31 @@ import { createViewportControllerParams } from "./create-viewport-controller-par
 import { EventSubject } from "@/event-subject";
 
 describe("createViewportControllerParams", () => {
-  it("should configure default focus content offset", () => {
+  it("should configure default focus content padding", () => {
     const viewportControllerParams = createViewportControllerParams({
       canvasDefaults: {},
       hasLayout: false,
       layoutParams: createLayoutParams({}),
     });
 
-    expect(viewportControllerParams.focus.contentOffset).toBe(100);
+    expect(viewportControllerParams.focus.contentPadding).toBe(100);
   });
 
-  it("should configure specified focus content offset", () => {
+  it("should configure specified focus content padding", () => {
+    const viewportControllerParams = createViewportControllerParams({
+      canvasDefaults: {
+        focus: {
+          contentPadding: 200,
+        },
+      },
+      hasLayout: false,
+      layoutParams: createLayoutParams({}),
+    });
+
+    expect(viewportControllerParams.focus.contentPadding).toBe(200);
+  });
+
+  it("should configure specified focus legacy content padding", () => {
     const viewportControllerParams = createViewportControllerParams({
       canvasDefaults: {
         focus: {
@@ -25,7 +39,7 @@ describe("createViewportControllerParams", () => {
       layoutParams: createLayoutParams({}),
     });
 
-    expect(viewportControllerParams.focus.contentOffset).toBe(200);
+    expect(viewportControllerParams.focus.contentPadding).toBe(200);
   });
 
   it("should configure default minimum content scale", () => {

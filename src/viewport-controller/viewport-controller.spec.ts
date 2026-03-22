@@ -12,7 +12,7 @@ import {
 
 const createViewportController = (options?: {
   element?: HTMLElement;
-  contentOffset?: number;
+  contentPadding?: number;
   minContentScale?: number;
   schedule?: ScheduleFn;
 }): {
@@ -26,7 +26,7 @@ const createViewportController = (options?: {
 
   const params: ViewportControllerParams = {
     focus: {
-      contentOffset: options?.contentOffset ?? 0,
+      contentPadding: options?.contentPadding ?? 0,
       minContentScale: options?.minContentScale ?? 0,
       schedule: options?.schedule ?? immediateScheduleFn,
       animationDuration: 0,
@@ -91,7 +91,7 @@ describe("ViewportController", () => {
       priority: 0,
     });
 
-    viewportController.focus({ contentOffset: 200 });
+    viewportController.focus({ contentPadding: 200 });
 
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 0.25,

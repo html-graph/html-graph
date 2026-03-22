@@ -101,10 +101,10 @@ export class ViewportController {
     });
 
     if (nodesCount > 0) {
-      minX -= params.contentOffset;
-      minY -= params.contentOffset;
-      maxX += params.contentOffset;
-      maxY += params.contentOffset;
+      minX -= params.contentPadding;
+      minY -= params.contentPadding;
+      maxX += params.contentPadding;
+      maxY += params.contentPadding;
 
       const contentBoxCenter: Point = {
         x: (minX + maxX) / 2,

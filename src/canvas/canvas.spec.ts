@@ -63,7 +63,7 @@ const createCanvas = (options?: {
 
   const viewportControllerParams: ViewportControllerParams = {
     focus: {
-      contentOffset: 100,
+      contentPadding: 100,
       minContentScale: 0,
       schedule: immediateScheduleFn,
       animationDuration: 0,

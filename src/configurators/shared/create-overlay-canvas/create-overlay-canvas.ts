@@ -46,7 +46,7 @@ export const createOverlayCanvas = (
 
   const viewportControllerParams: ViewportControllerParams = {
     focus: {
-      contentOffset: 0,
+      contentPadding: 0,
       minContentScale: 0,
       schedule: immediateScheduleFn,
       animationDuration: 0,

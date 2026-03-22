@@ -17,7 +17,10 @@ export const createViewportControllerParams = (params: {
 
   return {
     focus: {
-      contentOffset: canvasDefaults.focus?.contentOffset ?? 100,
+      contentPadding:
+        canvasDefaults.focus?.contentPadding ??
+        canvasDefaults.focus?.contentOffset ??
+        100,
       minContentScale: canvasDefaults.focus?.minContentScale ?? 0,
       schedule,
       animationDuration: canvasDefaults.focus?.animationDuration ?? 0,
