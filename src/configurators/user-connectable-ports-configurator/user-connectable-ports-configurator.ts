@@ -34,6 +34,7 @@ export class UserConnectablePortsConfigurator {
     this.overlayCanvas = createOverlayCanvas(
       this.overlayLayer,
       this.viewportStore,
+      this.window,
     );
 
     DraggablePortsConfigurator.configure(

@@ -57,6 +57,7 @@ const createCanvas = (options?: {
     graphStore,
     viewportStore,
     defaultViewportControllerParams,
+    window,
   );
 
   const canvas = new Canvas(

@@ -230,6 +230,7 @@ export class CanvasBuilder {
       graphStore,
       viewportStore,
       viewportControllerParams,
+      this.window,
     );
 
     const viewport = new Viewport(viewportStore);

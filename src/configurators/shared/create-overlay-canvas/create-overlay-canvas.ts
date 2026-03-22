@@ -16,6 +16,7 @@ import { ViewportStore } from "@/viewport-store";
 export const createOverlayCanvas = (
   overlayLayer: HTMLElement,
   viewportStore: ViewportStore,
+  win: Window,
 ): Canvas => {
   const graphStore = new GraphStore();
   const graph = new Graph(graphStore);
@@ -55,6 +56,7 @@ export const createOverlayCanvas = (
     graphStore,
     viewportStore,
     viewportControllerParams,
+    win,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);
