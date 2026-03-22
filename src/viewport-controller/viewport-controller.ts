@@ -156,7 +156,9 @@ export class ViewportController {
           x: previousViewportMatrix.x + progress * deltaMatrix.x,
           y: previousViewportMatrix.y + progress * deltaMatrix.y,
         });
+      }
 
+      if (progress < 1) {
         this.win.requestAnimationFrame(step);
       }
     };
