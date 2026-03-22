@@ -42,5 +42,8 @@ canvas.addNode({
 canvas.center({ x: 0, y: 0 });
 
 document.querySelector("[data-animate]")!.addEventListener("click", () => {
-  canvas.center({ x: 500, y: 0 }, { animationDuration: 200 });
+  canvas.center(
+    { x: 500, y: 0 },
+    { animationDuration: 200, contentScale: 0.5 },
+  );
 });
