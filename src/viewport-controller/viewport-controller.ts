@@ -1,6 +1,6 @@
 import { PatchMatrixRequest } from "./patch-matrix-request";
 import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
+import { TransformState, ViewportStore } from "@/viewport-store";
 import { ViewportControllerParams } from "./viewport-controller-params";
 import { FocusConfig } from "./focus-config";
 import { Identifier } from "@/identifier";
@@ -14,6 +14,7 @@ export class ViewportController {
     private readonly graphStore: GraphStore,
     private readonly viewportStore: ViewportStore,
     private readonly params: ViewportControllerParams,
+    private readonly win: Window,
   ) {}
 
   public patchViewportMatrix(request: PatchMatrixRequest): void {
@@ -49,7 +50,13 @@ export class ViewportController {
       );
     }
 
-    this.viewportStore.patchViewportMatrix(nextViewportMatrix);
+    const duration = config?.animationDuration ?? 0;
+
+    if (duration > 0) {
+      this.animateNavigation(viewportMatrix, nextViewportMatrix, duration);
+    } else {
+      this.viewportStore.patchViewportMatrix(nextViewportMatrix);
+    }
   }
 
   public focus(config?: FocusConfig | undefined): void {
@@ -119,7 +126,46 @@ export class ViewportController {
       const fitContentScale = ratio > 1 ? scale / ratio : scale;
       const thresholdScale = Math.max(fitContentScale, params.minContentScale);
 
-      this.center(contentBoxCenter, { contentScale: thresholdScale });
+      this.center(contentBoxCenter, {
+        contentScale: thresholdScale,
+        animationDuration: params.animationDuration,
+      });
     }
+  }
+
+  private animateNavigation(
+    previousViewportMatrix: TransformState,
+    nextViewportMatrix: TransformState,
+    duration: number,
+  ): void {
+    let start: number | undefined = undefined;
+
+    const deltaMatrix: TransformState = {
+      scale: nextViewportMatrix.scale - previousViewportMatrix.scale,
+      x: nextViewportMatrix.x - previousViewportMatrix.x,
+      y: nextViewportMatrix.y - previousViewportMatrix.y,
+    };
+
+    const step = (timestamp: number): void => {
+      if (start === undefined) {
+        start = timestamp;
+      }
+
+      const progress = Math.min((timestamp - start) / duration, 1);
+
+      if (progress <= 1) {
+        this.viewportStore.patchViewportMatrix({
+          scale: previousViewportMatrix.scale + progress * deltaMatrix.scale,
+          x: previousViewportMatrix.x + progress * deltaMatrix.x,
+          y: previousViewportMatrix.y + progress * deltaMatrix.y,
+        });
+      }
+
+      if (progress < 1) {
+        this.win.requestAnimationFrame(step);
+      }
+    };
+
+    this.win.requestAnimationFrame(step);
   }
 }

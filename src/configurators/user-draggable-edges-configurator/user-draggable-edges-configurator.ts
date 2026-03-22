@@ -39,6 +39,7 @@ export class UserDraggableEdgesConfigurator {
     this.overlayCanvas = createOverlayCanvas(
       this.overlayLayer,
       this.viewportStore,
+      this.window,
     );
 
     DraggablePortsConfigurator.configure(

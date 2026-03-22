@@ -8,7 +8,7 @@ const createCanvas = (): Canvas => {
   const element = document.createElement("div");
   const viewportStore = new ViewportStore(element);
 
-  return createOverlayCanvas(element, viewportStore);
+  return createOverlayCanvas(element, viewportStore, window);
 };
 
 describe("createOverlayCanvas", () => {

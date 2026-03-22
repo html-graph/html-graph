@@ -11,6 +11,7 @@ export const createFocusParams = (
         minContentScale: controllerParams.focus.minContentScale,
         nodes: config,
         contentOffset: controllerParams.focus.contentOffset,
+        animationDuration: controllerParams.focus.animationDuration,
       }
     : {
         minContentScale:
@@ -18,5 +19,7 @@ export const createFocusParams = (
         nodes: config.nodes ?? [],
         contentOffset:
           config.contentOffset ?? controllerParams.focus.contentOffset,
+        animationDuration:
+          config.animationDuration ?? controllerParams.focus.animationDuration,
       };
 };

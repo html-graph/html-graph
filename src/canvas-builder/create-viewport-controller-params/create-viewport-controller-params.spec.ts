@@ -97,4 +97,28 @@ describe("createViewportControllerParams", () => {
 
     expect(viewportControllerParams.focus.schedule).toBe(immediateScheduleFn);
   });
+
+  it("should configure default focus animation duration", () => {
+    const viewportControllerParams = createViewportControllerParams({
+      canvasDefaults: {},
+      hasLayout: false,
+      layoutParams: createLayoutParams({}),
+    });
+
+    expect(viewportControllerParams.focus.animationDuration).toBe(0);
+  });
+
+  it("should configure specified focus animation duration", () => {
+    const viewportControllerParams = createViewportControllerParams({
+      canvasDefaults: {
+        focus: {
+          animationDuration: 100,
+        },
+      },
+      hasLayout: false,
+      layoutParams: createLayoutParams({}),
+    });
+
+    expect(viewportControllerParams.focus.animationDuration).toBe(100);
+  });
 });

@@ -1,7 +1,7 @@
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { ViewportController } from "./viewport-controller";
-import { createElement, waitMicrotask } from "@/mocks";
+import { AnimationFrameMock, createElement, waitMicrotask } from "@/mocks";
 import { standardCenterFn } from "@/center-fn";
 import { ViewportControllerParams } from "./viewport-controller-params";
 import {
@@ -29,6 +29,7 @@ const createViewportController = (options?: {
       contentOffset: options?.contentOffset ?? 0,
       minContentScale: options?.minContentScale ?? 0,
       schedule: options?.schedule ?? immediateScheduleFn,
+      animationDuration: 0,
     },
   };
 
@@ -36,12 +37,23 @@ const createViewportController = (options?: {
     graphStore,
     viewportStore,
     params,
+    window,
   );
 
   return { viewportController, graphStore, viewportStore };
 };
 
 describe("ViewportController", () => {
+  const animationMock = new AnimationFrameMock();
+
+  beforeEach(() => {
+    animationMock.hook();
+  });
+
+  afterEach(() => {
+    animationMock.unhook();
+  });
+
   it("should patch viewport matrix", () => {
     const element = document.createElement("div");
     const { viewportController, viewportStore } = createViewportController({
@@ -64,7 +76,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({ scale: 2, x: 3, y: 4 });
   });
 
-  it("should account for focus content offset", () => {
+  it("should account for focus content padding", () => {
     const element = createElement({ width: 100, height: 100 });
     const { viewportController, graphStore, viewportStore } =
       createViewportController({ element });
@@ -472,7 +484,7 @@ describe("ViewportController", () => {
     });
   });
 
-  it("should scale centered viewport", async () => {
+  it("should scale centered viewport", () => {
     const element = createElement({ width: 200, height: 200 });
     const { viewportController, viewportStore } = createViewportController({
       element,
@@ -517,6 +529,63 @@ describe("ViewportController", () => {
       scale: 0.5,
       x: 100,
       y: -150,
+    });
+  });
+
+  it("should start animation when duration provided", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore } = createViewportController({
+      element,
+    });
+
+    viewportController.center({ x: 200, y: 200 }, { animationDuration: 200 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
+    });
+  });
+
+  it("should end animation when duration provided", () => {
+    const element = createElement({ width: 200, height: 200 });
+    const { viewportController, viewportStore } = createViewportController({
+      element,
+    });
+
+    viewportController.center({ x: 200, y: 200 }, { animationDuration: 200 });
+
+    animationMock.timer.emit(0);
+    animationMock.timer.emit(200);
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: -100,
+      y: -100,
+    });
+  });
+
+  it("should start focus animation when duration provided", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const { viewportController, graphStore, viewportStore } =
+      createViewportController({ element });
+    const nodeElement = createElement();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus({ animationDuration: 200 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
     });
   });
 });

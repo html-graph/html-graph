@@ -42,5 +42,6 @@ export interface CanvasDefaults {
   readonly focus?: {
     readonly contentOffset?: number;
     readonly minContentScale?: number;
+    readonly animationDuration?: number;
   };
 }

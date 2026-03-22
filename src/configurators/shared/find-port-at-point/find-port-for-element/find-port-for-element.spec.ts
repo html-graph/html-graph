@@ -30,6 +30,7 @@ const createCanvas = (): Canvas => {
     graphStore,
     viewportStore,
     defaultViewportControllerParams,
+    window,
   );
 
   return new Canvas(graph, viewport, graphController, viewportController);

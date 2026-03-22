@@ -66,6 +66,7 @@ const createCanvas = (options?: {
       contentOffset: 100,
       minContentScale: 0,
       schedule: immediateScheduleFn,
+      animationDuration: 0,
     },
   };
 
@@ -73,6 +74,7 @@ const createCanvas = (options?: {
     graphStore,
     viewportStore,
     viewportControllerParams,
+    window,
   );
 
   const canvas = new Canvas(
