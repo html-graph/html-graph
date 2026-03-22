@@ -40,6 +40,11 @@ export interface CanvasDefaults {
     readonly priority?: Priority;
   };
   readonly focus?: {
+    readonly contentPadding?: number;
+    /**
+     * @deprecated
+     * use contentPadding instead
+     */
     readonly contentOffset?: number;
     readonly minContentScale?: number;
     readonly animationDuration?: number;

@@ -6,7 +6,7 @@ import { FocusParams } from "./focus-params";
 const controllerParams: ViewportControllerParams = {
   focus: {
     minContentScale: 0.5,
-    contentOffset: 100,
+    contentPadding: 100,
     schedule: immediateScheduleFn,
     animationDuration: 100,
   },
@@ -36,25 +36,34 @@ describe("createFocusParams", () => {
     expect(params.minContentScale).toBe(0.5);
   });
 
-  it("should configure default content offset", () => {
+  it("should configure default content padding", () => {
     const params: FocusParams = createFocusParams({}, controllerParams);
 
-    expect(params.contentOffset).toBe(100);
+    expect(params.contentPadding).toBe(100);
   });
 
-  it("should configure default content offset when using brief signature", () => {
+  it("should configure default content padding when using brief signature", () => {
     const params: FocusParams = createFocusParams([], controllerParams);
 
-    expect(params.contentOffset).toBe(100);
+    expect(params.contentPadding).toBe(100);
   });
 
-  it("should configure specified content offset", () => {
+  it("should configure specified content padding", () => {
+    const params: FocusParams = createFocusParams(
+      { contentPadding: 50 },
+      controllerParams,
+    );
+
+    expect(params.contentPadding).toBe(50);
+  });
+
+  it("should configure specified legacy content padding", () => {
     const params: FocusParams = createFocusParams(
       { contentOffset: 50 },
       controllerParams,
     );
 
-    expect(params.contentOffset).toBe(50);
+    expect(params.contentPadding).toBe(50);
   });
 
   it("should configure default nodes list", () => {

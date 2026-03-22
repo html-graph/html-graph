@@ -1,7 +1,7 @@
 import { Identifier } from "@/identifier";
 
 export interface FocusParams {
-  readonly contentOffset: number;
+  readonly contentPadding: number;
   readonly nodes: Iterable<Identifier>;
   readonly minContentScale: number;
   readonly animationDuration: number;
