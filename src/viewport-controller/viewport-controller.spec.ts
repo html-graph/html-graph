@@ -29,6 +29,7 @@ const createViewportController = (options?: {
       contentOffset: options?.contentOffset ?? 0,
       minContentScale: options?.minContentScale ?? 0,
       schedule: options?.schedule ?? immediateScheduleFn,
+      animationDuration: 0,
     },
   };
 
@@ -75,7 +76,7 @@ describe("ViewportController", () => {
     expect(viewportStore.getContentMatrix()).toEqual({ scale: 2, x: 3, y: 4 });
   });
 
-  it("should account for focus content offset", () => {
+  it("should account for focus content padding", () => {
     const element = createElement({ width: 100, height: 100 });
     const { viewportController, graphStore, viewportStore } =
       createViewportController({ element });
@@ -561,6 +562,30 @@ describe("ViewportController", () => {
       scale: 1,
       x: -100,
       y: -100,
+    });
+  });
+
+  it("should start focus animation when duration provided", () => {
+    const element = createElement({ width: 100, height: 100 });
+    const { viewportController, graphStore, viewportStore } =
+      createViewportController({ element });
+    const nodeElement = createElement();
+
+    graphStore.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      centerFn: standardCenterFn,
+      priority: 0,
+    });
+
+    viewportController.focus({ animationDuration: 200 });
+
+    expect(viewportStore.getContentMatrix()).toEqual({
+      scale: 1,
+      x: 0,
+      y: 0,
     });
   });
 });

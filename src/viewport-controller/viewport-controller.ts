@@ -126,7 +126,10 @@ export class ViewportController {
       const fitContentScale = ratio > 1 ? scale / ratio : scale;
       const thresholdScale = Math.max(fitContentScale, params.minContentScale);
 
-      this.center(contentBoxCenter, { contentScale: thresholdScale });
+      this.center(contentBoxCenter, {
+        contentScale: thresholdScale,
+        animationDuration: params.animationDuration,
+      });
     }
   }
 

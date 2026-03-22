@@ -5,5 +5,6 @@ export interface ViewportControllerParams {
     readonly contentOffset: number;
     readonly minContentScale: number;
     readonly schedule: ScheduleFn;
+    readonly animationDuration: number;
   };
 }

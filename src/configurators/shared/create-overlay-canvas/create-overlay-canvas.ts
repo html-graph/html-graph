@@ -49,6 +49,7 @@ export const createOverlayCanvas = (
       contentOffset: 0,
       minContentScale: 0,
       schedule: immediateScheduleFn,
+      animationDuration: 0,
     },
   };
 

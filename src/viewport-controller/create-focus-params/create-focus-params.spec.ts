@@ -8,6 +8,7 @@ const controllerParams: ViewportControllerParams = {
     minContentScale: 0.5,
     contentOffset: 100,
     schedule: immediateScheduleFn,
+    animationDuration: 100,
   },
 };
 
@@ -81,5 +82,26 @@ describe("createFocusParams", () => {
     const params: FocusParams = createFocusParams(["node-1"], controllerParams);
 
     expect(params.nodes).toEqual(["node-1"]);
+  });
+
+  it("should configure default animation duration when iterable specified", () => {
+    const params: FocusParams = createFocusParams([], controllerParams);
+
+    expect(params.animationDuration).toBe(100);
+  });
+
+  it("should configure default animation duration", () => {
+    const params: FocusParams = createFocusParams({}, controllerParams);
+
+    expect(params.animationDuration).toBe(100);
+  });
+
+  it("should configure provided animation duration by default", () => {
+    const params: FocusParams = createFocusParams(
+      { animationDuration: 200 },
+      controllerParams,
+    );
+
+    expect(params.animationDuration).toBe(200);
   });
 });

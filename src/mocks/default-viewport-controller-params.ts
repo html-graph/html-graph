@@ -6,5 +6,6 @@ export const defaultViewportControllerParams: ViewportControllerParams = {
     contentOffset: 0,
     minContentScale: 0,
     schedule: immediateScheduleFn,
+    animationDuration: 0,
   },
 };
