@@ -4,7 +4,7 @@
 
 ### Graph visualization library that enables rich nodes customization using HTML
 
-![Preview](/media/preview.jpg)
+![Preview](https://raw.githubusercontent.com/html-graph/html-graph/master/media/preview.jpg)
 
 ```
 npm i @html-graph/html-graph
