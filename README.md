@@ -2,7 +2,7 @@
   <img src="/media/logo-label.svg" alt="HTMLGraph" width="520" height="100"/>
 </p>
 
-<div align="center">>
+<div align="center">
   <h3>
     Graph visualization library that enables rich nodes customization using HTML
   </h3>
