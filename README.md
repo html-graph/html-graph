@@ -17,6 +17,7 @@ npm i @html-graph/html-graph
 import { CanvasBuilder } from "@html-graph/html-graph";
 
 const element = document.getElementById("canvas");
+
 const canvas = new CanvasBuilder(element)
   .enableUserTransformableViewport()
   .enableUserDraggableNodes()
