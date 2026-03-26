@@ -4,6 +4,8 @@
 
 ### Graph visualization library that enables rich nodes customization using HTML
 
+![Preview](/media/preview.jpg)
+
 ```
 npm i @html-graph/html-graph
 ```
