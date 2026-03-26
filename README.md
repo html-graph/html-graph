@@ -8,7 +8,9 @@
   </h3>
 </div>
 
-![Preview](https://raw.githubusercontent.com/html-graph/html-graph/master/media/preview.jpg)
+<a target="_blank" href="https://html-graph.github.io">
+  <img src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/preview.jpg">
+</a>
 
 ## Getting Started
 
