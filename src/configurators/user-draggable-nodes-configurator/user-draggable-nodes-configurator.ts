@@ -5,7 +5,6 @@ import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
-import { NodeElement } from "@/element";
 
 export class UserDraggableNodesConfigurator {
   private grabbedNode: GrabbedNodeState | null = null;
@@ -44,7 +43,7 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    const element = event.currentTarget as NodeElement;
+    const element = event.currentTarget as Element;
     const nodeId = this.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId);
 
@@ -93,7 +92,7 @@ export class UserDraggableNodesConfigurator {
 
     const touch = touchEvent.touches[0];
 
-    const element = event.currentTarget as NodeElement;
+    const element = event.currentTarget as Element;
     const nodeId = this.canvas.graph.findNodeIdByElement(element)!;
     const node = this.graph.getNode(nodeId);
 
@@ -140,7 +139,7 @@ export class UserDraggableNodesConfigurator {
     );
 
     if (!isInside) {
-      this.cancelMouseDrag();
+      this.stopMouseDrag();
       return;
     }
 
@@ -157,7 +156,7 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    this.cancelMouseDrag();
+    this.stopMouseDrag();
   };
 
   private readonly onWindowTouchMove = (event: TouchEvent): void => {
@@ -175,7 +174,7 @@ export class UserDraggableNodesConfigurator {
     );
 
     if (!isInside) {
-      this.cancelTouchDrag();
+      this.stopTouchDrag();
       return;
     }
 
@@ -188,7 +187,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowTouchFinish = (): void => {
-    this.cancelTouchDrag();
+    this.stopTouchDrag();
   };
 
   private readonly reset = (): void => {
@@ -276,7 +275,7 @@ export class UserDraggableNodesConfigurator {
     this.canvas.updateNode(nodeId, { priority: this.maxNodePriority });
   }
 
-  private cancelMouseDrag(): void {
+  private stopMouseDrag(): void {
     if (
       this.grabbedNode !== null &&
       this.graph.hasNode(this.grabbedNode.nodeId)
@@ -294,7 +293,7 @@ export class UserDraggableNodesConfigurator {
     this.window.removeEventListener("mousemove", this.onWindowMouseMove);
   }
 
-  private cancelTouchDrag(): void {
+  private stopTouchDrag(): void {
     if (
       this.grabbedNode !== null &&
       this.graph.hasNode(this.grabbedNode.nodeId)

@@ -2,14 +2,13 @@ import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
 import { MouseEventVerifier } from "../shared";
-import { NodeElement } from "@/element";
 
 export class UserSelectableNodesConfigurator {
   private readonly canvas: Canvas;
 
   private readonly window: Window;
 
-  private readonly selectionCallback: (
+  private readonly onSelectionChange: (
     nodeIds: ReadonlySet<Identifier>,
   ) => void;
 
@@ -17,7 +16,7 @@ export class UserSelectableNodesConfigurator {
 
   private readonly mouseUpEventVerifier: MouseEventVerifier;
 
-  private selectionCandidate: Identifier | null = null;
+  private selectionCandidateNodeId: Identifier | null = null;
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
@@ -25,13 +24,17 @@ export class UserSelectableNodesConfigurator {
     element.addEventListener("mousedown", this.onNodeMouseDown, {
       passive: true,
     });
+
+    element.addEventListener("touchstart", this.onNodeTouchStart, {
+      passive: true,
+    });
   };
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
-    this.selectionCandidate = null;
 
     element.removeEventListener("mousedown", this.onNodeMouseDown);
+    element.removeEventListener("touchstart", this.onNodeTouchStart);
   };
 
   private readonly reset = (): void => {
@@ -39,14 +42,14 @@ export class UserSelectableNodesConfigurator {
       const { element } = this.canvas.graph.getNode(nodeId);
 
       element.removeEventListener("mousedown", this.onNodeMouseDown);
+      element.removeEventListener("touchstart", this.onNodeTouchStart);
     });
-
-    this.selectionCandidate = null;
   };
 
   private readonly revert = (): void => {
     this.reset();
     this.removeMouseDragListeners();
+    this.removeTouchDragListeners();
   };
 
   private readonly onNodeMouseDown: EventListener = (event): void => {
@@ -57,12 +60,30 @@ export class UserSelectableNodesConfigurator {
     }
 
     const nodeId = this.canvas.graph.findNodeIdByElement(
-      event.currentTarget as NodeElement,
+      event.currentTarget as Element,
     )!;
 
-    this.selectionCandidate = nodeId;
+    this.selectionCandidateNodeId = nodeId;
 
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
+  };
+
+  private readonly onNodeTouchStart: EventListener = (event: Event): void => {
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 1) {
+      return;
+    }
+
+    const nodeId = this.canvas.graph.findNodeIdByElement(
+      touchEvent.currentTarget as Element,
+    )!;
+
+    this.selectionCandidateNodeId = nodeId;
+
+    this.window.addEventListener("touchend", this.onWindowTouchEnd, {
       passive: true,
     });
   };
@@ -74,8 +95,22 @@ export class UserSelectableNodesConfigurator {
       return;
     }
 
-    if (this.selectionCandidate !== null) {
-      this.selectionCallback(new Set([this.selectionCandidate]));
+    this.removeMouseDragListeners();
+
+    const nodeId = this.selectionCandidateNodeId;
+
+    if (nodeId !== null && this.canvas.graph.hasNode(nodeId)) {
+      this.onSelectionChange(new Set([nodeId]));
+    }
+  };
+
+  private readonly onWindowTouchEnd: EventListener = (): void => {
+    const nodeId = this.selectionCandidateNodeId;
+
+    this.removeTouchDragListeners();
+
+    if (nodeId !== null && this.canvas.graph.hasNode(nodeId)) {
+      this.onSelectionChange(new Set([nodeId]));
     }
   };
 
@@ -84,7 +119,7 @@ export class UserSelectableNodesConfigurator {
     this.window = params.window;
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
-    this.selectionCallback = params.selectionCallback;
+    this.onSelectionChange = params.onSelectionChange;
 
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
@@ -98,5 +133,9 @@ export class UserSelectableNodesConfigurator {
 
   private removeMouseDragListeners(): void {
     this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+  }
+
+  private removeTouchDragListeners(): void {
+    this.window.removeEventListener("touchend", this.onWindowTouchEnd);
   }
 }
