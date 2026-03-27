@@ -2,6 +2,7 @@ import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
 import { MouseEventVerifier } from "../shared";
+import { NodeElement } from "@/element";
 
 export class UserSelectableNodesConfigurator {
   private readonly canvas: Canvas;
@@ -16,11 +17,10 @@ export class UserSelectableNodesConfigurator {
 
   private readonly mouseUpEventVerifier: MouseEventVerifier;
 
-  private readonly selection = new Set<Identifier>();
+  private selectionCandidate: Identifier | null = null;
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
-    this.selection.add(nodeId);
 
     element.addEventListener("mousedown", this.onNodeMouseDown, {
       passive: true,
@@ -29,7 +29,7 @@ export class UserSelectableNodesConfigurator {
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
-    this.selection.delete(nodeId);
+    this.selectionCandidate = null;
 
     element.removeEventListener("mousedown", this.onNodeMouseDown);
   };
@@ -41,10 +41,10 @@ export class UserSelectableNodesConfigurator {
       element.removeEventListener("mousedown", this.onNodeMouseDown);
     });
 
-    this.selection.clear();
+    this.selectionCandidate = null;
   };
 
-  private readonly restore = (): void => {
+  private readonly revert = (): void => {
     this.reset();
     this.removeMouseDragListeners();
   };
@@ -55,6 +55,12 @@ export class UserSelectableNodesConfigurator {
     if (!this.mouseDownEventVerifier(mouseEvent)) {
       return;
     }
+
+    const nodeId = this.canvas.graph.findNodeIdByElement(
+      event.currentTarget as NodeElement,
+    )!;
+
+    this.selectionCandidate = nodeId;
 
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
@@ -68,7 +74,9 @@ export class UserSelectableNodesConfigurator {
       return;
     }
 
-    this.selectionCallback(new Set(this.selection));
+    if (this.selectionCandidate !== null) {
+      this.selectionCallback(new Set([this.selectionCandidate]));
+    }
   };
 
   private constructor(params: UserSelectableNodesParams) {
@@ -81,7 +89,7 @@ export class UserSelectableNodesConfigurator {
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
     this.canvas.graph.onBeforeClear.subscribe(this.reset);
-    this.canvas.onBeforeDestroy.subscribe(this.restore);
+    this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
   public static configure(params: UserSelectableNodesParams): void {

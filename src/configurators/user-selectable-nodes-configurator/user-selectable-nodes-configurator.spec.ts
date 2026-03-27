@@ -230,7 +230,7 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(selectionCallback).toHaveBeenCalledWith(new Set());
+    expect(selectionCallback).not.toHaveBeenCalled();
   });
 
   it("should not pass nodes cleared in the process of selection", () => {
@@ -259,7 +259,7 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(selectionCallback).toHaveBeenCalledWith(new Set());
+    expect(selectionCallback).not.toHaveBeenCalled();
   });
 
   it("should prevent selection initiation process when mouse down verifier not passed", () => {
