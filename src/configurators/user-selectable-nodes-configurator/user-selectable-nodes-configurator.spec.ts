@@ -17,6 +17,8 @@ import { Identifier } from "@/identifier";
 const createCanvas = (options?: {
   element?: HTMLElement;
   selectionCallback?: (nodeIds: ReadonlySet<Identifier>) => void;
+  mouseDownEventVerifier?: (event: MouseEvent) => boolean;
+  mouseUpEventVerifier?: (event: MouseEvent) => boolean;
 }): Canvas => {
   const graphStore = new GraphStore();
   const element = options?.element ?? document.createElement("div");
@@ -49,6 +51,10 @@ const createCanvas = (options?: {
     canvas,
     window,
     selectionCallback: options?.selectionCallback ?? ((): void => {}),
+    mouseDownEventVerifier:
+      options?.mouseDownEventVerifier ?? ((): boolean => true),
+    mouseUpEventVerifier:
+      options?.mouseUpEventVerifier ?? ((): boolean => true),
   });
 
   return canvas;
@@ -72,7 +78,6 @@ describe("UserSelectableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(
       new MouseEvent("mousedown", {
-        ctrlKey: true,
         clientX: 200,
         clientY: 200,
       }),
@@ -102,7 +107,6 @@ describe("UserSelectableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(
       new MouseEvent("mousedown", {
-        ctrlKey: true,
         clientX: 200,
         clientY: 200,
       }),
@@ -132,7 +136,6 @@ describe("UserSelectableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(
       new MouseEvent("mousedown", {
-        ctrlKey: true,
         clientX: 200,
         clientY: 200,
       }),
@@ -162,7 +165,6 @@ describe("UserSelectableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(
       new MouseEvent("mousedown", {
-        ctrlKey: true,
         clientX: 200,
         clientY: 200,
       }),
@@ -190,13 +192,132 @@ describe("UserSelectableNodesConfigurator", () => {
 
     nodeElement.dispatchEvent(
       new MouseEvent("mousedown", {
-        ctrlKey: true,
         clientX: 200,
         clientY: 200,
       }),
     );
 
     canvas.destroy();
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(selectionCallback).not.toHaveBeenCalled();
+  });
+
+  it("should not pass node removed in the process of selection", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const selectionCallback = jest.fn();
+
+    const canvas = createCanvas({ element, selectionCallback });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    canvas.removeNode("node-1");
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(selectionCallback).toHaveBeenCalledWith(new Set());
+  });
+
+  it("should not pass nodes cleared in the process of selection", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const selectionCallback = jest.fn();
+
+    const canvas = createCanvas({ element, selectionCallback });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    canvas.clear();
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(selectionCallback).toHaveBeenCalledWith(new Set());
+  });
+
+  it("should prevent selection initiation process when mouse down verifier not passed", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const selectionCallback = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      selectionCallback,
+      mouseDownEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(selectionCallback).not.toHaveBeenCalled();
+  });
+
+  it("should prevent selection when mouse up verifier not passed", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const selectionCallback = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      selectionCallback,
+      mouseUpEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 

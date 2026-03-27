@@ -1,6 +1,7 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
+import { MouseEventVerifier } from "../shared";
 
 export class UserSelectableNodesConfigurator {
   private readonly canvas: Canvas;
@@ -10,6 +11,10 @@ export class UserSelectableNodesConfigurator {
   private readonly selectionCallback: (
     nodeIds: ReadonlySet<Identifier>,
   ) => void;
+
+  private readonly mouseDownEventVerifier: MouseEventVerifier;
+
+  private readonly mouseUpEventVerifier: MouseEventVerifier;
 
   private readonly selection = new Set<Identifier>();
 
@@ -24,6 +29,7 @@ export class UserSelectableNodesConfigurator {
 
   private readonly onBeforeNodeRemoved = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
+    this.selection.delete(nodeId);
 
     element.removeEventListener("mousedown", this.onNodeMouseDown);
   };
@@ -34,6 +40,8 @@ export class UserSelectableNodesConfigurator {
 
       element.removeEventListener("mousedown", this.onNodeMouseDown);
     });
+
+    this.selection.clear();
   };
 
   private readonly restore = (): void => {
@@ -41,19 +49,33 @@ export class UserSelectableNodesConfigurator {
     this.removeMouseDragListeners();
   };
 
-  private readonly onNodeMouseDown: EventListener = (): void => {
+  private readonly onNodeMouseDown: EventListener = (event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.mouseDownEventVerifier(mouseEvent)) {
+      return;
+    }
+
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
     });
   };
 
-  private readonly onWindowMouseUp: EventListener = (): void => {
+  private readonly onWindowMouseUp: EventListener = (event: Event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.mouseUpEventVerifier(mouseEvent)) {
+      return;
+    }
+
     this.selectionCallback(new Set(this.selection));
   };
 
   private constructor(params: UserSelectableNodesParams) {
     this.canvas = params.canvas;
     this.window = params.window;
+    this.mouseDownEventVerifier = params.mouseDownEventVerifier;
+    this.mouseUpEventVerifier = params.mouseUpEventVerifier;
     this.selectionCallback = params.selectionCallback;
 
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
