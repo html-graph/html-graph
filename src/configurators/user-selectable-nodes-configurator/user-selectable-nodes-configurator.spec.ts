@@ -699,4 +699,155 @@ describe("UserSelectableNodesConfigurator", () => {
 
     expect(onNodeSelected).not.toHaveBeenCalled();
   });
+
+  it("should reset distance calculation on mouse selection start", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 1,
+        clientY: 1,
+      }),
+    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 1,
+        clientY: 1,
+      }),
+    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 2, clientY: 2 }));
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(onNodeSelected).toHaveBeenCalled();
+  });
+
+  it("should reset distance calculation on touch selection start", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 2, clientY: 2 })],
+      }),
+    );
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(onNodeSelected).toHaveBeenCalled();
+  });
+
+  it("should reset touch movement on selection finish", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const spy = jest.spyOn(window, "removeEventListener");
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 2, clientY: 2 })],
+      }),
+    );
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(spy).toHaveBeenCalledWith("touchmove", expect.anything());
+  });
+
+  it("should reset mouse movenent on selection finish", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const spy = jest.spyOn(window, "removeEventListener");
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 1,
+        clientY: 1,
+      }),
+    );
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 2, clientY: 2 }));
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(spy).toHaveBeenCalledWith("mousemove", expect.anything());
+  });
 });

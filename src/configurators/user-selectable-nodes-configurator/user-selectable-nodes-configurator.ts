@@ -73,8 +73,8 @@ export class UserSelectableNodesConfigurator {
     )!;
 
     this.selectionCandidateNodeId = nodeId;
-
     this.previousMouse = { x: mouseEvent.clientX, y: mouseEvent.clientY };
+    this.movedDistance = 0;
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
@@ -97,8 +97,8 @@ export class UserSelectableNodesConfigurator {
     )!;
 
     this.selectionCandidateNodeId = nodeId;
-
     this.previousTouch = touchEvent.touches[0];
+    this.movedDistance = 0;
 
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,
@@ -212,6 +212,7 @@ export class UserSelectableNodesConfigurator {
   }
 
   private removeWindowTouchListeners(): void {
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
     this.window.removeEventListener("touchend", this.onWindowTouchEnd);
     this.window.removeEventListener("touchcancel", this.onWindowTouchCancel);
   }
