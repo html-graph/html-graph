@@ -5,6 +5,7 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import {
   createElement,
+  createMouseMoveEvent,
   createTouch,
   defaultGraphControllerParams,
   defaultViewportControllerParams,
@@ -17,9 +18,10 @@ import { Identifier } from "@/identifier";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
-  onSelectionChange?: (nodeIds: ReadonlySet<Identifier>) => void;
+  onNodeSelected?: (nodeId: Identifier) => void;
   mouseDownEventVerifier?: (event: MouseEvent) => boolean;
   mouseUpEventVerifier?: (event: MouseEvent) => boolean;
+  movementThreshold?: number;
 }): Canvas => {
   const graphStore = new GraphStore();
   const element = options?.element ?? document.createElement("div");
@@ -49,13 +51,15 @@ const createCanvas = (options?: {
   );
 
   UserSelectableNodesConfigurator.configure({
+    element,
     canvas,
     window,
-    onSelectionChange: options?.onSelectionChange ?? ((): void => {}),
+    onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ?? ((): boolean => true),
     mouseUpEventVerifier:
       options?.mouseUpEventVerifier ?? ((): boolean => true),
+    movementThreshold: options?.movementThreshold ?? 10,
   });
 
   return canvas;
@@ -64,9 +68,9 @@ const createCanvas = (options?: {
 describe("UserSelectableNodesConfigurator", () => {
   it("should call specified callback on node mouse grab and immediate release", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -86,14 +90,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).toHaveBeenCalledWith(new Set(["node-1"]));
+    expect(onNodeSelected).toHaveBeenCalledWith("node-1");
   });
 
   it("should not call specified callback after node removed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -115,14 +119,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should not call specified callback after canvas destroy", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -144,16 +148,16 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should prevent selection initiation process when mouse down verifier not passed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
     const canvas = createCanvas({
       element,
-      onSelectionChange,
+      onNodeSelected,
       mouseDownEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
     });
 
@@ -175,16 +179,16 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should prevent selection when mouse up verifier not passed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
     const canvas = createCanvas({
       element,
-      onSelectionChange,
+      onNodeSelected,
       mouseUpEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
     });
 
@@ -206,14 +210,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should emit selection once", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const node1Element = createElement({ width: 100, height: 100 });
 
@@ -235,14 +239,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("mouseup"));
 
-    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onNodeSelected).toHaveBeenCalledTimes(1);
   });
 
   it("should reset node element mouse event on node removal", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -262,9 +266,9 @@ describe("UserSelectableNodesConfigurator", () => {
 
   it("should reset node element mouse event on canvas clear", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -284,9 +288,9 @@ describe("UserSelectableNodesConfigurator", () => {
 
   it("should call specified callback on node touch grab and immediate release", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -305,14 +309,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("touchend"));
 
-    expect(onSelectionChange).toHaveBeenCalledWith(new Set(["node-1"]));
+    expect(onNodeSelected).toHaveBeenCalledWith("node-1");
   });
 
   it("should not call specified callback on node touch grab after node removed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -333,14 +337,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("touchend"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should not call specified callback on node touch grab after canvas destroy", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -361,16 +365,16 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("touchend"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should prevent selection initiation process when touch start event doesnt fit", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
     const canvas = createCanvas({
       element,
-      onSelectionChange,
+      onNodeSelected,
       mouseDownEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
     });
 
@@ -394,14 +398,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("touchend"));
 
-    expect(onSelectionChange).not.toHaveBeenCalled();
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
   it("should emit selection on touch once second", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -422,14 +426,14 @@ describe("UserSelectableNodesConfigurator", () => {
 
     window.dispatchEvent(new MouseEvent("touchend"));
 
-    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onNodeSelected).toHaveBeenCalledTimes(1);
   });
 
   it("should reset node element touch event on node removal", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -449,9 +453,9 @@ describe("UserSelectableNodesConfigurator", () => {
 
   it("should reset node element touch event on canvas clear", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onSelectionChange = jest.fn();
+    const onNodeSelected = jest.fn();
 
-    const canvas = createCanvas({ element, onSelectionChange });
+    const canvas = createCanvas({ element, onNodeSelected });
 
     const nodeElement = createElement({ width: 100, height: 100 });
 
@@ -467,5 +471,232 @@ describe("UserSelectableNodesConfigurator", () => {
     canvas.clear();
 
     expect(spy).toHaveBeenCalledWith("touchstart", expect.anything());
+  });
+
+  it("should not call specified callback on touch grab cancelled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({ element, onNodeSelected });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("touchcancel"));
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
+  });
+
+  it("should reset touch state on selection cancellation", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    const spy = jest.spyOn(window, "removeEventListener");
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("touchcancel"));
+
+    expect(spy).toHaveBeenCalledWith("touchcancel", expect.anything());
+  });
+
+  it("should cancel selection when mouse move distance is more than specified threshold", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+      movementThreshold: Math.sqrt(100) - 1,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 300, clientY: 300 }));
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
+  });
+
+  it("should cancel selection when touch move distance is more than specified threshold", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+      movementThreshold: Math.sqrt(100) - 1,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 300, clientY: 300 })],
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
+  });
+
+  it("should cancel selection when mouse moved outside", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 1,
+        clientY: 1,
+      }),
+    );
+
+    window.dispatchEvent(createMouseMoveEvent({ clientX: -1, clientY: -1 }));
+
+    window.dispatchEvent(new MouseEvent("mouseup"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
+  });
+
+  it("should cancel selection when touch moved outside", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: -2, clientY: -2 })],
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
+  });
+
+  it("should cancel selection when touched with more than one point", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 2, clientY: 2 }),
+          createTouch({ clientX: 2, clientY: 2 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(new MouseEvent("touchend"));
+
+    expect(onNodeSelected).not.toHaveBeenCalled();
   });
 });

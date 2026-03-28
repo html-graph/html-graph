@@ -1,22 +1,31 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
-import { MouseEventVerifier } from "../shared";
+import { isPointInside, MouseEventVerifier } from "../shared";
+import { Point } from "@/point";
 
 export class UserSelectableNodesConfigurator {
+  private readonly element: HTMLElement;
+
   private readonly canvas: Canvas;
 
   private readonly window: Window;
 
-  private readonly onSelectionChange: (
-    nodeIds: ReadonlySet<Identifier>,
-  ) => void;
+  private readonly onNodeSelected: (nodeId: Identifier) => void;
 
   private readonly mouseDownEventVerifier: MouseEventVerifier;
 
   private readonly mouseUpEventVerifier: MouseEventVerifier;
 
+  private readonly movementThreshold: number;
+
   private selectionCandidateNodeId: Identifier | null = null;
+
+  private movedDistance = 0;
+
+  private previousMouse: Point | null = null;
+
+  private previousTouch: Touch | null = null;
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
@@ -48,8 +57,8 @@ export class UserSelectableNodesConfigurator {
 
   private readonly revert = (): void => {
     this.reset();
-    this.removeMouseDragListeners();
-    this.removeTouchDragListeners();
+    this.removeWindowMouseListeners();
+    this.removeWindowTouchListeners();
   };
 
   private readonly onNodeMouseDown: EventListener = (event): void => {
@@ -64,6 +73,12 @@ export class UserSelectableNodesConfigurator {
     )!;
 
     this.selectionCandidateNodeId = nodeId;
+
+    this.previousMouse = { x: mouseEvent.clientX, y: mouseEvent.clientY };
+
+    this.window.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
 
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
@@ -83,9 +98,73 @@ export class UserSelectableNodesConfigurator {
 
     this.selectionCandidateNodeId = nodeId;
 
+    this.previousTouch = touchEvent.touches[0];
+
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+
     this.window.addEventListener("touchend", this.onWindowTouchEnd, {
       passive: true,
     });
+
+    this.window.addEventListener("touchcancel", this.onWindowTouchCancel, {
+      passive: true,
+    });
+  };
+
+  private readonly onWindowMouseMove = (event: Event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    const previousMouse = this.previousMouse!;
+    const x = mouseEvent.clientX - previousMouse.x;
+    const y = mouseEvent.clientY - previousMouse.y;
+
+    if (
+      !isPointInside(
+        this.window,
+        this.element,
+        mouseEvent.clientX,
+        mouseEvent.clientY,
+      )
+    ) {
+      this.removeWindowMouseListeners();
+      return;
+    }
+
+    this.processMoveThresholdVerification(x, y, () => {
+      this.removeWindowMouseListeners();
+    });
+
+    this.previousMouse = { x, y };
+  };
+
+  private readonly onWindowTouchMove: EventListener = (event: Event): void => {
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 1) {
+      this.removeWindowTouchListeners();
+      return;
+    }
+
+    const touch = touchEvent.touches[0];
+
+    if (
+      !isPointInside(this.window, this.element, touch.clientX, touch.clientY)
+    ) {
+      this.removeWindowTouchListeners();
+      return;
+    }
+
+    const previousTouch = this.previousTouch!;
+    const x = touch.clientX - previousTouch.clientX;
+    const y = touch.clientY - previousTouch.clientY;
+
+    this.processMoveThresholdVerification(x, y, () => {
+      this.removeWindowTouchListeners();
+    });
+
+    this.previousTouch = touch;
   };
 
   private readonly onWindowMouseUp: EventListener = (event: Event): void => {
@@ -95,31 +174,27 @@ export class UserSelectableNodesConfigurator {
       return;
     }
 
-    this.removeMouseDragListeners();
-
-    const nodeId = this.selectionCandidateNodeId;
-
-    if (nodeId !== null && this.canvas.graph.hasNode(nodeId)) {
-      this.onSelectionChange(new Set([nodeId]));
-    }
+    this.removeWindowMouseListeners();
+    this.trySelectNode();
   };
 
   private readonly onWindowTouchEnd: EventListener = (): void => {
-    const nodeId = this.selectionCandidateNodeId;
+    this.removeWindowTouchListeners();
+    this.trySelectNode();
+  };
 
-    this.removeTouchDragListeners();
-
-    if (nodeId !== null && this.canvas.graph.hasNode(nodeId)) {
-      this.onSelectionChange(new Set([nodeId]));
-    }
+  private readonly onWindowTouchCancel: EventListener = (): void => {
+    this.removeWindowTouchListeners();
   };
 
   private constructor(params: UserSelectableNodesParams) {
+    this.element = params.element;
     this.canvas = params.canvas;
     this.window = params.window;
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
-    this.onSelectionChange = params.onSelectionChange;
+    this.onNodeSelected = params.onNodeSelected;
+    this.movementThreshold = params.movementThreshold;
 
     this.canvas.graph.onAfterNodeAdded.subscribe(this.onAfterNodeAdded);
     this.canvas.graph.onBeforeNodeRemoved.subscribe(this.onBeforeNodeRemoved);
@@ -131,11 +206,34 @@ export class UserSelectableNodesConfigurator {
     new UserSelectableNodesConfigurator(params);
   }
 
-  private removeMouseDragListeners(): void {
+  private removeWindowMouseListeners(): void {
     this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+    this.window.removeEventListener("mousemove", this.onWindowMouseMove);
   }
 
-  private removeTouchDragListeners(): void {
+  private removeWindowTouchListeners(): void {
     this.window.removeEventListener("touchend", this.onWindowTouchEnd);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchCancel);
+  }
+
+  private trySelectNode(): void {
+    const nodeId = this.selectionCandidateNodeId!;
+
+    if (this.canvas.graph.hasNode(nodeId)) {
+      this.onNodeSelected(nodeId);
+    }
+  }
+
+  private processMoveThresholdVerification(
+    x: number,
+    y: number,
+    thresholdReachedCallback: () => void,
+  ): void {
+    const distance = Math.sqrt(x * x + y * y);
+    this.movedDistance += distance;
+
+    if (this.movedDistance > this.movementThreshold) {
+      thresholdReachedCallback();
+    }
   }
 }
