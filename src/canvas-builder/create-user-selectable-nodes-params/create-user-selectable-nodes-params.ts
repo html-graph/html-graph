@@ -13,7 +13,7 @@ export const createUserSelectableNodesParams = (
     canvas,
     element,
     window,
-    onNodeSelected: config.onNodeSelected ?? defaults.onNodeSelected,
+    onNodeSelected: config.onNodeSelected,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? defaults.mouseDownEventVerifier,
     mouseUpEventVerifier:

@@ -93,7 +93,8 @@ export class CanvasBuilder {
 
   private animatedLayoutConfig: AnimatedLayoutConfig = {};
 
-  private userSelectableNodesConfig: UserSelectableNodesConfig = {};
+  private userSelectableNodesConfig: UserSelectableNodesConfig | undefined =
+    undefined;
 
   private hasDraggableNodes = false;
 
@@ -110,8 +111,6 @@ export class CanvasBuilder {
   private hasAnimatedLayout = false;
 
   private hasLayout = false;
-
-  private hasUserSelectableNodes = false;
 
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
@@ -203,10 +202,9 @@ export class CanvasBuilder {
   }
 
   public enableUserSelectableNodes(
-    config?: UserSelectableNodesConfig | undefined,
+    config: UserSelectableNodesConfig,
   ): CanvasBuilder {
-    this.userSelectableNodesConfig = config ?? {};
-    this.hasUserSelectableNodes = true;
+    this.userSelectableNodesConfig = config;
 
     return this;
   }
@@ -277,7 +275,7 @@ export class CanvasBuilder {
       NodeResizeReactiveEdgesConfigurator.configure(canvas);
     }
 
-    if (this.hasUserSelectableNodes) {
+    if (this.userSelectableNodesConfig !== undefined) {
       const params = createUserSelectableNodesParams(
         canvas,
         layers.main,

@@ -7,7 +7,9 @@ describe("createUserSelectableNodesParams", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.canvas).toBe(canvas);
   });
@@ -16,7 +18,9 @@ describe("createUserSelectableNodesParams", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.element).toBe(element);
   });
@@ -25,25 +29,20 @@ describe("createUserSelectableNodesParams", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.window).toBe(window);
-  });
-
-  it("should return default node selected callback", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
-
-    expect(params.onNodeSelected).toBe(defaults.onNodeSelected);
   });
 
   it("should return default mouse down event verifier", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.mouseDownEventVerifier).toBe(defaults.mouseDownEventVerifier);
   });
@@ -52,7 +51,9 @@ describe("createUserSelectableNodesParams", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.mouseUpEventVerifier).toBe(defaults.mouseUpEventVerifier);
   });
@@ -61,7 +62,9 @@ describe("createUserSelectableNodesParams", () => {
     const canvas = createCanvas();
     const element = document.createElement("div");
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {});
+    const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
+    });
 
     expect(params.movementThreshold).toBe(defaults.movementThreshold);
   });
@@ -86,6 +89,7 @@ describe("createUserSelectableNodesParams", () => {
     const mouseDownEventVerifier = (): boolean => true;
 
     const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
       mouseDownEventVerifier,
     });
 
@@ -99,6 +103,7 @@ describe("createUserSelectableNodesParams", () => {
     const mouseUpEventVerifier = (): boolean => true;
 
     const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
       mouseUpEventVerifier,
     });
 
@@ -110,6 +115,7 @@ describe("createUserSelectableNodesParams", () => {
     const element = document.createElement("div");
 
     const params = createUserSelectableNodesParams(canvas, element, window, {
+      onNodeSelected: (): void => {},
       movementThreshold: 100,
     });
 

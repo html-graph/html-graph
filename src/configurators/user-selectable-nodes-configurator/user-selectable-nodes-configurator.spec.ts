@@ -850,4 +850,64 @@ describe("UserSelectableNodesConfigurator", () => {
 
     expect(spy).toHaveBeenCalledWith("mousemove", expect.anything());
   });
+
+  it("should stop mouse event propagation on selection finish", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 1,
+        clientY: 1,
+      }),
+    );
+
+    const event = new MouseEvent("mouseup");
+    const spy = jest.spyOn(event, "stopPropagation");
+
+    window.dispatchEvent(event);
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should stop touch event propagation on selection finish", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({
+      element,
+      onNodeSelected,
+    });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    nodeElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 1, clientY: 1 })],
+      }),
+    );
+
+    const event = new MouseEvent("touchend");
+    const spy = jest.spyOn(event, "stopPropagation");
+
+    window.dispatchEvent(event);
+
+    expect(spy).toHaveBeenCalled();
+  });
 });

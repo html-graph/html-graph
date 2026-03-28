@@ -176,11 +176,13 @@ export class UserSelectableNodesConfigurator {
 
     this.removeWindowMouseListeners();
     this.trySelectNode();
+    event.stopPropagation();
   };
 
-  private readonly onWindowTouchEnd: EventListener = (): void => {
+  private readonly onWindowTouchEnd: EventListener = (event: Event): void => {
     this.removeWindowTouchListeners();
     this.trySelectNode();
+    event.stopPropagation();
   };
 
   private readonly onWindowTouchCancel: EventListener = (): void => {
