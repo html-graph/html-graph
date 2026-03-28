@@ -23,6 +23,7 @@ import {
   AnimatedLayoutParams,
   LayoutParams,
   UserSelectableNodesConfigurator,
+  UserSelectableCanvasConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -71,6 +72,10 @@ import {
   createUserSelectableNodesParams,
   UserSelectableNodesConfig,
 } from "./create-user-selectable-nodes-params";
+import {
+  createUserSelectableCanvasParams,
+  UserSelectableCanvasConfig,
+} from "./create-user-selectable-canvas-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -94,6 +99,9 @@ export class CanvasBuilder {
   private animatedLayoutConfig: AnimatedLayoutConfig = {};
 
   private userSelectableNodesConfig: UserSelectableNodesConfig | undefined =
+    undefined;
+
+  private userSelectableCanvasConfig: UserSelectableCanvasConfig | undefined =
     undefined;
 
   private hasDraggableNodes = false;
@@ -209,6 +217,14 @@ export class CanvasBuilder {
     return this;
   }
 
+  public enableUserSelectableCanvas(
+    config: UserSelectableCanvasConfig,
+  ): CanvasBuilder {
+    this.userSelectableCanvasConfig = config;
+
+    return this;
+  }
+
   public build(): Canvas {
     if (this.used) {
       throw new CanvasBuilderError(
@@ -284,6 +300,17 @@ export class CanvasBuilder {
       );
 
       UserSelectableNodesConfigurator.configure(params);
+    }
+
+    if (this.userSelectableCanvasConfig !== undefined) {
+      const params = createUserSelectableCanvasParams(
+        canvas,
+        layers.main,
+        this.window,
+        this.userSelectableCanvasConfig,
+      );
+
+      UserSelectableCanvasConfigurator.configure(params);
     }
 
     if (this.hasDraggableNodes) {

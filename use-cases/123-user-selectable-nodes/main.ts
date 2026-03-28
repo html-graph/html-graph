@@ -20,6 +20,15 @@ const canvas: Canvas = builder
       });
     },
   })
+  .enableUserSelectableCanvas({
+    onCanvasSelected: () => {
+      canvas.graph.getAllNodeIds().forEach((nodeId) => {
+        const { element } = canvas.graph.getNode(nodeId);
+
+        element.classList.remove("selected");
+      });
+    },
+  })
   .enableUserDraggableNodes()
   .build();
 

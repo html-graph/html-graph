@@ -40,3 +40,6 @@ export type { AnimatedLayoutParams } from "./animated-layout-configurator";
 
 export { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 export type { UserSelectableNodesParams } from "./user-selectable-nodes-configurator";
+
+export { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-configurator";
+export type { UserSelectableCanvasParams } from "./user-selectable-canvas-configurator";

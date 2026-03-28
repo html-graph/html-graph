@@ -1,19 +1,19 @@
-import { UserSelectableNodesParams } from "@/configurators";
+import { UserSelectableCanvasParams } from "@/configurators";
 import { Canvas } from "@/canvas";
-import { UserSelectableNodesConfig } from "./user-selectable-nodes-config";
+import { UserSelectableCanvasConfig } from "./user-selectable-canvas-config";
 import { selectionDefaults } from "../shared";
 
-export const createUserSelectableNodesParams = (
+export const createUserSelectableCanvasParams = (
   canvas: Canvas,
   element: HTMLElement,
   window: Window,
-  config: UserSelectableNodesConfig,
-): UserSelectableNodesParams => {
+  config: UserSelectableCanvasConfig,
+): UserSelectableCanvasParams => {
   return {
     canvas,
     element,
     window,
-    onNodeSelected: config.onNodeSelected,
+    onCanvasSelected: config.onCanvasSelected,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? selectionDefaults.mouseDownEventVerifier,
     mouseUpEventVerifier:

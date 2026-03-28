@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should select node", async ({ page }) => {
+test("should have selectable nodes", async ({ page }) => {
   await page.goto(`${e2eBase}/123-user-selectable-nodes/`);
 
   await expect(page).toHaveScreenshot("initial.png");
@@ -18,4 +18,10 @@ test("should select node", async ({ page }) => {
   await page.mouse.up();
 
   await expect(page).toHaveScreenshot("node-dragged.png");
+
+  await page.mouse.move(700, 700);
+  await page.mouse.down();
+  await page.mouse.up();
+
+  await expect(page).toHaveScreenshot("deselected-nodes.png");
 });
