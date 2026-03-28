@@ -262,6 +262,7 @@ describe("UserSelectableNodesConfigurator", () => {
     canvas.removeNode("node-1");
 
     expect(spy).toHaveBeenCalledWith("mousedown", expect.anything());
+    spy.mockClear();
   });
 
   it("should reset node element mouse event on canvas clear", () => {
@@ -284,6 +285,7 @@ describe("UserSelectableNodesConfigurator", () => {
     canvas.clear();
 
     expect(spy).toHaveBeenCalledWith("mousedown", expect.anything());
+    spy.mockClear();
   });
 
   it("should call specified callback on node touch grab and immediate release", () => {
@@ -449,6 +451,7 @@ describe("UserSelectableNodesConfigurator", () => {
     canvas.removeNode("node-1");
 
     expect(spy).toHaveBeenCalledWith("touchstart", expect.anything());
+    spy.mockClear();
   });
 
   it("should reset node element touch event on canvas clear", () => {
@@ -471,6 +474,7 @@ describe("UserSelectableNodesConfigurator", () => {
     canvas.clear();
 
     expect(spy).toHaveBeenCalledWith("touchstart", expect.anything());
+    spy.mockClear();
   });
 
   it("should not call specified callback on touch grab cancelled", () => {
@@ -524,6 +528,7 @@ describe("UserSelectableNodesConfigurator", () => {
     window.dispatchEvent(new MouseEvent("touchcancel"));
 
     expect(spy).toHaveBeenCalledWith("touchcancel", expect.anything());
+    spy.mockClear();
   });
 
   it("should cancel selection when mouse move distance is more than specified threshold", () => {
@@ -817,6 +822,7 @@ describe("UserSelectableNodesConfigurator", () => {
     window.dispatchEvent(new MouseEvent("touchend"));
 
     expect(spy).toHaveBeenCalledWith("touchmove", expect.anything());
+    spy.mockClear();
   });
 
   it("should reset mouse movenent on selection finish", () => {
@@ -849,65 +855,6 @@ describe("UserSelectableNodesConfigurator", () => {
     window.dispatchEvent(new MouseEvent("mouseup"));
 
     expect(spy).toHaveBeenCalledWith("mousemove", expect.anything());
-  });
-
-  it("should stop mouse event propagation on selection finish", () => {
-    const element = createElement({ width: 1000, height: 1000 });
-    const canvas = createCanvas({ element });
-
-    const nodeElement = createElement({ width: 100, height: 100 });
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
-
-    nodeElement.dispatchEvent(
-      new MouseEvent("mousedown", {
-        clientX: 1,
-        clientY: 1,
-      }),
-    );
-
-    const event = new MouseEvent("mouseup");
-    const spy = jest.spyOn(event, "stopPropagation");
-
-    window.dispatchEvent(event);
-
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it("should stop touch event propagation on selection finish", () => {
-    const element = createElement({ width: 1000, height: 1000 });
-    const onNodeSelected = jest.fn();
-
-    const canvas = createCanvas({
-      element,
-      onNodeSelected,
-    });
-
-    const nodeElement = createElement({ width: 100, height: 100 });
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
-
-    nodeElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 1, clientY: 1 })],
-      }),
-    );
-
-    const event = new MouseEvent("touchend");
-    const spy = jest.spyOn(event, "stopPropagation");
-
-    window.dispatchEvent(event);
-
-    expect(spy).toHaveBeenCalled();
+    spy.mockClear();
   });
 });

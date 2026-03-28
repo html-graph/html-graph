@@ -136,7 +136,7 @@ export class UserSelectableNodesConfigurator {
       this.removeWindowMouseListeners();
     });
 
-    this.previousMouse = { x, y };
+    this.previousMouse = { x: mouseEvent.clientX, y: mouseEvent.clientY };
   };
 
   private readonly onWindowTouchMove: EventListener = (event: Event): void => {
@@ -176,13 +176,11 @@ export class UserSelectableNodesConfigurator {
 
     this.removeWindowMouseListeners();
     this.trySelectNode();
-    event.stopPropagation();
   };
 
-  private readonly onWindowTouchEnd: EventListener = (event: Event): void => {
+  private readonly onWindowTouchEnd: EventListener = (): void => {
     this.removeWindowTouchListeners();
     this.trySelectNode();
-    event.stopPropagation();
   };
 
   private readonly onWindowTouchCancel: EventListener = (): void => {
