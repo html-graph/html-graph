@@ -1,6 +1,6 @@
 import { createCanvas } from "@/mocks";
 import { createUserSelectableCanvasParams } from "./create-user-selectable-canvas-params";
-import { defaults } from "./defaults";
+import { selectionDefaults } from "../shared";
 
 describe("createUserSelectableCanvasParams", () => {
   it("should pass specified canvas instance", () => {
@@ -44,7 +44,9 @@ describe("createUserSelectableCanvasParams", () => {
       onCanvasSelected: (): void => {},
     });
 
-    expect(params.mouseDownEventVerifier).toBe(defaults.mouseDownEventVerifier);
+    expect(params.mouseDownEventVerifier).toBe(
+      selectionDefaults.mouseDownEventVerifier,
+    );
   });
 
   it("should return default mouse up event verifier", () => {
@@ -55,7 +57,9 @@ describe("createUserSelectableCanvasParams", () => {
       onCanvasSelected: (): void => {},
     });
 
-    expect(params.mouseUpEventVerifier).toBe(defaults.mouseUpEventVerifier);
+    expect(params.mouseUpEventVerifier).toBe(
+      selectionDefaults.mouseUpEventVerifier,
+    );
   });
 
   it("should return default movement threshold", () => {
@@ -66,7 +70,7 @@ describe("createUserSelectableCanvasParams", () => {
       onCanvasSelected: (): void => {},
     });
 
-    expect(params.movementThreshold).toBe(defaults.movementThreshold);
+    expect(params.movementThreshold).toBe(selectionDefaults.movementThreshold);
   });
 
   it("should return specified canvas selected callback", () => {

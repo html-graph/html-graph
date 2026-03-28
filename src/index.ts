@@ -14,6 +14,8 @@ export type {
   LayoutApplyOn,
   CoordsTransformConfig,
   TransformDeclaration,
+  UserSelectableNodesConfig,
+  UserSelectableCanvasConfig,
 } from "./canvas-builder";
 
 export type { Canvas } from "./canvas";

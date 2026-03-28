@@ -20,3 +20,5 @@ export type {
   CoordsTransformConfig,
   TransformDeclaration,
 } from "./create-layout-params";
+export type { UserSelectableNodesConfig } from "./create-user-selectable-nodes-params";
+export type { UserSelectableCanvasConfig } from "./create-user-selectable-canvas-params";

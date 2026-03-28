@@ -525,4 +525,23 @@ describe("CanvasBuilder", () => {
 
     expect(onNodeSelected).toHaveBeenCalled();
   });
+
+  it("should build selectable canvas", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
+    const onCanvasSelected = jest.fn();
+
+    builder
+      .enableUserSelectableCanvas({
+        onCanvasSelected,
+      })
+      .build();
+
+    const layer = canvasElement.children[0].children[1];
+
+    layer.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    expect(onCanvasSelected).toHaveBeenCalled();
+  });
 });

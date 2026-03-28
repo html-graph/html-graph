@@ -1,7 +1,7 @@
 import { UserSelectableNodesParams } from "@/configurators";
 import { Canvas } from "@/canvas";
-import { defaults } from "./defaults";
 import { UserSelectableNodesConfig } from "./user-selectable-nodes-config";
+import { selectionDefaults } from "../shared";
 
 export const createUserSelectableNodesParams = (
   canvas: Canvas,
@@ -15,9 +15,10 @@ export const createUserSelectableNodesParams = (
     window,
     onNodeSelected: config.onNodeSelected,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaults.mouseDownEventVerifier,
+      config.mouseDownEventVerifier ?? selectionDefaults.mouseDownEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaults.mouseUpEventVerifier,
-    movementThreshold: config.movementThreshold ?? defaults.movementThreshold,
+      config.mouseUpEventVerifier ?? selectionDefaults.mouseUpEventVerifier,
+    movementThreshold:
+      config.movementThreshold ?? selectionDefaults.movementThreshold,
   };
 };
