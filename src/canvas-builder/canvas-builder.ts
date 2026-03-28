@@ -22,6 +22,7 @@ import {
   AnimatedLayoutConfigurator,
   AnimatedLayoutParams,
   LayoutParams,
+  UserSelectableNodesConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -66,6 +67,10 @@ import { ViewportController } from "@/viewport-controller";
 import { createGraphControllerParams } from "./create-graph-controller-params";
 import { createViewportControllerParams } from "./create-viewport-controller-params";
 import { CanvasDefaults } from "./shared";
+import {
+  createUserSelectableNodesParams,
+  UserSelectableNodesConfig,
+} from "./create-user-selectable-nodes-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -88,6 +93,8 @@ export class CanvasBuilder {
 
   private animatedLayoutConfig: AnimatedLayoutConfig = {};
 
+  private userSelectableNodesConfig: UserSelectableNodesConfig = {};
+
   private hasDraggableNodes = false;
 
   private hasTransformableViewport = false;
@@ -104,6 +111,8 @@ export class CanvasBuilder {
 
   private hasLayout = false;
 
+  private hasUserSelectableNodes = false;
+
   private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
 
   private readonly window: Window = window;
@@ -119,7 +128,7 @@ export class CanvasBuilder {
   }
 
   public enableUserDraggableNodes(
-    config?: DraggableNodesConfig,
+    config?: DraggableNodesConfig | undefined,
   ): CanvasBuilder {
     this.hasDraggableNodes = true;
     this.dragConfig = config ?? {};
@@ -128,7 +137,7 @@ export class CanvasBuilder {
   }
 
   public enableUserTransformableViewport(
-    config?: ViewportTransformConfig,
+    config?: ViewportTransformConfig | undefined,
   ): CanvasBuilder {
     this.hasTransformableViewport = true;
     this.transformConfig = config ?? {};
@@ -148,7 +157,9 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableBackground(config?: BackgroundConfig): CanvasBuilder {
+  public enableBackground(
+    config?: BackgroundConfig | undefined,
+  ): CanvasBuilder {
     this.hasBackground = true;
     this.backgroundConfig = config ?? {};
 
@@ -156,7 +167,7 @@ export class CanvasBuilder {
   }
 
   public enableUserConnectablePorts(
-    config?: ConnectablePortsConfig,
+    config?: ConnectablePortsConfig | undefined,
   ): CanvasBuilder {
     this.hasUserConnectablePorts = true;
     this.connectablePortsConfig = config ?? {};
@@ -165,7 +176,7 @@ export class CanvasBuilder {
   }
 
   public enableUserDraggableEdges(
-    config?: DraggableEdgesConfig,
+    config?: DraggableEdgesConfig | undefined,
   ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
     this.draggableEdgesConfig = config ?? {};
@@ -173,7 +184,7 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableLayout(config?: LayoutConfig): CanvasBuilder {
+  public enableLayout(config?: LayoutConfig | undefined): CanvasBuilder {
     this.layoutConfig = config ?? {};
     this.hasLayout = true;
     this.hasAnimatedLayout = false;
@@ -181,10 +192,21 @@ export class CanvasBuilder {
     return this;
   }
 
-  public enableAnimatedLayout(config?: AnimatedLayoutConfig): CanvasBuilder {
+  public enableAnimatedLayout(
+    config?: AnimatedLayoutConfig | undefined,
+  ): CanvasBuilder {
     this.animatedLayoutConfig = config ?? {};
     this.hasAnimatedLayout = true;
     this.hasLayout = false;
+
+    return this;
+  }
+
+  public enableUserSelectableNodes(
+    config?: UserSelectableNodesConfig | undefined,
+  ): CanvasBuilder {
+    this.userSelectableNodesConfig = config ?? {};
+    this.hasUserSelectableNodes = true;
 
     return this;
   }
@@ -253,6 +275,17 @@ export class CanvasBuilder {
 
     if (this.hasNodeResizeReactiveEdges) {
       NodeResizeReactiveEdgesConfigurator.configure(canvas);
+    }
+
+    if (this.hasUserSelectableNodes) {
+      const params = createUserSelectableNodesParams(
+        canvas,
+        layers.main,
+        this.window,
+        this.userSelectableNodesConfig,
+      );
+
+      UserSelectableNodesConfigurator.configure(params);
     }
 
     if (this.hasDraggableNodes) {
