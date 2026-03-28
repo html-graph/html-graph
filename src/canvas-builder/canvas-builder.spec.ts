@@ -497,4 +497,32 @@ describe("CanvasBuilder", () => {
 
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
+
+  it("should build canvas with selectable nodes", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
+    const onNodeSelected = jest.fn();
+
+    const canvas = builder
+      .enableUserSelectableNodes({
+        onNodeSelected,
+      })
+      .build();
+
+    const nodeElement = document.createElement("div");
+
+    const nodeRequest1: AddNodeRequest = {
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    };
+
+    canvas.addNode(nodeRequest1);
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    expect(onNodeSelected).toHaveBeenCalled();
+  });
 });

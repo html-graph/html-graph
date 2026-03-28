@@ -37,3 +37,6 @@ export type { LayoutParams, LayoutApplyOnParam } from "./layout-configurator";
 
 export { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
 export type { AnimatedLayoutParams } from "./animated-layout-configurator";
+
+export { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
+export type { UserSelectableNodesParams } from "./user-selectable-nodes-configurator";
