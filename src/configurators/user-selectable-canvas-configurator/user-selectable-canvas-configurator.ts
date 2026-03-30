@@ -131,7 +131,14 @@ export class UserSelectableCanvasConfigurator {
       return;
     }
 
-    this.onCanvasSelected();
+    // TODO: figure out better option
+    const ignore = (
+      event as unknown as { ignoreCanvasSelection?: boolean | undefined }
+    ).ignoreCanvasSelection;
+
+    if (ignore !== true) {
+      this.onCanvasSelected();
+    }
 
     this.removeWindowMouseListeners();
   };

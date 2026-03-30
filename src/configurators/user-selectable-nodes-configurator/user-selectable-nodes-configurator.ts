@@ -175,12 +175,12 @@ export class UserSelectableNodesConfigurator {
     }
 
     this.removeWindowMouseListeners();
-    this.trySelectNode();
+    this.trySelectNode(event);
   };
 
-  private readonly onWindowTouchEnd: EventListener = (): void => {
+  private readonly onWindowTouchEnd: EventListener = (event: Event): void => {
     this.removeWindowTouchListeners();
-    this.trySelectNode();
+    this.trySelectNode(event);
   };
 
   private readonly onWindowTouchCancel: EventListener = (): void => {
@@ -217,11 +217,15 @@ export class UserSelectableNodesConfigurator {
     this.window.removeEventListener("touchcancel", this.onWindowTouchCancel);
   }
 
-  private trySelectNode(): void {
+  private trySelectNode(event: Event): void {
     const nodeId = this.selectionCandidateNodeId!;
 
     if (this.canvas.graph.hasNode(nodeId)) {
       this.onNodeSelected(nodeId);
+      // TODO: figure out better option
+      (
+        event as unknown as { ignoreCanvasSelection: boolean }
+      ).ignoreCanvasSelection = true;
     }
   }
 
