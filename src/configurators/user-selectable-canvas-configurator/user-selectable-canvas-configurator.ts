@@ -132,10 +132,11 @@ export class UserSelectableCanvasConfigurator {
     }
 
     // TODO: figure out better option
-    const ignore = (event as unknown as { ignoreCanvasSelection: boolean })
-      .ignoreCanvasSelection;
+    const ignore = (
+      event as unknown as { ignoreCanvasSelection?: boolean | undefined }
+    ).ignoreCanvasSelection;
 
-    if (!ignore) {
+    if (ignore !== true) {
       this.onCanvasSelected();
     }
 
