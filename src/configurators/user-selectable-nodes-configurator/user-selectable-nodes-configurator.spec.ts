@@ -15,6 +15,7 @@ import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 import { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 import { Identifier } from "@/identifier";
+import { PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -50,17 +51,21 @@ const createCanvas = (options?: {
     viewportController,
   );
 
-  UserSelectableNodesConfigurator.configure({
-    element,
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
+  UserSelectableNodesConfigurator.configure(
     canvas,
     window,
-    onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
-    mouseDownEventVerifier:
-      options?.mouseDownEventVerifier ?? ((): boolean => true),
-    mouseUpEventVerifier:
-      options?.mouseUpEventVerifier ?? ((): boolean => true),
-    movementThreshold: options?.movementThreshold ?? 10,
-  });
+    pointInsideVerifier,
+    {
+      onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
+      mouseDownEventVerifier:
+        options?.mouseDownEventVerifier ?? ((): boolean => true),
+      mouseUpEventVerifier:
+        options?.mouseUpEventVerifier ?? ((): boolean => true),
+      movementThreshold: options?.movementThreshold ?? 10,
+    },
+  );
 
   return canvas;
 };

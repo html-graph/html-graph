@@ -1,16 +1,10 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
-import { isPointInside, MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 import { Point } from "@/point";
 
 export class UserSelectableNodesConfigurator {
-  private readonly element: HTMLElement;
-
-  private readonly canvas: Canvas;
-
-  private readonly window: Window;
-
   private readonly onNodeSelected: (nodeId: Identifier) => void;
 
   private readonly mouseDownEventVerifier: MouseEventVerifier;
@@ -121,12 +115,7 @@ export class UserSelectableNodesConfigurator {
     const y = mouseEvent.clientY - previousMouse.y;
 
     if (
-      !isPointInside(
-        this.window,
-        this.element,
-        mouseEvent.clientX,
-        mouseEvent.clientY,
-      )
+      !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeWindowMouseListeners();
       return;
@@ -149,9 +138,7 @@ export class UserSelectableNodesConfigurator {
 
     const touch = touchEvent.touches[0];
 
-    if (
-      !isPointInside(this.window, this.element, touch.clientX, touch.clientY)
-    ) {
+    if (!this.pointInsideVerifier.verify(touch.clientX, touch.clientY)) {
       this.removeWindowTouchListeners();
       return;
     }
@@ -187,10 +174,12 @@ export class UserSelectableNodesConfigurator {
     this.removeWindowTouchListeners();
   };
 
-  private constructor(params: UserSelectableNodesParams) {
-    this.element = params.element;
-    this.canvas = params.canvas;
-    this.window = params.window;
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
+    params: UserSelectableNodesParams,
+  ) {
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
     this.onNodeSelected = params.onNodeSelected;
@@ -202,8 +191,18 @@ export class UserSelectableNodesConfigurator {
     this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
-  public static configure(params: UserSelectableNodesParams): void {
-    new UserSelectableNodesConfigurator(params);
+  public static configure(
+    canvas: Canvas,
+    window: Window,
+    pointInsideVerifier: PointInsideVerifier,
+    params: UserSelectableNodesParams,
+  ): void {
+    new UserSelectableNodesConfigurator(
+      canvas,
+      window,
+      pointInsideVerifier,
+      params,
+    );
   }
 
   private removeWindowMouseListeners(): void {

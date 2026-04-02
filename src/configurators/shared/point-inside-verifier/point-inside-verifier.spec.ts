@@ -1,10 +1,10 @@
 import { createElement } from "@/mocks";
-import { isPointInside } from "./is-point-inside";
+import { PointInsideVerifier } from "./point-inside-verifier";
 
 let innerWidth: number;
 let innerHeight: number;
 
-describe("isPointInside", () => {
+describe("PointInsideVerifier", () => {
   beforeEach(() => {
     innerWidth = window.innerWidth;
     innerHeight = window.innerHeight;
@@ -20,19 +20,22 @@ describe("isPointInside", () => {
 
   it("should return true when point is inside window and element", () => {
     const element = createElement({ x: 10, y: 10, width: 100, height: 100 });
+    const verifier = new PointInsideVerifier(element, window);
 
-    expect(isPointInside(window, element, 20, 20)).toBe(true);
+    expect(verifier.verify(20, 20)).toBe(true);
   });
 
   it("should return false when point is outside element", () => {
     const element = createElement({ x: 10, y: 10, width: 100, height: 100 });
+    const verifier = new PointInsideVerifier(element, window);
 
-    expect(isPointInside(window, element, 5, 5)).toBe(false);
+    expect(verifier.verify(5, 5)).toBe(false);
   });
 
   it("should return false when point is outside window", () => {
     const element = createElement({ x: 10, y: 10, width: 100, height: 100 });
+    const verifier = new PointInsideVerifier(element, window);
 
-    expect(isPointInside(window, element, 105, 105)).toBe(false);
+    expect(verifier.verify(105, 105)).toBe(false);
   });
 });

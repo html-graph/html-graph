@@ -43,3 +43,5 @@ export type { UserSelectableNodesParams } from "./user-selectable-nodes-configur
 
 export { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-configurator";
 export type { UserSelectableCanvasParams } from "./user-selectable-canvas-configurator";
+
+export { PointInsideVerifier } from "./shared";

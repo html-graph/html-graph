@@ -7,6 +7,7 @@ import {
 } from "../user-transformable-viewport-configurator";
 import { VirtualScrollParams } from "./virtual-scroll-config";
 import { Viewport } from "@/viewport";
+import { PointInsideVerifier } from "../shared";
 
 export class UserTransformableViewportVirtualScrollConfigurator {
   private readonly nodeHorizontal: number;
@@ -52,6 +53,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     private readonly window: Window,
     transformParams: TransformableViewportParams,
     private readonly trigger: EventSubject<RenderingBox>,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: VirtualScrollParams,
   ) {
     this.nodeHorizontal = this.params.nodeVerticalRadius;
@@ -101,6 +103,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       canvas,
       this.element,
       this.window,
+      this.pointInsideVerifier,
       patchedTransformableViewportParams,
     );
 
@@ -114,6 +117,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
     win: Window,
     transformParams: TransformableViewportParams,
     trigger: EventSubject<RenderingBox>,
+    pointInsideVerifier: PointInsideVerifier,
     virtualScrollOptions: VirtualScrollParams,
   ): void {
     new UserTransformableViewportVirtualScrollConfigurator(
@@ -122,6 +126,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
       win,
       transformParams,
       trigger,
+      pointInsideVerifier,
       virtualScrollOptions,
     );
   }

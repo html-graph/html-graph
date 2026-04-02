@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { isPointInside, setCursor } from "../shared";
+import { PointInsideVerifier, setCursor } from "../shared";
 import { Point } from "@/point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
@@ -131,9 +131,7 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
-    const isInside = isPointInside(
-      this.window,
-      this.element,
+    const isInside = this.pointInsideVerifier.verify(
       event.clientX,
       event.clientY,
     );
@@ -166,9 +164,7 @@ export class UserDraggableNodesConfigurator {
 
     const touch = event.touches[0];
 
-    const isInside = isPointInside(
-      this.window,
-      this.element,
+    const isInside = this.pointInsideVerifier.verify(
       touch.clientX,
       touch.clientY,
     );
@@ -211,6 +207,7 @@ export class UserDraggableNodesConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: DraggableNodesParams,
   ) {
     this.graph = canvas.graph;
@@ -226,9 +223,16 @@ export class UserDraggableNodesConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
+    pointInsideVerifier: PointInsideVerifier,
     config: DraggableNodesParams,
   ): void {
-    new UserDraggableNodesConfigurator(canvas, element, win, config);
+    new UserDraggableNodesConfigurator(
+      canvas,
+      element,
+      win,
+      pointInsideVerifier,
+      config,
+    );
   }
 
   private moveNode(state: GrabbedNodeState, cursor: Point): void {

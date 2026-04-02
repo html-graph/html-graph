@@ -12,7 +12,7 @@ import {
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { ConnectionPreprocessor } from "../shared";
+import { ConnectionPreprocessor, PointInsideVerifier } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -75,11 +75,14 @@ const createCanvas = (options?: {
     dragPortDirection: 0,
   };
 
+  const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
+
   UserConnectablePortsConfigurator.configure(
     canvas,
     overlayElement,
     viewportStore,
     window,
+    pointInsideVerifier,
     params,
   );
 

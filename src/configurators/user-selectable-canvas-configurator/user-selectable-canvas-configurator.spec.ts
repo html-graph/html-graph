@@ -13,6 +13,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -48,17 +49,22 @@ const createCanvas = (options?: {
     viewportController,
   );
 
-  UserSelectableCanvasConfigurator.configure({
-    element,
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
+  UserSelectableCanvasConfigurator.configure(
     canvas,
+    element,
     window,
-    onCanvasSelected: options?.onCanvasSelected ?? ((): void => {}),
-    movementThreshold: options?.movementThreshold ?? 10,
-    mouseDownEventVerifier:
-      options?.mouseDownEventVerifier ?? ((): boolean => true),
-    mouseUpEventVerifier:
-      options?.mouseUpEventVerifier ?? ((): boolean => true),
-  });
+    pointInsideVerifier,
+    {
+      onCanvasSelected: options?.onCanvasSelected ?? ((): void => {}),
+      movementThreshold: options?.movementThreshold ?? 10,
+      mouseDownEventVerifier:
+        options?.mouseDownEventVerifier ?? ((): boolean => true),
+      mouseUpEventVerifier:
+        options?.mouseUpEventVerifier ?? ((): boolean => true),
+    },
+  );
 
   return canvas;
 };

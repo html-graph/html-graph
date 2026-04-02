@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { isPointInside } from "../is-point-inside";
+import { PointInsideVerifier } from "../point-inside-verifier";
 import { DraggablePortsParams } from "./draggable-ports-params";
 import { Identifier } from "@/identifier";
 import { PortElement } from "@/element";
@@ -53,9 +53,7 @@ export class DraggablePortsConfigurator {
   };
 
   private readonly onWindowMouseMove = (event: MouseEvent): void => {
-    const isInside = isPointInside(
-      this.window,
-      this.element,
+    const isInside = this.pointInsideVerifier.verify(
       event.clientX,
       event.clientY,
     );
@@ -115,9 +113,7 @@ export class DraggablePortsConfigurator {
   private readonly onWindowTouchMove = (event: TouchEvent): void => {
     const touch = event.touches[0];
 
-    const isInside = isPointInside(
-      this.window,
-      this.element,
+    const isInside = this.pointInsideVerifier.verify(
       touch.clientX,
       touch.clientY,
     );
@@ -152,8 +148,8 @@ export class DraggablePortsConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    private readonly element: HTMLElement,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: DraggablePortsParams,
   ) {
     this.canvas.graph.onAfterPortMarked.subscribe(this.onAfterPortMarked);
@@ -164,11 +160,11 @@ export class DraggablePortsConfigurator {
 
   public static configure(
     canvas: Canvas,
-    element: HTMLElement,
     win: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: DraggablePortsParams,
   ): void {
-    new DraggablePortsConfigurator(canvas, element, win, params);
+    new DraggablePortsConfigurator(canvas, win, pointInsideVerifier, params);
   }
 
   private hookPortEvents(element: PortElement): void {

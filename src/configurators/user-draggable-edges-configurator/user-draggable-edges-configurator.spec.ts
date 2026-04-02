@@ -11,7 +11,7 @@ import {
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
-import { ConnectionPreprocessor } from "../shared";
+import { ConnectionPreprocessor, PointInsideVerifier } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph, GraphEdge } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -86,11 +86,14 @@ const createCanvas = (options?: {
       options?.onEdgeReattachPrevented ?? ((): void => {}),
   };
 
+  const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
+
   UserDraggableEdgesConfigurator.configure(
     canvas,
     overlayElement,
     viewportStore,
     window,
+    pointInsideVerifier,
     params,
   );
 

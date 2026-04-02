@@ -1,46 +1,9 @@
-import { createCanvas } from "@/mocks";
 import { createUserSelectableNodesParams } from "./create-user-selectable-nodes-params";
 import { selectionDefaults } from "../shared";
 
 describe("createUserSelectableNodesParams", () => {
-  it("should pass specified canvas instance", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
-      onNodeSelected: (): void => {},
-    });
-
-    expect(params.canvas).toBe(canvas);
-  });
-
-  it("should pass specified layer element", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
-      onNodeSelected: (): void => {},
-    });
-
-    expect(params.element).toBe(element);
-  });
-
-  it("should pass specified window", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
-      onNodeSelected: (): void => {},
-    });
-
-    expect(params.window).toBe(window);
-  });
-
   it("should return default mouse down event verifier", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
     });
 
@@ -50,10 +13,7 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return default mouse up event verifier", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
     });
 
@@ -63,10 +23,7 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return default movement threshold", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
     });
 
@@ -74,12 +31,9 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return specified node selected callback", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
     const onNodeSelected = (): void => {};
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected,
     });
 
@@ -87,12 +41,9 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return specified mouse down event verifier", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
     const mouseDownEventVerifier = (): boolean => true;
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
       mouseDownEventVerifier,
     });
@@ -101,12 +52,9 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return specified mouse up event verifier", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
     const mouseUpEventVerifier = (): boolean => true;
 
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
       mouseUpEventVerifier,
     });
@@ -115,10 +63,7 @@ describe("createUserSelectableNodesParams", () => {
   });
 
   it("should return specified movement threshold", () => {
-    const canvas = createCanvas();
-    const element = document.createElement("div");
-
-    const params = createUserSelectableNodesParams(canvas, element, window, {
+    const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
       movementThreshold: 100,
     });

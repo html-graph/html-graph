@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { isPointInside, setCursor } from "../shared";
+import { PointInsideVerifier, setCursor } from "../shared";
 import { applyMatrixMove, applyMatrixScale } from "@/transformations";
 import { processTouch, TouchState } from "./process-touch";
 import { TransformableViewportParams } from "./transformable-viewport-params";
@@ -43,9 +43,7 @@ export class UserTransformableViewportConfigurator {
   private readonly onWindowMouseMove: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
-    const isInside = isPointInside(
-      this.window,
-      this.element,
+    const isInside = this.pointInsideVerifier.verify(
       event.clientX,
       event.clientY,
     );
@@ -137,7 +135,7 @@ export class UserTransformableViewportConfigurator {
   ) => {
     const currentTouches = processTouch(event);
     const isEvery = currentTouches.touches.every((touch) =>
-      isPointInside(this.window, this.element, touch[0], touch[1]),
+      this.pointInsideVerifier.verify(touch[0], touch[1]),
     );
 
     if (!isEvery) {
@@ -183,6 +181,7 @@ export class UserTransformableViewportConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: TransformableViewportParams,
   ) {
     this.element.addEventListener("wheel", this.preventWheelScaleListener, {
@@ -216,9 +215,16 @@ export class UserTransformableViewportConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     win: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: TransformableViewportParams,
   ): void {
-    new UserTransformableViewportConfigurator(canvas, element, win, params);
+    new UserTransformableViewportConfigurator(
+      canvas,
+      element,
+      win,
+      pointInsideVerifier,
+      params,
+    );
   }
 
   private moveViewport(dx: number, dy: number): void {

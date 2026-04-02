@@ -20,6 +20,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -86,12 +87,15 @@ const createCanvas = (options?: {
     scaleWheelFinishTimeout: 500,
   };
 
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
   UserTransformableViewportVirtualScrollConfigurator.configure(
     canvas,
     element,
     window,
     transformParams,
     trigger,
+    pointInsideVerifier,
     {
       nodeVerticalRadius: 25,
       nodeHorizontalRadius: 25,

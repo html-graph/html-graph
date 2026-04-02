@@ -13,7 +13,7 @@ import {
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
-import { MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -92,10 +92,13 @@ const createCanvas = (options?: {
     scaleWheelFinishTimeout: options?.scaleWheelFinishTimeout ?? 500,
   };
 
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
   UserTransformableViewportConfigurator.configure(
     canvas,
     element,
     window,
+    pointInsideVerifier,
     params,
   );
 

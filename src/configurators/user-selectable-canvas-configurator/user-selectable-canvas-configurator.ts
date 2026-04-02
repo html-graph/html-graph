@@ -1,15 +1,9 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableCanvasParams } from "./user-selectable-canvas-params";
 import { Point } from "@/point";
-import { isPointInside, MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 
 export class UserSelectableCanvasConfigurator {
-  private readonly element: HTMLElement;
-
-  private readonly canvas: Canvas;
-
-  private readonly window: Window;
-
   private readonly onCanvasSelected: () => void;
 
   private readonly movementThreshold: number;
@@ -72,12 +66,7 @@ export class UserSelectableCanvasConfigurator {
     const mouseEvent = event as MouseEvent;
 
     if (
-      !isPointInside(
-        this.window,
-        this.element,
-        mouseEvent.clientX,
-        mouseEvent.clientY,
-      )
+      !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeWindowMouseListeners();
       return;
@@ -105,9 +94,7 @@ export class UserSelectableCanvasConfigurator {
 
     const touch = touchEvent.touches[0];
 
-    if (
-      !isPointInside(this.window, this.element, touch.clientX, touch.clientY)
-    ) {
+    if (!this.pointInsideVerifier.verify(touch.clientX, touch.clientY)) {
       this.removeWindowTouchListeners();
       return;
     }
@@ -160,11 +147,14 @@ export class UserSelectableCanvasConfigurator {
     this.removeWindowTouchListeners();
   };
 
-  private constructor(params: UserSelectableCanvasParams) {
-    this.element = params.element;
-    this.window = params.window;
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
+    private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
+    params: UserSelectableCanvasParams,
+  ) {
     this.onCanvasSelected = params.onCanvasSelected;
-    this.canvas = params.canvas;
     this.movementThreshold = params.movementThreshold;
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
@@ -180,8 +170,20 @@ export class UserSelectableCanvasConfigurator {
     });
   }
 
-  public static configure(params: UserSelectableCanvasParams): void {
-    new UserSelectableCanvasConfigurator(params);
+  public static configure(
+    canvas: Canvas,
+    element: HTMLElement,
+    window: Window,
+    pointInsideVerifier: PointInsideVerifier,
+    params: UserSelectableCanvasParams,
+  ): void {
+    new UserSelectableCanvasConfigurator(
+      canvas,
+      element,
+      window,
+      pointInsideVerifier,
+      params,
+    );
   }
 
   private removeWindowMouseListeners(): void {

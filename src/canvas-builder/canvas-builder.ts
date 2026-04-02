@@ -24,6 +24,7 @@ import {
   LayoutParams,
   UserSelectableNodesConfigurator,
   UserSelectableCanvasConfigurator,
+  PointInsideVerifier,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -126,7 +127,11 @@ export class CanvasBuilder {
 
   private readonly animationStaticNodes = new Set<Identifier>();
 
-  public constructor(private readonly element: HTMLElement) {}
+  private readonly pointInsideVerifier: PointInsideVerifier;
+
+  public constructor(private readonly element: HTMLElement) {
+    this.pointInsideVerifier = new PointInsideVerifier(element, this.window);
+  }
 
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
@@ -293,24 +298,29 @@ export class CanvasBuilder {
 
     if (this.userSelectableNodesConfig !== undefined) {
       const params = createUserSelectableNodesParams(
-        canvas,
-        layers.main,
-        this.window,
         this.userSelectableNodesConfig,
       );
 
-      UserSelectableNodesConfigurator.configure(params);
+      UserSelectableNodesConfigurator.configure(
+        canvas,
+        this.window,
+        this.pointInsideVerifier,
+        params,
+      );
     }
 
     if (this.userSelectableCanvasConfig !== undefined) {
       const params = createUserSelectableCanvasParams(
-        canvas,
-        layers.main,
-        this.window,
         this.userSelectableCanvasConfig,
       );
 
-      UserSelectableCanvasConfigurator.configure(params);
+      UserSelectableCanvasConfigurator.configure(
+        canvas,
+        layers.main,
+        this.window,
+        this.pointInsideVerifier,
+        params,
+      );
     }
 
     if (this.hasDraggableNodes) {
@@ -328,6 +338,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
+        this.pointInsideVerifier,
         draggableNodesParams,
       );
     }
@@ -344,6 +355,7 @@ export class CanvasBuilder {
         layers.overlayConnectablePorts,
         viewportStore,
         this.window,
+        this.pointInsideVerifier,
         params,
       );
     }
@@ -359,6 +371,7 @@ export class CanvasBuilder {
         layers.overlayDraggableEdges,
         viewportStore,
         this.window,
+        this.pointInsideVerifier,
         dragEdgeParams,
       );
     }
@@ -370,6 +383,7 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
         this.boxRenderingTrigger,
+        this.pointInsideVerifier,
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
@@ -377,6 +391,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
+        this.pointInsideVerifier,
         createTransformableViewportParams(this.transformConfig),
       );
     }
