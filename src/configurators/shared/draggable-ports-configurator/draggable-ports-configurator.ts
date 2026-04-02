@@ -1,5 +1,5 @@
 import { Canvas } from "@/canvas";
-import { PointInsideVerifier } from "../is-point-inside";
+import { PointInsideVerifier } from "../point-inside-verifier";
 import { DraggablePortsParams } from "./draggable-ports-params";
 import { Identifier } from "@/identifier";
 import { PortElement } from "@/element";

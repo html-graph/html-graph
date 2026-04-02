@@ -13,15 +13,3 @@ export class PointInsideVerifier {
     );
   }
 }
-
-/**
- * @deprecated
- */
-export const isPointInside = (
-  win: Window,
-  element: HTMLElement,
-  x: number,
-  y: number,
-): boolean => {
-  return isPointOnElement(element, x, y) && isPointOnWindow(win, x, y);
-};

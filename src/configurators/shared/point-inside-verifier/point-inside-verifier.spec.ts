@@ -1,10 +1,10 @@
 import { createElement } from "@/mocks";
-import { PointInsideVerifier } from "./is-point-inside";
+import { PointInsideVerifier } from "./point-inside-verifier";
 
 let innerWidth: number;
 let innerHeight: number;
 
-describe("isPointInside", () => {
+describe("PointInsideVerifier", () => {
   beforeEach(() => {
     innerWidth = window.innerWidth;
     innerHeight = window.innerHeight;

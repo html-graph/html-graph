@@ -299,8 +299,8 @@ export class CanvasBuilder {
 
       UserSelectableNodesConfigurator.configure(
         canvas,
-        layers.main,
         this.window,
+        new PointInsideVerifier(layers.main, this.window),
         params,
       );
     }
@@ -314,6 +314,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
+        new PointInsideVerifier(layers.main, this.window),
         params,
       );
     }
@@ -378,6 +379,7 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
         this.boxRenderingTrigger,
+        new PointInsideVerifier(layers.main, this.window),
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
@@ -385,6 +387,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
+        new PointInsideVerifier(layers.main, this.window),
         createTransformableViewportParams(this.transformConfig),
       );
     }

@@ -1,7 +1,7 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
-import { isPointInside, MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 import { Point } from "@/point";
 
 export class UserSelectableNodesConfigurator {
@@ -115,12 +115,7 @@ export class UserSelectableNodesConfigurator {
     const y = mouseEvent.clientY - previousMouse.y;
 
     if (
-      !isPointInside(
-        this.window,
-        this.element,
-        mouseEvent.clientX,
-        mouseEvent.clientY,
-      )
+      !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeWindowMouseListeners();
       return;
@@ -143,9 +138,7 @@ export class UserSelectableNodesConfigurator {
 
     const touch = touchEvent.touches[0];
 
-    if (
-      !isPointInside(this.window, this.element, touch.clientX, touch.clientY)
-    ) {
+    if (!this.pointInsideVerifier.verify(touch.clientX, touch.clientY)) {
       this.removeWindowTouchListeners();
       return;
     }
@@ -183,8 +176,8 @@ export class UserSelectableNodesConfigurator {
 
   private constructor(
     private readonly canvas: Canvas,
-    private readonly element: HTMLElement,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     params: UserSelectableNodesParams,
   ) {
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
@@ -200,11 +193,16 @@ export class UserSelectableNodesConfigurator {
 
   public static configure(
     canvas: Canvas,
-    element: HTMLElement,
     window: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: UserSelectableNodesParams,
   ): void {
-    new UserSelectableNodesConfigurator(canvas, element, window, params);
+    new UserSelectableNodesConfigurator(
+      canvas,
+      window,
+      pointInsideVerifier,
+      params,
+    );
   }
 
   private removeWindowMouseListeners(): void {

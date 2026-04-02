@@ -1,7 +1,7 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableCanvasParams } from "./user-selectable-canvas-params";
 import { Point } from "@/point";
-import { isPointInside, MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 
 export class UserSelectableCanvasConfigurator {
   private readonly onCanvasSelected: () => void;
@@ -66,12 +66,7 @@ export class UserSelectableCanvasConfigurator {
     const mouseEvent = event as MouseEvent;
 
     if (
-      !isPointInside(
-        this.window,
-        this.element,
-        mouseEvent.clientX,
-        mouseEvent.clientY,
-      )
+      !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeWindowMouseListeners();
       return;
@@ -99,9 +94,7 @@ export class UserSelectableCanvasConfigurator {
 
     const touch = touchEvent.touches[0];
 
-    if (
-      !isPointInside(this.window, this.element, touch.clientX, touch.clientY)
-    ) {
+    if (!this.pointInsideVerifier.verify(touch.clientX, touch.clientY)) {
       this.removeWindowTouchListeners();
       return;
     }
@@ -158,6 +151,7 @@ export class UserSelectableCanvasConfigurator {
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     params: UserSelectableCanvasParams,
   ) {
     this.onCanvasSelected = params.onCanvasSelected;
@@ -180,9 +174,16 @@ export class UserSelectableCanvasConfigurator {
     canvas: Canvas,
     element: HTMLElement,
     window: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: UserSelectableCanvasParams,
   ): void {
-    new UserSelectableCanvasConfigurator(canvas, element, window, params);
+    new UserSelectableCanvasConfigurator(
+      canvas,
+      element,
+      window,
+      pointInsideVerifier,
+      params,
+    );
   }
 
   private removeWindowMouseListeners(): void {

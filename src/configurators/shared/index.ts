@@ -1,4 +1,4 @@
-export { isPointInside, PointInsideVerifier } from "./is-point-inside";
+export { PointInsideVerifier } from "./point-inside-verifier";
 export { setCursor } from "./set-cursor";
 export type { MouseEventVerifier } from "./mouse-event-verifier";
 export type { ConnectionPreprocessor } from "./connection-preprocessor";

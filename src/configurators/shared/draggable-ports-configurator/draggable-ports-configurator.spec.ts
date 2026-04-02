@@ -16,7 +16,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { PointInsideVerifier } from "../is-point-inside";
+import { PointInsideVerifier } from "../point-inside-verifier";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
