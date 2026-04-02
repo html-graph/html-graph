@@ -6,6 +6,7 @@ import {
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
+  PointInsideVerifier,
 } from "../shared";
 import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
@@ -29,6 +30,7 @@ export class UserConnectablePortsConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: UserConnectablePortsParams,
   ) {
     this.overlayCanvas = createOverlayCanvas(
@@ -39,8 +41,8 @@ export class UserConnectablePortsConfigurator {
 
     DraggablePortsConfigurator.configure(
       this.canvas,
-      this.overlayLayer,
       this.window,
+      this.pointInsideVerifier,
       {
         mouseDownEventVerifier: this.params.mouseDownEventVerifier,
         mouseUpEventVerifier: this.params.mouseUpEventVerifier,
@@ -73,6 +75,7 @@ export class UserConnectablePortsConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: UserConnectablePortsParams,
   ): void {
     new UserConnectablePortsConfigurator(
@@ -80,6 +83,7 @@ export class UserConnectablePortsConfigurator {
       overlayLayer,
       viewportStore,
       win,
+      pointInsideVerifier,
       params,
     );
   }

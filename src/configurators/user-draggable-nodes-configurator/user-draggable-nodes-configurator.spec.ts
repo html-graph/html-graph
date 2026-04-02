@@ -13,7 +13,7 @@ import {
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
-import { MouseEventVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -79,7 +79,15 @@ const createCanvas = (options?: {
     onNodeDragFinished: options?.onNodeDragFinished ?? ((): void => {}),
   };
 
-  UserDraggableNodesConfigurator.configure(canvas, element, window, params);
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
+  UserDraggableNodesConfigurator.configure(
+    canvas,
+    element,
+    window,
+    pointInsideVerifier,
+    params,
+  );
 
   return canvas;
 };

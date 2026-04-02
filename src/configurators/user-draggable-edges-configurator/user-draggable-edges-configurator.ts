@@ -8,6 +8,7 @@ import {
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
+  PointInsideVerifier,
 } from "../shared";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
@@ -34,6 +35,7 @@ export class UserDraggableEdgesConfigurator {
     private readonly overlayLayer: HTMLElement,
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
+    private readonly pointInsideVerifier: PointInsideVerifier,
     private readonly params: DraggableEdgesParams,
   ) {
     this.overlayCanvas = createOverlayCanvas(
@@ -44,8 +46,8 @@ export class UserDraggableEdgesConfigurator {
 
     DraggablePortsConfigurator.configure(
       this.canvas,
-      this.overlayLayer,
       this.window,
+      this.pointInsideVerifier,
       {
         mouseDownEventVerifier: this.params.mouseDownEventVerifier,
         mouseUpEventVerifier: this.params.mouseUpEventVerifier,
@@ -70,6 +72,7 @@ export class UserDraggableEdgesConfigurator {
     overlayLayer: HTMLElement,
     viewportStore: ViewportStore,
     win: Window,
+    pointInsideVerifier: PointInsideVerifier,
     params: DraggableEdgesParams,
   ): void {
     new UserDraggableEdgesConfigurator(
@@ -77,6 +80,7 @@ export class UserDraggableEdgesConfigurator {
       overlayLayer,
       viewportStore,
       win,
+      pointInsideVerifier,
       params,
     );
   }

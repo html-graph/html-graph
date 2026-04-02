@@ -50,10 +50,7 @@ const createCanvas = (options?: {
     viewportController,
   );
 
-  UserSelectableNodesConfigurator.configure({
-    element,
-    canvas,
-    window,
+  UserSelectableNodesConfigurator.configure(canvas, element, window, {
     onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ?? ((): boolean => true),

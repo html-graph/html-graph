@@ -5,12 +5,6 @@ import { isPointInside, MouseEventVerifier } from "../shared";
 import { Point } from "@/point";
 
 export class UserSelectableNodesConfigurator {
-  private readonly element: HTMLElement;
-
-  private readonly canvas: Canvas;
-
-  private readonly window: Window;
-
   private readonly onNodeSelected: (nodeId: Identifier) => void;
 
   private readonly mouseDownEventVerifier: MouseEventVerifier;
@@ -187,10 +181,12 @@ export class UserSelectableNodesConfigurator {
     this.removeWindowTouchListeners();
   };
 
-  private constructor(params: UserSelectableNodesParams) {
-    this.element = params.element;
-    this.canvas = params.canvas;
-    this.window = params.window;
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
+    private readonly window: Window,
+    params: UserSelectableNodesParams,
+  ) {
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
     this.onNodeSelected = params.onNodeSelected;
@@ -202,8 +198,13 @@ export class UserSelectableNodesConfigurator {
     this.canvas.onBeforeDestroy.subscribe(this.revert);
   }
 
-  public static configure(params: UserSelectableNodesParams): void {
-    new UserSelectableNodesConfigurator(params);
+  public static configure(
+    canvas: Canvas,
+    element: HTMLElement,
+    window: Window,
+    params: UserSelectableNodesParams,
+  ): void {
+    new UserSelectableNodesConfigurator(canvas, element, window, params);
   }
 
   private removeWindowMouseListeners(): void {

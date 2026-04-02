@@ -4,12 +4,6 @@ import { Point } from "@/point";
 import { isPointInside, MouseEventVerifier } from "../shared";
 
 export class UserSelectableCanvasConfigurator {
-  private readonly element: HTMLElement;
-
-  private readonly canvas: Canvas;
-
-  private readonly window: Window;
-
   private readonly onCanvasSelected: () => void;
 
   private readonly movementThreshold: number;
@@ -160,11 +154,13 @@ export class UserSelectableCanvasConfigurator {
     this.removeWindowTouchListeners();
   };
 
-  private constructor(params: UserSelectableCanvasParams) {
-    this.element = params.element;
-    this.window = params.window;
+  private constructor(
+    private readonly canvas: Canvas,
+    private readonly element: HTMLElement,
+    private readonly window: Window,
+    params: UserSelectableCanvasParams,
+  ) {
     this.onCanvasSelected = params.onCanvasSelected;
-    this.canvas = params.canvas;
     this.movementThreshold = params.movementThreshold;
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
@@ -180,8 +176,13 @@ export class UserSelectableCanvasConfigurator {
     });
   }
 
-  public static configure(params: UserSelectableCanvasParams): void {
-    new UserSelectableCanvasConfigurator(params);
+  public static configure(
+    canvas: Canvas,
+    element: HTMLElement,
+    window: Window,
+    params: UserSelectableCanvasParams,
+  ): void {
+    new UserSelectableCanvasConfigurator(canvas, element, window, params);
   }
 
   private removeWindowMouseListeners(): void {

@@ -24,6 +24,7 @@ import {
   LayoutParams,
   UserSelectableNodesConfigurator,
   UserSelectableCanvasConfigurator,
+  PointInsideVerifier,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -293,24 +294,28 @@ export class CanvasBuilder {
 
     if (this.userSelectableNodesConfig !== undefined) {
       const params = createUserSelectableNodesParams(
-        canvas,
-        layers.main,
-        this.window,
         this.userSelectableNodesConfig,
       );
 
-      UserSelectableNodesConfigurator.configure(params);
+      UserSelectableNodesConfigurator.configure(
+        canvas,
+        layers.main,
+        this.window,
+        params,
+      );
     }
 
     if (this.userSelectableCanvasConfig !== undefined) {
       const params = createUserSelectableCanvasParams(
-        canvas,
-        layers.main,
-        this.window,
         this.userSelectableCanvasConfig,
       );
 
-      UserSelectableCanvasConfigurator.configure(params);
+      UserSelectableCanvasConfigurator.configure(
+        canvas,
+        layers.main,
+        this.window,
+        params,
+      );
     }
 
     if (this.hasDraggableNodes) {
@@ -328,6 +333,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
+        new PointInsideVerifier(layers.main, this.window),
         draggableNodesParams,
       );
     }
@@ -344,6 +350,7 @@ export class CanvasBuilder {
         layers.overlayConnectablePorts,
         viewportStore,
         this.window,
+        new PointInsideVerifier(layers.overlayConnectablePorts, this.window),
         params,
       );
     }
@@ -359,6 +366,7 @@ export class CanvasBuilder {
         layers.overlayDraggableEdges,
         viewportStore,
         this.window,
+        new PointInsideVerifier(layers.overlayDraggableEdges, this.window),
         dragEdgeParams,
       );
     }

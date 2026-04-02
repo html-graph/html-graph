@@ -1,1 +1,1 @@
-export { isPointInside } from "./is-point-inside";
+export { isPointInside, PointInsideVerifier } from "./is-point-inside";

@@ -48,10 +48,7 @@ const createCanvas = (options?: {
     viewportController,
   );
 
-  UserSelectableCanvasConfigurator.configure({
-    element,
-    canvas,
-    window,
+  UserSelectableCanvasConfigurator.configure(canvas, element, window, {
     onCanvasSelected: options?.onCanvasSelected ?? ((): void => {}),
     movementThreshold: options?.movementThreshold ?? 10,
     mouseDownEventVerifier:

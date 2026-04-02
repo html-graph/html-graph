@@ -16,6 +16,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { PointInsideVerifier } from "../is-point-inside";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
@@ -54,7 +55,9 @@ const createDraggablePortsCanvas = (options?: {
     viewportController,
   );
 
-  DraggablePortsConfigurator.configure(canvas, element, window, {
+  const pointInsideVerifier = new PointInsideVerifier(element, window);
+
+  DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
     onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),
