@@ -127,7 +127,11 @@ export class CanvasBuilder {
 
   private readonly animationStaticNodes = new Set<Identifier>();
 
-  public constructor(private readonly element: HTMLElement) {}
+  private readonly pointInsideVerifier: PointInsideVerifier;
+
+  public constructor(private readonly element: HTMLElement) {
+    this.pointInsideVerifier = new PointInsideVerifier(element, this.window);
+  }
 
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
@@ -300,7 +304,7 @@ export class CanvasBuilder {
       UserSelectableNodesConfigurator.configure(
         canvas,
         this.window,
-        new PointInsideVerifier(layers.main, this.window),
+        this.pointInsideVerifier,
         params,
       );
     }
@@ -314,7 +318,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        new PointInsideVerifier(layers.main, this.window),
+        this.pointInsideVerifier,
         params,
       );
     }
@@ -334,7 +338,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        new PointInsideVerifier(layers.main, this.window),
+        this.pointInsideVerifier,
         draggableNodesParams,
       );
     }
@@ -351,7 +355,7 @@ export class CanvasBuilder {
         layers.overlayConnectablePorts,
         viewportStore,
         this.window,
-        new PointInsideVerifier(layers.overlayConnectablePorts, this.window),
+        this.pointInsideVerifier,
         params,
       );
     }
@@ -367,7 +371,7 @@ export class CanvasBuilder {
         layers.overlayDraggableEdges,
         viewportStore,
         this.window,
-        new PointInsideVerifier(layers.overlayDraggableEdges, this.window),
+        this.pointInsideVerifier,
         dragEdgeParams,
       );
     }
@@ -379,7 +383,7 @@ export class CanvasBuilder {
         this.window,
         createTransformableViewportParams(this.transformConfig),
         this.boxRenderingTrigger,
-        new PointInsideVerifier(layers.main, this.window),
+        this.pointInsideVerifier,
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
@@ -387,7 +391,7 @@ export class CanvasBuilder {
         canvas,
         layers.main,
         this.window,
-        new PointInsideVerifier(layers.main, this.window),
+        this.pointInsideVerifier,
         createTransformableViewportParams(this.transformConfig),
       );
     }
