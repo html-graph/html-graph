@@ -1,12 +1,17 @@
 import { createCanvas } from "@/mocks";
 import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
 import { TreeNode } from "../tree";
+import { adjacentNextLayerNodesResolver } from "../next-layer-nodes-resolver";
 
 describe("WidthFirstSpanningForestGenerator", () => {
   it("should generate empty forest for graph without nodes", () => {
     const canvas = createCanvas();
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const forest = forestGenerator.generate();
 
     expect(forest.size).toBe(0);
@@ -20,7 +25,11 @@ describe("WidthFirstSpanningForestGenerator", () => {
       element: document.createElement("div"),
     });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const [tree] = forestGenerator.generate();
 
     const expected: TreeNode = {
@@ -47,7 +56,11 @@ describe("WidthFirstSpanningForestGenerator", () => {
       })
       .addEdge({ from: "port-1", to: "port-2" });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const [tree] = forestGenerator.generate();
 
     const expected: TreeNode = {
@@ -74,7 +87,11 @@ describe("WidthFirstSpanningForestGenerator", () => {
       })
       .addEdge({ from: "port-2", to: "port-1" });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const [tree] = forestGenerator.generate();
 
     const expected: TreeNode = {
@@ -93,7 +110,11 @@ describe("WidthFirstSpanningForestGenerator", () => {
       element: document.createElement("div"),
     });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const [tree] = forestGenerator.generate();
 
     const expected: TreeNode = {
@@ -133,7 +154,11 @@ describe("WidthFirstSpanningForestGenerator", () => {
       .addEdge({ from: "port-2", to: "port-4" })
       .addEdge({ from: "port-3", to: "port-4" });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(canvas.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      canvas.graph,
+      adjacentNextLayerNodesResolver,
+    );
+
     const [tree] = forestGenerator.generate();
 
     const expected: TreeNode = {

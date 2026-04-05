@@ -1,5 +1,6 @@
 import { LayoutAlgorithm } from "@/layouts";
 import { CoordsTransformConfig } from "./resolve-transform-fn";
+import { NextLayerNodesResolverDeclaration } from "./resolve-next-layer-nodes-resolver";
 
 export type LayoutAlgorithmConfig =
   | {
@@ -30,4 +31,7 @@ export type LayoutAlgorithmConfig =
       readonly layerWidth?: number | undefined;
       readonly layerSpace?: number | undefined;
       readonly transform?: CoordsTransformConfig | undefined;
+      readonly nextLayerNodesResolver?:
+        | NextLayerNodesResolverDeclaration
+        | undefined;
     };

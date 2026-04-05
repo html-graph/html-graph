@@ -16,6 +16,7 @@ export type {
   TransformDeclaration,
   UserSelectableNodesConfig,
   UserSelectableCanvasConfig,
+  NextLayerNodesResolverDeclaration,
 } from "./canvas-builder";
 
 export type { Canvas } from "./canvas";
@@ -105,6 +106,8 @@ export type {
   AnimatedLayoutAlgorithm,
   AnimatedLayoutAlgorithmParams,
   CoordsTransformFn,
+  NextLayerNodesResolver,
+  NextLayerNodesResolverParams,
 } from "./layouts";
 
 export { EventSubject } from "./event-subject";

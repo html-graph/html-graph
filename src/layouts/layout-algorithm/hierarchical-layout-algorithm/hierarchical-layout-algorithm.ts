@@ -17,7 +17,11 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   ): ReadonlyMap<Identifier, Point> {
     const result = new Map<Identifier, MutablePoint>();
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(params.graph);
+    const forestGenerator = new WidthFirstSpanningForestGenerator(
+      params.graph,
+      this.params.nextLayerNodesResolver,
+    );
+
     const forest = forestGenerator.generate();
 
     let currentX = 0;

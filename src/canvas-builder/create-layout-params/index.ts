@@ -5,4 +5,5 @@ export type {
   LayoutAlgorithmConfig,
   CoordsTransformConfig,
   TransformDeclaration,
+  NextLayerNodesResolverDeclaration,
 } from "./resolve-layout-algorithm";
