@@ -1,5 +1,5 @@
 import { createCanvas } from "@/mocks";
-import { WidthFirstSpanningForestGenerator } from "../width-first-spanning-forest-generator";
+import { BreadthFirstSpanningForestGenerator } from "../breadth-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { adjacentNextLayerNodesResolver } from "../next-layer-nodes-resolver";
 
@@ -12,7 +12,7 @@ describe("ChildrenOffsetsGenerator", () => {
       element: document.createElement("div"),
     });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(
+    const forestGenerator = new BreadthFirstSpanningForestGenerator(
       canvas.graph,
       adjacentNextLayerNodesResolver,
     );
@@ -44,7 +44,7 @@ describe("ChildrenOffsetsGenerator", () => {
       })
       .addEdge({ from: "port-1", to: "port-2" });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(
+    const forestGenerator = new BreadthFirstSpanningForestGenerator(
       canvas.graph,
       adjacentNextLayerNodesResolver,
     );
@@ -82,7 +82,7 @@ describe("ChildrenOffsetsGenerator", () => {
       .addEdge({ from: "port-1", to: "port-2" })
       .addEdge({ from: "port-1", to: "port-3" });
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(
+    const forestGenerator = new BreadthFirstSpanningForestGenerator(
       canvas.graph,
       adjacentNextLayerNodesResolver,
     );
