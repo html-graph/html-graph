@@ -16,6 +16,7 @@ export type {
   TransformDeclaration,
   UserSelectableNodesConfig,
   UserSelectableCanvasConfig,
+  NextLayerNodesResolverDeclaration,
 } from "./canvas-builder";
 
 export type { Canvas } from "./canvas";
