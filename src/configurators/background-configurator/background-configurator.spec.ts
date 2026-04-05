@@ -15,15 +15,20 @@ import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 
-const createCanvas = (): {
+const createCanvas = (params?: {
+  width?: number;
+  height?: number;
+}): {
   canvas: Canvas;
   backgroundElement: HTMLElement;
   element: HTMLElement;
 } => {
+  const width = params?.width ?? 2500;
+  const height = params?.height ?? 1000;
   const graphStore = new GraphStore();
-  const element = createElement({ width: 2500, height: 1000 });
+  const element = createElement({ width, height });
   const viewportStore = new ViewportStore(element);
-  const backgroundElement = createElement({ width: 2500, height: 1000 });
+  const backgroundElement = createElement({ width, height });
   const htmlView = new CoreHtmlView(graphStore, viewportStore, element);
   const graph = new Graph(graphStore);
   const viewport = new Viewport(viewportStore);
@@ -48,14 +53,14 @@ const createCanvas = (): {
     viewportController,
   );
 
-  const params: BackgroundParams = {
+  const backgroundParams: BackgroundParams = {
     tileWidth: 10,
     tileHeight: 10,
     renderer: document.createElementNS("http://www.w3.org/2000/svg", "circle"),
     maxViewportScale: 10,
   };
 
-  BackgroundConfigurator.configure(canvas, params, backgroundElement);
+  BackgroundConfigurator.configure(canvas, backgroundParams, backgroundElement);
 
   return { canvas, backgroundElement, element };
 };
@@ -136,7 +141,7 @@ describe("BackgroundConfigurator", () => {
     expect(pattern.tagName).toBe("pattern");
   });
 
-  it("should pattern element dimensions", () => {
+  it("should set pattern element dimensions", () => {
     const { backgroundElement } = createCanvas();
     const svg = backgroundElement.children[0] as SVGSVGElement;
     const defs = svg.children[0];
@@ -197,5 +202,27 @@ describe("BackgroundConfigurator", () => {
     const svg = backgroundElement.children[0];
 
     expect(svg).not.toBe(undefined);
+  });
+
+  it("should not set pattern element dimensions when element has zero width", () => {
+    const { backgroundElement } = createCanvas({ width: 0 });
+    const svg = backgroundElement.children[0] as SVGSVGElement;
+    const defs = svg.children[0];
+    const pattern = defs.children[0];
+    const width = pattern.getAttribute("width");
+    const height = pattern.getAttribute("height");
+
+    expect({ width, height }).toEqual({ width: null, height: null });
+  });
+
+  it("should not set pattern element dimensions when element has zero height", () => {
+    const { backgroundElement } = createCanvas({ height: 0 });
+    const svg = backgroundElement.children[0] as SVGSVGElement;
+    const defs = svg.children[0];
+    const pattern = defs.children[0];
+    const width = pattern.getAttribute("width");
+    const height = pattern.getAttribute("height");
+
+    expect({ width, height }).toEqual({ width: null, height: null });
   });
 });

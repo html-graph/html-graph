@@ -98,10 +98,12 @@ export class BackgroundConfigurator {
     this.patternRenderingRectangle.setAttribute("width", `${width}`);
     this.patternRenderingRectangle.setAttribute("height", `${height}`);
 
-    const patternWidth = this.tileWidth / width;
-    const patternHeight = this.tileHeight / height;
+    if (width > 0 && height > 0) {
+      const patternWidth = this.tileWidth / width;
+      const patternHeight = this.tileHeight / height;
 
-    this.pattern.setAttribute("width", `${patternWidth}`);
-    this.pattern.setAttribute("height", `${patternHeight}`);
+      this.pattern.setAttribute("width", `${patternWidth}`);
+      this.pattern.setAttribute("height", `${patternHeight}`);
+    }
   }
 }
