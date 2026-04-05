@@ -1,12 +1,15 @@
 export {
   ForceDirectedLayoutAlgorithm,
   HierarchicalLayoutAlgorithm,
+  adjacentNextLayerNodesResolver,
 } from "./layout-algorithm";
 export type {
   LayoutAlgorithm,
   LayoutAlgorithmParams,
   HierarchicalLayoutAlgorithmParams,
   ForceDirectedLayoutAlgorithmParams,
+  NextLayerNodesResolver,
+  NextLayerNodesResolverParams,
 } from "./layout-algorithm";
 
 export { ForceDirectedAnimatedLayoutAlgorithm } from "./animated-layout-algorithm";

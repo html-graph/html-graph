@@ -105,6 +105,8 @@ export type {
   AnimatedLayoutAlgorithm,
   AnimatedLayoutAlgorithmParams,
   CoordsTransformFn,
+  NextLayerNodesResolver,
+  NextLayerNodesResolverParams,
 } from "./layouts";
 
 export { EventSubject } from "./event-subject";

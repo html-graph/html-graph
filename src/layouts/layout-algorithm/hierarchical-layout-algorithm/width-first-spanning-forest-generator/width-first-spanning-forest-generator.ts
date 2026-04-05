@@ -1,13 +1,17 @@
 import { Graph } from "@/graph";
 import { Tree, MutableTreeNode, TreeNode } from "../tree";
 import { Identifier } from "@/identifier";
+import { NextLayerNodesResolver } from "../next-layer-nodes-resolver";
 
 export class WidthFirstSpanningForestGenerator {
   private readonly forest = new Set<Tree>();
 
   private readonly remainingNodeIds: Set<Identifier>;
 
-  public constructor(private readonly graph: Graph) {
+  public constructor(
+    private readonly graph: Graph,
+    private readonly nextLayerNodesResolver: NextLayerNodesResolver,
+  ) {
     this.remainingNodeIds = new Set(this.graph.getAllNodeIds());
 
     while (this.remainingNodeIds.size > 0) {
@@ -39,32 +43,14 @@ export class WidthFirstSpanningForestGenerator {
       layer.forEach((current) => {
         sequence.push(current);
 
-        const outgoingNodeIds = this.graph
-          .getNodeOutgoingEdgeIds(current.nodeId)
-          .map((edgeId) => {
-            const edge = this.graph.getEdge(edgeId);
-            const port = this.graph.getPort(edge.to);
+        const nextLayerNodes = this.nextLayerNodesResolver({
+          graph: this.graph,
+          currentNodeId: current.nodeId,
+        });
 
-            return port.nodeId;
-          });
-
-        const incomingNodeIds = this.graph
-          .getNodeIncomingEdgeIds(current.nodeId)
-          .map((edgeId) => {
-            const edge = this.graph.getEdge(edgeId);
-            const port = this.graph.getPort(edge.from);
-
-            return port.nodeId;
-          });
-
-        const adjacentNodeIds = new Set([
-          ...outgoingNodeIds,
-          ...incomingNodeIds,
-        ]);
-
-        adjacentNodeIds.forEach((nodeId) => {
+        for (const nodeId of nextLayerNodes) {
           if (!this.remainingNodeIds.has(nodeId)) {
-            return;
+            continue;
           }
 
           this.remainingNodeIds.delete(nodeId);
@@ -76,7 +62,7 @@ export class WidthFirstSpanningForestGenerator {
 
           current.children.add(child);
           nextLayer.push(child);
-        });
+        }
       });
 
       layer = nextLayer;

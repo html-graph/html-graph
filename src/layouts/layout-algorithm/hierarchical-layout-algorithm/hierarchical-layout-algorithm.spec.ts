@@ -1,6 +1,7 @@
 import { createCanvas } from "@/mocks";
 import { HierarchicalLayoutAlgorithm } from "./hierarchical-layout-algorithm";
 import { Point } from "@/point";
+import { adjacentNextLayerNodesResolver } from "./next-layer-nodes-resolver";
 
 describe("HierarchicalLayoutAlgorithm", () => {
   it("should return empty map when graph has no nodes", () => {
@@ -10,6 +11,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
       layerWidth: 100,
       layerSpace: 50,
       transform: (point: Point): Point => point,
+      nextLayerNodesResolver: adjacentNextLayerNodesResolver,
     });
 
     const coords = layout.calculateCoordinates({
@@ -32,6 +34,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
       layerWidth: 100,
       layerSpace: 50,
       transform: (point: Point): Point => point,
+      nextLayerNodesResolver: adjacentNextLayerNodesResolver,
     });
 
     const coords = layout.calculateCoordinates({
@@ -62,6 +65,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
       layerWidth: 100,
       layerSpace: 50,
       transform: (point: Point): Point => point,
+      nextLayerNodesResolver: adjacentNextLayerNodesResolver,
     });
 
     const coords = layout.calculateCoordinates({
@@ -87,6 +91,7 @@ describe("HierarchicalLayoutAlgorithm", () => {
         x: point.x + 10,
         y: point.y + 10,
       }),
+      nextLayerNodesResolver: adjacentNextLayerNodesResolver,
     });
 
     const coords = layout.calculateCoordinates({
