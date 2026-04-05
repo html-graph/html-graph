@@ -8,7 +8,7 @@ import { forceDirectedDefaults } from "../../shared";
 import { defaults } from "../defaults";
 import { resolveTransformFn } from "./resolve-transform-fn";
 import { LayoutAlgorithmConfig } from "./layout-algorithm-config";
-import { adjacentNextLayerNodesResolver } from "@/layouts";
+import { resolveNextLayerNodesResolver } from "./resolve-next-layer-nodes-resolver";
 
 export const resolveLayoutAlgorithm = (
   config: LayoutAlgorithmConfig | undefined,
@@ -22,7 +22,9 @@ export const resolveLayoutAlgorithm = (
         layerWidth: config.layerWidth ?? defaults.hierarchicalLayout.layerWidth,
         layerSpace: config.layerSpace ?? defaults.hierarchicalLayout.layerSpace,
         transform: resolveTransformFn(config.transform),
-        nextLayerNodesResolver: adjacentNextLayerNodesResolver,
+        nextLayerNodesResolver: resolveNextLayerNodesResolver(
+          config.nextLayerNodesResolver,
+        ),
       });
     }
     default: {

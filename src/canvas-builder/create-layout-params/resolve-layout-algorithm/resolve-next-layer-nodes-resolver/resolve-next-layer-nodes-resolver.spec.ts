@@ -30,4 +30,10 @@ describe("resolveNextlayerNodesResolver", () => {
       incomingNextLayerNodesResolver,
     );
   });
+
+  it("should resolve adjacent resolver by default", () => {
+    expect(resolveNextLayerNodesResolver(undefined)).toBe(
+      adjacentNextLayerNodesResolver,
+    );
+  });
 });
