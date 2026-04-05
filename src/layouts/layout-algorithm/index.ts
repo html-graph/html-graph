@@ -7,6 +7,8 @@ export type { RandomFillerLayoutAlgorithmParams } from "./random-filler-layout-a
 export {
   HierarchicalLayoutAlgorithm,
   adjacentNextLayerNodesResolver,
+  outgoingNextLayerNodesResolver,
+  incomingNextLayerNodesResolver,
 } from "./hierarchical-layout-algorithm";
 export type {
   HierarchicalLayoutAlgorithmParams,

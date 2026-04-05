@@ -2,6 +2,8 @@ export {
   ForceDirectedLayoutAlgorithm,
   HierarchicalLayoutAlgorithm,
   adjacentNextLayerNodesResolver,
+  outgoingNextLayerNodesResolver,
+  incomingNextLayerNodesResolver,
 } from "./layout-algorithm";
 export type {
   LayoutAlgorithm,
