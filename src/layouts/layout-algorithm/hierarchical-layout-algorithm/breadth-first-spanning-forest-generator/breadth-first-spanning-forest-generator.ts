@@ -3,7 +3,7 @@ import { Tree, MutableTreeNode, TreeNode } from "../tree";
 import { Identifier } from "@/identifier";
 import { NextLayerNodesResolver } from "../next-layer-nodes-resolver";
 
-export class WidthFirstSpanningForestGenerator {
+export class BreadthFirstSpanningForestGenerator {
   private readonly forest = new Set<Tree>();
 
   private readonly remainingNodeIds: Set<Identifier>;

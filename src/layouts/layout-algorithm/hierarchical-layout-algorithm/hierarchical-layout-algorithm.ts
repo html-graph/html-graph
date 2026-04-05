@@ -3,7 +3,7 @@ import { MutablePoint, Point } from "@/point";
 import { LayoutAlgorithm } from "../layout-algorithm";
 import { LayoutAlgorithmParams } from "../layout-algorithm-params";
 import { HierarchicalLayoutAlgorithmParams } from "./hierarchical-layout-algorithm-params";
-import { WidthFirstSpanningForestGenerator } from "./width-first-spanning-forest-generator";
+import { BreadthFirstSpanningForestGenerator } from "./breadth-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { TreeNode } from "./tree";
 
@@ -17,7 +17,7 @@ export class HierarchicalLayoutAlgorithm implements LayoutAlgorithm {
   ): ReadonlyMap<Identifier, Point> {
     const result = new Map<Identifier, MutablePoint>();
 
-    const forestGenerator = new WidthFirstSpanningForestGenerator(
+    const forestGenerator = new BreadthFirstSpanningForestGenerator(
       params.graph,
       this.params.nextLayerNodesResolver,
     );
