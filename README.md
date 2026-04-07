@@ -6,13 +6,13 @@
   Graph visualization library that enables rich nodes customization using HTML
 </h3>
 
-#
+&nbsp;
 
 <a target="_blank" href="https://html-graph.github.io">
   <img src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/preview.jpg">
 </a>
 
-#
+&nbsp;
 
 ## Getting Started
 
