@@ -28,5 +28,6 @@ export default defineConfig({
       name: "HtmlGraph",
     },
     copyPublicDir: false,
+    minify: false,
   },
 });
