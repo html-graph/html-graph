@@ -2,15 +2,21 @@
   <img src="/media/logo-label.svg" alt="HTMLGraph" width="520" height="100"/>
 </p>
 
-<div align="center">
-  <h3>
-    Graph visualization library that enables rich nodes customization using HTML
-  </h3>
+<h3 align="center">
+  Graph visualization library that enables rich nodes customization using HTML
+</h3>
+
+<div>
+&nbsp;
 </div>
 
 <a target="_blank" href="https://html-graph.github.io">
   <img src="https://raw.githubusercontent.com/html-graph/html-graph/master/media/preview.jpg">
 </a>
+
+<div>
+&nbsp;
+</div>
 
 ## Getting Started
 
