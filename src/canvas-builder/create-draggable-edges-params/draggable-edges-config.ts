@@ -16,7 +16,7 @@ export interface DraggableEdgesConfig {
   readonly draggingEdgeShape?: EdgeShapeConfig;
   readonly events?: {
     readonly onAfterEdgeReattached?: (edgeId: Identifier) => void;
-    // TODO: create type
+    // TODO: create type for parameter
     readonly onEdgeReattachInterrupted?: (
       edge: GraphEdge & { readonly id: Identifier },
     ) => void;
