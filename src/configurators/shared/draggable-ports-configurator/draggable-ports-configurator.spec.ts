@@ -22,6 +22,7 @@ const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
   onPointerDown?: (portId: Identifier, clientPoint: Point) => boolean;
   onPointerMove?: (clientPoint: Point) => void;
+  onPointerMoveOutside?: () => void;
   onPointerUp?: (clientPoint: Point) => void;
   onStopDrag?: () => void;
   mouseDownEventVerifier?: MouseEventVerifier;
@@ -60,6 +61,7 @@ const createDraggablePortsCanvas = (options?: {
   DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
     onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
+    onPointerMoveOutside: options?.onPointerMoveOutside ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),
     onStopDrag: options?.onStopDrag ?? ((): void => {}),
     mouseDownEventVerifier:
@@ -213,7 +215,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMove).toHaveBeenCalledWith({ x: 100, y: 200 });
   });
 
-  it("should call onPointerMove when mouse is outside", () => {
+  it("should not call onPointerMove when mouse is outside", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
@@ -229,6 +231,24 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerMove).not.toHaveBeenCalled();
+  });
+
+  it("should call onPointerMoveOutside when mouse is outside", () => {
+    const onPointerMoveOutside = jest.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerMoveOutside });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -1, clientY: -1 }),
+    );
+
+    expect(onPointerMoveOutside).toHaveBeenCalled();
   });
 
   it("should call onStopDrag when mouse is outside", () => {
@@ -291,6 +311,28 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerMove).not.toHaveBeenCalled();
+  });
+
+  it("should call onPointerMoveOutside when touch is outside", () => {
+    const onPointerMoveOutside = jest.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerMoveOutside });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: -1, clientY: -1 })],
+      }),
+    );
+
+    expect(onPointerMoveOutside).toHaveBeenCalled();
   });
 
   it("should call onStopDrag when touch is outside", () => {

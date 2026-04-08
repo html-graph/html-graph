@@ -245,6 +245,37 @@ describe("UserConnectablePortsConfigurator", () => {
     expect(overlayElement.children[0].children[0].children.length).toBe(0);
   });
 
+  it("should call onEdgeCreatinInterrupted when moving target port outside", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeCreationInterrupted = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      onEdgeCreationInterrupted,
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: -10, clientY: -10 }));
+
+    expect(onEdgeCreationInterrupted).toHaveBeenCalledWith({
+      staticPortId: 0,
+      isDirect: true,
+    });
+  });
+
   it("should create connection on pointer release", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
