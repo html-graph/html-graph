@@ -61,15 +61,7 @@ export class UserDraggableEdgesConfigurator {
           this.moveDraggingPort(cursor);
         },
         onPointerMoveOutside: () => {
-          const edge = this.draggingEdgePayload!;
-
-          this.params.onEdgeReattachInterrupted({
-            id: edge.id,
-            from: edge.from,
-            to: edge.to,
-            shape: edge.shape,
-            priority: edge.priority,
-          });
+          this.handleEdgeReattachInterrupted();
         },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
@@ -205,15 +197,8 @@ export class UserDraggableEdgesConfigurator {
     this.overlayCanvas.removeEdge(OverlayId.EdgeId);
 
     if (draggingPortId === null) {
-      const edge = this.draggingEdgePayload!;
+      this.handleEdgeReattachInterrupted();
 
-      this.params.onEdgeReattachInterrupted({
-        id: edge.id,
-        from: edge.from,
-        to: edge.to,
-        shape: edge.shape,
-        priority: edge.priority,
-      });
       return;
     }
 
@@ -247,5 +232,17 @@ export class UserDraggableEdgesConfigurator {
         priority: edge.priority,
       });
     }
+  }
+
+  private handleEdgeReattachInterrupted(): void {
+    const edge = this.draggingEdgePayload!;
+
+    this.params.onEdgeReattachInterrupted({
+      id: edge.id,
+      from: edge.from,
+      to: edge.to,
+      shape: edge.shape,
+      priority: edge.priority,
+    });
   }
 }
