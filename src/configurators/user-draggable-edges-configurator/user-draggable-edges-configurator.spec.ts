@@ -381,6 +381,38 @@ describe("UserDraggableEdgesConfigurator", () => {
     });
   });
 
+  it("should call onEdgeReattachInterrupted on pointer move outside", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeReattachInterrupted = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      onEdgeReattachInterrupted,
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portElement1 = createElement({ x: 0, y: 0, width: 10, height: 10 });
+    const portElement2 = createElement({ x: 95, y: 95, width: 10, height: 10 });
+    const edgeShape = new BezierEdgeShape();
+
+    createGraph(canvas, { portElement1, portElement2, edgeShape });
+
+    portElement1.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: -10, clientY: -10 }));
+
+    expect(onEdgeReattachInterrupted).toHaveBeenCalledWith({
+      id: 0,
+      from: "node-1-1",
+      to: "node-2-1",
+      priority: 0,
+      shape: edgeShape,
+    });
+  });
+
   it("should call specified callback on edge reattach prevention", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });

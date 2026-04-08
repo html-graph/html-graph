@@ -64,7 +64,12 @@ export class UserConnectablePortsConfigurator {
           this.moveDraggingPort(cursor);
         },
         onPointerMoveOutside: () => {
-          //
+          const staticPortId = this.staticPortId!;
+
+          this.params.onEdgeCreationInterrupted({
+            staticPortId,
+            isDirect: this.isTargetDragging,
+          });
         },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
