@@ -61,7 +61,18 @@ export class UserDraggableEdgesConfigurator {
           this.moveDraggingPort(cursor);
         },
         onPointerMoveOutside: () => {
-          this.handleEdgeReattachInterrupted();
+          const edge = this.draggingEdgePayload!;
+
+          // TODO: find propper solution
+          queueMicrotask(() => {
+            this.params.onEdgeReattachInterrupted({
+              id: edge.id,
+              from: edge.from,
+              to: edge.to,
+              shape: edge.shape,
+              priority: edge.priority,
+            });
+          });
         },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
