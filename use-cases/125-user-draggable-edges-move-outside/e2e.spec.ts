@@ -9,5 +9,5 @@ test("should apply draggable edges", async ({ page }) => {
   await page.mouse.down();
   await page.mouse.move(-100, -100);
 
-  await expect(page).toHaveScreenshot("after-pointer outside.png");
+  await expect(page).toHaveScreenshot("initial.png");
 });
