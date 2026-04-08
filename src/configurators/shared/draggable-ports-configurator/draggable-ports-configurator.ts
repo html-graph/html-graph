@@ -60,6 +60,7 @@ export class DraggablePortsConfigurator {
 
     if (!isInside) {
       this.stopMouseDrag();
+      this.params.onPointerMoveOutside();
       return;
     }
 
@@ -120,6 +121,7 @@ export class DraggablePortsConfigurator {
 
     if (!isInside) {
       this.stopTouchDrag();
+      this.params.onPointerMoveOutside();
       return;
     }
 

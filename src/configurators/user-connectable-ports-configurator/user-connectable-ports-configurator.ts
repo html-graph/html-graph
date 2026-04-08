@@ -63,6 +63,9 @@ export class UserConnectablePortsConfigurator {
         onPointerMove: (cursor) => {
           this.moveDraggingPort(cursor);
         },
+        onPointerMoveOutside: () => {
+          //
+        },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
         },

@@ -60,6 +60,9 @@ export class UserDraggableEdgesConfigurator {
         onPointerMove: (cursor) => {
           this.moveDraggingPort(cursor);
         },
+        onPointerMoveOutside: () => {
+          //
+        },
         onPointerUp: (cursor) => {
           this.tryCreateConnection(cursor);
         },

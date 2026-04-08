@@ -11,5 +11,6 @@ export interface DraggablePortsParams {
     clientPoint: Point,
   ) => boolean;
   readonly onPointerMove: (clientPoint: Point) => void;
+  readonly onPointerMoveOutside: () => void;
   readonly onPointerUp: (clientPoint: Point) => void;
 }
