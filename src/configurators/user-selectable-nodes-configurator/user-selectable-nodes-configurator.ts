@@ -229,7 +229,6 @@ export class UserSelectableNodesConfigurator {
 
     if (this.canvas.graph.hasNode(nodeId)) {
       this.onNodeSelected(nodeId);
-
       this.eventTagger.tag(event, selectionHandled);
     }
   }

@@ -13,7 +13,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { EventTagger, PointInsideVerifier } from "../shared";
+import { EventTagger, PointInsideVerifier, selectionHandled } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -87,6 +87,29 @@ describe("UserSelectableCanvasConfigurator", () => {
     window.dispatchEvent(new MouseEvent("mouseup"));
 
     expect(onCanvasSelected).toHaveBeenCalled();
+  });
+
+  it("should not call specified callback when event was tagged as handled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onCanvasSelected = jest.fn();
+
+    createCanvas({ element, onCanvasSelected });
+
+    element.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    const event = new MouseEvent("mouseup");
+
+    const eventTagger = new EventTagger();
+    eventTagger.tag(event, selectionHandled);
+
+    window.dispatchEvent(event);
+
+    expect(onCanvasSelected).not.toHaveBeenCalled();
   });
 
   it("should restore window mouse up listener on mouse selection finish", () => {
