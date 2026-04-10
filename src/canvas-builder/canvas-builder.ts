@@ -25,6 +25,7 @@ import {
   UserSelectableNodesConfigurator,
   UserSelectableCanvasConfigurator,
   PointInsideVerifier,
+  EventTagger,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -77,7 +78,6 @@ import {
   createUserSelectableCanvasParams,
   UserSelectableCanvasConfig,
 } from "./create-user-selectable-canvas-params";
-import { EventTagger } from "@/configurators/shared";
 
 export class CanvasBuilder {
   private used = false;
