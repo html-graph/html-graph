@@ -15,7 +15,7 @@ import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 import { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 import { Identifier } from "@/identifier";
-import { PointInsideVerifier } from "../shared";
+import { EventTagger, PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -57,6 +57,7 @@ const createCanvas = (options?: {
     canvas,
     window,
     pointInsideVerifier,
+    new EventTagger(),
     {
       onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
       mouseDownEventVerifier:

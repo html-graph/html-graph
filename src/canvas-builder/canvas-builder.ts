@@ -77,6 +77,7 @@ import {
   createUserSelectableCanvasParams,
   UserSelectableCanvasConfig,
 } from "./create-user-selectable-canvas-params";
+import { EventTagger } from "@/configurators/shared";
 
 export class CanvasBuilder {
   private used = false;
@@ -128,6 +129,8 @@ export class CanvasBuilder {
   private readonly animationStaticNodes = new Set<Identifier>();
 
   private readonly pointInsideVerifier: PointInsideVerifier;
+
+  private readonly eventTagger = new EventTagger();
 
   public constructor(private readonly element: HTMLElement) {
     this.pointInsideVerifier = new PointInsideVerifier(element, this.window);
@@ -305,6 +308,7 @@ export class CanvasBuilder {
         canvas,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         params,
       );
     }
@@ -319,6 +323,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         params,
       );
     }
