@@ -1,7 +1,12 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableCanvasParams } from "./user-selectable-canvas-params";
 import { Point } from "@/point";
-import { MouseEventVerifier, PointInsideVerifier } from "../shared";
+import {
+  EventTagger,
+  MouseEventVerifier,
+  PointInsideVerifier,
+  selectionHandled,
+} from "../shared";
 
 export class UserSelectableCanvasConfigurator {
   private readonly onCanvasSelected: () => void;
@@ -11,6 +16,8 @@ export class UserSelectableCanvasConfigurator {
   private readonly mouseDownEventVerifier: MouseEventVerifier;
 
   private readonly mouseUpEventVerifier: MouseEventVerifier;
+
+  private readonly selectionHandledTag = selectionHandled;
 
   private movedDistance = 0;
 
@@ -118,12 +125,7 @@ export class UserSelectableCanvasConfigurator {
       return;
     }
 
-    // TODO: figure out better option
-    const ignore = (
-      event as unknown as { ignoreCanvasSelection?: boolean | undefined }
-    ).ignoreCanvasSelection;
-
-    if (ignore !== true) {
+    if (!this.eventTagger.has(event, this.selectionHandledTag)) {
       this.onCanvasSelected();
     }
 
@@ -152,6 +154,7 @@ export class UserSelectableCanvasConfigurator {
     private readonly element: HTMLElement,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     params: UserSelectableCanvasParams,
   ) {
     this.onCanvasSelected = params.onCanvasSelected;
@@ -175,6 +178,7 @@ export class UserSelectableCanvasConfigurator {
     element: HTMLElement,
     window: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     params: UserSelectableCanvasParams,
   ): void {
     new UserSelectableCanvasConfigurator(
@@ -182,6 +186,7 @@ export class UserSelectableCanvasConfigurator {
       element,
       window,
       pointInsideVerifier,
+      eventTagger,
       params,
     );
   }

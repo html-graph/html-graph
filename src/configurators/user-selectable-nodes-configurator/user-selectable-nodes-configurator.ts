@@ -1,7 +1,12 @@
 import { Canvas } from "@/canvas";
 import { UserSelectableNodesParams } from "./user-selectable-nodes-params";
 import { Identifier } from "@/identifier";
-import { MouseEventVerifier, PointInsideVerifier } from "../shared";
+import {
+  EventTagger,
+  MouseEventVerifier,
+  PointInsideVerifier,
+  selectionHandled,
+} from "../shared";
 import { Point } from "@/point";
 
 export class UserSelectableNodesConfigurator {
@@ -12,6 +17,8 @@ export class UserSelectableNodesConfigurator {
   private readonly mouseUpEventVerifier: MouseEventVerifier;
 
   private readonly movementThreshold: number;
+
+  private readonly selectionHandledTag = selectionHandled;
 
   private selectionCandidateNodeId: Identifier | null = null;
 
@@ -178,6 +185,7 @@ export class UserSelectableNodesConfigurator {
     private readonly canvas: Canvas,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     params: UserSelectableNodesParams,
   ) {
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
@@ -195,12 +203,14 @@ export class UserSelectableNodesConfigurator {
     canvas: Canvas,
     window: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     params: UserSelectableNodesParams,
   ): void {
     new UserSelectableNodesConfigurator(
       canvas,
       window,
       pointInsideVerifier,
+      eventTagger,
       params,
     );
   }
@@ -221,10 +231,7 @@ export class UserSelectableNodesConfigurator {
 
     if (this.canvas.graph.hasNode(nodeId)) {
       this.onNodeSelected(nodeId);
-      // TODO: figure out better option
-      (
-        event as unknown as { ignoreCanvasSelection: boolean }
-      ).ignoreCanvasSelection = true;
+      this.eventTagger.tag(event, this.selectionHandledTag);
     }
   }
 

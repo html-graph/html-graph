@@ -15,7 +15,7 @@ import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 import { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 import { Identifier } from "@/identifier";
-import { PointInsideVerifier } from "../shared";
+import { EventTagger, PointInsideVerifier, selectionHandled } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -57,6 +57,7 @@ const createCanvas = (options?: {
     canvas,
     window,
     pointInsideVerifier,
+    new EventTagger(),
     {
       onNodeSelected: options?.onNodeSelected ?? ((): void => {}),
       mouseDownEventVerifier:
@@ -96,6 +97,37 @@ describe("UserSelectableNodesConfigurator", () => {
     window.dispatchEvent(new MouseEvent("mouseup"));
 
     expect(onNodeSelected).toHaveBeenCalledWith("node-1");
+  });
+
+  it("should should tag mouse event on node selection", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const onNodeSelected = jest.fn();
+
+    const canvas = createCanvas({ element, onNodeSelected });
+
+    const nodeElement = createElement({ width: 100, height: 100 });
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 200,
+      y: 200,
+    });
+
+    nodeElement.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
+
+    const event = new MouseEvent("mouseup");
+
+    window.dispatchEvent(event);
+
+    const eventTagger = new EventTagger();
+
+    expect(eventTagger.has(event, selectionHandled)).toBe(true);
   });
 
   it("should not call specified callback after node removed", () => {

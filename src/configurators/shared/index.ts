@@ -13,3 +13,5 @@ export { LayoutApplier } from "./layout-applier";
 export type { LayoutApplierParams } from "./layout-applier";
 export { AnimatedLayoutApplier } from "./animated-layout-applier";
 export type { AnimatedLayoutApplierParams } from "./animated-layout-applier";
+export { EventTagger } from "./event-tagger";
+export { selectionHandled } from "./selection-handled";
