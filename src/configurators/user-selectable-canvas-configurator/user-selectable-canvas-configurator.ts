@@ -17,6 +17,8 @@ export class UserSelectableCanvasConfigurator {
 
   private readonly mouseUpEventVerifier: MouseEventVerifier;
 
+  private readonly selectionHandledTag = selectionHandled;
+
   private movedDistance = 0;
 
   private previousMouseDown: Point | null = null;
@@ -123,7 +125,7 @@ export class UserSelectableCanvasConfigurator {
       return;
     }
 
-    if (!this.eventTagger.has(event, selectionHandled)) {
+    if (!this.eventTagger.has(event, this.selectionHandledTag)) {
       this.onCanvasSelected();
     }
 
