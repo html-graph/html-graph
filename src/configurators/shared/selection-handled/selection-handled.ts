@@ -1,1 +1,1 @@
-export const selectionHandled = "selection-handled";
+export const selectionHandled = Symbol();
