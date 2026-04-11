@@ -27,7 +27,7 @@ const createConfigurator = (options?: {
   return configurator;
 };
 
-describe("UserSelectableEntitesConfigurator", () => {
+describe("UserSelectableElementsConfigurator", () => {
   it("should call specified callback for element with enabled selection", () => {
     const onSelected = jest.fn();
     const configurator = createConfigurator({ onSelected });
