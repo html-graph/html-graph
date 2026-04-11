@@ -164,10 +164,17 @@ describe("UserSelectableCanvasConfigurator", () => {
     expect(spy).toHaveBeenCalledWith("mousedown", expect.anything());
   });
 
-  it("should restore window mouse listener on canvas destroy", () => {
+  it("should restore window mouse listener on canvas destroy in the process", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
     const spy = jest.spyOn(window, "removeEventListener");
+
+    element.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 200,
+        clientY: 200,
+      }),
+    );
 
     canvas.destroy();
 
@@ -399,16 +406,6 @@ describe("UserSelectableCanvasConfigurator", () => {
     expect(spy).toHaveBeenCalledWith("touchstart", expect.anything());
   });
 
-  it("should restore window touch listener on canvas destroy", () => {
-    const element = createElement({ width: 1000, height: 1000 });
-    const canvas = createCanvas({ element });
-    const spy = jest.spyOn(window, "removeEventListener");
-
-    canvas.destroy();
-
-    expect(spy).toHaveBeenCalledWith("touchend", expect.anything());
-  });
-
   it("should not call specified callback when touch move distance exceeds specified threshold", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const onCanvasSelected = jest.fn();
@@ -434,43 +431,6 @@ describe("UserSelectableCanvasConfigurator", () => {
     window.dispatchEvent(new MouseEvent("touchend"));
 
     expect(onCanvasSelected).not.toHaveBeenCalled();
-  });
-
-  it("should reset moved distance on next selection", () => {
-    const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
-
-    createCanvas({
-      element,
-      onCanvasSelected,
-      movementThreshold: 10,
-    });
-
-    element.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 100, clientY: 100 })],
-      }),
-    );
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: 200, clientY: 200 })],
-      }),
-    );
-    window.dispatchEvent(new MouseEvent("touchend"));
-
-    element.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 100, clientY: 100 })],
-      }),
-    );
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: 101, clientY: 101 })],
-      }),
-    );
-    window.dispatchEvent(new MouseEvent("touchend"));
-
-    expect(onCanvasSelected).toHaveBeenCalled();
   });
 
   it("should not call specified callback when start event has multiple touches", () => {

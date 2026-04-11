@@ -55,6 +55,7 @@ export class UserSelectableElementsConfigurator {
 
     this.selectionCandidate = touchEvent.currentTarget as Element;
     this.previousTouch = touches[0];
+    this.movedDistance = 0;
 
     this.window.addEventListener("touchmove", this.onWindowTouchMove, {
       passive: true,

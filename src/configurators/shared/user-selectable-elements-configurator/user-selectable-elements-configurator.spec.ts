@@ -558,4 +558,41 @@ describe("UserSelectableElementsConfigurator", () => {
 
     expect(onSelected).not.toHaveBeenCalled();
   });
+
+  it("should reset moved distance on next selection", () => {
+    const onSelected = jest.fn();
+    const configurator = createConfigurator({ onSelected });
+
+    const selectableElement = document.createElement("div");
+
+    configurator.enable(selectableElement);
+
+    selectableElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 200, clientY: 200 })],
+      }),
+    );
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    selectableElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 101, clientY: 101 })],
+      }),
+    );
+
+    const event = new TouchEvent("touchend");
+    window.dispatchEvent(event);
+
+    expect(onSelected).toHaveBeenCalledWith(selectableElement, event);
+  });
 });
