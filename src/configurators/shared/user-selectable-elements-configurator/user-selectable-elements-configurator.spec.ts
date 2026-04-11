@@ -48,7 +48,7 @@ describe("UserSelectableElementsConfigurator", () => {
     expect(onSelected).toHaveBeenCalledWith(selectableElement);
   });
 
-  it("should call specified callback for element with disabled selection", () => {
+  it("should not call specified callback for element with disabled selection", () => {
     const onSelected = jest.fn();
     const configurator = createConfigurator({ onSelected });
 
