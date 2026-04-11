@@ -20,6 +20,11 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public readonly targetArrow: SVGPathElement | null;
 
+  // TODO: make private
+  /**
+   * @deprecated
+   * do use shape.svg instead
+   */
   public readonly handle = createEdgeGroup();
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
