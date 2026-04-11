@@ -1368,6 +1368,68 @@ describe("GraphStore", () => {
     ]);
   });
 
+  it("should find edge id by svg element", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out1Out = createAddEdgeRequest1Out1Out();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1Out);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out1Out);
+
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toEqual(
+      addEdgeRequest1Out1Out.id,
+    );
+  });
+
+  it("should remove edge id by svg element", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out1Out = createAddEdgeRequest1Out1Out();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1Out);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out1Out);
+    store.removeEdge(addEdgeRequest1Out1Out.id);
+
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toBe(
+      undefined,
+    );
+  });
+
+  it("should clear edge id by svg element", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out1Out = createAddEdgeRequest1Out1Out();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1Out);
+    store.addPort(addPortRequest2In);
+    store.addEdge(addEdgeRequest1Out1Out);
+    store.clear();
+
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toBe(
+      undefined,
+    );
+  });
+
   it("should return element port ids", () => {
     const store = new GraphStore();
 

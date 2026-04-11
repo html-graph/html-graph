@@ -33,6 +33,8 @@ export class GraphStore {
     Identifier
   >();
 
+  private readonly edgesElementsMap = new Map<Element, Identifier>();
+
   private readonly afterNodeAddedEmitter: EventEmitter<Identifier>;
 
   public readonly onAfterNodeAdded: EventHandler<Identifier>;
@@ -301,6 +303,10 @@ export class GraphStore {
     return edge;
   }
 
+  public findEdgeIdByElement(element: Element): Identifier | undefined {
+    return this.edgesElementsMap.get(element);
+  }
+
   public addEdge(request: AddEdgeRequest): void {
     if (this.hasEdge(request.id)) {
       throw new CanvasError(canvasErrorText.addEdgeWithExistingId(request.id));
@@ -388,6 +394,7 @@ export class GraphStore {
     this.portCycleEdges.clear();
     this.elementPorts.clear();
     this.nodesElementsMap.clear();
+    this.edgesElementsMap.clear();
 
     this.edges.clear();
     this.ports.clear();
@@ -533,6 +540,8 @@ export class GraphStore {
       },
     });
 
+    this.edgesElementsMap.set(request.shape.svg, request.id);
+
     if (request.from !== request.to) {
       this.portOutgoingEdges.get(request.from)!.add(request.id);
       this.portIncomingEdges.get(request.to)!.add(request.id);
@@ -542,7 +551,7 @@ export class GraphStore {
   }
 
   private removeEdgeInternal(edgeId: Identifier): void {
-    const { from, to } = this.getEdge(edgeId);
+    const { from, to, payload } = this.getEdge(edgeId);
 
     this.portCycleEdges.get(from)!.delete(edgeId);
     this.portCycleEdges.get(to)!.delete(edgeId);
@@ -552,5 +561,6 @@ export class GraphStore {
     this.portOutgoingEdges.get(to)!.delete(edgeId);
 
     this.edges.delete(edgeId);
+    this.edgesElementsMap.delete(payload.shape.svg);
   }
 }

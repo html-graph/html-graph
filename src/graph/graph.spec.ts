@@ -804,12 +804,37 @@ describe("Graph", () => {
     );
   });
 
-  it("should return undefined when element is not a node", () => {
+  it("should return edge id for element", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const element = document.createElement("div");
+    const addNodeRequest1 = createAddNodeRequest1();
 
-    expect(graph.findNodeIdByElement(element)).toEqual(undefined);
+    store.addNode(addNodeRequest1);
+
+    expect(graph.findNodeIdByElement(addNodeRequest1.element)).toEqual(
+      addNodeRequest1.id,
+    );
+  });
+
+  it("should return edge id for svg element", () => {
+    const store = new GraphStore();
+    const graph = new Graph(store);
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addPortRequest1 = createAddPortRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest2 = createAddPortRequest2();
+    const addEdgeRequest12 = createAddEdgeRequest12();
+
+    store.addNode(addNodeRequest1);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest1);
+    store.addPort(addPortRequest2);
+    store.addEdge(addEdgeRequest12);
+
+    expect(graph.findEdgeIdByElement(addEdgeRequest12.shape.svg)).toEqual(
+      addEdgeRequest12.id,
+    );
   });
 });
