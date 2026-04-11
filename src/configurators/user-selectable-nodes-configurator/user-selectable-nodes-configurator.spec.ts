@@ -414,7 +414,6 @@ describe("UserSelectableNodesConfigurator", () => {
     const canvas = createCanvas({
       element,
       onNodeSelected,
-      mouseDownEventVerifier: (event: MouseEvent): boolean => event.ctrlKey,
     });
 
     const nodeElement = createElement({ width: 100, height: 100 });
@@ -440,7 +439,7 @@ describe("UserSelectableNodesConfigurator", () => {
     expect(onNodeSelected).not.toHaveBeenCalled();
   });
 
-  it("should emit selection on touch once second", () => {
+  it("should emit selection on touch once", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const onNodeSelected = jest.fn();
 

@@ -16,6 +16,8 @@ export class UserSelectableElementsConfigurator {
 
   private previousMouse: Point | null = null;
 
+  private previousTouch: Touch | null = null;
+
   private movedDistance = 0;
 
   private readonly onElementMouseDown: EventListener = (event): void => {
@@ -38,15 +40,29 @@ export class UserSelectableElementsConfigurator {
     });
   };
 
-  private readonly onWindowMouseUp: EventListener = (event: Event): void => {
-    const mouseEvent = event as MouseEvent;
+  private readonly onElementTouchStart: EventListener = (
+    event: Event,
+  ): void => {
+    const touchEvent = event as TouchEvent;
 
-    if (!this.mouseUpEventVerifier(mouseEvent)) {
+    if (touchEvent.touches.length !== 1) {
       return;
     }
 
-    this.removeWindowMouseListeners();
-    this.onSelected(this.selectionCandidate!);
+    this.selectionCandidate = touchEvent.currentTarget as Element;
+    this.previousTouch = touchEvent.touches[0];
+
+    this.window.addEventListener("touchend", this.onWindowTouchEnd, {
+      passive: true,
+    });
+
+    this.window.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+
+    this.window.addEventListener("touchcancel", this.onWindowTouchCancel, {
+      passive: true,
+    });
   };
 
   private readonly onWindowMouseMove = (event: Event): void => {
@@ -72,6 +88,56 @@ export class UserSelectableElementsConfigurator {
     });
   };
 
+  private readonly onWindowMouseUp: EventListener = (event: Event): void => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.mouseUpEventVerifier(mouseEvent)) {
+      return;
+    }
+
+    this.removeWindowMouseListeners();
+    this.onSelected(this.selectionCandidate!);
+  };
+
+  private readonly onWindowTouchMove: EventListener = (event: Event): void => {
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 1) {
+      this.removeWindowTouchListeners();
+      return;
+    }
+
+    const touch = touchEvent.touches[0];
+
+    const inside = this.pointInsideVerifier.verify(
+      touch.clientX,
+      touch.clientY,
+    );
+
+    if (!inside) {
+      this.removeWindowTouchListeners();
+      return;
+    }
+
+    const previousTouch = this.previousTouch!;
+    const x = touch.clientX - previousTouch.clientX;
+    const y = touch.clientY - previousTouch.clientY;
+    this.previousTouch = touch;
+
+    this.processMoveThresholdVerification(x, y, () => {
+      this.removeWindowTouchListeners();
+    });
+  };
+
+  private readonly onWindowTouchEnd: EventListener = (): void => {
+    this.removeWindowTouchListeners();
+    this.onSelected(this.selectionCandidate!);
+  };
+
+  private readonly onWindowTouchCancel: EventListener = (): void => {
+    this.removeWindowTouchListeners();
+  };
+
   public constructor(
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
@@ -85,19 +151,28 @@ export class UserSelectableElementsConfigurator {
 
   public enable(element: Element): void {
     element.addEventListener("mousedown", this.onElementMouseDown);
+    element.addEventListener("touchstart", this.onElementTouchStart);
   }
 
   public disable(element: Element): void {
     element.removeEventListener("mousedown", this.onElementMouseDown);
+    element.removeEventListener("touchstart", this.onElementTouchStart);
 
     if (element === this.selectionCandidate) {
       this.removeWindowMouseListeners();
+      this.removeWindowTouchListeners();
     }
   }
 
   private removeWindowMouseListeners(): void {
     this.window.removeEventListener("mousemove", this.onWindowMouseMove);
     this.window.removeEventListener("mouseup", this.onWindowMouseUp);
+  }
+
+  private removeWindowTouchListeners(): void {
+    this.window.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.window.removeEventListener("touchend", this.onWindowTouchEnd);
+    this.window.removeEventListener("touchcancel", this.onWindowTouchCancel);
   }
 
   private processMoveThresholdVerification(
