@@ -133,6 +133,10 @@ export class Graph {
     };
   }
 
+  public findEdgeIdByElement(element: Element): Identifier | undefined {
+    return this.graphStore.findEdgeIdByElement(element);
+  }
+
   public getPortIncomingEdgeIds(portId: Identifier): readonly Identifier[] {
     return this.graphStore.getPortIncomingEdgeIds(portId);
   }

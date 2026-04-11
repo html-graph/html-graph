@@ -544,4 +544,47 @@ describe("CanvasBuilder", () => {
 
     expect(onCanvasSelected).toHaveBeenCalled();
   });
+
+  it("should build canvas with selectable edges", () => {
+    const canvasElement = document.createElement("div");
+    const builder = new CanvasBuilder(canvasElement);
+    const onEdgeSelected = jest.fn();
+
+    const canvas = builder
+      .enableUserSelectableEdges({
+        onEdgeSelected,
+      })
+      .build();
+
+    const node1Element = document.createElement("div");
+    const node2Element = document.createElement("div");
+
+    const shape = new BezierEdgeShape();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: node1Element,
+        x: 0,
+        y: 0,
+        ports: [{ id: "port-1", element: node1Element }],
+      })
+      .addNode({
+        id: "node-2",
+        element: node2Element,
+        x: 0,
+        y: 0,
+        ports: [{ id: "port-2", element: node2Element }],
+      })
+      .addEdge({
+        from: "port-1",
+        to: "port-2",
+        shape,
+      });
+
+    shape.svg.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
+
+    expect(onEdgeSelected).toHaveBeenCalled();
+  });
 });

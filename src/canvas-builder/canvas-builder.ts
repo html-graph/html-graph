@@ -26,6 +26,7 @@ import {
   UserSelectableCanvasConfigurator,
   PointInsideVerifier,
   EventTagger,
+  UserSelectableEdgesConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -78,6 +79,10 @@ import {
   createUserSelectableCanvasParams,
   UserSelectableCanvasConfig,
 } from "./create-user-selectable-canvas-params";
+import {
+  createUserSelectableEdgesParams,
+  UserSelectableEdgesConfig,
+} from "./create-user-selectable-edges-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -101,6 +106,9 @@ export class CanvasBuilder {
   private animatedLayoutConfig: AnimatedLayoutConfig = {};
 
   private userSelectableNodesConfig: UserSelectableNodesConfig | undefined =
+    undefined;
+
+  private userSelectableEdgesConfig: UserSelectableEdgesConfig | undefined =
     undefined;
 
   private userSelectableCanvasConfig: UserSelectableCanvasConfig | undefined =
@@ -225,6 +233,14 @@ export class CanvasBuilder {
     return this;
   }
 
+  public enableUserSelectableEdges(
+    config: UserSelectableEdgesConfig,
+  ): CanvasBuilder {
+    this.userSelectableEdgesConfig = config;
+
+    return this;
+  }
+
   public enableUserSelectableCanvas(
     config: UserSelectableCanvasConfig,
   ): CanvasBuilder {
@@ -297,6 +313,20 @@ export class CanvasBuilder {
 
     if (this.hasNodeResizeReactiveEdges) {
       NodeResizeReactiveEdgesConfigurator.configure(canvas);
+    }
+
+    if (this.userSelectableEdgesConfig !== undefined) {
+      const params = createUserSelectableEdgesParams(
+        this.userSelectableEdgesConfig,
+      );
+
+      UserSelectableEdgesConfigurator.configure(
+        canvas,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        params,
+      );
     }
 
     if (this.userSelectableNodesConfig !== undefined) {

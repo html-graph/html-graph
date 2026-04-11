@@ -15,6 +15,7 @@ export type {
   CoordsTransformConfig,
   TransformDeclaration,
   UserSelectableNodesConfig,
+  UserSelectableEdgesConfig,
   UserSelectableCanvasConfig,
   NextLayerNodesResolverDeclaration,
 } from "./canvas-builder";
