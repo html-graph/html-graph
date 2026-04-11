@@ -22,4 +22,5 @@ export type {
   NextLayerNodesResolverDeclaration,
 } from "./create-layout-params";
 export type { UserSelectableNodesConfig } from "./create-user-selectable-nodes-params";
+export type { UserSelectableEdgesConfig } from "./create-user-selectable-edges-params";
 export type { UserSelectableCanvasConfig } from "./create-user-selectable-canvas-params";

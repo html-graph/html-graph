@@ -15,14 +15,14 @@ export class UserSelectableEdgesConfigurator {
 
   private readonly onEdgeSelected: (nodeId: Identifier) => void;
 
-  private readonly onAfterEdgeAdded = (nedgeId: Identifier): void => {
-    const { shape } = this.canvas.graph.getEdge(nedgeId);
+  private readonly onAfterEdgeAdded = (edgeId: Identifier): void => {
+    const { shape } = this.canvas.graph.getEdge(edgeId);
 
     this.configurator.enable(shape.svg);
   };
 
-  private readonly onBeforeEdgeRemoved = (nedgeId: Identifier): void => {
-    const { shape } = this.canvas.graph.getEdge(nedgeId);
+  private readonly onBeforeEdgeRemoved = (edgeId: Identifier): void => {
+    const { shape } = this.canvas.graph.getEdge(edgeId);
 
     this.configurator.disable(shape.svg);
   };
