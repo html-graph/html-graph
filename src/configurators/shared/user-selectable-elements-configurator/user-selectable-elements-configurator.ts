@@ -44,13 +44,14 @@ export class UserSelectableElementsConfigurator {
     event: Event,
   ): void => {
     const touchEvent = event as TouchEvent;
+    const touches = touchEvent.touches;
 
-    if (touchEvent.touches.length !== 1) {
+    if (touches.length !== 1) {
       return;
     }
 
     this.selectionCandidate = touchEvent.currentTarget as Element;
-    this.previousTouch = touchEvent.touches[0];
+    this.previousTouch = touches[0];
 
     this.window.addEventListener("touchend", this.onWindowTouchEnd, {
       passive: true,
@@ -101,13 +102,14 @@ export class UserSelectableElementsConfigurator {
 
   private readonly onWindowTouchMove: EventListener = (event: Event): void => {
     const touchEvent = event as TouchEvent;
+    const touches = touchEvent.touches;
 
-    if (touchEvent.touches.length !== 1) {
+    if (touches.length !== 1) {
       this.removeWindowTouchListeners();
       return;
     }
 
-    const touch = touchEvent.touches[0];
+    const touch = touches[0];
 
     const inside = this.pointInsideVerifier.verify(
       touch.clientX,
