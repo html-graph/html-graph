@@ -15,3 +15,5 @@ export { AnimatedLayoutApplier } from "./animated-layout-applier";
 export type { AnimatedLayoutApplierParams } from "./animated-layout-applier";
 export { EventTagger } from "./event-tagger";
 export { selectionHandled } from "./selection-handled";
+export { UserSelectableElementsConfigurator } from "./user-selectable-elements-configurator";
+export type { UserSelectableElementsParams } from "./user-selectable-elements-configurator";
