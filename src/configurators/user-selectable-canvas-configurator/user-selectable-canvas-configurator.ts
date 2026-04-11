@@ -6,9 +6,12 @@ import {
   MouseEventVerifier,
   PointInsideVerifier,
   selectionHandled,
+  // UserSelectableElementsConfigurator,
 } from "../shared";
 
 export class UserSelectableCanvasConfigurator {
+  // private readonly configurator: UserSelectableElementsConfigurator;
+
   private readonly onCanvasSelected: () => void;
 
   private readonly movementThreshold: number;
@@ -143,6 +146,7 @@ export class UserSelectableCanvasConfigurator {
   };
 
   private readonly restore = (): void => {
+    // this.configurator.disable(this.element)
     this.element.removeEventListener("mousedown", this.onMouseDown);
     this.element.removeEventListener("touchstart", this.onTouchStart);
     this.removeWindowMouseListeners();
@@ -161,6 +165,21 @@ export class UserSelectableCanvasConfigurator {
     this.movementThreshold = params.movementThreshold;
     this.mouseDownEventVerifier = params.mouseDownEventVerifier;
     this.mouseUpEventVerifier = params.mouseUpEventVerifier;
+
+    // this.configurator = new UserSelectableElementsConfigurator(
+    //   this.window,
+    //   this.pointInsideVerifier,
+    //   {
+    //     onSelected: (): void => {
+    //       this.onCanvasSelected();
+    //     },
+    //     movementThreshold: params.movementThreshold,
+    //     mouseDownEventVerifier: params.mouseDownEventVerifier,
+    //     mouseUpEventVerifier: params.mouseUpEventVerifier,
+    //   },
+    // );
+
+    // this.configurator.enable(this.element);
 
     this.canvas.onBeforeDestroy.subscribe(this.restore);
 

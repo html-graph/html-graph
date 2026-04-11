@@ -4,7 +4,10 @@ import { UserSelectableElementsParams } from "./user-selectable-elements-params"
 import { Point } from "@/point";
 
 export class UserSelectableElementsConfigurator {
-  private readonly onSelected: (element: Element) => void;
+  private readonly onSelected: (
+    element: Element,
+    selectionEvent: Event,
+  ) => void;
 
   private readonly mouseDownEventVerifier: MouseEventVerifier;
 
@@ -97,7 +100,7 @@ export class UserSelectableElementsConfigurator {
     }
 
     this.removeWindowMouseListeners();
-    this.onSelected(this.selectionCandidate!);
+    this.onSelected(this.selectionCandidate!, event);
   };
 
   private readonly onWindowTouchMove: EventListener = (event: Event): void => {
@@ -131,9 +134,9 @@ export class UserSelectableElementsConfigurator {
     });
   };
 
-  private readonly onWindowTouchEnd: EventListener = (): void => {
+  private readonly onWindowTouchEnd: EventListener = (event: Event): void => {
     this.removeWindowTouchListeners();
-    this.onSelected(this.selectionCandidate!);
+    this.onSelected(this.selectionCandidate!, event);
   };
 
   private readonly onWindowTouchCancel: EventListener = (): void => {

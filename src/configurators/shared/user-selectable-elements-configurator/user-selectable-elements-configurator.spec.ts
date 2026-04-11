@@ -43,9 +43,10 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("mouseup"));
+    const event = new MouseEvent("mouseup");
+    window.dispatchEvent(event);
 
-    expect(onSelected).toHaveBeenCalledWith(selectableElement);
+    expect(onSelected).toHaveBeenCalledWith(selectableElement, event);
   });
 
   it("should not call specified callback for element with disabled selection", () => {
@@ -224,9 +225,10 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("mouseup"));
+    const event = new MouseEvent("mouseup");
+    window.dispatchEvent(event);
 
-    expect(onSelected).toHaveBeenCalledWith(selectableElement);
+    expect(onSelected).toHaveBeenCalledWith(selectableElement, event);
 
     const spy = jest.spyOn(window, "removeEventListener");
 
@@ -308,9 +310,10 @@ describe("UserSelectableElementsConfigurator", () => {
 
     configurator.disable(selectableElement2);
 
-    window.dispatchEvent(new MouseEvent("mouseup"));
+    const event = new MouseEvent("mouseup");
+    window.dispatchEvent(event);
 
-    expect(onSelected).toHaveBeenCalledWith(selectableElement1);
+    expect(onSelected).toHaveBeenCalledWith(selectableElement1, event);
   });
 
   it("should call specified callback on node touch grab and immediate release", () => {
@@ -327,9 +330,10 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    const event = new TouchEvent("touchend");
+    window.dispatchEvent(event);
 
-    expect(onSelected).toHaveBeenCalledWith(selectableElement);
+    expect(onSelected).toHaveBeenCalledWith(selectableElement, event);
   });
 
   it("should prevent selection initiation process when touch start event doesnt fit", () => {
@@ -349,7 +353,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalledWith(selectableElement);
   });
@@ -368,8 +372,8 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).toHaveBeenCalledTimes(1);
   });
@@ -388,8 +392,8 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchcancel"));
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchcancel"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
@@ -409,7 +413,7 @@ describe("UserSelectableElementsConfigurator", () => {
     );
 
     const spy = jest.spyOn(window, "removeEventListener");
-    window.dispatchEvent(new MouseEvent("touchcancel"));
+    window.dispatchEvent(new TouchEvent("touchcancel"));
 
     expect(spy).toHaveBeenCalledWith("touchcancel", expect.anything());
     spy.mockClear();
@@ -435,7 +439,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
@@ -455,7 +459,7 @@ describe("UserSelectableElementsConfigurator", () => {
     );
 
     const spy = jest.spyOn(window, "removeEventListener");
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(spy).toHaveBeenCalledWith("touchmove", expect.anything());
     spy.mockClear();
@@ -481,7 +485,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
@@ -501,7 +505,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
@@ -522,7 +526,7 @@ describe("UserSelectableElementsConfigurator", () => {
 
     configurator.disable(selectableElement);
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
@@ -550,7 +554,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    window.dispatchEvent(new MouseEvent("touchend"));
+    window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(onSelected).not.toHaveBeenCalled();
   });
