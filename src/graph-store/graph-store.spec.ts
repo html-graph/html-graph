@@ -679,6 +679,29 @@ describe("GraphStore", () => {
     }).toThrow(CanvasError);
   });
 
+  it("should throw error when trying to add edge with SVG elemen already in use", () => {
+    const store = new GraphStore();
+
+    const addNodeRequest1 = createAddNodeRequest1();
+    const addNodeRequest2 = createAddNodeRequest2();
+    const addPortRequest1Out = createAddPortRequest1Out();
+    const addPortRequest2In = createAddPortRequest2In();
+    const addEdgeRequest1Out2In = createAddEdgeRequest1Out2In();
+
+    store.addNode(addNodeRequest1);
+    store.addPort(addPortRequest1Out);
+    store.addNode(addNodeRequest2);
+    store.addPort(addPortRequest2In);
+    store.addEdge({
+      ...addEdgeRequest1Out2In,
+      id: "use-svg-edge-1-out-2-in",
+    });
+
+    expect(() => {
+      store.addEdge(addEdgeRequest1Out2In);
+    }).toThrow(CanvasError);
+  });
+
   it("should update edge shape", () => {
     const store = new GraphStore();
 

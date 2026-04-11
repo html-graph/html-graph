@@ -324,6 +324,14 @@ export class GraphStore {
       );
     }
 
+    const useEdgeId = this.findEdgeIdByElement(request.shape.svg);
+
+    if (useEdgeId !== undefined) {
+      throw new CanvasError(
+        canvasErrorText.addEdgeWithElementInUse(request.id, useEdgeId),
+      );
+    }
+
     this.addEdgeInternal(request);
     this.afterEdgeAddedEmitter.emit(request.id);
   }
