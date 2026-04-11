@@ -354,7 +354,7 @@ describe("UserSelectableElementsConfigurator", () => {
     expect(onSelected).not.toHaveBeenCalledWith(selectableElement);
   });
 
-  it("should call specified callback one ou second touch end", () => {
+  it("should call specified callback once on second touch end", () => {
     const onSelected = jest.fn();
     const configurator = createConfigurator({ onSelected });
 
