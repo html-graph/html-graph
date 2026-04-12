@@ -58,7 +58,7 @@ const createDraggablePortsCanvas = (options?: {
   const pointInsideVerifier = new PointInsideVerifier(element, window);
 
   DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
-    onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
+    portDragAllowedVerifier: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
     onPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),

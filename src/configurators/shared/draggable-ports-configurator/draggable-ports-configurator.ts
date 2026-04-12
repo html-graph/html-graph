@@ -33,12 +33,12 @@ export class DraggablePortsConfigurator {
     const target = event.currentTarget as PortElement;
     const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
-    const accepted = this.params.onPortPointerDown(portId, {
+    const dragAllowed = this.params.portDragAllowedVerifier(portId, {
       x: mouseEvent.clientX,
       y: mouseEvent.clientY,
     });
 
-    if (!accepted) {
+    if (!dragAllowed) {
       return;
     }
 
@@ -47,6 +47,7 @@ export class DraggablePortsConfigurator {
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
       passive: true,
     });
+
     this.window.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
     });
@@ -87,12 +88,12 @@ export class DraggablePortsConfigurator {
     const target = event.currentTarget as PortElement;
     const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
-    const accepted = this.params.onPortPointerDown(portId, {
+    const dragAllowed = this.params.portDragAllowedVerifier(portId, {
       x: touch.clientX,
       y: touch.clientY,
     });
 
-    if (!accepted) {
+    if (!dragAllowed) {
       return;
     }
 
