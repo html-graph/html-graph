@@ -7,7 +7,6 @@ import {
   createMouseMoveEvent,
   defaultGraphControllerParams,
   defaultViewportControllerParams,
-  waitMicrotask,
 } from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
@@ -367,7 +366,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     });
   });
 
-  it("should call onEdgeReattachInterrupted on pointer move outside", async () => {
+  it("should call onEdgeReattachInterrupted on pointer move outside", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
@@ -389,9 +388,6 @@ describe("UserDraggableEdgesConfigurator", () => {
 
     portElement1.dispatchEvent(new MouseEvent("mousedown"));
     window.dispatchEvent(createMouseMoveEvent({ clientX: -10, clientY: -10 }));
-
-    // TODO: find propper solution
-    await waitMicrotask();
 
     expect(onEdgeReattachInterrupted).toHaveBeenCalledWith({
       id: 0,
