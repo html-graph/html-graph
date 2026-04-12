@@ -152,6 +152,21 @@ describe("createUserConnectablePortsParams", () => {
     );
   });
 
+  it("should not throw error when calling default creation interrupted callback", () => {
+    const options = createConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
+
+    expect(() => {
+      options.onEdgeCreationInterrupted({
+        isDirect: true,
+        staticPortId: "port-1",
+      });
+    }).not.toThrow();
+  });
+
   it("should return specified edge creation interrupted callback", () => {
     const onEdgeCreationInterrupted = (): void => {};
 
@@ -174,6 +189,21 @@ describe("createUserConnectablePortsParams", () => {
     expect(options.onEdgeCreationPrevented).toBe(
       defaults.onEdgeCreationPrevented,
     );
+  });
+
+  it("should not throw error when calling default creation prevented callback", () => {
+    const options = createConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
+
+    expect(() => {
+      options.onEdgeCreationPrevented({
+        from: "port-1",
+        to: "port-2",
+      });
+    }).not.toThrow();
   });
 
   it("should return specified edge creation interrupted callback", () => {
