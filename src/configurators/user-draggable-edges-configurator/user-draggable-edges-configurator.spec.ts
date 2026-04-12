@@ -188,21 +188,6 @@ describe("UserDraggableEdgesConfigurator", () => {
     expect(overlayElement.children[0].children[0].children.length).toBe(0);
   });
 
-  it("should not create overlay graph when resolved to nonexisting edge", () => {
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-    const canvas = createCanvas({
-      overlayElement,
-      draggingEdgeResolver: () => "edge-123",
-    });
-
-    const portElement1 = document.createElement("div");
-    createGraph(canvas, { portElement1 });
-
-    portElement1.dispatchEvent(new MouseEvent("mousedown"));
-
-    expect(overlayElement.children[0].children[0].children.length).toBe(0);
-  });
-
   it("should create source node at static port center", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ overlayElement });

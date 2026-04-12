@@ -101,7 +101,7 @@ export class UserDraggableEdgesConfigurator {
   private tryStartEdgeDragging(portId: Identifier, cursor: Point): boolean {
     const edgeId = this.params.draggingEdgeResolver(portId);
 
-    if (edgeId === null || !this.canvas.graph.hasEdge(edgeId)) {
+    if (edgeId === null) {
       return false;
     }
 
