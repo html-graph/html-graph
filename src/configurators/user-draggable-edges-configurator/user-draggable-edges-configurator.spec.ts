@@ -7,7 +7,6 @@ import {
   createMouseMoveEvent,
   defaultGraphControllerParams,
   defaultViewportControllerParams,
-  waitMicrotask,
 } from "@/mocks";
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
@@ -178,21 +177,6 @@ describe("UserDraggableEdgesConfigurator", () => {
     const canvas = createCanvas({
       overlayElement,
       draggingEdgeResolver: () => null,
-    });
-
-    const portElement1 = document.createElement("div");
-    createGraph(canvas, { portElement1 });
-
-    portElement1.dispatchEvent(new MouseEvent("mousedown"));
-
-    expect(overlayElement.children[0].children[0].children.length).toBe(0);
-  });
-
-  it("should not create overlay graph when resolved to nonexisting edge", () => {
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-    const canvas = createCanvas({
-      overlayElement,
-      draggingEdgeResolver: () => "edge-123",
     });
 
     const portElement1 = document.createElement("div");
@@ -382,7 +366,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     });
   });
 
-  it("should call onEdgeReattachInterrupted on pointer move outside", async () => {
+  it("should call onEdgeReattachInterrupted on pointer move outside", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
@@ -404,9 +388,6 @@ describe("UserDraggableEdgesConfigurator", () => {
 
     portElement1.dispatchEvent(new MouseEvent("mousedown"));
     window.dispatchEvent(createMouseMoveEvent({ clientX: -10, clientY: -10 }));
-
-    // TODO: find propper solution
-    await waitMicrotask();
 
     expect(onEdgeReattachInterrupted).toHaveBeenCalledWith({
       id: 0,

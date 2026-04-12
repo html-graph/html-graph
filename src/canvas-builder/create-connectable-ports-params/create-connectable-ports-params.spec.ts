@@ -4,7 +4,8 @@ import {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
 } from "@/configurators";
-import { AddEdgeRequest, EdgeShapeFactory } from "@/graph-controller";
+import { EdgeShapeFactory } from "@/graph-controller";
+import { defaults } from "./defaults";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {
@@ -14,7 +15,9 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.connectionTypeResolver("123")).toBe("direct");
+    expect(options.connectionTypeResolver).toBe(
+      defaults.connectionTypeResolver,
+    );
   });
 
   it("should return specified connection type resolver", () => {
@@ -35,9 +38,9 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    const request: AddEdgeRequest = { from: "1", to: "2" };
-
-    expect(options.connectionPreprocessor(request)).toBe(request);
+    expect(options.connectionPreprocessor).toBe(
+      defaults.connectionPreprocessor,
+    );
   });
 
   it("should return specified connection preprocessor", () => {
@@ -51,21 +54,14 @@ describe("createUserConnectablePortsParams", () => {
     expect(options.connectionPreprocessor).toBe(preprocessor);
   });
 
-  it("should return LMB mouse down event verifier by default", () => {
+  it("should return default mouse down event verifier", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
       0,
     );
-    const pass = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 0 }),
-    );
 
-    const fail = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 1 }),
-    );
-
-    expect([pass, fail]).toEqual([true, false]);
+    expect(options.mouseDownEventVerifier).toEqual(defaults.mouseEventVerifier);
   });
 
   it("should return specified mouse down event verifier", () => {
@@ -79,21 +75,14 @@ describe("createUserConnectablePortsParams", () => {
     expect(options.mouseDownEventVerifier).toBe(verifier);
   });
 
-  it("should return LMB mouse up event verifier by default", () => {
+  it("should return default mouse up event verifier", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
       0,
     );
-    const pass = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 0 }),
-    );
 
-    const fail = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 1 }),
-    );
-
-    expect([pass, fail]).toEqual([true, false]);
+    expect(options.mouseUpEventVerifier).toEqual(defaults.mouseEventVerifier);
   });
 
   it("should return specified mouse up event verifier", () => {
@@ -114,9 +103,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(() => {
-      options.onAfterEdgeCreated("123");
-    }).not.toThrow();
+    expect(options.onAfterEdgeCreated).toBe(defaults.onAfterEdgeCreated);
   });
 
   it("should return specified edge created callback", () => {
@@ -160,10 +147,22 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
+    expect(options.onEdgeCreationInterrupted).toBe(
+      defaults.onEdgeCreationInterrupted,
+    );
+  });
+
+  it("should not throw error when calling default creation interrupted callback", () => {
+    const options = createConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
+
     expect(() => {
       options.onEdgeCreationInterrupted({
-        staticPortId: "123",
         isDirect: true,
+        staticPortId: "port-1",
       });
     }).not.toThrow();
   });
@@ -187,8 +186,23 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
+    expect(options.onEdgeCreationPrevented).toBe(
+      defaults.onEdgeCreationPrevented,
+    );
+  });
+
+  it("should not throw error when calling default creation prevented callback", () => {
+    const options = createConnectablePortsParams(
+      {},
+      () => new BezierEdgeShape(),
+      0,
+    );
+
     expect(() => {
-      options.onEdgeCreationPrevented({ from: "123", to: "456" });
+      options.onEdgeCreationPrevented({
+        from: "port-1",
+        to: "port-2",
+      });
     }).not.toThrow();
   });
 

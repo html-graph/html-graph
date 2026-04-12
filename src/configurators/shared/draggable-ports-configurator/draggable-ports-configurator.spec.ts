@@ -24,7 +24,6 @@ const createDraggablePortsCanvas = (options?: {
   onPointerMove?: (clientPoint: Point) => void;
   onPointerMoveOutside?: () => void;
   onPointerUp?: (clientPoint: Point) => void;
-  onStopDrag?: () => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
 }): Canvas => {
@@ -61,9 +60,8 @@ const createDraggablePortsCanvas = (options?: {
   DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
     onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
-    onPointerMoveOutside: options?.onPointerMoveOutside ?? ((): void => {}),
+    onPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),
-    onStopDrag: options?.onStopDrag ?? ((): void => {}),
     mouseDownEventVerifier:
       options?.mouseDownEventVerifier ?? ((): boolean => true),
     mouseUpEventVerifier:
@@ -251,24 +249,6 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMoveOutside).toHaveBeenCalled();
   });
 
-  it("should call onStopDrag when mouse is outside", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mousemove", { clientX: -1, clientY: -1 }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
-  });
-
   it("should call onPointerMove on touch move", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
@@ -335,50 +315,6 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMoveOutside).toHaveBeenCalled();
   });
 
-  it("should call onStopDrag when touch is outside", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 0, clientY: 0 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: -1, clientY: -1 })],
-      }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
-  });
-
-  it("should call onStopDrag on mouse up", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mousemove", { clientX: 100, clientY: 200 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mouseup", { clientX: 100, clientY: 200 }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
-  });
-
   it("should call onPointerUp on mouse up", () => {
     const onPointerUp = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
@@ -401,7 +337,35 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerUp).toHaveBeenCalledWith({ x: 100, y: 200 });
   });
 
-  it("should  not call onPointerUp when mouse up event verifier fails", () => {
+  it("should call onPointerUp on touch end", () => {
+    const onPointerUp = jest.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerUp });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [createTouch({ clientX: 0, clientY: 0 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchend", {
+        changedTouches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(onPointerUp).toHaveBeenCalledWith({ x: 100, y: 100 });
+  });
+
+  it("should not call onPointerUp when mouse up event verifier fails", () => {
     const onPointerUp = jest.fn();
     const canvas = createDraggablePortsCanvas({
       onPointerUp,
@@ -424,62 +388,6 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerUp).not.toHaveBeenCalledWith();
-  });
-
-  it("should call onStopDrag on touch end", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 0, clientY: 0 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: 100, clientY: 200 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchend", {
-        changedTouches: [createTouch({ clientX: 100, clientY: 200 })],
-      }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
-  });
-
-  it("should call onStopDrag on touch cancel", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 0, clientY: 0 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: 100, clientY: 200 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchcancel", {
-        changedTouches: [createTouch({ clientX: 100, clientY: 200 })],
-      }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
   });
 
   it("should call onPointerDown for unmarked port", () => {
@@ -525,42 +433,6 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerDown).not.toHaveBeenCalled();
-  });
-
-  it("should not call onStopDrag when mouse event verifier fails", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({
-      onStopDrag,
-      mouseUpEventVerifier: () => false,
-    });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mousemove", { clientX: 100, clientY: 200 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mouseup", { clientX: 100, clientY: 200 }),
-    );
-
-    expect(onStopDrag).not.toHaveBeenCalled();
-  });
-
-  it("should call onStopDrag on destroy", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({
-      onStopDrag,
-    });
-
-    canvas.destroy();
-
-    expect(onStopDrag).toHaveBeenCalled();
   });
 
   it("should not call onPointerMove error when canvas destroyed in the process of dragging with mouse", () => {

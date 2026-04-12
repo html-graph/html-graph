@@ -1,49 +1,31 @@
-import {
-  ConnectionTypeResolver,
-  ConnectionPreprocessor,
-  UserConnectablePortsParams,
-} from "@/configurators";
+import { UserConnectablePortsParams } from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
-import { Identifier } from "@/identifier";
 import { EdgeShapeFactory } from "@/graph-controller";
+import { defaults } from "./defaults";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   defaultDragPortDirection: number,
 ): UserConnectablePortsParams => {
-  const defaultConnectionTypeResolver: ConnectionTypeResolver = () => "direct";
-
-  const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
-    request;
-
-  const defaultMouseEventVerifier = (event: MouseEvent): boolean =>
-    event.button === 0;
-
-  const defaultOnAfterEdgeCreated: (edgeId: Identifier) => void = () => {};
-
-  const defaultOnAfterEdgeConnectionPrevented = (): void => {};
-
-  const defaultOnAfterEdgeConnectionInterrupted = (): void => {};
-
   return {
     connectionTypeResolver:
-      config.connectionTypeResolver ?? defaultConnectionTypeResolver,
+      config.connectionTypeResolver ?? defaults.connectionTypeResolver,
     connectionPreprocessor:
-      config.connectionPreprocessor ?? defaultConnectionPreprocessor,
+      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaultMouseEventVerifier,
+      config.mouseDownEventVerifier ?? defaults.mouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaultMouseEventVerifier,
+      config.mouseUpEventVerifier ?? defaults.mouseEventVerifier,
     onAfterEdgeCreated:
-      config.events?.onAfterEdgeCreated ?? defaultOnAfterEdgeCreated,
+      config.events?.onAfterEdgeCreated ?? defaults.onAfterEdgeCreated,
     onEdgeCreationInterrupted:
       config.events?.onEdgeCreationInterrupted ??
-      defaultOnAfterEdgeConnectionInterrupted,
+      defaults.onEdgeCreationInterrupted,
     onEdgeCreationPrevented:
       config.events?.onEdgeCreationPrevented ??
-      defaultOnAfterEdgeConnectionPrevented,
+      defaults.onEdgeCreationPrevented,
     dragPortDirection: config.dragPortDirection ?? defaultDragPortDirection,
     edgeShapeFactory:
       config.edgeShape !== undefined

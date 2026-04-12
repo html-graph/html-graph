@@ -59,8 +59,8 @@ export class DraggablePortsConfigurator {
     );
 
     if (!isInside) {
-      this.params.onPointerMoveOutside();
-      this.stopMouseDrag();
+      this.removeWindowMouseListeners();
+      this.params.onPointerOutside();
       return;
     }
 
@@ -72,8 +72,8 @@ export class DraggablePortsConfigurator {
       return;
     }
 
+    this.removeWindowMouseListeners();
     this.params.onPointerUp({ x: event.clientX, y: event.clientY });
-    this.stopMouseDrag();
   };
 
   private readonly onPortTouchStart: EventListener = (event: Event): void => {
@@ -120,8 +120,8 @@ export class DraggablePortsConfigurator {
     );
 
     if (!isInside) {
-      this.params.onPointerMoveOutside();
-      this.stopTouchDrag();
+      this.removeWindowTouchListeners();
+      this.params.onPointerOutside();
       return;
     }
 
@@ -129,9 +129,9 @@ export class DraggablePortsConfigurator {
   };
 
   private readonly onWindowTouchFinish = (event: TouchEvent): void => {
+    this.removeWindowTouchListeners();
     const touch = event.changedTouches[0];
     this.params.onPointerUp({ x: touch.clientX, y: touch.clientY });
-    this.stopTouchDrag();
   };
 
   private readonly reset = (): void => {
@@ -142,10 +142,9 @@ export class DraggablePortsConfigurator {
   };
 
   private readonly revert = (): void => {
-    this.params.onStopDrag();
-    this.reset();
     this.removeWindowMouseListeners();
     this.removeWindowTouchListeners();
+    this.reset();
   };
 
   private constructor(
@@ -182,16 +181,6 @@ export class DraggablePortsConfigurator {
   private unhookPortEvents(element: PortElement): void {
     element.removeEventListener("mousedown", this.onPortMouseDown);
     element.removeEventListener("touchstart", this.onPortTouchStart);
-  }
-
-  private stopMouseDrag(): void {
-    this.params.onStopDrag();
-    this.removeWindowMouseListeners();
-  }
-
-  private stopTouchDrag(): void {
-    this.params.onStopDrag();
-    this.removeWindowTouchListeners();
   }
 
   private removeWindowMouseListeners(): void {

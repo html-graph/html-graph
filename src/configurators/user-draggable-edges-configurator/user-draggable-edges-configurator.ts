@@ -5,6 +5,7 @@ import { Point } from "@/point";
 import {
   createAddNodeOverlayRequest,
   createOverlayCanvas,
+  DraggablePortsParams,
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
@@ -44,40 +45,38 @@ export class UserDraggableEdgesConfigurator {
       this.window,
     );
 
+    const draggablePortsParams: DraggablePortsParams = {
+      mouseDownEventVerifier: this.params.mouseDownEventVerifier,
+      mouseUpEventVerifier: this.params.mouseUpEventVerifier,
+      onPortPointerDown: (portId, cursor) => {
+        return this.tryStartEdgeDragging(portId, cursor);
+      },
+      onPointerMove: (cursor) => {
+        this.moveDraggingPort(cursor);
+      },
+      onPointerUp: (cursor) => {
+        this.tryCreateConnection(cursor);
+        this.resetDragState();
+      },
+      onPointerOutside: () => {
+        const edge = this.draggingEdgePayload!;
+        this.resetDragState();
+
+        this.params.onEdgeReattachInterrupted({
+          id: edge.id,
+          from: edge.from,
+          to: edge.to,
+          shape: edge.shape,
+          priority: edge.priority,
+        });
+      },
+    };
+
     DraggablePortsConfigurator.configure(
       this.canvas,
       this.window,
       this.pointInsideVerifier,
-      {
-        mouseDownEventVerifier: this.params.mouseDownEventVerifier,
-        mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-        onStopDrag: () => {
-          this.resetDragState();
-        },
-        onPortPointerDown: (portId, cursor) => {
-          return this.tryStartEdgeDragging(portId, cursor);
-        },
-        onPointerMove: (cursor) => {
-          this.moveDraggingPort(cursor);
-        },
-        onPointerMoveOutside: () => {
-          const edge = this.draggingEdgePayload!;
-
-          // TODO: find propper solution
-          queueMicrotask(() => {
-            this.params.onEdgeReattachInterrupted({
-              id: edge.id,
-              from: edge.from,
-              to: edge.to,
-              shape: edge.shape,
-              priority: edge.priority,
-            });
-          });
-        },
-        onPointerUp: (cursor) => {
-          this.tryCreateConnection(cursor);
-        },
-      },
+      draggablePortsParams,
     );
   }
 
@@ -102,7 +101,7 @@ export class UserDraggableEdgesConfigurator {
   private tryStartEdgeDragging(portId: Identifier, cursor: Point): boolean {
     const edgeId = this.params.draggingEdgeResolver(portId);
 
-    if (edgeId === null || !this.canvas.graph.hasEdge(edgeId)) {
+    if (edgeId === null) {
       return false;
     }
 
