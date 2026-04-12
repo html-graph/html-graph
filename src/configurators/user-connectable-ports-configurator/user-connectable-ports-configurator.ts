@@ -3,6 +3,7 @@ import { ViewportStore } from "@/viewport-store";
 import {
   createAddNodeOverlayRequest,
   createOverlayCanvas,
+  DraggablePortsParams,
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
@@ -39,37 +40,47 @@ export class UserConnectablePortsConfigurator {
       this.window,
     );
 
+    const draggablePortsParams: DraggablePortsParams = {
+      mouseDownEventVerifier: this.params.mouseDownEventVerifier,
+      mouseUpEventVerifier: this.params.mouseUpEventVerifier,
+      onPortPointerDown: (portId, cursor) => {
+        const connectionType = this.params.connectionTypeResolver(portId);
+
+        if (connectionType === null) {
+          return false;
+        }
+
+        this.grabPort(portId, cursor, connectionType);
+
+        return true;
+      },
+      onPointerMove: (cursor) => {
+        this.moveDraggingPort(cursor);
+      },
+      onPointerUp: (cursor) => {
+        this.tryCreateConnection(cursor);
+      },
+      onStopDrag: () => {
+        this.resetDragState();
+      },
+      onStopDragPointerOutside: () => {
+        const staticPortId = this.staticPortId!;
+        const isTargetDragging = this.isTargetDragging;
+
+        this.resetDragState();
+
+        this.params.onEdgeCreationInterrupted({
+          staticPortId,
+          isDirect: isTargetDragging,
+        });
+      },
+    };
+
     DraggablePortsConfigurator.configure(
       this.canvas,
       this.window,
       this.pointInsideVerifier,
-      {
-        mouseDownEventVerifier: this.params.mouseDownEventVerifier,
-        mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-        onStopDrag: () => {
-          this.resetDragState();
-        },
-        onPortPointerDown: (portId, cursor) => {
-          const connectionType = this.params.connectionTypeResolver(portId);
-
-          if (connectionType === null) {
-            return false;
-          }
-
-          this.grabPort(portId, cursor, connectionType);
-
-          return true;
-        },
-        onPointerMove: (cursor) => {
-          this.moveDraggingPort(cursor);
-        },
-        onPointerMoveOutside: () => {
-          this.handleEdgeCreationInterrupted();
-        },
-        onPointerUp: (cursor) => {
-          this.tryCreateConnection(cursor);
-        },
-      },
+      draggablePortsParams,
     );
   }
 

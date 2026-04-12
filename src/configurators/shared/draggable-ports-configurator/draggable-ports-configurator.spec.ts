@@ -61,7 +61,7 @@ const createDraggablePortsCanvas = (options?: {
   DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
     onPortPointerDown: options?.onPointerDown ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
-    onPointerMoveOutside: options?.onPointerMoveOutside ?? ((): void => {}),
+    onStopDragPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),
     onStopDrag: options?.onStopDrag ?? ((): void => {}),
     mouseDownEventVerifier:
@@ -251,24 +251,6 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerMoveOutside).toHaveBeenCalled();
   });
 
-  it("should call onStopDrag when mouse is outside", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
-    );
-
-    window.dispatchEvent(
-      new MouseEvent("mousemove", { clientX: -1, clientY: -1 }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
-  });
-
   it("should call onPointerMove on touch move", () => {
     const onPointerMove = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
@@ -333,28 +315,6 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerMoveOutside).toHaveBeenCalled();
-  });
-
-  it("should call onStopDrag when touch is outside", () => {
-    const onStopDrag = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onStopDrag });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    portElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [createTouch({ clientX: 0, clientY: 0 })],
-      }),
-    );
-
-    window.dispatchEvent(
-      new TouchEvent("touchmove", {
-        touches: [createTouch({ clientX: -1, clientY: -1 })],
-      }),
-    );
-
-    expect(onStopDrag).toHaveBeenCalled();
   });
 
   it("should call onStopDrag on mouse up", () => {
