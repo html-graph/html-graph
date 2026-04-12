@@ -59,11 +59,9 @@ export class UserConnectablePortsConfigurator {
       },
       onPointerUp: (cursor) => {
         this.tryCreateConnection(cursor);
-      },
-      onStopDrag: () => {
         this.resetDragState();
       },
-      onStopDragPointerOutside: () => {
+      onPointerOutside: () => {
         const staticPortId = this.staticPortId!;
         const isTargetDragging = this.isTargetDragging;
 

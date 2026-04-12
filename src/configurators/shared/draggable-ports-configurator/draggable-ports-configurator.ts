@@ -60,7 +60,7 @@ export class DraggablePortsConfigurator {
 
     if (!isInside) {
       this.removeWindowMouseListeners();
-      this.params.onStopDragPointerOutside();
+      this.params.onPointerOutside();
       return;
     }
 
@@ -74,7 +74,6 @@ export class DraggablePortsConfigurator {
 
     this.removeWindowMouseListeners();
     this.params.onPointerUp({ x: event.clientX, y: event.clientY });
-    this.params.onStopDrag();
   };
 
   private readonly onPortTouchStart: EventListener = (event: Event): void => {
@@ -122,7 +121,7 @@ export class DraggablePortsConfigurator {
 
     if (!isInside) {
       this.removeWindowTouchListeners();
-      this.params.onStopDragPointerOutside();
+      this.params.onPointerOutside();
       return;
     }
 
@@ -133,7 +132,6 @@ export class DraggablePortsConfigurator {
     this.removeWindowTouchListeners();
     const touch = event.changedTouches[0];
     this.params.onPointerUp({ x: touch.clientX, y: touch.clientY });
-    this.params.onStopDrag();
   };
 
   private readonly reset = (): void => {
@@ -146,7 +144,6 @@ export class DraggablePortsConfigurator {
   private readonly revert = (): void => {
     this.removeWindowMouseListeners();
     this.removeWindowTouchListeners();
-    this.params.onStopDrag();
     this.reset();
   };
 

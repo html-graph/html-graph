@@ -56,11 +56,9 @@ export class UserDraggableEdgesConfigurator {
       },
       onPointerUp: (cursor) => {
         this.tryCreateConnection(cursor);
-      },
-      onStopDrag: () => {
         this.resetDragState();
       },
-      onStopDragPointerOutside: () => {
+      onPointerOutside: () => {
         const edge = this.draggingEdgePayload!;
         this.resetDragState();
 
