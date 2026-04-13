@@ -11,9 +11,9 @@ import {
   defaultViewportControllerParams,
 } from "@/mocks";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
-import { LayoutApplier } from "../../shared";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { LayoutApplier } from "../layout-applier";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();

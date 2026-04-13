@@ -14,10 +14,6 @@ export class UserSelectableCanvasConfigurator {
 
   private readonly selectionHandledTag = selectionHandled;
 
-  private readonly restore = (): void => {
-    this.configurator.disable(this.element);
-  };
-
   private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
@@ -45,7 +41,9 @@ export class UserSelectableCanvasConfigurator {
 
     this.configurator.enable(this.element);
 
-    this.canvas.onBeforeDestroy.subscribe(this.restore);
+    this.canvas.onBeforeDestroy.subscribe(() => {
+      this.configurator.disable(this.element);
+    });
   }
 
   public static configure(

@@ -2,7 +2,7 @@ import { LayoutParams } from "./layout-params";
 import { Canvas } from "@/canvas";
 import { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
 import { TopologyChangeAsyncLayoutApplicationStrategyConfigurator } from "./topology-change-async-layout-application-strategy-configurator";
-import { LayoutApplier } from "../shared";
+import { LayoutApplier } from "./layout-applier";
 
 export class LayoutConfigurator {
   public static configure(canvas: Canvas, params: LayoutParams): void {

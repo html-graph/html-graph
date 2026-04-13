@@ -1,7 +1,7 @@
 import { Canvas } from "@/canvas";
 import { AnimationSeries } from "./animation-series";
-import { AnimatedLayoutApplier } from "../shared";
 import { AnimatedLayoutParams } from "./animated-layout-params";
+import { AnimatedLayoutApplier } from "./animated-layout-applier";
 
 export class AnimatedLayoutConfigurator {
   private readonly applier: AnimatedLayoutApplier;

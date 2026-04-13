@@ -12,7 +12,7 @@ import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
-import { svgPadding } from "@/edges/svg-padding";
+import { svgPadding } from "../../svg-padding";
 
 export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;

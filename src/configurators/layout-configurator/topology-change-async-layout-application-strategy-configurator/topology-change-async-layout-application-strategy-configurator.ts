@@ -1,5 +1,5 @@
-import { LayoutApplier } from "../../shared";
 import { Graph } from "@/graph";
+import { LayoutApplier } from "../layout-applier";
 
 export class TopologyChangeAsyncLayoutApplicationStrategyConfigurator {
   private applyScheduled = false;

@@ -1,5 +1,5 @@
-import { LayoutApplier } from "../../shared";
 import { EventHandler } from "@/event-subject";
+import { LayoutApplier } from "../layout-applier";
 
 export class ManualLayoutApplicationStrategyConfigurator {
   private constructor(
