@@ -4,6 +4,7 @@ import { createLayoutParams } from "./create-layout-params";
 import { defaults } from "./defaults";
 import { LayoutApplyOnParam } from "@/configurators";
 import { macrotaskScheduleFn } from "@/schedule-fn";
+import { noopFn } from "../shared";
 
 describe("createLayoutParams", () => {
   it("should set specified algorithm", () => {
@@ -61,7 +62,7 @@ describe("createLayoutParams", () => {
 
     const params = createLayoutParams(config);
 
-    expect(params.onBeforeApplied).toEqual(defaults.onBeforeApplied);
+    expect(params.onBeforeApplied).toEqual(noopFn);
   });
 
   it("should set default onAfterApplied", () => {
@@ -69,7 +70,7 @@ describe("createLayoutParams", () => {
 
     const params = createLayoutParams(config);
 
-    expect(params.onAfterApplied).toEqual(defaults.onAfterApplied);
+    expect(params.onAfterApplied).toEqual(noopFn);
   });
 
   it("should set specified onBeforeApplied", () => {

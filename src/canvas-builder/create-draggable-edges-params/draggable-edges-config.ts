@@ -1,4 +1,5 @@
 import {
+  ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   DraggingEdgeResolver,
   MouseEventVerifier,
@@ -10,6 +11,7 @@ import { AddEdgeRequest } from "@/graph-controller";
 
 export interface DraggableEdgesConfig {
   readonly connectionPreprocessor?: ConnectionPreprocessor;
+  readonly connectionAllowedVerifier?: ConnectionAllowedVerifier;
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly draggingEdgeResolver?: DraggingEdgeResolver;

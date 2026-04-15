@@ -225,9 +225,13 @@ export class UserDraggableEdgesConfigurator {
       priority: edge.priority,
     };
 
+    const connectionAllowed = this.params.connectionAllowedVerifier({
+      from,
+      to,
+    });
     const processedRequest = this.params.connectionPreprocessor(request);
 
-    if (processedRequest !== null) {
+    if (connectionAllowed && processedRequest !== null) {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeReattached);
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeReattached);

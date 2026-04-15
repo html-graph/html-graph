@@ -6,6 +6,7 @@ import {
 } from "@/configurators";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {
@@ -103,7 +104,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onAfterEdgeCreated).toBe(defaults.onAfterEdgeCreated);
+    expect(options.onAfterEdgeCreated).toBe(noopFn);
   });
 
   it("should return specified edge created callback", () => {
@@ -147,9 +148,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onEdgeCreationInterrupted).toBe(
-      defaults.onEdgeCreationInterrupted,
-    );
+    expect(options.onEdgeCreationInterrupted).toBe(noopFn);
   });
 
   it("should not throw error when calling default creation interrupted callback", () => {
@@ -186,9 +185,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onEdgeCreationPrevented).toBe(
-      defaults.onEdgeCreationPrevented,
-    );
+    expect(options.onEdgeCreationPrevented).toBe(noopFn);
   });
 
   it("should not throw error when calling default creation prevented callback", () => {
@@ -235,5 +232,26 @@ describe("createUserConnectablePortsParams", () => {
     );
 
     expect(options.edgeShapeFactory).toBe(connectionFactory);
+  });
+
+  it("should return default connection allowed verifier", () => {
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, 0);
+
+    expect(options.connectionAllowedVerifier).toBe(
+      defaults.connectionAllowedVerifier,
+    );
+  });
+
+  it("should return specified connection allowed verifier", () => {
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const connectionAllowedVerifier = (): boolean => true;
+    const options = createConnectablePortsParams(
+      { connectionAllowedVerifier },
+      factory,
+      0,
+    );
+
+    expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
   });
 });

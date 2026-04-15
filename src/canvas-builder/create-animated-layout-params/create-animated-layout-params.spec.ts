@@ -3,6 +3,7 @@ import { AnimatedLayoutConfig } from "./animated-layout-config";
 import { createAnimatedLayoutParams } from "./create-animated-layout-params";
 import { ForceDirectedAnimatedLayoutAlgorithm } from "@/layouts";
 import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 describe("createAnimatedLayoutParams", () => {
   it("should set specified algorithm", () => {
@@ -57,7 +58,7 @@ describe("createAnimatedLayoutParams", () => {
 
     const params = createAnimatedLayoutParams(config);
 
-    expect(params.onBeforeApplied).toEqual(defaults.onBeforeApplied);
+    expect(params.onBeforeApplied).toEqual(noopFn);
   });
 
   it("should set default onAfterApplied", () => {
@@ -65,7 +66,7 @@ describe("createAnimatedLayoutParams", () => {
 
     const params = createAnimatedLayoutParams(config);
 
-    expect(params.onAfterApplied).toEqual(defaults.onAfterApplied);
+    expect(params.onAfterApplied).toEqual(noopFn);
   });
 
   it("should set specified onBeforeApplied", () => {

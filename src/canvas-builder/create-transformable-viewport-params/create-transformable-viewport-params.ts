@@ -7,6 +7,7 @@ import { createCombinedTransformPreprocessor } from "./preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 import { TransformState } from "@/viewport-store";
+import { noopFn } from "../shared";
 
 export const createTransformableViewportParams = (
   transformConfig: ViewportTransformConfig | undefined,
@@ -42,12 +43,6 @@ export const createTransformableViewportParams = (
       ? transformConfig.shift.cursor
       : "grab";
 
-  const onBeforeTransformStarted =
-    transformConfig?.events?.onBeforeTransformChange ?? ((): void => {});
-
-  const onTransformFinished =
-    transformConfig?.events?.onTransformChange ?? ((): void => {});
-
   const defaultMouseDownEventVerifier =
     transformConfig?.shift?.mouseDownEventVerifier;
 
@@ -74,12 +69,11 @@ export const createTransformableViewportParams = (
 
   return {
     wheelSensitivity: wheelSensitivity,
-    onTransformStarted:
-      transformConfig?.events?.onTransformStarted ?? ((): void => {}),
-    onTransformFinished:
-      transformConfig?.events?.onTransformFinished ?? ((): void => {}),
-    onBeforeTransformChange: onBeforeTransformStarted,
-    onTransformChange: onTransformFinished,
+    onTransformStarted: transformConfig?.events?.onTransformStarted ?? noopFn,
+    onTransformFinished: transformConfig?.events?.onTransformFinished ?? noopFn,
+    onBeforeTransformChange:
+      transformConfig?.events?.onBeforeTransformChange ?? noopFn,
+    onTransformChange: transformConfig?.events?.onTransformChange ?? noopFn,
     transformPreprocessor,
     shiftCursor,
     mouseDownEventVerifier,
@@ -87,8 +81,8 @@ export const createTransformableViewportParams = (
     mouseWheelEventVerifier,
     scaleWheelFinishTimeout: transformConfig?.scale?.wheelFinishTimeout ?? 500,
     onResizeTransformStarted:
-      transformConfig?.events?.onResizeTransformStarted ?? ((): void => {}),
+      transformConfig?.events?.onResizeTransformStarted ?? noopFn,
     onResizeTransformFinished:
-      transformConfig?.events?.onResizeTransformFinished ?? ((): void => {}),
+      transformConfig?.events?.onResizeTransformFinished ?? noopFn,
   };
 };

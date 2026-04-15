@@ -11,7 +11,6 @@ import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import {
   BackgroundConfigurator,
-  DraggableNodesParams,
   NodeResizeReactiveEdgesConfigurator,
   UserConnectablePortsConfigurator,
   UserDraggableEdgesConfigurator,
@@ -20,8 +19,6 @@ import {
   UserTransformableViewportVirtualScrollConfigurator,
   LayoutConfigurator,
   AnimatedLayoutConfigurator,
-  AnimatedLayoutParams,
-  LayoutParams,
   UserSelectableNodesConfigurator,
   UserSelectableCanvasConfigurator,
   PointInsideVerifier,
@@ -278,7 +275,7 @@ export class CanvasBuilder {
       graphControllerParams,
     );
 
-    const layoutParams: LayoutParams = createLayoutParams(this.layoutConfig);
+    const layoutParams = createLayoutParams(this.layoutConfig);
 
     const viewportControllerParams = createViewportControllerParams({
       canvasDefaults: this.canvasDefaults,
@@ -359,8 +356,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasDraggableNodes) {
-      let draggableNodesParams: DraggableNodesParams =
-        createDraggableNodesParams(this.dragConfig);
+      let draggableNodesParams = createDraggableNodesParams(this.dragConfig);
 
       if (this.hasAnimatedLayout) {
         draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
@@ -436,9 +432,7 @@ export class CanvasBuilder {
     }
 
     if (this.hasAnimatedLayout) {
-      let config: AnimatedLayoutParams = createAnimatedLayoutParams(
-        this.animatedLayoutConfig,
-      );
+      let config = createAnimatedLayoutParams(this.animatedLayoutConfig);
 
       if (this.hasDraggableNodes) {
         subscribeAnimatedLayoutStaticNodesUpdate(

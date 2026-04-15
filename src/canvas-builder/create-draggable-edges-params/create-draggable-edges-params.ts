@@ -1,23 +1,14 @@
 import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
-import { ConnectionPreprocessor } from "@/configurators";
-import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
+import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
   graph: Graph,
 ): DraggableEdgesParams => {
-  const defaultConnectionPreprocessor: ConnectionPreprocessor = (request) =>
-    request;
-
-  const defaultMouseDownEventVerifier = (event: MouseEvent): boolean =>
-    event.button === 0 && event.ctrlKey;
-
-  const defaultMouseUpEventVerifier = (event: MouseEvent): boolean =>
-    event.button === 0;
-
   const defaultDraggingEdgeResolver: DraggingEdgeResolver = (portId) => {
     const edgeIds = graph.getPortAdjacentEdgeIds(portId);
 
@@ -28,32 +19,24 @@ export const createDraggableEdgeParams = (
     }
   };
 
-  const defaultOnAfterEdgeReattached: (edgeId: Identifier) => void = () => {};
-
-  const defaultOnAfterEdgeReattachPrevented = (): void => {};
-
-  const defaultOnAfterEdgeReattachInterrupted = (): void => {};
-
   return {
     connectionPreprocessor:
-      config.connectionPreprocessor ?? defaultConnectionPreprocessor,
+      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
+    connectionAllowedVerifier:
+      config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaultMouseDownEventVerifier,
+      config.mouseDownEventVerifier ?? defaults.mouseDownEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaultMouseUpEventVerifier,
+      config.mouseUpEventVerifier ?? defaults.mouseUpEventVerifier,
     draggingEdgeResolver:
       config.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
     draggingEdgeShapeFactory:
       config.draggingEdgeShape !== undefined
         ? resolveEdgeShapeFactory(config.draggingEdgeShape)
         : null,
-    onAfterEdgeReattached:
-      config.events?.onAfterEdgeReattached ?? defaultOnAfterEdgeReattached,
+    onAfterEdgeReattached: config.events?.onAfterEdgeReattached ?? noopFn,
     onEdgeReattachInterrupted:
-      config.events?.onEdgeReattachInterrupted ??
-      defaultOnAfterEdgeReattachInterrupted,
-    onEdgeReattachPrevented:
-      config.events?.onEdgeReattachPrevented ??
-      defaultOnAfterEdgeReattachPrevented,
+      config.events?.onEdgeReattachInterrupted ?? noopFn,
+    onEdgeReattachPrevented: config.events?.onEdgeReattachPrevented ?? noopFn,
   };
 };
