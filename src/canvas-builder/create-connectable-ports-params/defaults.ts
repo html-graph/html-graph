@@ -5,5 +5,4 @@ export const defaults = Object.freeze({
   connectionPreprocessor: (request: AddEdgeRequest) => request,
   connectionAllowedVerifier: () => true,
   mouseEventVerifier: (event: MouseEvent): boolean => event.button === 0,
-  noopFn: () => {},
 });

@@ -3,6 +3,7 @@ import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { Graph } from "@/graph";
 import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
@@ -33,13 +34,9 @@ export const createDraggableEdgeParams = (
       config.draggingEdgeShape !== undefined
         ? resolveEdgeShapeFactory(config.draggingEdgeShape)
         : null,
-    onAfterEdgeReattached:
-      config.events?.onAfterEdgeReattached ?? defaults.onAfterEdgeReattached,
+    onAfterEdgeReattached: config.events?.onAfterEdgeReattached ?? noopFn,
     onEdgeReattachInterrupted:
-      config.events?.onEdgeReattachInterrupted ??
-      defaults.onEdgeReattachInterrupted,
-    onEdgeReattachPrevented:
-      config.events?.onEdgeReattachPrevented ??
-      defaults.onEdgeReattachPrevented,
+      config.events?.onEdgeReattachInterrupted ?? noopFn,
+    onEdgeReattachPrevented: config.events?.onEdgeReattachPrevented ?? noopFn,
   };
 };

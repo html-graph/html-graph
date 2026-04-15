@@ -14,6 +14,7 @@ import {
   defaultViewportControllerParams,
 } from "@/mocks";
 import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -106,7 +107,7 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattached callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(options.onAfterEdgeReattached).toBe(defaults.onAfterEdgeReattached);
+    expect(options.onAfterEdgeReattached).toBe(noopFn);
   });
 
   it("should return specified edge reattached callback", () => {
@@ -125,9 +126,7 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattach interrupted callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(options.onEdgeReattachInterrupted).toBe(
-      defaults.onEdgeReattachInterrupted,
-    );
+    expect(options.onEdgeReattachInterrupted).toBe(noopFn);
   });
 
   it("should return specified edge reattach interrupted callback", () => {
@@ -144,9 +143,7 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattach prevented callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(options.onEdgeReattachPrevented).toBe(
-      defaults.onEdgeReattachPrevented,
-    );
+    expect(options.onEdgeReattachPrevented).toBe(noopFn);
   });
 
   it("should return specified edge reattach interrupted callback", () => {

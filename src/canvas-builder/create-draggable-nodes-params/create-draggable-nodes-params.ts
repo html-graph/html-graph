@@ -1,18 +1,11 @@
 import { DraggableNodesParams } from "@/configurators";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
+import { noopFn } from "../shared";
 
 export const createDraggableNodesParams = (
   config: DraggableNodesConfig,
 ): DraggableNodesParams => {
-  const onNodeDragStarted =
-    config.events?.onNodeDragStarted ?? ((): void => {});
-
-  const onNodeDrag = config.events?.onNodeDrag ?? ((): void => {});
-
   const nodeDragVerifier = config.nodeDragVerifier ?? ((): boolean => true);
-
-  const onNodeDragFinished =
-    config.events?.onNodeDragFinished ?? ((): void => {});
 
   const moveOnTop = config.moveOnTop !== false;
   const moveEdgesOnTop = config.moveEdgesOnTop !== false && moveOnTop;
@@ -41,9 +34,9 @@ export const createDraggableNodesParams = (
     gridSize: config.gridSize ?? null,
     mouseDownEventVerifier,
     mouseUpEventVerifier,
-    onNodeDragStarted,
-    onNodeDrag,
+    onNodeDragStarted: config.events?.onNodeDragStarted ?? noopFn,
+    onNodeDrag: config.events?.onNodeDrag ?? noopFn,
     nodeDragVerifier,
-    onNodeDragFinished,
+    onNodeDragFinished: config.events?.onNodeDragFinished ?? noopFn,
   };
 };

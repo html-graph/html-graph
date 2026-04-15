@@ -3,6 +3,7 @@ import { LayoutConfig } from "./layout-config";
 import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 import { resolveLayoutAlgorithm } from "./resolve-layout-algorithm";
 import { defaults } from "./defaults";
+import { noopFn } from "../shared";
 
 export const createLayoutParams = (config: LayoutConfig): LayoutParams => {
   return {
@@ -10,7 +11,7 @@ export const createLayoutParams = (config: LayoutConfig): LayoutParams => {
     applyOn: resolveLayoutApplyOn(config.applyOn),
     staticNodeResolver:
       config.staticNodeResolver ?? defaults.staticNodeResolver,
-    onBeforeApplied: config.events?.onBeforeApplied ?? defaults.onBeforeApplied,
-    onAfterApplied: config.events?.onAfterApplied ?? defaults.onAfterApplied,
+    onBeforeApplied: config.events?.onBeforeApplied ?? noopFn,
+    onAfterApplied: config.events?.onAfterApplied ?? noopFn,
   };
 };
