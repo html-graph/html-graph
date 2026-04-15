@@ -103,7 +103,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onAfterEdgeCreated).toBe(defaults.onAfterEdgeCreated);
+    expect(options.onAfterEdgeCreated).toBe(defaults.noopFn);
   });
 
   it("should return specified edge created callback", () => {
@@ -147,9 +147,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onEdgeCreationInterrupted).toBe(
-      defaults.onEdgeCreationInterrupted,
-    );
+    expect(options.onEdgeCreationInterrupted).toBe(defaults.noopFn);
   });
 
   it("should not throw error when calling default creation interrupted callback", () => {
@@ -186,9 +184,7 @@ describe("createUserConnectablePortsParams", () => {
       0,
     );
 
-    expect(options.onEdgeCreationPrevented).toBe(
-      defaults.onEdgeCreationPrevented,
-    );
+    expect(options.onEdgeCreationPrevented).toBe(defaults.noopFn);
   });
 
   it("should not throw error when calling default creation prevented callback", () => {

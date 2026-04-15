@@ -20,14 +20,11 @@ export const createConnectablePortsParams = (
       config.mouseDownEventVerifier ?? defaults.mouseEventVerifier,
     mouseUpEventVerifier:
       config.mouseUpEventVerifier ?? defaults.mouseEventVerifier,
-    onAfterEdgeCreated:
-      config.events?.onAfterEdgeCreated ?? defaults.onAfterEdgeCreated,
+    onAfterEdgeCreated: config.events?.onAfterEdgeCreated ?? defaults.noopFn,
     onEdgeCreationInterrupted:
-      config.events?.onEdgeCreationInterrupted ??
-      defaults.onEdgeCreationInterrupted,
+      config.events?.onEdgeCreationInterrupted ?? defaults.noopFn,
     onEdgeCreationPrevented:
-      config.events?.onEdgeCreationPrevented ??
-      defaults.onEdgeCreationPrevented,
+      config.events?.onEdgeCreationPrevented ?? defaults.noopFn,
     dragPortDirection: config.dragPortDirection ?? defaultDragPortDirection,
     edgeShapeFactory:
       config.edgeShape !== undefined
