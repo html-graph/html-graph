@@ -1,10 +1,12 @@
 services:
-  html-graph-e2e:
+  html-graph-e2e-ui:
     build:
-      dockerfile: ./docker/Dockerfile-e2e
+      dockerfile: ./docker/Dockerfile-e2e-ui
       context: .
       args:
         HOST_USER_ID: ${HOST_USER_ID:-1000}
         HOST_GROUP_ID: ${HOST_GROUP_ID:-1000}
+    ports:
+      - ${E2E_SERVER_PORT:-3101}:3101
     volumes:
       - ./:/app

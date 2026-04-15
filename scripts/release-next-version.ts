@@ -13,6 +13,7 @@ class ReleaseNextVersion {
       "npm install",
       "npm run before-build",
       "npm run check-directory-structure",
+      "docker-compose -f ./e2e.docker-compose.yml up",
     ];
 
     await execute(cmdsBeforeBuild.join(" && "));
