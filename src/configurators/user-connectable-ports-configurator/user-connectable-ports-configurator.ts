@@ -134,7 +134,7 @@ export class UserConnectablePortsConfigurator {
     const draggingParams: OverlayNodeParams = {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: cursorPoint,
-      portDirection: this.params.dragPortDirection,
+      portDirection: this.params.dragPortDirection ?? port.direction,
     };
 
     this.isTargetDragging = connectionType === "direct";
@@ -188,12 +188,12 @@ export class UserConnectablePortsConfigurator {
     }
   }
 
-  private moveDraggingPort(dragPoint: Point): void {
+  private moveDraggingPort(cursor: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeContentCoords = this.canvas.viewport.createContentCoords({
-      x: dragPoint.x - canvasRect.x,
-      y: dragPoint.y - canvasRect.y,
+      x: cursor.x - canvasRect.x,
+      y: cursor.y - canvasRect.y,
     });
 
     this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {

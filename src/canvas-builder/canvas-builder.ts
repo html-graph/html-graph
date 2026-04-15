@@ -378,7 +378,6 @@ export class CanvasBuilder {
       const params = createConnectablePortsParams(
         this.connectablePortsConfig,
         graphControllerParams.edges.shapeFactory,
-        graphControllerParams.ports.direction,
       );
 
       UserConnectablePortsConfigurator.configure(

@@ -20,7 +20,7 @@ import { PointInsideVerifier } from "../point-inside-verifier";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
-  onPointerDown?: (portId: Identifier, clientPoint: Point) => boolean;
+  portDragAllowedVerifier?: (portId: Identifier, clientPoint: Point) => boolean;
   onPointerMove?: (clientPoint: Point) => void;
   onPointerMoveOutside?: () => void;
   onPointerUp?: (clientPoint: Point) => void;
@@ -58,7 +58,8 @@ const createDraggablePortsCanvas = (options?: {
   const pointInsideVerifier = new PointInsideVerifier(element, window);
 
   DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
-    portDragAllowedVerifier: options?.onPointerDown ?? ((): boolean => true),
+    portDragAllowedVerifier:
+      options?.portDragAllowedVerifier ?? ((): boolean => true),
     onPointerMove: options?.onPointerMove ?? ((): void => {}),
     onPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
     onPointerUp: options?.onPointerUp ?? ((): void => {}),
@@ -84,9 +85,9 @@ const createNode = (canvas: Canvas, portElement: HTMLElement): void => {
 };
 
 describe("DraggablePortsConfigurator", () => {
-  it("should call onPointerDown callback on mouse down", () => {
-    const onPointerDown = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onPointerDown });
+  it("should call portDragAllowedVerifier callback on mouse down", () => {
+    const portDragAllowedVerifier = jest.fn();
+    const canvas = createDraggablePortsCanvas({ portDragAllowedVerifier });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
@@ -95,15 +96,15 @@ describe("DraggablePortsConfigurator", () => {
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
     );
 
-    expect(onPointerDown).toHaveBeenCalledWith(0, { x: 100, y: 200 });
+    expect(portDragAllowedVerifier).toHaveBeenCalledWith(0, { x: 100, y: 200 });
   });
 
-  it("should not call onPointerDown callback when mouse event verifier not matched", () => {
-    const onPointerDown = jest.fn();
+  it("should not call portDragAllowedVerifier callback when mouse event verifier not matched", () => {
+    const portDragAllowedVerifier = jest.fn();
     const mouseDownEventVerifier: MouseEventVerifier = () => false;
 
     const canvas = createDraggablePortsCanvas({
-      onPointerDown,
+      portDragAllowedVerifier,
       mouseDownEventVerifier,
     });
 
@@ -114,14 +115,14 @@ describe("DraggablePortsConfigurator", () => {
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
     );
 
-    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(portDragAllowedVerifier).not.toHaveBeenCalled();
   });
 
   it("should stop event propagation when mouse event is accepted", () => {
-    const onPointerDown = jest.fn(() => true);
+    const portDragAllowedVerifier = jest.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
-      onPointerDown,
+      portDragAllowedVerifier,
     });
 
     const portElement = document.createElement("div");
@@ -136,9 +137,9 @@ describe("DraggablePortsConfigurator", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should call onPointerDown callback on touch start", () => {
-    const onPointerDown = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onPointerDown });
+  it("should call portDragAllowedVerifier callback on touch start", () => {
+    const portDragAllowedVerifier = jest.fn();
+    const canvas = createDraggablePortsCanvas({ portDragAllowedVerifier });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
@@ -149,14 +150,14 @@ describe("DraggablePortsConfigurator", () => {
       }),
     );
 
-    expect(onPointerDown).toHaveBeenCalledWith(0, { x: 100, y: 200 });
+    expect(portDragAllowedVerifier).toHaveBeenCalledWith(0, { x: 100, y: 200 });
   });
 
-  it("should not call onPointerDown callback when event has more than 1 touch", () => {
-    const onPointerDown = jest.fn(() => true);
+  it("should not call portDragAllowedVerifier callback when event has more than 1 touch", () => {
+    const portDragAllowedVerifier = jest.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
-      onPointerDown,
+      portDragAllowedVerifier,
     });
 
     const portElement = document.createElement("div");
@@ -171,14 +172,14 @@ describe("DraggablePortsConfigurator", () => {
       }),
     );
 
-    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(portDragAllowedVerifier).not.toHaveBeenCalled();
   });
 
   it("should stop event propagation when touch event is accepted", () => {
-    const onPointerDown = jest.fn(() => true);
+    const portDragAllowedVerifier = jest.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
-      onPointerDown,
+      portDragAllowedVerifier,
     });
 
     const portElement = document.createElement("div");
@@ -390,9 +391,9 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerUp).not.toHaveBeenCalledWith();
   });
 
-  it("should call onPointerDown for unmarked port", () => {
-    const onPointerDown = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onPointerDown });
+  it("should call portDragAllowedVerifier for unmarked port", () => {
+    const portDragAllowedVerifier = jest.fn();
+    const canvas = createDraggablePortsCanvas({ portDragAllowedVerifier });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
@@ -402,12 +403,12 @@ describe("DraggablePortsConfigurator", () => {
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
     );
 
-    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(portDragAllowedVerifier).not.toHaveBeenCalled();
   });
 
-  it("should not call onPointerDown after clear", () => {
-    const onPointerDown = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onPointerDown });
+  it("should not call portDragAllowedVerifier after clear", () => {
+    const portDragAllowedVerifier = jest.fn();
+    const canvas = createDraggablePortsCanvas({ portDragAllowedVerifier });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
@@ -417,12 +418,12 @@ describe("DraggablePortsConfigurator", () => {
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
     );
 
-    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(portDragAllowedVerifier).not.toHaveBeenCalled();
   });
 
-  it("should not call onPointerDown after destroy", () => {
-    const onPointerDown = jest.fn();
-    const canvas = createDraggablePortsCanvas({ onPointerDown });
+  it("should not call portDragAllowedVerifier after destroy", () => {
+    const portDragAllowedVerifier = jest.fn();
+    const canvas = createDraggablePortsCanvas({ portDragAllowedVerifier });
 
     const portElement = document.createElement("div");
     createNode(canvas, portElement);
@@ -432,7 +433,7 @@ describe("DraggablePortsConfigurator", () => {
       new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
     );
 
-    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(portDragAllowedVerifier).not.toHaveBeenCalled();
   });
 
   it("should not call onPointerMove error when canvas destroyed in the process of dragging with mouse", () => {

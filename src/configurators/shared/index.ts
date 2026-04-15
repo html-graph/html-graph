@@ -17,3 +17,7 @@ export type {
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
 } from "./connection-allowed-verifier";
+export type {
+  DraggingPortDirectionResolver,
+  ClosestConnectablePortDraggingPortDirectionResolver,
+} from "./dragging-port-direction-resolver";

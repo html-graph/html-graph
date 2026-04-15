@@ -20,5 +20,5 @@ export interface UserConnectablePortsParams {
     readonly isDirect: boolean;
   }) => void;
   readonly onEdgeCreationPrevented: (request: AddEdgeRequest) => void;
-  readonly dragPortDirection: number;
+  readonly dragPortDirection: number | undefined;
 }
