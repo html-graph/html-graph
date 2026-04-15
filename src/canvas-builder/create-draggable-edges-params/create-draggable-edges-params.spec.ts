@@ -1,4 +1,4 @@
-import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
+import { DirectEdgeShape } from "@/edges";
 import { createDraggableEdgeParams } from "./create-draggable-edges-params";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
@@ -106,9 +106,7 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattached callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(() => {
-      options.onAfterEdgeReattached("123");
-    }).not.toThrow();
+    expect(options.onAfterEdgeReattached).toBe(defaults.onAfterEdgeReattached);
   });
 
   it("should return specified edge reattached callback", () => {
@@ -127,15 +125,9 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattach interrupted callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(() => {
-      options.onEdgeReattachInterrupted({
-        id: 0,
-        from: "1",
-        to: "2",
-        shape: new BezierEdgeShape(),
-        priority: 0,
-      });
-    }).not.toThrow();
+    expect(options.onEdgeReattachInterrupted).toBe(
+      defaults.onEdgeReattachInterrupted,
+    );
   });
 
   it("should return specified edge reattach interrupted callback", () => {
@@ -152,15 +144,9 @@ describe("createDraggableEdgeParams", () => {
   it("should return default edge reattach prevented callback", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(() => {
-      options.onEdgeReattachPrevented({
-        id: 0,
-        from: "123",
-        to: "456",
-        shape: new BezierEdgeShape(),
-        priority: 0,
-      });
-    }).not.toThrow();
+    expect(options.onEdgeReattachPrevented).toBe(
+      defaults.onEdgeReattachPrevented,
+    );
   });
 
   it("should return specified edge reattach interrupted callback", () => {

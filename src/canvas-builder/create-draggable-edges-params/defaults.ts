@@ -6,4 +6,7 @@ export const defaults = Object.freeze({
   mouseDownEventVerifier: (event: MouseEvent): boolean =>
     event.button === 0 && event.ctrlKey,
   mouseUpEventVerifier: (event: MouseEvent): boolean => event.button === 0,
+  onAfterEdgeReattached: () => {},
+  onEdgeReattachInterrupted: () => {},
+  onEdgeReattachPrevented: () => {},
 });

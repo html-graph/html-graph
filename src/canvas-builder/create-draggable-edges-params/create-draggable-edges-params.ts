@@ -1,7 +1,6 @@
 import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
-import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { defaults } from "./defaults";
 
@@ -19,12 +18,6 @@ export const createDraggableEdgeParams = (
     }
   };
 
-  const defaultOnAfterEdgeReattached: (edgeId: Identifier) => void = () => {};
-
-  const defaultOnAfterEdgeReattachPrevented = (): void => {};
-
-  const defaultOnAfterEdgeReattachInterrupted = (): void => {};
-
   return {
     connectionPreprocessor:
       config.connectionPreprocessor ?? defaults.connectionPreprocessor,
@@ -41,12 +34,12 @@ export const createDraggableEdgeParams = (
         ? resolveEdgeShapeFactory(config.draggingEdgeShape)
         : null,
     onAfterEdgeReattached:
-      config.events?.onAfterEdgeReattached ?? defaultOnAfterEdgeReattached,
+      config.events?.onAfterEdgeReattached ?? defaults.onAfterEdgeReattached,
     onEdgeReattachInterrupted:
       config.events?.onEdgeReattachInterrupted ??
-      defaultOnAfterEdgeReattachInterrupted,
+      defaults.onEdgeReattachInterrupted,
     onEdgeReattachPrevented:
       config.events?.onEdgeReattachPrevented ??
-      defaultOnAfterEdgeReattachPrevented,
+      defaults.onEdgeReattachPrevented,
   };
 };
