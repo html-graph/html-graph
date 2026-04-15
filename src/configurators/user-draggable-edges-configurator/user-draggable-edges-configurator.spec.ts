@@ -11,7 +11,11 @@ import {
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";
-import { ConnectionPreprocessor, PointInsideVerifier } from "../shared";
+import {
+  ConnectionAllowedVerifier,
+  ConnectionPreprocessor,
+  PointInsideVerifier,
+} from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph, GraphEdge } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -26,6 +30,7 @@ const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
   connectionPreprocessor?: ConnectionPreprocessor;
+  connectionAllowedVerifier?: ConnectionAllowedVerifier;
   draggingEdgeResolver?: (portId: Identifier) => Identifier | null;
   onAfterEdgeReattached?: (edgeId: Identifier) => void;
   onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
@@ -77,6 +82,8 @@ const createCanvas = (options?: {
     draggingEdgeResolver: options?.draggingEdgeResolver ?? defaultResolver,
     connectionPreprocessor:
       options?.connectionPreprocessor ?? ((request): AddEdgeRequest => request),
+    connectionAllowedVerifier:
+      options?.connectionAllowedVerifier ?? ((): boolean => true),
     mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
     mouseUpEventVerifier: (event: MouseEvent) => event.button === 0,
     onAfterEdgeReattached: options?.onAfterEdgeReattached ?? ((): void => {}),
@@ -408,6 +415,42 @@ describe("UserDraggableEdgesConfigurator", () => {
       mainElement,
       onEdgeReattachPrevented,
       connectionPreprocessor: () => null,
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portElement1 = createElement({ x: -5, y: -5, width: 10, height: 10 });
+    const portElement2 = createElement({ x: 95, y: 95, width: 10, height: 10 });
+    const edgeShape = new BezierEdgeShape();
+
+    createGraph(canvas, { portElement1, portElement2, edgeShape });
+
+    portElement1.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onEdgeReattachPrevented).toHaveBeenCalledWith({
+      id: 0,
+      from: "node-1-1",
+      to: "node-2-1",
+      priority: 0,
+      shape: edgeShape,
+    });
+  });
+
+  it("should call specified callback when edge reattach disallowed", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeReattachPrevented = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      onEdgeReattachPrevented,
+      connectionAllowedVerifier: () => false,
     });
 
     document.body.appendChild(mainElement);

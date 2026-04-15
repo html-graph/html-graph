@@ -30,8 +30,6 @@ export type {
   DraggingEdgeResolver,
 } from "./user-draggable-edges-configurator";
 
-export type { MouseEventVerifier } from "./shared";
-
 export { LayoutConfigurator } from "./layout-configurator";
 export type { LayoutParams, LayoutApplyOnParam } from "./layout-configurator";
 
@@ -48,3 +46,8 @@ export { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-confi
 export type { UserSelectableCanvasParams } from "./user-selectable-canvas-configurator";
 
 export { PointInsideVerifier, EventTagger } from "./shared";
+export type {
+  MouseEventVerifier,
+  ConnectionAllowedVerifier,
+  ConnectionAllowedVerifierRequest,
+} from "./shared";

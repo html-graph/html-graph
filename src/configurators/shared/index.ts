@@ -13,3 +13,7 @@ export { EventTagger } from "./event-tagger";
 export { selectionHandled } from "./selection-handled";
 export { UserSelectableElementsConfigurator } from "./user-selectable-elements-configurator";
 export type { UserSelectableElementsParams } from "./user-selectable-elements-configurator";
+export type {
+  ConnectionAllowedVerifier,
+  ConnectionAllowedVerifierRequest,
+} from "./connection-allowed-verifier";

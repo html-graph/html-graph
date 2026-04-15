@@ -48,6 +48,8 @@ export type {
   ConnectionTypeResolver,
   MouseEventVerifier,
   DraggingEdgeResolver,
+  ConnectionAllowedVerifier,
+  ConnectionAllowedVerifierRequest,
 } from "./configurators";
 
 export type {

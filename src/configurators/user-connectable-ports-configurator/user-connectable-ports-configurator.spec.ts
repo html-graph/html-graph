@@ -12,7 +12,11 @@ import {
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
-import { ConnectionPreprocessor, PointInsideVerifier } from "../shared";
+import {
+  ConnectionAllowedVerifier,
+  ConnectionPreprocessor,
+  PointInsideVerifier,
+} from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -23,6 +27,7 @@ const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
   connectionTypeResolver?: ConnectionTypeResolver;
+  connectionAllowedVerifier?: ConnectionAllowedVerifier;
   connectionPreprocessor?: ConnectionPreprocessor;
   onAfterEdgeCreated?: (edgeId: Identifier) => void;
   onEdgeCreationInterrupted?: () => void;
@@ -73,6 +78,8 @@ const createCanvas = (options?: {
     onEdgeCreationPrevented:
       options?.onEdgeCreationPrevented ?? ((): void => {}),
     dragPortDirection: 0,
+    connectionAllowedVerifier:
+      options?.connectionAllowedVerifier ?? ((): boolean => true),
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
@@ -472,6 +479,46 @@ describe("UserConnectablePortsConfigurator", () => {
       mainElement,
       onEdgeCreationPrevented,
       connectionPreprocessor: () => null,
+    });
+
+    document.body.appendChild(mainElement);
+    document.body.appendChild(overlayElement);
+
+    const portSourceElement = createElement({
+      x: -5,
+      y: -5,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portSourceElement);
+
+    const portTargetElement = createElement({
+      x: 95,
+      y: 95,
+      width: 10,
+      height: 10,
+    });
+    createNode(canvas, portTargetElement);
+
+    portSourceElement.dispatchEvent(new MouseEvent("mousedown"));
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onEdgeCreationPrevented).toHaveBeenCalledWith({ from: 0, to: 1 });
+  });
+
+  it("should call specified callback on edge creation is disallowed", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const mainElement = createElement({ width: 1000, height: 1000 });
+
+    const onEdgeCreationPrevented = jest.fn();
+    const canvas = createCanvas({
+      overlayElement,
+      mainElement,
+      onEdgeCreationPrevented,
+      connectionAllowedVerifier: () => false,
     });
 
     document.body.appendChild(mainElement);

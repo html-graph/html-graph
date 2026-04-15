@@ -236,4 +236,25 @@ describe("createUserConnectablePortsParams", () => {
 
     expect(options.edgeShapeFactory).toBe(connectionFactory);
   });
+
+  it("should return default connection allowed verifier", () => {
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, 0);
+
+    expect(options.connectionAllowedVerifier).toBe(
+      defaults.connectionAllowedVerifier,
+    );
+  });
+
+  it("should return specified connection allowed verifier", () => {
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const connectionAllowedVerifier = (): boolean => true;
+    const options = createConnectablePortsParams(
+      { connectionAllowedVerifier },
+      factory,
+      0,
+    );
+
+    expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
+  });
 });

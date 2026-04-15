@@ -1,4 +1,5 @@
 import {
+  ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   MouseEventVerifier,
@@ -11,6 +12,7 @@ export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;
   readonly connectionTypeResolver?: ConnectionTypeResolver;
   readonly connectionPreprocessor?: ConnectionPreprocessor;
+  readonly connectionAllowedVerifier?: ConnectionAllowedVerifier;
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly dragPortDirection?: number | undefined;

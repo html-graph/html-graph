@@ -14,6 +14,8 @@ export const createConnectablePortsParams = (
       config.connectionTypeResolver ?? defaults.connectionTypeResolver,
     connectionPreprocessor:
       config.connectionPreprocessor ?? defaults.connectionPreprocessor,
+    connectionAllowedVerifier:
+      config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? defaults.mouseEventVerifier,
     mouseUpEventVerifier:

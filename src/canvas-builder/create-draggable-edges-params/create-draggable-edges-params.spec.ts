@@ -7,16 +7,13 @@ import { CoreHtmlView } from "@/html-view";
 import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
-import {
-  AddEdgeRequest,
-  EdgeShapeFactory,
-  GraphController,
-} from "@/graph-controller";
+import { EdgeShapeFactory, GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 import {
   defaultGraphControllerParams,
   defaultViewportControllerParams,
 } from "@/mocks";
+import { defaults } from "./defaults";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -50,48 +47,30 @@ const createCanvas = (): Canvas => {
 };
 
 describe("createDraggableEdgeParams", () => {
-  it("should return LMB+CTRL mouse down event verifier by default", () => {
+  it("should return default mouse down event verifier", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    const fail1 = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 1 }),
+    expect(options.mouseDownEventVerifier).toBe(
+      defaults.mouseDownEventVerifier,
     );
-
-    const fail2 = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 0 }),
-    );
-
-    const pass = options.mouseDownEventVerifier(
-      new MouseEvent("mousedown", { button: 0, ctrlKey: true }),
-    );
-
-    expect([fail1, fail2, pass]).toEqual([false, false, true]);
   });
 
   it("should return specified mouse down event verifier", () => {
-    const verifier: (event: MouseEvent) => boolean = () => false;
+    const mouseDownEventVerifier: (event: MouseEvent) => boolean = () => false;
     const options = createDraggableEdgeParams(
       {
-        mouseDownEventVerifier: verifier,
+        mouseDownEventVerifier,
       },
       createCanvas().graph,
     );
 
-    expect(options.mouseDownEventVerifier).toBe(verifier);
+    expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should return LMB mouse up event verifier by default", () => {
+  it("should return default mouse up event verifier", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    const fail = options.mouseUpEventVerifier(
-      new MouseEvent("mousedown", { button: 1 }),
-    );
-
-    const pass = options.mouseUpEventVerifier(
-      new MouseEvent("mousedown", { button: 0 }),
-    );
-
-    expect([fail, pass]).toEqual([false, true]);
+    expect(options.mouseUpEventVerifier).toBe(defaults.mouseUpEventVerifier);
   });
 
   it("should return specified mouse up event verifier", () => {
@@ -109,9 +88,9 @@ describe("createDraggableEdgeParams", () => {
   it("should return default connection preprocessor", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    const request: AddEdgeRequest = { from: "1", to: "2" };
-
-    expect(options.connectionPreprocessor(request)).toBe(request);
+    expect(options.connectionPreprocessor).toBe(
+      defaults.connectionPreprocessor,
+    );
   });
 
   it("should return specified connection preprocessor", () => {
@@ -263,5 +242,23 @@ describe("createDraggableEdgeParams", () => {
     );
 
     expect(options.draggingEdgeResolver).toBe(resolver);
+  });
+
+  it("should return default connection allowed verifier", () => {
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
+
+    expect(options.connectionAllowedVerifier).toBe(
+      defaults.connectionAllowedVerifier,
+    );
+  });
+
+  it("should return specifier connection allowed verifier", () => {
+    const connectionAllowedVerifier = (): boolean => true;
+    const options = createDraggableEdgeParams(
+      { connectionAllowedVerifier },
+      createCanvas().graph,
+    );
+
+    expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
   });
 });
