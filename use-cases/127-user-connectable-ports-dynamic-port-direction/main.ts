@@ -24,23 +24,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return idStr.endsWith("-out") ? "direct" : "reverse";
   },
-  // connectionAllowedVerifier: (request) => {
-  //   const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
-  //     const edge = canvas.graph.getEdge(edgeId)!;
-
-  //     return edge.from === request.from && edge.to === request.to;
-  //   });
-
-  //   if (existingEdge !== undefined) {
-  //     return false;
-  //   }
-
-  //   const strFrom = request.from as string;
-  //   const strTo = request.to as string;
-
-  //   return strFrom.endsWith("-out") && strTo.endsWith("-in");
-  // },
-  connectionPreprocessor: (request) => {
+  connectionAllowedVerifier: (request) => {
     const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
       const edge = canvas.graph.getEdge(edgeId)!;
 
@@ -48,17 +32,13 @@ const connectablePortConfig: ConnectablePortsConfig = {
     });
 
     if (existingEdge !== undefined) {
-      return null;
+      return false;
     }
 
     const strFrom = request.from as string;
     const strTo = request.to as string;
 
-    if (strFrom.endsWith("-out") && strTo.endsWith("-in")) {
-      return request;
-    }
-
-    return null;
+    return strFrom.endsWith("-out") && strTo.endsWith("-in");
   },
   // portDirection: {
   //   strategy: "nearest-connectable-port",
