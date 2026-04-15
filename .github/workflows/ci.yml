@@ -1,8 +1,6 @@
 name: CI
 run-name: Continuous Integration (${{ github.actor }})
 on:
-  push:
-    branches: [master]
   pull_request:
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
