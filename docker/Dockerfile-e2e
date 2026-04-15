@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ubuntu:24.04  AS image-build
+FROM ubuntu:24.04
 
 WORKDIR /app
 
@@ -22,10 +22,12 @@ RUN addgroup -S ${HOST_GROUP_ID} && adduser\
  --shell /bin/zsh\
  "${USER_NAME}" || true
 
+
 # act as non-root user inside container (1000:1000 by default)
 USER ${HOST_USER_ID}:${HOST_GROUP_ID}
 
 # create empty config in order to avoid initial prompt
 RUN touch ~/.zshrc
+ENV PLAYWRIGHT_HTML_OPEN=never
 
 CMD npx playwright install && npx playwright test
