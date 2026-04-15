@@ -43,7 +43,7 @@ export class UserConnectablePortsConfigurator {
     const draggablePortsParams: DraggablePortsParams = {
       mouseDownEventVerifier: this.params.mouseDownEventVerifier,
       mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-      onPortPointerDown: (portId, cursor) => {
+      portDragAllowedVerifier: (portId, cursor) => {
         const connectionType = this.params.connectionTypeResolver(portId);
 
         if (connectionType === null) {

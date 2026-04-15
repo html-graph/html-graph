@@ -455,12 +455,9 @@ export class CanvasBuilder {
       AnimatedLayoutConfigurator.configure(canvas, config, this.window);
     }
 
-    const onBeforeDestroy = (): void => {
+    canvas.onBeforeDestroy.subscribe(() => {
       layers.destroy();
-      canvas.onBeforeDestroy.unsubscribe(onBeforeDestroy);
-    };
-
-    canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
+    });
 
     return canvas;
   }

@@ -11,9 +11,9 @@ import {
   DummyLayoutAlgorithm,
 } from "@/mocks";
 import { EventSubject } from "@/event-subject";
-import { LayoutApplier } from "../../shared";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { LayoutApplier } from "../layout-applier";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
