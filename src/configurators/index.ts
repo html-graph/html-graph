@@ -45,9 +45,16 @@ export type { UserSelectableEdgesParams } from "./user-selectable-edges-configur
 export { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-configurator";
 export type { UserSelectableCanvasParams } from "./user-selectable-canvas-configurator";
 
-export { PointInsideVerifier, EventTagger } from "./shared";
+export {
+  PointInsideVerifier,
+  EventTagger,
+  ClosestConnectablePortDraggingPortDirectionResolver,
+  ConstantDraggingPortDirectionResolver,
+} from "./shared";
+
 export type {
   MouseEventVerifier,
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
+  DraggingPortDirectionResolver,
 } from "./shared";

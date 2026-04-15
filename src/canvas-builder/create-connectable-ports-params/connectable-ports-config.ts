@@ -11,8 +11,8 @@ import { AddEdgeRequest } from "@/graph-controller";
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;
   readonly connectionTypeResolver?: ConnectionTypeResolver;
-  readonly connectionPreprocessor?: ConnectionPreprocessor;
   readonly connectionAllowedVerifier?: ConnectionAllowedVerifier;
+  readonly connectionPreprocessor?: ConnectionPreprocessor;
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly dragPortDirection?: number | undefined;

@@ -48,7 +48,7 @@ export class UserDraggableEdgesConfigurator {
     const draggablePortsParams: DraggablePortsParams = {
       mouseDownEventVerifier: this.params.mouseDownEventVerifier,
       mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-      portDragAllowedVerifier: (portId, cursor) => {
+      onPointerDownVerifier: (portId, cursor) => {
         return this.tryStartEdgeDragging(portId, cursor);
       },
       onPointerMove: (cursor) => {

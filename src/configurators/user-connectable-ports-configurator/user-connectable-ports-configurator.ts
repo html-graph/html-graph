@@ -43,7 +43,7 @@ export class UserConnectablePortsConfigurator {
     const draggablePortsParams: DraggablePortsParams = {
       mouseDownEventVerifier: this.params.mouseDownEventVerifier,
       mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-      portDragAllowedVerifier: (portId, cursor) => {
+      onPointerDownVerifier: (portId, cursor) => {
         const connectionType = this.params.connectionTypeResolver(portId);
 
         if (connectionType === null) {
@@ -159,9 +159,9 @@ export class UserConnectablePortsConfigurator {
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
+    const targetPortId = findPortAtPoint(this.canvas.graph, cursor);
 
-    if (draggingPortId === null) {
+    if (targetPortId === null) {
       this.params.onEdgeCreationInterrupted({
         staticPortId: this.staticPortId!,
         isDirect: this.isTargetDragging,
@@ -171,8 +171,8 @@ export class UserConnectablePortsConfigurator {
     }
 
     const staticPortId = this.staticPortId!;
-    const sourceId = this.isTargetDragging ? staticPortId : draggingPortId;
-    const targetId = this.isTargetDragging ? draggingPortId : staticPortId;
+    const sourceId = this.isTargetDragging ? staticPortId : targetPortId;
+    const targetId = this.isTargetDragging ? targetPortId : staticPortId;
 
     const request: AddEdgeRequest = { from: sourceId, to: targetId };
 

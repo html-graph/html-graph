@@ -1,5 +1,5 @@
-import { EventHandler } from "@/event-subject";
+import { Point } from "@/point";
 
 export interface DraggingPortDirectionResolver {
-  readonly directionChangeHandler: EventHandler<number>;
+  resolve(cursor: Point): number | undefined;
 }

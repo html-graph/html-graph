@@ -1,9 +1,8 @@
 import { UserConnectablePortsParams } from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
-import { noopFn } from "../shared";
+import { noopFn, resolveEdgeShapeFactory } from "../shared";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,

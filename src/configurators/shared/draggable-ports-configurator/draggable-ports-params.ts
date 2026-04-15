@@ -5,7 +5,7 @@ import { Identifier } from "@/identifier";
 export interface DraggablePortsParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
-  readonly portDragAllowedVerifier: (
+  readonly onPointerDownVerifier: (
     portId: Identifier,
     clientPoint: Point,
   ) => boolean;

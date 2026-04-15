@@ -1,17 +1,36 @@
-import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { Point } from "@/point";
 import { DraggingPortDirectionResolver } from "../dragging-port-direction-resolver";
+import { Graph } from "@/graph";
 
 export class ClosestConnectablePortDraggingPortDirectionResolver
   implements DraggingPortDirectionResolver
 {
-  public readonly directionChangeHandler: EventHandler<number>;
+  public constructor(private readonly graph: Graph) {}
 
-  private readonly directionChangeEmitter: EventEmitter<number>;
+  public resolve(cursor: Point): number | undefined {
+    let closestDirection: number | undefined = undefined;
+    let closestDistance = Infinity;
 
-  public constructor() {
-    [this.directionChangeEmitter, this.directionChangeHandler] =
-      createPair<number>();
+    this.graph.getAllPortIds().forEach((portId) => {
+      const { element, direction, nodeId } = this.graph.getPort(portId);
+      const { x, y } = this.graph.getNode(nodeId);
 
-    this.directionChangeEmitter.emit(0);
+      if (x === null || y === null) {
+        return;
+      }
+
+      const { top, left, width, height } = element.getBoundingClientRect();
+      const center: Point = { x: left + width / 2, y: top + height / 2 };
+      const dx = cursor.x - center.x;
+      const dy = cursor.y - center.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestDirection = direction;
+      }
+    });
+
+    return closestDirection;
   }
 }

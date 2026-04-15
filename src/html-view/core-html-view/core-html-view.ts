@@ -1,4 +1,3 @@
-import { Point } from "@/point";
 import { GraphStore, StorePort } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edges";
@@ -167,7 +166,7 @@ export class CoreHtmlView implements HtmlView {
     rectCanvas: DOMRect,
     scale: number,
   ): EdgeRenderPort {
-    const contentPoint: Point = this.viewportStore.createContentCoords({
+    const contentPoint = this.viewportStore.createContentCoords({
       x: rectPort.left - rectCanvas.left,
       y: rectPort.top - rectCanvas.top,
     });
