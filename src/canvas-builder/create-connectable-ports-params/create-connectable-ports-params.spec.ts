@@ -148,7 +148,9 @@ describe("createUserConnectablePortsParams", () => {
       cursor: { x: 0, y: 0 },
     };
 
-    expect(options.draggingPortDirectionResolver.resolve(params)).toBe(undefined);
+    expect(options.draggingPortDirectionResolver.resolve(params)).toBe(
+      undefined,
+    );
   });
 
   it("should return specified drag port direction", () => {
