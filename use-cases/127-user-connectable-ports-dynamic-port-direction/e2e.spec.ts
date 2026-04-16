@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { e2eBase } from "../shared/e2e-base";
 
-test("should connect ports", async ({ page }) => {
+test("should change dragging port direction", async ({ page }) => {
   await page.goto(
     `${e2eBase}/127-user-connectable-ports-dynamic-port-direction/`,
   );
