@@ -2,6 +2,7 @@ import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   ConnectionTypeResolver,
+  EdgeCreationInProgressParams,
   MouseEventVerifier,
 } from "@/configurators";
 import { EdgeShapeConfig } from "../shared";
@@ -18,10 +19,9 @@ export interface ConnectablePortsConfig {
   readonly dragPortDirection?: number | undefined;
   readonly events?: {
     readonly onAfterEdgeCreated?: (edgeId: Identifier) => void;
-    readonly onEdgeCreationInterrupted?: (params: {
-      readonly staticPortId: Identifier;
-      readonly isDirect: boolean;
-    }) => void;
+    readonly onEdgeCreationInterrupted?: (
+      params: EdgeCreationInProgressParams,
+    ) => void;
     readonly onEdgeCreationPrevented?: (request: AddEdgeRequest) => void;
   };
 }

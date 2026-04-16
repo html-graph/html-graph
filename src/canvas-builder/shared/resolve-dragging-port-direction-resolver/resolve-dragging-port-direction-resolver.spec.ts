@@ -11,6 +11,7 @@ describe("resolveDraggingPortDirectionResolver", () => {
     const resolver = resolveDraggingPortDirectionResolver(
       Math.PI,
       canvas.graph,
+      () => true,
     );
 
     expect(resolver instanceof ConstantDraggingPortDirectionResolver).toBe(
@@ -23,6 +24,7 @@ describe("resolveDraggingPortDirectionResolver", () => {
     const resolver = resolveDraggingPortDirectionResolver(
       "closest-connectable-port",
       canvas.graph,
+      () => true,
     );
 
     expect(

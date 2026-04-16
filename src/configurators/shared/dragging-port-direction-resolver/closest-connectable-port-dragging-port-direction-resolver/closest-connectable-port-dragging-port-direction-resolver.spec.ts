@@ -1,14 +1,24 @@
 import { createCanvas, createElement } from "@/mocks";
 import { ClosestConnectablePortDraggingPortDirectionResolver } from "./closest-connectable-port-dragging-port-direction-resolver";
+import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";
 
 describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
   it("should resolve default direction when graph has no ports", () => {
     const canvas = createCanvas();
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(canvas.graph);
+      new ClosestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        () => true,
+      );
 
-    expect(portDirectionResolver.resolve({ x: 0, y: 0 })).toBe(undefined);
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 0, y: 0 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(undefined);
   });
 
   it("should resolve direction of a single port", () => {
@@ -19,14 +29,27 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
       x: 0,
       y: 0,
       ports: [
-        { id: 0, element: createElement({ x: 10, y: 10 }), direction: Math.PI },
+        {
+          id: "port-1",
+          element: createElement({ x: 10, y: 10 }),
+          direction: Math.PI,
+        },
       ],
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(canvas.graph);
+      new ClosestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        () => true,
+      );
 
-    expect(portDirectionResolver.resolve({ x: 0, y: 0 })).toBe(Math.PI);
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 0, y: 0 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(Math.PI);
   });
 
   it("should resolve direction of the closest port", () => {
@@ -36,7 +59,9 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
       element: createElement(),
       x: 0,
       y: 0,
-      ports: [{ id: 0, element: createElement({ x: 0, y: 0 }), direction: 0 }],
+      ports: [
+        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
+      ],
     });
 
     canvas.addNode({
@@ -45,7 +70,7 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
       y: 0,
       ports: [
         {
-          id: 1,
+          id: "port-2",
           element: createElement({ x: 100, y: 100 }),
           direction: Math.PI,
         },
@@ -53,26 +78,37 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(canvas.graph);
+      new ClosestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        () => true,
+      );
 
-    expect(portDirectionResolver.resolve({ x: 90, y: 90 })).toBe(Math.PI);
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 90, y: 90 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(Math.PI);
   });
 
-  it("should not take into account not attached ports", () => {
+  it("should take into account only attached ports", () => {
     const canvas = createCanvas();
 
     canvas.addNode({
       element: createElement(),
       x: 0,
       y: 0,
-      ports: [{ id: 0, element: createElement({ x: 0, y: 0 }), direction: 0 }],
+      ports: [
+        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
+      ],
     });
 
     canvas.addNode({
       element: createElement(),
       ports: [
         {
-          id: 1,
+          id: "port-2",
           element: createElement({ x: 100, y: 100 }),
           direction: Math.PI,
         },
@@ -80,8 +116,57 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(canvas.graph);
+      new ClosestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        () => true,
+      );
 
-    expect(portDirectionResolver.resolve({ x: 90, y: 90 })).toBe(0);
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 90, y: 90 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(0);
+  });
+
+  it("should take into account only ports with allowed connections", () => {
+    const canvas = createCanvas();
+
+    canvas.addNode({
+      element: createElement(),
+      x: 0,
+      y: 0,
+      ports: [
+        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
+      ],
+    });
+
+    canvas.addNode({
+      element: createElement(),
+      x: 100,
+      y: 100,
+      ports: [
+        {
+          id: "port-2",
+          element: createElement({ x: 100, y: 100 }),
+          direction: Math.PI,
+        },
+      ],
+    });
+
+    const portDirectionResolver =
+      new ClosestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        (request) => request.to !== "port-2",
+      );
+
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 90, y: 90 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(0);
   });
 });

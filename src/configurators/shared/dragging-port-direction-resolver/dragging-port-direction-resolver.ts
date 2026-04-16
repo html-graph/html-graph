@@ -1,5 +1,5 @@
-import { Point } from "@/point";
+import { DraggingPortDirectionResolverParams } from "./dragging-port-direction-resolver-params";
 
 export interface DraggingPortDirectionResolver {
-  resolve(cursor: Point): number | undefined;
+  resolve(params: DraggingPortDirectionResolverParams): number | undefined;
 }

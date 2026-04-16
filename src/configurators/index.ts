@@ -57,4 +57,6 @@ export type {
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
   DraggingPortDirectionResolver,
+  DraggingPortDirectionResolverParams,
+  EdgeCreationInProgressParams,
 } from "./shared";
