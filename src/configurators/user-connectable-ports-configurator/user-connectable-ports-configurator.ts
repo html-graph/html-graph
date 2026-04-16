@@ -196,9 +196,16 @@ export class UserConnectablePortsConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
-    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
-      x: nodeContentCoords.x,
-      y: nodeContentCoords.y,
+    const portDirection = this.params.dragPortDirection.resolve({
+      cursor,
+      ...this.edgeInProgress!,
     });
+
+    this.overlayCanvas
+      .updateNode(OverlayId.DraggingNodeId, {
+        x: nodeContentCoords.x,
+        y: nodeContentCoords.y,
+      })
+      .updatePort(OverlayId.DraggingNodeId, { direction: portDirection });
   }
 }
