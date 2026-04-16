@@ -30,9 +30,9 @@ import { CanvasBuilder } from "@html-graph/html-graph";
 const element = document.getElementById("canvas");
 
 const canvas = new CanvasBuilder(element)
-  .enableUserTransformableViewport()
-  .enableUserDraggableNodes()
-  .enableBackground()
+  .enableUserTransformableViewport() // Enables viewport pan and zoom
+  .enableUserDraggableNodes() // Enables draggable nodes
+  .enableBackground() // Renders background
   .build();
 ```
 
