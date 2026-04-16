@@ -4,7 +4,7 @@ import {
   ConnectionTypeResolver,
   MouseEventVerifier,
 } from "@/configurators";
-import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
+import { EdgeShapeConfig } from "../shared";
 import { Identifier } from "@/identifier";
 import { AddEdgeRequest } from "@/graph-controller";
 

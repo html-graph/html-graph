@@ -4,7 +4,7 @@ import {
   DraggingEdgeResolver,
   MouseEventVerifier,
 } from "@/configurators";
-import { EdgeShapeConfig } from "../resolve-edge-shape-factory";
+import { EdgeShapeConfig } from "../shared";
 import { GraphEdge } from "@/graph";
 import { Identifier } from "@/identifier";
 import { AddEdgeRequest } from "@/graph-controller";
