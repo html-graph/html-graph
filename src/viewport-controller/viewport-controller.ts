@@ -153,13 +153,11 @@ export class ViewportController {
 
       const progress = Math.min((timestamp - start) / duration, 1);
 
-      if (progress <= 1) {
-        this.viewportStore.patchViewportMatrix({
-          scale: previousViewportMatrix.scale + progress * deltaMatrix.scale,
-          x: previousViewportMatrix.x + progress * deltaMatrix.x,
-          y: previousViewportMatrix.y + progress * deltaMatrix.y,
-        });
-      }
+      this.viewportStore.patchViewportMatrix({
+        scale: previousViewportMatrix.scale + progress * deltaMatrix.scale,
+        x: previousViewportMatrix.x + progress * deltaMatrix.x,
+        y: previousViewportMatrix.y + progress * deltaMatrix.y,
+      });
 
       if (progress < 1) {
         this.win.requestAnimationFrame(step);

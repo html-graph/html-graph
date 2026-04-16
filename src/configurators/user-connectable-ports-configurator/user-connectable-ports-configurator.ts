@@ -9,12 +9,12 @@ import {
   OverlayId,
   OverlayNodeParams,
   PointInsideVerifier,
+  DraggablePortsConfigurator,
+  resolveCreateEdgeRequest,
 } from "../shared";
 import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
-import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
-import { resolveCreateEdgeRequest } from "../shared/resolve-create-edge-request";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -131,14 +131,17 @@ export class UserConnectablePortsConfigurator {
       isDirect,
     };
 
+    const resolvedDirection = this.params.draggingPortDirectionResolver.resolve(
+      {
+        cursor,
+        ...this.edgeInProgress,
+      },
+    );
+
     const draggingParams: OverlayNodeParams = {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: cursorPoint,
-      portDirection:
-        this.params.draggingPortDirectionResolver.resolve({
-          cursor,
-          ...this.edgeInProgress,
-        }) ?? port.direction,
+      portDirection: resolvedDirection ?? port.direction,
     };
 
     const [sourceParams, targetParams] = isDirect
