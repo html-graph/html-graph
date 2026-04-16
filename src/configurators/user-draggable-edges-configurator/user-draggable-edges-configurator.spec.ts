@@ -14,6 +14,7 @@ import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configura
 import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
+  ConstantDraggingPortDirectionResolver,
   PointInsideVerifier,
 } from "../shared";
 import { Identifier } from "@/identifier";
@@ -91,6 +92,9 @@ const createCanvas = (options?: {
       options?.onEdgeReattachInterrupted ?? ((): void => {}),
     onEdgeReattachPrevented:
       options?.onEdgeReattachPrevented ?? ((): void => {}),
+    draggingPortDirectionResolver: new ConstantDraggingPortDirectionResolver(
+      undefined,
+    ),
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);

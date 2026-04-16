@@ -1,6 +1,7 @@
 import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
+  DraggingPortDirectionResolver,
   MouseEventVerifier,
 } from "../shared";
 import { DraggingEdgeResolver } from "./dragging-edge-resolver";
@@ -22,4 +23,5 @@ export interface DraggableEdgesParams {
   readonly onEdgeReattachPrevented: (
     payload: GraphEdge & { readonly id: Identifier },
   ) => void;
+  readonly draggingPortDirectionResolver: DraggingPortDirectionResolver;
 }

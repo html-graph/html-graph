@@ -12,6 +12,7 @@ export const resolveDraggingPortDirectionResolver = (
   graph: Graph,
   connectionAllowedVerifier: ConnectionAllowedVerifier,
 ): DraggingPortDirectionResolver => {
+  // TODO: use "closest-connectable-port" by default
   if (config === "closest-connectable-port") {
     return new ClosestConnectablePortDraggingPortDirectionResolver(
       graph,

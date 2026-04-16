@@ -6,6 +6,7 @@ import {
   createAddNodeOverlayRequest,
   createOverlayCanvas,
   DraggablePortsParams,
+  EdgeCreationInProgressParams,
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
@@ -15,13 +16,12 @@ import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
 import { GraphEdge } from "@/graph";
 import { AddEdgeRequest } from "@/graph-controller";
+import { resolveCreateEdgeRequest } from "../shared/resolve-create-edge-request";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private staticPortId: Identifier | null = null;
-
-  private isTargetDragging: boolean = true;
+  private edgeInProgress: EdgeCreationInProgressParams | null = null;
 
   private draggingEdgePayload:
     | (GraphEdge & { readonly id: Identifier })
@@ -108,11 +108,10 @@ export class UserDraggableEdgesConfigurator {
     const edge = this.canvas.graph.getEdge(edgeId);
 
     const isSourceDragging = portId === edge.from;
-    const isTargetDragging = portId === edge.to;
+    const isDirect = portId === edge.to;
 
     const staticPortId = isSourceDragging ? edge.to : edge.from;
-    this.staticPortId = staticPortId;
-    this.isTargetDragging = isTargetDragging;
+    this.edgeInProgress = { staticPortId, isDirect };
     const draggingPort = this.canvas.graph.getPort(portId);
     const staticPort = this.canvas.graph.getPort(staticPortId);
 
@@ -150,13 +149,18 @@ export class UserDraggableEdgesConfigurator {
       portDirection: staticPort.direction,
     };
 
+    const direction = this.params.draggingPortDirectionResolver.resolve({
+      cursor,
+      ...this.edgeInProgress,
+    });
+
     const draggingParams: OverlayNodeParams = {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: draggingPoint,
-      portDirection: draggingPort.direction,
+      portDirection: direction ?? draggingPort.direction,
     };
 
-    const [sourceParams, targetParams] = this.isTargetDragging
+    const [sourceParams, targetParams] = isDirect
       ? [staticParams, draggingParams]
       : [draggingParams, staticParams];
 
@@ -180,26 +184,32 @@ export class UserDraggableEdgesConfigurator {
 
   private resetDragState(): void {
     this.draggingEdgePayload = null;
-    this.staticPortId = null;
-    this.isTargetDragging = true;
+    this.edgeInProgress = null;
     this.overlayCanvas.clear();
   }
 
-  private moveDraggingPort(dragPoint: Point): void {
+  private moveDraggingPort(cursor: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeViewCoords: Point = {
-      x: dragPoint.x - canvasRect.x,
-      y: dragPoint.y - canvasRect.y,
+      x: cursor.x - canvasRect.x,
+      y: cursor.y - canvasRect.y,
     };
 
     const nodeContentCoords =
       this.canvas.viewport.createContentCoords(nodeViewCoords);
 
-    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
-      x: nodeContentCoords.x,
-      y: nodeContentCoords.y,
+    const direction = this.params.draggingPortDirectionResolver.resolve({
+      cursor,
+      ...this.edgeInProgress!,
     });
+
+    this.overlayCanvas
+      .updateNode(OverlayId.DraggingNodeId, {
+        x: nodeContentCoords.x,
+        y: nodeContentCoords.y,
+      })
+      .updatePort(OverlayId.DraggingNodeId, { direction });
   }
 
   private tryCreateConnection(cursor: Point): void {
@@ -207,14 +217,23 @@ export class UserDraggableEdgesConfigurator {
     this.overlayCanvas.removeEdge(OverlayId.EdgeId);
 
     if (draggingPortId === null) {
-      this.handleEdgeReattachInterrupted();
+      const edge = this.draggingEdgePayload!;
+
+      this.params.onEdgeReattachInterrupted({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
 
       return;
     }
 
-    const [from, to] = this.isTargetDragging
-      ? [this.staticPortId!, draggingPortId]
-      : [draggingPortId, this.staticPortId!];
+    const { from, to } = resolveCreateEdgeRequest(
+      this.edgeInProgress!,
+      draggingPortId,
+    );
 
     const edge = this.draggingEdgePayload!;
     const request: AddEdgeRequest = {
@@ -246,17 +265,5 @@ export class UserDraggableEdgesConfigurator {
         priority: edge.priority,
       });
     }
-  }
-
-  private handleEdgeReattachInterrupted(): void {
-    const edge = this.draggingEdgePayload!;
-
-    this.params.onEdgeReattachInterrupted({
-      id: edge.id,
-      from: edge.from,
-      to: edge.to,
-      shape: edge.shape,
-      priority: edge.priority,
-    });
   }
 }

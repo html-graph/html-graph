@@ -3,8 +3,7 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
-  ConnectablePortsConfig,
-  Identifier,
+  DraggableEdgesConfig,
 } from "@html-graph/html-graph";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -18,12 +17,8 @@ const defaults: CanvasDefaults = {
   },
 };
 
-const connectablePortConfig: ConnectablePortsConfig = {
-  connectionTypeResolver: (portId: Identifier) => {
-    const idStr = portId as string;
-
-    return idStr.endsWith("-out") ? "direct" : "reverse";
-  },
+const draggableEdgesConfig: DraggableEdgesConfig = {
+  mouseDownEventVerifier: (event) => event.button === 0,
   connectionAllowedVerifier: (request) => {
     const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
       const edge = canvas.graph.getEdge(edgeId)!;
@@ -42,13 +37,23 @@ const connectablePortConfig: ConnectablePortsConfig = {
   },
   dragPortDirection: "closest-connectable-port",
   events: {
-    onEdgeCreationPrevented: (request) => {
-      console.log(`prevented edge creation`);
-      console.log(request);
+    onEdgeReattachPrevented: (edge) => {
+      canvas.addEdge({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
     },
-    onEdgeCreationInterrupted: (params) => {
-      console.log(`interrupted edge creation`);
-      console.log(params);
+    onEdgeReattachInterrupted: (edge) => {
+      canvas.addEdge({
+        id: edge.id,
+        from: edge.from,
+        to: edge.to,
+        shape: edge.shape,
+        priority: edge.priority,
+      });
     },
   },
 };
@@ -56,7 +61,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 const canvas: Canvas = builder
   .setDefaults(defaults)
   .enableUserDraggableNodes()
-  .enableUserConnectablePorts(connectablePortConfig)
+  .enableUserDraggableEdges(draggableEdgesConfig)
   .enableUserTransformableViewport()
   .enableBackground()
   .build();
@@ -157,4 +162,5 @@ const addNode3Request: AddNodeRequest = createInOutNode({
 canvas
   .addNode(addNode1Request)
   .addNode(addNode2Request)
-  .addNode(addNode3Request);
+  .addNode(addNode3Request)
+  .addEdge({ from: "node-1-right-out", to: "node-2-in" });

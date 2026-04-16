@@ -96,11 +96,11 @@ export class UserConnectablePortsConfigurator {
   }
 
   private grabPort(
-    portId: Identifier,
+    staticPortId: Identifier,
     cursor: Point,
     connectionType: "direct" | "reverse",
   ): void {
-    const port = this.canvas.graph.getPort(portId);
+    const port = this.canvas.graph.getPort(staticPortId);
 
     const portRect = port.element.getBoundingClientRect();
     const portX = portRect.x + portRect.width / 2;
@@ -124,17 +124,21 @@ export class UserConnectablePortsConfigurator {
       portDirection: port.direction,
     };
 
-    const draggingParams: OverlayNodeParams = {
-      overlayNodeId: OverlayId.DraggingNodeId,
-      portCoords: cursorPoint,
-      portDirection: this.params.dragPortDirection ?? port.direction,
-    };
-
     const isDirect = connectionType === "direct";
 
     this.edgeInProgress = {
-      staticPortId: portId,
+      staticPortId,
       isDirect,
+    };
+
+    const draggingParams: OverlayNodeParams = {
+      overlayNodeId: OverlayId.DraggingNodeId,
+      portCoords: cursorPoint,
+      portDirection:
+        this.params.draggingPortDirectionResolver.resolve({
+          cursor,
+          ...this.edgeInProgress,
+        }) ?? port.direction,
     };
 
     const [sourceParams, targetParams] = isDirect
@@ -192,9 +196,16 @@ export class UserConnectablePortsConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
-    this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {
-      x: nodeContentCoords.x,
-      y: nodeContentCoords.y,
+    const direction = this.params.draggingPortDirectionResolver.resolve({
+      cursor,
+      ...this.edgeInProgress!,
     });
+
+    this.overlayCanvas
+      .updateNode(OverlayId.DraggingNodeId, {
+        x: nodeContentCoords.x,
+        y: nodeContentCoords.y,
+      })
+      .updatePort(OverlayId.DraggingNodeId, { direction });
   }
 }
