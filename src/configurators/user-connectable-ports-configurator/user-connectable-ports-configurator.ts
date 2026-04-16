@@ -135,7 +135,7 @@ export class UserConnectablePortsConfigurator {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: cursorPoint,
       portDirection:
-        this.params.dragPortDirection.resolve({
+        this.params.draggingPortDirectionResolver.resolve({
           cursor,
           ...this.edgeInProgress,
         }) ?? port.direction,
@@ -196,7 +196,7 @@ export class UserConnectablePortsConfigurator {
       y: cursor.y - canvasRect.y,
     });
 
-    const portDirection = this.params.dragPortDirection.resolve({
+    const direction = this.params.draggingPortDirectionResolver.resolve({
       cursor,
       ...this.edgeInProgress!,
     });
@@ -206,6 +206,6 @@ export class UserConnectablePortsConfigurator {
         x: nodeContentCoords.x,
         y: nodeContentCoords.y,
       })
-      .updatePort(OverlayId.DraggingNodeId, { direction: portDirection });
+      .updatePort(OverlayId.DraggingNodeId, { direction });
   }
 }

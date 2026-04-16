@@ -21,5 +21,5 @@ export interface UserConnectablePortsParams {
     params: EdgeCreationInProgressParams,
   ) => void;
   readonly onEdgeCreationPrevented: (request: AddEdgeRequest) => void;
-  readonly dragPortDirection: DraggingPortDirectionResolver;
+  readonly draggingPortDirectionResolver: DraggingPortDirectionResolver;
 }

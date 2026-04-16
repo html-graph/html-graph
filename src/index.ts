@@ -18,6 +18,7 @@ export type {
   UserSelectableEdgesConfig,
   UserSelectableCanvasConfig,
   NextLayerNodesResolverDeclaration,
+  DraggableEdgesConfig,
 } from "./canvas-builder";
 
 export type { Canvas } from "./canvas";

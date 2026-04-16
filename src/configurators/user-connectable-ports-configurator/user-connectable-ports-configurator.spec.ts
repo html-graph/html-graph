@@ -78,7 +78,7 @@ const createCanvas = (options?: {
       options?.onEdgeCreationInterrupted ?? ((): void => {}),
     onEdgeCreationPrevented:
       options?.onEdgeCreationPrevented ?? ((): void => {}),
-    dragPortDirection: new ConstantDraggingPortDirectionResolver(0),
+    draggingPortDirectionResolver: new ConstantDraggingPortDirectionResolver(0),
     connectionAllowedVerifier:
       options?.connectionAllowedVerifier ?? ((): boolean => true),
   };

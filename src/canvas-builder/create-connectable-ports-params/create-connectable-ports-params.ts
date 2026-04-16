@@ -21,7 +21,7 @@ export const createConnectablePortsParams = (
     connectionTypeResolver:
       config.connectionTypeResolver ?? defaults.connectionTypeResolver,
     connectionAllowedVerifier,
-    dragPortDirection: resolveDraggingPortDirectionResolver(
+    draggingPortDirectionResolver: resolveDraggingPortDirectionResolver(
       config.dragPortDirection,
       graph,
       connectionAllowedVerifier,

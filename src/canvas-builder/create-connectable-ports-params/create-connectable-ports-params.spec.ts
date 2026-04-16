@@ -148,7 +148,7 @@ describe("createUserConnectablePortsParams", () => {
       cursor: { x: 0, y: 0 },
     };
 
-    expect(options.dragPortDirection.resolve(params)).toBe(undefined);
+    expect(options.draggingPortDirectionResolver.resolve(params)).toBe(undefined);
   });
 
   it("should return specified drag port direction", () => {
@@ -165,7 +165,7 @@ describe("createUserConnectablePortsParams", () => {
       cursor: { x: 0, y: 0 },
     };
 
-    expect(options.dragPortDirection.resolve(params)).toBe(Math.PI);
+    expect(options.draggingPortDirectionResolver.resolve(params)).toBe(Math.PI);
   });
 
   it("should return default edge creation interrupted callback", () => {

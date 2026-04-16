@@ -2,7 +2,11 @@ import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { Graph } from "@/graph";
 import { defaults } from "./defaults";
-import { noopFn, resolveEdgeShapeFactory } from "../shared";
+import {
+  noopFn,
+  resolveDraggingPortDirectionResolver,
+  resolveEdgeShapeFactory,
+} from "../shared";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
@@ -18,11 +22,13 @@ export const createDraggableEdgeParams = (
     }
   };
 
+  const connectionAllowedVerifier =
+    config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
+
   return {
     connectionPreprocessor:
       config.connectionPreprocessor ?? defaults.connectionPreprocessor,
-    connectionAllowedVerifier:
-      config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier,
+    connectionAllowedVerifier,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? defaults.mouseDownEventVerifier,
     mouseUpEventVerifier:
@@ -37,5 +43,10 @@ export const createDraggableEdgeParams = (
     onEdgeReattachInterrupted:
       config.events?.onEdgeReattachInterrupted ?? noopFn,
     onEdgeReattachPrevented: config.events?.onEdgeReattachPrevented ?? noopFn,
+    draggingPortDirectionResolver: resolveDraggingPortDirectionResolver(
+      config.dragPortDirection,
+      graph,
+      connectionAllowedVerifier,
+    ),
   };
 };

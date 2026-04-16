@@ -24,3 +24,4 @@ export type {
 export type { UserSelectableNodesConfig } from "./create-user-selectable-nodes-params";
 export type { UserSelectableEdgesConfig } from "./create-user-selectable-edges-params";
 export type { UserSelectableCanvasConfig } from "./create-user-selectable-canvas-params";
+export type { DraggableEdgesConfig } from "./create-draggable-edges-params";
