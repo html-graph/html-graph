@@ -2,18 +2,30 @@ import { UserConnectablePortsParams } from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
-import { noopFn, resolveEdgeShapeFactory } from "../shared";
+import {
+  noopFn,
+  resolveDraggingPortDirectionResolver,
+  resolveEdgeShapeFactory,
+} from "../shared";
+import { Graph } from "@/graph";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
+  graph: Graph,
 ): UserConnectablePortsParams => {
+  const connectionAllowedVerifier =
+    config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
+
   return {
     connectionTypeResolver:
       config.connectionTypeResolver ?? defaults.connectionTypeResolver,
-    connectionAllowedVerifier:
-      config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier,
-    dragPortDirection: config.dragPortDirection,
+    connectionAllowedVerifier,
+    dragPortDirection: resolveDraggingPortDirectionResolver(
+      config.dragPortDirection,
+      graph,
+      connectionAllowedVerifier,
+    ),
     edgeShapeFactory:
       config.edgeShape !== undefined
         ? resolveEdgeShapeFactory(config.edgeShape)

@@ -40,8 +40,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return strFrom.endsWith("-out") && strTo.endsWith("-in");
   },
-  // portDirection: { emitter: new EventSubject<number>(), initialValue: 0 },
-  // portDirection: "nearest-connectable-port",
+  dragPortDirection: "closest-connectable-port",
   events: {
     onEdgeCreationPrevented: (request) => {
       console.log(`prevented edge creation`);
@@ -83,29 +82,44 @@ function createInOutNode(params: {
   name: string;
   x: number;
   y: number;
-  frontPortId: string;
-  backPortId: string;
+  topPortId: string;
+  bottomPortId: string;
+  leftPortId: string;
+  rightPortId: string;
 }): AddNodeRequest {
   const node = document.createElement("div");
   node.classList.add("node");
 
-  const frontPort = createPortElement();
-  node.appendChild(frontPort);
+  const middle = document.createElement("div");
+  middle.classList.add("middle");
+
+  const leftPort = createPortElement();
+  middle.appendChild(leftPort);
 
   const text = document.createElement("div");
   text.innerText = params.name;
-  node.appendChild(text);
+  middle.appendChild(text);
 
-  const backPort = createPortElement();
-  node.appendChild(backPort);
+  const rightPort = createPortElement();
+  middle.appendChild(rightPort);
+
+  const topPort = createPortElement();
+  node.appendChild(topPort);
+
+  node.appendChild(middle);
+
+  const bottomPort = createPortElement();
+  node.appendChild(bottomPort);
 
   return {
     element: node,
     x: params.x,
     y: params.y,
     ports: [
-      { id: params.frontPortId, element: frontPort },
-      { id: params.backPortId, element: backPort },
+      { id: params.topPortId, element: topPort, direction: Math.PI / 2 },
+      { id: params.bottomPortId, element: bottomPort, direction: Math.PI / 2 },
+      { id: params.leftPortId, element: leftPort, direction: -Math.PI },
+      { id: params.rightPortId, element: rightPort, direction: 0 },
     ],
   };
 }
@@ -114,24 +128,30 @@ const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
   x: 200,
   y: 400,
-  frontPortId: "node-1-in",
-  backPortId: "node-1-out",
+  topPortId: "node-1-in",
+  bottomPortId: "node-1-bottom-out",
+  leftPortId: "node-1-left-out",
+  rightPortId: "node-1-right-out",
 });
 
 const addNode2Request: AddNodeRequest = createInOutNode({
   name: "Node 2",
   x: 500,
   y: 500,
-  frontPortId: "node-2-in",
-  backPortId: "node-2-out",
+  topPortId: "node-2-in",
+  bottomPortId: "node-2-bottom-out",
+  leftPortId: "node-2-left-out",
+  rightPortId: "node-2-right-out",
 });
 
 const addNode3Request: AddNodeRequest = createInOutNode({
   name: "Node 3",
   x: 700,
   y: 200,
-  frontPortId: "node-3-in",
-  backPortId: "node-3-out",
+  topPortId: "node-3-in",
+  bottomPortId: "node-3-bottom-out",
+  leftPortId: "node-3-left-out",
+  rightPortId: "node-3-right-out",
 });
 
 canvas

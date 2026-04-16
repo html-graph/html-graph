@@ -7,9 +7,17 @@
   box-shadow: 0 0 5px var(--color-node-border);
   border-radius: 50%;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   user-select: none;
+}
+
+.middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .node-port {

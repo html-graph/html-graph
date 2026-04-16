@@ -15,6 +15,7 @@ import { ConnectionTypeResolver } from "./connection-type-resolver";
 import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
+  ConstantDraggingPortDirectionResolver,
   PointInsideVerifier,
 } from "../shared";
 import { Identifier } from "@/identifier";
@@ -77,7 +78,7 @@ const createCanvas = (options?: {
       options?.onEdgeCreationInterrupted ?? ((): void => {}),
     onEdgeCreationPrevented:
       options?.onEdgeCreationPrevented ?? ((): void => {}),
-    dragPortDirection: 0,
+    dragPortDirection: new ConstantDraggingPortDirectionResolver(0),
     connectionAllowedVerifier:
       options?.connectionAllowedVerifier ?? ((): boolean => true),
   };
