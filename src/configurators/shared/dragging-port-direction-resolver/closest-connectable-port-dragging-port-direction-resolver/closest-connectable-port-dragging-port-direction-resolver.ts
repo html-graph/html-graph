@@ -3,6 +3,7 @@ import { DraggingPortDirectionResolver } from "../dragging-port-direction-resolv
 import { Graph } from "@/graph";
 import { ConnectionAllowedVerifier } from "../../connection-allowed-verifier";
 import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";
+import { resolveCreateEdgeRequest } from "../../resolve-create-edge-request";
 
 export class ClosestConnectablePortDraggingPortDirectionResolver
   implements DraggingPortDirectionResolver
@@ -27,10 +28,9 @@ export class ClosestConnectablePortDraggingPortDirectionResolver
         return;
       }
 
-      const from = params.isDirect ? params.staticPortId : portId;
-      const to = params.isDirect ? portId : params.staticPortId;
+      const request = resolveCreateEdgeRequest(params, portId);
 
-      if (!this.connectionAllowedVerifier({ from, to })) {
+      if (!this.connectionAllowedVerifier(request)) {
         return;
       }
 

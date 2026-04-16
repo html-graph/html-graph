@@ -14,7 +14,7 @@ import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
-import { AddEdgeRequest } from "@/graph-controller";
+import { resolveCreateEdgeRequest } from "../shared/resolve-create-edge-request";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -164,14 +164,16 @@ export class UserConnectablePortsConfigurator {
       return;
     }
 
-    const { staticPortId, isDirect } = this.edgeInProgress!;
-    const sourceId = isDirect ? staticPortId : targetPortId;
-    const targetId = isDirect ? targetPortId : staticPortId;
-
-    const request: AddEdgeRequest = { from: sourceId, to: targetId };
+    const request = resolveCreateEdgeRequest(
+      this.edgeInProgress!,
+      targetPortId,
+    );
 
     const connectionAllowed = this.params.connectionAllowedVerifier(request);
-    const processedRequest = this.params.connectionPreprocessor(request);
+    const processedRequest = this.params.connectionPreprocessor({
+      from: request.from,
+      to: request.to,
+    });
 
     if (connectionAllowed && processedRequest !== null) {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
