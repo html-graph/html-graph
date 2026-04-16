@@ -25,3 +25,4 @@ export type { UserSelectableNodesConfig } from "./create-user-selectable-nodes-p
 export type { UserSelectableEdgesConfig } from "./create-user-selectable-edges-params";
 export type { UserSelectableCanvasConfig } from "./create-user-selectable-canvas-params";
 export type { DraggableEdgesConfig } from "./create-draggable-edges-params";
+export type { DraggingPortDirectionConfig } from "./shared";
