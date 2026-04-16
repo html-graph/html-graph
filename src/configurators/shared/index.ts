@@ -17,3 +17,12 @@ export type {
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
 } from "./connection-allowed-verifier";
+export type {
+  DraggingPortDirectionResolver,
+  DraggingPortDirectionResolverParams,
+} from "./dragging-port-direction-resolver";
+export {
+  ClosestConnectablePortDraggingPortDirectionResolver,
+  ConstantDraggingPortDirectionResolver,
+} from "./dragging-port-direction-resolver";
+export type { EdgeCreationInProgressParams } from "./edge-creation-in-progress";

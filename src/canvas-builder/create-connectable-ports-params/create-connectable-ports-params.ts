@@ -1,22 +1,25 @@
 import { UserConnectablePortsParams } from "@/configurators";
 import { ConnectablePortsConfig } from "./connectable-ports-config";
-import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
-import { noopFn } from "../shared";
+import { noopFn, resolveEdgeShapeFactory } from "../shared";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
   defaultEdgeShapeFactory: EdgeShapeFactory,
-  defaultDragPortDirection: number,
 ): UserConnectablePortsParams => {
   return {
     connectionTypeResolver:
       config.connectionTypeResolver ?? defaults.connectionTypeResolver,
-    connectionPreprocessor:
-      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
     connectionAllowedVerifier:
       config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier,
+    dragPortDirection: config.dragPortDirection,
+    edgeShapeFactory:
+      config.edgeShape !== undefined
+        ? resolveEdgeShapeFactory(config.edgeShape)
+        : defaultEdgeShapeFactory,
+    connectionPreprocessor:
+      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
     mouseDownEventVerifier:
       config.mouseDownEventVerifier ?? defaults.mouseEventVerifier,
     mouseUpEventVerifier:
@@ -25,10 +28,5 @@ export const createConnectablePortsParams = (
     onEdgeCreationInterrupted:
       config.events?.onEdgeCreationInterrupted ?? noopFn,
     onEdgeCreationPrevented: config.events?.onEdgeCreationPrevented ?? noopFn,
-    dragPortDirection: config.dragPortDirection ?? defaultDragPortDirection,
-    edgeShapeFactory:
-      config.edgeShape !== undefined
-        ? resolveEdgeShapeFactory(config.edgeShape)
-        : defaultEdgeShapeFactory,
   };
 };

@@ -1,9 +1,8 @@
 import { DraggingEdgeResolver, DraggableEdgesParams } from "@/configurators";
 import { DraggableEdgesConfig } from "./draggable-edges-config";
-import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
 import { Graph } from "@/graph";
 import { defaults } from "./defaults";
-import { noopFn } from "../shared";
+import { noopFn, resolveEdgeShapeFactory } from "../shared";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,

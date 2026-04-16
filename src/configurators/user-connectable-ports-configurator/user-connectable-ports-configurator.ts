@@ -4,6 +4,7 @@ import {
   createAddNodeOverlayRequest,
   createOverlayCanvas,
   DraggablePortsParams,
+  EdgeCreationInProgressParams,
   findPortAtPoint,
   OverlayId,
   OverlayNodeParams,
@@ -13,14 +14,12 @@ import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
-import { AddEdgeRequest } from "@/graph-controller";
+import { resolveCreateEdgeRequest } from "../shared/resolve-create-edge-request";
 
 export class UserConnectablePortsConfigurator {
   private readonly overlayCanvas: Canvas;
 
-  private staticPortId: Identifier | null = null;
-
-  private isTargetDragging: boolean = true;
+  private edgeInProgress: EdgeCreationInProgressParams | null = null;
 
   private readonly onEdgeCreated = (edgeId: Identifier): void => {
     this.params.onAfterEdgeCreated(edgeId);
@@ -43,7 +42,7 @@ export class UserConnectablePortsConfigurator {
     const draggablePortsParams: DraggablePortsParams = {
       mouseDownEventVerifier: this.params.mouseDownEventVerifier,
       mouseUpEventVerifier: this.params.mouseUpEventVerifier,
-      portDragAllowedVerifier: (portId, cursor) => {
+      onPointerDownVerifier: (portId, cursor) => {
         const connectionType = this.params.connectionTypeResolver(portId);
 
         if (connectionType === null) {
@@ -62,15 +61,11 @@ export class UserConnectablePortsConfigurator {
         this.resetDragState();
       },
       onPointerOutside: () => {
-        const staticPortId = this.staticPortId!;
-        const isTargetDragging = this.isTargetDragging;
+        const params = this.edgeInProgress!;
 
         this.resetDragState();
 
-        this.params.onEdgeCreationInterrupted({
-          staticPortId,
-          isDirect: isTargetDragging,
-        });
+        this.params.onEdgeCreationInterrupted(params);
       },
     };
 
@@ -107,8 +102,6 @@ export class UserConnectablePortsConfigurator {
   ): void {
     const port = this.canvas.graph.getPort(portId);
 
-    this.staticPortId = portId;
-
     const portRect = port.element.getBoundingClientRect();
     const portX = portRect.x + portRect.width / 2;
     const portY = portRect.y + portRect.height / 2;
@@ -134,12 +127,17 @@ export class UserConnectablePortsConfigurator {
     const draggingParams: OverlayNodeParams = {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: cursorPoint,
-      portDirection: this.params.dragPortDirection,
+      portDirection: this.params.dragPortDirection ?? port.direction,
     };
 
-    this.isTargetDragging = connectionType === "direct";
+    const isDirect = connectionType === "direct";
 
-    const [sourceParams, targetParams] = this.isTargetDragging
+    this.edgeInProgress = {
+      staticPortId: portId,
+      isDirect,
+    };
+
+    const [sourceParams, targetParams] = isDirect
       ? [staticParams, draggingParams]
       : [draggingParams, staticParams];
 
@@ -153,31 +151,29 @@ export class UserConnectablePortsConfigurator {
   }
 
   private resetDragState(): void {
-    this.staticPortId = null;
-    this.isTargetDragging = true;
+    this.edgeInProgress = null;
     this.overlayCanvas.clear();
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
+    const targetPortId = findPortAtPoint(this.canvas.graph, cursor);
 
-    if (draggingPortId === null) {
-      this.params.onEdgeCreationInterrupted({
-        staticPortId: this.staticPortId!,
-        isDirect: this.isTargetDragging,
-      });
+    if (targetPortId === null) {
+      this.params.onEdgeCreationInterrupted(this.edgeInProgress!);
 
       return;
     }
 
-    const staticPortId = this.staticPortId!;
-    const sourceId = this.isTargetDragging ? staticPortId : draggingPortId;
-    const targetId = this.isTargetDragging ? draggingPortId : staticPortId;
-
-    const request: AddEdgeRequest = { from: sourceId, to: targetId };
+    const request = resolveCreateEdgeRequest(
+      this.edgeInProgress!,
+      targetPortId,
+    );
 
     const connectionAllowed = this.params.connectionAllowedVerifier(request);
-    const processedRequest = this.params.connectionPreprocessor(request);
+    const processedRequest = this.params.connectionPreprocessor({
+      from: request.from,
+      to: request.to,
+    });
 
     if (connectionAllowed && processedRequest !== null) {
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
@@ -188,12 +184,12 @@ export class UserConnectablePortsConfigurator {
     }
   }
 
-  private moveDraggingPort(dragPoint: Point): void {
+  private moveDraggingPort(cursor: Point): void {
     const canvasRect = this.overlayLayer.getBoundingClientRect();
 
     const nodeContentCoords = this.canvas.viewport.createContentCoords({
-      x: dragPoint.x - canvasRect.x,
-      y: dragPoint.y - canvasRect.y,
+      x: cursor.x - canvasRect.x,
+      y: cursor.y - canvasRect.y,
     });
 
     this.overlayCanvas.updateNode(OverlayId.DraggingNodeId, {

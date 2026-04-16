@@ -50,6 +50,7 @@ export type {
   DraggingEdgeResolver,
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
+  EdgeCreationInProgressParams,
 } from "./configurators";
 
 export type {

@@ -1,7 +1,6 @@
 import { standardCenterFn } from "@/center-fn";
 import { resolvePriority } from "./resolve-priority";
-import { resolveEdgeShapeFactory } from "../resolve-edge-shape-factory";
-import { CanvasDefaults } from "../shared";
+import { resolveEdgeShapeFactory, CanvasDefaults } from "../shared";
 import { GraphControllerParams } from "@/graph-controller";
 
 export const createGraphControllerParams = (

@@ -13,7 +13,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.connectionTypeResolver).toBe(
@@ -26,7 +25,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { connectionTypeResolver: resolver },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.connectionTypeResolver).toBe(resolver);
@@ -36,7 +34,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.connectionPreprocessor).toBe(
@@ -49,7 +46,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { connectionPreprocessor: preprocessor },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.connectionPreprocessor).toBe(preprocessor);
@@ -59,7 +55,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.mouseDownEventVerifier).toEqual(defaults.mouseEventVerifier);
@@ -70,7 +65,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { mouseDownEventVerifier: verifier },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.mouseDownEventVerifier).toBe(verifier);
@@ -80,7 +74,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.mouseUpEventVerifier).toEqual(defaults.mouseEventVerifier);
@@ -91,7 +84,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { mouseUpEventVerifier: verifier },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.mouseUpEventVerifier).toBe(verifier);
@@ -101,7 +93,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onAfterEdgeCreated).toBe(noopFn);
@@ -115,7 +106,6 @@ describe("createUserConnectablePortsParams", () => {
         events: { onAfterEdgeCreated: onEdgeCreated },
       },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onAfterEdgeCreated).toBe(onEdgeCreated);
@@ -125,17 +115,15 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      Math.PI,
     );
 
-    expect(options.dragPortDirection).toBe(Math.PI);
+    expect(options.dragPortDirection).toBe(undefined);
   });
 
   it("should return specified drag port direction", () => {
     const options = createConnectablePortsParams(
       { dragPortDirection: Math.PI },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.dragPortDirection).toBe(Math.PI);
@@ -145,7 +133,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onEdgeCreationInterrupted).toBe(noopFn);
@@ -155,7 +142,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(() => {
@@ -172,7 +158,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { events: { onEdgeCreationInterrupted } },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onEdgeCreationInterrupted).toBe(onEdgeCreationInterrupted);
@@ -182,7 +167,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onEdgeCreationPrevented).toBe(noopFn);
@@ -192,7 +176,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       {},
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(() => {
@@ -209,7 +192,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { events: { onEdgeCreationPrevented } },
       () => new BezierEdgeShape(),
-      0,
     );
 
     expect(options.onEdgeCreationPrevented).toBe(onEdgeCreationPrevented);
@@ -217,7 +199,7 @@ describe("createUserConnectablePortsParams", () => {
 
   it("should return default edge shape factory", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
-    const options = createConnectablePortsParams({}, factory, 0);
+    const options = createConnectablePortsParams({}, factory);
 
     expect(options.edgeShapeFactory).toBe(factory);
   });
@@ -228,7 +210,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { edgeShape: connectionFactory },
       factory,
-      0,
     );
 
     expect(options.edgeShapeFactory).toBe(connectionFactory);
@@ -236,7 +217,7 @@ describe("createUserConnectablePortsParams", () => {
 
   it("should return default connection allowed verifier", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
-    const options = createConnectablePortsParams({}, factory, 0);
+    const options = createConnectablePortsParams({}, factory);
 
     expect(options.connectionAllowedVerifier).toBe(
       defaults.connectionAllowedVerifier,
@@ -249,7 +230,6 @@ describe("createUserConnectablePortsParams", () => {
     const options = createConnectablePortsParams(
       { connectionAllowedVerifier },
       factory,
-      0,
     );
 
     expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
