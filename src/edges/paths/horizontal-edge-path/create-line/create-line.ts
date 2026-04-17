@@ -2,10 +2,15 @@ import { Point } from "@/point";
 import { Line } from "./line";
 import { PortParams } from "./port-params";
 
-export const createLine = (from: PortParams, to: PortParams): Line => {
+export const createLine = (
+  fromParams: PortParams,
+  toParams: PortParams,
+): Line => {
+  const from = fromParams.linePoint;
+  const to = toParams.linePoint;
   const horizontalLineDir = to.x - from.x >= 0;
-  const fromPortDir = from.dirX >= 0;
-  const toPortDir = to.dirX >= 0;
+  const fromPortDir = fromParams.dirX >= 0;
+  const toPortDir = toParams.dirX >= 0;
 
   const isSameDirPorts = fromPortDir === toPortDir;
 
@@ -18,10 +23,10 @@ export const createLine = (from: PortParams, to: PortParams): Line => {
     if (isSameDirLine) {
       return {
         points: [
-          { x: from.x, y: from.y },
+          fromParams.arrowPoint,
           { x: midpoint.x, y: from.y },
           { x: midpoint.x, y: to.y },
-          { x: to.x, y: to.y },
+          toParams.arrowPoint,
         ],
         midpoint,
       };
@@ -29,10 +34,12 @@ export const createLine = (from: PortParams, to: PortParams): Line => {
 
     return {
       points: [
+        fromParams.arrowPoint,
         { x: from.x, y: from.y },
         { x: from.x, y: midpoint.y },
         { x: to.x, y: midpoint.y },
         { x: to.x, y: to.y },
+        toParams.arrowPoint,
       ],
       midpoint,
     };
@@ -45,7 +52,12 @@ export const createLine = (from: PortParams, to: PortParams): Line => {
     const joint: Point = { x: to.x, y: from.y };
 
     return {
-      points: [{ x: from.x, y: from.y }, joint, { x: to.x, y: to.y }],
+      points: [
+        fromParams.arrowPoint,
+        joint,
+        { x: to.x, y: to.y },
+        toParams.arrowPoint,
+      ],
       midpoint: { x: joint.x, y: centerY },
     };
   }
@@ -53,7 +65,12 @@ export const createLine = (from: PortParams, to: PortParams): Line => {
   const joint: Point = { x: from.x, y: to.y };
 
   return {
-    points: [{ x: from.x, y: from.y }, joint, { x: to.x, y: to.y }],
+    points: [
+      fromParams.arrowPoint,
+      { x: from.x, y: from.y },
+      joint,
+      toParams.arrowPoint,
+    ],
     midpoint: { x: joint.x, y: centerY },
   };
 };

@@ -55,7 +55,7 @@ describe("HorizontalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 125 150 C 130 150 130 150 135 150 L 150 150",
+      "M 50 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 150 150",
     );
   });
 
@@ -84,7 +84,7 @@ describe("HorizontalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 125 150 C 130 150 130 150 135 150 L 140 150",
+      "M 50 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 140 150",
     );
   });
 
@@ -113,7 +113,7 @@ describe("HorizontalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 60 50 L 65 50 C 70 50 70 50 75 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 125 150 C 130 150 130 150 135 150 L 150 150",
+      "M 60 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 150 150",
     );
   });
 

@@ -63,21 +63,18 @@ export class HorizontalEdgePath implements EdgePath {
 
     const line = createLine(
       {
-        x: beginLine.x,
-        y: beginLine.y,
+        arrowPoint: beginArrow,
+        linePoint: beginLine,
         dirX: fromDir.x,
       },
       {
-        x: endLine.x,
-        y: endLine.y,
+        arrowPoint: endArrow,
+        linePoint: endLine,
         dirX: toDir.x,
       },
     );
 
-    this.path = createRoundedPath(
-      [beginArrow, ...line.points, endArrow],
-      roundness,
-    );
+    this.path = createRoundedPath(line.points, roundness);
 
     this.midpoint = line.midpoint;
   }

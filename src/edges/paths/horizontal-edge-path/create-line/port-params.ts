@@ -1,5 +1,7 @@
+import { Point } from "@/point";
+
 export interface PortParams {
-  readonly x: number;
-  readonly y: number;
+  readonly arrowPoint: Point;
+  readonly linePoint: Point;
   readonly dirX: number;
 }
