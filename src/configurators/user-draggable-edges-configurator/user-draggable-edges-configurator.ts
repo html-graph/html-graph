@@ -11,12 +11,12 @@ import {
   OverlayId,
   OverlayNodeParams,
   PointInsideVerifier,
+  DraggablePortsConfigurator,
+  resolveCreateEdgeRequest,
 } from "../shared";
-import { DraggablePortsConfigurator } from "../shared";
 import { Identifier } from "@/identifier";
 import { GraphEdge } from "@/graph";
 import { AddEdgeRequest } from "@/graph-controller";
-import { resolveCreateEdgeRequest } from "../shared/resolve-create-edge-request";
 
 export class UserDraggableEdgesConfigurator {
   private readonly overlayCanvas: Canvas;
@@ -149,15 +149,17 @@ export class UserDraggableEdgesConfigurator {
       portDirection: staticPort.direction,
     };
 
-    const direction = this.params.draggingPortDirectionResolver.resolve({
-      cursor,
-      ...this.edgeInProgress,
-    });
+    const resolvedDirection = this.params.draggingPortDirectionResolver.resolve(
+      {
+        cursor,
+        ...this.edgeInProgress,
+      },
+    );
 
     const draggingParams: OverlayNodeParams = {
       overlayNodeId: OverlayId.DraggingNodeId,
       portCoords: draggingPoint,
-      portDirection: direction ?? draggingPort.direction,
+      portDirection: resolvedDirection ?? draggingPort.direction,
     };
 
     const [sourceParams, targetParams] = isDirect

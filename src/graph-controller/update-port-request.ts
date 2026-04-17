@@ -1,3 +1,3 @@
 export interface UpdatePortRequest {
-  readonly direction?: number;
+  readonly direction?: number | undefined;
 }

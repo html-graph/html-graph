@@ -26,3 +26,4 @@ export {
   ConstantDraggingPortDirectionResolver,
 } from "./dragging-port-direction-resolver";
 export type { EdgeCreationInProgressParams } from "./edge-creation-in-progress";
+export { resolveCreateEdgeRequest } from "./resolve-create-edge-request";
