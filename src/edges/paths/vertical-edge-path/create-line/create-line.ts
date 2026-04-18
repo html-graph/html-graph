@@ -2,10 +2,15 @@ import { Point } from "@/point";
 import { Line } from "./line";
 import { PortParams } from "./port-params";
 
-export const createLine = (from: PortParams, to: PortParams): Line => {
+export const createLine = (
+  fromParams: PortParams,
+  toParams: PortParams,
+): Line => {
+  const from = fromParams.linePoint;
+  const to = toParams.linePoint;
   const verticalLineDir = to.y - from.y >= 0;
-  const fromPortDir = from.dirY >= 0;
-  const toPortDir = to.dirY >= 0;
+  const fromPortDir = fromParams.dirY >= 0;
+  const toPortDir = toParams.dirY >= 0;
 
   const isSameDirPorts = fromPortDir === toPortDir;
 

@@ -41,14 +41,7 @@ export class HorizontalEdgePath implements EdgePath {
       : from;
 
     const endArrow: Point = hasTargetArrow
-      ? createRotatedPoint(
-          {
-            x: to.x - arrowLength,
-            y: to.y,
-          },
-          toDir,
-          to,
-        )
+      ? createRotatedPoint({ x: to.x - arrowLength, y: to.y }, toDir, to)
       : to;
 
     const gap = arrowLength + arrowOffset;
@@ -62,16 +55,8 @@ export class HorizontalEdgePath implements EdgePath {
     const endLine = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
 
     const line = createLine(
-      {
-        arrowPoint: beginArrow,
-        linePoint: beginLine,
-        dirX: fromDir.x,
-      },
-      {
-        arrowPoint: endArrow,
-        linePoint: endLine,
-        dirX: toDir.x,
-      },
+      { arrowPoint: beginArrow, linePoint: beginLine, dirX: fromDir.x },
+      { arrowPoint: endArrow, linePoint: endLine, dirX: toDir.x },
     );
 
     this.path = createRoundedPath(line.points, roundness);
