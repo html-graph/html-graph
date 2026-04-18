@@ -29,6 +29,7 @@ export const resolveAnimatedLayoutAlgorithm = (
           forceDirectedDefaults.edgeEquilibriumLength,
         edgeStiffness:
           config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
+        // TODO: rename no `minVelocity`
         convergenceVelocity:
           config?.convergenceVelocity ??
           forceDirectedDefaults.convergenceVelocity,

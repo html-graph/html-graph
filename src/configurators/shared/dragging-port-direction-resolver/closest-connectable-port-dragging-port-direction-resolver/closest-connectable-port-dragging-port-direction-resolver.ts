@@ -5,7 +5,7 @@ import { ConnectionAllowedVerifier } from "../../connection-allowed-verifier";
 import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";
 import { resolveCreateEdgeRequest } from "../../resolve-create-edge-request";
 
-export class ClosestConnectablePortDraggingPortDirectionResolver
+export class NearestConnectablePortDraggingPortDirectionResolver
   implements DraggingPortDirectionResolver
 {
   public constructor(

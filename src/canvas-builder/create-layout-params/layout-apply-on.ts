@@ -2,7 +2,7 @@ import { EventSubject } from "@/event-subject";
 
 /**
  * @deprecated
- * use topologyChangeMicrotask instead
+ * use "topologyChangeMicrotask" instead
  */
 type TopologyChangeMacrotask = {
   type: "topologyChangeMacrotask";
@@ -15,4 +15,5 @@ type TopologyChangeMicrotask = {
 export type LayoutApplyOn =
   | TopologyChangeMacrotask
   | TopologyChangeMicrotask
+  | "topologyChangeMicrotask"
   | EventSubject<void>;

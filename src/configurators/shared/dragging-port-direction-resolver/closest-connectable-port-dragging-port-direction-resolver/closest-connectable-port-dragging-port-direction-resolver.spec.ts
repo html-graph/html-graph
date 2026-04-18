@@ -1,13 +1,13 @@
 import { createCanvas, createElement } from "@/mocks";
-import { ClosestConnectablePortDraggingPortDirectionResolver } from "./closest-connectable-port-dragging-port-direction-resolver";
+import { NearestConnectablePortDraggingPortDirectionResolver } from "./closest-connectable-port-dragging-port-direction-resolver";
 import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";
 
-describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
+describe("NearestConnectablePortDraggingPortDirectionResolver", () => {
   it("should resolve default direction when graph has no ports", () => {
     const canvas = createCanvas();
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(
+      new NearestConnectablePortDraggingPortDirectionResolver(
         canvas.graph,
         () => true,
       );
@@ -38,7 +38,7 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(
+      new NearestConnectablePortDraggingPortDirectionResolver(
         canvas.graph,
         () => true,
       );
@@ -78,7 +78,7 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(
+      new NearestConnectablePortDraggingPortDirectionResolver(
         canvas.graph,
         () => true,
       );
@@ -116,7 +116,7 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(
+      new NearestConnectablePortDraggingPortDirectionResolver(
         canvas.graph,
         () => true,
       );
@@ -156,7 +156,7 @@ describe("ClosestConnectablePortDraggingPortDirectionResolver", () => {
     });
 
     const portDirectionResolver =
-      new ClosestConnectablePortDraggingPortDirectionResolver(
+      new NearestConnectablePortDraggingPortDirectionResolver(
         canvas.graph,
         (request) => request.to !== "port-2",
       );

@@ -48,7 +48,7 @@ export type { UserSelectableCanvasParams } from "./user-selectable-canvas-config
 export {
   PointInsideVerifier,
   EventTagger,
-  ClosestConnectablePortDraggingPortDirectionResolver,
+  NearestConnectablePortDraggingPortDirectionResolver,
   ConstantDraggingPortDirectionResolver,
 } from "./shared";
 
