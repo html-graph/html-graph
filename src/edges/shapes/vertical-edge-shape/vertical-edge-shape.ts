@@ -13,6 +13,7 @@ import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
+import { verticalizeDirection } from "./verticalize-directions";
 
 export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -137,6 +138,18 @@ export class VerticalEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.pathShape.render(params);
+    const { from, to, category } = params;
+
+    this.pathShape.render({
+      category,
+      from: {
+        ...from,
+        direction: verticalizeDirection(from.direction),
+      },
+      to: {
+        ...to,
+        direction: verticalizeDirection(to.direction),
+      },
+    });
   }
 }

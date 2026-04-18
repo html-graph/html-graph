@@ -29,6 +29,8 @@ const createVerticalEdge = (
   });
 };
 
+const pi2 = Math.PI / 2;
+
 describe("VerticalEdgeShape", () => {
   it("should create line path without arrows", () => {
     const shape = createVerticalEdge(false, false);
@@ -39,14 +41,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.Line,
     });
@@ -55,7 +57,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 68.14304661822948 95.3576165455737 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 131.85695338177052 104.6423834544263 L 150 150",
+      "M 50 50 L 50.00000000000001 94.99999999999999 C 50.00000000000001 99.99999999999999 50.00000000000001 99.99999999999999 55.00000000000001 99.99999999999999 L 145 99.99999999999999 C 150 99.99999999999999 150 99.99999999999999 150 104.99999999999999 L 150 150",
     );
   });
 
@@ -68,14 +70,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.Line,
     });
@@ -84,7 +86,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 68.14304661822948 95.3576165455737 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 130.98058067569093 104.9029033784546 L 140 150",
+      "M 50 50 L 50.00000000000001 94.99999999999999 C 50.00000000000001 99.99999999999999 50.00000000000001 99.99999999999999 55.00000000000001 99.99999999999999 L 145 99.99999999999999 C 150 99.99999999999999 150 99.99999999999999 150 104.99999999999999 L 150 139.99999999999997",
     );
   });
 
@@ -97,14 +99,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.Line,
     });
@@ -113,7 +115,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 60 50 L 69.01941932430908 95.0970966215454 C 70 100 70 100 75 100 L 125 100 C 130 100 130 100 131.85695338177052 104.6423834544263 L 150 150",
+      "M 50.00000000000001 59.99999999999999 L 50.00000000000001 94.99999999999999 C 50.00000000000001 99.99999999999999 50.00000000000001 99.99999999999999 55.00000000000001 99.99999999999999 L 145 99.99999999999999 C 150 99.99999999999999 150 99.99999999999999 150 104.99999999999999 L 150 150",
     );
   });
 
@@ -126,14 +128,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 0,
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.PortCycle,
     });
@@ -142,7 +144,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 60 50 M 60 50 L 65 50 C 70 50 70 50 70 55 L 70 95 C 70 100 70 100 75 100 L 165 100 C 170 100 170 100 170 95 L 170 5 C 170 0 170 0 165 0 L 75 0 C 70 0 70 0 70 5 L 70 45 C 70 50 70 50 65 50 L 60 50",
+      "M 50 50 L 50 60 M 50 60 L 50 65 C 50 70 50 70 45 70 L 5 70 C 0 70 0 70 3.552713678800501e-16 75 L 6.7501559897209515e-15 165 C 7.105427357601002e-15 170 7.105427357601002e-15 170 5.000000000000007 170 L 95 170 C 100 170 100 170 100 165 L 100 75 C 100 70 100 70 95 70 L 55 70 C 50 70 50 70 50 65 L 50 60",
     );
   });
 
@@ -155,14 +157,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.NodeCycle,
     });
@@ -171,7 +173,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 150 150",
+      "M 50 50 L 50.00000000000001 65 C 50.00000000000001 70 50.00000000000001 70 55.00000000000001 70 L 245 70 C 250 70 250 70 250 75 L 250 124.99999999999997 C 250 129.99999999999997 250 129.99999999999997 245 129.99999999999997 L 155 129.99999999999997 C 150 129.99999999999997 150 129.99999999999997 150 134.99999999999997 L 150 150",
     );
   });
 
@@ -184,14 +186,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.NodeCycle,
     });
@@ -200,7 +202,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 50 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 140 150",
+      "M 50 50 L 50.00000000000001 65 C 50.00000000000001 70 50.00000000000001 70 55.00000000000001 70 L 245 70 C 250 70 250 70 250 75 L 250 124.99999999999997 C 250 129.99999999999997 250 129.99999999999997 245 129.99999999999997 L 155 129.99999999999997 C 150 129.99999999999997 150 129.99999999999997 150 134.99999999999997 L 150 139.99999999999997",
     );
   });
 
@@ -213,14 +215,14 @@ describe("VerticalEdgeShape", () => {
         y: 0,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       to: {
         x: 100,
         y: 100,
         width: 0,
         height: 0,
-        direction: 0,
+        direction: pi2,
       },
       category: ConnectionCategory.NodeCycle,
     });
@@ -229,7 +231,7 @@ describe("VerticalEdgeShape", () => {
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
-      "M 60 50 L 65 50 C 70 50 70 50 75 50 L 225 50 C 230 50 230 50 230 55 L 230 145 C 230 150 230 150 225 150 L 135 150 C 130 150 130 150 135 150 L 150 150",
+      "M 50.00000000000001 59.99999999999999 L 50.00000000000001 65 C 50.00000000000001 70 50.00000000000001 70 55.00000000000001 70 L 245 70 C 250 70 250 70 250 75 L 250 124.99999999999997 C 250 129.99999999999997 250 129.99999999999997 245 129.99999999999997 L 155 129.99999999999997 C 150 129.99999999999997 150 129.99999999999997 150 134.99999999999997 L 150 150",
     );
   });
 });
