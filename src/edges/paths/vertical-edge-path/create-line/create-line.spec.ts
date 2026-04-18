@@ -51,7 +51,6 @@ describe("createLinePoints", () => {
 
     expect(line.points).toEqual([
       { x: 0, y: 0 },
-      { x: 0, y: 10 },
       { x: 0, y: 110 },
       { x: 100, y: 110 },
       { x: 100, y: 100 },
@@ -68,7 +67,6 @@ describe("createLinePoints", () => {
       { x: 0, y: 0 },
       { x: 0, y: -10 },
       { x: 100, y: -10 },
-      { x: 100, y: 90 },
       { x: 100, y: 100 },
     ]);
   });
