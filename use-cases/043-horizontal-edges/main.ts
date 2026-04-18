@@ -17,9 +17,6 @@ const canvasDefaults: CanvasDefaults = {
       hasTargetArrow: true,
     },
   },
-  ports: {
-    direction: Math.PI / 4,
-  },
 };
 
 const canvas: Canvas = builder
