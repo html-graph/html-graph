@@ -34,7 +34,7 @@ export const canvasErrorText = Object.freeze({
     edgeId: Identifier,
     useEdgeId: Identifier,
   ): string =>
-    `Failed to add edge with ID ${JSON.stringify(edgeId)} because its SVG element is already attached to edge with ID ${JSON.stringify(useEdgeId)}`,
+    `Failed to add edge with ID ${JSON.stringify(edgeId)} because its element is already attached to edge with ID ${JSON.stringify(useEdgeId)}`,
   addEdgeFromNonexistentPort: (
     edgeId: Identifier,
     portId: Identifier,

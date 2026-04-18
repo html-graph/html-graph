@@ -41,7 +41,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return strFrom.endsWith("-out") && strTo.endsWith("-in");
   },
-  dragPortDirection: Math.PI / 4,
+  dragPortDirection: -Math.PI / 4,
 };
 
 const canvas: Canvas = builder
