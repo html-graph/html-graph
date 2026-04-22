@@ -1,7 +1,7 @@
 import { Graph } from "@/graph";
 import { DraggingPortDirectionConfig } from "./dragging-port-direction-config";
 import {
-  ClosestConnectablePortDraggingPortDirectionResolver,
+  NearestConnectablePortDraggingPortDirectionResolver,
   ConnectionAllowedVerifier,
   ConstantDraggingPortDirectionResolver,
   DraggingPortDirectionResolver,
@@ -12,9 +12,16 @@ export const resolveDraggingPortDirectionResolver = (
   graph: Graph,
   connectionAllowedVerifier: ConnectionAllowedVerifier,
 ): DraggingPortDirectionResolver => {
-  // TODO: use "closest-connectable-port" by default
   if (config === "closest-connectable-port") {
-    return new ClosestConnectablePortDraggingPortDirectionResolver(
+    return new NearestConnectablePortDraggingPortDirectionResolver(
+      graph,
+      connectionAllowedVerifier,
+    );
+  }
+
+  // TODO: use "nearest-connectable-port" by default
+  if (config === "nearest-connectable-port") {
+    return new NearestConnectablePortDraggingPortDirectionResolver(
       graph,
       connectionAllowedVerifier,
     );

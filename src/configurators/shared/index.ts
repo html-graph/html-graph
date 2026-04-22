@@ -22,7 +22,7 @@ export type {
   DraggingPortDirectionResolverParams,
 } from "./dragging-port-direction-resolver";
 export {
-  ClosestConnectablePortDraggingPortDirectionResolver,
+  NearestConnectablePortDraggingPortDirectionResolver,
   ConstantDraggingPortDirectionResolver,
 } from "./dragging-port-direction-resolver";
 export type { EdgeCreationInProgressParams } from "./edge-creation-in-progress";

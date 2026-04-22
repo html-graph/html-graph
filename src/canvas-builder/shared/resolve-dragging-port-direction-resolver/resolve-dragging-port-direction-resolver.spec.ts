@@ -1,7 +1,7 @@
 import { createCanvas } from "@/mocks";
 import { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-direction-resolver";
 import {
-  ClosestConnectablePortDraggingPortDirectionResolver,
+  NearestConnectablePortDraggingPortDirectionResolver,
   ConstantDraggingPortDirectionResolver,
 } from "@/configurators";
 
@@ -19,7 +19,7 @@ describe("resolveDraggingPortDirectionResolver", () => {
     );
   });
 
-  it("should resolve ClosestConnectablePortDraggingPortDirectionResolver for related value", () => {
+  it("should resolve NearestConnectablePortDraggingPortDirectionResolver for related value", () => {
     const canvas = createCanvas();
     const resolver = resolveDraggingPortDirectionResolver(
       "closest-connectable-port",
@@ -28,7 +28,20 @@ describe("resolveDraggingPortDirectionResolver", () => {
     );
 
     expect(
-      resolver instanceof ClosestConnectablePortDraggingPortDirectionResolver,
+      resolver instanceof NearestConnectablePortDraggingPortDirectionResolver,
+    ).toBe(true);
+  });
+
+  it("should resolve NearestConnectablePortDraggingPortDirectionResolver for related value", () => {
+    const canvas = createCanvas();
+    const resolver = resolveDraggingPortDirectionResolver(
+      "nearest-connectable-port",
+      canvas.graph,
+      () => true,
+    );
+
+    expect(
+      resolver instanceof NearestConnectablePortDraggingPortDirectionResolver,
     ).toBe(true);
   });
 });

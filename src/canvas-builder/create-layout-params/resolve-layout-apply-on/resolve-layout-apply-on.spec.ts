@@ -31,4 +31,13 @@ describe("resolveLayoutApplyOn", () => {
       trigger,
     });
   });
+
+  it("should resolve topologyChangeMicrotask strategy", async () => {
+    const params = resolveLayoutApplyOn("topologyChangeMicrotask");
+
+    expect(
+      params.type === "topologyChangeSchedule" &&
+        params.schedule === microtaskScheduleFn,
+    ).toBe(true);
+  });
 });

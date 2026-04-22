@@ -1,4 +1,9 @@
 export type DraggingPortDirectionConfig =
   | number
   | undefined
-  | "closest-connectable-port";
+  /**
+   * @deprecated
+   * use "nearest-connectable-port" instead
+   */
+  | "closest-connectable-port"
+  | "nearest-connectable-port";

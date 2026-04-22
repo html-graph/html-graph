@@ -13,6 +13,13 @@ export const resolveLayoutApplyOn = (
     };
   }
 
+  if (applyOn === "topologyChangeMicrotask") {
+    return {
+      type: "topologyChangeSchedule",
+      schedule: microtaskScheduleFn,
+    };
+  }
+
   if (applyOn?.type === "topologyChangeMacrotask") {
     return {
       type: "topologyChangeSchedule",
