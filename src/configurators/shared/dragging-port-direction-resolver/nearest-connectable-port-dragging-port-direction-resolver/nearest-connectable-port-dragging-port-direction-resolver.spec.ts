@@ -1,5 +1,5 @@
 import { createCanvas, createElement } from "@/mocks";
-import { NearestConnectablePortDraggingPortDirectionResolver } from "./closest-connectable-port-dragging-port-direction-resolver";
+import { NearestConnectablePortDraggingPortDirectionResolver } from "./nearest-connectable-port-dragging-port-direction-resolver";
 import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";
 
 describe("NearestConnectablePortDraggingPortDirectionResolver", () => {
