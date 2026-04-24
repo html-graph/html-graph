@@ -83,7 +83,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 20 4 L 20 -4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 50 50 L 70 54 L 70 46 Z");
   });
 
   it("should create path for target arrow", () => {
@@ -225,7 +225,7 @@ describe("DirectEdgeShape", () => {
     const g = shape.svg.children[0];
     const arrow = g.children[1];
 
-    expect(arrow.getAttribute("d")).toBe("M 10 0 L 30 4 L 30 -4 Z");
+    expect(arrow.getAttribute("d")).toBe("M 60 50 L 80 54 L 80 46 Z");
   });
 
   it("should account for target arrow offset", () => {
