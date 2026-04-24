@@ -116,8 +116,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
       if (this.sourceArrow) {
         const sourceOffset: Point = {
-          x: direction.x * this.sourceOffset,
-          y: direction.y * this.sourceOffset,
+          x: direction.x * this.sourceOffset + from.x,
+          y: direction.y * this.sourceOffset + from.y,
         };
 
         sourceArrowPath = this.arrowRenderer({
