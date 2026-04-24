@@ -1,13 +1,14 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
+  boxPortOffsetFn,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
   Identifier,
 } from "@html-graph/html-graph";
 
-export function createNode(params: {
+function createNode(params: {
   id: Identifier;
   name: string;
   x: number;
@@ -30,24 +31,20 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
-  nodes: {
-    priority: 1,
-  },
   edges: {
     shape: {
       type: "direct",
-      sourceOffset: 50,
-      targetOffset: 50,
       hasTargetArrow: true,
       hasSourceArrow: true,
+      sourceOffset: boxPortOffsetFn,
+      targetOffset: boxPortOffsetFn,
     },
-    priority: 0,
   },
 };
 
 const canvas: Canvas = builder
   .setDefaults(canvasDefaults)
-  .enableUserDraggableNodes({ moveEdgesOnTop: false })
+  .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground()
   .build();

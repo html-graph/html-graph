@@ -15,6 +15,7 @@ import {
   setSvgRectangle,
 } from "../../svg";
 import { svgPadding } from "../../svg-padding";
+import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
@@ -36,9 +37,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowLength: number;
 
-  private readonly sourceOffset: number;
+  private readonly sourceOffset: PortOffsetFn;
 
-  private readonly targetOffset: number;
+  private readonly targetOffset: PortOffsetFn;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
@@ -54,8 +55,12 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
-    this.sourceOffset = params?.sourceOffset ?? edgeConstants.preOffset;
-    this.targetOffset = params?.targetOffset ?? edgeConstants.preOffset;
+    this.sourceOffset = resolvePortOffsetFn(
+      params?.sourceOffset ?? edgeConstants.portOffset,
+    );
+    this.targetOffset = resolvePortOffsetFn(
+      params?.targetOffset ?? edgeConstants.portOffset,
+    );
 
     this.svg = createEdgeSvg(this.color);
     this.svg.appendChild(this.group);
@@ -82,47 +87,50 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     setSvgRectangle(this.svg, { x, y, width, height });
 
+    const dirX = to.x - from.x;
+    const dirY = to.y - from.y;
+
+    const diagonal = Math.sqrt(dirX * dirX + dirY * dirY);
+    // TODO: handle zero diagonal
+    const direction: Point = { x: dirX / diagonal, y: dirY / diagonal };
+
+    const sourceOffset = this.sourceOffset(
+      { x: direction.x, y: direction.y },
+      { width: params.from.width / 2, height: params.from.height / 2 },
+    );
+
+    const targetOffset = this.targetOffset(
+      { x: -direction.x, y: -direction.y },
+      { width: params.to.width / 2, height: params.to.height / 2 },
+    );
+
     const edgePath = new DirectEdgePath({
       from,
       to,
-      sourceOffset: this.sourceOffset,
-      targetOffset: this.targetOffset,
+      sourceOffset,
+      targetOffset,
       hasSourceArrow: this.sourceArrow !== null,
       hasTargetArrow: this.targetArrow !== null,
       arrowLength: this.arrowLength,
+      diagonal,
+      direction,
     });
 
     this.line.setAttribute("d", edgePath.path);
 
     let sourceArrowPath: string | null = null;
     let targetArrowPath: string | null = null;
-    const diagonal = edgePath.diagonalDistance;
 
-    if (diagonal === 0) {
-      if (this.sourceArrow !== null) {
-        sourceArrowPath = "";
-        this.sourceArrow.setAttribute("d", sourceArrowPath);
-      }
-
-      if (this.targetArrow !== null) {
-        targetArrowPath = "";
-        this.targetArrow.setAttribute("d", targetArrowPath);
-      }
-    } else {
-      const direction: Point = {
-        x: (to.x - from.x) / diagonal,
-        y: (to.y - from.y) / diagonal,
-      };
-
+    if (diagonal !== 0) {
       if (this.sourceArrow) {
-        const sourceOffset: Point = {
-          x: direction.x * this.sourceOffset + from.x,
-          y: direction.y * this.sourceOffset + from.y,
+        const sourceOffsetPoint: Point = {
+          x: direction.x * sourceOffset + from.x,
+          y: direction.y * sourceOffset + from.y,
         };
 
         sourceArrowPath = this.arrowRenderer({
-          direction,
-          shift: sourceOffset,
+          direction: direction,
+          shift: sourceOffsetPoint,
           arrowLength: this.arrowLength,
         });
 
@@ -130,20 +138,30 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       }
 
       if (this.targetArrow) {
-        const targetOffset: Point = {
-          x: direction.x * this.targetOffset,
-          y: direction.y * this.targetOffset,
+        const targetOffsetPoint: Point = {
+          x: direction.x * targetOffset,
+          y: direction.y * targetOffset,
         };
 
         targetArrowPath = this.arrowRenderer({
           direction: { x: -direction.x, y: -direction.y },
           shift: {
-            x: to.x - targetOffset.x,
-            y: to.y - targetOffset.y,
+            x: to.x - targetOffsetPoint.x,
+            y: to.y - targetOffsetPoint.y,
           },
           arrowLength: this.arrowLength,
         });
 
+        this.targetArrow.setAttribute("d", targetArrowPath);
+      }
+    } else {
+      if (this.sourceArrow !== null) {
+        sourceArrowPath = "";
+        this.sourceArrow.setAttribute("d", sourceArrowPath);
+      }
+
+      if (this.targetArrow !== null) {
+        targetArrowPath = "";
         this.targetArrow.setAttribute("d", targetArrowPath);
       }
     }

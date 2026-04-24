@@ -1,5 +1,5 @@
 .node {
-  width: 100px;
+  width: 150px;
   height: 100px;
   background: var(--color-node-background);
   border: 1px solid var(--color-node-border);

@@ -6,8 +6,6 @@ export class DirectEdgePath implements EdgePath {
 
   public readonly midpoint: Point;
 
-  public readonly diagonalDistance: number;
-
   public constructor(params: {
     readonly from: Point;
     readonly to: Point;
@@ -16,6 +14,8 @@ export class DirectEdgePath implements EdgePath {
     readonly hasSourceArrow: boolean;
     readonly hasTargetArrow: boolean;
     readonly arrowLength: number;
+    readonly diagonal: number;
+    readonly direction: Point;
   }) {
     const {
       from,
@@ -27,19 +27,13 @@ export class DirectEdgePath implements EdgePath {
       arrowLength,
     } = params;
 
+    // TODO: account for offsets when calculating midpoint
     this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 
-    const width = to.x - from.x;
-    const height = to.y - from.y;
-
-    this.diagonalDistance = Math.sqrt(width * width + height * height);
-
-    if (this.diagonalDistance === 0) {
+    if (params.diagonal === 0) {
       this.path = "";
       return;
     }
-
-    const dir: Point = { x: width, y: height };
 
     const source = this.createDirectLinePoint({
       offset: sourceOffset,
@@ -47,7 +41,8 @@ export class DirectEdgePath implements EdgePath {
       flip: 1,
       shift: from,
       arrowLength,
-      dir,
+      dir: params.direction,
+      diagonal: params.diagonal,
     });
 
     const target = this.createDirectLinePoint({
@@ -56,7 +51,8 @@ export class DirectEdgePath implements EdgePath {
       flip: -1,
       shift: to,
       arrowLength,
-      dir,
+      dir: params.direction,
+      diagonal: params.diagonal,
     });
 
     this.path = `M ${source.x} ${source.y} L ${target.x} ${target.y}`;
@@ -69,15 +65,16 @@ export class DirectEdgePath implements EdgePath {
     readonly shift: Point;
     readonly arrowLength: number;
     readonly dir: Point;
+    readonly diagonal: number;
   }): Point {
     const arrowOffset = params.hasArrow ? params.arrowLength : 0;
     const totalOffset = params.offset + arrowOffset;
-    const targetRatio = (params.flip * totalOffset) / this.diagonalDistance;
+    const targetOffset = params.flip * totalOffset;
     const { dir, shift } = params;
 
     return {
-      x: dir.x * targetRatio + shift.x,
-      y: dir.y * targetRatio + shift.y,
+      x: dir.x * targetOffset + shift.x,
+      y: dir.y * targetOffset + shift.y,
     };
   }
 }

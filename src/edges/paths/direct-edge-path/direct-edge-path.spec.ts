@@ -10,6 +10,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: false,
       hasTargetArrow: false,
       arrowLength: 0,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.path).toBe("M 0 0 L 10 0");
@@ -24,6 +26,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: false,
       hasTargetArrow: false,
       arrowLength: 0,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.path).toBe("M 1 0 L 10 0");
@@ -38,6 +42,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: false,
       hasTargetArrow: false,
       arrowLength: 0,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.path).toBe("M 0 0 L 9 0");
@@ -52,6 +58,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: true,
       hasTargetArrow: false,
       arrowLength: 1,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.path).toBe("M 1 0 L 10 0");
@@ -66,6 +74,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: false,
       hasTargetArrow: true,
       arrowLength: 1,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.path).toBe("M 0 0 L 9 0");
@@ -80,6 +90,8 @@ describe("DirectEdgePath", () => {
       hasSourceArrow: false,
       hasTargetArrow: true,
       arrowLength: 1,
+      diagonal: 10,
+      direction: { x: 1, y: 0 },
     });
 
     expect(edgePath.midpoint).toEqual({ x: 50, y: 100 });

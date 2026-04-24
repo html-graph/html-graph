@@ -74,6 +74,7 @@ export {
   DirectEdgeShape,
   MidpointEdgeShape,
   ConnectionCategory,
+  boxPortOffsetFn,
 } from "./edges";
 export type {
   EdgeShape,
@@ -90,6 +91,8 @@ export type {
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
+  PortOffset,
+  PortOffsetFn,
 } from "./edges";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
