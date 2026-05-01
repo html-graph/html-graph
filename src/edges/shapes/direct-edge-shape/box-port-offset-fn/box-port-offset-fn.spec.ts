@@ -1,20 +1,20 @@
 import { boxPortOffsetFn } from "./box-port-offset-fn";
 
 describe("boxPortOffsetFn", () => {
-  it("should resolve specified width when direction is horizontal", () => {
+  it("should resolve specified horizontal radius when direction is horizontal", () => {
     expect(
       boxPortOffsetFn({
         direction: { x: 1, y: 0 },
-        dimensions: { width: 100, height: 50 },
+        radius: { horizontal: 100, vertical: 50 },
       }),
     ).toBe(100);
   });
 
-  it("should resolve specified height when direction is vertical", () => {
+  it("should resolve specified vertical radius when direction is vertical", () => {
     expect(
       boxPortOffsetFn({
         direction: { x: 0, y: 1 },
-        dimensions: { width: 100, height: 50 },
+        radius: { horizontal: 100, vertical: 50 },
       }),
     ).toBe(50);
   });

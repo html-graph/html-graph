@@ -1,7 +1,7 @@
-import { Dimensions } from "@/dimensions";
 import { Point } from "@/point";
+import { Radius } from "@/radius";
 
 export interface PortOffsetFnParams {
   readonly direction: Point;
-  readonly dimensions: Dimensions;
+  readonly radius: Radius;
 }

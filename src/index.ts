@@ -102,6 +102,8 @@ export type { Viewport } from "./viewport";
 
 export type { Dimensions } from "./dimensions";
 
+export type { Radius } from "./radius";
+
 export type { Point } from "./point";
 
 export type { CenterFn } from "./center-fn";
