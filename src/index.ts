@@ -102,7 +102,7 @@ export type { Viewport } from "./viewport";
 
 export type { Dimensions } from "./dimensions";
 
-export type { Radius } from "./radius";
+export type { Radii } from "./radii";
 
 export type { Point } from "./point";
 

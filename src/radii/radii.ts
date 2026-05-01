@@ -1,4 +1,4 @@
-export interface Radius {
+export interface Radii {
   readonly horizontal: number;
   readonly vertical: number;
 }
