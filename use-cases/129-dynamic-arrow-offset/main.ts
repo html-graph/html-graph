@@ -1,13 +1,17 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
+  boxPortOffsetFn,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
+  DirectEdgeShape,
   Identifier,
+  MidpointEdgeShape,
 } from "@html-graph/html-graph";
+import { createMidpoint } from "../shared/create-midpoint";
 
-export function createNode(params: {
+function createNode(params: {
   id: Identifier;
   name: string;
   x: number;
@@ -30,24 +34,25 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
-  nodes: {
-    priority: 1,
-  },
   edges: {
-    shape: {
-      type: "direct",
-      sourceOffset: 50,
-      targetOffset: 50,
-      hasTargetArrow: true,
-      hasSourceArrow: true,
+    shape: () => {
+      const baseShape = new DirectEdgeShape({
+        hasTargetArrow: true,
+        hasSourceArrow: true,
+        sourceOffset: boxPortOffsetFn,
+        targetOffset: boxPortOffsetFn,
+      });
+
+      const midpoint = createMidpoint();
+
+      return new MidpointEdgeShape(baseShape, midpoint);
     },
-    priority: 0,
   },
 };
 
 const canvas: Canvas = builder
   .setDefaults(canvasDefaults)
-  .enableUserDraggableNodes({ moveEdgesOnTop: false })
+  .enableUserDraggableNodes()
   .enableUserTransformableViewport()
   .enableBackground()
   .build();

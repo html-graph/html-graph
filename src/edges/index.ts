@@ -13,6 +13,7 @@ export {
   InteractiveEdgeShape,
   InteractiveEdgeError,
   MidpointEdgeShape,
+  boxPortOffsetFn,
 } from "./shapes";
 export type {
   BezierEdgeParams,
@@ -21,6 +22,9 @@ export type {
   VerticalEdgeParams,
   DirectEdgeParams,
   InteractiveEdgeParams,
+  PortOffset,
+  PortOffsetFn,
+  PortOffsetFnParams,
 } from "./shapes";
 
 export { ConnectionCategory } from "./connection-category";

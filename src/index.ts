@@ -74,6 +74,7 @@ export {
   DirectEdgeShape,
   MidpointEdgeShape,
   ConnectionCategory,
+  boxPortOffsetFn,
 } from "./edges";
 export type {
   EdgeShape,
@@ -90,6 +91,9 @@ export type {
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
+  PortOffset,
+  PortOffsetFn,
+  PortOffsetFnParams,
 } from "./edges";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
@@ -97,6 +101,8 @@ export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 export type { Viewport } from "./viewport";
 
 export type { Dimensions } from "./dimensions";
+
+export type { Radii } from "./radii";
 
 export type { Point } from "./point";
 

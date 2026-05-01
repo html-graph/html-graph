@@ -10,8 +10,13 @@ export type { StraightEdgeParams } from "./straight-edge-shape";
 export { VerticalEdgeShape } from "./vertical-edge-shape";
 export type { VerticalEdgeParams } from "./vertical-edge-shape";
 
-export { DirectEdgeShape } from "./direct-edge-shape";
-export type { DirectEdgeParams } from "./direct-edge-shape";
+export { DirectEdgeShape, boxPortOffsetFn } from "./direct-edge-shape";
+export type {
+  DirectEdgeParams,
+  PortOffset,
+  PortOffsetFn,
+  PortOffsetFnParams,
+} from "./direct-edge-shape";
 
 export {
   InteractiveEdgeShape,
