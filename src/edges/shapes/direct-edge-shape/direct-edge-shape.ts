@@ -16,6 +16,8 @@ import {
 import { svgPadding } from "../../svg-padding";
 import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
 
+const defaultPortOffset = edgeConstants.portOffset;
+
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 
@@ -56,11 +58,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
 
     this.sourceOffsetFn = resolvePortOffsetFn(
-      params?.sourceOffset ?? edgeConstants.portOffset,
+      params?.sourceOffset ?? defaultPortOffset,
     );
 
     this.targetOffsetFn = resolvePortOffsetFn(
-      params?.targetOffset ?? edgeConstants.portOffset,
+      params?.targetOffset ?? defaultPortOffset,
     );
 
     this.svg = createEdgeSvg(this.color);
