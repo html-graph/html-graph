@@ -54,9 +54,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
+
     this.sourceOffsetFn = resolvePortOffsetFn(
       params?.sourceOffset ?? edgeConstants.portOffset,
     );
+
     this.targetOffsetFn = resolvePortOffsetFn(
       params?.targetOffset ?? edgeConstants.portOffset,
     );
