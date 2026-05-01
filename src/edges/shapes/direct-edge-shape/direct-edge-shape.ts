@@ -4,7 +4,6 @@ import { DirectEdgeParams } from "./direct-edge-params";
 import { edgeConstants } from "../../edge-constants";
 import { Point } from "@/point";
 import { createEdgeRectangle } from "../../geometry";
-import { DirectEdgePath } from "../../paths";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { ArrowRenderer, resolveArrowRenderer } from "@/edges/arrow-renderer";
@@ -109,19 +108,37 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       { width: params.to.width / 2, height: params.to.height / 2 },
     );
 
-    const edgePath = new DirectEdgePath({
-      from,
-      to,
-      sourceOffset,
-      targetOffset,
-      hasSourceArrow: this.sourceArrow !== null,
-      hasTargetArrow: this.targetArrow !== null,
-      arrowLength: this.arrowLength,
-      diagonal,
-      direction,
-    });
+    const source: Point = {
+      x: from.x + sourceOffset * direction.x,
+      y: from.y + sourceOffset * direction.y,
+    };
 
-    this.line.setAttribute("d", edgePath.path);
+    const target: Point = {
+      x: to.x - targetOffset * direction.x,
+      y: to.y - targetOffset * direction.y,
+    };
+
+    const diagonalSource = this.sourceArrow !== null ? this.arrowLength : 0;
+
+    const sourceLine: Point = {
+      x: source.x + diagonalSource * direction.x,
+      y: source.y + diagonalSource * direction.y,
+    };
+
+    const diagonalTarget = this.targetArrow !== null ? this.arrowLength : 0;
+
+    const targetLine: Point = {
+      x: target.x - diagonalTarget * direction.x,
+      y: target.y - diagonalTarget * direction.y,
+    };
+
+    const midpoint: Point = {
+      x: (source.x + target.x) / 2,
+      y: (source.y + target.y) / 2,
+    };
+
+    const path = `M ${sourceLine.x} ${sourceLine.y} L ${targetLine.x} ${targetLine.y}`;
+    this.line.setAttribute("d", path);
 
     let sourceArrowPath: string | null = null;
     let targetArrowPath: string | null = null;
@@ -160,27 +177,33 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     }
 
     this.afterRenderEmitter.emit({
-      edgePath,
+      edgePath: { path, midpoint },
       sourceArrowPath,
       targetArrowPath,
     });
   }
 
   private renderEmpty(midpoint: Point): void {
-    this.line.setAttribute("d", "");
+    const emptyPath = "";
+    let sourceArrowPath: string | null = null;
+    let targetArrowPath: string | null = null;
+
+    this.line.setAttribute("d", emptyPath);
 
     if (this.sourceArrow !== null) {
-      this.sourceArrow.setAttribute("d", "");
+      sourceArrowPath = "";
+      this.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
     if (this.targetArrow !== null) {
-      this.targetArrow.setAttribute("d", "");
+      targetArrowPath = "";
+      this.targetArrow.setAttribute("d", targetArrowPath);
     }
 
     this.afterRenderEmitter.emit({
-      edgePath: { path: "", midpoint },
-      sourceArrowPath: "",
-      targetArrowPath: "",
+      edgePath: { path: emptyPath, midpoint },
+      sourceArrowPath,
+      targetArrowPath,
     });
   }
 }
