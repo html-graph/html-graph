@@ -15,6 +15,7 @@ export type {
   DirectEdgeParams,
   PortOffset,
   PortOffsetFn,
+  PortOffsetFnParams,
 } from "./direct-edge-shape";
 
 export {

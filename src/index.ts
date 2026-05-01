@@ -93,6 +93,7 @@ export type {
   ArrowRenderingParams,
   PortOffset,
   PortOffsetFn,
+  PortOffsetFnParams,
 } from "./edges";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";

@@ -1,4 +1,3 @@
-import { Dimensions } from "@/dimensions";
-import { Point } from "@/point";
+import { PortOffsetFnParams } from "./port-offset-fn-params";
 
-export type PortOffsetFn = (direction: Point, dimensions: Dimensions) => number;
+export type PortOffsetFn = (params: PortOffsetFnParams) => number;

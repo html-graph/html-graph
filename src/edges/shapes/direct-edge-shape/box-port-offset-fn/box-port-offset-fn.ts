@@ -1,11 +1,9 @@
-import { Point } from "@/point";
-import { PortOffsetFn } from "../resolve-port-offset-fn";
-import { Dimensions } from "@/dimensions";
+import { PortOffsetFn, PortOffsetFnParams } from "../resolve-port-offset-fn";
 
 export const boxPortOffsetFn: PortOffsetFn = (
-  direction: Point,
-  dimensions: Dimensions,
+  params: PortOffsetFnParams,
 ): number => {
+  const { direction, dimensions } = params;
   const { x, y } = direction;
   const { width, height } = dimensions;
   const tg = y / x;

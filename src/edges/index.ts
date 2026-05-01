@@ -24,6 +24,7 @@ export type {
   InteractiveEdgeParams,
   PortOffset,
   PortOffsetFn,
+  PortOffsetFnParams,
 } from "./shapes";
 
 export { ConnectionCategory } from "./connection-category";
