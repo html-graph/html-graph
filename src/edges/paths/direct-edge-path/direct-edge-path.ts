@@ -30,11 +30,6 @@ export class DirectEdgePath implements EdgePath {
     // TODO: account for offsets when calculating midpoint
     this.midpoint = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2 };
 
-    if (params.diagonal === 0) {
-      this.path = "";
-      return;
-    }
-
     const source = this.createDirectLinePoint({
       offset: sourceOffset,
       hasArrow: hasSourceArrow,
