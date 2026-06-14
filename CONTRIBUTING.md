@@ -94,6 +94,8 @@ npm run fix-formatting   # Fix formatting with Prettier
 - **Minor**: New features (backward compatible)
 - **Patch**: Bug fixes (backward compatible)
 
+See [DEVELOPMENT.md](DEVELOPMENT.md) for more detailed setup.
+
 ## Project Structure
 
 ```
