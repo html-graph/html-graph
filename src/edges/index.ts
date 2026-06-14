@@ -13,6 +13,10 @@ export {
   InteractiveEdgeShape,
   InteractiveEdgeError,
   MidpointEdgeShape,
+  /**
+   * @deprecated
+   * use "box" value instead
+   */
   boxPortOffsetFn,
 } from "./shapes";
 export type {

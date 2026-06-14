@@ -74,6 +74,10 @@ export {
   DirectEdgeShape,
   MidpointEdgeShape,
   ConnectionCategory,
+  /**
+   * @deprecated
+   * use "box" value instead
+   */
   boxPortOffsetFn,
 } from "./edges";
 export type {
