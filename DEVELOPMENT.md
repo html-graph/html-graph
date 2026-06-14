@@ -1,7 +1,7 @@
 ## Development
 
 ```
-// install packeges
+// install packages
 npm install
 
 // start development server
