@@ -68,10 +68,10 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 1. **Fork the repository** and create your branch from `master`
 2. **Check for open issues** that your PR would address
 3. **Add or update tests** before adding or changing functionality
-   This project follows a Behavior Driven Development approach:
-   - Add a failing test
-   - Make the failed test pass
-   - Refactor
+   - This project follows a Behavior Driven Development approach:
+     - Add a failing test
+     - Make the failed test pass
+     - Refactor
 4. **Update documentation** for any API changes (see [Documentation repository](https://github.com/html-graph/html-graph.github.io))
 5. **Submit the pull request** with a clear description, ensuring all validation checks pass
 
