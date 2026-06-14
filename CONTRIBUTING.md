@@ -5,6 +5,7 @@ First off, thank you for considering contributing to HTMLGraph! It's people like
 ## Getting Started
 
 ### Project Structure
+
 ```
 html-graph/
 ├── src/
@@ -63,17 +64,19 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ### Pull Requests
 
 #### Process
+
 1. **Fork the repository** and create your branch from `master`
 2. **Check for open issues** that your PR would address
 3. **Add or update tests** before adding or changing functionality
-   - This project follows a Behavior Driven Development approach:
-     - Add a failing test
-     - Make the failed test pass
-     - Refactor
+   This project follows a Behavior Driven Development approach:
+   - Add a failing test
+   - Make the failed test pass
+   - Refactor
 4. **Update documentation** for any API changes (see [Documentation repository](https://github.com/html-graph/html-graph.github.io))
 5. **Submit the pull request** with a clear description, ensuring all validation checks pass
 
 #### PR Guidelines
+
 - Keep PRs focused on a single feature or fix
 - Reference related issues using `#issue-number`
 - Request review from maintainers after CI passes
@@ -81,6 +84,7 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 ## Development Setup
 
 ### Clone and Install
+
 ```bash
 # Clone your fork
 git clone https://github.com/{{YOUR_USERNAME}}/html-graph
@@ -100,6 +104,7 @@ npm run start
 ```
 
 ### Available Scripts
+
 ```bash
 npm run start            # Start development server with hot reload
 npm run build            # Build production bundle
@@ -113,11 +118,13 @@ npm run fix-formatting   # Fix formatting with Prettier
 ```
 
 ### Use Cases
+
 - Add a use case for new features
 - Keep use cases simple and focused
 - Add Playwright end-to-end tests
 
 ### Versioning Guidelines
+
 - **Major**: Breaking API changes
 - **Minor**: New features (backward compatible)
 - **Patch**: Bug fixes (backward compatible)
