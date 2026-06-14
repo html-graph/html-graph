@@ -2,9 +2,7 @@
 
 First off, thank you for considering contributing to HTMLGraph! It's people like you that make this library better for everyone.
 
-## Getting Started
-
-### Project Structure
+## Project Structure
 
 ```
 html-graph/
