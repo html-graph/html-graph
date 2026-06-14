@@ -38,6 +38,6 @@ const canvas = new CanvasBuilder(element)
 
 ## Links
 
-- <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a>
-- <a target="_blank" href="CONTRIBUTING.md">CONTRIBUTING</a>
-- <a target="_blank" href="DEVELOPMENT.md">DEVELOPMENT</a>
+- <a target="_blank" href="https://html-graph.github.io">Documentation</a>
+- <a target="_blank" href="CONTRIBUTING.md">Contributing</a>
+- <a target="_blank" href="DEVELOPMENT.md">Development</a>
