@@ -36,4 +36,8 @@ const canvas = new CanvasBuilder(element)
   .build();
 ```
 
-Visit the <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a> for examples and API reference.
+## Links
+
+- <a target="_blank" href="https://html-graph.github.io">DOCUMENTATION</a>
+- <a target="_blank" href="/blob/master/CONTRIBUTING.md">CONTRIBUTING</a>
+- <a target="_blank" href="/blob/master/DEVELOPMENT.md">DEVELOPMENT</a>
