@@ -2,39 +2,6 @@
 
 First off, thank you for considering contributing to HTMLGraph! It's people like you that make this library better for everyone.
 
-## Project Structure
-
-```
-html-graph/
-├── src/
-│   ├── canvas/              # Main object for managing graph visualization
-│   ├── canvas-builder/      # Object responsible for canvas configuration
-│   ├── canvas-error/        # Error behavior related entities
-│   ├── center-fn/           # Function which determines node's center
-│   ├── configurators/       # Canvas extension with useful extra features
-│   ├── dimensions/          # Viewport dimensions model
-│   ├── edges/               # Visualization for connections
-│   ├── element/             # Model for HTML elements
-│   ├── event-subject/       # Straightforward implementation of observer pattern
-│   ├── graph/               # Public model for graph
-│   ├── graph-controller/    # Logic for graph manipulation
-│   ├── graph-store/         # Internal model for graph
-│   ├── html-view/           # HTML representation for graph
-│   ├── identifier/          # Identifier model for nodes, ports, and edges
-│   ├── layouts/             # Automatic node coordinate calculation
-│   ├── mocks/               # Unit-test related objects
-│   ├── point/               # Model for point in 2D space
-│   ├── priority/            # Z-index calculation for nodes and edges
-│   ├── prng/                # Pseudo-random number generator
-│   ├── radii/               # Cover radius model for 2D space
-│   ├── schedule-fn/         # Delay for actions
-│   ├── transformations/     # Analytical geometry operations
-│   ├── viewport/            # Public model for viewport
-│   ├── viewport-store/      # Internal model for viewport
-│   └── viewport-controller/ # Logic for viewport manipulation
-├── use-cases/            # Examples and E2E tests
-```
-
 ## How Can I Contribute?
 
 ### Reporting Bugs
@@ -126,6 +93,39 @@ npm run fix-formatting   # Fix formatting with Prettier
 - **Major**: Breaking API changes
 - **Minor**: New features (backward compatible)
 - **Patch**: Bug fixes (backward compatible)
+
+## Project Structure
+
+```
+html-graph/
+├── src/
+│   ├── canvas/              # Main object for managing graph visualization
+│   ├── canvas-builder/      # Object responsible for canvas configuration
+│   ├── canvas-error/        # Error behavior related entities
+│   ├── center-fn/           # Function which determines node's center
+│   ├── configurators/       # Canvas extension with useful extra features
+│   ├── dimensions/          # Viewport dimensions model
+│   ├── edges/               # Visualization for connections
+│   ├── element/             # Model for HTML elements
+│   ├── event-subject/       # Straightforward implementation of observer pattern
+│   ├── graph/               # Public model for graph
+│   ├── graph-controller/    # Logic for graph manipulation
+│   ├── graph-store/         # Internal model for graph
+│   ├── html-view/           # HTML representation for graph
+│   ├── identifier/          # Identifier model for nodes, ports, and edges
+│   ├── layouts/             # Automatic node coordinate calculation
+│   ├── mocks/               # Unit-test related objects
+│   ├── point/               # Model for point in 2D space
+│   ├── priority/            # Z-index calculation for nodes and edges
+│   ├── prng/                # Pseudo-random number generator
+│   ├── radii/               # Cover radius model for 2D space
+│   ├── schedule-fn/         # Delay for actions
+│   ├── transformations/     # Analytical geometry operations
+│   ├── viewport/            # Public model for viewport
+│   ├── viewport-store/      # Internal model for viewport
+│   └── viewport-controller/ # Logic for viewport manipulation
+├── use-cases/            # Examples and E2E tests
+```
 
 ---
 
