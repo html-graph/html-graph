@@ -1,7 +1,6 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
-  boxPortOffsetFn,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
@@ -39,8 +38,8 @@ const canvasDefaults: CanvasDefaults = {
       const baseShape = new DirectEdgeShape({
         hasTargetArrow: true,
         hasSourceArrow: true,
-        sourceOffset: boxPortOffsetFn,
-        targetOffset: boxPortOffsetFn,
+        sourceOffset: "box",
+        targetOffset: "box",
       });
 
       const midpoint = createMidpoint();

@@ -1,6 +1,7 @@
 import { Point } from "@/point";
 import { resolvePortOffsetFn } from "./resolve-port-offset-fn";
 import { Radii } from "@/radii";
+import { boxPortOffsetFn } from "./box-port-offset-fn";
 
 describe("resolvePortOffsetFn", () => {
   it("should resolve number offset function", () => {
@@ -17,5 +18,11 @@ describe("resolvePortOffsetFn", () => {
     const radius: Radii = { horizontal: 100, vertical: 100 };
 
     expect(fn({ direction, radius })).toBe(20);
+  });
+
+  it("should resolve box offset function", () => {
+    const fn = resolvePortOffsetFn("box");
+
+    expect(fn).toBe(boxPortOffsetFn);
   });
 });

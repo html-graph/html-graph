@@ -1,4 +1,5 @@
-import { PortOffsetFn, PortOffsetFnParams } from "../resolve-port-offset-fn";
+import { PortOffsetFn } from "../port-offset-fn";
+import { PortOffsetFnParams } from "../port-offset-fn-params";
 
 export const boxPortOffsetFn: PortOffsetFn = (
   params: PortOffsetFnParams,
