@@ -9,4 +9,4 @@ export type {
  * @deprecated
  * use "box" value instead
  */
-export { boxPortOffsetFn } from "./box-port-offset-fn";
+export { boxPortOffsetFn } from "./resolve-port-offset-fn";

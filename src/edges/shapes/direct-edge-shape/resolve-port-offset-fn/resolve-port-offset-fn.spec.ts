@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { resolvePortOffsetFn } from "./resolve-port-offset-fn";
 import { Radii } from "@/radii";
-import { boxPortOffsetFn } from "../box-port-offset-fn";
+import { boxPortOffsetFn } from "./box-port-offset-fn";
 
 describe("resolvePortOffsetFn", () => {
   it("should resolve number offset function", () => {

@@ -1,4 +1,4 @@
-import { boxPortOffsetFn } from "../box-port-offset-fn";
+import { boxPortOffsetFn } from "./box-port-offset-fn";
 import { PortOffset } from "./port-offset";
 import { PortOffsetFn } from "./port-offset-fn";
 
