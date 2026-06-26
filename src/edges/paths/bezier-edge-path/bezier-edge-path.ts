@@ -2,6 +2,9 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 
+const halfCube = 0.5 * 0.5 * 0.5;
+const halfCube3 = 3 * halfCube;
+
 export class BezierEdgePath implements EdgePath {
   public readonly path: string;
 
@@ -49,9 +52,6 @@ export class BezierEdgePath implements EdgePath {
       x: end.x - toDir.x * curvature,
       y: end.y - toDir.y * curvature,
     };
-
-    const halfCube = 0.5 * 0.5 * 0.5;
-    const halfCube3 = 3 * halfCube;
 
     const centerX =
       halfCube * begin.x +
