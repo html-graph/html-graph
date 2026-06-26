@@ -126,7 +126,7 @@ html-graph/
 │   ├── viewport/            # Public model for viewport
 │   ├── viewport-store/      # Internal model for viewport
 │   └── viewport-controller/ # Logic for viewport manipulation
-├── use-cases/            # Examples and E2E tests
+├── use-cases/               # Examples and E2E tests
 ```
 
 ---
