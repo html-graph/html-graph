@@ -10,6 +10,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
+      priority: 0,
       shape: () => {
         const baseShape = new BezierEdgeShape();
 
@@ -18,9 +19,12 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
         return new MidpointEdgeShape(baseShape, midpoint);
       },
     },
+    nodes: {
+      priority: 1,
+    },
   })
   .enableUserTransformableViewport()
-  .enableUserDraggableNodes()
+  .enableUserDraggableNodes({ moveEdgesOnTop: false })
   .enableBackground()
   .build();
 

@@ -28,11 +28,6 @@ export class BezierEdgePath implements EdgePath {
       hasTargetArrow,
     } = params;
 
-    const centerX = (from.x + to.x) / 2;
-    const centerY = (from.y + to.y) / 2;
-
-    this.midpoint = { x: centerX, y: centerY };
-
     const begin = createRotatedPoint(
       { x: from.x + arrowLength, y: from.y },
       fromDir,
@@ -54,6 +49,23 @@ export class BezierEdgePath implements EdgePath {
       x: end.x - toDir.x * curvature,
       y: end.y - toDir.y * curvature,
     };
+
+    const halfCube = 0.5 * 0.5 * 0.5;
+    const halfCube3 = 3 * halfCube;
+
+    const centerX =
+      halfCube * begin.x +
+      halfCube3 * bezierBegin.x +
+      halfCube3 * bezierEnd.x +
+      halfCube * end.x;
+
+    const centerY =
+      halfCube * begin.y +
+      halfCube3 * bezierBegin.y +
+      halfCube3 * bezierEnd.y +
+      halfCube * end.y;
+
+    this.midpoint = { x: centerX, y: centerY };
 
     const curve = `M ${begin.x} ${begin.y} C ${bezierBegin.x} ${bezierBegin.y}, ${bezierEnd.x} ${bezierEnd.y}, ${end.x} ${end.y}`;
 
