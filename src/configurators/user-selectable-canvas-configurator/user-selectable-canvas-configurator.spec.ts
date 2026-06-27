@@ -12,7 +12,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { EventTagger, PointInsideVerifier, selectionHandled } from "../shared";
+import { EventTagger, PointInsideVerifier, selectionEventHandledTag } from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -104,7 +104,7 @@ describe("UserSelectableCanvasConfigurator", () => {
     const event = new MouseEvent("mouseup");
 
     const eventTagger = new EventTagger();
-    eventTagger.tag(event, selectionHandled);
+    eventTagger.tag(event, selectionEventHandledTag);
 
     window.dispatchEvent(event);
 

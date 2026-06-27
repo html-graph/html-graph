@@ -1,3 +1,5 @@
+import { tagsFieldName } from "./tags-field-name";
+
 export type ExtendedEvent = Event & {
-  _htmlGraphTags: Set<unknown> | undefined;
+  [tagsFieldName]: Set<unknown> | undefined;
 };

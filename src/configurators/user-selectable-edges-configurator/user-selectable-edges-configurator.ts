@@ -2,7 +2,7 @@ import { Canvas } from "@/canvas";
 import {
   EventTagger,
   PointInsideVerifier,
-  selectionHandled,
+  selectionEventHandledTag,
   UserSelectableElementsConfigurator,
 } from "../shared";
 import { UserSelectableEdgesParams } from "./user-selectable-edges-params";
@@ -11,7 +11,7 @@ import { Identifier } from "@/identifier";
 export class UserSelectableEdgesConfigurator {
   private readonly configurator: UserSelectableElementsConfigurator;
 
-  private readonly selectionHandledTag = selectionHandled;
+  private readonly eventHandledTag = selectionEventHandledTag;
 
   private readonly onEdgeSelected: (nodeId: Identifier) => void;
 
@@ -50,7 +50,7 @@ export class UserSelectableEdgesConfigurator {
       {
         onSelected: (element, event): void => {
           const edgeId = this.canvas.graph.findEdgeIdByElement(element)!;
-          this.eventTagger.tag(event, this.selectionHandledTag);
+          this.eventTagger.tag(event, this.eventHandledTag);
 
           this.onEdgeSelected(edgeId);
         },

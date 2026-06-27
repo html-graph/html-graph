@@ -10,7 +10,8 @@ export { createOverlayCanvas } from "./create-overlay-canvas";
 export { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 export type { DraggablePortsParams } from "./draggable-ports-configurator";
 export { EventTagger } from "./event-tagger";
-export { selectionHandled } from "./selection-handled";
+export { selectionEventHandledTag } from "./selection-event-handled-tag";
+export { dragEventHandledTag } from "./drag-event-handled-tag";
 export { UserSelectableElementsConfigurator } from "./user-selectable-elements-configurator";
 export type { UserSelectableElementsParams } from "./user-selectable-elements-configurator";
 export type {
