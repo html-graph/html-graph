@@ -13,7 +13,12 @@ import {
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";
-import { MouseEventVerifier, PointInsideVerifier } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  MouseEventVerifier,
+  PointInsideVerifier,
+} from "../shared";
 import { TransformableViewportParams } from "./transformable-viewport-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -93,12 +98,14 @@ const createCanvas = (options?: {
   };
 
   const pointInsideVerifier = new PointInsideVerifier(element, window);
+  const eventTagger = new EventTagger();
 
   UserTransformableViewportConfigurator.configure(
     canvas,
     element,
     window,
     pointInsideVerifier,
+    eventTagger,
     params,
   );
 
@@ -139,7 +146,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
   it("should move viewport with mouse", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createCanvas({ element });
+    const canvas = createCanvas({ element });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
@@ -147,9 +154,24 @@ describe("UserTransformableViewportConfigurator", () => {
 
     window.dispatchEvent(moveEvent);
 
-    const container = element.children[0].children[0] as HTMLElement;
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(100);
+  });
 
-    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+  it("should not move viewport with mouse when event was tagged as handled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    const event = new MouseEvent("mousedown", { button: 0 });
+    const eventTagger = new EventTagger();
+    eventTagger.tag(event, dragEventHandledTag);
+
+    element.dispatchEvent(event);
+
+    const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
+
+    window.dispatchEvent(moveEvent);
+
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(0);
   });
 
   it("should call onBeforeTransformChange for move with mouse", () => {
@@ -413,7 +435,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
   it("should move viewport with touch", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    createCanvas({ element });
+    const canvas = createCanvas({ element });
 
     element.dispatchEvent(
       new TouchEvent("touchstart", {
@@ -427,9 +449,30 @@ describe("UserTransformableViewportConfigurator", () => {
       }),
     );
 
-    const container = element.children[0].children[0] as HTMLElement;
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(100);
+  });
 
-    expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
+  it("should not move viewport with touch when event was tagged as handled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    const event = new TouchEvent("touchstart", {
+      touches: [createTouch({ clientX: 0, clientY: 0 })],
+    });
+
+    const eventTagger = new EventTagger();
+
+    eventTagger.tag(event, dragEventHandledTag);
+
+    element.dispatchEvent(event);
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(0);
   });
 
   it("should stop movement on touchend", () => {

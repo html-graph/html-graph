@@ -415,6 +415,7 @@ export class CanvasBuilder {
         createTransformableViewportParams(this.transformConfig),
         this.boxRenderingTrigger,
         this.pointInsideVerifier,
+        this.eventTagger,
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
@@ -423,6 +424,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         createTransformableViewportParams(this.transformConfig),
       );
     }

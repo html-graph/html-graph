@@ -31,6 +31,7 @@ export class DraggablePortsConfigurator {
     }
 
     const target = event.currentTarget as PortElement;
+    // TODO: add port id resolver by element
     const portId = this.canvas.graph.findPortIdsByElement(target)[0]!;
 
     const dragAllowed = this.params.onPointerDownVerifier(portId, {
