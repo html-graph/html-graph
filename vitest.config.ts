@@ -12,5 +12,14 @@ export default defineConfig({
     include: ["./src/**/*.spec.ts"],
     environment: "jsdom",
     setupFiles: "./setup-jest.ts",
+    coverage: {
+      thresholds: {
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        statements: 100,
+      },
+      exclude: ["src/**/*.mock.ts", "src/**/index.ts"],
+    },
   },
 });

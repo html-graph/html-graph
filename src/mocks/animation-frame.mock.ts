@@ -1,4 +1,5 @@
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { Mock } from "vitest";
 
 export class AnimationFrameMock {
   private callbacks: Array<(dtSec: number) => void> = [];
@@ -7,11 +8,7 @@ export class AnimationFrameMock {
 
   public readonly timer: EventEmitter<number>;
 
-  private spy!: jest.SpyInstance<
-    number,
-    [callback: FrameRequestCallback],
-    unknown
-  >;
+  private spy!: Mock;
 
   public constructor() {
     [this.timer, this.timerHandler] = createPair<number>();

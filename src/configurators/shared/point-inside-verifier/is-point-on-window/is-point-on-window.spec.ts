@@ -1,7 +1,8 @@
+import { Mock } from "vitest";
 import { isPointOnWindow } from "./is-point-on-window";
 
 describe("isPointOnWindow", () => {
-  let windowSpy: jest.SpyInstance;
+  let windowSpy: Mock;
 
   beforeEach(() => {
     windowSpy = vi.spyOn(globalThis, "window", "get");
