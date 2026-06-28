@@ -45,8 +45,6 @@ export class DraggablePortsConfigurator {
       return;
     }
 
-    event.stopPropagation();
-
     this.eventTagger.tag(event, dragEventHandledTag);
 
     this.window.addEventListener("mousemove", this.onWindowMouseMove, {
@@ -101,8 +99,6 @@ export class DraggablePortsConfigurator {
     if (!dragAllowed) {
       return;
     }
-
-    event.stopPropagation();
 
     this.eventTagger.tag(event, dragEventHandledTag);
 

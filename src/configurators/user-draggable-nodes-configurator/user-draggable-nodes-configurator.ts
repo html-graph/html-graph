@@ -63,7 +63,6 @@ export class UserDraggableNodesConfigurator {
     }
 
     this.eventTagger.tag(event, dragEventHandledTag);
-    event.stopPropagation();
 
     this.params.onNodeDragStarted(nodeId);
 
@@ -121,7 +120,6 @@ export class UserDraggableNodesConfigurator {
     }
 
     this.eventTagger.tag(event, dragEventHandledTag);
-    event.stopPropagation();
 
     const cursorContent = this.calculateContentPoint({
       x: touch.clientX,

@@ -127,25 +127,6 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDownVerifier).not.toHaveBeenCalled();
   });
 
-  it("should stop event propagation when mouse event is accepted", () => {
-    const onPointerDownVerifier = jest.fn(() => true);
-
-    const canvas = createDraggablePortsCanvas({
-      onPointerDownVerifier,
-    });
-
-    const portElement = document.createElement("div");
-    createNode(canvas, portElement);
-
-    const event = new MouseEvent("mousedown", { clientX: 100, clientY: 200 });
-
-    const spy = jest.spyOn(event, "stopPropagation");
-
-    portElement.dispatchEvent(event);
-
-    expect(spy).toHaveBeenCalled();
-  });
-
   it("should tag event as handled when mouse event is accepted", () => {
     const onPointerDownVerifier = jest.fn(() => true);
 
