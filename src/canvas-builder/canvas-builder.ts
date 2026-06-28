@@ -370,6 +370,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         draggableNodesParams,
       );
     }
@@ -387,6 +388,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         params,
       );
     }
@@ -403,6 +405,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         dragEdgeParams,
       );
     }
@@ -415,6 +418,7 @@ export class CanvasBuilder {
         createTransformableViewportParams(this.transformConfig),
         this.boxRenderingTrigger,
         this.pointInsideVerifier,
+        this.eventTagger,
         createVirtualScrollParams(this.virtualScrollConfig),
       );
     } else if (this.hasTransformableViewport) {
@@ -423,6 +427,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         createTransformableViewportParams(this.transformConfig),
       );
     }

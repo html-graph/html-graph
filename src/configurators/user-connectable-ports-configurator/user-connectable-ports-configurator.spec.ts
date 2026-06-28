@@ -16,6 +16,7 @@ import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   ConstantDraggingPortDirectionResolver,
+  EventTagger,
   PointInsideVerifier,
 } from "../shared";
 import { Identifier } from "@/identifier";
@@ -84,6 +85,7 @@ const createCanvas = (options?: {
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
+  const eventTagger = new EventTagger();
 
   UserConnectablePortsConfigurator.configure(
     canvas,
@@ -91,6 +93,7 @@ const createCanvas = (options?: {
     viewportStore,
     window,
     pointInsideVerifier,
+    eventTagger,
     params,
   );
 

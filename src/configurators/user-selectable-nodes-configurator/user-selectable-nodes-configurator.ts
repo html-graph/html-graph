@@ -4,7 +4,7 @@ import { Identifier } from "@/identifier";
 import {
   EventTagger,
   PointInsideVerifier,
-  selectionHandled,
+  selectionEventHandledTag,
   UserSelectableElementsConfigurator,
 } from "../shared";
 
@@ -13,7 +13,7 @@ export class UserSelectableNodesConfigurator {
 
   private readonly onNodeSelected: (nodeId: Identifier) => void;
 
-  private readonly selectionHandledTag = selectionHandled;
+  private readonly eventHandledTag = selectionEventHandledTag;
 
   private readonly onAfterNodeAdded = (nodeId: Identifier): void => {
     const { element } = this.canvas.graph.getNode(nodeId);
@@ -51,7 +51,7 @@ export class UserSelectableNodesConfigurator {
         onSelected: (element, event): void => {
           const nodeId = this.canvas.graph.findNodeIdByElement(element)!;
 
-          this.eventTagger.tag(event, this.selectionHandledTag);
+          this.eventTagger.tag(event, this.eventHandledTag);
           this.onNodeSelected(nodeId);
         },
         movementThreshold: params.movementThreshold,

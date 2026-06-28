@@ -13,6 +13,7 @@ import {
   PointInsideVerifier,
   DraggablePortsConfigurator,
   resolveCreateEdgeRequest,
+  EventTagger,
 } from "../shared";
 import { Identifier } from "@/identifier";
 import { GraphEdge } from "@/graph";
@@ -37,6 +38,7 @@ export class UserDraggableEdgesConfigurator {
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     private readonly params: DraggableEdgesParams,
   ) {
     this.overlayCanvas = createOverlayCanvas(
@@ -76,6 +78,7 @@ export class UserDraggableEdgesConfigurator {
       this.canvas,
       this.window,
       this.pointInsideVerifier,
+      this.eventTagger,
       draggablePortsParams,
     );
   }
@@ -86,6 +89,7 @@ export class UserDraggableEdgesConfigurator {
     viewportStore: ViewportStore,
     win: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     params: DraggableEdgesParams,
   ): void {
     new UserDraggableEdgesConfigurator(
@@ -94,6 +98,7 @@ export class UserDraggableEdgesConfigurator {
       viewportStore,
       win,
       pointInsideVerifier,
+      eventTagger,
       params,
     );
   }

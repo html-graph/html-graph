@@ -1,5 +1,3 @@
-import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
@@ -13,7 +11,12 @@ import {
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
-import { MouseEventVerifier, PointInsideVerifier } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  MouseEventVerifier,
+  PointInsideVerifier,
+} from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -80,12 +83,14 @@ const createCanvas = (options?: {
   };
 
   const pointInsideVerifier = new PointInsideVerifier(element, window);
+  const eventTagger = new EventTagger();
 
   UserDraggableNodesConfigurator.configure(
     canvas,
     element,
     window,
     pointInsideVerifier,
+    eventTagger,
     params,
   );
 
@@ -116,8 +121,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -135,8 +138,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 1 }));
@@ -154,8 +155,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -168,6 +167,53 @@ describe("UserDraggableNodesConfigurator", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
+  it("should tag mouse down event when grab was accepted", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const event = new MouseEvent("mousedown", { button: 0 });
+
+    nodeElement.dispatchEvent(event);
+
+    const eventTagger = new EventTagger();
+
+    expect(eventTagger.has(event, dragEventHandledTag)).toBe(true);
+  });
+
+  it("should not move grabbed node with mouse when event was tagged as handled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const event = new MouseEvent("mousedown", { button: 0 });
+    const eventTagger = new EventTagger();
+    eventTagger.tag(event, dragEventHandledTag);
+
+    nodeElement.dispatchEvent(event);
+
+    window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
+
+    const container = element.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(0px, 0px)");
+  });
+
   it("should change cursor back on node release", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
@@ -178,8 +224,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -198,8 +242,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -221,8 +263,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -240,8 +280,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -262,6 +300,63 @@ describe("UserDraggableNodesConfigurator", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
+  it("should tag touch down event when grab was accepted", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const event = new TouchEvent("touchstart", {
+      touches: [createTouch({ clientX: 0, clientY: 0 })],
+    });
+
+    nodeElement.dispatchEvent(event);
+
+    const eventTagger = new EventTagger();
+
+    expect(eventTagger.has(event, dragEventHandledTag)).toBe(true);
+  });
+
+  it("should not move grabbed node with touch when event was tagged as handled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+    const nodeElement = createElement();
+
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
+
+    const event = new TouchEvent("touchstart", {
+      touches: [createTouch({ clientX: 0, clientY: 0 })],
+    });
+
+    const eventTagger = new EventTagger();
+
+    eventTagger.tag(event, dragEventHandledTag);
+
+    nodeElement.dispatchEvent(event);
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [createTouch({ clientX: 100, clientY: 100 })],
+      }),
+    );
+
+    const container = element.children[0].children[0];
+    const nodeWrapper = container.children[0] as HTMLElement;
+
+    expect(nodeWrapper.style.transform).toBe("translate(0px, 0px)");
+  });
+
   it("should not move grabbed node with mouse when pointer is out of controller", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
@@ -272,8 +367,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -296,8 +389,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -320,8 +411,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -355,8 +444,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -387,8 +474,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -419,8 +504,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -463,8 +546,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -512,8 +593,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -534,8 +613,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -561,8 +638,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -593,8 +668,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -628,8 +701,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     canvas.clear();
@@ -649,8 +720,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     canvas.destroy();
@@ -670,8 +739,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -695,8 +762,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -720,8 +785,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -743,15 +806,12 @@ describe("UserDraggableNodesConfigurator", () => {
       element: element1,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     canvas.markPort({
       id: "port-1",
       nodeId: "node-1",
       element: createElement(),
-      direction: 0,
     });
 
     canvas.addNode({
@@ -759,23 +819,18 @@ describe("UserDraggableNodesConfigurator", () => {
       element: createElement(),
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     canvas.markPort({
       id: "port-2",
       nodeId: "node-2",
       element: createElement(),
-      direction: 0,
     });
 
     canvas.addEdge({
       id: "edge-1",
       from: "port-1",
       to: "port-2",
-      shape: new BezierEdgeShape(),
-      priority: 0,
     });
 
     element1.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -802,8 +857,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -828,8 +881,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -867,8 +918,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -898,8 +947,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -934,8 +981,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -959,8 +1004,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(
@@ -990,8 +1033,6 @@ describe("UserDraggableNodesConfigurator", () => {
       element: nodeElement,
       x: 0,
       y: 0,
-      centerFn: standardCenterFn,
-      priority: 0,
     });
 
     nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));

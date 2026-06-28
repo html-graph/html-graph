@@ -1,5 +1,10 @@
 import { Canvas } from "@/canvas";
-import { PointInsideVerifier, setCursor } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  PointInsideVerifier,
+  setCursor,
+} from "../shared";
 import { Point } from "@/point";
 import { DraggableNodesParams } from "./draggable-nodes-params";
 import { GrabbedNodeState } from "./grabbed-node-state";
@@ -37,6 +42,10 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onMouseDown: EventListener = (event: Event): void => {
+    if (this.eventTagger.has(event, dragEventHandledTag)) {
+      return;
+    }
+
     const mouseEvent = event as MouseEvent;
 
     if (!this.params.mouseDownEventVerifier(mouseEvent)) {
@@ -53,9 +62,9 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    this.params.onNodeDragStarted(nodeId);
+    this.eventTagger.tag(event, dragEventHandledTag);
 
-    event.stopPropagation();
+    this.params.onNodeDragStarted(nodeId);
 
     const cursorContent = this.calculateContentPoint({
       x: mouseEvent.clientX,
@@ -68,6 +77,7 @@ export class UserDraggableNodesConfigurator {
       dy: cursorContent.y - node.y!,
     };
 
+    // TODO: make cursor behavior more flexible
     setCursor(this.element, this.params.dragCursor);
 
     this.moveNodeOnTop(nodeId);
@@ -82,13 +92,15 @@ export class UserDraggableNodesConfigurator {
   };
 
   private readonly onTouchStart: EventListener = (event: Event) => {
+    if (this.eventTagger.has(event, dragEventHandledTag)) {
+      return;
+    }
+
     const touchEvent = event as TouchEvent;
 
     if (touchEvent.touches.length !== 1) {
       return;
     }
-
-    event.stopPropagation();
 
     const touch = touchEvent.touches[0];
 
@@ -106,6 +118,8 @@ export class UserDraggableNodesConfigurator {
     if (!isDragAllowed) {
       return;
     }
+
+    this.eventTagger.tag(event, dragEventHandledTag);
 
     const cursorContent = this.calculateContentPoint({
       x: touch.clientX,
@@ -208,6 +222,7 @@ export class UserDraggableNodesConfigurator {
     private readonly element: HTMLElement,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     private readonly params: DraggableNodesParams,
   ) {
     this.graph = canvas.graph;
@@ -224,6 +239,7 @@ export class UserDraggableNodesConfigurator {
     element: HTMLElement,
     win: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     config: DraggableNodesParams,
   ): void {
     new UserDraggableNodesConfigurator(
@@ -231,6 +247,7 @@ export class UserDraggableNodesConfigurator {
       element,
       win,
       pointInsideVerifier,
+      eventTagger,
       config,
     );
   }

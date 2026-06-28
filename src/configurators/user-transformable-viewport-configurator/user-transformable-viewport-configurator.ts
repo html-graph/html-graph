@@ -1,5 +1,10 @@
 import { Canvas } from "@/canvas";
-import { PointInsideVerifier, setCursor } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  PointInsideVerifier,
+  setCursor,
+} from "../shared";
 import { applyMatrixMove, applyMatrixScale } from "@/transformations";
 import { processTouch, TouchState } from "./process-touch";
 import { TransformableViewportParams } from "./transformable-viewport-params";
@@ -23,6 +28,10 @@ export class UserTransformableViewportConfigurator {
   private readonly onMouseDown: (event: MouseEvent) => void = (
     event: MouseEvent,
   ) => {
+    if (this.eventTagger.has(event, dragEventHandledTag)) {
+      return;
+    }
+
     if (!this.params.mouseDownEventVerifier(event)) {
       return;
     }
@@ -108,6 +117,10 @@ export class UserTransformableViewportConfigurator {
   private readonly onTouchStart: (event: TouchEvent) => void = (
     event: TouchEvent,
   ) => {
+    if (this.eventTagger.has(event, dragEventHandledTag)) {
+      return;
+    }
+
     if (this.prevTouches !== null) {
       this.prevTouches = processTouch(event);
       return;
@@ -182,6 +195,7 @@ export class UserTransformableViewportConfigurator {
     private readonly element: HTMLElement,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     private readonly params: TransformableViewportParams,
   ) {
     this.element.addEventListener("wheel", this.preventWheelScaleListener, {
@@ -216,6 +230,7 @@ export class UserTransformableViewportConfigurator {
     element: HTMLElement,
     win: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     params: TransformableViewportParams,
   ): void {
     new UserTransformableViewportConfigurator(
@@ -223,6 +238,7 @@ export class UserTransformableViewportConfigurator {
       element,
       win,
       pointInsideVerifier,
+      eventTagger,
       params,
     );
   }

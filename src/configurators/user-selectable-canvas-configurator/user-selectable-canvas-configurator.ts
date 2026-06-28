@@ -3,7 +3,7 @@ import { UserSelectableCanvasParams } from "./user-selectable-canvas-params";
 import {
   EventTagger,
   PointInsideVerifier,
-  selectionHandled,
+  selectionEventHandledTag,
   UserSelectableElementsConfigurator,
 } from "../shared";
 
@@ -12,7 +12,7 @@ export class UserSelectableCanvasConfigurator {
 
   private readonly onCanvasSelected: () => void;
 
-  private readonly selectionHandledTag = selectionHandled;
+  private readonly eventHandledTag = selectionEventHandledTag;
 
   private constructor(
     private readonly canvas: Canvas,
@@ -29,7 +29,9 @@ export class UserSelectableCanvasConfigurator {
       this.pointInsideVerifier,
       {
         onSelected: (_element, event): void => {
-          if (!this.eventTagger.has(event, this.selectionHandledTag)) {
+          const hasTag = this.eventTagger.has(event, this.eventHandledTag);
+
+          if (!hasTag) {
             this.onCanvasSelected();
           }
         },

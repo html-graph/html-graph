@@ -13,7 +13,11 @@ import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 import { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 import { Identifier } from "@/identifier";
-import { EventTagger, PointInsideVerifier, selectionHandled } from "../shared";
+import {
+  EventTagger,
+  PointInsideVerifier,
+  selectionEventHandledTag,
+} from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -125,7 +129,7 @@ describe("UserSelectableNodesConfigurator", () => {
 
     const eventTagger = new EventTagger();
 
-    expect(eventTagger.has(event, selectionHandled)).toBe(true);
+    expect(eventTagger.has(event, selectionEventHandledTag)).toBe(true);
   });
 
   it("should not call specified callback after node removed", () => {

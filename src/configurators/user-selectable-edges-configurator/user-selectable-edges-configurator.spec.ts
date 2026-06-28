@@ -12,7 +12,11 @@ import {
 import { Viewport } from "@/viewport";
 import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
-import { EventTagger, PointInsideVerifier, selectionHandled } from "../shared";
+import {
+  EventTagger,
+  PointInsideVerifier,
+  selectionEventHandledTag,
+} from "../shared";
 import { UserSelectableEdgesConfigurator } from "./user-selectable-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 
@@ -145,7 +149,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
     const eventTagger = new EventTagger();
 
-    expect(eventTagger.has(event, selectionHandled)).toBe(true);
+    expect(eventTagger.has(event, selectionEventHandledTag)).toBe(true);
   });
 
   it("should not call specified callback after edge removed", () => {
