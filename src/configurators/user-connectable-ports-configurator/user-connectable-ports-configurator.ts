@@ -11,6 +11,7 @@ import {
   PointInsideVerifier,
   DraggablePortsConfigurator,
   resolveCreateEdgeRequest,
+  EventTagger,
 } from "../shared";
 import { Point } from "@/point";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
@@ -31,6 +32,7 @@ export class UserConnectablePortsConfigurator {
     private readonly viewportStore: ViewportStore,
     private readonly window: Window,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     private readonly params: UserConnectablePortsParams,
   ) {
     this.overlayCanvas = createOverlayCanvas(
@@ -73,6 +75,7 @@ export class UserConnectablePortsConfigurator {
       this.canvas,
       this.window,
       this.pointInsideVerifier,
+      this.eventTagger,
       draggablePortsParams,
     );
   }
@@ -83,6 +86,7 @@ export class UserConnectablePortsConfigurator {
     viewportStore: ViewportStore,
     win: Window,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     params: UserConnectablePortsParams,
   ): void {
     new UserConnectablePortsConfigurator(
@@ -91,6 +95,7 @@ export class UserConnectablePortsConfigurator {
       viewportStore,
       win,
       pointInsideVerifier,
+      eventTagger,
       params,
     );
   }

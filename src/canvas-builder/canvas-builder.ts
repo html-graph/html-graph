@@ -370,6 +370,7 @@ export class CanvasBuilder {
         layers.main,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         draggableNodesParams,
       );
     }
@@ -387,6 +388,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         params,
       );
     }
@@ -403,6 +405,7 @@ export class CanvasBuilder {
         viewportStore,
         this.window,
         this.pointInsideVerifier,
+        this.eventTagger,
         dragEdgeParams,
       );
     }

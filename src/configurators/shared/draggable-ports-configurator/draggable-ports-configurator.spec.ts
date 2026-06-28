@@ -17,6 +17,8 @@ import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 import { PointInsideVerifier } from "../point-inside-verifier";
+import { EventTagger } from "../event-tagger";
+import { dragEventHandledTag } from "../drag-event-handled-tag";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
@@ -56,18 +58,25 @@ const createDraggablePortsCanvas = (options?: {
   );
 
   const pointInsideVerifier = new PointInsideVerifier(element, window);
+  const eventTagger = new EventTagger();
 
-  DraggablePortsConfigurator.configure(canvas, window, pointInsideVerifier, {
-    onPointerDownVerifier:
-      options?.onPointerDownVerifier ?? ((): boolean => true),
-    onPointerMove: options?.onPointerMove ?? ((): void => {}),
-    onPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
-    onPointerUp: options?.onPointerUp ?? ((): void => {}),
-    mouseDownEventVerifier:
-      options?.mouseDownEventVerifier ?? ((): boolean => true),
-    mouseUpEventVerifier:
-      options?.mouseUpEventVerifier ?? ((): boolean => true),
-  });
+  DraggablePortsConfigurator.configure(
+    canvas,
+    window,
+    pointInsideVerifier,
+    eventTagger,
+    {
+      onPointerDownVerifier:
+        options?.onPointerDownVerifier ?? ((): boolean => true),
+      onPointerMove: options?.onPointerMove ?? ((): void => {}),
+      onPointerOutside: options?.onPointerMoveOutside ?? ((): void => {}),
+      onPointerUp: options?.onPointerUp ?? ((): void => {}),
+      mouseDownEventVerifier:
+        options?.mouseDownEventVerifier ?? ((): boolean => true),
+      mouseUpEventVerifier:
+        options?.mouseUpEventVerifier ?? ((): boolean => true),
+    },
+  );
 
   return canvas;
 };
@@ -137,6 +146,25 @@ describe("DraggablePortsConfigurator", () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it("should tag event as handled when mouse event is accepted", () => {
+    const onPointerDownVerifier = jest.fn(() => true);
+
+    const canvas = createDraggablePortsCanvas({
+      onPointerDownVerifier,
+    });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    const event = new MouseEvent("mousedown", { clientX: 100, clientY: 200 });
+
+    portElement.dispatchEvent(event);
+
+    const eventTagger = new EventTagger();
+
+    expect(eventTagger.has(event, dragEventHandledTag)).toBe(true);
+  });
+
   it("should call onPointerDownVerifier callback on touch start", () => {
     const onPointerDownVerifier = jest.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
@@ -175,7 +203,7 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDownVerifier).not.toHaveBeenCalled();
   });
 
-  it("should stop event propagation when touch event is accepted", () => {
+  it("should tag event as handled when touch event is accepted", () => {
     const onPointerDownVerifier = jest.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
@@ -189,11 +217,11 @@ describe("DraggablePortsConfigurator", () => {
       touches: [createTouch({ clientX: 100, clientY: 200 })],
     });
 
-    const spy = jest.spyOn(event, "stopPropagation");
-
     portElement.dispatchEvent(event);
 
-    expect(spy).toHaveBeenCalled();
+    const eventTagger = new EventTagger();
+
+    expect(eventTagger.has(event, dragEventHandledTag)).toBe(true);
   });
 
   it("should call onPointerMove on mouse move", () => {
