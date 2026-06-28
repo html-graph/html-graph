@@ -12,7 +12,11 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { EventTagger, PointInsideVerifier, selectionEventHandledTag } from "../shared";
+import {
+  EventTagger,
+  PointInsideVerifier,
+  selectionEventHandledTag,
+} from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

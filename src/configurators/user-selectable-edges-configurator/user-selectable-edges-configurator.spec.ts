@@ -12,7 +12,11 @@ import {
 import { Viewport } from "@/viewport";
 import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
-import { EventTagger, PointInsideVerifier, selectionEventHandledTag } from "../shared";
+import {
+  EventTagger,
+  PointInsideVerifier,
+  selectionEventHandledTag,
+} from "../shared";
 import { UserSelectableEdgesConfigurator } from "./user-selectable-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 

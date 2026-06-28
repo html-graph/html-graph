@@ -13,7 +13,11 @@ import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
 import { UserSelectableNodesConfigurator } from "./user-selectable-nodes-configurator";
 import { Identifier } from "@/identifier";
-import { EventTagger, PointInsideVerifier, selectionEventHandledTag } from "../shared";
+import {
+  EventTagger,
+  PointInsideVerifier,
+  selectionEventHandledTag,
+} from "../shared";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
