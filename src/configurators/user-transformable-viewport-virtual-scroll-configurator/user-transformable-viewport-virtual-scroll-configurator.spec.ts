@@ -284,7 +284,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onTransformChange", async () => {
-    const onTransformChange = jest.fn();
+    const onTransformChange = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
@@ -308,7 +308,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onTransformFinished", async () => {
-    const onTransformFinished = jest.fn();
+    const onTransformFinished = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
@@ -365,7 +365,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onResizeTransformStarted", async () => {
-    const onResizeTransformStarted = jest.fn();
+    const onResizeTransformStarted = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
@@ -379,7 +379,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onResizeTransformFinished", async () => {
-    const onResizeTransformFinished = jest.fn();
+    const onResizeTransformFinished = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
@@ -393,7 +393,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onBeforeTransformChange", async () => {
-    const onBeforeTransformChange = jest.fn();
+    const onBeforeTransformChange = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({

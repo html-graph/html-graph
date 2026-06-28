@@ -108,7 +108,7 @@ describe("OneToManyCollection", () => {
   });
 
   it("should iterate over single values", () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     const collection = new OneToManyCollection<string, string>();
 
     collection.addRecord("single-1", "multi-1");

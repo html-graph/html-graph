@@ -321,7 +321,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onAfterEdgeReattached = jest.fn();
+    const onAfterEdgeReattached = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -349,7 +349,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeReattachInterrupted = jest.fn();
+    const onEdgeReattachInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -384,7 +384,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeReattachInterrupted = jest.fn();
+    const onEdgeReattachInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -416,7 +416,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeReattachPrevented = jest.fn();
+    const onEdgeReattachPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -452,7 +452,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeReattachPrevented = jest.fn();
+    const onEdgeReattachPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -490,7 +490,7 @@ describe("UserDraggableEdgesConfigurator", () => {
 
     const edgeShape = new DirectEdgeShape();
 
-    const onEdgeReattachPrevented = jest.fn();
+    const onEdgeReattachPrevented = vi.fn();
     const canvas = createCanvas({
       draggingEdgeShapeFactory: () => edgeShape,
       overlayElement,

@@ -172,7 +172,7 @@ describe("ViewportController", () => {
       element,
     });
 
-    const spy = jest.spyOn(viewportStore, "destroy");
+    const spy = vi.spyOn(viewportStore, "destroy");
 
     viewportController.destroy();
 

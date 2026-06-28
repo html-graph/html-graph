@@ -118,7 +118,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterNodeAdded.subscribe(handler);
 
@@ -133,7 +133,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterNodeUpdated.subscribe(handler);
 
@@ -155,7 +155,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterNodePriorityUpdated.subscribe(handler);
 
@@ -188,7 +188,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onBeforeNodeRemoved.subscribe(handler);
 
@@ -254,7 +254,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterPortMarked.subscribe(handler);
 
@@ -271,7 +271,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterPortUpdated.subscribe(handler);
 
@@ -331,7 +331,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onBeforePortUnmarked.subscribe(handler);
 
@@ -349,7 +349,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterEdgeAdded.subscribe(handler);
 
@@ -371,7 +371,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterEdgeShapeUpdated.subscribe(handler);
 
@@ -402,7 +402,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onAfterEdgePriorityUpdated.subscribe(handler);
 
@@ -509,7 +509,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onBeforeEdgeRemoved.subscribe(handler);
 
@@ -765,7 +765,7 @@ describe("Graph", () => {
     const store = new GraphStore();
     const graph = new Graph(store);
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     graph.onBeforeClear.subscribe(handler);
 

@@ -122,7 +122,7 @@ describe("CanvasBuilder", () => {
 
     canvas.addNode(nodeRequest1).addNode(nodeRequest2).addEdge(addEdge);
 
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     triggerResizeFor(nodeRequest1.element);
 
@@ -501,7 +501,7 @@ describe("CanvasBuilder", () => {
   it("should build canvas with selectable nodes", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
-    const onNodeSelected = jest.fn();
+    const onNodeSelected = vi.fn();
 
     const canvas = builder
       .enableUserSelectableNodes({
@@ -529,7 +529,7 @@ describe("CanvasBuilder", () => {
   it("should build selectable canvas", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     builder
       .enableUserSelectableCanvas({
@@ -548,7 +548,7 @@ describe("CanvasBuilder", () => {
   it("should build canvas with selectable edges", () => {
     const canvasElement = document.createElement("div");
     const builder = new CanvasBuilder(canvasElement);
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = builder
       .enableUserSelectableEdges({

@@ -63,7 +63,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -86,7 +86,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.removeNode("node-1");
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -109,7 +109,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.clear();
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -132,7 +132,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.destroy();
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -170,7 +170,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     triggerResizeFor(element);
 

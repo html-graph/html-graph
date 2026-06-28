@@ -260,7 +260,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationInterrupted = jest.fn();
+    const onEdgeCreationInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -396,7 +396,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onAfterEdgeCreated = jest.fn();
+    const onAfterEdgeCreated = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -435,7 +435,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationInterrupted = jest.fn();
+    const onEdgeCreationInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -477,7 +477,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationPrevented = jest.fn();
+    const onEdgeCreationPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -517,7 +517,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationPrevented = jest.fn();
+    const onEdgeCreationPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,

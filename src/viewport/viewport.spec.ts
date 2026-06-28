@@ -9,9 +9,11 @@ describe("Viewport", () => {
     const viewportStore = new ViewportStore(host);
     const viewport = new Viewport(viewportStore);
 
-    jest
-      .spyOn(viewportStore, "getViewportMatrix")
-      .mockReturnValue({ scale: 2, x: 1, y: 1 });
+    vi.spyOn(viewportStore, "getViewportMatrix").mockReturnValue({
+      scale: 2,
+      x: 1,
+      y: 1,
+    });
 
     const viewportMatrix = viewport.getViewportMatrix();
 
@@ -29,9 +31,11 @@ describe("Viewport", () => {
     const viewportStore = new ViewportStore(host);
     const viewport = new Viewport(viewportStore);
 
-    jest
-      .spyOn(viewportStore, "getContentMatrix")
-      .mockReturnValue({ scale: 2, x: 1, y: 1 });
+    vi.spyOn(viewportStore, "getContentMatrix").mockReturnValue({
+      scale: 2,
+      x: 1,
+      y: 1,
+    });
 
     const viewportMatrix = viewport.getContentMatrix();
 
@@ -55,7 +59,7 @@ describe("Viewport", () => {
       y: 1,
     };
 
-    jest.spyOn(viewportStore, "getViewportMatrix").mockReturnValue(matrix);
+    vi.spyOn(viewportStore, "getViewportMatrix").mockReturnValue(matrix);
 
     const viewportMatrix = viewport.getViewportMatrix();
 
@@ -73,7 +77,7 @@ describe("Viewport", () => {
       y: 1,
     };
 
-    jest.spyOn(viewportStore, "getContentMatrix").mockReturnValue(matrix);
+    vi.spyOn(viewportStore, "getContentMatrix").mockReturnValue(matrix);
 
     const viewportMatrix = viewport.getContentMatrix();
 
@@ -85,7 +89,7 @@ describe("Viewport", () => {
     const viewportStore = new ViewportStore(host);
     const viewport = new Viewport(viewportStore);
 
-    const onBeforeUpdate = jest.fn();
+    const onBeforeUpdate = vi.fn();
 
     viewport.onBeforeUpdated.subscribe(onBeforeUpdate);
 
@@ -99,7 +103,7 @@ describe("Viewport", () => {
     const viewportStore = new ViewportStore(host);
     const viewport = new Viewport(viewportStore);
 
-    const onAfterUpdate = jest.fn();
+    const onAfterUpdate = vi.fn();
 
     viewport.onAfterUpdated.subscribe(onAfterUpdate);
 
@@ -126,7 +130,7 @@ describe("Viewport", () => {
       return new DOMRect(0, 0, 1100, 800);
     };
 
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     viewport.onAfterResize.subscribe(callback);
 

@@ -579,7 +579,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call onNodeDragStarted after node dragging process started", () => {
-    const onNodeDragStarted = jest.fn();
+    const onNodeDragStarted = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
@@ -842,7 +842,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call on drag finished with mouse", () => {
-    const onNodeDragFinished = jest.fn();
+    const onNodeDragFinished = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
@@ -866,7 +866,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call on drag finished with touch", () => {
-    const onNodeDragFinished = jest.fn();
+    const onNodeDragFinished = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({

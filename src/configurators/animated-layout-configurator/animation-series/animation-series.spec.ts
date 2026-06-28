@@ -13,7 +13,7 @@ describe("AnimationSeries", () => {
   });
 
   it("should call callback with latest frames difference", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     new AnimationSeries(window, callback);
 
     animationMock.timer.emit(100);

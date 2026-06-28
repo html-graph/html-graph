@@ -180,7 +180,7 @@ describe("GraphController", () => {
 
     const { graphController } = createGraphController({ element });
 
-    const spy = jest.spyOn(graphController, "markPort");
+    const spy = vi.spyOn(graphController, "markPort");
 
     const portElement = createElement();
 
@@ -918,7 +918,7 @@ describe("GraphController", () => {
     });
 
     const shape = new BezierEdgeShape();
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     graphController.addEdge({ from: "port-1", to: "port-1", shape });
     graphController.updateNode("node-1");
@@ -944,7 +944,7 @@ describe("GraphController", () => {
       ],
     });
 
-    const spy = jest.spyOn(graphController, "unmarkPort");
+    const spy = vi.spyOn(graphController, "unmarkPort");
 
     graphController.removeNode("node-1");
 
@@ -970,7 +970,7 @@ describe("GraphController", () => {
     });
 
     const shape = new BezierEdgeShape();
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     graphController.addEdge({ from: "port-1", to: "port-1", shape });
     graphController.updatePort("port-1");
@@ -998,7 +998,7 @@ describe("GraphController", () => {
 
     graphController.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(graphController, "removeEdge");
+    const spy = vi.spyOn(graphController, "removeEdge");
 
     graphController.unmarkPort("port-1");
 

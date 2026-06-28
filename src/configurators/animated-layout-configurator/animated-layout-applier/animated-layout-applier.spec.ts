@@ -49,7 +49,7 @@ describe("AnimatedLayoutApplier", () => {
   it("should emit onBeforeApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
 
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: () => false,
@@ -67,7 +67,7 @@ describe("AnimatedLayoutApplier", () => {
   it("should emit onAfterApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
 
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: () => false,

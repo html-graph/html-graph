@@ -85,7 +85,7 @@ describe("InteractiveEdgeShape", () => {
 
   it("should render specified edge", () => {
     const shape = new BezierEdgeShape();
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
     const interactiveShape = new InteractiveEdgeShape(shape);
 
     interactiveShape.render(edgeRenderParams);

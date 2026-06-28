@@ -2,7 +2,7 @@ import { immediateScheduleFn } from "./immediate-schedule-fn";
 
 describe("immediateScheduleFn", () => {
   it("should call function immediately", () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     immediateScheduleFn(fn);
 

@@ -76,7 +76,7 @@ const createCanvas = (options?: {
 describe("UserSelectableCanvasConfigurator", () => {
   it("should call specified callback on canvas mouse grab and immediate release", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     createCanvas({ element, onCanvasSelected });
 
@@ -94,7 +94,7 @@ describe("UserSelectableCanvasConfigurator", () => {
 
   it("should not call specified callback when event was tagged as handled", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     createCanvas({ element, onCanvasSelected });
 
@@ -120,7 +120,7 @@ describe("UserSelectableCanvasConfigurator", () => {
 
     const canvas = createCanvas({ element });
 
-    const spy = jest.spyOn(element, "removeEventListener");
+    const spy = vi.spyOn(element, "removeEventListener");
 
     canvas.destroy();
 
@@ -129,7 +129,7 @@ describe("UserSelectableCanvasConfigurator", () => {
 
   it("should not call specified callback when mouse move distance exceeds specified threshold", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     createCanvas({
       element,
@@ -158,7 +158,7 @@ describe("UserSelectableCanvasConfigurator", () => {
 
   it("should not call specified callback when mouse down verifier failed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     createCanvas({
       element,
@@ -180,7 +180,7 @@ describe("UserSelectableCanvasConfigurator", () => {
 
   it("should not call specified callback when mouse up verifier failed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onCanvasSelected = jest.fn();
+    const onCanvasSelected = vi.fn();
 
     createCanvas({
       element,

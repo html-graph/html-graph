@@ -43,6 +43,7 @@
     "check-directory-structure": "npm run make-deps-graph && tsx ./scripts/check-directory-structure.ts",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:new": "vitest",
     "test:ci": "jest --config=./jest-ci.config.ts",
     "test:e2e": "npx playwright test"
   },
@@ -64,12 +65,13 @@
     "prettier": "3.3.3",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tsx": "^3.12.10",
+    "tsx": "^4.22.4",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.1",
-    "vite-plugin-checker": "^0.7.2",
-    "vite-plugin-dts": "^4.0.3"
+    "vite": "^8.1.0",
+    "vite-plugin-checker": "^0.14.4",
+    "vite-plugin-dts": "^5.0.3",
+    "vitest": "^4.1.9"
   },
   "os": [
     "darwin",

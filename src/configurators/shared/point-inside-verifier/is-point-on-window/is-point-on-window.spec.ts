@@ -1,21 +1,21 @@
 import { isPointOnWindow } from "./is-point-on-window";
 
-let windowSpy: jest.SpyInstance;
-
-beforeEach(() => {
-  windowSpy = jest.spyOn(globalThis, "window", "get");
-
-  windowSpy.mockImplementation(() => ({
-    innerWidth: 1000,
-    innerHeight: 500,
-  }));
-});
-
-afterEach(() => {
-  windowSpy.mockRestore();
-});
-
 describe("isPointOnWindow", () => {
+  let windowSpy: jest.SpyInstance;
+
+  beforeEach(() => {
+    windowSpy = vi.spyOn(globalThis, "window", "get");
+
+    windowSpy.mockImplementation(() => ({
+      innerWidth: 1000,
+      innerHeight: 500,
+    }));
+  });
+
+  afterEach(() => {
+    windowSpy.mockRestore();
+  });
+
   it("should return true when for point inside window", () => {
     expect(isPointOnWindow(window, 1, 1)).toBe(true);
   });

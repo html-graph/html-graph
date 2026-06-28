@@ -175,7 +175,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onBeforeTransformChange for move with mouse", () => {
-    const onBeforeTransformChange = jest.fn((): void => {});
+    const onBeforeTransformChange = vi.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -193,7 +193,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onTransformChange for move with mouse", () => {
-    const onTransformChange = jest.fn((): void => {});
+    const onTransformChange = vi.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -211,7 +211,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should unset cursor after move with mouse finished", () => {
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformFinished = vi.fn((): void => {});
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -271,7 +271,7 @@ describe("UserTransformableViewportConfigurator", () => {
 
   it("should not unset cursor left mouse button was not released", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onTransformChange = jest.fn((): void => {});
+    const onTransformChange = vi.fn((): void => {});
 
     createCanvas({
       element,
@@ -338,7 +338,7 @@ describe("UserTransformableViewportConfigurator", () => {
       deltaY: 1,
     });
 
-    const spy = jest.spyOn(wheelEvent, "preventDefault");
+    const spy = vi.spyOn(wheelEvent, "preventDefault");
 
     element.dispatchEvent(wheelEvent);
 
@@ -346,7 +346,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call start event on mouse wheel scroll", () => {
-    const onTransformStarted = jest.fn();
+    const onTransformStarted = vi.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -366,7 +366,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call finish event on mouse wheel scroll", async () => {
-    const onTransformFinished = jest.fn();
+    const onTransformFinished = vi.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -387,7 +387,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call finish after 500ms span without events", async () => {
-    const onTransformFinished = jest.fn();
+    const onTransformFinished = vi.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -411,7 +411,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call start before finish on wheel scale", async () => {
-    const onTransformStarted = jest.fn();
+    const onTransformStarted = vi.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -534,7 +534,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should not dispatch onTransformStarted for next touch", () => {
-    const onTransformStarted = jest.fn();
+    const onTransformStarted = vi.fn();
     const element = createElement({ width: 1000, height: 1000 });
 
     createCanvas({
@@ -660,7 +660,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onTransformStarted for move with mouse", () => {
-    const onTransformStarted = jest.fn((): void => {});
+    const onTransformStarted = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -674,7 +674,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onTransformStarted for move with touch", () => {
-    const onTransformStarted = jest.fn((): void => {});
+    const onTransformStarted = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -692,7 +692,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onTransformFinished on finish move with mouse", () => {
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformFinished = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -707,7 +707,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call onTransformFinished on finish move with touch", () => {
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformFinished = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -747,7 +747,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call resize start event on host element resize", () => {
-    const onResizeTransformStarted = jest.fn((): void => {});
+    const onResizeTransformStarted = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -759,7 +759,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should call resize finish event on host element resize", () => {
-    const onResizeTransformFinished = jest.fn((): void => {});
+    const onResizeTransformFinished = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
@@ -777,7 +777,7 @@ describe("UserTransformableViewportConfigurator", () => {
   });
 
   it("should not call onTransformFinished while scaling with wheel but also dragging in progress", async () => {
-    const onTransformFinished = jest.fn((): void => {});
+    const onTransformFinished = vi.fn((): void => {});
 
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({

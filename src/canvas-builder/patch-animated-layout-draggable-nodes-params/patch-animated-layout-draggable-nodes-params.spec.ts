@@ -36,7 +36,7 @@ describe("patchAnimatedLayoutDraggableNodesParams", () => {
     const params = createParams();
 
     const staticNodes = new Set<Identifier>();
-    const spy = jest.spyOn(params, "onNodeDragStarted");
+    const spy = vi.spyOn(params, "onNodeDragStarted");
     const patchedParams = patchAnimatedLayoutDraggableNodesParams(
       params,
       staticNodes,
@@ -66,7 +66,7 @@ describe("patchAnimatedLayoutDraggableNodesParams", () => {
     const params = createParams();
     const staticNodes = new Set<Identifier>();
 
-    const spy = jest.spyOn(params, "onNodeDragFinished");
+    const spy = vi.spyOn(params, "onNodeDragFinished");
     const patchedParams = patchAnimatedLayoutDraggableNodesParams(
       params,
       staticNodes,

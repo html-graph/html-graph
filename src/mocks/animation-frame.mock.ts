@@ -34,7 +34,7 @@ export class AnimationFrameMock {
   }
 
   public hook(): void {
-    this.spy = jest.spyOn(window, "requestAnimationFrame");
+    this.spy = vi.spyOn(window, "requestAnimationFrame");
 
     this.spy.mockImplementation((callback) => {
       this.callbacks.push(callback);

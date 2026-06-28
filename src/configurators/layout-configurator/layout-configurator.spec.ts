@@ -119,7 +119,7 @@ describe("LayoutConfigurator", () => {
 
   it("should emit onBeforeApplied event", async () => {
     const canvas = createCanvas();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
@@ -142,7 +142,7 @@ describe("LayoutConfigurator", () => {
 
   it("should emit onAfterApplied event", async () => {
     const canvas = createCanvas();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {

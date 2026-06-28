@@ -3,7 +3,7 @@ import { macrotaskScheduleFn } from "./macrotask-schedule-fn";
 
 describe("macrotaskScheduleFn", () => {
   it("should call function in next macrotask", async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     macrotaskScheduleFn(fn);
 

@@ -48,7 +48,7 @@ describe("createConfig", () => {
       return params.nextTransform;
     };
 
-    const fn = jest.fn(transformPreprocessor);
+    const fn = vi.fn(transformPreprocessor);
 
     const res = createTransformableViewportParams({
       transformPreprocessor: fn,
@@ -73,7 +73,7 @@ describe("createConfig", () => {
       return params.nextTransform;
     };
 
-    const fn = jest.fn(transformPreprocessor);
+    const fn = vi.fn(transformPreprocessor);
 
     const res = createTransformableViewportParams({
       transformPreprocessor: [fn, fn],

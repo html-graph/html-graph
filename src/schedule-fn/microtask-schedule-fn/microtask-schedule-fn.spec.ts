@@ -3,7 +3,7 @@ import { microtaskScheduleFn } from "./microtask-schedule-fn";
 
 describe("microtaskScheduleFn", () => {
   it("should call function in next microtask", async () => {
-    const fn = jest.fn();
+    const fn = vi.fn();
 
     microtaskScheduleFn(fn);
 

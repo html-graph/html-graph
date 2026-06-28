@@ -14,7 +14,7 @@ describe("IdGenerator", () => {
   });
 
   it("should call check once when no values exist", () => {
-    const checkFn = jest.fn((): boolean => false);
+    const checkFn = vi.fn((): boolean => false);
 
     const gen = new IdGenerator(checkFn);
 
@@ -30,7 +30,7 @@ describe("IdGenerator", () => {
   });
 
   it("should call check twice when has [0] value", () => {
-    const checkFn = jest.fn((id): boolean => id === 0);
+    const checkFn = vi.fn((id): boolean => id === 0);
 
     const gen = new IdGenerator(checkFn);
 
@@ -40,7 +40,7 @@ describe("IdGenerator", () => {
   });
 
   it("should call check 3 times when called create two times", () => {
-    const checkFn = jest.fn((id): boolean => id === 0);
+    const checkFn = vi.fn((id): boolean => id === 0);
 
     const gen = new IdGenerator(checkFn);
 
@@ -51,7 +51,7 @@ describe("IdGenerator", () => {
   });
 
   it("should call check 4 times when called reset before create", () => {
-    const checkFn = jest.fn((id): boolean => id === 0);
+    const checkFn = vi.fn((id): boolean => id === 0);
 
     const gen = new IdGenerator(checkFn);
 

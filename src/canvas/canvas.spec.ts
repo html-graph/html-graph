@@ -91,7 +91,7 @@ describe("Canvas", () => {
   it("should add node", () => {
     const { canvas, graphController } = createCanvas();
 
-    const spy = jest.spyOn(graphController, "addNode");
+    const spy = vi.spyOn(graphController, "addNode");
 
     canvas.addNode({
       element: createElement(),
@@ -109,7 +109,7 @@ describe("Canvas", () => {
       element: nodeElement,
     });
 
-    const spy = jest.spyOn(graphController, "updateNode");
+    const spy = vi.spyOn(graphController, "updateNode");
 
     canvas.updateNode("node-1");
 
@@ -124,7 +124,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const spy = jest.spyOn(graphController, "removeNode");
+    const spy = vi.spyOn(graphController, "removeNode");
 
     canvas.removeNode("node-1");
 
@@ -139,7 +139,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const spy = jest.spyOn(graphController, "markPort");
+    const spy = vi.spyOn(graphController, "markPort");
 
     canvas.markPort({
       nodeId: "node-1",
@@ -163,7 +163,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const spy = jest.spyOn(graphController, "updatePort");
+    const spy = vi.spyOn(graphController, "updatePort");
 
     canvas.updatePort("port-1");
 
@@ -184,7 +184,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const spy = jest.spyOn(graphController, "unmarkPort");
+    const spy = vi.spyOn(graphController, "unmarkPort");
 
     canvas.unmarkPort("port-1");
 
@@ -205,7 +205,7 @@ describe("Canvas", () => {
       element: createElement(),
     });
 
-    const spy = jest.spyOn(graphController, "addEdge");
+    const spy = vi.spyOn(graphController, "addEdge");
 
     canvas.addEdge({ from: "port-1", to: "port-1" });
 
@@ -230,7 +230,7 @@ describe("Canvas", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(graphController, "updateEdge");
+    const spy = vi.spyOn(graphController, "updateEdge");
 
     canvas.updateEdge("edge-1");
 
@@ -253,7 +253,7 @@ describe("Canvas", () => {
 
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
 
-    const spy = jest.spyOn(graphController, "removeEdge");
+    const spy = vi.spyOn(graphController, "removeEdge");
 
     canvas.removeEdge("edge-1");
 
@@ -263,7 +263,7 @@ describe("Canvas", () => {
   it("should clear graph", () => {
     const { canvas, graphController } = createCanvas();
 
-    const spy = jest.spyOn(graphController, "clear");
+    const spy = vi.spyOn(graphController, "clear");
 
     canvas.clear();
 
@@ -273,7 +273,7 @@ describe("Canvas", () => {
   it("should patch viewport matrix", () => {
     const { canvas, viewportController } = createCanvas();
 
-    const spy = jest.spyOn(viewportController, "patchViewportMatrix");
+    const spy = vi.spyOn(viewportController, "patchViewportMatrix");
 
     canvas.patchViewportMatrix({});
 
@@ -283,7 +283,7 @@ describe("Canvas", () => {
   it("should patch content matrix", () => {
     const { canvas, viewportController } = createCanvas();
 
-    const spy = jest.spyOn(viewportController, "patchContentMatrix");
+    const spy = vi.spyOn(viewportController, "patchContentMatrix");
 
     canvas.patchContentMatrix({});
 
@@ -293,7 +293,7 @@ describe("Canvas", () => {
   it("should destroy graph controller on destroy", () => {
     const { canvas, graphController } = createCanvas();
 
-    const spy = jest.spyOn(graphController, "destroy");
+    const spy = vi.spyOn(graphController, "destroy");
 
     canvas.destroy();
 
@@ -303,7 +303,7 @@ describe("Canvas", () => {
   it("should destroy viewport controller on destroy", () => {
     const { canvas, viewportController } = createCanvas();
 
-    const spy = jest.spyOn(viewportController, "destroy");
+    const spy = vi.spyOn(viewportController, "destroy");
 
     canvas.destroy();
 
@@ -313,7 +313,7 @@ describe("Canvas", () => {
   it("should emit event before destroy", () => {
     const { canvas } = createCanvas();
 
-    const onBeforeDestroy = jest.fn();
+    const onBeforeDestroy = vi.fn();
 
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
@@ -325,7 +325,7 @@ describe("Canvas", () => {
   it("should not emit destroy event twice", () => {
     const { canvas } = createCanvas();
 
-    const onBeforeDestroy = jest.fn();
+    const onBeforeDestroy = vi.fn();
 
     canvas.onBeforeDestroy.subscribe(onBeforeDestroy);
 
@@ -338,7 +338,7 @@ describe("Canvas", () => {
   it("should focus viewport", () => {
     const { canvas, viewportController } = createCanvas();
 
-    const spy = jest.spyOn(viewportController, "focus");
+    const spy = vi.spyOn(viewportController, "focus");
 
     canvas.focus();
 
@@ -348,7 +348,7 @@ describe("Canvas", () => {
   it("should center viewport", () => {
     const { canvas, viewportController } = createCanvas();
 
-    const spy = jest.spyOn(viewportController, "center");
+    const spy = vi.spyOn(viewportController, "center");
 
     canvas.center({ x: 0, y: 0 });
 

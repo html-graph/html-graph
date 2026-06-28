@@ -84,7 +84,7 @@ const configureEdgeGraph = (store: GraphStore): void => {
 describe("VirtualScrollHtmlView", () => {
   it("should clear core view on clear", () => {
     const { coreView, boxView } = create();
-    const spy = jest.spyOn(coreView, "clear");
+    const spy = vi.spyOn(coreView, "clear");
 
     boxView.clear();
 
@@ -93,7 +93,7 @@ describe("VirtualScrollHtmlView", () => {
 
   it("should call clear on destroy", () => {
     const { boxView } = create();
-    const spy = jest.spyOn(boxView, "clear");
+    const spy = vi.spyOn(boxView, "clear");
 
     boxView.destroy();
 
@@ -102,7 +102,7 @@ describe("VirtualScrollHtmlView", () => {
 
   it("should destroy core view on destroy", () => {
     const { coreView, boxView } = create();
-    const spy = jest.spyOn(coreView, "destroy");
+    const spy = vi.spyOn(coreView, "destroy");
 
     boxView.destroy();
 
@@ -113,14 +113,14 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should call event handler before node attach", () => {
-    const onBeforeNodeAttached = jest.fn();
+    const onBeforeNodeAttached = vi.fn();
     const { trigger, store } = create({ onBeforeNodeAttached });
 
     store.addNode(addNodeRequest);
@@ -134,7 +134,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 9, y: 9, width: 2, height: 2 });
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     boxView.attachNode(addNodeRequest.id);
 
     expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
@@ -145,14 +145,14 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
-    const spy = jest.spyOn(coreView, "detachNode");
+    const spy = vi.spyOn(coreView, "detachNode");
     boxView.detachNode("node-1");
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
   });
 
   it("should call event handler after node detach", () => {
-    const onAfterNodeDetached = jest.fn();
+    const onAfterNodeDetached = vi.fn();
     const { trigger, store, boxView } = create({ onAfterNodeDetached });
 
     store.addNode(addNodeRequest);
@@ -167,7 +167,7 @@ describe("VirtualScrollHtmlView", () => {
     const { coreView, store, boxView } = create();
     store.addNode(addNodeRequest);
 
-    const spy = jest.spyOn(coreView, "detachNode");
+    const spy = vi.spyOn(coreView, "detachNode");
     boxView.detachNode("node-1");
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
@@ -178,7 +178,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.detachNode(addNodeRequest.id);
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
 
     boxView.attachNode(addNodeRequest.id);
 
@@ -189,7 +189,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-1");
@@ -201,7 +201,7 @@ describe("VirtualScrollHtmlView", () => {
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     boxView.attachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
@@ -211,7 +211,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-2");
@@ -223,7 +223,7 @@ describe("VirtualScrollHtmlView", () => {
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     boxView.attachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("node-2");
@@ -233,7 +233,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -244,7 +244,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     boxView.attachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -254,7 +254,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -265,7 +265,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "detachEdge");
+    const spy = vi.spyOn(coreView, "detachEdge");
     boxView.detachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -277,7 +277,7 @@ describe("VirtualScrollHtmlView", () => {
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.detachEdge("edge-1");
 
-    const spy = jest.spyOn(coreView, "detachEdge");
+    const spy = vi.spyOn(coreView, "detachEdge");
     boxView.detachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -289,7 +289,7 @@ describe("VirtualScrollHtmlView", () => {
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
     boxView.clear();
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     boxView.attachNode(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
@@ -301,7 +301,7 @@ describe("VirtualScrollHtmlView", () => {
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
     boxView.clear();
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     boxView.attachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -316,7 +316,7 @@ describe("VirtualScrollHtmlView", () => {
     payload.x = 11;
     payload.y = 11;
 
-    const spy = jest.spyOn(coreView, "updateNodePosition");
+    const spy = vi.spyOn(coreView, "updateNodePosition");
     boxView.updateNodePosition(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
@@ -331,7 +331,7 @@ describe("VirtualScrollHtmlView", () => {
     payload.x = 2;
     payload.y = 2;
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     boxView.updateNodePosition(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
@@ -346,7 +346,7 @@ describe("VirtualScrollHtmlView", () => {
     payload.x = 12;
     payload.y = 12;
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     boxView.updateNodePosition("node-1");
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
@@ -356,7 +356,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateNodePriority");
+    const spy = vi.spyOn(coreView, "updateNodePriority");
     boxView.updateNodePriority(addNodeRequest.id);
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
@@ -367,7 +367,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateNodePriority");
+    const spy = vi.spyOn(coreView, "updateNodePriority");
     boxView.updateNodePriority(addNodeRequest.id);
 
     expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
@@ -378,7 +378,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateEdgeShape");
+    const spy = vi.spyOn(coreView, "updateEdgeShape");
     boxView.updateEdgeShape("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -389,7 +389,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateEdgeShape");
+    const spy = vi.spyOn(coreView, "updateEdgeShape");
     boxView.updateEdgeShape("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -400,7 +400,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "renderEdge");
+    const spy = vi.spyOn(coreView, "renderEdge");
     boxView.renderEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -411,7 +411,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "renderEdge");
+    const spy = vi.spyOn(coreView, "renderEdge");
     boxView.renderEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -422,7 +422,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateEdgePriority");
+    const spy = vi.spyOn(coreView, "updateEdgePriority");
     boxView.updateEdgePriority("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -433,7 +433,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "updateEdgePriority");
+    const spy = vi.spyOn(coreView, "updateEdgePriority");
     boxView.updateEdgePriority("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -442,7 +442,7 @@ describe("VirtualScrollHtmlView", () => {
   it("should attach node moved to inside of the viewport", () => {
     const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
 
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
@@ -453,7 +453,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     store.addNode(addNodeRequest);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
 
     trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
@@ -465,7 +465,7 @@ describe("VirtualScrollHtmlView", () => {
     store.addNode(addNodeRequest);
     trigger.emit({ x: -1, y: -1, width: 2, height: 2 });
 
-    const spy = jest.spyOn(coreView, "detachNode");
+    const spy = vi.spyOn(coreView, "detachNode");
     trigger.emit({ x: 1, y: 1, width: 2, height: 2 });
 
     expect(spy).toHaveBeenCalledWith(addNodeRequest.id);
@@ -475,7 +475,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachEdge");
+    const spy = vi.spyOn(coreView, "attachEdge");
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -486,7 +486,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "detachEdge");
+    const spy = vi.spyOn(coreView, "detachEdge");
     trigger.emit({ x: 11, y: 11, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -496,7 +496,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     expect(spy).toHaveBeenCalledWith("node-1");
@@ -506,7 +506,7 @@ describe("VirtualScrollHtmlView", () => {
     const { trigger, coreView, store } = create();
     configureEdgeGraph(store);
 
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: 0, y: 0, width: 9, height: 9 });
 
     expect(spy).toHaveBeenCalledWith("node-2");
@@ -517,7 +517,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "detachNode");
+    const spy = vi.spyOn(coreView, "detachNode");
     trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
@@ -528,7 +528,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
     trigger.emit({ x: 0, y: 0, width: 10, height: 10 });
 
-    const spy = jest.spyOn(coreView, "detachNode");
+    const spy = vi.spyOn(coreView, "detachNode");
     trigger.emit({ x: 0, y: 0, width: 9, height: 9 });
 
     expect(spy).not.toHaveBeenCalledWith("node-1");
@@ -539,7 +539,7 @@ describe("VirtualScrollHtmlView", () => {
     configureEdgeGraph(store);
 
     trigger.emit({ x: 1, y: 1, width: 11, height: 11 });
-    const spy = jest.spyOn(coreView, "attachNode");
+    const spy = vi.spyOn(coreView, "attachNode");
     trigger.emit({ x: 1, y: 1, width: 11, height: 11 });
 
     expect(spy).not.toHaveBeenCalledWith("node-1");

@@ -4,7 +4,7 @@ describe("EventSubject", () => {
   it("should call callback on emit", () => {
     const subject = new EventSubject<number>();
 
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     subject.subscribe(callback);
 
@@ -16,7 +16,7 @@ describe("EventSubject", () => {
   it("should not call callback after unsubscribe", () => {
     const subject = new EventSubject<number>();
 
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     subject.subscribe(callback);
     subject.unsubscribe(callback);

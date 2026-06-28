@@ -95,7 +95,7 @@ const createNode = (canvas: Canvas, portElement: HTMLElement): void => {
 
 describe("DraggablePortsConfigurator", () => {
   it("should call onPointerDownVerifier callback on mouse down", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
 
     const portElement = document.createElement("div");
@@ -109,7 +109,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerDownVerifier callback when mouse event verifier not matched", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const mouseDownEventVerifier: MouseEventVerifier = () => false;
 
     const canvas = createDraggablePortsCanvas({
@@ -128,7 +128,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should tag event as handled when mouse event is accepted", () => {
-    const onPointerDownVerifier = jest.fn(() => true);
+    const onPointerDownVerifier = vi.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
       onPointerDownVerifier,
@@ -147,7 +147,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerDownVerifier callback on touch start", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
 
     const portElement = document.createElement("div");
@@ -163,7 +163,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerDownVerifier callback when event has more than 1 touch", () => {
-    const onPointerDownVerifier = jest.fn(() => true);
+    const onPointerDownVerifier = vi.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
       onPointerDownVerifier,
@@ -185,7 +185,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should tag event as handled when touch event is accepted", () => {
-    const onPointerDownVerifier = jest.fn(() => true);
+    const onPointerDownVerifier = vi.fn(() => true);
 
     const canvas = createDraggablePortsCanvas({
       onPointerDownVerifier,
@@ -206,7 +206,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerMove on mouse move", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -224,7 +224,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove when mouse is outside", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -242,7 +242,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerMoveOutside when mouse is outside", () => {
-    const onPointerMoveOutside = jest.fn();
+    const onPointerMoveOutside = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMoveOutside });
 
     const portElement = document.createElement("div");
@@ -260,7 +260,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerMove on touch move", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -282,7 +282,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove when touch is outside", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -304,7 +304,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerMoveOutside when touch is outside", () => {
-    const onPointerMoveOutside = jest.fn();
+    const onPointerMoveOutside = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMoveOutside });
 
     const portElement = document.createElement("div");
@@ -326,7 +326,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerUp on mouse up", () => {
-    const onPointerUp = jest.fn();
+    const onPointerUp = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
 
     const portElement = document.createElement("div");
@@ -348,7 +348,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerUp on touch end", () => {
-    const onPointerUp = jest.fn();
+    const onPointerUp = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
 
     const portElement = document.createElement("div");
@@ -376,7 +376,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerUp when mouse up event verifier fails", () => {
-    const onPointerUp = jest.fn();
+    const onPointerUp = vi.fn();
     const canvas = createDraggablePortsCanvas({
       onPointerUp,
       mouseUpEventVerifier: () => false,
@@ -401,7 +401,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should call onPointerDownVerifier for unmarked port", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
 
     const portElement = document.createElement("div");
@@ -416,7 +416,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerDownVerifier after clear", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
 
     const portElement = document.createElement("div");
@@ -431,7 +431,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerDownVerifier after destroy", () => {
-    const onPointerDownVerifier = jest.fn();
+    const onPointerDownVerifier = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
 
     const portElement = document.createElement("div");
@@ -446,7 +446,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove error when canvas destroyed in the process of dragging with mouse", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -466,7 +466,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove error when canvas destroyed in the process of dragging with touch", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -490,7 +490,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerUp error when canvas destroyed before mouse up", () => {
-    const onPointerUp = jest.fn();
+    const onPointerUp = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerUp });
 
     const portElement = document.createElement("div");
@@ -508,7 +508,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove error when canvas destroyed before touch end", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
@@ -532,7 +532,7 @@ describe("DraggablePortsConfigurator", () => {
   });
 
   it("should not call onPointerMove error when canvas destroyed before touch cancel", () => {
-    const onPointerMove = jest.fn();
+    const onPointerMove = vi.fn();
     const canvas = createDraggablePortsCanvas({ onPointerMove });
 
     const portElement = document.createElement("div");
