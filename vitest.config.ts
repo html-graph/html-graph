@@ -11,7 +11,7 @@ export default defineConfig({
     globals: true,
     include: ["./src/**/*.spec.ts"],
     environment: "jsdom",
-    setupFiles: "./setup-jest.ts",
+    setupFiles: "./unit-setup.ts",
     coverage: {
       thresholds: {
         branches: 100,

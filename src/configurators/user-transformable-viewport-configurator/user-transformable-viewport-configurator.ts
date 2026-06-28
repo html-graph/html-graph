@@ -25,9 +25,7 @@ export class UserTransformableViewportConfigurator {
     this.removeTouchDragListeners();
   };
 
-  private readonly onMouseDown: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
+  private readonly onMouseDown = (event: MouseEvent): void => {
     if (this.eventTagger.has(event, dragEventHandledTag)) {
       return;
     }
@@ -49,9 +47,7 @@ export class UserTransformableViewportConfigurator {
     this.startRegisteredTransform();
   };
 
-  private readonly onWindowMouseMove: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
+  private readonly onWindowMouseMove = (event: MouseEvent): void => {
     const isInside = this.pointInsideVerifier.verify(
       event.clientX,
       event.clientY,
@@ -68,9 +64,7 @@ export class UserTransformableViewportConfigurator {
     this.moveViewport(deltaViewX, deltaViewY);
   };
 
-  private readonly onWindowMouseUp: (event: MouseEvent) => void = (
-    event: MouseEvent,
-  ) => {
+  private readonly onWindowMouseUp = (event: MouseEvent): void => {
     if (!this.params.mouseUpEventVerifier(event)) {
       return;
     }
@@ -78,9 +72,7 @@ export class UserTransformableViewportConfigurator {
     this.stopMouseDrag();
   };
 
-  private readonly onWheelScroll: (event: WheelEvent) => void = (
-    event: WheelEvent,
-  ) => {
+  private readonly onWheelScroll = (event: WheelEvent): void => {
     if (!this.params.mouseWheelEventVerifier(event)) {
       return;
     }
@@ -114,9 +106,7 @@ export class UserTransformableViewportConfigurator {
     }, this.params.scaleWheelFinishTimeout);
   };
 
-  private readonly onTouchStart: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
+  private readonly onTouchStart = (event: TouchEvent): void => {
     if (this.eventTagger.has(event, dragEventHandledTag)) {
       return;
     }
@@ -143,9 +133,7 @@ export class UserTransformableViewportConfigurator {
     this.startRegisteredTransform();
   };
 
-  private readonly onWindowTouchMove: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
+  private readonly onWindowTouchMove = (event: TouchEvent): void => {
     const currentTouches = processTouch(event);
     const isEvery = currentTouches.touches.every((touch) =>
       this.pointInsideVerifier.verify(touch[0], touch[1]),
@@ -157,10 +145,12 @@ export class UserTransformableViewportConfigurator {
     }
 
     if (currentTouches.touchesCnt === 1 || currentTouches.touchesCnt === 2) {
-      this.moveViewport(
-        -(currentTouches.x - this.prevTouches!.x),
-        -(currentTouches.y - this.prevTouches!.y),
-      );
+      const { x, y } = this.prevTouches!;
+
+      const dx = currentTouches.x - x;
+      const dy = currentTouches.y - y;
+
+      this.moveViewport(-dx, -dy);
     }
 
     if (currentTouches.touchesCnt === 2) {
@@ -176,9 +166,7 @@ export class UserTransformableViewportConfigurator {
     this.prevTouches = currentTouches;
   };
 
-  private readonly onWindowTouchFinish: (event: TouchEvent) => void = (
-    event: TouchEvent,
-  ) => {
+  private readonly onWindowTouchFinish = (event: TouchEvent): void => {
     if (event.touches.length > 0) {
       this.prevTouches = processTouch(event);
     } else {
@@ -190,7 +178,7 @@ export class UserTransformableViewportConfigurator {
     event.preventDefault();
   };
 
-  public constructor(
+  private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,

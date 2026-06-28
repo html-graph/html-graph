@@ -52,30 +52,34 @@ describe("NearestConnectablePortDraggingPortDirectionResolver", () => {
     expect(portDirectionResolver.resolve(params)).toBe(Math.PI);
   });
 
-  it("should resolve direction of the closest port", () => {
+  it("should resolve direction of the nearest port", () => {
     const canvas = createCanvas();
 
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
-      ],
-    });
-
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        {
-          id: "port-2",
-          element: createElement({ x: 100, y: 100 }),
-          direction: Math.PI,
-        },
-      ],
-    });
+    canvas
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement({ x: 0, y: 0 }),
+            direction: 0,
+          },
+        ],
+      })
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-2",
+            element: createElement({ x: 100, y: 100 }),
+            direction: Math.PI,
+          },
+        ],
+      });
 
     const portDirectionResolver =
       new NearestConnectablePortDraggingPortDirectionResolver(
@@ -92,28 +96,76 @@ describe("NearestConnectablePortDraggingPortDirectionResolver", () => {
     expect(portDirectionResolver.resolve(params)).toBe(Math.PI);
   });
 
+  it("should resolve direction of the nearest port when it's the first port", () => {
+    const canvas = createCanvas();
+
+    canvas
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement({ x: 0, y: 0 }),
+            direction: 0,
+          },
+        ],
+      })
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-2",
+            element: createElement({ x: 100, y: 100 }),
+            direction: Math.PI,
+          },
+        ],
+      });
+
+    const portDirectionResolver =
+      new NearestConnectablePortDraggingPortDirectionResolver(
+        canvas.graph,
+        () => true,
+      );
+
+    const params: DraggingPortDirectionResolverParams = {
+      staticPortId: "port-1",
+      isDirect: true,
+      cursor: { x: 10, y: 10 },
+    };
+
+    expect(portDirectionResolver.resolve(params)).toBe(0);
+  });
+
   it("should take into account only attached ports", () => {
     const canvas = createCanvas();
 
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
-      ],
-    });
-
-    canvas.addNode({
-      element: createElement(),
-      ports: [
-        {
-          id: "port-2",
-          element: createElement({ x: 100, y: 100 }),
-          direction: Math.PI,
-        },
-      ],
-    });
+    canvas
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement({ x: 0, y: 0 }),
+            direction: 0,
+          },
+        ],
+      })
+      .addNode({
+        element: createElement(),
+        ports: [
+          {
+            id: "port-2",
+            element: createElement({ x: 100, y: 100 }),
+            direction: Math.PI,
+          },
+        ],
+      });
 
     const portDirectionResolver =
       new NearestConnectablePortDraggingPortDirectionResolver(
@@ -133,27 +185,31 @@ describe("NearestConnectablePortDraggingPortDirectionResolver", () => {
   it("should take into account only ports with allowed connections", () => {
     const canvas = createCanvas();
 
-    canvas.addNode({
-      element: createElement(),
-      x: 0,
-      y: 0,
-      ports: [
-        { id: "port-1", element: createElement({ x: 0, y: 0 }), direction: 0 },
-      ],
-    });
-
-    canvas.addNode({
-      element: createElement(),
-      x: 100,
-      y: 100,
-      ports: [
-        {
-          id: "port-2",
-          element: createElement({ x: 100, y: 100 }),
-          direction: Math.PI,
-        },
-      ],
-    });
+    canvas
+      .addNode({
+        element: createElement(),
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement({ x: 0, y: 0 }),
+            direction: 0,
+          },
+        ],
+      })
+      .addNode({
+        element: createElement(),
+        x: 100,
+        y: 100,
+        ports: [
+          {
+            id: "port-2",
+            element: createElement({ x: 100, y: 100 }),
+            direction: Math.PI,
+          },
+        ],
+      });
 
     const portDirectionResolver =
       new NearestConnectablePortDraggingPortDirectionResolver(

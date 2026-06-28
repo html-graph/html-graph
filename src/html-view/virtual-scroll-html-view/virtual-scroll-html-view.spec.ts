@@ -351,6 +351,21 @@ describe("VirtualScrollHtmlView", () => {
     expect(spy).toHaveBeenCalledWith("edge-1");
   });
 
+  it("should not attach node when kept outside of the viewport", () => {
+    const { trigger, coreView, store, boxView } = create();
+    store.addNode(addNodeRequest);
+    trigger.emit({ x: 1, y: 1, width: 10, height: 10 });
+
+    const payload = store.getNode(addNodeRequest.id).payload;
+    payload.x = -1;
+    payload.y = -1;
+
+    const spy = vi.spyOn(coreView, "attachNode");
+    boxView.updateNodePosition(addNodeRequest.id);
+
+    expect(spy).not.toHaveBeenCalledWith(addNodeRequest.id);
+  });
+
   it("should update node priority for attached node", () => {
     const { trigger, coreView, store, boxView } = create();
     store.addNode(addNodeRequest);

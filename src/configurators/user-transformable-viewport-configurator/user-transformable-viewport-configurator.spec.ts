@@ -452,6 +452,58 @@ describe("UserTransformableViewportConfigurator", () => {
     expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(100);
   });
 
+  it("should move viewport with touch when event has two touches", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 100, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(100);
+  });
+
+  it("should not move viewport with touch when event has more than 2 touches", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ element });
+
+    element.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 300 }),
+        ],
+      }),
+    );
+
+    expect(canvas.viewport.getContentMatrix().x).toBeCloseTo(0);
+  });
+
   it("should not move viewport with touch when event was tagged as handled", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });

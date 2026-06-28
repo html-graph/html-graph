@@ -108,6 +108,31 @@ describe("DraggablePortsConfigurator", () => {
     expect(onPointerDownVerifier).toHaveBeenCalledWith(0, { x: 100, y: 200 });
   });
 
+  it("should call onPointerDownVerifier callback on mouse down once when the same element is attached to different ports", () => {
+    const onPointerDownVerifier = vi.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerDownVerifier });
+
+    const portElement = document.createElement("div");
+    const nodeElement = document.createElement("div");
+    nodeElement.appendChild(portElement);
+
+    canvas.addNode({
+      element: nodeElement,
+      x: 0,
+      y: 0,
+      ports: [
+        { id: "port-1", element: portElement },
+        { id: "port-2", element: portElement },
+      ],
+    });
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerDownVerifier).toHaveBeenCalledTimes(1);
+  });
+
   it("should not call onPointerDownVerifier callback when mouse event verifier not matched", () => {
     const onPointerDownVerifier = vi.fn();
     const mouseDownEventVerifier: MouseEventVerifier = () => false;
@@ -345,6 +370,41 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerUp).toHaveBeenCalledWith({ x: 100, y: 200 });
+  });
+
+  it("should call onPointerUp on mouse up after port with the same element is unmarked", () => {
+    const onPointerUp = vi.fn();
+    const canvas = createDraggablePortsCanvas({ onPointerUp });
+
+    const portElement = document.createElement("div");
+    const nodeElement = document.createElement("div");
+    nodeElement.appendChild(portElement);
+
+    canvas
+      .addNode({
+        element: nodeElement,
+        x: 0,
+        y: 0,
+        ports: [
+          { id: "port-1", element: portElement },
+          { id: "port-2", element: portElement },
+        ],
+      })
+      .unmarkPort("port-2");
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 100, clientY: 200 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerUp).toHaveBeenCalled();
   });
 
   it("should call onPointerUp on touch end", () => {

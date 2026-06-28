@@ -16,8 +16,8 @@ export class NearestConnectablePortDraggingPortDirectionResolver
   public resolve(
     params: DraggingPortDirectionResolverParams,
   ): number | undefined {
-    let closestDirection: number | undefined = undefined;
-    let closestDistance = Infinity;
+    let nearestPortDirection: number | undefined = undefined;
+    let nearestDistance = Infinity;
     const { cursor } = params;
 
     this.graph.getAllPortIds().forEach((portId) => {
@@ -40,12 +40,12 @@ export class NearestConnectablePortDraggingPortDirectionResolver
       const dy = cursor.y - center.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestDirection = direction;
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestPortDirection = direction;
       }
     });
 
-    return closestDirection;
+    return nearestPortDirection;
   }
 }
