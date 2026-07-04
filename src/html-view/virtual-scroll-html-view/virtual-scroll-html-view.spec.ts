@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { AddNodeRequest, GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "../core-html-view";
 import { ViewportStore } from "@/viewport-store";

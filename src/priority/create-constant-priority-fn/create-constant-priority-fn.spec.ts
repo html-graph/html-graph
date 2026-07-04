@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createConstantPriorityFn } from "./create-constant-priority-fn";
 
 describe("createConstantPriorityFn", () => {

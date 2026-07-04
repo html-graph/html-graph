@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Canvas } from "@/canvas";
 import { ManualLayoutApplicationStrategyConfigurator } from "./manual-layout-application-strategy-configurator";
 import { GraphStore } from "@/graph-store";

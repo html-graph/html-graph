@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { AnimationSeries } from "./animation-series";
 import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
 

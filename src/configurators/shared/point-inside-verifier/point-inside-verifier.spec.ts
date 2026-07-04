@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach, afterEach } from "vitest";
 import { createElement } from "@/mocks/create-element.mock";
 import { PointInsideVerifier } from "./point-inside-verifier";
 

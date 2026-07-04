@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { prepareNodeElement } from "./prepare-node-element";
 
 describe("prepareNodeElement", () => {

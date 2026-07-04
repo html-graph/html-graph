@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { Mock } from "vitest";
 

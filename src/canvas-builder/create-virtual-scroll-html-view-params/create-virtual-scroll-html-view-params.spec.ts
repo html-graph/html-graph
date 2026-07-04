@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-view-params";
 
 describe("createVirtualScrollHtmlViewParams", () => {

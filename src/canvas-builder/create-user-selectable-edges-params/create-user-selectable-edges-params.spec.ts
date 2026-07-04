@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createUserSelectableEdgesParams } from "./create-user-selectable-edges-params";
 import { selectionDefaults } from "../shared";
 

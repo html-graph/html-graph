@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 import { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-direction-resolver";
 import {

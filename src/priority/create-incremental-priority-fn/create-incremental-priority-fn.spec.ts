@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createIncrementalPriorityFn } from "./create-incremental-priority-fn";
 
 describe("createIncrementalPriorityFn", () => {

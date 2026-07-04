@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { BezierEdgeShape } from "../bezier-edge-shape";
 import { ConnectionCategory } from "../../connection-category";
 import { MidpointEdgeShape } from "./midpoint-edge-shape";

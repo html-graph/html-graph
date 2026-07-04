@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createEdgeSvg } from "./create-edge-svg";
 
 describe("createEdgeSvg", () => {

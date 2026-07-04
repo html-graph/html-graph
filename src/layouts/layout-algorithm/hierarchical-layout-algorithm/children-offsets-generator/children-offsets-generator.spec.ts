@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 import { BreadthFirstSpanningForestGenerator } from "../breadth-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";

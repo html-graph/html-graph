@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { cssVariables } from "../css-variables";
 import { createEdgePath } from "./create-edge-path";
 

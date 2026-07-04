@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { createElement } from "@/mocks/create-element.mock";
 import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { TransformState } from "./transform-state";

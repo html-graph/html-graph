@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";

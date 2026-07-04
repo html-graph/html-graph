@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { AnimatedLayoutParams } from "@/configurators";
 import { Identifier } from "@/identifier";
 import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";

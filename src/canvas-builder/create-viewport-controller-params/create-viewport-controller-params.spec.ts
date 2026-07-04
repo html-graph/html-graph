@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { immediateScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
 import { createLayoutParams } from "../create-layout-params";
 import { createViewportControllerParams } from "./create-viewport-controller-params";

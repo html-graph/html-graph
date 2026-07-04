@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createPatternFilledRectangle } from "./create-pattern-filled-rectangle";
 
 describe("createPatternFilledRectangle", () => {

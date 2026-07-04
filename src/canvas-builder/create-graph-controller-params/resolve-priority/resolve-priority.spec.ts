@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { standardPriorityFn } from "@/priority";
 import { resolvePriority } from "./resolve-priority";
 

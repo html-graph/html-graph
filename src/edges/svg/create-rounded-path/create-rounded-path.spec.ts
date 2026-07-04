@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Point } from "@/point";
 import { createRoundedPath } from "./create-rounded-path";
 

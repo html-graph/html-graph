@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 import { HierarchicalLayoutAlgorithm } from "./hierarchical-layout-algorithm";
 import { Point } from "@/point";

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";

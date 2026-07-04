@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createAreaBox } from "./create-area-box";
 
 describe("createAreaBox", () => {

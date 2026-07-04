@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { QuadTree } from "./quad-tree";
 import { QuadTreeNode } from "./quad-tree-node";
 

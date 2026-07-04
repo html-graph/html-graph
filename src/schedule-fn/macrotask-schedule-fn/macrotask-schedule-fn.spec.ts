@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { macrotaskScheduleFn } from "./macrotask-schedule-fn";
 

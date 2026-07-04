@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { IdGenerator } from "./id-generator";
 
 describe("IdGenerator", () => {

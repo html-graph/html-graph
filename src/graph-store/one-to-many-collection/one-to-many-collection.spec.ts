@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { OneToManyCollection } from "./one-to-many-collection";
 
 describe("OneToManyCollection", () => {

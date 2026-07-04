@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { EventSubject } from "./event-subject";
 
 describe("EventSubject", () => {

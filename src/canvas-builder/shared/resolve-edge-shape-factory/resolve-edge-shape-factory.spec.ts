@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 import {
   BezierEdgeShape,

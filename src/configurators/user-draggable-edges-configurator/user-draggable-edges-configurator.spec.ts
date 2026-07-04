@@ -1,3 +1,4 @@
+import { describe, expect, it, afterEach, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";

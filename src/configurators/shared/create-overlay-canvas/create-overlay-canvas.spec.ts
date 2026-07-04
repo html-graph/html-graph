@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { ViewportStore } from "@/viewport-store";
 import { createOverlayCanvas } from "./create-overlay-canvas";
 import { Canvas } from "@/canvas";

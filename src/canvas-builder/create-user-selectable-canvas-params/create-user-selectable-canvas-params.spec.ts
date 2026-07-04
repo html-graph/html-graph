@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createUserSelectableCanvasParams } from "./create-user-selectable-canvas-params";
 import { selectionDefaults } from "../shared";
 

@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";

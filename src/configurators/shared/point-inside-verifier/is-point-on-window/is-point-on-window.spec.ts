@@ -1,3 +1,4 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { Mock } from "vitest";
 import { isPointOnWindow } from "./is-point-on-window";
 

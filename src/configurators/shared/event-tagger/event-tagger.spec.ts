@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { EventTagger } from "./event-tagger";
 
 describe("EventTagger", () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createBackgroundParams } from "./create-background-params";
 
 describe("createBackgroundParams", () => {

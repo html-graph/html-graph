@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { BezierEdgeShape } from "../bezier-edge-shape";
 import { ConnectionCategory } from "../../connection-category";
 import { EdgeRenderParams } from "../../edge-render-params";

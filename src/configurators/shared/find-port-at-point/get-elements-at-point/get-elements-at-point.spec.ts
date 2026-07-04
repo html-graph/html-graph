@@ -1,3 +1,4 @@
+import { describe, expect, it, afterEach } from "vitest";
 import { createElement } from "@/mocks/create-element.mock";
 import { getElementsAtPoint } from "./get-elements-at-point";
 

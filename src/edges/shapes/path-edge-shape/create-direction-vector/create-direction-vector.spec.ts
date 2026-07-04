@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createDirectionVector } from "./create-direction-vector";
 
 describe("createDirectionVector", () => {

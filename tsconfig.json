@@ -20,7 +20,7 @@
       "@html-graph/html-graph": ["src"],
       "@/*": ["src/*"]
     },
-    "types": ["vitest/globals", "jsdom"]
+    "types": ["jsdom"]
   },
   "include": ["use-cases", "src"]
 }

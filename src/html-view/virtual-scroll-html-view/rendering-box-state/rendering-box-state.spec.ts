@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { RenderingBoxState } from "./rendering-box-state";
 import { standardCenterFn } from "@/center-fn";

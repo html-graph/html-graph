@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { createElement } from "@/mocks/create-element.mock";
 import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
 import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";

@@ -1,3 +1,4 @@
+import { describe, expect, it, afterEach, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";

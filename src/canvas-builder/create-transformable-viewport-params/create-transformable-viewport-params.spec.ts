@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { TransformState } from "@/viewport-store";
 import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";

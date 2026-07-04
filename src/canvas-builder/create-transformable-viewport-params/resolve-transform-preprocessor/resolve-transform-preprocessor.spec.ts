@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { TransformPreprocessorFn } from "@/configurators";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 

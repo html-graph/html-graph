@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 import { createElement } from "@/mocks/create-element.mock";
 import { NearestConnectablePortDraggingPortDirectionResolver } from "./nearest-connectable-port-dragging-port-direction-resolver";

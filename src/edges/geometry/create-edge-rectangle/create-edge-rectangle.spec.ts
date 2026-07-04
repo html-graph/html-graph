@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { EdgeRenderPort } from "../../edge-render-port";
 import { createEdgeRectangle } from "./create-edge-rectangle";
 

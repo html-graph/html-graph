@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createPattern } from "./create-pattern";
 
 describe("createPattern", () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { ConstantDraggingPortDirectionResolver } from "./constant-dragging-port-direction-resolver";
 import { DraggingPortDirectionResolver } from "../dragging-port-direction-resolver";
 import { DraggingPortDirectionResolverParams } from "../dragging-port-direction-resolver-params";

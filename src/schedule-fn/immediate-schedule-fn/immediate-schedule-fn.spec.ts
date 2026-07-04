@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { immediateScheduleFn } from "./immediate-schedule-fn";
 
 describe("immediateScheduleFn", () => {

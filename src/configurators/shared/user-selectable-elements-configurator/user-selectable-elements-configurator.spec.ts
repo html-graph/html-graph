@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { createElement } from "@/mocks/create-element.mock";
 import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
 import { createTouch } from "@/mocks/create-touch.mock";

@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { ViewportStore, TransformState } from "@/viewport-store";
 import { Viewport } from "./viewport";
 import { createElement } from "@/mocks/create-element.mock";

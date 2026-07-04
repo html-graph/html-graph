@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { cssVariables } from "../css-variables";
 import { createEdgeArrow } from "./create-edge-arrow";
 

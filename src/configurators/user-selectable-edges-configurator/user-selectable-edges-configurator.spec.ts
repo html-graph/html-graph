@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphController } from "@/graph-controller";

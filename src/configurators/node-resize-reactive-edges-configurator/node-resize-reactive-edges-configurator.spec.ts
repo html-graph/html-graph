@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { NodeResizeReactiveEdgesConfigurator } from "./node-resize-reactive-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 import { standardCenterFn } from "@/center-fn";

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { calculateDotourY } from "./calculate-detour-y";
 
 describe("calculateDetourY", () => {

@@ -18,6 +18,7 @@ import {
   ViewportControllerParams,
 } from "@/viewport-controller";
 import { immediateScheduleFn } from "@/schedule-fn";
+import { describe, expect, it, vi } from "vitest";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

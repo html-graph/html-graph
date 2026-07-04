@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { DirectEdgeShape } from "@/edges";
 import { createDraggableEdgeParams } from "./create-draggable-edges-params";
 import { Canvas } from "@/canvas";

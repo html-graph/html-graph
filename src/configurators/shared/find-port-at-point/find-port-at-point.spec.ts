@@ -1,3 +1,4 @@
+import { describe, expect, it, afterEach } from "vitest";
 import { Canvas } from "@/canvas";
 import { findPortAtPoint } from "./find-port-at-point";
 import { GraphStore } from "@/graph-store";

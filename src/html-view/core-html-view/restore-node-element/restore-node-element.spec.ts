@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { restoreNodeElement } from "./restore-node-element";
 
 describe("restoreNodeElement", () => {

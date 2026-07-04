@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { setSvgRectangle } from "./set-svg-rectangle";
 
 describe("setSvgRectangle", () => {

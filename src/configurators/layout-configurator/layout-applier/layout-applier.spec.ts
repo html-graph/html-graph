@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutApplier } from "./layout-applier";
