@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { processTouch } from "./process-touch";
 
 const touch1: Touch = {

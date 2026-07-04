@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createEdgeLine } from "./create-edge-line";
 
 describe("createEdgeLine", () => {

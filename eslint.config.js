@@ -19,7 +19,8 @@ export default tseslint.config(
         "error",
         {
           selector: "ExportAllDeclaration",
-          message: "Wildcard exports (export *) are forbidden.",
+          message:
+            "Wildcard exports (export *) are forbidden to respect directory-wide encapsulation",
         },
       ],
     },

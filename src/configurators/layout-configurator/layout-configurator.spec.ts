@@ -1,16 +1,15 @@
+import { describe, expect, it, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  waitMacrotask,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutParams } from "./layout-params";
-import { DummyLayoutAlgorithm } from "@/mocks";
 import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
 import { GraphController } from "@/graph-controller";
@@ -119,7 +118,7 @@ describe("LayoutConfigurator", () => {
 
   it("should emit onBeforeApplied event", async () => {
     const canvas = createCanvas();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
@@ -142,7 +141,7 @@ describe("LayoutConfigurator", () => {
 
   it("should emit onAfterApplied event", async () => {
     const canvas = createCanvas();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
     const config: LayoutParams = {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {

@@ -1,4 +1,7 @@
-import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
+import { describe, expect, it, vi } from "vitest";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createTouch } from "@/mocks/create-touch.mock";
 import { PointInsideVerifier } from "../point-inside-verifier";
 import { UserSelectableElementsConfigurator } from "./user-selectable-elements-configurator";
 
@@ -29,7 +32,7 @@ const createConfigurator = (options?: {
 
 describe("UserSelectableElementsConfigurator", () => {
   it("should call specified callback for element with enabled selection", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -50,7 +53,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback for element with disabled selection", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -71,7 +74,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should prevent selection initiation process when mouse down verifier not passed", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({
       onSelected,
       mouseDownEventVerifier: (event: MouseEvent) => event.ctrlKey,
@@ -94,7 +97,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should prevent selection when mouse up verifier not passed", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({
       onSelected,
       mouseUpEventVerifier: (event: MouseEvent) => event.ctrlKey,
@@ -117,7 +120,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should emit selection once", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -138,7 +141,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should cancel selection when mouse move distance is more than specified threshold", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -159,7 +162,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should stack cursor movement when calculating threshold", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -181,7 +184,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should reset cursor travel", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -211,7 +214,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should remove mouse movement listener on selection finish", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -230,7 +233,7 @@ describe("UserSelectableElementsConfigurator", () => {
 
     expect(onSelected).toHaveBeenCalledWith(selectableElement, event);
 
-    const spy = jest.spyOn(window, "removeEventListener");
+    const spy = vi.spyOn(window, "removeEventListener");
 
     selectableElement.dispatchEvent(
       new MouseEvent("mousedown", {
@@ -245,7 +248,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should cancel selection when mouse cursor moved outside", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -266,7 +269,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback when selection was disabled in the process", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -290,7 +293,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should call specified callback when selection was disabled on another element", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement1 = document.createElement("div");
@@ -317,7 +320,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should call specified callback on node touch grab and immediate release", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -337,7 +340,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should prevent selection initiation process when touch start event doesnt fit", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -359,7 +362,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should call specified callback once on second touch end", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -379,7 +382,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback on touch grab cancelled", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -399,7 +402,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should reset touch state on selection cancellation", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -412,7 +415,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    const spy = jest.spyOn(window, "removeEventListener");
+    const spy = vi.spyOn(window, "removeEventListener");
     window.dispatchEvent(new TouchEvent("touchcancel"));
 
     expect(spy).toHaveBeenCalledWith("touchcancel", expect.anything());
@@ -420,7 +423,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should cancel selection when touch move distance is more than specified threshold", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -445,7 +448,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should remove touch move listener on touch end", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -458,7 +461,7 @@ describe("UserSelectableElementsConfigurator", () => {
       }),
     );
 
-    const spy = jest.spyOn(window, "removeEventListener");
+    const spy = vi.spyOn(window, "removeEventListener");
     window.dispatchEvent(new TouchEvent("touchend"));
 
     expect(spy).toHaveBeenCalledWith("touchmove", expect.anything());
@@ -466,7 +469,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback when touch moved outside", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -491,7 +494,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback when selection is disabled", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -511,7 +514,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback when selection was disabled in the process", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -532,7 +535,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should not call specified callback when touch move event doesn't fit", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");
@@ -560,7 +563,7 @@ describe("UserSelectableElementsConfigurator", () => {
   });
 
   it("should reset moved distance on next selection", () => {
-    const onSelected = jest.fn();
+    const onSelected = vi.fn();
     const configurator = createConfigurator({ onSelected });
 
     const selectableElement = document.createElement("div");

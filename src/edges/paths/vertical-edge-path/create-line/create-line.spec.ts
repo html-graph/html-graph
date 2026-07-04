@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createLine } from "./create-line";
 
 describe("createLinePoints", () => {

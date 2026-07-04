@@ -1,14 +1,13 @@
+import { describe, expect, it, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphController } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { Identifier } from "@/identifier";
-import {
-  createElement,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { Viewport } from "@/viewport";
 import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
@@ -77,7 +76,7 @@ const createCanvas = (options?: {
 describe("UserSelectableEdgesConfigurator", () => {
   it("should call specified callback on edge mouse grab and immediate release", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({ element, onEdgeSelected });
 
@@ -114,7 +113,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should should tag mouse event on edge selection", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({ element, onEdgeSelected });
 
@@ -154,7 +153,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should not call specified callback after edge removed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({ element, onEdgeSelected });
 
@@ -192,7 +191,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should not call specified callback after canvas clear", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({ element, onEdgeSelected });
 
@@ -230,7 +229,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should not call specified callback after canvas destroy", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({ element, onEdgeSelected });
 
@@ -268,7 +267,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should prevent selection initiation process when mouse down verifier not passed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({
       element,
@@ -308,7 +307,7 @@ describe("UserSelectableEdgesConfigurator", () => {
 
   it("should prevent selection initiation process when mouse up verifier not passed", () => {
     const element = createElement({ width: 1000, height: 1000 });
-    const onEdgeSelected = jest.fn();
+    const onEdgeSelected = vi.fn();
 
     const canvas = createCanvas({
       element,

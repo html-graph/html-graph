@@ -47,7 +47,7 @@ export class UserTransformableViewportVirtualScrollConfigurator {
 
   private userTransformInProgress = false;
 
-  public constructor(
+  private constructor(
     private readonly canvas: Canvas,
     private readonly element: HTMLElement,
     private readonly window: Window,

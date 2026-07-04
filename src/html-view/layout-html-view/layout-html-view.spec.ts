@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "../core-html-view";
 import { ViewportStore } from "@/viewport-store";
@@ -36,7 +37,7 @@ describe("LayoutHtmlView", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(coreHtmlView, "attachNode");
+    const spy = vi.spyOn(coreHtmlView, "attachNode");
 
     layoutHtmlView.attachNode("node-1");
 
@@ -57,7 +58,7 @@ describe("LayoutHtmlView", () => {
 
     layoutHtmlView.attachNode("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "detachNode");
+    const spy = vi.spyOn(coreHtmlView, "detachNode");
     layoutHtmlView.detachNode("node-1");
 
     expect(spy).toHaveBeenCalledWith("node-1");
@@ -92,7 +93,7 @@ describe("LayoutHtmlView", () => {
 
     layoutHtmlView.attachNode("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.attachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -128,7 +129,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "detachEdge");
+    const spy = vi.spyOn(coreHtmlView, "detachEdge");
     layoutHtmlView.detachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -147,7 +148,7 @@ describe("LayoutHtmlView", () => {
     });
 
     layoutHtmlView.attachNode("node-1");
-    const spy = jest.spyOn(coreHtmlView, "updateNodePosition");
+    const spy = vi.spyOn(coreHtmlView, "updateNodePosition");
 
     layoutHtmlView.updateNodePosition("node-1");
 
@@ -167,7 +168,7 @@ describe("LayoutHtmlView", () => {
     });
 
     layoutHtmlView.attachNode("node-1");
-    const spy = jest.spyOn(coreHtmlView, "updateNodePriority");
+    const spy = vi.spyOn(coreHtmlView, "updateNodePriority");
 
     layoutHtmlView.updateNodePriority("node-1");
 
@@ -204,7 +205,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "updateEdgeShape");
+    const spy = vi.spyOn(coreHtmlView, "updateEdgeShape");
     layoutHtmlView.updateEdgeShape("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -240,7 +241,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "renderEdge");
+    const spy = vi.spyOn(coreHtmlView, "renderEdge");
     layoutHtmlView.renderEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -276,7 +277,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "updateEdgePriority");
+    const spy = vi.spyOn(coreHtmlView, "updateEdgePriority");
     layoutHtmlView.updateEdgePriority("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -285,7 +286,7 @@ describe("LayoutHtmlView", () => {
   it("should clear core view", () => {
     const { layoutHtmlView, coreHtmlView } = create();
 
-    const spy = jest.spyOn(coreHtmlView, "clear");
+    const spy = vi.spyOn(coreHtmlView, "clear");
     layoutHtmlView.clear();
 
     expect(spy).toHaveBeenCalled();
@@ -294,7 +295,7 @@ describe("LayoutHtmlView", () => {
   it("should destroy core view", () => {
     const { layoutHtmlView, coreHtmlView } = create();
 
-    const spy = jest.spyOn(coreHtmlView, "destroy");
+    const spy = vi.spyOn(coreHtmlView, "destroy");
     layoutHtmlView.destroy();
 
     expect(spy).toHaveBeenCalled();
@@ -312,7 +313,7 @@ describe("LayoutHtmlView", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(coreHtmlView, "attachNode");
+    const spy = vi.spyOn(coreHtmlView, "attachNode");
 
     layoutHtmlView.attachNode("node-1");
 
@@ -331,7 +332,7 @@ describe("LayoutHtmlView", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(coreHtmlView, "attachNode");
+    const spy = vi.spyOn(coreHtmlView, "attachNode");
 
     layoutHtmlView.attachNode("node-1");
 
@@ -463,7 +464,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachNode("node-2");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.attachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -515,7 +516,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachNode("node-2");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.attachEdge("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -627,7 +628,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-2");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "detachEdge");
+    const spy = vi.spyOn(coreHtmlView, "detachEdge");
     layoutHtmlView.detachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -714,7 +715,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     layoutHtmlView.renderEdge("edge-1");
 
@@ -844,7 +845,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     graphStore.updateNode("node-1", { x: 0, y: 0 });
 
-    const spy = jest.spyOn(coreHtmlView, "updateNodePosition");
+    const spy = vi.spyOn(coreHtmlView, "updateNodePosition");
 
     layoutHtmlView.updateNodePosition("node-1");
 
@@ -867,7 +868,7 @@ describe("LayoutHtmlView", () => {
     graphStore.updateNode("node-1", { x: 0, y: 0 });
     layoutHtmlView.updateNodePosition("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "detachNode");
+    const spy = vi.spyOn(coreHtmlView, "detachNode");
 
     layoutHtmlView.detachNode("node-1");
 
@@ -889,7 +890,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-1");
     graphStore.updateNode("node-1", { x: 0, y: 0 });
 
-    const spy = jest.spyOn(coreHtmlView, "updateNodePriority");
+    const spy = vi.spyOn(coreHtmlView, "updateNodePriority");
 
     layoutHtmlView.updateNodePriority("node-1");
 
@@ -945,7 +946,7 @@ describe("LayoutHtmlView", () => {
     graphStore.updateNode("node-1", { x: 0, y: 0 });
     layoutHtmlView.updateNodePosition("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.updateEdgeShape("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -998,7 +999,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-2");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.updateEdgeShape("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -1051,7 +1052,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.attachNode("node-2");
     layoutHtmlView.attachEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.updateEdgeShape("edge-1");
 
     expect(spy).not.toHaveBeenCalledWith("edge-1");
@@ -1106,7 +1107,7 @@ describe("LayoutHtmlView", () => {
     graphStore.updateNode("node-1", { x: 0, y: 0 });
     layoutHtmlView.updateNodePosition("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.renderEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -1161,7 +1162,7 @@ describe("LayoutHtmlView", () => {
     graphStore.updateNode("node-1", { x: 0, y: 0 });
     layoutHtmlView.updateNodePosition("node-1");
 
-    const spy = jest.spyOn(coreHtmlView, "attachEdge");
+    const spy = vi.spyOn(coreHtmlView, "attachEdge");
     layoutHtmlView.updateEdgePriority("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");
@@ -1217,7 +1218,7 @@ describe("LayoutHtmlView", () => {
     layoutHtmlView.updateNodePosition("node-1");
     layoutHtmlView.renderEdge("edge-1");
 
-    const spy = jest.spyOn(coreHtmlView, "detachEdge");
+    const spy = vi.spyOn(coreHtmlView, "detachEdge");
     layoutHtmlView.detachEdge("edge-1");
 
     expect(spy).toHaveBeenCalledWith("edge-1");

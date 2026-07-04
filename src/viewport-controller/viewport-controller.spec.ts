@@ -1,7 +1,10 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { ViewportController } from "./viewport-controller";
-import { AnimationFrameMock, createElement, waitMicrotask } from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
+import { createElement } from "@/mocks/create-element.mock";
+import { waitMicrotask } from "@/mocks/wait-microtask.mock";
 import { standardCenterFn } from "@/center-fn";
 import { ViewportControllerParams } from "./viewport-controller-params";
 import {
@@ -172,7 +175,7 @@ describe("ViewportController", () => {
       element,
     });
 
-    const spy = jest.spyOn(viewportStore, "destroy");
+    const spy = vi.spyOn(viewportStore, "destroy");
 
     viewportController.destroy();
 

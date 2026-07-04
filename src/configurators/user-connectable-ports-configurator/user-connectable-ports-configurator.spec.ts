@@ -1,14 +1,13 @@
+import { describe, expect, it, afterEach, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { UserConnectablePortsConfigurator } from "./user-connectable-ports-configurator";
-import {
-  createElement,
-  createMouseMoveEvent,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
 import { BezierEdgeShape } from "@/edges";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
@@ -260,7 +259,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationInterrupted = jest.fn();
+    const onEdgeCreationInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -396,7 +395,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onAfterEdgeCreated = jest.fn();
+    const onAfterEdgeCreated = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -435,7 +434,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationInterrupted = jest.fn();
+    const onEdgeCreationInterrupted = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -477,7 +476,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationPrevented = jest.fn();
+    const onEdgeCreationPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,
@@ -517,7 +516,7 @@ describe("UserConnectablePortsConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const mainElement = createElement({ width: 1000, height: 1000 });
 
-    const onEdgeCreationPrevented = jest.fn();
+    const onEdgeCreationPrevented = vi.fn();
     const canvas = createCanvas({
       overlayElement,
       mainElement,

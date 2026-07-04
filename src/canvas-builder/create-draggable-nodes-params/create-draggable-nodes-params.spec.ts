@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createDraggableNodesParams } from "./create-draggable-nodes-params";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
 

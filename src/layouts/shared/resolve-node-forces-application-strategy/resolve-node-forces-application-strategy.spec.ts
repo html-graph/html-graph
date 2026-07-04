@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { DistanceVectorGenerator } from "../distance-vector-generator";
 import {
   BarnesHutApproximationNodeForcesApplicationStrategy,

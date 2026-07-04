@@ -1,4 +1,5 @@
-import { createCanvas } from "@/mocks";
+import { describe, expect, it } from "vitest";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 import { ForceDirectedAnimatedLayoutAlgorithm } from "./force-directed-animated-layout-algorithm";
 import { Canvas } from "@/canvas";
 import { AnimatedLayoutAlgorithm } from "../animated-layout-algorithm";

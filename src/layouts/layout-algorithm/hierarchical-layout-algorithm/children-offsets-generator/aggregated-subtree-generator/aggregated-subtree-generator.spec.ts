@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { TreeSpans } from "../tree-spans";
 import { AggregatedSubtreeGenerator } from "./aggregated-subtree-generator";
 

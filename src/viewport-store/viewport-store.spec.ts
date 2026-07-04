@@ -1,4 +1,6 @@
-import { createElement, triggerResizeFor } from "@/mocks";
+import { describe, expect, it, vi } from "vitest";
+import { createElement } from "@/mocks/create-element.mock";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { TransformState } from "./transform-state";
 import { ViewportStore } from "./viewport-store";
 import { Point } from "@/point";
@@ -173,7 +175,7 @@ describe("ViewportStore", () => {
   it("should call callback before patching content matrix", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
-    const onBeforeUpdate = jest.fn();
+    const onBeforeUpdate = vi.fn();
     viewportStore.onBeforeUpdated.subscribe(onBeforeUpdate);
 
     viewportStore.patchContentMatrix({ scale: 2, x: 2, y: 2 });
@@ -184,7 +186,7 @@ describe("ViewportStore", () => {
   it("should call callback after patching content matrix", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
-    const onAfterUpdate = jest.fn();
+    const onAfterUpdate = vi.fn();
     viewportStore.onAfterUpdated.subscribe(onAfterUpdate);
 
     viewportStore.patchContentMatrix({ scale: 2, x: 2, y: 2 });
@@ -195,7 +197,7 @@ describe("ViewportStore", () => {
   it("should call callback before patching viewport matrix", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
-    const onBeforeUpdate = jest.fn();
+    const onBeforeUpdate = vi.fn();
     viewportStore.onBeforeUpdated.subscribe(onBeforeUpdate);
 
     viewportStore.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
@@ -206,7 +208,7 @@ describe("ViewportStore", () => {
   it("should call callback after patching viewport matrix", () => {
     const host = createElement({ x: 0, y: 0, width: 1000, height: 700 });
     const viewportStore = new ViewportStore(host);
-    const onAfterUpdate = jest.fn();
+    const onAfterUpdate = vi.fn();
     viewportStore.onAfterUpdated.subscribe(onAfterUpdate);
 
     viewportStore.patchViewportMatrix({ scale: 2, x: 2, y: 2 });
@@ -231,7 +233,7 @@ describe("ViewportStore", () => {
       return new DOMRect(0, 0, 1100, 800);
     };
 
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     viewportStore.onAfterResize.subscribe(callback);
 
@@ -249,7 +251,7 @@ describe("ViewportStore", () => {
       return new DOMRect(0, 0, 1100, 800);
     };
 
-    const callback = jest.fn();
+    const callback = vi.fn();
 
     viewportStore.onAfterResize.subscribe(callback);
     viewportStore.destroy();

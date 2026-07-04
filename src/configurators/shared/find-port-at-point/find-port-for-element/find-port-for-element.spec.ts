@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
@@ -7,10 +8,8 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();

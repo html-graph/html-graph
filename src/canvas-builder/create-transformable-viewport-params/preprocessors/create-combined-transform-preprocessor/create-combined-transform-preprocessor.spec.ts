@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { TransformState } from "@/viewport-store";
 import { TransformPreprocessorFn } from "@/configurators";
 import { createCombinedTransformPreprocessor } from "./create-combined-transform-preprocessor";

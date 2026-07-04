@@ -1,12 +1,11 @@
+import { describe, expect, it } from "vitest";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";

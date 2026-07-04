@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { horizontalizeDirection } from "./horizontalize-direction";
 
 describe("horizontalizeDirection", () => {

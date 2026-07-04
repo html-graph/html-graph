@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { immediateScheduleFn } from "@/schedule-fn";
 import { ViewportControllerParams } from "../viewport-controller-params";
 import { createFocusParams } from "./create-focus-params";

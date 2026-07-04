@@ -19,7 +19,8 @@
     "paths": {
       "@html-graph/html-graph": ["src"],
       "@/*": ["src/*"]
-    }
+    },
+    "types": ["jsdom"]
   },
   "include": ["use-cases", "src"]
 }

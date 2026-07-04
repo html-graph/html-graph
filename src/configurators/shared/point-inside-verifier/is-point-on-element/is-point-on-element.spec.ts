@@ -1,4 +1,5 @@
-import { createElement } from "@/mocks";
+import { describe, expect, it } from "vitest";
+import { createElement } from "@/mocks/create-element.mock";
 import { isPointOnElement } from "./is-point-on-element";
 
 describe("isPointOnElement", () => {

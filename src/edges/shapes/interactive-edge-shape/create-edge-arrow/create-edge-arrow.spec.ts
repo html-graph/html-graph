@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createEdgeArrow } from "./create-edge-arrow";
 
 describe("createEdgeArrow", () => {

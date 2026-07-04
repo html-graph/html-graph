@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { TransformState } from "@/viewport-store";
 import { createShiftLimitTransformPreprocessor } from "./create-shift-limit-transform-preprocessor";
 

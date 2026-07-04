@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { DirectEdgeShape } from "@/edges";
 import { createDraggableEdgeParams } from "./create-draggable-edges-params";
 import { Canvas } from "@/canvas";
@@ -9,10 +10,8 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { EdgeShapeFactory, GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { defaults } from "./defaults";
 import { noopFn } from "../shared";
 

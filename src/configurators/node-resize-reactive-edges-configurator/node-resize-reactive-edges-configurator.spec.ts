@@ -1,14 +1,13 @@
+import { describe, expect, it, vi } from "vitest";
 import { NodeResizeReactiveEdgesConfigurator } from "./node-resize-reactive-edges-configurator";
 import { BezierEdgeShape } from "@/edges";
 import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  triggerResizeFor,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
@@ -63,7 +62,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -86,7 +85,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.removeNode("node-1");
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -109,7 +108,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.clear();
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -132,7 +131,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
 
     canvas.destroy();
 
-    const spy = jest.spyOn(canvas, "updateNode");
+    const spy = vi.spyOn(canvas, "updateNode");
 
     triggerResizeFor(element);
 
@@ -170,7 +169,7 @@ describe("NodeResizeReactiveEdgesConfigurator", () => {
       priority: 0,
     });
 
-    const spy = jest.spyOn(shape, "render");
+    const spy = vi.spyOn(shape, "render");
 
     triggerResizeFor(element);
 

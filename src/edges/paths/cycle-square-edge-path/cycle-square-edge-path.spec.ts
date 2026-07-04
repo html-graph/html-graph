@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { CycleSquareEdgePath } from "./cycle-square-edge-path";
 
 describe("CycleSquareEdgePath", () => {

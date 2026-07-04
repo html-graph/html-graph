@@ -1,4 +1,6 @@
-import { createCanvas, DummyLayoutAlgorithm } from "@/mocks";
+import { describe, expect, it, vi } from "vitest";
+import { createCanvas } from "@/mocks/create-canvas.mock";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutApplier } from "./layout-applier";
 import { Identifier } from "@/identifier";
 import { LayoutApplierParams } from "./layout-applier-params";
@@ -49,7 +51,7 @@ describe("LayoutApplier", () => {
   it("should emit onBeforeApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
     const params: LayoutApplierParams = {
       staticNodeResolver: (): boolean => false,
       onBeforeApplied,
@@ -66,7 +68,7 @@ describe("LayoutApplier", () => {
   it("should emit onAfterApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyLayoutAlgorithm();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
     const params: LayoutApplierParams = {
       staticNodeResolver: (): boolean => false,
       onBeforeApplied: (): void => {},

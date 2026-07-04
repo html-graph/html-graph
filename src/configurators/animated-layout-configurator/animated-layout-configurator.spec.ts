@@ -1,13 +1,12 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  AnimationFrameMock,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  DummyAnimatedLayoutAlgorithm,
-} from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { AnimatedLayoutConfigurator } from "./animated-layout-configurator";
@@ -121,7 +120,7 @@ describe("AnimatedLayoutConfigurator", () => {
   it("should emit onBeforeApplied event", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyAnimatedLayoutAlgorithm();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
 
     AnimatedLayoutConfigurator.configure(
       canvas,
@@ -143,7 +142,7 @@ describe("AnimatedLayoutConfigurator", () => {
   it("should emit onAfterApplied event", async () => {
     const canvas = createCanvas();
     const algorithm = new DummyAnimatedLayoutAlgorithm();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
 
     AnimatedLayoutConfigurator.configure(
       canvas,

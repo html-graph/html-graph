@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { standardCenterFn } from "./standard-center-fn";
 
 describe("standardCenterFn", () => {

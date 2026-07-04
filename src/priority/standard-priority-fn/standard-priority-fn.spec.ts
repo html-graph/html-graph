@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { standardPriorityFn } from "./standard-priority-fn";
 
 describe("standardPriorityFn", () => {

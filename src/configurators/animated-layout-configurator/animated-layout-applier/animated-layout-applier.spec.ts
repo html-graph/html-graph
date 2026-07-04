@@ -1,4 +1,6 @@
-import { createCanvas, DummyAnimatedLayoutAlgorithm } from "@/mocks";
+import { describe, expect, it, vi } from "vitest";
+import { createCanvas } from "@/mocks/create-canvas.mock";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { Identifier } from "@/identifier";
 import { AnimatedLayoutApplier } from "./animated-layout-applier";
 import { AnimatedLayoutApplierParams } from "./animated-layout-applier-params";
@@ -49,7 +51,7 @@ describe("AnimatedLayoutApplier", () => {
   it("should emit onBeforeApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const onBeforeApplied = jest.fn();
+    const onBeforeApplied = vi.fn();
 
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: () => false,
@@ -67,7 +69,7 @@ describe("AnimatedLayoutApplier", () => {
   it("should emit onAfterApplied event", () => {
     const canvas = createCanvas();
     const layoutAlgorithm = new DummyAnimatedLayoutAlgorithm();
-    const onAfterApplied = jest.fn();
+    const onAfterApplied = vi.fn();
 
     const params: AnimatedLayoutApplierParams = {
       staticNodeResolver: () => false,

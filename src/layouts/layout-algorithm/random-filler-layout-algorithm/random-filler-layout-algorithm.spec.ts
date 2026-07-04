@@ -1,5 +1,7 @@
+import { describe, expect, it } from "vitest";
 import { RandomFillerLayoutAlgorithm } from "./random-filler-layout-algorithm";
-import { createCanvas, createElement } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
+import { createElement } from "@/mocks/create-element.mock";
 
 describe("RandomFillerLayoutAlgorithm", () => {
   it("should set single node coordinates to maximum of specified edge length", () => {

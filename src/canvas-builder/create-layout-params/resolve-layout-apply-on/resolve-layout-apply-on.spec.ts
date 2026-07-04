@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { EventSubject } from "@/event-subject";
 import { resolveLayoutApplyOn } from "./resolve-layout-apply-on";
 import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";

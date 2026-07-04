@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { calculateNodeRepulsiveForce } from "./calculate-node-repulsive-force";
 
 describe("calculateNodeRepulsiveForceParams", () => {

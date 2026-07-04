@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createHost } from "./create-host";
 
 describe("createHost", () => {

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { ConnectionCategory } from "../../connection-category";
 import { EdgeShape } from "../../edge-shape";
 import { HorizontalEdgeShape } from "./horizontal-edge-shape";

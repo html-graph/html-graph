@@ -1,18 +1,16 @@
+import { describe, expect, it, vi } from "vitest";
 import { EventSubject } from "@/event-subject";
 import { VirtualScrollHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
-import {
-  createElement,
-  createMouseMoveEvent,
-  createMouseWheelEvent,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  triggerResizeFor,
-  waitMacrotask,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createMouseWheelEvent } from "@/mocks/create-mouse-wheel-event.mock";
+import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
@@ -21,6 +19,7 @@ import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 import { EventTagger, PointInsideVerifier } from "../shared";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 
 const createCanvas = (options?: {
   element?: HTMLElement;
@@ -284,7 +283,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onTransformChange", async () => {
-    const onTransformChange = jest.fn();
+    const onTransformChange = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
@@ -308,7 +307,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onTransformFinished", async () => {
-    const onTransformFinished = jest.fn();
+    const onTransformFinished = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({
@@ -365,7 +364,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onResizeTransformStarted", async () => {
-    const onResizeTransformStarted = jest.fn();
+    const onResizeTransformStarted = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
@@ -379,7 +378,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onResizeTransformFinished", async () => {
-    const onResizeTransformFinished = jest.fn();
+    const onResizeTransformFinished = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     createCanvas({
@@ -393,7 +392,7 @@ describe("UserTransformableViewportVirtualScrollCanvasController", () => {
   });
 
   it("should call specified onBeforeTransformChange", async () => {
-    const onBeforeTransformChange = jest.fn();
+    const onBeforeTransformChange = vi.fn();
     const element = createElement({ width: 100, height: 100 });
 
     const canvas = createCanvas({

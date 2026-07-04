@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createConnectablePortsParams } from "./create-connectable-ports-params";
 import { BezierEdgeShape, DirectEdgeShape } from "@/edges";
 import {
@@ -8,7 +9,7 @@ import {
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
 import { noopFn } from "../shared";
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {

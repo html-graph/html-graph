@@ -1,5 +1,6 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { AnimationSeries } from "./animation-series";
-import { AnimationFrameMock } from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
 
 describe("AnimationSeries", () => {
   const animationMock = new AnimationFrameMock();
@@ -13,7 +14,7 @@ describe("AnimationSeries", () => {
   });
 
   it("should call callback with latest frames difference", () => {
-    const callback = jest.fn();
+    const callback = vi.fn();
     new AnimationSeries(window, callback);
 
     animationMock.timer.emit(100);

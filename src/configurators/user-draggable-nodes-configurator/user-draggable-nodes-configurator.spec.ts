@@ -1,13 +1,12 @@
+import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  createMouseMoveEvent,
-  createTouch,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createTouch } from "@/mocks/create-touch.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { Canvas } from "@/canvas";
 import { UserDraggableNodesConfigurator } from "./user-draggable-nodes-configurator";
 import { DraggableNodesParams } from "./draggable-nodes-params";
@@ -579,7 +578,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call onNodeDragStarted after node dragging process started", () => {
-    const onNodeDragStarted = jest.fn();
+    const onNodeDragStarted = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
@@ -795,6 +794,34 @@ describe("UserDraggableNodesConfigurator", () => {
     expect(nodeWrapper.style.zIndex).toBe("0");
   });
 
+  it("should not move adjacent edges on top when related option is disabled", () => {
+    const element = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({
+      element,
+      moveEdgesOnTop: false,
+    });
+    const nodeElement = createElement();
+
+    canvas
+      .addNode({
+        id: "node-1",
+        element: nodeElement,
+        x: 0,
+        y: 0,
+        ports: [
+          {
+            id: "port-1",
+            element: createElement(),
+          },
+        ],
+      })
+      .addEdge({ id: "edge-1", from: "port-1", to: "port-1" });
+
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+
+    expect(canvas.graph.getEdge("edge-1").priority).toBe(0);
+  });
+
   it("should update adjacent edges priorities", () => {
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({ element });
@@ -842,7 +869,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call on drag finished with mouse", () => {
-    const onNodeDragFinished = jest.fn();
+    const onNodeDragFinished = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
@@ -866,7 +893,7 @@ describe("UserDraggableNodesConfigurator", () => {
   });
 
   it("should call on drag finished with touch", () => {
-    const onNodeDragFinished = jest.fn();
+    const onNodeDragFinished = vi.fn();
 
     const element = createElement({ width: 1000, height: 1000 });
     const canvas = createCanvas({
@@ -895,12 +922,7 @@ describe("UserDraggableNodesConfigurator", () => {
       }),
     );
 
-    expect(onNodeDragFinished).toHaveBeenCalledWith({
-      nodeId: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
+    expect(onNodeDragFinished).toHaveBeenCalledWith("node-1");
   });
 
   it("should not start drag when mouse down validator not passed", () => {

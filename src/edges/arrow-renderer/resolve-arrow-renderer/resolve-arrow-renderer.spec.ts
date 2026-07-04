@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { Point } from "@/point";
 import { resolveArrowRenderer } from "./resolve-arrow-renderer";
 import { ArrowRenderer } from "../arrow-renderer";

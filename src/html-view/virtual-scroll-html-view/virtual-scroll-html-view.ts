@@ -116,14 +116,12 @@ export class VirtualScrollHtmlView implements HtmlView {
   public updateNodePosition(nodeId: Identifier): void {
     if (this.attachedNodes.has(nodeId)) {
       this.htmlView.updateNodePosition(nodeId);
-    } else {
-      if (this.renderingBox.hasNode(nodeId)) {
-        this.handleAttachNode(nodeId);
+    } else if (this.renderingBox.hasNode(nodeId)) {
+      this.handleAttachNode(nodeId);
 
-        this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edgeId) => {
-          this.attachEdgeEntities(edgeId);
-        });
-      }
+      this.graphStore.getNodeAdjacentEdgeIds(nodeId).forEach((edgeId) => {
+        this.attachEdgeEntities(edgeId);
+      });
     }
   }
 

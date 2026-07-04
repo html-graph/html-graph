@@ -1,4 +1,6 @@
+import { vi } from "vitest";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
+import { Mock } from "vitest";
 
 export class AnimationFrameMock {
   private callbacks: Array<(dtSec: number) => void> = [];
@@ -7,11 +9,7 @@ export class AnimationFrameMock {
 
   public readonly timer: EventEmitter<number>;
 
-  private spy!: jest.SpyInstance<
-    number,
-    [callback: FrameRequestCallback],
-    unknown
-  >;
+  private spy!: Mock;
 
   public constructor() {
     [this.timer, this.timerHandler] = createPair<number>();
@@ -34,7 +32,7 @@ export class AnimationFrameMock {
   }
 
   public hook(): void {
-    this.spy = jest.spyOn(window, "requestAnimationFrame");
+    this.spy = vi.spyOn(window, "requestAnimationFrame");
 
     this.spy.mockImplementation((callback) => {
       this.callbacks.push(callback);

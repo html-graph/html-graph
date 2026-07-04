@@ -12,7 +12,7 @@ import { Identifier } from "@/identifier";
 import { Graph } from "@/graph";
 
 export class UserDraggableNodesConfigurator {
-  private grabbedNode: GrabbedNodeState | null = null;
+  private grabbedNodeState: GrabbedNodeState | null = null;
 
   private maxNodePriority = 0;
 
@@ -71,7 +71,7 @@ export class UserDraggableNodesConfigurator {
       y: mouseEvent.clientY,
     });
 
-    this.grabbedNode = {
+    this.grabbedNodeState = {
       nodeId,
       dx: cursorContent.x - node.x!,
       dy: cursorContent.y - node.y!,
@@ -126,7 +126,7 @@ export class UserDraggableNodesConfigurator {
       y: touch.clientY,
     });
 
-    this.grabbedNode = {
+    this.grabbedNodeState = {
       nodeId,
       dx: cursorContent.x - node.x!,
       dy: cursorContent.y - node.y!,
@@ -155,12 +155,10 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    if (this.grabbedNode !== null) {
-      this.moveNode(this.grabbedNode, {
-        x: event.clientX,
-        y: event.clientY,
-      });
-    }
+    this.moveNode(this.grabbedNodeState!, {
+      x: event.clientX,
+      y: event.clientY,
+    });
   };
 
   private readonly onWindowMouseUp = (event: MouseEvent): void => {
@@ -188,12 +186,10 @@ export class UserDraggableNodesConfigurator {
       return;
     }
 
-    if (this.grabbedNode !== null) {
-      this.moveNode(this.grabbedNode, {
-        x: touch.clientX,
-        y: touch.clientY,
-      });
-    }
+    this.moveNode(this.grabbedNodeState!, {
+      x: touch.clientX,
+      y: touch.clientY,
+    });
   };
 
   private readonly onWindowTouchFinish = (): void => {
@@ -297,14 +293,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private stopMouseDrag(): void {
-    if (
-      this.grabbedNode !== null &&
-      this.graph.hasNode(this.grabbedNode.nodeId)
-    ) {
-      this.params.onNodeDragFinished(this.grabbedNode.nodeId);
-    }
-
-    this.grabbedNode = null;
+    this.finishDrag();
     setCursor(this.element, null);
     this.removeMouseDragListeners();
   }
@@ -315,21 +304,7 @@ export class UserDraggableNodesConfigurator {
   }
 
   private stopTouchDrag(): void {
-    if (
-      this.grabbedNode !== null &&
-      this.graph.hasNode(this.grabbedNode.nodeId)
-    ) {
-      const node = this.graph.getNode(this.grabbedNode.nodeId);
-
-      this.params.onNodeDragFinished({
-        nodeId: this.grabbedNode.nodeId,
-        element: node.element,
-        x: node.x,
-        y: node.y,
-      });
-    }
-
-    this.grabbedNode = null;
+    this.finishDrag();
     this.removeTouchDragListeners();
   }
 
@@ -369,5 +344,15 @@ export class UserDraggableNodesConfigurator {
     }
 
     return coords;
+  }
+
+  private finishDrag(): void {
+    const grabbedNodeId = this.grabbedNodeState!.nodeId;
+
+    if (this.graph.hasNode(grabbedNodeId)) {
+      this.params.onNodeDragFinished(grabbedNodeId);
+    }
+
+    this.grabbedNodeState = null;
   }
 }

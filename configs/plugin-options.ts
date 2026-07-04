@@ -5,7 +5,7 @@ import { PluginOption } from "vite";
 export const pluginOptions: PluginOption[] = [
   dts({
     include: ["src"],
-    rollupTypes: true,
+    bundleTypes: true,
   }),
   checker({ typescript: true }),
 ];

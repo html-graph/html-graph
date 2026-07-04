@@ -10,7 +10,7 @@ export const createMouseWheelEvent = (params: {
 
   Object.defineProperty(wheelEvent, "deltaY", {
     get() {
-      return params.deltaY ?? 0;
+      return params.deltaY;
     },
   });
 

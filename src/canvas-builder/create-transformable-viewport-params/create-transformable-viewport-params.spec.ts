@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { TransformState } from "@/viewport-store";
 import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
@@ -48,7 +49,7 @@ describe("createConfig", () => {
       return params.nextTransform;
     };
 
-    const fn = jest.fn(transformPreprocessor);
+    const fn = vi.fn(transformPreprocessor);
 
     const res = createTransformableViewportParams({
       transformPreprocessor: fn,
@@ -73,7 +74,7 @@ describe("createConfig", () => {
       return params.nextTransform;
     };
 
-    const fn = jest.fn(transformPreprocessor);
+    const fn = vi.fn(transformPreprocessor);
 
     const res = createTransformableViewportParams({
       transformPreprocessor: [fn, fn],

@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { DetourHorizontalEdgePath } from "./detour-horizontal-edge-path";
 
 describe("DetourHorizontalEdgePath", () => {

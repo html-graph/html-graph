@@ -1,4 +1,5 @@
-import { DummyLayoutAlgorithm } from "@/mocks";
+import { describe, expect, it } from "vitest";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutConfig } from "./layout-config";
 import { createLayoutParams } from "./create-layout-params";
 import { defaults } from "./defaults";

@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import { GraphStore } from "./graph-store";
 import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
@@ -137,7 +138,7 @@ describe("GraphStore", () => {
   it("should emit event after node added", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterNodeAdded.subscribe(handler);
 
@@ -222,7 +223,7 @@ describe("GraphStore", () => {
   it("should emit event after updating node coordinates", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterNodeUpdated.subscribe(handler);
 
@@ -271,7 +272,7 @@ describe("GraphStore", () => {
   it("should emit event after updating node priority", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterNodePriorityUpdated.subscribe(handler);
 
@@ -320,7 +321,7 @@ describe("GraphStore", () => {
   it("should emit before node removed", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onBeforeNodeRemoved.subscribe(handler);
 
@@ -408,7 +409,7 @@ describe("GraphStore", () => {
   it("should emit after port added", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterPortAdded.subscribe(handler);
 
@@ -455,7 +456,7 @@ describe("GraphStore", () => {
   it("should emit after port direction updated", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterPortUpdated.subscribe(handler);
 
@@ -530,7 +531,7 @@ describe("GraphStore", () => {
   it("should emit before port removed", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onBeforePortRemoved.subscribe(handler);
 
@@ -606,7 +607,7 @@ describe("GraphStore", () => {
   it("should emit event after edge added", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterEdgeAdded.subscribe(handler);
 
@@ -741,7 +742,7 @@ describe("GraphStore", () => {
   it("should emit event after edge shape updated", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterEdgeShapeUpdated.subscribe(handler);
 
@@ -806,7 +807,7 @@ describe("GraphStore", () => {
   it("should emit event after edge priority updated", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onAfterEdgePriorityUpdated.subscribe(handler);
 
@@ -928,7 +929,7 @@ describe("GraphStore", () => {
   it("should emit event before edge removed", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onBeforeEdgeRemoved.subscribe(handler);
 
@@ -962,7 +963,7 @@ describe("GraphStore", () => {
   it("should emit event before clear", () => {
     const store = new GraphStore();
 
-    const handler = jest.fn();
+    const handler = vi.fn();
 
     store.onBeforeClear.subscribe(handler);
 

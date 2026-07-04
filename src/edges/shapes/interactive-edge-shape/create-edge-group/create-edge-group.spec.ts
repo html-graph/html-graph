@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { createEdgeGroup } from "./create-edge-group";
 
 describe("createEdgeGroup", () => {

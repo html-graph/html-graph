@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from "vitest";
 import {
   AddEdgeRequest,
   AddNodeRequest,
@@ -365,7 +366,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest2.id);
     htmlView.attachEdge(addEdgeRequest12.id);
 
-    const spy = jest.spyOn(addEdgeRequest12.shape, "render");
+    const spy = vi.spyOn(addEdgeRequest12.shape, "render");
 
     htmlView.renderEdge(addEdgeRequest12.id);
 
@@ -407,7 +408,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest1.id);
     htmlView.attachEdge(addEdgeRequest12.id);
 
-    const spy = jest.spyOn(addEdgeRequest12.shape, "render");
+    const spy = vi.spyOn(addEdgeRequest12.shape, "render");
 
     htmlView.renderEdge(addEdgeRequest12.id);
 
@@ -447,7 +448,7 @@ describe("CoreHtmlView", () => {
     htmlView.attachNode(addNodeRequest1.id);
     htmlView.attachEdge(addEdgeRequest11.id);
 
-    const spy = jest.spyOn(addEdgeRequest11.shape, "render");
+    const spy = vi.spyOn(addEdgeRequest11.shape, "render");
 
     htmlView.renderEdge(addEdgeRequest11.id);
 
