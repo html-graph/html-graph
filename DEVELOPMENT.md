@@ -11,7 +11,7 @@ npm run start
 npm run test:watch
 
 // run unit tests with code coverage calculation
-npx jest --coverage
+npm run test:ci
 ```
 
 or
@@ -42,7 +42,7 @@ npm install {some package}
 
 npm run test:watch
 
-npx jest --coverage
+npm run test:ci
 ...
 ```
 
