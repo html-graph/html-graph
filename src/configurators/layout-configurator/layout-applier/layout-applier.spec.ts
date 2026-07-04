@@ -1,4 +1,5 @@
-import { createCanvas, DummyLayoutAlgorithm } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutApplier } from "./layout-applier";
 import { Identifier } from "@/identifier";
 import { LayoutApplierParams } from "./layout-applier-params";

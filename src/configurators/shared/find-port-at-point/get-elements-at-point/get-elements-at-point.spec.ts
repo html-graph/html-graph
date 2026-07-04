@@ -1,4 +1,4 @@
-import { createElement } from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
 import { getElementsAtPoint } from "./get-elements-at-point";
 
 describe("getElementsAtPoint", () => {

@@ -2,12 +2,10 @@ import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  AnimationFrameMock,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  DummyAnimatedLayoutAlgorithm,
-} from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { Viewport } from "@/viewport";
 import { ViewportStore } from "@/viewport-store";
 import { AnimatedLayoutConfigurator } from "./animated-layout-configurator";

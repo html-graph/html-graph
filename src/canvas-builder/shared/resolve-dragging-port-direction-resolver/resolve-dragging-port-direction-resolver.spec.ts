@@ -1,4 +1,4 @@
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 import { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-direction-resolver";
 import {
   NearestConnectablePortDraggingPortDirectionResolver,

@@ -1,6 +1,7 @@
 import { ViewportStore, TransformState } from "@/viewport-store";
 import { Viewport } from "./viewport";
-import { createElement, triggerResizeFor } from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { Point } from "@/point";
 
 describe("Viewport", () => {

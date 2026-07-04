@@ -1,7 +1,7 @@
 import { ViewportStore } from "@/viewport-store";
 import { createOverlayCanvas } from "./create-overlay-canvas";
 import { Canvas } from "@/canvas";
-import { createElement } from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
 import { DirectEdgeShape } from "@/edges";
 
 const createCanvas = (): Canvas => {

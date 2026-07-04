@@ -1,5 +1,5 @@
 import { AnimationSeries } from "./animation-series";
-import { AnimationFrameMock } from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
 
 describe("AnimationSeries", () => {
   const animationMock = new AnimationFrameMock();

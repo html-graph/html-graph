@@ -1,4 +1,4 @@
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 import { outgoingNextLayerNodesResolver } from "./outgoing-next-layer-nodes-resolver";
 
 describe("outgoingNextLayerNodesResolver", () => {

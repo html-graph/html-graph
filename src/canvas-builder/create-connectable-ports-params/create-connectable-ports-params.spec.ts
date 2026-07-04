@@ -8,7 +8,7 @@ import {
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
 import { noopFn } from "../shared";
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {

@@ -5,11 +5,9 @@ import { ViewportStore } from "@/viewport-store";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  DummyLayoutAlgorithm,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { EventSubject } from "@/event-subject";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";

@@ -4,15 +4,12 @@ import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
-import {
-  createElement,
-  createMouseMoveEvent,
-  createMouseWheelEvent,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  triggerResizeFor,
-  waitMacrotask,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createMouseWheelEvent } from "@/mocks/create-mouse-wheel-event.mock";
+import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportVirtualScrollConfigurator } from "./user-transformable-viewport-virtual-scroll-configurator";
 import { TransformableViewportParams } from "../user-transformable-viewport-configurator";
@@ -21,6 +18,7 @@ import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 import { EventTagger, PointInsideVerifier } from "../shared";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

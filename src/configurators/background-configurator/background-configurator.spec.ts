@@ -3,12 +3,10 @@ import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
 import { Canvas } from "@/canvas";
 import { BackgroundConfigurator } from "./background-configurator";
-import {
-  createElement,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  triggerResizeFor,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { BackgroundParams } from "./background-params";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";

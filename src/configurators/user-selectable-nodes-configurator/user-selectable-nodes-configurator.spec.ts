@@ -3,11 +3,9 @@ import { Graph } from "@/graph";
 import { GraphController } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { Viewport } from "@/viewport";
 import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";

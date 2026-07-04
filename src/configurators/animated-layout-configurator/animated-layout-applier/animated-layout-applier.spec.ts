@@ -1,4 +1,5 @@
-import { createCanvas, DummyAnimatedLayoutAlgorithm } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { Identifier } from "@/identifier";
 import { AnimatedLayoutApplier } from "./animated-layout-applier";
 import { AnimatedLayoutApplierParams } from "./animated-layout-applier-params";

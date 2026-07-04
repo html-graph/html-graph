@@ -1,4 +1,4 @@
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 import { ForceDirectedAlgorithmIteration } from "./force-directed-algorithm-iteration";
 import { Identifier } from "@/identifier";
 import { Point } from "@/point";

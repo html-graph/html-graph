@@ -1,16 +1,14 @@
 import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
-import {
-  AnimationFrameMock,
-  createElement,
-  createMouseMoveEvent,
-  DummyAnimatedLayoutAlgorithm,
-  triggerResizeFor,
-  waitMacrotask,
-} from "@/mocks";
+import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
+import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
+import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { CanvasBuilderError } from "./canvas-builder-error";
-import { DummyLayoutAlgorithm } from "@/mocks";
 import { EventSubject } from "@/event-subject";
 import { AddEdgeRequest, AddNodeRequest } from "@/graph-controller";
 

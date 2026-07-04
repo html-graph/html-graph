@@ -1,4 +1,4 @@
-import { createCanvas } from "@/mocks";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 import { BreadthFirstSpanningForestGenerator } from "../breadth-first-spanning-forest-generator";
 import { ChildrenOffsetsGenerator } from "./children-offsets-generator";
 import { adjacentNextLayerNodesResolver } from "../next-layer-nodes-resolver";

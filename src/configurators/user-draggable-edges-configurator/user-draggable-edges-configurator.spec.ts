@@ -2,12 +2,10 @@ import { Canvas } from "@/canvas";
 import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  createMouseMoveEvent,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { ViewportStore } from "@/viewport-store";
 import { DraggableEdgesParams } from "./draggable-edges-params";
 import { UserDraggableEdgesConfigurator } from "./user-draggable-edges-configurator";

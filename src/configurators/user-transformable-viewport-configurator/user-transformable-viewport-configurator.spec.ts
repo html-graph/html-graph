@@ -1,15 +1,13 @@
 import { GraphStore } from "@/graph-store";
 import { TransformState, ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  createMouseMoveEvent,
-  createMouseWheelEvent,
-  createTouch,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  waitMacrotask,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createMouseWheelEvent } from "@/mocks/create-mouse-wheel-event.mock";
+import { createTouch } from "@/mocks/create-touch.mock";
+import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { Canvas } from "@/canvas";
 import { UserTransformableViewportConfigurator } from "./user-transformable-viewport-configurator";
 import { TransformPreprocessorFn } from "./transform-preprocessor-fn";

@@ -1,4 +1,4 @@
-import { DummyAnimatedLayoutAlgorithm } from "@/mocks";
+import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { ForceDirectedAnimatedLayoutAlgorithm } from "@/layouts";
 import { resolveAnimatedLayoutAlgorithm } from "./resolve-animated-layout-algorithm";
 import { AnimatedLayoutAlgorithmConfig } from "../animated-layout-algorithm-config";

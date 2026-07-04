@@ -4,11 +4,9 @@ import { standardCenterFn } from "@/center-fn";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-  triggerResizeFor,
-} from "@/mocks";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { Canvas } from "@/canvas";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";

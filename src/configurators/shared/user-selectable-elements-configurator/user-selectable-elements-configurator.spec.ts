@@ -1,4 +1,6 @@
-import { createElement, createMouseMoveEvent, createTouch } from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
+import { createTouch } from "@/mocks/create-touch.mock";
 import { PointInsideVerifier } from "../point-inside-verifier";
 import { UserSelectableElementsConfigurator } from "./user-selectable-elements-configurator";
 

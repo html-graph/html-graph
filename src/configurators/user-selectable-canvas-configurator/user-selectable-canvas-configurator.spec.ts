@@ -1,8 +1,6 @@
-import {
-  createElement,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-configurator";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";

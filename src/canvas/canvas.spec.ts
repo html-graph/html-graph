@@ -2,7 +2,7 @@ import { GraphStore } from "@/graph-store";
 import { CoreHtmlView, HtmlView, LayoutHtmlView } from "@/html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Canvas } from "./canvas";
-import { createElement } from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
 import { CenterFn, standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { PriorityFn } from "@/priority";

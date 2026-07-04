@@ -1,12 +1,10 @@
 import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
-import {
-  createElement,
-  createTouch,
-  defaultGraphControllerParams,
-  defaultViewportControllerParams,
-} from "@/mocks";
+import { createElement } from "@/mocks/create-element.mock";
+import { createTouch } from "@/mocks/create-touch.mock";
+import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
+import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { ViewportStore } from "@/viewport-store";
 import { DraggablePortsConfigurator } from "./draggable-ports-configurator";
 import { Point } from "@/point";

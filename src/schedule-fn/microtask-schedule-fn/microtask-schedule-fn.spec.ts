@@ -1,4 +1,4 @@
-import { waitMicrotask } from "@/mocks";
+import { waitMicrotask } from "@/mocks/wait-microtask.mock";
 import { microtaskScheduleFn } from "./microtask-schedule-fn";
 
 describe("microtaskScheduleFn", () => {
