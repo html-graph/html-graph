@@ -1,21 +1,25 @@
 import { Point } from "@/point";
-import { Line } from "./line";
-import { PortParams } from "./port-params";
+import { PortParams, Line } from "../shared";
 
-export const createLine = (from: PortParams, to: PortParams): Line => {
+export const createHorizontalLine = (
+  from: PortParams,
+  to: PortParams,
+): Line => {
   const fromLine = from.linePoint;
   const toLine = to.linePoint;
   const horizontalLineDir = toLine.x - fromLine.x >= 0;
-  const fromPortDir = from.dirX >= 0;
-  const toPortDir = to.dirX >= 0;
+  const fromPortDir = from.dir.x >= 0;
+  const toPortDir = to.dir.x >= 0;
 
   const isSameDirPorts = fromPortDir === toPortDir;
 
   if (isSameDirPorts) {
     const isSameDirLine = fromPortDir === horizontalLineDir;
-    const centerX = (fromLine.x + toLine.x) / 2;
-    const centerY = (fromLine.y + toLine.y) / 2;
-    const midpoint: Point = { x: centerX, y: centerY };
+
+    const midpoint: Point = {
+      x: (fromLine.x + toLine.x) / 2,
+      y: (fromLine.y + toLine.y) / 2,
+    };
 
     if (isSameDirLine) {
       return {

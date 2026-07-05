@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
-import { createLine } from "./create-line";
+import { createVerticalLine } from "../shared";
 
 export class VerticalEdgePath implements EdgePath {
   public readonly path: string;
@@ -54,9 +54,9 @@ export class VerticalEdgePath implements EdgePath {
 
     const endLine = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
 
-    const line = createLine(
-      { arrowPoint: beginArrow, linePoint: beginLine, dirY: fromDir.y },
-      { arrowPoint: endArrow, linePoint: endLine, dirY: toDir.y },
+    const line = createVerticalLine(
+      { arrowPoint: beginArrow, linePoint: beginLine, dir: fromDir },
+      { arrowPoint: endArrow, linePoint: endLine, dir: toDir },
     );
 
     this.path = createRoundedPath(line.points, roundness);
