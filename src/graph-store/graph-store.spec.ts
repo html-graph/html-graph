@@ -731,7 +731,7 @@ describe("GraphStore", () => {
       from: addEdgeRequest1Out2In.from,
       to: addEdgeRequest1Out2In.to,
       payload: {
-        shape: shape,
+        shape,
         priority: addEdgeRequest1Out2In.priority,
       },
     };

@@ -716,7 +716,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      onTransformStarted: onTransformStarted,
+      onTransformStarted,
     });
 
     element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -730,7 +730,7 @@ describe("UserTransformableViewportConfigurator", () => {
     const element = createElement({ width: 1000, height: 1000 });
     createCanvas({
       element,
-      onTransformStarted: onTransformStarted,
+      onTransformStarted,
     });
 
     element.dispatchEvent(

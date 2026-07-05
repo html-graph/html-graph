@@ -22,7 +22,7 @@ describe("createAddNodeOverlayRequest", () => {
       ports: [
         {
           id: "node",
-          element: element,
+          element,
           direction: Math.PI,
         },
       ],

@@ -68,7 +68,7 @@ export const createTransformableViewportParams = (
       : (): boolean => true;
 
   return {
-    wheelSensitivity: wheelSensitivity,
+    wheelSensitivity,
     onTransformStarted: transformConfig?.events?.onTransformStarted ?? noopFn,
     onTransformFinished: transformConfig?.events?.onTransformFinished ?? noopFn,
     onBeforeTransformChange:

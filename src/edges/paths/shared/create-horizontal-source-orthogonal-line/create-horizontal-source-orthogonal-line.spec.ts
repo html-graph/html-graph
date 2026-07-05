@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createOrthogonalLine } from "./create-orthogonal-line";
+import { createHorizontalSourceOrthogonalLine } from "./create-horizontal-source-orthogonal-line";
 
-describe("createOrthogonalLine", () => {
+describe("createHorizontalSourceOrthogonalLine", () => {
   it("should create orthogonal line points when both port directions match line direction", () => {
-    const line = createOrthogonalLine(
+    const line = createHorizontalSourceOrthogonalLine(
       {
         arrowPoint: { x: 0, y: 0 },
         linePoint: { x: 10, y: 0 },
@@ -24,7 +24,7 @@ describe("createOrthogonalLine", () => {
   });
 
   it("should create orthogonal line points when only target port direction is opposite to the connection direction", () => {
-    const line = createOrthogonalLine(
+    const line = createHorizontalSourceOrthogonalLine(
       {
         arrowPoint: { x: 0, y: 0 },
         linePoint: { x: 10, y: 0 },
@@ -47,7 +47,7 @@ describe("createOrthogonalLine", () => {
   });
 
   it("should create orthogonal line points when only source port direction is opposite to the connection direction", () => {
-    const line = createOrthogonalLine(
+    const line = createHorizontalSourceOrthogonalLine(
       {
         arrowPoint: { x: 0, y: 0 },
         linePoint: { x: -10, y: 0 },
@@ -70,7 +70,7 @@ describe("createOrthogonalLine", () => {
   });
 
   it("should create orthogonal line points when both port directions are opposite to line direction", () => {
-    const line = createOrthogonalLine(
+    const line = createHorizontalSourceOrthogonalLine(
       {
         arrowPoint: { x: 0, y: 0 },
         linePoint: { x: -10, y: 0 },
