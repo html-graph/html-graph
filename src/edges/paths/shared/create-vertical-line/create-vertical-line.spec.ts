@@ -1,14 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { createLine } from "./create-line";
+import { createVerticalLine } from "./create-vertical-line";
 
-describe("createLinePoints", () => {
+describe("createVerticalLine", () => {
   it("should create horizontal line points when connection idirection matches port directions", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: 10 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: 10 },
+        dir: { x: 0, y: 1 },
+      },
       {
         arrowPoint: { x: 100, y: 100 },
         linePoint: { x: 100, y: 90 },
-        dirY: 1,
+        dir: { x: 0, y: 1 },
       },
     );
 
@@ -21,12 +25,16 @@ describe("createLinePoints", () => {
   });
 
   it("should create vertical line points when connection is direction is opposite to ports direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: -10 }, dirY: -1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: -10 },
+        dir: { x: 0, y: -1 },
+      },
       {
         arrowPoint: { x: 100, y: 100 },
         linePoint: { x: 100, y: 110 },
-        dirY: -1,
+        dir: { x: 0, y: -1 },
       },
     );
 
@@ -41,12 +49,16 @@ describe("createLinePoints", () => {
   });
 
   it("should create vertical line followed by horizontal line when source port direction matches connection direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: 10 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: 10 },
+        dir: { x: 0, y: 1 },
+      },
       {
         arrowPoint: { x: 100, y: 100 },
         linePoint: { x: 100, y: 110 },
-        dirY: -1,
+        dir: { x: 0, y: -1 },
       },
     );
 
@@ -59,9 +71,17 @@ describe("createLinePoints", () => {
   });
 
   it("should create horizontal line followed by vertical line when source port direction is opposite to connection direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: -10 }, dirY: -1 },
-      { arrowPoint: { x: 100, y: 100 }, linePoint: { x: 100, y: 90 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: -10 },
+        dir: { x: 0, y: -1 },
+      },
+      {
+        arrowPoint: { x: 100, y: 100 },
+        linePoint: { x: 100, y: 90 },
+        dir: { x: 0, y: 1 },
+      },
     );
 
     expect(line.points).toEqual([
@@ -73,21 +93,33 @@ describe("createLinePoints", () => {
   });
 
   it("should create middle point when connection idirection matches port directions", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: 10 }, dirY: 1 },
-      { arrowPoint: { x: 100, y: 100 }, linePoint: { x: 100, y: 90 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: 10 },
+        dir: { x: 0, y: 1 },
+      },
+      {
+        arrowPoint: { x: 100, y: 100 },
+        linePoint: { x: 100, y: 90 },
+        dir: { x: 0, y: 1 },
+      },
     );
 
     expect(line.midpoint).toEqual({ x: 50, y: 50 });
   });
 
-  it("should create middle point when connection is direction is opposite to ports direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: -10 }, dirY: -1 },
+  it("should create middle point when connection direction is opposite to ports direction", () => {
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: -10 },
+        dir: { x: 0, y: -1 },
+      },
       {
         arrowPoint: { x: 100, y: 100 },
         linePoint: { x: 100, y: 110 },
-        dirY: -1,
+        dir: { x: 0, y: -1 },
       },
     );
 
@@ -95,12 +127,16 @@ describe("createLinePoints", () => {
   });
 
   it("should create middle point when source port direction matches connection direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: 10 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: 10 },
+        dir: { x: 0, y: 1 },
+      },
       {
         arrowPoint: { x: 100, y: 100 },
         linePoint: { x: 100, y: 110 },
-        dirY: -1,
+        dir: { x: 0, y: -1 },
       },
     );
 
@@ -108,9 +144,17 @@ describe("createLinePoints", () => {
   });
 
   it("should create midpoint when source port direction is opposite to connection direction", () => {
-    const line = createLine(
-      { arrowPoint: { x: 0, y: 0 }, linePoint: { x: 0, y: -10 }, dirY: -1 },
-      { arrowPoint: { x: 100, y: 100 }, linePoint: { x: 100, y: 90 }, dirY: 1 },
+    const line = createVerticalLine(
+      {
+        arrowPoint: { x: 0, y: 0 },
+        linePoint: { x: 0, y: -10 },
+        dir: { x: 0, y: -1 },
+      },
+      {
+        arrowPoint: { x: 100, y: 100 },
+        linePoint: { x: 100, y: 90 },
+        dir: { x: 0, y: 1 },
+      },
     );
 
     expect(line.midpoint).toEqual({ x: 50, y: -10 });
