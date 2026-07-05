@@ -1,4 +1,6 @@
+import { Point } from "@/point";
 import { Line, PortParams } from "../shared";
+import { calculateMidpoint } from "./calculate-midpoint";
 
 export const createHorizontalSourceOrthogonalLine = (
   from: PortParams,
@@ -19,49 +21,41 @@ export const createHorizontalSourceOrthogonalLine = (
 
   if (isSameSourceHorizontal) {
     if (isSameTargetVertical) {
+      const joint: Point = { x: toArrow.x, y: fromArrow.y };
+
       return {
-        points: [fromArrow, { x: toArrow.x, y: fromArrow.y }, toArrow],
-        midpoint: { x: 0, y: 0 },
+        points: [fromArrow, joint, toArrow],
+        midpoint: calculateMidpoint([fromLine, joint, toLine]),
       };
     }
 
     const middleX = (fromLine.x + toLine.x) / 2;
 
+    const jointStart: Point = { x: middleX, y: fromLine.y };
+    const jointEnd: Point = { x: middleX, y: toLine.y };
+
     return {
-      points: [
-        fromArrow,
-        { x: middleX, y: fromLine.y },
-        { x: middleX, y: toLine.y },
-        toLine,
-        toArrow,
-      ],
-      midpoint: { x: 0, y: 0 },
+      points: [fromArrow, jointStart, jointEnd, toLine, toArrow],
+      midpoint: calculateMidpoint([fromLine, jointStart, jointEnd, toLine]),
     };
   }
 
   if (isSameTargetVertical) {
     const middleY = (fromLine.y + toLine.y) / 2;
 
+    const jointStart: Point = { x: fromLine.x, y: middleY };
+    const jointEnd: Point = { x: toLine.x, y: middleY };
+
     return {
-      points: [
-        fromArrow,
-        fromLine,
-        { x: fromLine.x, y: middleY },
-        { x: toLine.x, y: middleY },
-        toArrow,
-      ],
-      midpoint: { x: 0, y: 0 },
+      points: [fromArrow, fromLine, jointStart, jointEnd, toArrow],
+      midpoint: calculateMidpoint([fromLine, jointStart, jointEnd, toLine]),
     };
   }
 
+  const joint: Point = { x: fromLine.x, y: toLine.y };
+
   return {
-    points: [
-      fromArrow,
-      fromLine,
-      { x: fromLine.x, y: toLine.y },
-      toLine,
-      toArrow,
-    ],
-    midpoint: { x: 0, y: 0 },
+    points: [fromArrow, fromLine, joint, toLine, toArrow],
+    midpoint: calculateMidpoint([fromLine, joint, toLine]),
   };
 };
