@@ -20,4 +20,19 @@ describe("calculateMidpoint", () => {
 
     expect(midpoint).toEqual({ x: 0, y: 100 });
   });
+
+  it("should return specified point when path has single point", () => {
+    const midpoint = calculateMidpoint([{ x: 0, y: 0 }]);
+
+    expect(midpoint).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should handle zero length segments", () => {
+    const midpoint = calculateMidpoint([
+      { x: 0, y: 0 },
+      { x: 0, y: 0 },
+    ]);
+
+    expect(midpoint).toEqual({ x: 0, y: 0 });
+  });
 });

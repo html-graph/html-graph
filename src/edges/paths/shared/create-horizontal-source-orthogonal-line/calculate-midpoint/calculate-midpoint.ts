@@ -27,6 +27,10 @@ export const calculateMidpoint = (points: readonly Point[]): Point => {
       const residue = halfLength - accLength;
       const { start, end, distance } = part;
 
+      if (distance === 0) {
+        continue;
+      }
+
       const ratio = residue / distance;
       const dx = end.x - start.x;
       const dy = end.y - start.y;
@@ -40,6 +44,10 @@ export const calculateMidpoint = (points: readonly Point[]): Point => {
     }
 
     accLength = nextAccLength;
+  }
+
+  if (accLength === 0 && points.length > 0) {
+    return points[0];
   }
 
   throw new Error("Failed to calculate midpoint");
