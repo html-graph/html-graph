@@ -21,7 +21,10 @@ export class DetourOrthogonalEdgePath implements EdgePath {
     readonly hasSourceArrow: boolean;
     readonly hasTargetArrow: boolean;
   }) {
-    if (params.fromDir.y === 0 && params.toDir.y === 0) {
+    const isSourceHor = Math.abs(params.fromDir.y) < 1e-10;
+    const isTargetHor = Math.abs(params.toDir.y) < 1e-10;
+
+    if (isSourceHor && isTargetHor) {
       const path = new DetourHorizontalEdgePath(params);
 
       this.path = path.path;
@@ -29,7 +32,7 @@ export class DetourOrthogonalEdgePath implements EdgePath {
       return;
     }
 
-    if (params.fromDir.x === 0 && params.toDir.x === 0) {
+    if (!isSourceHor && !isTargetHor) {
       const path = new DetourVerticalEdgePath(params);
 
       this.path = path.path;

@@ -8,15 +8,18 @@ export const createOrthogonalLine = (
   from: PortParams,
   to: PortParams,
 ): Line => {
-  if (from.dir.y === 0) {
-    if (to.dir.y === 0) {
+  const isSourceHor = Math.abs(from.dir.y) < 1e-10;
+  const isTargetHor = Math.abs(to.dir.y) < 1e-10;
+
+  if (isSourceHor) {
+    if (isTargetHor) {
       return createHorizontalLine(from, to);
     }
 
     return createHorizontalSourceOrthogonalLine(from, to);
   }
 
-  if (to.dir.x === 0) {
+  if (!isTargetHor) {
     return createVerticalLine(from, to);
   }
 

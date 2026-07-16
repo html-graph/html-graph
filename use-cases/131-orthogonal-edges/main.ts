@@ -3,11 +3,18 @@ import { CanvasBuilder } from "@html-graph/html-graph";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
-    nodes: { priority: 1 },
-    edges: { priority: 0, shape: { type: "orthogonal" } },
+    nodes: { priority: 0 },
+    edges: {
+      priority: 1,
+      shape: {
+        type: "orthogonal",
+        hasSourceArrow: true,
+        hasTargetArrow: true,
+      },
+    },
   })
   .enableUserTransformableViewport()
-  .enableUserDraggableNodes({ moveEdgesOnTop: false })
+  .enableUserDraggableNodes({ moveOnTop: false })
   .enableBackground()
   .build();
 
@@ -30,8 +37,8 @@ for (const sourceDir of angles) {
     canvas
       .addNode({
         element: sourceNode,
-        x: (i + 1) * 300,
-        y: (j + 1) * 300,
+        x: (j + 1) * 300,
+        y: (i + 1) * 300,
         ports: [
           {
             id: sourceId,
@@ -42,8 +49,8 @@ for (const sourceDir of angles) {
       })
       .addNode({
         element: targetNode,
-        x: (i + 1) * 300 + 100,
-        y: (j + 1) * 300 + 100,
+        x: (j + 1) * 300 + 100,
+        y: (i + 1) * 300 + 100,
         ports: [
           {
             id: targetId,
