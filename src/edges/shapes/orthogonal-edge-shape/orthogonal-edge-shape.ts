@@ -1,2 +1,155 @@
+import { EdgeRenderParams } from "../../edge-render-params";
+import {
+  CycleSquareEdgePath,
+  DetourOrthogonalEdgePath,
+  OrthogonalEdgePath,
+} from "../../paths";
+import { Point } from "@/point";
+import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
+import { edgeConstants } from "../../edge-constants";
+import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
+import { StructuredEdgeShape } from "../../structured-edge-shape";
+import { EventHandler } from "@/event-subject";
+import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { resolveArrowRenderer } from "../../arrow-renderer";
+import { svgPadding } from "../../svg-padding";
+import { orthogonalizeDirection } from "./orthogonalize-direction";
 
+export class OrthogonalEdgeShape implements StructuredEdgeShape {
+  public readonly svg: SVGSVGElement;
 
+  public readonly group: SVGGElement;
+
+  public readonly line: SVGPathElement;
+
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
+
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  private readonly arrowLength: number;
+
+  private readonly arrowOffset: number;
+
+  private readonly roundness: number;
+
+  private readonly cycleSquareSide: number;
+
+  private readonly detourDistance: number;
+
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  private readonly pathShape: PathEdgeShape;
+
+  private readonly createCyclePath: EdgePathFactory = (
+    from: Point,
+    _to: Point,
+    fromDir: Point,
+  ) =>
+    new CycleSquareEdgePath({
+      origin: from,
+      dir: fromDir,
+      arrowLength: this.arrowLength,
+      side: this.cycleSquareSide,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
+    });
+
+  private readonly createDetourPath: EdgePathFactory = (
+    from: Point,
+    to: Point,
+    fromDir: Point,
+    toDir: Point,
+  ) =>
+    new DetourOrthogonalEdgePath({
+      from,
+      to,
+      fromDir,
+      toDir,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      detourDistance: this.detourDistance,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  private readonly createLinePath: EdgePathFactory = (
+    from: Point,
+    to: Point,
+    fromDir: Point,
+    toDir: Point,
+  ) =>
+    new OrthogonalEdgePath({
+      from,
+      to,
+      fromDir,
+      toDir,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  public constructor(params?: OrthogonalEdgeParams) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+    this.roundness = Math.min(
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
+    );
+
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
+    this.pathShape = new PathEdgeShape({
+      color: params?.color ?? edgeConstants.color,
+      width: params?.width ?? edgeConstants.width,
+      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowLength: this.arrowLength,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+      createCyclePath: this.createCyclePath,
+      createDetourPath: this.createDetourPath,
+      createLinePath: this.createLinePath,
+      padding: svgPadding,
+    });
+
+    this.svg = this.pathShape.svg;
+    this.group = this.pathShape.group;
+    this.line = this.pathShape.line;
+    this.sourceArrow = this.pathShape.sourceArrow;
+    this.targetArrow = this.pathShape.targetArrow;
+    this.onAfterRender = this.pathShape.onAfterRender;
+  }
+
+  public render(params: EdgeRenderParams): void {
+    const { from, to, category } = params;
+
+    this.pathShape.render({
+      category,
+      from: {
+        ...from,
+        direction: orthogonalizeDirection(from.direction),
+      },
+      to: {
+        ...to,
+        direction: orthogonalizeDirection(to.direction),
+      },
+    });
+  }
+}
