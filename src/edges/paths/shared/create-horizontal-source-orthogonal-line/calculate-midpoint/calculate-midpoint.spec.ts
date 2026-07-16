@@ -35,4 +35,10 @@ describe("calculateMidpoint", () => {
 
     expect(midpoint).toEqual({ x: 0, y: 0 });
   });
+
+  it("should throw error when 0 points specified", () => {
+    expect(() => {
+      calculateMidpoint([]);
+    }).toThrow();
+  });
 });
