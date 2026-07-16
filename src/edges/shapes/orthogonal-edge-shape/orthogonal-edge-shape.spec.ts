@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-describe("OrthogonalPath", () => {
+describe("OrthogonalEdgeShape", () => {
   it("should fail", () => {
     expect(true).toBe(false);
   });
