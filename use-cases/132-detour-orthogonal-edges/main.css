@@ -5,7 +5,6 @@
   background: var(--color-node-background);
   border: 1px solid var(--color-node-border);
   box-shadow: 0 0 5px var(--color-node-border);
-  border-radius: 50%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,4 +26,12 @@
   height: calc(2 * var(--port-size));
   background: var(--color-edge);
   border-radius: calc(2 * var(--port-size));
+}
+
+.node-port-front {
+  align-self: flex-start;
+}
+
+.node-port-back {
+  align-self: flex-end;
 }
