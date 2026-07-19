@@ -2,7 +2,7 @@ import { ArrowRendererConfig } from "../../arrow-renderer";
 
 /**
  * @deprecated
- * use OrhogonalEdgeShape instead
+ * use OrthogonalEdgeShape instead
  */
 export interface HorizontalEdgeParams {
   readonly color?: string | undefined;

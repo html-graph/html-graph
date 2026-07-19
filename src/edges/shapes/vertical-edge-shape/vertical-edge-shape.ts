@@ -17,7 +17,7 @@ import { verticalizeDirection } from "./verticalize-directions";
 
 /**
  * @deprecated
- * use OrhogonalEdgeShape instead
+ * use OrthogonalEdgeShape instead
  */
 export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;

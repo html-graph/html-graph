@@ -17,7 +17,7 @@ import { horizontalizeDirection } from "./horizontalize-directions";
 
 /**
  * @deprecated
- * use OrhogonalEdgeShape instead
+ * use OrthogonalEdgeShape instead
  */
 export class HorizontalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
