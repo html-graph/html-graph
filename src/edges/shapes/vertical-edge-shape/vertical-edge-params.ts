@@ -1,5 +1,9 @@
 import { ArrowRendererConfig } from "../../arrow-renderer";
 
+/**
+ * @deprecated
+ * use OrhogonalEdgeShape instead
+ */
 export interface VerticalEdgeParams {
   readonly color?: string | undefined;
   readonly width?: number | undefined;
