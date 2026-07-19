@@ -23,6 +23,7 @@ export default tseslint.config(
             "Wildcard exports (export *) are forbidden to respect directory-wide encapsulation",
         },
       ],
+      "object-shorthand": ["error", "always"],
     },
   },
   {

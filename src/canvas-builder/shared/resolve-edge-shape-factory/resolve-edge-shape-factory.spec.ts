@@ -5,6 +5,7 @@ import {
   DirectEdgeShape,
   EdgeShape,
   HorizontalEdgeShape,
+  OrthogonalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
 } from "@/edges";
@@ -48,6 +49,14 @@ describe("resolveEdgeShapeFactory", () => {
     const shape = factory("123");
 
     expect(shape instanceof VerticalEdgeShape).toBe(true);
+  });
+
+  it("should return orthogonal function for orthogonal type", () => {
+    const factory = resolveEdgeShapeFactory({ type: "orthogonal" });
+
+    const shape = factory("123");
+
+    expect(shape instanceof OrthogonalEdgeShape).toBe(true);
   });
 
   it("should return direct function for direct type", () => {

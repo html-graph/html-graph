@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createHorizontalLine } from "./create-horizontal-line";
 
 describe("createHorizontalLine", () => {
-  it("should create vertical line points when connection idirection matches port directions", () => {
+  it("should create vertical line points when connection direction matches port directions", () => {
     const line = createHorizontalLine(
       {
         arrowPoint: { x: 0, y: 0 },

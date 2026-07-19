@@ -109,7 +109,7 @@ export class UserDraggableNodesConfigurator {
     const node = this.graph.getNode(nodeId);
 
     const isDragAllowed = this.params.nodeDragVerifier({
-      nodeId: nodeId,
+      nodeId,
       element: node.element,
       x: node.x,
       y: node.y,

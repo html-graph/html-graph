@@ -14,7 +14,7 @@ export const createAddNodeOverlayRequest = (
     ports: [
       {
         id: payload.overlayNodeId,
-        element: element,
+        element,
         direction: payload.portDirection,
       },
     ],

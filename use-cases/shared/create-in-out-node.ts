@@ -14,6 +14,7 @@ export function createInOutNode(params: {
 
   const frontPortElement = document.createElement("div");
   frontPortElement.classList.add("node-port");
+  frontPortElement.classList.add("node-port-front");
   node.appendChild(frontPortElement);
 
   const textElement = document.createElement("div");
@@ -22,6 +23,7 @@ export function createInOutNode(params: {
 
   const backPortElement = document.createElement("div");
   backPortElement.classList.add("node-port");
+  backPortElement.classList.add("node-port-back");
   node.appendChild(backPortElement);
 
   const { frontPort, backPort } = params;

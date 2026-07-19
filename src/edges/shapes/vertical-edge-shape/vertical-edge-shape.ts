@@ -15,6 +15,10 @@ import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
 import { verticalizeDirection } from "./verticalize-directions";
 
+/**
+ * @deprecated
+ * use OrthogonalEdgeShape instead
+ */
 export class VerticalEdgeShape implements StructuredEdgeShape {
   public readonly svg: SVGSVGElement;
 

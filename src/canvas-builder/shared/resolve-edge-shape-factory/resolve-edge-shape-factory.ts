@@ -2,6 +2,7 @@ import {
   BezierEdgeShape,
   DirectEdgeShape,
   HorizontalEdgeShape,
+  OrthogonalEdgeShape,
   StraightEdgeShape,
   VerticalEdgeShape,
 } from "@/edges";
@@ -48,6 +49,20 @@ export const resolveEdgeShapeFactory = (
     case "vertical":
       return () =>
         new VerticalEdgeShape({
+          color: config.color,
+          width: config.width,
+          arrowLength: config.arrowLength,
+          arrowOffset: config.arrowOffset,
+          arrowRenderer: config.arrowRenderer,
+          hasSourceArrow: config.hasSourceArrow,
+          hasTargetArrow: config.hasTargetArrow,
+          cycleSquareSide: config.cycleSquareSide,
+          roundness: config.roundness,
+          detourDistance: config.detourDistance,
+        });
+    case "orthogonal":
+      return () =>
+        new OrthogonalEdgeShape({
           color: config.color,
           width: config.width,
           arrowLength: config.arrowLength,

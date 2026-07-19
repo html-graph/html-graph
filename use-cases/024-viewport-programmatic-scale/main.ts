@@ -68,8 +68,8 @@ class ViewportStore {
 
     const patchMatrixRequest: PatchMatrixRequest = {
       scale,
-      x: x,
-      y: y,
+      x,
+      y,
     };
 
     this.canvas.patchViewportMatrix(patchMatrixRequest);

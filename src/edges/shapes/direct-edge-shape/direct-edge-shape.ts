@@ -160,7 +160,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       };
 
       sourceArrowPath = this.arrowRenderer({
-        direction: direction,
+        direction,
         shift: sourceOffsetPoint,
         arrowLength: this.arrowLength,
       });
