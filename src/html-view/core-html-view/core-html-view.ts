@@ -112,16 +112,16 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public updateEdgeShape(edgeId: Identifier): void {
-    const element = this.edgeIdToElementMap.get(edgeId)!;
+    const previousElement = this.edgeIdToElementMap.get(edgeId)!;
 
-    this.container.removeChild(element);
+    this.container.removeChild(previousElement);
 
     const edge = this.graphStore.getEdge(edgeId);
 
-    const svg = edge.payload.shape.element;
+    const { element } = edge.payload.shape;
 
-    this.edgeIdToElementMap.set(edgeId, svg);
-    this.container.appendChild(svg);
+    this.edgeIdToElementMap.set(edgeId, element);
+    this.container.appendChild(element);
   }
 
   public renderEdge(edgeId: Identifier): void {
