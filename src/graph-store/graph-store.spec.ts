@@ -1407,9 +1407,9 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2In);
     store.addEdge(addEdgeRequest1Out1Out);
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toEqual(
-      addEdgeRequest1Out1Out.id,
-    );
+    expect(
+      store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element),
+    ).toEqual(addEdgeRequest1Out1Out.id);
   });
 
   it("should remove edge id by svg element", () => {
@@ -1428,9 +1428,9 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out1Out);
     store.removeEdge(addEdgeRequest1Out1Out.id);
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toBe(
-      undefined,
-    );
+    expect(
+      store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element),
+    ).toBe(undefined);
   });
 
   it("should clear edge id by svg element", () => {
@@ -1449,9 +1449,9 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out1Out);
     store.clear();
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toBe(
-      undefined,
-    );
+    expect(
+      store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element),
+    ).toBe(undefined);
   });
 
   it("should return element port ids", () => {

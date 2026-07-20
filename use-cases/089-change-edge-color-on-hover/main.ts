@@ -31,7 +31,10 @@ const defaults: CanvasDefaults = {
       });
 
       interactiveShape.handle.addEventListener("mouseenter", () => {
-        interactiveShape.element.style.setProperty("--edge-color", hoverEdgeColor);
+        interactiveShape.element.style.setProperty(
+          "--edge-color",
+          hoverEdgeColor,
+        );
       });
 
       interactiveShape.handle.addEventListener("mouseleave", () => {

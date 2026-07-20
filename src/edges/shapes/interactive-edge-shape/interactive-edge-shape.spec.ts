@@ -100,7 +100,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.element.children[0].children[0] as SVGPathElement;
+    const path = interactiveShape.element.children[0]
+      .children[0] as SVGPathElement;
     const interactivePath = interactiveShape.element.children[0].children[1]
       .children[0] as SVGPathElement;
 
@@ -113,7 +114,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.element.children[0].children[1] as SVGPathElement;
+    const path = interactiveShape.element.children[0]
+      .children[1] as SVGPathElement;
     const interactivePath = interactiveShape.element.children[0].children[2]
       .children[1] as SVGPathElement;
 
@@ -126,7 +128,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.element.children[0].children[1] as SVGPathElement;
+    const path = interactiveShape.element.children[0]
+      .children[1] as SVGPathElement;
     const interactivePath = interactiveShape.element.children[0].children[2]
       .children[1] as SVGPathElement;
 
