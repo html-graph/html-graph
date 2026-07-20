@@ -99,7 +99,7 @@ describe("UserSelectableEdgesConfigurator", () => {
         shape,
       });
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -136,7 +136,7 @@ describe("UserSelectableEdgesConfigurator", () => {
         shape,
       });
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -177,7 +177,7 @@ describe("UserSelectableEdgesConfigurator", () => {
       })
       .removeEdge("edge-1");
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -215,7 +215,7 @@ describe("UserSelectableEdgesConfigurator", () => {
       })
       .clear();
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -253,7 +253,7 @@ describe("UserSelectableEdgesConfigurator", () => {
       })
       .destroy();
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -293,7 +293,7 @@ describe("UserSelectableEdgesConfigurator", () => {
         shape,
       });
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,
@@ -333,7 +333,7 @@ describe("UserSelectableEdgesConfigurator", () => {
         shape,
       });
 
-    shape.svg.dispatchEvent(
+    shape.element.dispatchEvent(
       new MouseEvent("mousedown", {
         clientX: 200,
         clientY: 200,

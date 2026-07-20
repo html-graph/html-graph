@@ -14,7 +14,7 @@ describe("MidpointEdgeShape", () => {
 
     const midpointShape = new MidpointEdgeShape(baseShape, midpointElement);
 
-    expect(midpointShape.svg.lastChild).toBe(midpointElement);
+    expect(midpointShape.element.lastChild).toBe(midpointElement);
   });
 
   it("should update midpoint element transformation", () => {

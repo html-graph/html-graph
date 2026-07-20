@@ -509,7 +509,7 @@ describe("GraphController", () => {
     const container = element.children[0].children[0];
     const edgeSvg = container.children[1];
 
-    expect(edgeSvg).toBe(shape.svg);
+    expect(edgeSvg).toBe(shape.element);
   });
 
   it("should add edge with specified shape", () => {
@@ -541,7 +541,7 @@ describe("GraphController", () => {
     const container = element.children[0].children[0];
     const edgeSvg = container.children[1];
 
-    expect(edgeSvg).toBe(shape.svg);
+    expect(edgeSvg).toBe(shape.element);
   });
 
   it("should add edge with specified default priority", () => {
@@ -766,7 +766,7 @@ describe("GraphController", () => {
     const container = element.children[0].children[0];
     const edgeSvg = container.children[1] as SVGSVGElement;
 
-    expect(edgeSvg).toBe(newShape.svg);
+    expect(edgeSvg).toBe(newShape.element);
   });
 
   it("should remove edge", () => {

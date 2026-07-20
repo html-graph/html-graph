@@ -15,6 +15,8 @@ export interface EdgeRectangle {
 }
 
 export class EdgeWithLabelShape implements EdgeShape {
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   private readonly group: SVGGElement;
@@ -48,10 +50,11 @@ export class EdgeWithLabelShape implements EdgeShape {
   private readonly rectCurvature = 50;
 
   public constructor(label: string) {
-    this.svg = this.createSvg();
+    this.element = this.createSvg();
+    this.svg = this.element;
 
     this.group = this.createGroup();
-    this.svg.appendChild(this.group);
+    this.element.appendChild(this.group);
 
     this.line = this.createLine();
     this.group.appendChild(this.line);
@@ -66,10 +69,10 @@ export class EdgeWithLabelShape implements EdgeShape {
       this.group.appendChild(this.targetArrow);
     }
 
-    this.svg.appendChild(this.textRect);
+    this.element.appendChild(this.textRect);
 
     this.text.textContent = label;
-    this.svg.appendChild(this.text);
+    this.element.appendChild(this.text);
   }
 
   public render(params: EdgeRenderParams): void {
@@ -78,9 +81,9 @@ export class EdgeWithLabelShape implements EdgeShape {
       params.to,
     );
 
-    this.svg.style.width = `${width}px`;
-    this.svg.style.height = `${height}px`;
-    this.svg.style.transform = `translate(${x}px, ${y}px)`;
+    this.element.style.width = `${width}px`;
+    this.element.style.height = `${height}px`;
+    this.element.style.transform = `translate(${x}px, ${y}px)`;
     this.group.style.transform = `scale(${flipX}, ${flipY})`;
 
     const fromVect = this.createDirectionVector(

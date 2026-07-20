@@ -191,7 +191,7 @@ describe("CoreHtmlView", () => {
 
     const container = element.children[0].children[0];
 
-    expect(container.children[2]).toBe(addEdgeRequest12.shape.svg);
+    expect(container.children[2]).toBe(addEdgeRequest12.shape.element);
   });
 
   it("should detach edge", () => {
@@ -343,7 +343,7 @@ describe("CoreHtmlView", () => {
 
     const container = element.children[0].children[0];
 
-    expect(container.children[2]).toBe(newShape.svg);
+    expect(container.children[2]).toBe(newShape.element);
   });
 
   it("should update edge coordinates for line category", () => {

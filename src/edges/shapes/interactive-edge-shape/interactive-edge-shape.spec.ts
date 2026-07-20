@@ -79,7 +79,7 @@ describe("InteractiveEdgeShape", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape, {});
 
-    expect(interactiveShape.svg.children[0].children[1]).toBe(
+    expect(interactiveShape.element.children[0].children[1]).toBe(
       interactiveShape.handle,
     );
   });
@@ -100,8 +100,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.svg.children[0].children[0] as SVGPathElement;
-    const interactivePath = interactiveShape.svg.children[0].children[1]
+    const path = interactiveShape.element.children[0].children[0] as SVGPathElement;
+    const interactivePath = interactiveShape.element.children[0].children[1]
       .children[0] as SVGPathElement;
 
     expect(path.getAttribute("d")).toBe(interactivePath.getAttribute("d"));
@@ -113,8 +113,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.svg.children[0].children[1] as SVGPathElement;
-    const interactivePath = interactiveShape.svg.children[0].children[2]
+    const path = interactiveShape.element.children[0].children[1] as SVGPathElement;
+    const interactivePath = interactiveShape.element.children[0].children[2]
       .children[1] as SVGPathElement;
 
     expect(path.getAttribute("d")).toBe(interactivePath.getAttribute("d"));
@@ -126,8 +126,8 @@ describe("InteractiveEdgeShape", () => {
 
     interactiveShape.render(edgeRenderParams);
 
-    const path = interactiveShape.svg.children[0].children[1] as SVGPathElement;
-    const interactivePath = interactiveShape.svg.children[0].children[2]
+    const path = interactiveShape.element.children[0].children[1] as SVGPathElement;
+    const interactivePath = interactiveShape.element.children[0].children[2]
       .children[1] as SVGPathElement;
 
     expect(path.getAttribute("d")).toBe(interactivePath.getAttribute("d"));

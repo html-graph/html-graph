@@ -19,6 +19,8 @@ import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
 const defaultPortOffset = edgeConstants.portOffset;
 
 export class DirectEdgeShape implements StructuredEdgeShape {
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   public readonly group = document.createElementNS(
@@ -65,8 +67,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       params?.targetOffset ?? defaultPortOffset,
     );
 
-    this.svg = createEdgeSvg(this.color);
-    this.svg.appendChild(this.group);
+    this.element = createEdgeSvg(this.color);
+    this.svg = this.element;
+    this.element.appendChild(this.group);
     this.line = createEdgePath(this.width);
     this.group.appendChild(this.line);
 
@@ -88,7 +91,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       svgPadding,
     );
 
-    setSvgRectangle(this.svg, { x, y, width, height });
+    setSvgRectangle(this.element, { x, y, width, height });
 
     const dirX = to.x - from.x;
     const dirY = to.y - from.y;

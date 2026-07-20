@@ -54,7 +54,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -83,7 +83,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -112,7 +112,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -141,7 +141,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.PortCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -170,7 +170,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -199,7 +199,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -228,7 +228,7 @@ describe("VerticalEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(

@@ -10,6 +10,8 @@ import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -45,7 +47,8 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
       );
     }
 
-    this.svg = this.baseEdge.svg;
+    this.element = this.baseEdge.element;
+    this.svg = this.element;
     this.group = this.baseEdge.group;
     this.line = this.baseEdge.line;
     this.sourceArrow = this.baseEdge.sourceArrow;

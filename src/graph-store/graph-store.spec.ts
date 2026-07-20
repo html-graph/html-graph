@@ -1407,7 +1407,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2In);
     store.addEdge(addEdgeRequest1Out1Out);
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toEqual(
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toEqual(
       addEdgeRequest1Out1Out.id,
     );
   });
@@ -1428,7 +1428,7 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out1Out);
     store.removeEdge(addEdgeRequest1Out1Out.id);
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toBe(
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toBe(
       undefined,
     );
   });
@@ -1449,7 +1449,7 @@ describe("GraphStore", () => {
     store.addEdge(addEdgeRequest1Out1Out);
     store.clear();
 
-    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.svg)).toBe(
+    expect(store.findEdgeIdByElement(addEdgeRequest1Out1Out.shape.element)).toBe(
       undefined,
     );
   });

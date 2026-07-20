@@ -17,6 +17,8 @@ import {
 import { createDirectionVector } from "./create-direction-vector";
 
 export class PathEdgeShape implements StructuredEdgeShape {
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   public readonly group = document.createElementNS(
@@ -42,8 +44,9 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
     this.arrowRenderer = this.params.arrowRenderer;
 
-    this.svg = createEdgeSvg(params.color);
-    this.svg.appendChild(this.group);
+    this.element = createEdgeSvg(params.color);
+    this.svg = this.element;
+    this.element.appendChild(this.group);
     this.line = createEdgePath(params.width);
     this.group.appendChild(this.line);
 
@@ -65,7 +68,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
       this.params.padding,
     );
 
-    setSvgRectangle(this.svg, { x, y, width, height });
+    setSvgRectangle(this.element, { x, y, width, height });
 
     const sourceDirection = createDirectionVector(params.from.direction);
     const targetDirection = createDirectionVector(params.to.direction);

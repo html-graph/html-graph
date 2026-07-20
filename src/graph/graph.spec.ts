@@ -834,7 +834,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    expect(graph.findEdgeIdByElement(addEdgeRequest12.shape.svg)).toEqual(
+    expect(graph.findEdgeIdByElement(addEdgeRequest12.shape.element)).toEqual(
       addEdgeRequest12.id,
     );
   });

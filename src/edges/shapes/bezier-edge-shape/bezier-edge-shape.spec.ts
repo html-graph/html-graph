@@ -52,7 +52,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -81,7 +81,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -110,7 +110,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -139,7 +139,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.PortCycle,
     });
 
-    const line = shape.svg.children[0].children[0];
+    const line = shape.element.children[0].children[0];
 
     expect(line.getAttribute("d")).toBe(
       "M 50 50 L 60 50 M 60 50 A 20 20 0 0 1 78.33030277982336 62 A 30 30 0 1 0 78.33030277982336 38 A 20 20 0 0 1 60 50",
@@ -167,7 +167,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -196,7 +196,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(
@@ -225,7 +225,7 @@ describe("BezierEdgeShape", () => {
       category: ConnectionCategory.NodeCycle,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe(

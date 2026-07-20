@@ -18,20 +18,20 @@ export class UserSelectableEdgesConfigurator {
   private readonly onAfterEdgeAdded = (edgeId: Identifier): void => {
     const { shape } = this.canvas.graph.getEdge(edgeId);
 
-    this.configurator.enable(shape.svg);
+    this.configurator.enable(shape.element);
   };
 
   private readonly onBeforeEdgeRemoved = (edgeId: Identifier): void => {
     const { shape } = this.canvas.graph.getEdge(edgeId);
 
-    this.configurator.disable(shape.svg);
+    this.configurator.disable(shape.element);
   };
 
   private readonly reset = (): void => {
     this.canvas.graph.getAllEdgeIds().forEach((edgeId) => {
       const { shape } = this.canvas.graph.getEdge(edgeId);
 
-      this.configurator.disable(shape.svg);
+      this.configurator.disable(shape.element);
     });
   };
 

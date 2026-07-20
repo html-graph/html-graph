@@ -74,7 +74,7 @@ describe("createOverlayCanvas", () => {
 
     canvas.addEdge({ id: "edge", from: "node-1-1", to: "node-1-1" });
 
-    expect(canvas.graph.getEdge("edge")!.shape.svg.style.zIndex).toBe("0");
+    expect(canvas.graph.getEdge("edge")!.shape.element.style.zIndex).toBe("0");
   });
 
   it("should create canvas with default port direction set to 0", () => {

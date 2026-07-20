@@ -16,6 +16,8 @@ import { svgPadding } from "../../svg-padding";
 import { orthogonalizeDirection } from "./orthogonalize-direction";
 
 export class OrthogonalEdgeShape implements StructuredEdgeShape {
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   public readonly group: SVGGElement;
@@ -129,7 +131,8 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
       padding: svgPadding,
     });
 
-    this.svg = this.pathShape.svg;
+    this.element = this.pathShape.element;
+    this.svg = this.element;
     this.group = this.pathShape.group;
     this.line = this.pathShape.line;
     this.sourceArrow = this.pathShape.sourceArrow;

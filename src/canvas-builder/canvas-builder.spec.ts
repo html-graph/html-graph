@@ -581,7 +581,7 @@ describe("CanvasBuilder", () => {
         shape,
       });
 
-    shape.svg.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
+    shape.element.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
     expect(onEdgeSelected).toHaveBeenCalled();

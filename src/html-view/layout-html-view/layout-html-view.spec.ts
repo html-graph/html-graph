@@ -764,7 +764,7 @@ describe("LayoutHtmlView", () => {
     graphStore.updateEdge("edge-1", { priority: 10 });
     layoutHtmlView.updateEdgePriority("edge-1");
 
-    expect(shape.svg.style.zIndex).toBe("");
+    expect(shape.element.style.zIndex).toBe("");
   });
 
   it("should throw on detach of deferred node after clear", () => {

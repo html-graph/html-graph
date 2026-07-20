@@ -6,7 +6,7 @@ describe("DirectEdgeShape", () => {
   it("should create edge shape with only line", () => {
     const shape = new DirectEdgeShape();
 
-    const childrenCount = shape.svg.children[0].children.length;
+    const childrenCount = shape.element.children[0].children.length;
 
     expect(childrenCount).toBe(1);
   });
@@ -14,7 +14,7 @@ describe("DirectEdgeShape", () => {
   it("should create edge with line and arrow element", () => {
     const shape = new DirectEdgeShape({ hasSourceArrow: true });
 
-    const childrenCount = shape.svg.children[0].children.length;
+    const childrenCount = shape.element.children[0].children.length;
 
     expect(childrenCount).toBe(2);
   });
@@ -25,7 +25,7 @@ describe("DirectEdgeShape", () => {
       hasTargetArrow: true,
     });
 
-    const childrenCount = shape.svg.children[0].children.length;
+    const childrenCount = shape.element.children[0].children.length;
 
     expect(childrenCount).toBe(3);
   });
@@ -51,7 +51,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[0];
 
     expect(arrow.getAttribute("d")).toBe("M 50 50 L 150 50");
@@ -81,7 +81,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 50 50 L 70 54 L 70 46 Z");
@@ -111,7 +111,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 150 50 L 130 46 L 130 54 Z");
@@ -138,7 +138,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const line = g.children[0];
 
     expect(line.getAttribute("d")).toBe("");
@@ -165,7 +165,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("");
@@ -192,7 +192,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("");
@@ -223,7 +223,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 60 50 L 80 54 L 80 46 Z");
@@ -254,7 +254,7 @@ describe("DirectEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.svg.children[0];
+    const g = shape.element.children[0];
     const arrow = g.children[1];
 
     expect(arrow.getAttribute("d")).toBe("M 140 50 L 120 46 L 120 54 Z");

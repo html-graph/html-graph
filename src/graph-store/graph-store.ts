@@ -324,7 +324,7 @@ export class GraphStore {
       );
     }
 
-    const useEdgeId = this.findEdgeIdByElement(request.shape.svg);
+    const useEdgeId = this.findEdgeIdByElement(request.shape.element);
 
     if (useEdgeId !== undefined) {
       throw new CanvasError(
@@ -548,7 +548,7 @@ export class GraphStore {
       },
     });
 
-    this.edgesElementsMap.set(request.shape.svg, request.id);
+    this.edgesElementsMap.set(request.shape.element, request.id);
 
     if (request.from !== request.to) {
       this.portOutgoingEdges.get(request.from)!.add(request.id);
@@ -569,6 +569,6 @@ export class GraphStore {
     this.portOutgoingEdges.get(to)!.delete(edgeId);
 
     this.edges.delete(edgeId);
-    this.edgesElementsMap.delete(payload.shape.svg);
+    this.edgesElementsMap.delete(payload.shape.element);
   }
 }

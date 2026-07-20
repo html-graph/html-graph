@@ -58,7 +58,7 @@ export class CoreHtmlView implements HtmlView {
   }
 
   public attachEdge(edgeId: Identifier): void {
-    const svg = this.graphStore.getEdge(edgeId).payload.shape.svg;
+    const svg = this.graphStore.getEdge(edgeId).payload.shape.element;
 
     this.edgeIdToElementMap.set(edgeId, svg);
     this.container.appendChild(svg);
@@ -118,7 +118,7 @@ export class CoreHtmlView implements HtmlView {
 
     const edge = this.graphStore.getEdge(edgeId);
 
-    const svg = edge.payload.shape.svg;
+    const svg = edge.payload.shape.element;
 
     this.edgeIdToElementMap.set(edgeId, svg);
     this.container.appendChild(svg);
@@ -157,7 +157,7 @@ export class CoreHtmlView implements HtmlView {
   public updateEdgePriority(edgeId: Identifier): void {
     const edge = this.graphStore.getEdge(edgeId);
 
-    edge.payload.shape.svg.style.zIndex = `${edge.payload.priority}`;
+    edge.payload.shape.element.style.zIndex = `${edge.payload.priority}`;
   }
 
   private createEdgeRenderPort(

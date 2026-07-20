@@ -509,7 +509,7 @@ describe("UserDraggableEdgesConfigurator", () => {
     portElement1.dispatchEvent(new MouseEvent("mousedown"));
 
     expect(overlayElement.children[0].children[0].children[2]).toBe(
-      edgeShape.svg,
+      edgeShape.element,
     );
   });
 

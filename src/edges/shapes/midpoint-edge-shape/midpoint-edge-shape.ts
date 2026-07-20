@@ -14,19 +14,22 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
+  public readonly element: SVGSVGElement;
+
   public readonly svg: SVGSVGElement;
 
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
     public readonly midpointElement: SVGElement,
   ) {
-    this.svg = this.baseShape.svg;
+    this.element = this.baseShape.element;
+    this.svg = this.element;
     this.group = this.baseShape.group;
     this.line = this.baseShape.line;
     this.sourceArrow = this.baseShape.sourceArrow;
     this.targetArrow = this.baseShape.targetArrow;
     this.onAfterRender = this.baseShape.onAfterRender;
-    this.svg.append(this.midpointElement);
+    this.element.append(this.midpointElement);
 
     this.baseShape.onAfterRender.subscribe((model) => {
       const midpoint = model.edgePath.midpoint;
