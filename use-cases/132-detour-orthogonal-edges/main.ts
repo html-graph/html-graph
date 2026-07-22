@@ -13,7 +13,10 @@ const canvas = new CanvasBuilder(canvasElement)
     edges: {
       priority: 1,
       shape: () => {
-        const baseShape = new OrthogonalEdgeShape();
+        const baseShape = new OrthogonalEdgeShape({
+          hasSourceArrow: true,
+          hasTargetArrow: true,
+        });
 
         const midpoint = createMidpoint();
 
