@@ -70,7 +70,7 @@ export class ForceDirectedAlgorithmIteration {
 
   private applyEdgeForces(forces: ReadonlyMap<Identifier, MutablePoint>): void {
     this.graph.getAllEdgeIds().forEach((edgeId) => {
-      const edge = this.graph.getEdge(edgeId)!;
+      const edge = this.graph.getEdge(edgeId);
       const portFrom = this.graph.getPort(edge.from);
       const portTo = this.graph.getPort(edge.to);
       const sourceCoords = this.currentCoords.get(portFrom.nodeId)!;

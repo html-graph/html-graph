@@ -114,7 +114,7 @@ export class CustomLayoutAlgorithm implements LayoutAlgorithm {
 
         if (outgoingEdges !== null) {
           outgoingEdges.forEach((edgeId) => {
-            const edge = graph.getEdge(edgeId)!;
+            const edge = graph.getEdge(edgeId);
             const port = graph.getPort(edge.to);
 
             if (!visited.has(port.nodeId)) {

@@ -21,7 +21,7 @@ const draggableEdgesConfig: DraggableEdgesConfig = {
   mouseDownEventVerifier: (event) => event.button === 0,
   connectionAllowedVerifier: (request) => {
     const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
-      const edge = canvas.graph.getEdge(edgeId)!;
+      const edge = canvas.graph.getEdge(edgeId);
 
       return edge.from === request.from && edge.to === request.to;
     });

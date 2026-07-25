@@ -105,7 +105,7 @@ canvas.graph.getAllPortIds().forEach((portId) => {
 });
 
 canvas.graph.getAllEdgeIds().forEach((edgeId) => {
-  const edge = canvas.graph.getEdge(edgeId)!;
+  const edge = canvas.graph.getEdge(edgeId);
   structure.edges.push({
     edgeId,
     from: edge.from,
