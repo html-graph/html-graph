@@ -25,7 +25,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   // TODO: make private
   /**
    * @deprecated
-   * use shape.svg instead
+   * use shape.element instead
    */
   public readonly handle = createEdgeGroup();
 
