@@ -30,14 +30,14 @@ const defaults: CanvasDefaults = {
         distance: 40,
       });
 
-      interactiveShape.handle.addEventListener("mouseenter", () => {
+      interactiveShape.element.addEventListener("mouseenter", () => {
         interactiveShape.element.style.setProperty(
           "--edge-color",
           hoverEdgeColor,
         );
       });
 
-      interactiveShape.handle.addEventListener("mouseleave", () => {
+      interactiveShape.element.addEventListener("mouseleave", () => {
         interactiveShape.element.style.setProperty("--edge-color", edgeColor);
       });
 

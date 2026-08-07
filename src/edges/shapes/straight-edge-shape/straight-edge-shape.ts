@@ -17,8 +17,6 @@ import { svgPadding } from "../../svg-padding";
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly svg: SVGSVGElement;
-
   public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;
@@ -138,7 +136,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
     this.element = this.pathShape.element;
-    this.svg = this.element;
     this.group = this.pathShape.group;
     this.line = this.pathShape.line;
     this.sourceArrow = this.pathShape.sourceArrow;

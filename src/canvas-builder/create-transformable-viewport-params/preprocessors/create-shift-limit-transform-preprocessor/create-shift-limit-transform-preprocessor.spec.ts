@@ -14,8 +14,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 100, y: 100 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -38,8 +40,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: -200, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -62,8 +66,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: -200, y: 0 },
       nextTransform: { scale: 1, x: -300, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -86,8 +92,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 200, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -110,8 +118,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 200, y: 0 },
       nextTransform: { scale: 1, x: 300, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -134,8 +144,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 0, y: -200 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -158,8 +170,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: -200 },
       nextTransform: { scale: 1, x: 0, y: -300 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -182,8 +196,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 0, y: 200 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -206,8 +222,10 @@ describe("createShiftLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 200 },
       nextTransform: { scale: 1, x: 0, y: 300 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {

@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  HorizontalEdgeShape,
+  OrthogonalEdgeShape,
   UpdateEdgeRequest,
   UpdateNodeRequest,
   UpdatePortRequest,
@@ -102,7 +102,7 @@ canvas.graph.onBeforeClear.subscribe(() => {
 const updateEdgeRequest: UpdateEdgeRequest = {
   from: "node-2-in",
   to: "node-1-out",
-  shape: new HorizontalEdgeShape(),
+  shape: new OrthogonalEdgeShape(),
   priority: 10,
 };
 

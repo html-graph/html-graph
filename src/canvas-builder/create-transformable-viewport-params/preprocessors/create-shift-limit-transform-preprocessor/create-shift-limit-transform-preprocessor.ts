@@ -26,7 +26,7 @@ export const createShiftLimitTransformPreprocessor: (
       dx = Math.min(params.prevTransform.x, minX);
     }
 
-    const w = params.canvasWidth * params.prevTransform.scale;
+    const w = params.viewport.width * params.prevTransform.scale;
     const maxScreenX = maxX - w;
 
     if (dx > maxScreenX && dx > params.prevTransform.x) {
@@ -37,7 +37,7 @@ export const createShiftLimitTransformPreprocessor: (
       dy = Math.min(params.prevTransform.y, minY);
     }
 
-    const h = params.canvasHeight * params.prevTransform.scale;
+    const h = params.viewport.height * params.prevTransform.scale;
     const maxScreenY = maxY - h;
 
     if (dy > maxScreenY && dy > params.prevTransform.y) {

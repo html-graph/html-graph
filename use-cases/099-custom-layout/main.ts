@@ -17,7 +17,7 @@ const canvas: Canvas = builder
         layerSpace: 200,
       }),
     },
-    applyOn: { type: "topologyChangeMicrotask" },
+    applyOn: "topologyChangeMicrotask",
   })
   .build();
 

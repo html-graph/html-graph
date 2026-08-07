@@ -36,7 +36,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
     this.edgeStiffness = params.edgeStiffness;
-    this.convergenceVelocity = params.convergenceVelocity;
+    this.convergenceVelocity = params.stopVelocity;
 
     this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 

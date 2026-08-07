@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
+import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edges";
 import {
   AddEdgeRequest,
   AddNodeRequest,
@@ -387,7 +387,7 @@ describe("Graph", () => {
     store.addPort(addPortRequest2);
     store.addEdge(addEdgeRequest12);
 
-    const shape = new HorizontalEdgeShape();
+    const shape = new OrthogonalEdgeShape();
 
     store.updateEdge(addEdgeRequest12.id, {
       from: undefined,

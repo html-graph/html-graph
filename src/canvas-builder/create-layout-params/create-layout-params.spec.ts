@@ -3,8 +3,6 @@ import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { LayoutConfig } from "./layout-config";
 import { createLayoutParams } from "./create-layout-params";
 import { defaults } from "./defaults";
-import { LayoutApplyOnParam } from "@/configurators";
-import { macrotaskScheduleFn } from "@/schedule-fn";
 import { noopFn } from "../shared";
 
 describe("createLayoutParams", () => {
@@ -21,21 +19,6 @@ describe("createLayoutParams", () => {
     const params = createLayoutParams(config);
 
     expect(params.algorithm).toBe(instance);
-  });
-
-  it("should set specified trigger", () => {
-    const config: LayoutConfig = {
-      applyOn: { type: "topologyChangeMacrotask" },
-    };
-
-    const params = createLayoutParams(config);
-
-    const expected: LayoutApplyOnParam = {
-      type: "topologyChangeSchedule",
-      schedule: macrotaskScheduleFn,
-    };
-
-    expect(params.applyOn).toEqual(expected);
   });
 
   it("should set default static node resolver", () => {

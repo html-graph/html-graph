@@ -34,7 +34,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
   private readonly fillerLayoutAlgorithm: LayoutAlgorithm;
 
   public constructor(params: ForceDirectedAnimatedLayoutAlgorithmParams) {
-    this.convergenceVelocity = params.convergenceVelocity;
+    this.convergenceVelocity = params.stopVelocity;
     this.maxTimeDeltaSec = params.maxTimeDeltaSec;
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;

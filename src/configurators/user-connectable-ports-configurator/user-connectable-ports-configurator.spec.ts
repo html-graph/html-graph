@@ -71,8 +71,7 @@ const createCanvas = (options?: {
     mouseDownEventVerifier: (event: MouseEvent) => event.button === 0,
     mouseUpEventVerifier: (event: MouseEvent) => event.button === 0,
     connectionPreprocessor:
-      options?.connectionPreprocessor ??
-      ((request): AddEdgeRequest | null => request),
+      options?.connectionPreprocessor ?? ((request): AddEdgeRequest => request),
     onAfterEdgeCreated: options?.onAfterEdgeCreated ?? ((): void => {}),
     onEdgeCreationInterrupted:
       options?.onEdgeCreationInterrupted ?? ((): void => {}),
@@ -481,7 +480,7 @@ describe("UserConnectablePortsConfigurator", () => {
       overlayElement,
       mainElement,
       onEdgeCreationPrevented,
-      connectionPreprocessor: () => null,
+      connectionAllowedVerifier: () => false,
     });
 
     document.body.appendChild(mainElement);

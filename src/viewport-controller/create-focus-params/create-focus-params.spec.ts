@@ -58,15 +58,6 @@ describe("createFocusParams", () => {
     expect(params.contentPadding).toBe(50);
   });
 
-  it("should configure specified legacy content padding", () => {
-    const params: FocusParams = createFocusParams(
-      { contentOffset: 50 },
-      controllerParams,
-    );
-
-    expect(params.contentPadding).toBe(50);
-  });
-
   it("should configure default nodes list", () => {
     const params: FocusParams = createFocusParams({}, controllerParams);
 

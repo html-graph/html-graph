@@ -17,8 +17,6 @@ export interface EdgeRectangle {
 export class EdgeWithLabelShape implements EdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly svg: SVGSVGElement;
-
   private readonly group: SVGGElement;
 
   private readonly line: SVGPathElement;
@@ -51,7 +49,6 @@ export class EdgeWithLabelShape implements EdgeShape {
 
   public constructor(label: string) {
     this.element = this.createSvg();
-    this.svg = this.element;
 
     this.group = this.createGroup();
     this.element.appendChild(this.group);

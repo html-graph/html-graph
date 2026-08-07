@@ -7,8 +7,7 @@ export interface ViewportTransformConfig {
     readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
     readonly wheelFinishTimeout?: number;
   };
-  // TODO: rename to "pan"
-  readonly shift?: {
+  readonly pan?: {
     readonly cursor?: string | null;
     readonly mouseDownEventVerifier?: MouseEventVerifier;
     readonly mouseUpEventVerifier?: MouseEventVerifier;

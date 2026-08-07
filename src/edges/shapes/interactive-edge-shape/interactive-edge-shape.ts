@@ -12,8 +12,6 @@ import { StructuredEdgeRenderModel } from "../../structure-render-model";
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly svg: SVGSVGElement;
-
   public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;
@@ -22,12 +20,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public readonly targetArrow: SVGPathElement | null;
 
-  // TODO: make private
-  /**
-   * @deprecated
-   * use shape.element instead
-   */
-  public readonly handle = createEdgeGroup();
+  private readonly handle = createEdgeGroup();
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
@@ -48,7 +41,6 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     }
 
     this.element = this.baseEdge.element;
-    this.svg = this.element;
     this.group = this.baseEdge.group;
     this.line = this.baseEdge.line;
     this.sourceArrow = this.baseEdge.sourceArrow;

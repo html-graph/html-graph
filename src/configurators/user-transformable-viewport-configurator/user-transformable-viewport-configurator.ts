@@ -238,8 +238,10 @@ export class UserTransformableViewportConfigurator {
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
-      canvasWidth: width,
-      canvasHeight: height,
+      viewport: {
+        width,
+        height,
+      },
     });
 
     this.performTransform(transform);
@@ -253,8 +255,10 @@ export class UserTransformableViewportConfigurator {
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform,
-      canvasWidth: width,
-      canvasHeight: height,
+      viewport: {
+        width,
+        height,
+      },
     });
 
     this.performTransform(transform);
@@ -308,8 +312,10 @@ export class UserTransformableViewportConfigurator {
     const transform = this.params.transformPreprocessor({
       prevTransform,
       nextTransform: prevTransform,
-      canvasWidth: width,
-      canvasHeight: height,
+      viewport: {
+        width,
+        height,
+      },
     });
 
     this.params.onResizeTransformStarted();

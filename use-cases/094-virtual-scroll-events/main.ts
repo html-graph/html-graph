@@ -13,7 +13,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const defaults: CanvasDefaults = {
   edges: {
     shape: {
-      type: "horizontal",
+      type: "orthogonal",
       hasTargetArrow: true,
     },
   },

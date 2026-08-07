@@ -23,7 +23,7 @@ describe("resolveDraggingPortDirectionResolver", () => {
   it("should resolve NearestConnectablePortDraggingPortDirectionResolver for related value", () => {
     const canvas = createCanvas();
     const resolver = resolveDraggingPortDirectionResolver(
-      "closest-connectable-port",
+      "nearest-connectable-port",
       canvas.graph,
       () => true,
     );
@@ -33,16 +33,29 @@ describe("resolveDraggingPortDirectionResolver", () => {
     ).toBe(true);
   });
 
-  it("should resolve NearestConnectablePortDraggingPortDirectionResolver for related value", () => {
+  it("should resolve ConstantDraggingPortDirectionResolver when inherit value provided", () => {
     const canvas = createCanvas();
     const resolver = resolveDraggingPortDirectionResolver(
-      "nearest-connectable-port",
+      "inherit",
       canvas.graph,
       () => true,
     );
 
-    expect(
-      resolver instanceof NearestConnectablePortDraggingPortDirectionResolver,
-    ).toBe(true);
+    expect(resolver instanceof ConstantDraggingPortDirectionResolver).toBe(
+      true,
+    );
+  });
+
+  it("should resolve ConstantDraggingPortDirectionResolver by default", () => {
+    const canvas = createCanvas();
+    const resolver = resolveDraggingPortDirectionResolver(
+      undefined,
+      canvas.graph,
+      () => true,
+    );
+
+    expect(resolver instanceof ConstantDraggingPortDirectionResolver).toBe(
+      true,
+    );
   });
 });

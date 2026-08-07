@@ -1,19 +1,13 @@
 export { BezierEdgeShape } from "./bezier-edge-shape";
 export type { BezierEdgeParams } from "./bezier-edge-shape";
 
-export { HorizontalEdgeShape } from "./horizontal-edge-shape";
-export type { HorizontalEdgeParams } from "./horizontal-edge-shape";
-
 export { StraightEdgeShape } from "./straight-edge-shape";
 export type { StraightEdgeParams } from "./straight-edge-shape";
-
-export { VerticalEdgeShape } from "./vertical-edge-shape";
-export type { VerticalEdgeParams } from "./vertical-edge-shape";
 
 export { OrthogonalEdgeShape } from "./orthogonal-edge-shape";
 export type { OrthogonalEdgeParams } from "./orthogonal-edge-shape";
 
-export { DirectEdgeShape, boxPortOffsetFn } from "./direct-edge-shape";
+export { DirectEdgeShape } from "./direct-edge-shape";
 export type {
   DirectEdgeParams,
   PortOffset,

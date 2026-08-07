@@ -55,39 +55,23 @@ export type {
   EdgeCreationInProgressParams,
 } from "./configurators";
 
-export type {
-  TransformState,
-  /**
-   * @deprecated
-   * use TransformState instead
-   */
-  TransformState as TransformPayload,
-} from "./viewport-store";
+export type { TransformState } from "./viewport-store";
 
 export {
   BezierEdgeShape,
   StraightEdgeShape,
-  HorizontalEdgeShape,
-  VerticalEdgeShape,
   OrthogonalEdgeShape,
   InteractiveEdgeShape,
   InteractiveEdgeError,
   DirectEdgeShape,
   MidpointEdgeShape,
   ConnectionCategory,
-  /**
-   * @deprecated
-   * use "box" value instead
-   */
-  boxPortOffsetFn,
 } from "./edges";
 export type {
   EdgeShape,
   EdgeRenderParams,
   EdgeRenderPort,
   BezierEdgeParams,
-  HorizontalEdgeParams,
-  VerticalEdgeParams,
   OrthogonalEdgeParams,
   StraightEdgeParams,
   InteractiveEdgeParams,

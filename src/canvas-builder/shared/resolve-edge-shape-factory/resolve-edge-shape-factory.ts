@@ -1,10 +1,8 @@
 import {
   BezierEdgeShape,
   DirectEdgeShape,
-  HorizontalEdgeShape,
   OrthogonalEdgeShape,
   StraightEdgeShape,
-  VerticalEdgeShape,
 } from "@/edges";
 import { EdgeShapeConfig } from "./edge-shape-config";
 import { EdgeShapeFactory } from "@/graph-controller";
@@ -31,34 +29,6 @@ export const resolveEdgeShapeFactory = (
           roundness: config.roundness,
           detourDistance: config.detourDistance,
           detourDirection: config.detourDirection,
-        });
-    case "horizontal":
-      return () =>
-        new HorizontalEdgeShape({
-          color: config.color,
-          width: config.width,
-          arrowLength: config.arrowLength,
-          arrowOffset: config.arrowOffset,
-          arrowRenderer: config.arrowRenderer,
-          hasSourceArrow: config.hasSourceArrow,
-          hasTargetArrow: config.hasTargetArrow,
-          cycleSquareSide: config.cycleSquareSide,
-          roundness: config.roundness,
-          detourDistance: config.detourDistance,
-        });
-    case "vertical":
-      return () =>
-        new VerticalEdgeShape({
-          color: config.color,
-          width: config.width,
-          arrowLength: config.arrowLength,
-          arrowOffset: config.arrowOffset,
-          arrowRenderer: config.arrowRenderer,
-          hasSourceArrow: config.hasSourceArrow,
-          hasTargetArrow: config.hasTargetArrow,
-          cycleSquareSide: config.cycleSquareSide,
-          roundness: config.roundness,
-          detourDistance: config.detourDistance,
         });
     case "orthogonal":
       return () =>

@@ -11,7 +11,7 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const transformOptions: ViewportTransformConfig = {
-  shift: {
+  pan: {
     cursor: "crosshair",
   },
 };

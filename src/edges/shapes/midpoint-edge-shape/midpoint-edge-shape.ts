@@ -16,14 +16,11 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
 
   public readonly element: SVGSVGElement;
 
-  public readonly svg: SVGSVGElement;
-
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
     public readonly midpointElement: SVGElement,
   ) {
     this.element = this.baseShape.element;
-    this.svg = this.element;
     this.group = this.baseShape.group;
     this.line = this.baseShape.line;
     this.sourceArrow = this.baseShape.sourceArrow;
