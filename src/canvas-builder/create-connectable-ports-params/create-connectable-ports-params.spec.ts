@@ -10,7 +10,7 @@ import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
 import { noopFn } from "../shared";
 import { createCanvas } from "@/mocks/create-canvas.mock";
-import { defaultPortIdResolver, PortIdResolver } from "@/configurators/shared";
+import { defaultPortIdResolver, PortIdResolver } from "@/configurators";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {
