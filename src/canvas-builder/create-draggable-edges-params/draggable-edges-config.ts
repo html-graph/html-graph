@@ -21,7 +21,7 @@ export interface DraggableEdgesConfig {
   readonly grabbedPortIdResolver?: PortIdResolver | undefined;
   readonly releasedPortIdResolver?: PortIdResolver | undefined;
   readonly events?: {
-    readonly onAfterEdgeReattached?: (edgeId: Identifier) => void | undefined;
+    readonly onAfterEdgeReattached?: (edgeId: Identifier) => void;
     // TODO: create type for parameter
     readonly onEdgeReattachInterrupted?: (
       edge: GraphEdge & { readonly id: Identifier },
