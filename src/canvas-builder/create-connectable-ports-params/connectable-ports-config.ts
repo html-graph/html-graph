@@ -4,11 +4,11 @@ import {
   ConnectionTypeResolver,
   EdgeCreationInProgressParams,
   MouseEventVerifier,
+  PortIdResolver,
 } from "@/configurators";
 import { DraggingPortDirectionConfig, EdgeShapeConfig } from "../shared";
 import { Identifier } from "@/identifier";
 import { AddEdgeRequest } from "@/graph-controller";
-import { PortIdResolver } from "@/configurators/shared";
 
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig | undefined;
