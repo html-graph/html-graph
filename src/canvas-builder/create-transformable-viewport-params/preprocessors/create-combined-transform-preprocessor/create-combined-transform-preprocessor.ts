@@ -14,8 +14,7 @@ export const createCombinedTransformPreprocessor: (
         cur({
           prevTransform: params.prevTransform,
           nextTransform: acc,
-          canvasWidth: params.canvasWidth,
-          canvasHeight: params.canvasHeight,
+          viewport: params.viewport,
         }),
       params.nextTransform,
     );

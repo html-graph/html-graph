@@ -3,8 +3,6 @@ import { AddEdgeRequest } from "@/graph-controller";
 export const defaults = Object.freeze({
   connectionAllowedVerifier: () => true,
   connectionPreprocessor: (request: AddEdgeRequest) => request,
-  // TODO: remove ctrl key
-  mouseDownEventVerifier: (event: MouseEvent): boolean =>
-    event.button === 0 && event.ctrlKey,
+  mouseDownEventVerifier: (event: MouseEvent): boolean => event.button === 0,
   mouseUpEventVerifier: (event: MouseEvent): boolean => event.button === 0,
 });

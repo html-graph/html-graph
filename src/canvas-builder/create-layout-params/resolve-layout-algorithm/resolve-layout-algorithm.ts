@@ -43,9 +43,8 @@ export const resolveLayoutAlgorithm = (
           forceDirectedDefaults.edgeEquilibriumLength,
         edgeStiffness:
           config?.edgeStiffness ?? forceDirectedDefaults.edgeStiffness,
-        convergenceVelocity:
-          config?.convergenceVelocity ??
-          forceDirectedDefaults.convergenceVelocity,
+        stopVelocity:
+          config?.stopVelocity ?? forceDirectedDefaults.convergenceVelocity,
         maxForce: config?.maxForce ?? forceDirectedDefaults.maxForce,
         nodeForceCoefficient:
           config?.nodeForceCoefficient ??

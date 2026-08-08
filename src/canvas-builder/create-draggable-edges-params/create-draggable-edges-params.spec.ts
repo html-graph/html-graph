@@ -94,7 +94,7 @@ describe("createDraggableEdgeParams", () => {
   });
 
   it("should return specified connection preprocessor", () => {
-    const preprocessor: ConnectionPreprocessor = () => null;
+    const preprocessor: ConnectionPreprocessor = (edge) => edge;
     const options = createDraggableEdgeParams(
       { connectionPreprocessor: preprocessor },
       createCanvas().graph,

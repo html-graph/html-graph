@@ -8,18 +8,10 @@ import {
 } from "@/configurators";
 
 export const resolveDraggingPortDirectionResolver = (
-  config: DraggingPortDirectionConfig,
+  config: DraggingPortDirectionConfig | undefined,
   graph: Graph,
   connectionAllowedVerifier: ConnectionAllowedVerifier,
 ): DraggingPortDirectionResolver => {
-  if (config === "closest-connectable-port") {
-    return new NearestConnectablePortDraggingPortDirectionResolver(
-      graph,
-      connectionAllowedVerifier,
-    );
-  }
-
-  // TODO: use "nearest-connectable-port" by default
   if (config === "nearest-connectable-port") {
     return new NearestConnectablePortDraggingPortDirectionResolver(
       graph,
@@ -27,5 +19,9 @@ export const resolveDraggingPortDirectionResolver = (
     );
   }
 
-  return new ConstantDraggingPortDirectionResolver(config);
+  if (typeof config === "number") {
+    return new ConstantDraggingPortDirectionResolver(config);
+  }
+
+  return new ConstantDraggingPortDirectionResolver(undefined);
 };

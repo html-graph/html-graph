@@ -27,16 +27,17 @@ describe("InteractiveEdgeShape", () => {
   it("should create interactive group with line", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape);
+    const handle = interactiveShape.element.children[0].children[1];
 
-    expect(interactiveShape.handle.children[0].nodeName).toBe("path");
+    expect(handle.children[0].nodeName).toBe("path");
   });
 
   it("should create interactive group with line of default width when no parameters specified", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape);
+    const handle = interactiveShape.element.children[0].children[1];
 
-    const width =
-      interactiveShape.handle.children[0].getAttribute("stroke-width");
+    const width = handle.children[0].getAttribute("stroke-width");
 
     expect(width).toBe("10");
   });
@@ -44,9 +45,9 @@ describe("InteractiveEdgeShape", () => {
   it("should create interactive group with line of default width", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape, {});
+    const handle = interactiveShape.element.children[0].children[1];
 
-    const width =
-      interactiveShape.handle.children[0].getAttribute("stroke-width");
+    const width = handle.children[0].getAttribute("stroke-width");
 
     expect(width).toBe("10");
   });
@@ -54,9 +55,9 @@ describe("InteractiveEdgeShape", () => {
   it("should create interactive group with line of specified width", () => {
     const shape = new BezierEdgeShape();
     const interactiveShape = new InteractiveEdgeShape(shape, { distance: 20 });
+    const handle = interactiveShape.element.children[0].children[1];
 
-    const width =
-      interactiveShape.handle.children[0].getAttribute("stroke-width");
+    const width = handle.children[0].getAttribute("stroke-width");
 
     expect(width).toBe("20");
   });
@@ -64,24 +65,17 @@ describe("InteractiveEdgeShape", () => {
   it("should create interactive group with source arrow", () => {
     const shape = new BezierEdgeShape({ hasSourceArrow: true });
     const interactiveShape = new InteractiveEdgeShape(shape, {});
+    const handle = interactiveShape.element.children[0];
 
-    expect(interactiveShape.handle.children[1].nodeName).toBe("path");
+    expect(handle.children[1].nodeName).toBe("path");
   });
 
   it("should create interactive group with target arrow", () => {
     const shape = new BezierEdgeShape({ hasTargetArrow: true });
     const interactiveShape = new InteractiveEdgeShape(shape, {});
+    const handle = interactiveShape.element.children[0];
 
-    expect(interactiveShape.handle.children[1].nodeName).toBe("path");
-  });
-
-  it("should append interactive group to specified shape", () => {
-    const shape = new BezierEdgeShape();
-    const interactiveShape = new InteractiveEdgeShape(shape, {});
-
-    expect(interactiveShape.element.children[0].children[1]).toBe(
-      interactiveShape.handle,
-    );
+    expect(handle.children[1].nodeName).toBe("path");
   });
 
   it("should render specified edge", () => {

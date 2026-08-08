@@ -13,7 +13,7 @@ export type AnimatedLayoutAlgorithmConfig =
       readonly edgeEquilibriumLength?: number;
       readonly edgeStiffness?: number;
       readonly seed?: string;
-      readonly convergenceVelocity?: number;
+      readonly stopVelocity?: number;
       readonly maxForce?: number;
       readonly nodeForceCoefficient?: number;
       readonly barnesHut?: {

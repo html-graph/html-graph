@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { GraphStore } from "./graph-store";
-import { BezierEdgeShape, HorizontalEdgeShape } from "@/edges";
+import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edges";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";
@@ -718,7 +718,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2In);
     store.addEdge(addEdgeRequest1Out2In);
 
-    const shape = new HorizontalEdgeShape();
+    const shape = new OrthogonalEdgeShape();
 
     store.updateEdge(addEdgeRequest1Out2In.id, {
       from: undefined,
@@ -758,7 +758,7 @@ describe("GraphStore", () => {
     store.addPort(addPortRequest2In);
     store.addEdge(addEdgeRequest1Out2In);
 
-    const shape = new HorizontalEdgeShape();
+    const shape = new OrthogonalEdgeShape();
 
     store.updateEdge(addEdgeRequest1Out2In.id, {
       from: undefined,

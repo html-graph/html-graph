@@ -53,7 +53,7 @@ describe("createUserConnectablePortsParams", () => {
 
   it("should return specified connection preprocessor", () => {
     const canvas = createCanvas();
-    const preprocessor: ConnectionPreprocessor = () => null;
+    const preprocessor: ConnectionPreprocessor = (edge) => edge;
     const options = createConnectablePortsParams(
       { connectionPreprocessor: preprocessor },
       () => new BezierEdgeShape(),

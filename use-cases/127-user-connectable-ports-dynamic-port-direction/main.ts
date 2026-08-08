@@ -40,7 +40,7 @@ const connectablePortConfig: ConnectablePortsConfig = {
 
     return strFrom.endsWith("-out") && strTo.endsWith("-in");
   },
-  dragPortDirection: "closest-connectable-port",
+  dragPortDirection: "nearest-connectable-port",
   events: {
     onEdgeCreationPrevented: (request) => {
       console.log(`prevented edge creation`);

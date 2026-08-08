@@ -29,8 +29,10 @@ describe("createConfig", () => {
     const matrix = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1_000_000, x: 1_000_000, y: 1_000_000 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -60,8 +62,10 @@ describe("createConfig", () => {
     preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 2, x: 3, y: 4 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(fn).toHaveBeenCalled();
@@ -85,8 +89,10 @@ describe("createConfig", () => {
     preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 2, x: 3, y: 4 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(fn).toHaveBeenCalledTimes(2);
@@ -100,7 +106,7 @@ describe("createConfig", () => {
 
   it("should set specified shift cursor", () => {
     const res = createTransformableViewportParams({
-      shift: {
+      pan: {
         cursor: "crosshair",
       },
     });
@@ -170,7 +176,7 @@ describe("createConfig", () => {
     const mouseDownEventVerifier = (): boolean => false;
 
     const transformOptions: ViewportTransformConfig = {
-      shift: {
+      pan: {
         mouseDownEventVerifier,
       },
     };
@@ -194,7 +200,7 @@ describe("createConfig", () => {
     const mouseUpEventVerifier = (): boolean => false;
 
     const transformOptions: ViewportTransformConfig = {
-      shift: {
+      pan: {
         mouseUpEventVerifier,
       },
     };

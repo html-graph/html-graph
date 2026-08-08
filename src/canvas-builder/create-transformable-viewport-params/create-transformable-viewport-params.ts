@@ -39,12 +39,12 @@ export const createTransformableViewportParams = (
   }
 
   const shiftCursor =
-    transformConfig?.shift?.cursor !== undefined
-      ? transformConfig.shift.cursor
+    transformConfig?.pan?.cursor !== undefined
+      ? transformConfig.pan.cursor
       : "grab";
 
   const defaultMouseDownEventVerifier =
-    transformConfig?.shift?.mouseDownEventVerifier;
+    transformConfig?.pan?.mouseDownEventVerifier;
 
   const mouseDownEventVerifier =
     defaultMouseDownEventVerifier !== undefined
@@ -52,7 +52,7 @@ export const createTransformableViewportParams = (
       : (event: MouseEvent): boolean => event.button === 0;
 
   const defaultMouseUpEventVerifier =
-    transformConfig?.shift?.mouseUpEventVerifier;
+    transformConfig?.pan?.mouseUpEventVerifier;
 
   const mouseUpEventVerifier =
     defaultMouseUpEventVerifier !== undefined

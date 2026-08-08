@@ -21,8 +21,6 @@ const defaultPortOffset = edgeConstants.portOffset;
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly svg: SVGSVGElement;
-
   public readonly group = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "g",
@@ -68,7 +66,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     );
 
     this.element = createEdgeSvg(this.color);
-    this.svg = this.element;
     this.element.appendChild(this.group);
     this.line = createEdgePath(this.width);
     this.group.appendChild(this.line);

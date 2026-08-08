@@ -42,7 +42,7 @@ const createAlgorithm = (params?: {
     nodeMass: 1,
     edgeEquilibriumLength: 8,
     edgeStiffness: 1,
-    convergenceVelocity: params?.convergeVelocity ?? 0,
+    stopVelocity: params?.convergeVelocity ?? 0,
     maxForce: 1e9,
     nodeForceCoefficient: 1,
     barnesHutTheta: 0,

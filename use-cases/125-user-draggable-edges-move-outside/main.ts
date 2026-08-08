@@ -20,7 +20,7 @@ const canvas: Canvas = builder
   .setDefaults(defaults)
   .enableUserDraggableEdges({
     mouseDownEventVerifier: (event) => event.button === 0,
-    connectionPreprocessor: (request) => {
+    connectionAllowedVerifier: (request) => {
       const existingEdge = canvas.graph.getAllEdgeIds().find((edgeId) => {
         const edge = canvas.graph.getEdge(edgeId);
 
@@ -28,17 +28,12 @@ const canvas: Canvas = builder
       });
 
       if (existingEdge !== undefined) {
-        return null;
+        return false;
       }
 
-      if (
-        `${request.from}`.endsWith("-out") &&
-        `${request.to}`.endsWith("-in")
-      ) {
-        return request;
-      }
-
-      return null;
+      return (
+        `${request.from}`.endsWith("-out") && `${request.to}`.endsWith("-in")
+      );
     },
     events: {
       onEdgeReattachPrevented: (edge) => {

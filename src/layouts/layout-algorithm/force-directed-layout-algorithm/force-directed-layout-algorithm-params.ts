@@ -6,7 +6,7 @@ export interface ForceDirectedLayoutAlgorithmParams {
   readonly nodeCharge: number;
   readonly edgeEquilibriumLength: number;
   readonly edgeStiffness: number;
-  readonly convergenceVelocity: number;
+  readonly stopVelocity: number;
   readonly maxForce: number;
   readonly nodeForceCoefficient: number;
   readonly barnesHutTheta: number;

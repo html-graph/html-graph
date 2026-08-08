@@ -14,7 +14,8 @@ import { LayoutConfigurator } from "./layout-configurator";
 import { EventSubject } from "@/event-subject";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
-import { macrotaskScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
+import { microtaskScheduleFn } from "@/schedule-fn";
+import { waitMicrotask } from "@/mocks/wait-microtask.mock";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -123,7 +124,7 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
         type: "topologyChangeSchedule",
-        schedule: macrotaskScheduleFn,
+        schedule: microtaskScheduleFn,
       },
       staticNodeResolver: () => false,
       onBeforeApplied,
@@ -134,7 +135,7 @@ describe("LayoutConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await waitMacrotask(0);
+    await waitMicrotask();
 
     expect(onBeforeApplied).toHaveBeenCalled();
   });
@@ -146,7 +147,7 @@ describe("LayoutConfigurator", () => {
       algorithm: new DummyLayoutAlgorithm(),
       applyOn: {
         type: "topologyChangeSchedule",
-        schedule: macrotaskScheduleFn,
+        schedule: microtaskScheduleFn,
       },
       staticNodeResolver: () => false,
       onBeforeApplied: (): void => {},
@@ -157,7 +158,7 @@ describe("LayoutConfigurator", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
-    await waitMacrotask(0);
+    await waitMicrotask();
 
     expect(onAfterApplied).toHaveBeenCalled();
   });

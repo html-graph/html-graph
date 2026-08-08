@@ -6,25 +6,16 @@ export type { StructuredEdgeRenderModel } from "./structure-render-model";
 
 export {
   BezierEdgeShape,
-  HorizontalEdgeShape,
   StraightEdgeShape,
-  VerticalEdgeShape,
   OrthogonalEdgeShape,
   DirectEdgeShape,
   InteractiveEdgeShape,
   InteractiveEdgeError,
   MidpointEdgeShape,
-  /**
-   * @deprecated
-   * use "box" value instead
-   */
-  boxPortOffsetFn,
 } from "./shapes";
 export type {
   BezierEdgeParams,
   StraightEdgeParams,
-  HorizontalEdgeParams,
-  VerticalEdgeParams,
   OrthogonalEdgeParams,
   DirectEdgeParams,
   InteractiveEdgeParams,

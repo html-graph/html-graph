@@ -35,7 +35,7 @@ const draggableEdgesConfig: DraggableEdgesConfig = {
 
     return strFrom.endsWith("-out") && strTo.endsWith("-in");
   },
-  dragPortDirection: "closest-connectable-port",
+  dragPortDirection: "nearest-connectable-port",
   events: {
     onEdgeReattachPrevented: (edge) => {
       canvas.addEdge({

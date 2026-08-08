@@ -13,7 +13,7 @@ describe("resolveLayoutFocusSchedule", () => {
 
   it("should resolve specified schedule when topology change microtask application strategy provided", () => {
     const params = createLayoutParams({
-      applyOn: { type: "topologyChangeMicrotask" },
+      applyOn: "topologyChangeMicrotask",
     });
 
     expect(resolveLayoutFocusSchedule(params)).toBe(microtaskScheduleFn);

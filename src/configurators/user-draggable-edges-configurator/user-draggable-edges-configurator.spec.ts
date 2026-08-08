@@ -420,7 +420,7 @@ describe("UserDraggableEdgesConfigurator", () => {
       overlayElement,
       mainElement,
       onEdgeReattachPrevented,
-      connectionPreprocessor: () => null,
+      connectionAllowedVerifier: () => false,
     });
 
     document.body.appendChild(mainElement);
@@ -495,7 +495,7 @@ describe("UserDraggableEdgesConfigurator", () => {
       overlayElement,
       mainElement,
       onEdgeReattachPrevented,
-      connectionPreprocessor: () => null,
+      connectionAllowedVerifier: () => false,
     });
 
     document.body.appendChild(mainElement);

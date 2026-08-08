@@ -29,8 +29,10 @@ describe("createCombinedTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 3, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -67,8 +69,10 @@ describe("createCombinedTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 0.1, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {

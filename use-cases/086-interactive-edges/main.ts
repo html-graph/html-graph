@@ -33,12 +33,12 @@ const canvasDefaults: CanvasDefaults = {
           `clicked on edge with id: ${edgeId}`;
       };
 
-      interactiveEdge.handle.addEventListener("mousedown", (event) => {
+      interactiveEdge.element.addEventListener("mousedown", (event) => {
         event.stopPropagation();
         handler();
       });
 
-      interactiveEdge.handle.addEventListener("touchstart", (event) => {
+      interactiveEdge.element.addEventListener("touchstart", (event) => {
         event.stopPropagation();
         handler();
       });

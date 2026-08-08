@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { immediateScheduleFn, microtaskScheduleFn } from "@/schedule-fn";
+import { immediateScheduleFn } from "@/schedule-fn";
 import { createLayoutParams } from "../create-layout-params";
 import { createViewportControllerParams } from "./create-viewport-controller-params";
 import { EventSubject } from "@/event-subject";
@@ -20,20 +20,6 @@ describe("createViewportControllerParams", () => {
       canvasDefaults: {
         focus: {
           contentPadding: 200,
-        },
-      },
-      hasLayout: false,
-      layoutParams: createLayoutParams({}),
-    });
-
-    expect(viewportControllerParams.focus.contentPadding).toBe(200);
-  });
-
-  it("should configure specified focus legacy content padding", () => {
-    const viewportControllerParams = createViewportControllerParams({
-      canvasDefaults: {
-        focus: {
-          contentOffset: 200,
         },
       },
       hasLayout: false,
@@ -79,22 +65,6 @@ describe("createViewportControllerParams", () => {
     });
 
     expect(viewportControllerParams.focus.schedule).toBe(immediateScheduleFn);
-  });
-
-  it("should configure microtask schedule function when layout microtask application strategy configured", () => {
-    const viewportControllerParams = createViewportControllerParams({
-      canvasDefaults: {
-        focus: {
-          minContentScale: 0.25,
-        },
-      },
-      hasLayout: true,
-      layoutParams: createLayoutParams({
-        applyOn: { type: "topologyChangeMicrotask" },
-      }),
-    });
-
-    expect(viewportControllerParams.focus.schedule).toBe(microtaskScheduleFn);
   });
 
   it("should configure immediate schedule function when layout trigger application strategy configured", () => {

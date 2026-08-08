@@ -16,7 +16,7 @@ export type LayoutAlgorithmConfig =
       readonly nodeMass?: number | undefined;
       readonly edgeEquilibriumLength?: number | undefined;
       readonly edgeStiffness?: number | undefined;
-      readonly convergenceVelocity?: number | undefined;
+      readonly stopVelocity?: number | undefined;
       readonly maxForce?: number | undefined;
       readonly nodeForceCoefficient?: number | undefined;
       readonly barnesHut?:

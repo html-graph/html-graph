@@ -22,8 +22,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: -200, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.x).toBe(-100);
@@ -38,8 +40,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 10, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.scale).toBe(2);
@@ -53,8 +57,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 10, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.scale).toBe(10);
@@ -68,8 +74,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 0.001, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.scale).toBe(0.001);
@@ -83,8 +91,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: -1_000_000, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.x).toBe(-1_000_000);
@@ -98,8 +108,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 1_000_000, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.x).toBe(1_000_000);
@@ -113,8 +125,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 0, y: -1_000_000 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.y).toBe(-1_000_000);
@@ -128,8 +142,10 @@ describe("resolveTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 1, x: 0, y: 1_000_000 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     expect(res.y).toBe(1_000_000);

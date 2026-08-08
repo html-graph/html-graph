@@ -4,10 +4,8 @@ import {
   BezierEdgeShape,
   DirectEdgeShape,
   EdgeShape,
-  HorizontalEdgeShape,
   OrthogonalEdgeShape,
   StraightEdgeShape,
-  VerticalEdgeShape,
 } from "@/edges";
 
 describe("resolveEdgeShapeFactory", () => {
@@ -33,22 +31,6 @@ describe("resolveEdgeShapeFactory", () => {
     const shape = factory("123");
 
     expect(shape instanceof StraightEdgeShape).toBe(true);
-  });
-
-  it("should return horizontal function for horizontal type", () => {
-    const factory = resolveEdgeShapeFactory({ type: "horizontal" });
-
-    const shape = factory("123");
-
-    expect(shape instanceof HorizontalEdgeShape).toBe(true);
-  });
-
-  it("should return vertical function for vertical type", () => {
-    const factory = resolveEdgeShapeFactory({ type: "vertical" });
-
-    const shape = factory("123");
-
-    expect(shape instanceof VerticalEdgeShape).toBe(true);
   });
 
   it("should return orthogonal function for orthogonal type", () => {

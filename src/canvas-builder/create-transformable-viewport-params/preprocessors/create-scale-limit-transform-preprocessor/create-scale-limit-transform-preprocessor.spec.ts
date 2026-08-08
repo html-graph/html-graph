@@ -12,8 +12,10 @@ describe("createScaleLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 2, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -34,8 +36,10 @@ describe("createScaleLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 10, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -56,8 +60,10 @@ describe("createScaleLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 10, x: 0, y: 0 },
       nextTransform: { scale: 20, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -78,8 +84,10 @@ describe("createScaleLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 1, x: 0, y: 0 },
       nextTransform: { scale: 0.1, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {
@@ -100,8 +108,10 @@ describe("createScaleLimitTransformPreprocessor", () => {
     const res = preprocessor({
       prevTransform: { scale: 0.2, x: 0, y: 0 },
       nextTransform: { scale: 0.1, x: 0, y: 0 },
-      canvasWidth: 500,
-      canvasHeight: 500,
+      viewport: {
+        width: 500,
+        height: 500,
+      },
     });
 
     const expected: TransformState = {

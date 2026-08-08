@@ -18,9 +18,7 @@ export const createFocusParams = (
           config.minContentScale ?? controllerParams.focus.minContentScale,
         nodes: config.nodes ?? [],
         contentPadding:
-          config.contentPadding ??
-          config.contentOffset ??
-          controllerParams.focus.contentPadding,
+          config.contentPadding ?? controllerParams.focus.contentPadding,
         animationDuration:
           config.animationDuration ?? controllerParams.focus.animationDuration,
       };
