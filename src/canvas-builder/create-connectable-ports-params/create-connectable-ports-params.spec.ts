@@ -321,4 +321,25 @@ describe("createUserConnectablePortsParams", () => {
 
     expect(options.grabbedPortIdResolver).toBe(grabbedPortIdResolver);
   });
+
+  it("should resolve default released port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, canvas.graph);
+
+    expect(options.releasedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified released port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const releasedPortIdResolver: PortIdResolver = () => null;
+    const options = createConnectablePortsParams(
+      { releasedPortIdResolver },
+      factory,
+      canvas.graph,
+    );
+
+    expect(options.releasedPortIdResolver).toBe(releasedPortIdResolver);
+  });
 });

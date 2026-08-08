@@ -169,7 +169,11 @@ export class UserConnectablePortsConfigurator {
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const targetPortId = findPortAtPoint(this.canvas.graph, cursor);
+    const targetPortId = findPortAtPoint(
+      this.canvas.graph,
+      cursor,
+      this.params.releasedPortIdResolver,
+    );
 
     if (targetPortId === null) {
       this.params.onEdgeCreationInterrupted(this.edgeInProgress!);

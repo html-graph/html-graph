@@ -20,6 +20,7 @@ export interface DraggableEdgesParams {
   readonly onAfterEdgeReattached: (edgeId: Identifier) => void;
   readonly draggingPortDirectionResolver: DraggingPortDirectionResolver;
   readonly grabbedPortIdResolver: PortIdResolver;
+  readonly releasedPortIdResolver: PortIdResolver;
   readonly onEdgeReattachInterrupted: (
     payload: GraphEdge & { readonly id: Identifier },
   ) => void;

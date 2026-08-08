@@ -1,16 +1,17 @@
 import { Graph } from "@/graph";
 import { PortSearchResult } from "./port-search-result";
+import { PortIdResolver } from "../../port-id-resolver";
 
 export const findPortForElement = (
   graph: Graph,
   element: Element,
+  portIdResolver: PortIdResolver,
 ): PortSearchResult => {
   let elementBuf: Element | null = element;
 
   while (elementBuf !== null) {
     const portIds = graph.findPortIdsByElement(elementBuf);
-    // TODO: add port id resolver
-    const portId = portIds[0] ?? null;
+    const portId = portIdResolver(portIds);
 
     if (portId !== null) {
       return {

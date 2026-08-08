@@ -264,4 +264,20 @@ describe("createDraggableEdgeParams", () => {
 
     expect(options.grabbedPortIdResolver).toBe(grabbedPortIdResolver);
   });
+
+  it("should resolve default released port id resolver", () => {
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
+
+    expect(options.releasedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified released port id resolver", () => {
+    const releasedPortIdResolver: PortIdResolver = () => null;
+    const options = createDraggableEdgeParams(
+      { releasedPortIdResolver },
+      createCanvas().graph,
+    );
+
+    expect(options.releasedPortIdResolver).toBe(releasedPortIdResolver);
+  });
 });

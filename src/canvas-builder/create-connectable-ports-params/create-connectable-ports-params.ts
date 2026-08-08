@@ -43,5 +43,7 @@ export const createConnectablePortsParams = (
     onEdgeCreationPrevented: config.events?.onEdgeCreationPrevented ?? noopFn,
     grabbedPortIdResolver:
       config.grabbedPortIdResolver ?? defaultPortIdResolver,
+    releasedPortIdResolver:
+      config.releasedPortIdResolver ?? defaultPortIdResolver,
   };
 };

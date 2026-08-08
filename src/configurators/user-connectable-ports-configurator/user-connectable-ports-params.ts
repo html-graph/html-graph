@@ -17,11 +17,12 @@ export interface UserConnectablePortsParams {
   readonly connectionAllowedVerifier: ConnectionAllowedVerifier;
   readonly mouseDownEventVerifier: MouseEventVerifier;
   readonly mouseUpEventVerifier: MouseEventVerifier;
+  readonly grabbedPortIdResolver: PortIdResolver;
+  readonly releasedPortIdResolver: PortIdResolver;
   readonly onAfterEdgeCreated: (edgeId: Identifier) => void;
   readonly onEdgeCreationInterrupted: (
     params: EdgeCreationInProgressParams,
   ) => void;
   readonly onEdgeCreationPrevented: (request: AddEdgeRequest) => void;
   readonly draggingPortDirectionResolver: DraggingPortDirectionResolver;
-  readonly grabbedPortIdResolver: PortIdResolver;
 }

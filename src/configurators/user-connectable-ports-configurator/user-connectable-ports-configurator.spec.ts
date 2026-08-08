@@ -82,6 +82,7 @@ const createCanvas = (options?: {
     connectionAllowedVerifier:
       options?.connectionAllowedVerifier ?? ((): boolean => true),
     grabbedPortIdResolver: defaultPortIdResolver,
+    releasedPortIdResolver: defaultPortIdResolver,
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);

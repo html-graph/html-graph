@@ -100,6 +100,7 @@ const createCanvas = (options?: {
     ),
     grabbedPortIdResolver:
       options?.grabbedPortIdResolver ?? defaultPortIdResolver,
+    releasedPortIdResolver: defaultPortIdResolver,
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);

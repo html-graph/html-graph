@@ -51,5 +51,7 @@ export const createDraggableEdgeParams = (
     ),
     grabbedPortIdResolver:
       config.grabbedPortIdResolver ?? defaultPortIdResolver,
+    releasedPortIdResolver:
+      config.releasedPortIdResolver ?? defaultPortIdResolver,
   };
 };
