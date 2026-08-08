@@ -5,6 +5,7 @@ import {
   DraggingPortDirectionResolver,
   EdgeCreationInProgressParams,
   MouseEventVerifier,
+  PortIdResolver,
 } from "../shared";
 import { Identifier } from "@/identifier";
 import { AddEdgeRequest, EdgeShapeFactory } from "@/graph-controller";
@@ -22,4 +23,5 @@ export interface UserConnectablePortsParams {
   ) => void;
   readonly onEdgeCreationPrevented: (request: AddEdgeRequest) => void;
   readonly draggingPortDirectionResolver: DraggingPortDirectionResolver;
+  readonly grabbedPortIdResolver: PortIdResolver;
 }

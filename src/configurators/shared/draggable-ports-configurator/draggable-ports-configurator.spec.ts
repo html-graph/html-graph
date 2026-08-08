@@ -18,6 +18,7 @@ import { ViewportController } from "@/viewport-controller";
 import { PointInsideVerifier } from "../point-inside-verifier";
 import { EventTagger } from "../event-tagger";
 import { dragEventHandledTag } from "../drag-event-handled-tag";
+import { defaultPortIdResolver, PortIdResolver } from "../port-id-resolver";
 
 const createDraggablePortsCanvas = (options?: {
   element?: HTMLElement;
@@ -27,6 +28,7 @@ const createDraggablePortsCanvas = (options?: {
   onPointerUp?: (clientPoint: Point) => void;
   mouseDownEventVerifier?: MouseEventVerifier;
   mouseUpEventVerifier?: MouseEventVerifier;
+  portIdResolver?: PortIdResolver;
 }): Canvas => {
   const graphStore = new GraphStore();
   const element =
@@ -74,6 +76,7 @@ const createDraggablePortsCanvas = (options?: {
         options?.mouseDownEventVerifier ?? ((): boolean => true),
       mouseUpEventVerifier:
         options?.mouseUpEventVerifier ?? ((): boolean => true),
+      grabbedPortIdResolver: options?.portIdResolver ?? defaultPortIdResolver,
     },
   );
 
@@ -105,6 +108,26 @@ describe("DraggablePortsConfigurator", () => {
     );
 
     expect(onPointerDownVerifier).toHaveBeenCalledWith(0, { x: 100, y: 200 });
+  });
+
+  it("should not call onPointerDownVerifier callback when port id not resolved", () => {
+    const onPointerDownVerifier = vi.fn();
+
+    const portIdResolver: PortIdResolver = () => null;
+
+    const canvas = createDraggablePortsCanvas({
+      onPointerDownVerifier,
+      portIdResolver,
+    });
+
+    const portElement = document.createElement("div");
+    createNode(canvas, portElement);
+
+    portElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 200 }),
+    );
+
+    expect(onPointerDownVerifier).not.toHaveBeenCalled();
   });
 
   it("should call onPointerDownVerifier callback on mouse down once when the same element is attached to different ports", () => {

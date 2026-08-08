@@ -3,6 +3,7 @@ import {
   ConnectionPreprocessor,
   DraggingEdgeResolver,
   MouseEventVerifier,
+  PortIdResolver,
 } from "@/configurators";
 import { DraggingPortDirectionConfig, EdgeShapeConfig } from "../shared";
 import { GraphEdge } from "@/graph";
@@ -17,6 +18,7 @@ export interface DraggableEdgesConfig {
   readonly draggingEdgeResolver?: DraggingEdgeResolver;
   readonly draggingEdgeShape?: EdgeShapeConfig;
   readonly dragPortDirection?: DraggingPortDirectionConfig;
+  readonly grabbedPortIdResolver?: PortIdResolver;
   readonly events?: {
     readonly onAfterEdgeReattached?: (edgeId: Identifier) => void;
     // TODO: create type for parameter

@@ -5,7 +5,12 @@ import { Canvas } from "@/canvas";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { CoreHtmlView } from "@/html-view";
-import { ConnectionPreprocessor, DraggingEdgeResolver } from "@/configurators";
+import {
+  ConnectionPreprocessor,
+  defaultPortIdResolver,
+  DraggingEdgeResolver,
+  PortIdResolver,
+} from "@/configurators";
 import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { EdgeShapeFactory, GraphController } from "@/graph-controller";
@@ -242,5 +247,21 @@ describe("createDraggableEdgeParams", () => {
     );
 
     expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
+  });
+
+  it("should resolve default grabbed port id resolver", () => {
+    const options = createDraggableEdgeParams({}, createCanvas().graph);
+
+    expect(options.grabbedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified grabbed port id resolver", () => {
+    const grabbedPortIdResolver: PortIdResolver = () => null;
+    const options = createDraggableEdgeParams(
+      { grabbedPortIdResolver },
+      createCanvas().graph,
+    );
+
+    expect(options.grabbedPortIdResolver).toBe(grabbedPortIdResolver);
   });
 });

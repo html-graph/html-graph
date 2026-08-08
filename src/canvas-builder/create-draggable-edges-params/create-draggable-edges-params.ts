@@ -7,6 +7,7 @@ import {
   resolveDraggingPortDirectionResolver,
   resolveEdgeShapeFactory,
 } from "../shared";
+import { defaultPortIdResolver } from "@/configurators";
 
 export const createDraggableEdgeParams = (
   config: DraggableEdgesConfig,
@@ -48,5 +49,7 @@ export const createDraggableEdgeParams = (
       graph,
       connectionAllowedVerifier,
     ),
+    grabbedPortIdResolver:
+      config.grabbedPortIdResolver ?? defaultPortIdResolver,
   };
 };

@@ -50,6 +50,7 @@ export {
   EventTagger,
   NearestConnectablePortDraggingPortDirectionResolver,
   ConstantDraggingPortDirectionResolver,
+  defaultPortIdResolver,
 } from "./shared";
 
 export type {
@@ -59,4 +60,5 @@ export type {
   DraggingPortDirectionResolver,
   DraggingPortDirectionResolverParams,
   EdgeCreationInProgressParams,
+  PortIdResolver,
 } from "./shared";

@@ -8,6 +8,7 @@ import {
   resolveEdgeShapeFactory,
 } from "../shared";
 import { Graph } from "@/graph";
+import { defaultPortIdResolver } from "@/configurators";
 
 export const createConnectablePortsParams = (
   config: ConnectablePortsConfig,
@@ -40,5 +41,7 @@ export const createConnectablePortsParams = (
     onEdgeCreationInterrupted:
       config.events?.onEdgeCreationInterrupted ?? noopFn,
     onEdgeCreationPrevented: config.events?.onEdgeCreationPrevented ?? noopFn,
+    grabbedPortIdResolver:
+      config.grabbedPortIdResolver ?? defaultPortIdResolver,
   };
 };

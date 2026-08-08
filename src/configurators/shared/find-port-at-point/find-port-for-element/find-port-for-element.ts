@@ -8,7 +8,9 @@ export const findPortForElement = (
   let elementBuf: Element | null = element;
 
   while (elementBuf !== null) {
-    const portId = graph.findPortIdsByElement(elementBuf)[0] ?? null;
+    const portIds = graph.findPortIdsByElement(elementBuf);
+    // TODO: add port id resolver
+    const portId = portIds[0] ?? null;
 
     if (portId !== null) {
       return {

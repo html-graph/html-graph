@@ -10,6 +10,7 @@ import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
 import { noopFn } from "../shared";
 import { createCanvas } from "@/mocks/create-canvas.mock";
+import { defaultPortIdResolver, PortIdResolver } from "@/configurators/shared";
 
 describe("createUserConnectablePortsParams", () => {
   it("should return direct connection type resolver by default", () => {
@@ -298,5 +299,26 @@ describe("createUserConnectablePortsParams", () => {
     );
 
     expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
+  });
+
+  it("should resolve default grabbed port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, canvas.graph);
+
+    expect(options.grabbedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified grabbed port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const grabbedPortIdResolver: PortIdResolver = () => null;
+    const options = createConnectablePortsParams(
+      { grabbedPortIdResolver },
+      factory,
+      canvas.graph,
+    );
+
+    expect(options.grabbedPortIdResolver).toBe(grabbedPortIdResolver);
   });
 });

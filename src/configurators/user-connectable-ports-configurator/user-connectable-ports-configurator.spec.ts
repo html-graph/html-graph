@@ -15,6 +15,7 @@ import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   ConstantDraggingPortDirectionResolver,
+  defaultPortIdResolver,
   EventTagger,
   PointInsideVerifier,
 } from "../shared";
@@ -80,6 +81,7 @@ const createCanvas = (options?: {
     draggingPortDirectionResolver: new ConstantDraggingPortDirectionResolver(0),
     connectionAllowedVerifier:
       options?.connectionAllowedVerifier ?? ((): boolean => true),
+    grabbedPortIdResolver: defaultPortIdResolver,
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);

@@ -69,6 +69,7 @@ export class UserConnectablePortsConfigurator {
 
         this.params.onEdgeCreationInterrupted(params);
       },
+      grabbedPortIdResolver: this.params.grabbedPortIdResolver,
     };
 
     DraggablePortsConfigurator.configure(

@@ -28,3 +28,5 @@ export {
 } from "./dragging-port-direction-resolver";
 export type { EdgeCreationInProgressParams } from "./edge-creation-in-progress";
 export { resolveCreateEdgeRequest } from "./resolve-create-edge-request";
+export type { PortIdResolver } from "./port-id-resolver";
+export { defaultPortIdResolver } from "./port-id-resolver";

@@ -8,6 +8,7 @@ import {
 import { DraggingPortDirectionConfig, EdgeShapeConfig } from "../shared";
 import { Identifier } from "@/identifier";
 import { AddEdgeRequest } from "@/graph-controller";
+import { PortIdResolver } from "@/configurators/shared";
 
 export interface ConnectablePortsConfig {
   readonly edgeShape?: EdgeShapeConfig;
@@ -17,6 +18,7 @@ export interface ConnectablePortsConfig {
   readonly mouseDownEventVerifier?: MouseEventVerifier;
   readonly mouseUpEventVerifier?: MouseEventVerifier;
   readonly dragPortDirection?: DraggingPortDirectionConfig;
+  readonly grabbedPortIdResolver?: PortIdResolver;
   readonly events?: {
     readonly onAfterEdgeCreated?: (edgeId: Identifier) => void;
     readonly onEdgeCreationInterrupted?: (

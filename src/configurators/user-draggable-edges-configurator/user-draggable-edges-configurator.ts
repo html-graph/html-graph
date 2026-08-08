@@ -72,6 +72,7 @@ export class UserDraggableEdgesConfigurator {
           priority: edge.priority,
         });
       },
+      grabbedPortIdResolver: this.params.grabbedPortIdResolver,
     };
 
     DraggablePortsConfigurator.configure(
