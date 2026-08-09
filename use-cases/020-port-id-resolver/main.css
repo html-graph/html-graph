@@ -1,0 +1,65 @@
+.node {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  background: #daedbd;
+  border: 1px solid #9e9e9e;
+  box-shadow: 0 0 5px #9e9e9e;
+  border-radius: 50%;
+  user-select: none;
+}
+
+.node-ports-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.node-port {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.node-port-grab-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  top: -1rem;
+  left: -1rem;
+}
+
+.node-port-grab-area::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #777777;
+  border-radius: 3px;
+}
+
+.node-port-top {
+  left: 50%;
+  top: 0;
+}
+
+.node-port-bottom {
+  left: 50%;
+  bottom: 0;
+}
+
+.node-port-left {
+  left: 0;
+  top: 50%;
+}
+
+.node-port-right {
+  right: 0;
+  top: 50%;
+}
