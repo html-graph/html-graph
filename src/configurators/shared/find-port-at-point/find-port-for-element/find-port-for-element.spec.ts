@@ -10,6 +10,7 @@ import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
 import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
 import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
+import { defaultPortIdResolver } from "../../port-id-resolver";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -50,6 +51,7 @@ describe("findPortForElement", () => {
     const result = findPortForElement(
       canvas.graph,
       document.createElement("div"),
+      defaultPortIdResolver,
     );
 
     expect(result).toEqual({ status: "notFound" });
@@ -68,7 +70,11 @@ describe("findPortForElement", () => {
       ports: [{ id: "node-1-1", element: portElement }],
     });
 
-    const result = findPortForElement(canvas.graph, portElement);
+    const result = findPortForElement(
+      canvas.graph,
+      portElement,
+      defaultPortIdResolver,
+    );
 
     expect(result).toEqual({ status: "portFound", portId: "node-1-1" });
   });
@@ -88,7 +94,11 @@ describe("findPortForElement", () => {
       ports: [{ id: "node-1-1", element: portElement }],
     });
 
-    const result = findPortForElement(canvas.graph, insideElement);
+    const result = findPortForElement(
+      canvas.graph,
+      insideElement,
+      defaultPortIdResolver,
+    );
 
     expect(result).toEqual({ status: "portFound", portId: "node-1-1" });
   });
@@ -107,7 +117,11 @@ describe("findPortForElement", () => {
       y: 0,
     });
 
-    const result = findPortForElement(canvas.graph, childElement);
+    const result = findPortForElement(
+      canvas.graph,
+      childElement,
+      defaultPortIdResolver,
+    );
 
     expect(result).toEqual({ status: "nodeEncountered" });
   });

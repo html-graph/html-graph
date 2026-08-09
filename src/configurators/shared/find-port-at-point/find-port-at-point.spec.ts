@@ -11,6 +11,7 @@ import { Graph } from "@/graph";
 import { Viewport } from "@/viewport";
 import { GraphController } from "@/graph-controller";
 import { ViewportController } from "@/viewport-controller";
+import { defaultPortIdResolver } from "../port-id-resolver";
 
 const createCanvas = (options?: { element?: HTMLElement }): Canvas => {
   const graphStore = new GraphStore();
@@ -62,7 +63,11 @@ describe("findPortAtPoint", () => {
       ],
     });
 
-    const portId = findPortAtPoint(canvas.graph, { x: 0, y: 0 });
+    const portId = findPortAtPoint(
+      canvas.graph,
+      { x: 0, y: 0 },
+      defaultPortIdResolver,
+    );
 
     expect(portId).toBe(null);
   });
@@ -90,7 +95,11 @@ describe("findPortAtPoint", () => {
       ],
     });
 
-    const portId = findPortAtPoint(canvas.graph, { x: 1, y: 1 });
+    const portId = findPortAtPoint(
+      canvas.graph,
+      { x: 1, y: 1 },
+      defaultPortIdResolver,
+    );
 
     expect(portId).toBe("node-1-1");
   });
@@ -120,7 +129,11 @@ describe("findPortAtPoint", () => {
       ],
     });
 
-    const portId = findPortAtPoint(canvas.graph, { x: 1, y: 1 });
+    const portId = findPortAtPoint(
+      canvas.graph,
+      { x: 1, y: 1 },
+      defaultPortIdResolver,
+    );
 
     expect(portId).toBe("node-1-1");
   });
@@ -166,7 +179,11 @@ describe("findPortAtPoint", () => {
       priority: 1,
     });
 
-    const portId = findPortAtPoint(canvas.graph, { x: 1, y: 1 });
+    const portId = findPortAtPoint(
+      canvas.graph,
+      { x: 1, y: 1 },
+      defaultPortIdResolver,
+    );
 
     expect(portId).toBe(null);
   });

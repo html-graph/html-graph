@@ -72,6 +72,7 @@ export class UserDraggableEdgesConfigurator {
           priority: edge.priority,
         });
       },
+      grabbedPortIdResolver: this.params.grabbedPortIdResolver,
     };
 
     DraggablePortsConfigurator.configure(
@@ -220,7 +221,12 @@ export class UserDraggableEdgesConfigurator {
   }
 
   private tryCreateConnection(cursor: Point): void {
-    const draggingPortId = findPortAtPoint(this.canvas.graph, cursor);
+    const draggingPortId = findPortAtPoint(
+      this.canvas.graph,
+      cursor,
+      this.params.releasedPortIdResolver,
+    );
+
     this.overlayCanvas.removeEdge(OverlayId.EdgeId);
 
     if (draggingPortId === null) {

@@ -1,6 +1,7 @@
 import { Point } from "@/point";
 import { MouseEventVerifier } from "../mouse-event-verifier";
 import { Identifier } from "@/identifier";
+import { PortIdResolver } from "../port-id-resolver";
 
 export interface DraggablePortsParams {
   readonly mouseDownEventVerifier: MouseEventVerifier;
@@ -12,4 +13,5 @@ export interface DraggablePortsParams {
   readonly onPointerMove: (clientPoint: Point) => void;
   readonly onPointerOutside: () => void;
   readonly onPointerUp: (clientPoint: Point) => void;
+  readonly grabbedPortIdResolver: PortIdResolver;
 }

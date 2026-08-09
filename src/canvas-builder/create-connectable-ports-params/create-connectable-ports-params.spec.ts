@@ -5,6 +5,8 @@ import {
   ConnectionPreprocessor,
   ConnectionTypeResolver,
   DraggingPortDirectionResolverParams,
+  defaultPortIdResolver,
+  PortIdResolver,
 } from "@/configurators";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
@@ -298,5 +300,47 @@ describe("createUserConnectablePortsParams", () => {
     );
 
     expect(options.connectionAllowedVerifier).toBe(connectionAllowedVerifier);
+  });
+
+  it("should resolve default grabbed port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, canvas.graph);
+
+    expect(options.grabbedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified grabbed port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const grabbedPortIdResolver: PortIdResolver = () => null;
+    const options = createConnectablePortsParams(
+      { grabbedPortIdResolver },
+      factory,
+      canvas.graph,
+    );
+
+    expect(options.grabbedPortIdResolver).toBe(grabbedPortIdResolver);
+  });
+
+  it("should resolve default released port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const options = createConnectablePortsParams({}, factory, canvas.graph);
+
+    expect(options.releasedPortIdResolver).toBe(defaultPortIdResolver);
+  });
+
+  it("should resolve specified released port id resolver", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const releasedPortIdResolver: PortIdResolver = () => null;
+    const options = createConnectablePortsParams(
+      { releasedPortIdResolver },
+      factory,
+      canvas.graph,
+    );
+
+    expect(options.releasedPortIdResolver).toBe(releasedPortIdResolver);
   });
 });

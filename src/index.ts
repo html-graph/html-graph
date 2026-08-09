@@ -53,6 +53,7 @@ export type {
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
   EdgeCreationInProgressParams,
+  PortIdResolver,
 } from "./configurators";
 
 export type { TransformState } from "./viewport-store";

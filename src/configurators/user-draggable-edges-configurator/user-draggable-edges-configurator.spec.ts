@@ -14,8 +14,10 @@ import {
   ConnectionAllowedVerifier,
   ConnectionPreprocessor,
   ConstantDraggingPortDirectionResolver,
+  defaultPortIdResolver,
   EventTagger,
   PointInsideVerifier,
+  PortIdResolver,
 } from "../shared";
 import { Identifier } from "@/identifier";
 import { Graph, GraphEdge } from "@/graph";
@@ -37,6 +39,7 @@ const createCanvas = (options?: {
   onEdgeReattachInterrupted?: (edge: GraphEdge) => void;
   onEdgeReattachPrevented?: (edge: GraphEdge) => void;
   draggingEdgeShapeFactory?: EdgeShapeFactory;
+  grabbedPortIdResolver?: PortIdResolver;
 }): Canvas => {
   const graphStore = new GraphStore();
   const mainElement =
@@ -95,6 +98,9 @@ const createCanvas = (options?: {
     draggingPortDirectionResolver: new ConstantDraggingPortDirectionResolver(
       undefined,
     ),
+    grabbedPortIdResolver:
+      options?.grabbedPortIdResolver ?? defaultPortIdResolver,
+    releasedPortIdResolver: defaultPortIdResolver,
   };
 
   const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
@@ -181,6 +187,21 @@ describe("UserDraggableEdgesConfigurator", () => {
     createGraph(canvas, { portElement1 });
 
     portElement1.dispatchEvent(new MouseEvent("mousedown", { button: 1 }));
+
+    expect(overlayElement.children[0].children[0].children.length).toBe(0);
+  });
+
+  it("should not create overlay graph when port id is not resolved", () => {
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({
+      overlayElement,
+      grabbedPortIdResolver: () => null,
+    });
+
+    const portElement1 = document.createElement("div");
+    createGraph(canvas, { portElement1 });
+
+    portElement1.dispatchEvent(new MouseEvent("mousedown"));
 
     expect(overlayElement.children[0].children[0].children.length).toBe(0);
   });

@@ -13,7 +13,7 @@ export class AnimatedLayoutConfigurator {
   private constructor(
     canvas: Canvas,
     params: AnimatedLayoutParams,
-    private readonly win: Window,
+    win: Window,
   ) {
     this.applier = new AnimatedLayoutApplier(canvas, params.algorithm, {
       staticNodeResolver: params.staticNodeResolver,
@@ -21,7 +21,7 @@ export class AnimatedLayoutConfigurator {
       onAfterApplied: params.onAfterApplied,
     });
 
-    new AnimationSeries(this.win, this.step);
+    new AnimationSeries(win, this.step);
   }
 
   public static configure(
