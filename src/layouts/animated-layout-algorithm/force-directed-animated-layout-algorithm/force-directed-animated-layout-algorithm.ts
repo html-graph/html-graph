@@ -21,7 +21,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
   private readonly nodeForcesApplicationStrategy: NodeForcesApplicationStrategy;
 
-  private readonly convergenceVelocity: number;
+  private readonly stopVelocity: number;
 
   private readonly maxTimeDeltaSec: number;
 
@@ -34,7 +34,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
   private readonly fillerLayoutAlgorithm: LayoutAlgorithm;
 
   public constructor(params: ForceDirectedAnimatedLayoutAlgorithmParams) {
-    this.convergenceVelocity = params.stopVelocity;
+    this.stopVelocity = params.stopVelocity;
     this.maxTimeDeltaSec = params.maxTimeDeltaSec;
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
@@ -83,7 +83,7 @@ export class ForceDirectedAnimatedLayoutAlgorithm
 
     const maxVelocity = iteration.apply();
 
-    if (maxVelocity < this.convergenceVelocity) {
+    if (maxVelocity < this.stopVelocity) {
       const hasUnsetCoords = graph.getAllNodeIds().some((nodeId) => {
         const node = graph.getNode(nodeId);
 

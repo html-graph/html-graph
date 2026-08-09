@@ -28,7 +28,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
   private readonly edgeStiffness: number;
 
-  private readonly convergenceVelocity: number;
+  private readonly stopVelocity: number;
 
   public constructor(params: ForceDirectedLayoutAlgorithmParams) {
     this.maxIterations = params.maxIterations;
@@ -36,7 +36,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
     this.nodeMass = params.nodeMass;
     this.edgeEquilibriumLength = params.edgeEquilibriumLength;
     this.edgeStiffness = params.edgeStiffness;
-    this.convergenceVelocity = params.stopVelocity;
+    this.stopVelocity = params.stopVelocity;
 
     this.distanceVectorGenerator = new DistanceVectorGenerator(params.rand);
 
@@ -82,7 +82,7 @@ export class ForceDirectedLayoutAlgorithm implements LayoutAlgorithm {
 
       const maxVelocity = iteration.apply();
 
-      if (maxVelocity < this.convergenceVelocity) {
+      if (maxVelocity < this.stopVelocity) {
         break;
       }
     }
