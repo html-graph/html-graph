@@ -187,12 +187,13 @@ export class UserConnectablePortsConfigurator {
     );
 
     const connectionAllowed = this.params.connectionAllowedVerifier(request);
-    const processedRequest = this.params.connectionPreprocessor({
-      from: request.from,
-      to: request.to,
-    });
 
-    if (connectionAllowed && processedRequest !== null) {
+    if (connectionAllowed) {
+      const processedRequest = this.params.connectionPreprocessor({
+        from: request.from,
+        to: request.to,
+      });
+
       this.canvas.graph.onAfterEdgeAdded.subscribe(this.onEdgeCreated);
       this.canvas.addEdge(processedRequest);
       this.canvas.graph.onAfterEdgeAdded.unsubscribe(this.onEdgeCreated);

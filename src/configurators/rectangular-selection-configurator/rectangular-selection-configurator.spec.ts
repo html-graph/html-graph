@@ -52,14 +52,53 @@ const createCanvas = (options?: {
   return canvas;
 };
 
+const getHostElement = (overlayElement: HTMLElement): HTMLElement => {
+  return overlayElement.children[0] as HTMLElement;
+};
+
+const getContainerElement = (overlayElement: HTMLElement): HTMLElement => {
+  return getHostElement(overlayElement).children[0] as HTMLElement;
+};
+
 describe("RectangularSelectionConfigurator", () => {
-  it("should create selection rectangle on mouse down", () => {
+  it("should create overlay host element", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    mainElement.dispatchEvent(new MouseEvent("mousedown"));
-
     expect(overlayElement.children.length).toBe(1);
+  });
+
+  it("should create container element inside overlay host element", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    const hostElement = getHostElement(overlayElement);
+
+    expect(hostElement.children.length).toBe(1);
+  });
+
+  it("should initialize container transformation", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    const containerElement = getContainerElement(overlayElement);
+
+    expect(containerElement.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
+  });
+
+  it("should update container transformation on viewport transformation", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ mainElement, overlayElement });
+    canvas.patchContentMatrix({ scale: 2, x: 100, y: 100 });
+
+    const containerElement = getContainerElement(overlayElement);
+
+    expect(containerElement.style.transform).toBe(
+      "matrix(2, 0, 0, 2, 100, 100)",
+    );
   });
 });
