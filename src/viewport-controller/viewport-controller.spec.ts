@@ -478,7 +478,7 @@ describe("ViewportController", () => {
       element,
     });
 
-    viewportController.center({ x: 200, y: 200 });
+    viewportController.center({ x: 200, y: 200 }, undefined);
 
     expect(viewportStore.getContentMatrix()).toEqual({
       scale: 1,
