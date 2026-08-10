@@ -8,9 +8,10 @@ import { edgeConstants } from "../../edge-constants";
 import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { EdgeElement } from "@/element";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
-  public readonly element: SVGSVGElement;
+  public readonly element: EdgeElement;
 
   public readonly group: SVGGElement;
 

@@ -8,13 +8,14 @@ import { createContainer } from "./create-container";
 import { prepareNodeElement } from "./prepare-node-element";
 import { Identifier } from "@/identifier";
 import { restoreNodeElement } from "./restore-node-element";
+import { EdgeElement } from "@/element";
 
 export class CoreHtmlView implements HtmlView {
   private readonly host = createHost();
 
   private readonly container = createContainer();
 
-  private readonly edgeIdToElementMap = new Map<Identifier, SVGSVGElement>();
+  private readonly edgeIdToElementMap = new Map<Identifier, EdgeElement>();
 
   private readonly attachedNodeIds = new Set<Identifier>();
 

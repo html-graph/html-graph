@@ -25,7 +25,7 @@ export class ViewportController {
     this.viewportStore.patchContentMatrix(request);
   }
 
-  public center(target: Point, config?: CenterConfig | undefined): void {
+  public center(target: Point, config: CenterConfig | undefined): void {
     const { width, height } = this.viewportStore.getDimensions();
     const viewportCenter: Point = { x: width / 2, y: height / 2 };
 

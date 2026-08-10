@@ -115,4 +115,4 @@ export type {
 
 export { EventSubject } from "./event-subject";
 
-export type { NodeElement, PortElement } from "./element";
+export type { NodeElement, PortElement, EdgeElement } from "./element";

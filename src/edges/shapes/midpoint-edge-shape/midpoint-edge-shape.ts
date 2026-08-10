@@ -2,6 +2,7 @@ import { EventHandler } from "@/event-subject";
 import { EdgeRenderParams } from "../../edge-render-params";
 import { StructuredEdgeRenderModel } from "../../structure-render-model";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
+import { EdgeElement } from "@/element";
 
 export class MidpointEdgeShape implements StructuredEdgeShape {
   public readonly group: SVGGElement;
@@ -14,7 +15,7 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  public readonly element: SVGSVGElement;
+  public readonly element: EdgeElement;
 
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
