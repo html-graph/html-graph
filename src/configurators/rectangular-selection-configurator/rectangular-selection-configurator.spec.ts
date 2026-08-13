@@ -52,12 +52,12 @@ const createCanvas = (options?: {
   return canvas;
 };
 
-const getHostElement = (overlayElement: HTMLElement): HTMLElement => {
+const selectHostElement = (overlayElement: HTMLElement): HTMLElement => {
   return overlayElement.children[0] as HTMLElement;
 };
 
-const getContainerElement = (overlayElement: HTMLElement): HTMLElement => {
-  return getHostElement(overlayElement).children[0] as HTMLElement;
+const selectContainerElement = (overlayElement: HTMLElement): HTMLElement => {
+  return selectHostElement(overlayElement).children[0] as HTMLElement;
 };
 
 describe("RectangularSelectionConfigurator", () => {
@@ -74,7 +74,7 @@ describe("RectangularSelectionConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    const hostElement = getHostElement(overlayElement);
+    const hostElement = selectHostElement(overlayElement);
 
     expect(hostElement.children.length).toBe(1);
   });
@@ -84,7 +84,7 @@ describe("RectangularSelectionConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    const containerElement = getContainerElement(overlayElement);
+    const containerElement = selectContainerElement(overlayElement);
 
     expect(containerElement.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
   });
@@ -95,7 +95,7 @@ describe("RectangularSelectionConfigurator", () => {
     const canvas = createCanvas({ mainElement, overlayElement });
     canvas.patchContentMatrix({ scale: 2, x: 100, y: 100 });
 
-    const containerElement = getContainerElement(overlayElement);
+    const containerElement = selectContainerElement(overlayElement);
 
     expect(containerElement.style.transform).toBe(
       "matrix(2, 0, 0, 2, 100, 100)",
