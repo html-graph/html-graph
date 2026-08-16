@@ -75,7 +75,9 @@ describe("RectangularSelectionConfigurator", () => {
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    mainElement.dispatchEvent(new MouseEvent("mousedown"));
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
 
     expect(overlayElement.children[0].children.length).toBe(1);
   });
@@ -227,8 +229,34 @@ describe("RectangularSelectionConfigurator", () => {
 
     const rectangle = selectRectangle(overlayElement);
 
-    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+    const pos = {
+      x: rectangle.style.left,
+      y: rectangle.style.top,
+      width: rectangle.style.width,
+      height: rectangle.style.height,
+    };
 
-    expect(pos).toEqual({ x: "100px", y: "100px" });
+    expect(pos).toEqual({
+      x: "100px",
+      y: "100px",
+      width: "800px",
+      height: "800px",
+    });
+  });
+
+  it("should remove selection rectangle on mouse up", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(overlayElement.children[0].children.length).toBe(0);
   });
 });

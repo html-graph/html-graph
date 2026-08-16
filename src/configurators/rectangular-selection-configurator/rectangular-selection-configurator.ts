@@ -9,9 +9,9 @@ export class RectangularSelectionConfigurator {
   private readonly selectionRectangleWrapper =
     createSelectionRectangleWrapper();
 
-  private initialPoint: Point | null = null;
+  private initialContentPoint: Point | null = null;
 
-  private draggingPoint: Point | null = null;
+  private draggingViewportPoint: Point | null = null;
 
   private readonly onAfterViewportUpdated = (): void => {
     this.updateSelectionRectangle();
@@ -27,14 +27,16 @@ export class RectangularSelectionConfigurator {
       y: mouseEvent.clientY - rect.y,
     };
 
-    this.initialPoint = cursorViewportCoords;
-    this.draggingPoint = cursorViewportCoords;
+    this.initialContentPoint =
+      this.canvas.viewport.createContentCoords(cursorViewportCoords);
+    this.draggingViewportPoint = cursorViewportCoords;
 
     this.updateSelectionRectangle();
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
 
-    this.host.append(this.selectionRectangleWrapper);
+    this.host.appendChild(this.selectionRectangleWrapper);
     this.win.addEventListener("mousemove", this.onWindowMouseMove);
+    this.win.addEventListener("mouseup", this.onWindowMouseUp);
   };
 
   private readonly onWindowMouseMove: EventListener = (event: Event) => {
@@ -46,8 +48,12 @@ export class RectangularSelectionConfigurator {
       y: mouseEvent.clientY - rect.y,
     };
 
-    this.draggingPoint = cursorViewportCoords;
+    this.draggingViewportPoint = cursorViewportCoords;
     this.updateSelectionRectangle();
+  };
+
+  private readonly onWindowMouseUp: EventListener = () => {
+    this.host.removeChild(this.selectionRectangleWrapper);
   };
 
   private constructor(
@@ -76,15 +82,22 @@ export class RectangularSelectionConfigurator {
   }
 
   private updateSelectionRectangle(): void {
-    const initialPoint = this.initialPoint!;
-    const draggingPoint = this.draggingPoint!;
+    const initialViewportPoint = this.canvas.viewport.createViewportCoords(
+      this.initialContentPoint!,
+    );
+    const draggingViewportPoint = this.draggingViewportPoint!;
     const m = this.canvas.viewport.getContentMatrix();
+
+    const originX = Math.min(initialViewportPoint.x, draggingViewportPoint.x);
+    const originY = Math.min(initialViewportPoint.y, draggingViewportPoint.y);
+    const width = Math.abs(draggingViewportPoint.x - initialViewportPoint.x);
+    const height = Math.abs(draggingViewportPoint.y - initialViewportPoint.y);
 
     const { style } = this.selectionRectangleWrapper;
 
-    style.left = `${m.x + initialPoint.x}px`;
-    style.top = `${m.y + initialPoint.y}px`;
-    style.width = `${draggingPoint.x - initialPoint.x}px`;
-    style.height = `${draggingPoint.y - initialPoint.y}px`;
+    style.left = `${originX + m.x}px`;
+    style.top = `${originY + m.y}px`;
+    style.width = `${width}px`;
+    style.height = `${height}px`;
   }
 }
