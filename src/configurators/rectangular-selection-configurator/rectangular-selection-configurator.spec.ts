@@ -47,17 +47,18 @@ const createCanvas = (options?: {
   const overlayElement =
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
 
-  RectangularSelectionConfigurator.configure(canvas, overlayElement);
+  RectangularSelectionConfigurator.configure(
+    canvas,
+    mainElement,
+    overlayElement,
+    window,
+  );
 
   return canvas;
 };
 
-const selectHostElement = (overlayElement: HTMLElement): HTMLElement => {
-  return overlayElement.children[0] as HTMLElement;
-};
-
-const selectContainerElement = (overlayElement: HTMLElement): HTMLElement => {
-  return selectHostElement(overlayElement).children[0] as HTMLElement;
+const selectRectangle = (overlayElement: HTMLElement): HTMLElement => {
+  return overlayElement.children[0].children[0] as HTMLElement;
 };
 
 describe("RectangularSelectionConfigurator", () => {
@@ -69,36 +70,165 @@ describe("RectangularSelectionConfigurator", () => {
     expect(overlayElement.children.length).toBe(1);
   });
 
-  it("should create container element inside overlay host element", () => {
+  it("should create selection rectangle element on mouse down", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    const hostElement = selectHostElement(overlayElement);
+    mainElement.dispatchEvent(new MouseEvent("mousedown"));
 
-    expect(hostElement.children.length).toBe(1);
+    expect(overlayElement.children[0].children.length).toBe(1);
   });
 
-  it("should initialize container transformation", () => {
+  it("should create selection rectangle with abolute positioning", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
     createCanvas({ mainElement, overlayElement });
 
-    const containerElement = selectContainerElement(overlayElement);
-
-    expect(containerElement.style.transform).toBe("matrix(1, 0, 0, 1, 0, 0)");
-  });
-
-  it("should update container transformation on viewport transformation", () => {
-    const mainElement = createElement({ width: 1000, height: 1000 });
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-    const canvas = createCanvas({ mainElement, overlayElement });
-    canvas.patchContentMatrix({ scale: 2, x: 100, y: 100 });
-
-    const containerElement = selectContainerElement(overlayElement);
-
-    expect(containerElement.style.transform).toBe(
-      "matrix(2, 0, 0, 2, 100, 100)",
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
     );
+
+    const rectangle = selectRectangle(overlayElement);
+
+    expect(rectangle.style.position).toBe("absolute");
+  });
+
+  it("should create selection rectangle positioned at cursor", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "100px", y: "100px" });
+  });
+
+  it("should account for viewport coordinates when positioning rectangle", () => {
+    const mainElement = createElement({
+      x: 50,
+      y: 50,
+      width: 1000,
+      height: 1000,
+    });
+
+    const overlayElement = createElement({
+      x: 50,
+      y: 50,
+      width: 1000,
+      height: 1000,
+    });
+
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "50px", y: "50px" });
+  });
+
+  it("should account for viewport transformation when positioning rectangle", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+
+    const canvas = createCanvas({ mainElement, overlayElement });
+
+    canvas.patchContentMatrix({ x: 200, y: 300 });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "300px", y: "400px" });
+  });
+
+  it("should update rectangle positioning when viewport is updated", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+
+    const canvas = createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    canvas.patchContentMatrix({ x: 200, y: 300 });
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "300px", y: "400px" });
+  });
+
+  it("should create selection rectangle with zero width and height", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const size = {
+      width: rectangle.style.width,
+      height: rectangle.style.height,
+    };
+
+    expect(size).toEqual({ width: "0px", height: "0px" });
+  });
+
+  it("should adjust rectangle width and height on mouse move", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 900, clientY: 900 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const size = {
+      width: rectangle.style.width,
+      height: rectangle.style.height,
+    };
+
+    expect(size).toEqual({ width: "800px", height: "800px" });
+  });
+
+  it("should flip rectangle in opposite direction", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "100px", y: "100px" });
   });
 });
