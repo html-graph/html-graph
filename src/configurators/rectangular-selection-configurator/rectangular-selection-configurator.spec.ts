@@ -229,14 +229,14 @@ describe("RectangularSelectionConfigurator", () => {
 
     const rectangle = selectRectangle(overlayElement);
 
-    const pos = {
+    const box = {
       x: rectangle.style.left,
       y: rectangle.style.top,
       width: rectangle.style.width,
       height: rectangle.style.height,
     };
 
-    expect(pos).toEqual({
+    expect(box).toEqual({
       x: "100px",
       y: "100px",
       width: "800px",
