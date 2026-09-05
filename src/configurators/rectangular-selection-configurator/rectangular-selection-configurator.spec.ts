@@ -19,6 +19,7 @@ const createCanvas = (options?: {
   onSelectionChange?: (rect: DOMRect) => void;
   onSelectionFinished?: (rect: DOMRect) => void;
   onSelectionInterrupted?: (rect: DOMRect) => void;
+  onSelectionStarted?: () => void;
 }): Canvas => {
   const graphStore = new GraphStore();
   const mainElement =
@@ -60,10 +61,11 @@ const createCanvas = (options?: {
     pointInsideVerifier,
     window,
     {
-      onSelectionFinished: options?.onSelectionFinished ?? ((): void => {}),
+      onSelectionStarted: options?.onSelectionStarted ?? ((): void => {}),
       onSelectionChange: options?.onSelectionChange ?? ((): void => {}),
       onSelectionInterrupted:
         options?.onSelectionInterrupted ?? ((): void => {}),
+      onSelectionFinished: options?.onSelectionFinished ?? ((): void => {}),
     },
   );
 
@@ -109,6 +111,19 @@ describe("RectangularSelectionConfigurator", () => {
     );
 
     expect(overlayElement.children[0].children.length).toBe(1);
+  });
+
+  it("should call selection started callback on mouse down", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionStarted });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onSelectionStarted).toHaveBeenCalled();
   });
 
   it("should create selection rectangle with abolute positioning", () => {
@@ -451,5 +466,24 @@ describe("RectangularSelectionConfigurator", () => {
     );
 
     expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("should not listen to canvas mouse down when canvas is destroyed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    const canvas = createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionStarted,
+    });
+
+    canvas.destroy();
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onSelectionStarted).not.toHaveBeenCalled();
   });
 });

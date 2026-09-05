@@ -20,6 +20,7 @@ export class RectangularSelectionConfigurator {
   };
 
   private readonly onCanvasMouseDown: EventListener = (event: Event) => {
+    this.params.onSelectionStarted();
     const mouseEvent = event as MouseEvent;
 
     const rect = this.mainElement.getBoundingClientRect();
@@ -85,6 +86,7 @@ export class RectangularSelectionConfigurator {
     this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown);
 
     this.canvas.onBeforeDestroy.subscribe(() => {
+      this.mainElement.removeEventListener("mousedown", this.onCanvasMouseDown);
       this.removeMouseListeners();
     });
   }
