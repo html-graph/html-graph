@@ -11,7 +11,7 @@ import { ViewportStore } from "@/viewport-store";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RectangularSelectionConfigurator } from "./rectangular-selection-configurator";
 import { createElement } from "@/mocks/create-element.mock";
-import { PointInsideVerifier } from "../shared";
+import { MouseEventVerifier, PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -20,6 +20,9 @@ const createCanvas = (options?: {
   onSelectionFinished?: (rect: DOMRect) => void;
   onSelectionInterrupted?: (rect: DOMRect) => void;
   onSelectionStarted?: () => void;
+  rectangleElement?: Element;
+  mouseDownEventVerifier?: MouseEventVerifier;
+  mouseUpEventVerifier?: MouseEventVerifier;
 }): Canvas => {
   const graphStore = new GraphStore();
   const mainElement =
@@ -61,6 +64,12 @@ const createCanvas = (options?: {
     pointInsideVerifier,
     window,
     {
+      rectangleElement:
+        options?.rectangleElement ?? document.createElement("div"),
+      mouseDownEventVerifier:
+        options?.mouseDownEventVerifier ?? ((): boolean => true),
+      mouseUpEventVerifier:
+        options?.mouseUpEventVerifier ?? ((): boolean => true),
       onSelectionStarted: options?.onSelectionStarted ?? ((): void => {}),
       onSelectionChange: options?.onSelectionChange ?? ((): void => {}),
       onSelectionInterrupted:
@@ -113,6 +122,21 @@ describe("RectangularSelectionConfigurator", () => {
     expect(overlayElement.children[0].children.length).toBe(1);
   });
 
+  it("should attach rectangle element to rectangle wrapper", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const rectangleElement = document.createElement("div");
+    createCanvas({ mainElement, overlayElement, rectangleElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+
+    expect(rectangle.children[0]).toBe(rectangleElement);
+  });
+
   it("should call selection started callback on mouse down", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
@@ -124,6 +148,25 @@ describe("RectangularSelectionConfigurator", () => {
     );
 
     expect(onSelectionStarted).toHaveBeenCalled();
+  });
+
+  it("should not call selection started callback when mouse down event verifier not passed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    const mouseDownEventVerifier = (): boolean => false;
+    createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionStarted,
+      mouseDownEventVerifier,
+    });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onSelectionStarted).not.toHaveBeenCalled();
   });
 
   it("should create selection rectangle with abolute positioning", () => {
@@ -320,6 +363,29 @@ describe("RectangularSelectionConfigurator", () => {
     );
 
     expect(onSelectionFinished).toHaveBeenCalled();
+  });
+
+  it("should not call specified callback when mouse up verifier not passed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionFinished = vi.fn();
+    const mouseUpEventVerifier = (): boolean => false;
+    createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionFinished,
+      mouseUpEventVerifier,
+    });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onSelectionFinished).not.toHaveBeenCalled();
   });
 
   it("should not call specified callback after selection is finished", () => {

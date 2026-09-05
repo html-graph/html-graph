@@ -20,8 +20,13 @@ export class RectangularSelectionConfigurator {
   };
 
   private readonly onCanvasMouseDown: EventListener = (event: Event) => {
-    this.params.onSelectionStarted();
     const mouseEvent = event as MouseEvent;
+
+    if (!this.params.mouseDownEventVerifier(mouseEvent)) {
+      return;
+    }
+
+    this.params.onSelectionStarted();
 
     const rect = this.mainElement.getBoundingClientRect();
 
@@ -69,7 +74,13 @@ export class RectangularSelectionConfigurator {
     this.params.onSelectionChange(selectionRect);
   };
 
-  private readonly onWindowMouseUp: EventListener = () => {
+  private readonly onWindowMouseUp: EventListener = (event) => {
+    const mouseEvent = event as MouseEvent;
+
+    if (!this.params.mouseUpEventVerifier(mouseEvent)) {
+      return;
+    }
+
     this.removeMouseListeners();
     this.finishSelection();
   };
@@ -83,6 +94,7 @@ export class RectangularSelectionConfigurator {
     private readonly params: RectangularSelectionParams,
   ) {
     this.overlayLayer.appendChild(this.host);
+    this.selectionRectangleWrapper.appendChild(this.params.rectangleElement);
 
     this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown);
 

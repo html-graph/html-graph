@@ -3,15 +3,15 @@ import { createLayer } from "./create-layer";
 import { createOverlayLayer } from "./create-overlay-layer";
 
 export class Layers {
-  public readonly background = createLayer();
+  public readonly background = createLayer(0);
 
-  public readonly main = createLayer();
+  public readonly main = createLayer(1);
 
-  public readonly overlayConnectablePorts = createOverlayLayer();
+  public readonly overlayConnectablePorts = createOverlayLayer(1);
 
-  public readonly overlayDraggableEdges = createOverlayLayer();
+  public readonly overlayDraggableEdges = createOverlayLayer(1);
 
-  public readonly overlayRectangularSelection = createOverlayLayer();
+  public readonly overlayRectangularSelection = createOverlayLayer(2);
 
   private readonly host = createHost();
 
