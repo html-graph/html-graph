@@ -45,15 +45,11 @@ export class RectangularSelectionConfigurator {
   private readonly onWindowMouseMove: EventListener = (event: Event) => {
     const mouseEvent = event as MouseEvent;
 
-    const selectionRect =
-      this.selectionRectangleWrapper.getBoundingClientRect();
-
     if (
       !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeMouseListeners();
-      this.host.removeChild(this.selectionRectangleWrapper);
-      this.params.onSelectionInterrupted(selectionRect);
+      this.interruptSelection();
       return;
     }
 
@@ -66,6 +62,10 @@ export class RectangularSelectionConfigurator {
 
     this.draggingViewportPoint = cursorViewportCoords;
     this.updateSelectionRectangle();
+
+    const selectionRect =
+      this.selectionRectangleWrapper.getBoundingClientRect();
+
     this.params.onSelectionChange(selectionRect);
   };
 
@@ -139,5 +139,11 @@ export class RectangularSelectionConfigurator {
     const rect = this.selectionRectangleWrapper.getBoundingClientRect();
     this.host.removeChild(this.selectionRectangleWrapper);
     this.params.onSelectionFinished(rect);
+  }
+
+  private interruptSelection(): void {
+    const rect = this.selectionRectangleWrapper.getBoundingClientRect();
+    this.host.removeChild(this.selectionRectangleWrapper);
+    this.params.onSelectionInterrupted(selectionRect);
   }
 }
