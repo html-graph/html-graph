@@ -445,6 +445,28 @@ describe("RectangularSelectionConfigurator", () => {
     expect(onSelectionInterrupted).toHaveBeenCalledTimes(1);
   });
 
+  it("should remove selection rectangle when selection is interrupted", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+
+    expect(rectangle).toBe(undefined);
+  });
+
   it("should not listen to mouse events when canvas is destroyed", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });

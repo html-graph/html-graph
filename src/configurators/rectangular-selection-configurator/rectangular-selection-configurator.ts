@@ -52,6 +52,7 @@ export class RectangularSelectionConfigurator {
       !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
       this.removeMouseListeners();
+      this.host.removeChild(this.selectionRectangleWrapper);
       this.params.onSelectionInterrupted(selectionRect);
       return;
     }
@@ -135,8 +136,8 @@ export class RectangularSelectionConfigurator {
   }
 
   private finishSelection(): void {
-    this.host.removeChild(this.selectionRectangleWrapper);
     const rect = this.selectionRectangleWrapper.getBoundingClientRect();
+    this.host.removeChild(this.selectionRectangleWrapper);
     this.params.onSelectionFinished(rect);
   }
 }
