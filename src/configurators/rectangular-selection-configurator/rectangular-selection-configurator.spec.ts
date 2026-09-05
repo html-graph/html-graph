@@ -8,13 +8,17 @@ import { defaultViewportControllerParams } from "@/mocks/default-viewport-contro
 import { Viewport } from "@/viewport";
 import { ViewportController } from "@/viewport-controller";
 import { ViewportStore } from "@/viewport-store";
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RectangularSelectionConfigurator } from "./rectangular-selection-configurator";
 import { createElement } from "@/mocks/create-element.mock";
+import { PointInsideVerifier } from "../shared";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
   overlayElement?: HTMLElement;
+  onSelectionChange?: (rect: DOMRect) => void;
+  onSelectionFinished?: (rect: DOMRect) => void;
+  onSelectionInterrupted?: (rect: DOMRect) => void;
 }): Canvas => {
   const graphStore = new GraphStore();
   const mainElement =
@@ -47,11 +51,20 @@ const createCanvas = (options?: {
   const overlayElement =
     options?.overlayElement ?? createElement({ width: 1000, height: 1000 });
 
+  const pointInsideVerifier = new PointInsideVerifier(overlayElement, window);
+
   RectangularSelectionConfigurator.configure(
     canvas,
     mainElement,
     overlayElement,
+    pointInsideVerifier,
     window,
+    {
+      onSelectionFinished: options?.onSelectionFinished ?? ((): void => {}),
+      onSelectionChange: options?.onSelectionChange ?? ((): void => {}),
+      onSelectionInterrupted:
+        options?.onSelectionInterrupted ?? ((): void => {}),
+    },
   );
 
   return canvas;
@@ -61,7 +74,23 @@ const selectRectangle = (overlayElement: HTMLElement): HTMLElement => {
   return overlayElement.children[0].children[0] as HTMLElement;
 };
 
+let innerWidth: number;
+let innerHeight: number;
+
 describe("RectangularSelectionConfigurator", () => {
+  beforeEach(() => {
+    innerWidth = window.innerWidth;
+    innerHeight = window.innerHeight;
+
+    window.innerWidth = 1000;
+    window.innerHeight = 1000;
+  });
+
+  afterEach(() => {
+    window.innerWidth = innerWidth;
+    window.innerHeight = innerHeight;
+  });
+
   it("should create overlay host element", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
@@ -214,6 +243,23 @@ describe("RectangularSelectionConfigurator", () => {
     expect(size).toEqual({ width: "800px", height: "800px" });
   });
 
+  it("should call specified callback on selection change on mouse move", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionChange });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 900, clientY: 900 }),
+    );
+
+    expect(onSelectionChange).toHaveBeenCalled();
+  });
+
   it("should flip rectangle in opposite direction", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
@@ -244,19 +290,166 @@ describe("RectangularSelectionConfigurator", () => {
     });
   });
 
-  it("should remove selection rectangle on mouse up", () => {
+  it("should call specified callback on mouse up", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
-    createCanvas({ mainElement, overlayElement });
+    const onSelectionFinished = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionFinished });
 
     mainElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+      new MouseEvent("mousedown", { clientX: 900, clientY: 900 }),
     );
 
     window.dispatchEvent(
       new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
     );
 
-    expect(overlayElement.children[0].children.length).toBe(0);
+    expect(onSelectionFinished).toHaveBeenCalled();
+  });
+
+  it("should not call specified callback after selection is finished", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionFinished = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionFinished });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    expect(onSelectionFinished).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not call specified callback on selection change after selection is finished", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionChange });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 900, clientY: 900 }),
+    );
+
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("should remove rectangle element after selection is finished", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 900, clientY: 900 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mouseup", { clientX: 100, clientY: 100 }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+
+    expect(rectangle).toBe(undefined);
+  });
+
+  it("should call specified callback when selection is interrupted", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionInterrupted = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionInterrupted });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    expect(onSelectionInterrupted).toHaveBeenCalled();
+  });
+
+  it("should not call selection change callback when selection is interrupted", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionChange });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("should not listen to mouse move when selection is interrupted", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionInterrupted = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionInterrupted });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: -100, clientY: -100 }),
+    );
+
+    expect(onSelectionInterrupted).toHaveBeenCalledTimes(1);
+  });
+
+  it("should not listen to mouse events when canvas is destroyed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    const canvas = createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionChange,
+    });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      new MouseEvent("mousemove", { clientX: 900, clientY: 900 }),
+    );
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
   });
 });

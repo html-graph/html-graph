@@ -3,41 +3,45 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  Identifier,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-// const selectedNodeIds = new Set<Identifier>();
+const selectedNodeIds = new Set<Identifier>();
 
-// const intersects = (selectionRect: DOMRect, nodeRect: DOMRect): boolean => {
-//   const noIntersectionHor =
-//     nodeRect.right < selectionRect.left || nodeRect.left > selectionRect.right;
-//   const noIntersectionVert =
-//     nodeRect.top > selectionRect.bottom || nodeRect.bottom < selectionRect.top;
+const intersects = (nodeRect: DOMRect, selectionRect: DOMRect): boolean => {
+  const isNodeRightOfSelection = nodeRect.right < selectionRect.left;
+  const isNodeLeftOfSelection = nodeRect.left > selectionRect.right;
+  const isNodeBottomOfSelection = nodeRect.bottom < selectionRect.top;
+  const isNodeTopOfSelection = nodeRect.top > selectionRect.bottom;
 
-//   const noIntersection = noIntersectionHor || noIntersectionVert;
-
-//   return !noIntersection;
-// };
+  return !(
+    isNodeRightOfSelection ||
+    isNodeLeftOfSelection ||
+    isNodeTopOfSelection ||
+    isNodeBottomOfSelection
+  );
+};
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .enableUserTransformableViewport()
   .enableUserDraggableNodes()
-  // .enableRectangularSelection({
-  //   onSelectionFinished: (selectionRect: DOMRect): void => {
-  //     selectedNodeIds.clear();
+  .enableRectangularSelection({
+    onSelectionFinished: (selectionRect: DOMRect): void => {
+      selectedNodeIds.clear();
 
-  //     canvas.graph.getAllNodeIds().forEach((nodeId) => {
-  //       const { element } = canvas.graph.getNode(nodeId);
-  //       const nodeRect = element.getBoundingClientRect();
+      canvas.graph.getAllNodeIds().forEach((nodeId) => {
+        const { element } = canvas.graph.getNode(nodeId);
+        const nodeRect = element.getBoundingClientRect();
 
-  //       if (intersects(selectionRect, nodeRect)) {
-  //         selectedNodeIds.add(nodeId);
-  //       }
-  //     });
-  //   },
-  // })
+        if (intersects(nodeRect, selectionRect)) {
+          selectedNodeIds.add(nodeId);
+        }
+      });
+    },
+  })
   .enableBackground()
   .build();
 
