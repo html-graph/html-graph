@@ -32,6 +32,24 @@ describe("Layers", () => {
     );
   });
 
+  it("should create draggable edges overlay layer", () => {
+    const element = document.createElement("div");
+    const layers = new Layers(element);
+
+    expect(layers.overlayDraggableEdges.parentElement!.parentElement).toBe(
+      element,
+    );
+  });
+
+  it("should create rectangul;ar selection overlay layer", () => {
+    const element = document.createElement("div");
+    const layers = new Layers(element);
+
+    expect(
+      layers.overlayRectangularSelection.parentElement!.parentElement,
+    ).toBe(element);
+  });
+
   it("should destroy layers", () => {
     const element = document.createElement("div");
     const layers = new Layers(element);

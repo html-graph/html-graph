@@ -35,7 +35,7 @@ export class RectangularSelectionConfigurator {
     this.draggingViewportPoint = cursorViewportCoords;
 
     this.updateSelectionRectangle();
-    this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
+    this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated); // ?
 
     this.host.appendChild(this.selectionRectangleWrapper);
     this.win.addEventListener("mousemove", this.onWindowMouseMove);
@@ -136,15 +136,18 @@ export class RectangularSelectionConfigurator {
   }
 
   private finishSelection(): void {
-    const rect = this.selectionRectangleWrapper.getBoundingClientRect();
+    const selectionRect =
+      this.selectionRectangleWrapper.getBoundingClientRect();
     this.host.removeChild(this.selectionRectangleWrapper);
-    this.params.onSelectionFinished(rect);
+    // TODO: unsubscribe viewport update
+    this.params.onSelectionFinished(selectionRect);
   }
 
   private interruptSelection(): void {
     const selectionRect =
       this.selectionRectangleWrapper.getBoundingClientRect();
     this.host.removeChild(this.selectionRectangleWrapper);
+    // TODO: unsubscribe viewport update
     this.params.onSelectionInterrupted(selectionRect);
   }
 }
