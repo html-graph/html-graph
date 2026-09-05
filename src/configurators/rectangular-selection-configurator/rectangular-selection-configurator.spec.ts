@@ -225,42 +225,6 @@ describe("RectangularSelectionConfigurator", () => {
     expect(pos).toEqual({ x: "50px", y: "50px" });
   });
 
-  it("should account for viewport transformation when positioning rectangle", () => {
-    const mainElement = createElement({ width: 1000, height: 1000 });
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-
-    const canvas = createCanvas({ mainElement, overlayElement });
-
-    canvas.patchContentMatrix({ x: 200, y: 300 });
-
-    mainElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
-    );
-
-    const rectangle = selectRectangle(overlayElement);
-    const pos = { x: rectangle.style.left, y: rectangle.style.top };
-
-    expect(pos).toEqual({ x: "300px", y: "400px" });
-  });
-
-  it("should update rectangle positioning when viewport is updated", () => {
-    const mainElement = createElement({ width: 1000, height: 1000 });
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-
-    const canvas = createCanvas({ mainElement, overlayElement });
-
-    mainElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
-    );
-
-    canvas.patchContentMatrix({ x: 200, y: 300 });
-
-    const rectangle = selectRectangle(overlayElement);
-    const pos = { x: rectangle.style.left, y: rectangle.style.top };
-
-    expect(pos).toEqual({ x: "300px", y: "400px" });
-  });
-
   it("should create selection rectangle with zero width and height", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });

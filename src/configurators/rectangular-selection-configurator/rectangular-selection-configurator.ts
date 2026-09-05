@@ -127,7 +127,6 @@ export class RectangularSelectionConfigurator {
       this.initialContentPoint!,
     );
     const draggingViewportPoint = this.draggingViewportPoint!;
-    const m = this.canvas.viewport.getContentMatrix();
 
     const originX = Math.min(initialViewportPoint.x, draggingViewportPoint.x);
     const originY = Math.min(initialViewportPoint.y, draggingViewportPoint.y);
@@ -136,8 +135,8 @@ export class RectangularSelectionConfigurator {
 
     const { style } = this.selectionRectangleWrapper;
 
-    style.left = `${originX + m.x}px`;
-    style.top = `${originY + m.y}px`;
+    style.left = `${originX}px`;
+    style.top = `${originY}px`;
     style.width = `${width}px`;
     style.height = `${height}px`;
   }

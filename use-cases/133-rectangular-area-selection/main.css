@@ -12,6 +12,10 @@
   user-select: none;
 }
 
+.node.selected {
+  border: 1px solid red;
+}
+
 .node-port {
   position: relative;
   width: 0;

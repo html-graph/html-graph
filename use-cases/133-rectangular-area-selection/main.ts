@@ -7,8 +7,6 @@ import {
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
-const selectedNodeIds = new Set<Identifier>();
-
 const intersects = (nodeRect: DOMRect, selectionRect: DOMRect): boolean => {
   const isNodeRightOfSelection = nodeRect.right < selectionRect.left;
   const isNodeLeftOfSelection = nodeRect.left > selectionRect.right;
@@ -30,7 +28,7 @@ const canvas: Canvas = builder
   .enableUserDraggableNodes()
   .enableRectangularSelection({
     onSelectionFinished: (selectionRect: DOMRect): void => {
-      selectedNodeIds.clear();
+      const selectedNodeIds = new Set<Identifier>();
 
       canvas.graph.getAllNodeIds().forEach((nodeId) => {
         const { element } = canvas.graph.getNode(nodeId);
@@ -40,10 +38,25 @@ const canvas: Canvas = builder
           selectedNodeIds.add(nodeId);
         }
       });
+
+      markSelectedNodes(selectedNodeIds);
+    },
+  })
+  .enableUserSelectableCanvas({
+    onCanvasSelected: () => {
+      markSelectedNodes(new Set());
     },
   })
   .enableBackground()
   .build();
+
+const markSelectedNodes = (selection: ReadonlySet<Identifier>): void => {
+  canvas.graph.getAllNodeIds().forEach((nodeId) => {
+    const { element } = canvas.graph.getNode(nodeId);
+
+    element.classList.toggle("selected", selection.has(nodeId));
+  });
+};
 
 const addNode1Request: AddNodeRequest = createInOutNode({
   name: "Node 1",
