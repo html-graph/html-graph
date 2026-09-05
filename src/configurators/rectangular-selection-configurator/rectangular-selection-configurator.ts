@@ -51,8 +51,8 @@ export class RectangularSelectionConfigurator {
     if (
       !this.pointInsideVerifier.verify(mouseEvent.clientX, mouseEvent.clientY)
     ) {
-      this.params.onSelectionInterrupted(selectionRect);
       this.removeMouseListeners();
+      this.params.onSelectionInterrupted(selectionRect);
       return;
     }
 
