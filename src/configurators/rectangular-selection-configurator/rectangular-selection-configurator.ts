@@ -142,7 +142,8 @@ export class RectangularSelectionConfigurator {
   }
 
   private interruptSelection(): void {
-    const rect = this.selectionRectangleWrapper.getBoundingClientRect();
+    const selectionRect =
+      this.selectionRectangleWrapper.getBoundingClientRect();
     this.host.removeChild(this.selectionRectangleWrapper);
     this.params.onSelectionInterrupted(selectionRect);
   }
