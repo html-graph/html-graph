@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
+import { lmbCtrlMouseEventVerifier } from "./lmb-ctrl-mouse-event-verifier";
 
-describe("defaultMouseDownEventVerifier", () => {
+describe("lmbCtrlMouseDownEventVerifier", () => {
   it("should pass pass for 0 button and ctrl key", () => {
     expect(
-      defaultMouseDownEventVerifier(
+      lmbCtrlMouseEventVerifier(
         new MouseEvent("mousedown", { button: 0, ctrlKey: true }),
       ),
     ).toBe(true);
@@ -12,13 +12,13 @@ describe("defaultMouseDownEventVerifier", () => {
 
   it("should not pass when mouse one button pressed", () => {
     expect(
-      defaultMouseDownEventVerifier(new MouseEvent("mousedown", { button: 1 })),
+      lmbCtrlMouseEventVerifier(new MouseEvent("mousedown", { button: 1 })),
     ).toBe(false);
   });
 
   it("should not pass when ctrl key not pressed", () => {
     expect(
-      defaultMouseDownEventVerifier(
+      lmbCtrlMouseEventVerifier(
         new MouseEvent("mousedown", { button: 1, ctrlKey: true }),
       ),
     ).toBe(false);

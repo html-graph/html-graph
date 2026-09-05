@@ -53,6 +53,7 @@ export type {
   ConnectionAllowedVerifier,
   ConnectionAllowedVerifierRequest,
   EdgeCreationInProgressParams,
+  RectangularSelectionParams,
   PortIdResolver,
 } from "./configurators";
 

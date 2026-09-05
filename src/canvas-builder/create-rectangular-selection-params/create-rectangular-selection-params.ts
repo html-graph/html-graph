@@ -1,9 +1,8 @@
 import { RectangularSelectionParams } from "@/configurators";
 import { RectangularSelectionConfig } from "./rectangular-selection-config";
-import { noopFn } from "../shared";
+import { lmbCtrlMouseEventVerifier, noopFn } from "../shared";
 import { createDefaultRectangleElement } from "./create-default-rectangle-element";
-import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
-import { defaultMouseUpEventVerifier } from "./default-mouse-up-event-verifier";
+import { lmbMouseEventVerifier } from "../shared";
 
 export const createRectangularSelectionParams = (
   config: RectangularSelectionConfig,
@@ -11,8 +10,10 @@ export const createRectangularSelectionParams = (
   return {
     rectangleElement:
       config.rectangleElement ?? createDefaultRectangleElement(),
-    mouseDownEventVerifier: defaultMouseDownEventVerifier,
-    mouseUpEventVerifier: defaultMouseUpEventVerifier,
+    mouseDownEventVerifier:
+      config.mouseDownEventVerifier ?? lmbCtrlMouseEventVerifier,
+    mouseUpEventVerifier:
+      config.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     onSelectionStarted: config.onSelectionStarted ?? noopFn,
     onSelectionChange: config.onSelectionChange ?? noopFn,
     onSelectionInterrupted: config.onSelectionInterrupted ?? noopFn,

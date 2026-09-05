@@ -7,7 +7,11 @@ import { createCombinedTransformPreprocessor } from "./preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 import { TransformState } from "@/viewport-store";
-import { noopFn } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  noopFn,
+} from "../shared";
 
 export const createTransformableViewportParams = (
   transformConfig: ViewportTransformConfig | undefined,
@@ -45,10 +49,9 @@ export const createTransformableViewportParams = (
     shiftCursor: transformConfig?.pan?.cursor ?? "grab",
     mouseDownEventVerifier:
       transformConfig?.pan?.mouseDownEventVerifier ??
-      ((event: MouseEvent): boolean => event.button === 0 && !event.ctrlKey),
+      lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      transformConfig?.pan?.mouseUpEventVerifier ??
-      ((event: MouseEvent): boolean => event.button === 0),
+      transformConfig?.pan?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     mouseWheelEventVerifier:
       transformConfig?.scale?.mouseWheelEventVerifier ?? ((): boolean => true),
     scaleWheelFinishTimeout: transformConfig?.scale?.wheelFinishTimeout ?? 500,

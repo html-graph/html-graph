@@ -11,7 +11,12 @@ import { ViewportStore } from "@/viewport-store";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RectangularSelectionConfigurator } from "./rectangular-selection-configurator";
 import { createElement } from "@/mocks/create-element.mock";
-import { MouseEventVerifier, PointInsideVerifier } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  MouseEventVerifier,
+  PointInsideVerifier,
+} from "../shared";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -62,6 +67,7 @@ const createCanvas = (options?: {
     mainElement,
     overlayElement,
     pointInsideVerifier,
+    new EventTagger(),
     window,
     {
       rectangleElement:
@@ -165,6 +171,26 @@ describe("RectangularSelectionConfigurator", () => {
     mainElement.dispatchEvent(
       new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
     );
+
+    expect(onSelectionStarted).not.toHaveBeenCalled();
+  });
+
+  it("should not call selection started callback when event tagged as drag handled", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionStarted,
+    });
+
+    const event = new MouseEvent("mousedown", { clientX: 100, clientY: 100 });
+    const tagger = new EventTagger();
+
+    tagger.tag(event, dragEventHandledTag);
+
+    mainElement.dispatchEvent(event);
 
     expect(onSelectionStarted).not.toHaveBeenCalled();
   });
@@ -538,4 +564,22 @@ describe("RectangularSelectionConfigurator", () => {
 
     expect(onSelectionStarted).not.toHaveBeenCalled();
   });
+
+  // it("should create selection rectangle element on touch start", () => {
+  //   const mainElement = createElement({ width: 1000, height: 1000 });
+  //   const overlayElement = createElement({ width: 1000, height: 1000 });
+  //   createCanvas({ mainElement, overlayElement });
+
+  //   mainElement.dispatchEvent(
+  //     new TouchEvent("touchstart", {
+  //       touches: [
+  //         createTouch({ clientX: 100, clientY: 100 }),
+  //         createTouch({ clientX: 200, clientY: 200 }),
+  //         createTouch({ clientX: 200, clientY: 200 }),
+  //       ],
+  //     }),
+  //   );
+
+  //   expect(overlayElement.children[0].children.length).toBe(1);
+  // });
 });

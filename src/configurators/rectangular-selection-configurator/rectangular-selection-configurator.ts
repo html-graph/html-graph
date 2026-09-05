@@ -3,7 +3,11 @@ import { createHost } from "./create-host";
 import { createSelectionRectangleWrapper } from "./create-selection-rectangle-wrapper";
 import { Point } from "@/point";
 import { RectangularSelectionParams } from "./rectangular-selection-params";
-import { PointInsideVerifier } from "../shared";
+import {
+  dragEventHandledTag,
+  EventTagger,
+  PointInsideVerifier,
+} from "../shared";
 
 export class RectangularSelectionConfigurator {
   private readonly host = createHost();
@@ -15,6 +19,8 @@ export class RectangularSelectionConfigurator {
 
   private draggingViewportPoint: Point | null = null;
 
+  private readonly eventHandledTag = dragEventHandledTag;
+
   private readonly onAfterViewportUpdated = (): void => {
     this.updateSelectionRectangle();
   };
@@ -23,6 +29,10 @@ export class RectangularSelectionConfigurator {
     const mouseEvent = event as MouseEvent;
 
     if (!this.params.mouseDownEventVerifier(mouseEvent)) {
+      return;
+    }
+
+    if (this.eventTagger.has(event, this.eventHandledTag)) {
       return;
     }
 
@@ -40,7 +50,6 @@ export class RectangularSelectionConfigurator {
     this.draggingViewportPoint = cursorViewportCoords;
 
     this.updateSelectionRectangle();
-    this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated); // ?
 
     this.host.appendChild(this.selectionRectangleWrapper);
     this.win.addEventListener("mousemove", this.onWindowMouseMove);
@@ -90,11 +99,14 @@ export class RectangularSelectionConfigurator {
     private readonly mainElement: HTMLElement,
     private readonly overlayLayer: HTMLElement,
     private readonly pointInsideVerifier: PointInsideVerifier,
+    private readonly eventTagger: EventTagger,
     private readonly win: Window,
     private readonly params: RectangularSelectionParams,
   ) {
     this.overlayLayer.appendChild(this.host);
     this.selectionRectangleWrapper.appendChild(this.params.rectangleElement);
+
+    this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
 
     this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown);
 
@@ -109,6 +121,7 @@ export class RectangularSelectionConfigurator {
     mainElement: HTMLElement,
     overlayLayer: HTMLElement,
     pointInsideVerifier: PointInsideVerifier,
+    eventTagger: EventTagger,
     win: Window,
     params: RectangularSelectionParams,
   ): void {
@@ -117,26 +130,35 @@ export class RectangularSelectionConfigurator {
       mainElement,
       overlayLayer,
       pointInsideVerifier,
+      eventTagger,
       win,
       params,
     );
   }
 
   private updateSelectionRectangle(): void {
-    const initialViewportPoint = this.canvas.viewport.createViewportCoords(
-      this.initialContentPoint!,
-    );
-    const draggingViewportPoint = this.draggingViewportPoint!;
+    if (
+      this.initialContentPoint === null ||
+      this.draggingViewportPoint === null
+    ) {
+      return;
+    }
 
-    const originX = Math.min(initialViewportPoint.x, draggingViewportPoint.x);
-    const originY = Math.min(initialViewportPoint.y, draggingViewportPoint.y);
+    const initialViewportPoint = this.canvas.viewport.createViewportCoords(
+      this.initialContentPoint,
+    );
+
+    const draggingViewportPoint = this.draggingViewportPoint;
+
+    const x = Math.min(initialViewportPoint.x, draggingViewportPoint.x);
+    const y = Math.min(initialViewportPoint.y, draggingViewportPoint.y);
     const width = Math.abs(draggingViewportPoint.x - initialViewportPoint.x);
     const height = Math.abs(draggingViewportPoint.y - initialViewportPoint.y);
 
     const { style } = this.selectionRectangleWrapper;
 
-    style.left = `${originX}px`;
-    style.top = `${originY}px`;
+    style.left = `${x}px`;
+    style.top = `${y}px`;
     style.width = `${width}px`;
     style.height = `${height}px`;
   }
@@ -149,16 +171,20 @@ export class RectangularSelectionConfigurator {
   private finishSelection(): void {
     const selectionRect =
       this.selectionRectangleWrapper.getBoundingClientRect();
-    this.host.removeChild(this.selectionRectangleWrapper);
-    // TODO: unsubscribe viewport update
+    this.terminateSelection();
     this.params.onSelectionFinished(selectionRect);
   }
 
   private interruptSelection(): void {
     const selectionRect =
       this.selectionRectangleWrapper.getBoundingClientRect();
-    this.host.removeChild(this.selectionRectangleWrapper);
-    // TODO: unsubscribe viewport update
+    this.terminateSelection();
     this.params.onSelectionInterrupted(selectionRect);
+  }
+
+  private terminateSelection(): void {
+    this.host.removeChild(this.selectionRectangleWrapper);
+    this.initialContentPoint = null;
+    this.draggingViewportPoint = null;
   }
 }

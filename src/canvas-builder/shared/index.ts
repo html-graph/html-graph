@@ -7,3 +7,6 @@ export { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-di
 export type { DraggingPortDirectionConfig } from "./resolve-dragging-port-direction-resolver";
 export { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 export type { EdgeShapeConfig } from "./resolve-edge-shape-factory";
+export { lmbCtrlMouseEventVerifier } from "./lmb-ctrl-mouse-event-verifier";
+export { lmbMouseEventVerifier } from "./lmb-mouse-event-verifier";
+export { lmbNoCtrlMouseEventVerifier } from "./lmb-no-ctrl-mouse-event-verifier";

@@ -456,6 +456,7 @@ export class CanvasBuilder {
         this.element,
         layers.overlayRectangularSelection,
         this.pointInsideVerifier,
+        this.eventTagger,
         this.window,
         createRectangularSelectionParams(this.rectangularSelectionConfig),
       );

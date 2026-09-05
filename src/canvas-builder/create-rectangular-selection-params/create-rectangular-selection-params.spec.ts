@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { createRectangularSelectionParams } from "./create-rectangular-selection-params";
 import { noopFn } from "../shared";
-import { defaultMouseDownEventVerifier } from "./default-mouse-down-event-verifier";
-import { defaultMouseUpEventVerifier } from "./default-mouse-up-event-verifier";
+import { lmbCtrlMouseEventVerifier } from "../shared";
+import { lmbMouseEventVerifier } from "../shared";
 
 describe("createRectangularSelectionParams", () => {
   it("should set noop function for onSelectionStarted by default", () => {
@@ -64,15 +64,29 @@ describe("createRectangularSelectionParams", () => {
     expect(params.rectangleElement).toBe(rectangleElement);
   });
 
-  it("should set defaultMouseDownEventVerifier buy default", () => {
+  it("should set lmbCtrlMouseDownEventVerifier by default", () => {
     const params = createRectangularSelectionParams({});
 
-    expect(params.mouseDownEventVerifier).toBe(defaultMouseDownEventVerifier);
+    expect(params.mouseDownEventVerifier).toBe(lmbCtrlMouseEventVerifier);
   });
 
-  it("should set defaultMouseUpEventVerifier buy default", () => {
+  it("should set specified mouse down event verifier by default", () => {
+    const mouseDownEventVerifier = (): boolean => true;
+    const params = createRectangularSelectionParams({ mouseDownEventVerifier });
+
+    expect(params.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
+  });
+
+  it("should set lmbMouseUpEventVerifier by default", () => {
     const params = createRectangularSelectionParams({});
 
-    expect(params.mouseUpEventVerifier).toBe(defaultMouseUpEventVerifier);
+    expect(params.mouseUpEventVerifier).toBe(lmbMouseEventVerifier);
+  });
+
+  it("should set specified mouse up event verifier by default", () => {
+    const mouseUpEventVerifier = (): boolean => true;
+    const params = createRectangularSelectionParams({ mouseUpEventVerifier });
+
+    expect(params.mouseUpEventVerifier).toBe(mouseUpEventVerifier);
   });
 });
