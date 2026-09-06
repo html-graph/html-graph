@@ -10,7 +10,11 @@ import {
 } from "@/configurators";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
-import { lmbNoCtrlMouseEventVerifier, noopFn } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  noopFn,
+} from "../shared";
 import { createCanvas } from "@/mocks/create-canvas.mock";
 
 describe("createUserConnectablePortsParams", () => {
@@ -88,7 +92,7 @@ describe("createUserConnectablePortsParams", () => {
     expect(options.mouseDownEventVerifier).toBe(verifier);
   });
 
-  it("should return lmb no ctrl mouse up event verifier by default", () => {
+  it("should return lmb mouse up event verifier by default", () => {
     const canvas = createCanvas();
     const options = createConnectablePortsParams(
       {},
@@ -96,7 +100,7 @@ describe("createUserConnectablePortsParams", () => {
       canvas.graph,
     );
 
-    expect(options.mouseUpEventVerifier).toEqual(lmbNoCtrlMouseEventVerifier);
+    expect(options.mouseUpEventVerifier).toEqual(lmbMouseEventVerifier);
   });
 
   it("should return specified mouse up event verifier", () => {

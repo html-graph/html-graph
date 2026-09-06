@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createUserSelectableCanvasParams } from "./create-user-selectable-canvas-params";
 import {
+  lmbMouseEventVerifier,
   lmbNoCtrlMouseEventVerifier,
   selectionMovementThreshold,
 } from "../shared";
@@ -19,7 +20,7 @@ describe("createUserSelectableCanvasParams", () => {
       onCanvasSelected: (): void => {},
     });
 
-    expect(params.mouseUpEventVerifier).toBe(lmbNoCtrlMouseEventVerifier);
+    expect(params.mouseUpEventVerifier).toBe(lmbMouseEventVerifier);
   });
 
   it("should return default movement threshold", () => {

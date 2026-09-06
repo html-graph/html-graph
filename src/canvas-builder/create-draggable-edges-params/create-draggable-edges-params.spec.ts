@@ -18,7 +18,11 @@ import { ViewportController } from "@/viewport-controller";
 import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
 import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { defaults } from "./defaults";
-import { lmbNoCtrlMouseEventVerifier, noopFn } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  noopFn,
+} from "../shared";
 
 const createCanvas = (): Canvas => {
   const graphStore = new GraphStore();
@@ -70,10 +74,10 @@ describe("createDraggableEdgeParams", () => {
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should return lmb no ctrl mouse up event verifier by default", () => {
+  it("should return lmb mouse up event verifier by default", () => {
     const options = createDraggableEdgeParams({}, createCanvas().graph);
 
-    expect(options.mouseUpEventVerifier).toBe(lmbNoCtrlMouseEventVerifier);
+    expect(options.mouseUpEventVerifier).toBe(lmbMouseEventVerifier);
   });
 
   it("should return specified mouse up event verifier", () => {

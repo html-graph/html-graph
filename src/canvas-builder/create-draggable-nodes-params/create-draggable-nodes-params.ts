@@ -1,12 +1,14 @@
 import { DraggableNodesParams } from "@/configurators";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
-import { noopFn } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  noopFn,
+} from "../shared";
 
 export const createDraggableNodesParams = (
   config: DraggableNodesConfig,
 ): DraggableNodesParams => {
-  const nodeDragVerifier = config.nodeDragVerifier ?? ((): boolean => true);
-
   const moveOnTop = config.moveOnTop !== false;
   const moveEdgesOnTop = config.moveEdgesOnTop !== false && moveOnTop;
 
@@ -16,14 +18,12 @@ export const createDraggableNodesParams = (
     dragCursor: config.mouse?.dragCursor ?? "grab",
     gridSize: config.gridSize ?? null,
     mouseDownEventVerifier:
-      config.mouse?.mouseDownEventVerifier ??
-      ((event: MouseEvent): boolean => event.button === 0),
+      config.mouse?.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouse?.mouseUpEventVerifier ??
-      ((event: MouseEvent): boolean => event.button === 0),
+      config.mouse?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     onNodeDragStarted: config.events?.onNodeDragStarted ?? noopFn,
     onNodeDrag: config.events?.onNodeDrag ?? noopFn,
-    nodeDragVerifier,
+    nodeDragVerifier: config.nodeDragVerifier ?? ((): boolean => true),
     onNodeDragFinished: config.events?.onNodeDragFinished ?? noopFn,
   };
 };
