@@ -5,18 +5,17 @@ import { createDefaultRectangleElement } from "./create-default-rectangle-elemen
 import { lmbMouseEventVerifier } from "../shared";
 
 export const createRectangularSelectionParams = (
-  config: RectangularSelectionConfig,
+  config: RectangularSelectionConfig | undefined,
 ): RectangularSelectionParams => {
   return {
     rectangleElement:
-      config.rectangleElement ?? createDefaultRectangleElement(),
+      config?.rectangleElement ?? createDefaultRectangleElement(),
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? lmbCtrlMouseEventVerifier,
-    mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? lmbMouseEventVerifier,
-    onSelectionStarted: config.onSelectionStarted ?? noopFn,
-    onSelectionChange: config.onSelectionChange ?? noopFn,
-    onSelectionInterrupted: config.onSelectionInterrupted ?? noopFn,
-    onSelectionFinished: config.onSelectionFinished ?? noopFn,
+      config?.mouseDownEventVerifier ?? lmbCtrlMouseEventVerifier,
+    mouseUpEventVerifier: config?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
+    onSelectionStarted: config?.onSelectionStarted ?? noopFn,
+    onSelectionChange: config?.onSelectionChange ?? noopFn,
+    onSelectionInterrupted: config?.onSelectionInterrupted ?? noopFn,
+    onSelectionFinished: config?.onSelectionFinished ?? noopFn,
   };
 };

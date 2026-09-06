@@ -101,7 +101,8 @@ export class CanvasBuilder {
 
   private draggableEdgesConfig: DraggableEdgesConfig = {};
 
-  private rectangularSelectionConfig: RectangularSelectionConfig = {};
+  private rectangularSelectionConfig: RectangularSelectionConfig | undefined =
+    undefined;
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
@@ -217,7 +218,7 @@ export class CanvasBuilder {
     config?: RectangularSelectionConfig | undefined,
   ): CanvasBuilder {
     this.hasRectangularSelection = true;
-    this.rectangularSelectionConfig = config ?? {};
+    this.rectangularSelectionConfig = config;
 
     return this;
   }

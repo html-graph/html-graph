@@ -291,6 +291,37 @@ describe("RectangularSelectionConfigurator", () => {
     expect(size).toEqual({ width: "800px", height: "800px" });
   });
 
+  it("should adjust rectangle position on viewport transformation", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new MouseEvent("mousedown", { clientX: 100, clientY: 100 }),
+    );
+
+    canvas.patchContentMatrix({ x: -100, y: -100 });
+
+    const rectangle = selectRectangle(overlayElement);
+
+    const position = {
+      left: rectangle.style.left,
+      top: rectangle.style.top,
+    };
+
+    expect(position).toEqual({ top: "0px", left: "0px" });
+  });
+
+  it("should not throw when adjusting viewpoty without rectangular selection", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const canvas = createCanvas({ mainElement, overlayElement });
+
+    expect(() => {
+      canvas.patchContentMatrix({ x: -100, y: -100 });
+    }).not.toThrow();
+  });
+
   it("should call specified callback on selection change on mouse move", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
