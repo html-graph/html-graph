@@ -158,12 +158,12 @@ describe("CanvasBuilder", () => {
   });
 
   it("should build canvas with user transformable viewport", () => {
-    const element = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(element);
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
 
     builder.enableUserTransformableViewport().build();
 
-    const host = element.children[0].children[1];
+    const host = canvasElement.children[0].children[1];
     host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     const moveEvent = createMouseMoveEvent({ movementX: 100, movementY: 100 });
@@ -337,7 +337,7 @@ describe("CanvasBuilder", () => {
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2", shape });
 
     sourcePortElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0, ctrlKey: true }),
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
     );
     window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
     window.dispatchEvent(
@@ -585,5 +585,33 @@ describe("CanvasBuilder", () => {
     window.dispatchEvent(new MouseEvent("mouseup", { button: 0 }));
 
     expect(onEdgeSelected).toHaveBeenCalled();
+  });
+
+  it("should build canvas with rectangular selection", () => {
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const builder = new CanvasBuilder(canvasElement);
+    const onSelectionStarted = vi.fn();
+
+    document.body.appendChild(canvasElement);
+
+    builder
+      .enableRectangularSelection({
+        onSelectionStarted,
+      })
+      .build();
+
+    setLayersDimensions(canvasElement);
+
+    const host = canvasElement.children[0].children[1];
+    host.dispatchEvent(
+      new MouseEvent("mousedown", {
+        clientX: 100,
+        clientY: 100,
+        button: 0,
+        ctrlKey: true,
+      }),
+    );
+
+    expect(onSelectionStarted).toHaveBeenCalled();
   });
 });

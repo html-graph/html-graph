@@ -355,7 +355,7 @@ export class GraphStore {
       }
 
       const edge = this.getEdge(edgeId);
-      const payload = edge.payload;
+      const { payload } = edge;
 
       this.removeEdgeInternal(edgeId);
       this.addEdgeInternal({
@@ -367,7 +367,7 @@ export class GraphStore {
       });
     }
 
-    const edge = this.edges.get(edgeId)!;
+    const edge = this.getEdge(edgeId);
 
     if (request.shape !== undefined) {
       edge.payload.shape = request.shape;

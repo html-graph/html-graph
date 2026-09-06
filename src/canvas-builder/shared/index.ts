@@ -1,9 +1,12 @@
 export { forceDirectedDefaults } from "./force-directed-defaults";
 export type { CanvasDefaults } from "./canvas-defaults";
 export type { Priority } from "./priority";
-export { selectionDefaults } from "./selection-defaults";
+export { selectionMovementThreshold } from "./selection-movement-threshold";
 export { noopFn } from "./noop-fn";
 export { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-direction-resolver";
 export type { DraggingPortDirectionConfig } from "./resolve-dragging-port-direction-resolver";
 export { resolveEdgeShapeFactory } from "./resolve-edge-shape-factory";
 export type { EdgeShapeConfig } from "./resolve-edge-shape-factory";
+export { lmbCtrlMouseEventVerifier } from "./lmb-ctrl-mouse-event-verifier";
+export { lmbMouseEventVerifier } from "./lmb-mouse-event-verifier";
+export { lmbNoCtrlMouseEventVerifier } from "./lmb-no-ctrl-mouse-event-verifier";

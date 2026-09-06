@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDraggableNodesParams } from "./create-draggable-nodes-params";
 import { DraggableNodesConfig } from "./draggable-nodes-config";
+import { lmbMouseEventVerifier, lmbNoCtrlMouseEventVerifier } from "../shared";
 
 describe("createConfig", () => {
   it("should set specified onNodeDragStarted", () => {
@@ -69,14 +70,11 @@ describe("createConfig", () => {
     expect(options.dragCursor).toBe("crosshair");
   });
 
-  it("should set default mouse down event verifier", () => {
+  it("should set lmb no ctrl mouse down event verifier by default", () => {
     const options = createDraggableNodesParams({});
     const verifier = options.mouseDownEventVerifier;
 
-    expect([
-      verifier(new MouseEvent("mousedown", { button: 0 })),
-      verifier(new MouseEvent("mousedown", { button: 1 })),
-    ]).toEqual([true, false]);
+    expect(verifier).toBe(lmbNoCtrlMouseEventVerifier);
   });
 
   it("should set specified mouse down event verifier", () => {
@@ -93,14 +91,11 @@ describe("createConfig", () => {
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should set default mouse up event verifier", () => {
+  it("should set lmb mouse up event verifier by default", () => {
     const options = createDraggableNodesParams({});
     const verifier = options.mouseUpEventVerifier;
 
-    expect([
-      verifier(new MouseEvent("mouseup", { button: 0 })),
-      verifier(new MouseEvent("mouseup", { button: 1 })),
-    ]).toEqual([true, false]);
+    expect(verifier).toEqual(lmbMouseEventVerifier);
   });
 
   it("should set specified mouse up event verifier", () => {

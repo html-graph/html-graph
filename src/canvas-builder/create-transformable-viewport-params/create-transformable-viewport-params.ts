@@ -7,15 +7,15 @@ import { createCombinedTransformPreprocessor } from "./preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 import { TransformState } from "@/viewport-store";
-import { noopFn } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  noopFn,
+} from "../shared";
 
 export const createTransformableViewportParams = (
   transformConfig: ViewportTransformConfig | undefined,
 ): TransformableViewportParams => {
-  const configWheelSensitivity = transformConfig?.scale?.mouseWheelSensitivity;
-  const wheelSensitivity =
-    configWheelSensitivity !== undefined ? configWheelSensitivity : 1.2;
-
   const preprocessors = transformConfig?.transformPreprocessor;
 
   let transformPreprocessor: TransformPreprocessorFn;
@@ -23,9 +23,9 @@ export const createTransformableViewportParams = (
   if (preprocessors !== undefined) {
     if (Array.isArray(preprocessors)) {
       transformPreprocessor = createCombinedTransformPreprocessor(
-        preprocessors.map((preprocessor) =>
-          resolveTransformPreprocessor(preprocessor),
-        ),
+        preprocessors.map((preprocessor) => {
+          return resolveTransformPreprocessor(preprocessor);
+        }),
       );
     } else {
       transformPreprocessor = resolveTransformPreprocessor(preprocessors);
@@ -38,47 +38,22 @@ export const createTransformableViewportParams = (
     };
   }
 
-  const shiftCursor =
-    transformConfig?.pan?.cursor !== undefined
-      ? transformConfig.pan.cursor
-      : "grab";
-
-  const defaultMouseDownEventVerifier =
-    transformConfig?.pan?.mouseDownEventVerifier;
-
-  const mouseDownEventVerifier =
-    defaultMouseDownEventVerifier !== undefined
-      ? defaultMouseDownEventVerifier
-      : (event: MouseEvent): boolean => event.button === 0;
-
-  const defaultMouseUpEventVerifier =
-    transformConfig?.pan?.mouseUpEventVerifier;
-
-  const mouseUpEventVerifier =
-    defaultMouseUpEventVerifier !== undefined
-      ? defaultMouseUpEventVerifier
-      : (event: MouseEvent): boolean => event.button === 0;
-
-  const defaultMouseWheelEventVerifier =
-    transformConfig?.scale?.mouseWheelEventVerifier;
-
-  const mouseWheelEventVerifier =
-    defaultMouseWheelEventVerifier !== undefined
-      ? defaultMouseWheelEventVerifier
-      : (): boolean => true;
-
   return {
-    wheelSensitivity,
+    wheelSensitivity: transformConfig?.scale?.mouseWheelSensitivity ?? 1.2,
     onTransformStarted: transformConfig?.events?.onTransformStarted ?? noopFn,
     onTransformFinished: transformConfig?.events?.onTransformFinished ?? noopFn,
     onBeforeTransformChange:
       transformConfig?.events?.onBeforeTransformChange ?? noopFn,
     onTransformChange: transformConfig?.events?.onTransformChange ?? noopFn,
     transformPreprocessor,
-    shiftCursor,
-    mouseDownEventVerifier,
-    mouseUpEventVerifier,
-    mouseWheelEventVerifier,
+    shiftCursor: transformConfig?.pan?.cursor ?? "grab",
+    mouseDownEventVerifier:
+      transformConfig?.pan?.mouseDownEventVerifier ??
+      lmbNoCtrlMouseEventVerifier,
+    mouseUpEventVerifier:
+      transformConfig?.pan?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
+    mouseWheelEventVerifier:
+      transformConfig?.scale?.mouseWheelEventVerifier ?? ((): boolean => true),
     scaleWheelFinishTimeout: transformConfig?.scale?.wheelFinishTimeout ?? 500,
     onResizeTransformStarted:
       transformConfig?.events?.onResizeTransformStarted ?? noopFn,

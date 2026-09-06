@@ -24,6 +24,7 @@ import {
   PointInsideVerifier,
   EventTagger,
   UserSelectableEdgesConfigurator,
+  RectangularSelectionConfigurator,
 } from "@/configurators";
 import { Layers } from "./layers";
 import {
@@ -80,6 +81,10 @@ import {
   createUserSelectableEdgesParams,
   UserSelectableEdgesConfig,
 } from "./create-user-selectable-edges-params";
+import {
+  createRectangularSelectionParams,
+  RectangularSelectionConfig,
+} from "./create-rectangular-selection-params";
 
 export class CanvasBuilder {
   private used = false;
@@ -95,6 +100,9 @@ export class CanvasBuilder {
   private connectablePortsConfig: ConnectablePortsConfig = {};
 
   private draggableEdgesConfig: DraggableEdgesConfig = {};
+
+  private rectangularSelectionConfig: RectangularSelectionConfig | undefined =
+    undefined;
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
@@ -122,6 +130,8 @@ export class CanvasBuilder {
   private hasUserConnectablePorts = false;
 
   private hasUserDraggableEdges = false;
+
+  private hasRectangularSelection = false;
 
   private hasAnimatedLayout = false;
 
@@ -200,6 +210,15 @@ export class CanvasBuilder {
   ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
     this.draggableEdgesConfig = config ?? {};
+
+    return this;
+  }
+
+  public enableRectangularSelection(
+    config?: RectangularSelectionConfig | undefined,
+  ): CanvasBuilder {
+    this.hasRectangularSelection = true;
+    this.rectangularSelectionConfig = config;
 
     return this;
   }
@@ -429,6 +448,18 @@ export class CanvasBuilder {
         this.pointInsideVerifier,
         this.eventTagger,
         createTransformableViewportParams(this.transformConfig),
+      );
+    }
+
+    if (this.hasRectangularSelection) {
+      RectangularSelectionConfigurator.configure(
+        canvas,
+        layers.main,
+        layers.overlayRectangularSelection,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        this.window,
+        createRectangularSelectionParams(this.rectangularSelectionConfig),
       );
     }
 

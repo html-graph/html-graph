@@ -1,6 +1,10 @@
 import { UserSelectableEdgesParams } from "@/configurators";
 import { UserSelectableEdgesConfig } from "./user-selectable-edges-config";
-import { selectionDefaults } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  selectionMovementThreshold,
+} from "../shared";
 
 export const createUserSelectableEdgesParams = (
   config: UserSelectableEdgesConfig,
@@ -8,10 +12,8 @@ export const createUserSelectableEdgesParams = (
   return {
     onEdgeSelected: config.onEdgeSelected,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? selectionDefaults.mouseDownEventVerifier,
-    mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? selectionDefaults.mouseUpEventVerifier,
-    movementThreshold:
-      config.movementThreshold ?? selectionDefaults.movementThreshold,
+      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
+    mouseUpEventVerifier: config.mouseUpEventVerifier ?? lmbMouseEventVerifier,
+    movementThreshold: config.movementThreshold ?? selectionMovementThreshold,
   };
 };

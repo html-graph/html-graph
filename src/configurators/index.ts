@@ -45,6 +45,9 @@ export type { UserSelectableEdgesParams } from "./user-selectable-edges-configur
 export { UserSelectableCanvasConfigurator } from "./user-selectable-canvas-configurator";
 export type { UserSelectableCanvasParams } from "./user-selectable-canvas-configurator";
 
+export { RectangularSelectionConfigurator } from "./rectangular-selection-configurator";
+export type { RectangularSelectionParams } from "./rectangular-selection-configurator";
+
 export {
   PointInsideVerifier,
   EventTagger,

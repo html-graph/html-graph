@@ -1,26 +1,26 @@
 import { describe, expect, it } from "vitest";
 import { createUserSelectableEdgesParams } from "./create-user-selectable-edges-params";
-import { selectionDefaults } from "../shared";
+import {
+  lmbMouseEventVerifier,
+  lmbNoCtrlMouseEventVerifier,
+  selectionMovementThreshold,
+} from "../shared";
 
 describe("createUserSelectableEdgesParams", () => {
-  it("should return default mouse down event verifier", () => {
+  it("should return lmb no ctrl mouse down event verifier by default", () => {
     const params = createUserSelectableEdgesParams({
       onEdgeSelected: (): void => {},
     });
 
-    expect(params.mouseDownEventVerifier).toBe(
-      selectionDefaults.mouseDownEventVerifier,
-    );
+    expect(params.mouseDownEventVerifier).toBe(lmbNoCtrlMouseEventVerifier);
   });
 
-  it("should return default mouse up event verifier", () => {
+  it("should return lmb mouse up event verifier by default", () => {
     const params = createUserSelectableEdgesParams({
       onEdgeSelected: (): void => {},
     });
 
-    expect(params.mouseUpEventVerifier).toBe(
-      selectionDefaults.mouseUpEventVerifier,
-    );
+    expect(params.mouseUpEventVerifier).toBe(lmbMouseEventVerifier);
   });
 
   it("should return default movement threshold", () => {
@@ -28,7 +28,7 @@ describe("createUserSelectableEdgesParams", () => {
       onEdgeSelected: (): void => {},
     });
 
-    expect(params.movementThreshold).toBe(selectionDefaults.movementThreshold);
+    expect(params.movementThreshold).toBe(selectionMovementThreshold);
   });
 
   it("should return specified edge selected callback", () => {
