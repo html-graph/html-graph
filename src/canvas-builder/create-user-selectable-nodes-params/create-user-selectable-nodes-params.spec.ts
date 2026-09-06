@@ -1,26 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { createUserSelectableNodesParams } from "./create-user-selectable-nodes-params";
-import { selectionDefaults } from "../shared";
+import {
+  lmbNoCtrlMouseEventVerifier,
+  selectionMovementThreshold,
+} from "../shared";
 
 describe("createUserSelectableNodesParams", () => {
-  it("should return default mouse down event verifier", () => {
+  it("should return lmb no ctrl mouse down event verifier by default", () => {
     const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
     });
 
-    expect(params.mouseDownEventVerifier).toBe(
-      selectionDefaults.mouseDownEventVerifier,
-    );
+    expect(params.mouseDownEventVerifier).toBe(lmbNoCtrlMouseEventVerifier);
   });
 
-  it("should return default mouse up event verifier", () => {
+  it("should return lmb no ctrl mouse up event verifier by default", () => {
     const params = createUserSelectableNodesParams({
       onNodeSelected: (): void => {},
     });
 
-    expect(params.mouseUpEventVerifier).toBe(
-      selectionDefaults.mouseUpEventVerifier,
-    );
+    expect(params.mouseUpEventVerifier).toBe(lmbNoCtrlMouseEventVerifier);
   });
 
   it("should return default movement threshold", () => {
@@ -28,7 +27,7 @@ describe("createUserSelectableNodesParams", () => {
       onNodeSelected: (): void => {},
     });
 
-    expect(params.movementThreshold).toBe(selectionDefaults.movementThreshold);
+    expect(params.movementThreshold).toBe(selectionMovementThreshold);
   });
 
   it("should return specified node selected callback", () => {

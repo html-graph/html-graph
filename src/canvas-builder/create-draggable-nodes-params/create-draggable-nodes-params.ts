@@ -10,30 +10,17 @@ export const createDraggableNodesParams = (
   const moveOnTop = config.moveOnTop !== false;
   const moveEdgesOnTop = config.moveEdgesOnTop !== false && moveOnTop;
 
-  const cursor = config.mouse?.dragCursor;
-  const dragCursor = cursor !== undefined ? cursor : "grab";
-
-  const defaultMouseDownEventVerifier = config.mouse?.mouseDownEventVerifier;
-
-  const mouseDownEventVerifier =
-    defaultMouseDownEventVerifier !== undefined
-      ? defaultMouseDownEventVerifier
-      : (event: MouseEvent): boolean => event.button === 0;
-
-  const defaultMouseUpEventVerifier = config.mouse?.mouseUpEventVerifier;
-
-  const mouseUpEventVerifier =
-    defaultMouseUpEventVerifier !== undefined
-      ? defaultMouseUpEventVerifier
-      : (event: MouseEvent): boolean => event.button === 0;
-
   return {
     moveOnTop,
     moveEdgesOnTop,
-    dragCursor,
+    dragCursor: config.mouse?.dragCursor ?? "grab",
     gridSize: config.gridSize ?? null,
-    mouseDownEventVerifier,
-    mouseUpEventVerifier,
+    mouseDownEventVerifier:
+      config.mouse?.mouseDownEventVerifier ??
+      ((event: MouseEvent): boolean => event.button === 0),
+    mouseUpEventVerifier:
+      config.mouse?.mouseUpEventVerifier ??
+      ((event: MouseEvent): boolean => event.button === 0),
     onNodeDragStarted: config.events?.onNodeDragStarted ?? noopFn,
     onNodeDrag: config.events?.onNodeDrag ?? noopFn,
     nodeDragVerifier,

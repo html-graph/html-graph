@@ -3,6 +3,7 @@ import { ConnectablePortsConfig } from "./connectable-ports-config";
 import { EdgeShapeFactory } from "@/graph-controller";
 import { defaults } from "./defaults";
 import {
+  lmbNoCtrlMouseEventVerifier,
   noopFn,
   resolveDraggingPortDirectionResolver,
   resolveEdgeShapeFactory,
@@ -34,9 +35,9 @@ export const createConnectablePortsParams = (
     connectionPreprocessor:
       config.connectionPreprocessor ?? defaults.connectionPreprocessor,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaults.mouseEventVerifier,
+      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaults.mouseEventVerifier,
+      config.mouseUpEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     onAfterEdgeCreated: config.events?.onAfterEdgeCreated ?? noopFn,
     onEdgeCreationInterrupted:
       config.events?.onEdgeCreationInterrupted ?? noopFn,

@@ -1,6 +1,9 @@
 import { UserSelectableCanvasParams } from "@/configurators";
 import { UserSelectableCanvasConfig } from "./user-selectable-canvas-config";
-import { selectionDefaults } from "../shared";
+import {
+  lmbNoCtrlMouseEventVerifier,
+  selectionMovementThreshold,
+} from "../shared";
 
 export const createUserSelectableCanvasParams = (
   config: UserSelectableCanvasConfig,
@@ -8,10 +11,9 @@ export const createUserSelectableCanvasParams = (
   return {
     onCanvasSelected: config.onCanvasSelected,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? selectionDefaults.mouseDownEventVerifier,
+      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? selectionDefaults.mouseUpEventVerifier,
-    movementThreshold:
-      config.movementThreshold ?? selectionDefaults.movementThreshold,
+      config.mouseUpEventVerifier ?? lmbNoCtrlMouseEventVerifier,
+    movementThreshold: config.movementThreshold ?? selectionMovementThreshold,
   };
 };

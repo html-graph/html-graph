@@ -1,7 +1,7 @@
 export { forceDirectedDefaults } from "./force-directed-defaults";
 export type { CanvasDefaults } from "./canvas-defaults";
 export type { Priority } from "./priority";
-export { selectionDefaults } from "./selection-defaults";
+export { selectionMovementThreshold } from "./selection-movement-threshold";
 export { noopFn } from "./noop-fn";
 export { resolveDraggingPortDirectionResolver } from "./resolve-dragging-port-direction-resolver";
 export type { DraggingPortDirectionConfig } from "./resolve-dragging-port-direction-resolver";

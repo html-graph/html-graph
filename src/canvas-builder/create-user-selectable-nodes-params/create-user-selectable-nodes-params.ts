@@ -1,6 +1,9 @@
 import { UserSelectableNodesParams } from "@/configurators";
 import { UserSelectableNodesConfig } from "./user-selectable-nodes-config";
-import { selectionDefaults } from "../shared";
+import {
+  lmbNoCtrlMouseEventVerifier,
+  selectionMovementThreshold,
+} from "../shared";
 
 export const createUserSelectableNodesParams = (
   config: UserSelectableNodesConfig,
@@ -8,10 +11,9 @@ export const createUserSelectableNodesParams = (
   return {
     onNodeSelected: config.onNodeSelected,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? selectionDefaults.mouseDownEventVerifier,
+      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? selectionDefaults.mouseUpEventVerifier,
-    movementThreshold:
-      config.movementThreshold ?? selectionDefaults.movementThreshold,
+      config.mouseUpEventVerifier ?? lmbNoCtrlMouseEventVerifier,
+    movementThreshold: config.movementThreshold ?? selectionMovementThreshold,
   };
 };

@@ -337,7 +337,7 @@ describe("CanvasBuilder", () => {
     canvas.addEdge({ id: "edge-1", from: "port-1", to: "port-2", shape });
 
     sourcePortElement.dispatchEvent(
-      new MouseEvent("mousedown", { clientX: 0, clientY: 0, ctrlKey: true }),
+      new MouseEvent("mousedown", { clientX: 0, clientY: 0 }),
     );
     window.dispatchEvent(createMouseMoveEvent({ clientX: 100, clientY: 100 }));
     window.dispatchEvent(

@@ -3,6 +3,7 @@ import { TransformState } from "@/viewport-store";
 import { createTransformableViewportParams } from "./create-transformable-viewport-params";
 import { ViewportTransformConfig } from "./viewport-transform-config";
 import { TransformPreprocessorParams } from "@/configurators";
+import { lmbMouseEventVerifier, lmbNoCtrlMouseEventVerifier } from "../shared";
 
 describe("createConfig", () => {
   it("should set default wheel velocity if not specified", () => {
@@ -162,14 +163,11 @@ describe("createConfig", () => {
     expect(res.onTransformFinished).toBe(onTransformFinished);
   });
 
-  it("should set default mouse down event verifier", () => {
+  it("should set lmb no ctrl mouse down event verifier by default", () => {
     const options = createTransformableViewportParams({});
     const verifier = options.mouseDownEventVerifier;
 
-    expect([
-      verifier(new MouseEvent("mousedown", { button: 0 })),
-      verifier(new MouseEvent("mousedown", { button: 1 })),
-    ]).toEqual([true, false]);
+    expect(verifier).toBe(lmbNoCtrlMouseEventVerifier);
   });
 
   it("should set specified mouse down event validator", () => {
@@ -186,14 +184,11 @@ describe("createConfig", () => {
     expect(options.mouseDownEventVerifier).toBe(mouseDownEventVerifier);
   });
 
-  it("should set default mouse up event verifier", () => {
+  it("should set lmb mouse up event verifier by default", () => {
     const options = createTransformableViewportParams({});
     const verifier = options.mouseUpEventVerifier;
 
-    expect([
-      verifier(new MouseEvent("mouseup", { button: 0 })),
-      verifier(new MouseEvent("mouseup", { button: 1 })),
-    ]).toEqual([true, false]);
+    expect(verifier).toEqual(lmbMouseEventVerifier);
   });
 
   it("should set specified mouse up event validator", () => {

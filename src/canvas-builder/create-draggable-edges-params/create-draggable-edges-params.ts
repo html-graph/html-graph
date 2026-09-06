@@ -3,6 +3,7 @@ import { DraggableEdgesConfig } from "./draggable-edges-config";
 import { Graph } from "@/graph";
 import { defaults } from "./defaults";
 import {
+  lmbNoCtrlMouseEventVerifier,
   noopFn,
   resolveDraggingPortDirectionResolver,
   resolveEdgeShapeFactory,
@@ -31,9 +32,9 @@ export const createDraggableEdgeParams = (
       config.connectionPreprocessor ?? defaults.connectionPreprocessor,
     connectionAllowedVerifier,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? defaults.mouseDownEventVerifier,
+      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     mouseUpEventVerifier:
-      config.mouseUpEventVerifier ?? defaults.mouseUpEventVerifier,
+      config.mouseUpEventVerifier ?? lmbNoCtrlMouseEventVerifier,
     draggingEdgeResolver:
       config.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
     draggingEdgeShapeFactory:
