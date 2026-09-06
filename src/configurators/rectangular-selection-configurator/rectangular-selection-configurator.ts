@@ -52,8 +52,12 @@ export class RectangularSelectionConfigurator {
     this.updateSelectionRectangle();
 
     this.host.appendChild(this.selectionRectangleWrapper);
-    this.win.addEventListener("mousemove", this.onWindowMouseMove);
-    this.win.addEventListener("mouseup", this.onWindowMouseUp);
+    this.win.addEventListener("mousemove", this.onWindowMouseMove, {
+      passive: true,
+    });
+    this.win.addEventListener("mouseup", this.onWindowMouseUp, {
+      passive: true,
+    });
   };
 
   private readonly onWindowMouseMove: EventListener = (event: Event) => {
@@ -108,7 +112,9 @@ export class RectangularSelectionConfigurator {
 
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
 
-    this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown);
+    this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown, {
+      passive: true,
+    });
 
     this.canvas.onBeforeDestroy.subscribe(() => {
       this.mainElement.removeEventListener("mousedown", this.onCanvasMouseDown);

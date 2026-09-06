@@ -453,7 +453,7 @@ export class CanvasBuilder {
     if (this.hasRectangularSelection) {
       RectangularSelectionConfigurator.configure(
         canvas,
-        this.element,
+        layers.main,
         layers.overlayRectangularSelection,
         this.pointInsideVerifier,
         this.eventTagger,
