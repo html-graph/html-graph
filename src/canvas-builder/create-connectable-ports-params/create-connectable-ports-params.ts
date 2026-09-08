@@ -13,38 +13,38 @@ import { Graph } from "@/graph";
 import { defaultPortIdResolver } from "@/configurators";
 
 export const createConnectablePortsParams = (
-  config: ConnectablePortsConfig,
+  config: ConnectablePortsConfig | undefined,
   defaultEdgeShapeFactory: EdgeShapeFactory,
   graph: Graph,
 ): UserConnectablePortsParams => {
   const connectionAllowedVerifier =
-    config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
+    config?.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
 
   return {
     connectionTypeResolver:
-      config.connectionTypeResolver ?? defaults.connectionTypeResolver,
+      config?.connectionTypeResolver ?? defaults.connectionTypeResolver,
     connectionAllowedVerifier,
     draggingPortDirectionResolver: resolveDraggingPortDirectionResolver(
-      config.dragPortDirection,
+      config?.dragPortDirection,
       graph,
       connectionAllowedVerifier,
     ),
     edgeShapeFactory:
-      config.edgeShape !== undefined
+      config?.edgeShape !== undefined
         ? resolveEdgeShapeFactory(config.edgeShape)
         : defaultEdgeShapeFactory,
     connectionPreprocessor:
-      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
+      config?.connectionPreprocessor ?? defaults.connectionPreprocessor,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
-    mouseUpEventVerifier: config.mouseUpEventVerifier ?? lmbMouseEventVerifier,
-    onAfterEdgeCreated: config.events?.onAfterEdgeCreated ?? noopFn,
+      config?.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
+    mouseUpEventVerifier: config?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
+    onAfterEdgeCreated: config?.events?.onAfterEdgeCreated ?? noopFn,
     onEdgeCreationInterrupted:
-      config.events?.onEdgeCreationInterrupted ?? noopFn,
-    onEdgeCreationPrevented: config.events?.onEdgeCreationPrevented ?? noopFn,
+      config?.events?.onEdgeCreationInterrupted ?? noopFn,
+    onEdgeCreationPrevented: config?.events?.onEdgeCreationPrevented ?? noopFn,
     grabbedPortIdResolver:
-      config.grabbedPortIdResolver ?? defaultPortIdResolver,
+      config?.grabbedPortIdResolver ?? defaultPortIdResolver,
     releasedPortIdResolver:
-      config.releasedPortIdResolver ?? defaultPortIdResolver,
+      config?.releasedPortIdResolver ?? defaultPortIdResolver,
   };
 };
