@@ -12,7 +12,7 @@ import {
 import { defaultPortIdResolver } from "@/configurators";
 
 export const createDraggableEdgeParams = (
-  config: DraggableEdgesConfig,
+  config: DraggableEdgesConfig | undefined,
   graph: Graph,
 ): DraggableEdgesParams => {
   const defaultDraggingEdgeResolver: DraggingEdgeResolver = (portId) => {
@@ -26,33 +26,33 @@ export const createDraggableEdgeParams = (
   };
 
   const connectionAllowedVerifier =
-    config.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
+    config?.connectionAllowedVerifier ?? defaults.connectionAllowedVerifier;
 
   return {
     connectionPreprocessor:
-      config.connectionPreprocessor ?? defaults.connectionPreprocessor,
+      config?.connectionPreprocessor ?? defaults.connectionPreprocessor,
     connectionAllowedVerifier,
     mouseDownEventVerifier:
-      config.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
-    mouseUpEventVerifier: config.mouseUpEventVerifier ?? lmbMouseEventVerifier,
+      config?.mouseDownEventVerifier ?? lmbNoCtrlMouseEventVerifier,
+    mouseUpEventVerifier: config?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     draggingEdgeResolver:
-      config.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
+      config?.draggingEdgeResolver ?? defaultDraggingEdgeResolver,
     draggingEdgeShapeFactory:
-      config.draggingEdgeShape !== undefined
-        ? resolveEdgeShapeFactory(config.draggingEdgeShape)
+      config?.draggingEdgeShape !== undefined
+        ? resolveEdgeShapeFactory(config?.draggingEdgeShape)
         : null,
-    onAfterEdgeReattached: config.events?.onAfterEdgeReattached ?? noopFn,
+    onAfterEdgeReattached: config?.events?.onAfterEdgeReattached ?? noopFn,
     onEdgeReattachInterrupted:
-      config.events?.onEdgeReattachInterrupted ?? noopFn,
-    onEdgeReattachPrevented: config.events?.onEdgeReattachPrevented ?? noopFn,
+      config?.events?.onEdgeReattachInterrupted ?? noopFn,
+    onEdgeReattachPrevented: config?.events?.onEdgeReattachPrevented ?? noopFn,
     draggingPortDirectionResolver: resolveDraggingPortDirectionResolver(
-      config.dragPortDirection,
+      config?.dragPortDirection,
       graph,
       connectionAllowedVerifier,
     ),
     grabbedPortIdResolver:
-      config.grabbedPortIdResolver ?? defaultPortIdResolver,
+      config?.grabbedPortIdResolver ?? defaultPortIdResolver,
     releasedPortIdResolver:
-      config.releasedPortIdResolver ?? defaultPortIdResolver,
+      config?.releasedPortIdResolver ?? defaultPortIdResolver,
   };
 };

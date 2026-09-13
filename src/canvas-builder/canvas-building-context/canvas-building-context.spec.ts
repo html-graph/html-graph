@@ -1,20 +1,70 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
-import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
 import { BezierEdgeShape } from "@/edges";
 import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
 import { createElement } from "@/mocks/create-element.mock";
 import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
-import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algorithm.mock";
 import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
-import { CanvasBuilderError } from "./canvas-builder-error";
 import { EventSubject } from "@/event-subject";
 import { AddEdgeRequest, AddNodeRequest } from "@/graph-controller";
 import { setLayersDimensions } from "@/mocks/set-layer-dimensions.mock";
+import { CanvasBuildingContextParams } from "./canvas-building-context-params";
+import { CanvasBuildingContext } from "./canvas-building-context";
 
-describe("CanvasBuilder", () => {
+const defaultConfig: CanvasBuildingContextParams = {
+  canvasDefaults: {},
+  userDraggableNodes: {
+    enabled: false,
+    config: undefined,
+  },
+  userTransformableViewport: {
+    enabled: false,
+    config: undefined,
+  },
+  background: {
+    enabled: false,
+    config: undefined,
+  },
+  userConnectablePorts: {
+    enabled: false,
+    config: undefined,
+  },
+  userDraggableEdges: {
+    enabled: false,
+    config: undefined,
+  },
+  rectangularSelection: {
+    enabled: false,
+    config: undefined,
+  },
+  virtualScroll: {
+    enabled: false,
+  },
+  layout: {
+    enabled: false,
+    config: undefined,
+  },
+  animatedLayout: {
+    enabled: false,
+    config: undefined,
+  },
+  nodeResizeReactiveEdges: {
+    enabled: false,
+  },
+  userSelectableNodes: {
+    enabled: false,
+  },
+  userSelectableEdges: {
+    enabled: false,
+  },
+  userSelectableCanvas: {
+    enabled: false,
+  },
+};
+
+describe("CanvasBuildingContextContext", () => {
   const animationMock = new AnimationFrameMock();
 
   beforeEach(() => {
@@ -29,26 +79,29 @@ describe("CanvasBuilder", () => {
     document.body.innerHTML = "";
   });
 
-  it("should throw error when trying to call build second time", () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
-    builder.build();
+  it("should remove all children before destroy", () => {
+    const canvasElement = document.createElement("div");
+    const context = new CanvasBuildingContext(canvasElement, defaultConfig);
 
-    expect(() => {
-      builder.build();
-    }).toThrow(CanvasBuilderError);
+    const canvas = context.createCanvas();
+
+    canvas.destroy();
+
+    expect(canvasElement.children.length).toBe(0);
   });
 
-  it("should build canvas with specified defaults", () => {
+  it("should create canvas with specified defaults", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
-
-    const canvas = builder
-      .setDefaults({
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      canvasDefaults: {
         nodes: {
-          priority: () => 10,
+          priority: (): number => 10,
         },
-      })
-      .build();
+      },
+    });
+
+    const canvas = context.createCanvas();
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -63,11 +116,14 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.zIndex).toBe("10");
   });
 
-  it("should build canvas with node resize reactive edges", () => {
+  it("should create canvas with node resize reactive edges", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      nodeResizeReactiveEdges: { enabled: true },
+    });
 
-    const canvas = builder.enableNodeResizeReactiveEdges().build();
+    const canvas = context.createCanvas();
 
     const nodeRequest1: AddNodeRequest = {
       id: "node-1",
@@ -112,11 +168,14 @@ describe("CanvasBuilder", () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it("should build canvas with user draggable nodes", () => {
+  it("should create canvas with user draggable nodes", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userDraggableNodes: { enabled: true, config: undefined },
+    });
 
-    const canvas = builder.enableUserDraggableNodes().build();
+    const canvas = context.createCanvas();
     setLayersDimensions(canvasElement);
 
     const nodeElement = createElement();
@@ -141,11 +200,14 @@ describe("CanvasBuilder", () => {
     expect(nodeWrapper.style.transform).toBe("translate(100px, 100px)");
   });
 
-  it("should build canvas with user transformable viewport", () => {
+  it("should create canvas with user transformable viewport", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userTransformableViewport: { enabled: true, config: undefined },
+    });
 
-    builder.enableUserTransformableViewport().build();
+    context.createCanvas();
 
     const host = canvasElement.children[0].children[1];
     host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -159,18 +221,22 @@ describe("CanvasBuilder", () => {
     expect(container.style.transform).toBe("matrix(1, 0, 0, 1, 100, 100)");
   });
 
-  it("should build canvas with virtual scroll", async () => {
+  it("should create canvas with virtual scroll", async () => {
     const canvasElement = createElement({ width: 100, height: 100 });
-    const builder = new CanvasBuilder(canvasElement);
-
-    const canvas = builder
-      .enableVirtualScroll({
-        nodeContainingRadius: {
-          vertical: 10,
-          horizontal: 10,
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      virtualScroll: {
+        enabled: true,
+        config: {
+          nodeContainingRadius: {
+            vertical: 10,
+            horizontal: 10,
+          },
         },
-      })
-      .build();
+      },
+    });
+
+    const canvas = context.createCanvas();
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -192,23 +258,29 @@ describe("CanvasBuilder", () => {
     expect(container.children.length).toBe(1);
   });
 
-  it("should build canvas with background", async () => {
+  it("should create canvas with background", async () => {
     const canvasElement = createElement({ width: 100, height: 100 });
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      background: { enabled: true, config: undefined },
+    });
 
-    builder.enableBackground().build();
+    context.createCanvas();
 
     const svg = canvasElement.children[0].children[0].children[0];
 
     expect(svg.tagName).toBe("svg");
   });
 
-  it("should build canvas with user connectable ports", () => {
+  it("should create canvas with user connectable ports", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userConnectablePorts: { enabled: true, config: undefined },
+    });
     document.body.appendChild(canvasElement);
 
-    const canvas = builder.enableUserConnectablePorts().build();
+    const canvas = context.createCanvas();
 
     setLayersDimensions(canvasElement);
 
@@ -263,12 +335,15 @@ describe("CanvasBuilder", () => {
     expect(canvas.graph.getAllEdgeIds().length).toBe(1);
   });
 
-  it("should build canvas with user draggable edges", () => {
+  it("should create canvas with user draggable edges", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userDraggableEdges: { enabled: true, config: undefined },
+    });
     document.body.appendChild(canvasElement);
 
-    const canvas = builder.enableUserDraggableEdges().build();
+    const canvas = context.createCanvas();
 
     setLayersDimensions(canvasElement);
 
@@ -336,10 +411,13 @@ describe("CanvasBuilder", () => {
     });
   });
 
-  it("should build canvas with layout", async () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
+  it("should create canvas with default layout", async () => {
+    const context = new CanvasBuildingContext(document.createElement("div"), {
+      ...defaultConfig,
+      layout: { enabled: true, config: undefined },
+    });
 
-    const canvas = builder.enableLayout().build();
+    const canvas = context.createCanvas();
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
@@ -350,10 +428,41 @@ describe("CanvasBuilder", () => {
     expect(x !== null && y !== null).toBe(true);
   });
 
-  it("should build canvas with animated layout", async () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
+  it("should create canvas with specified layout", () => {
+    const trigger = new EventSubject<void>();
 
-    const canvas = builder.enableAnimatedLayout().build();
+    const context = new CanvasBuildingContext(document.createElement("div"), {
+      ...defaultConfig,
+      layout: {
+        enabled: true,
+        config: {
+          algorithm: {
+            type: "custom",
+            instance: new DummyLayoutAlgorithm(),
+          },
+          applyOn: trigger,
+        },
+      },
+    });
+
+    const canvas = context.createCanvas();
+
+    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+
+    trigger.emit();
+
+    const { x, y } = canvas.graph.getNode("node-1");
+
+    expect({ x, y }).toEqual({ x: 0, y: 0 });
+  });
+
+  it("should create canvas with specified animated layout", async () => {
+    const context = new CanvasBuildingContext(document.createElement("div"), {
+      ...defaultConfig,
+      animatedLayout: { enabled: true, config: undefined },
+    });
+
+    const canvas = context.createCanvas();
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
@@ -365,60 +474,28 @@ describe("CanvasBuilder", () => {
     expect(x !== null && y !== null).toBe(true);
   });
 
-  it("should unset canvas layout config when animated layout configured", async () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
-    const trigger = new EventSubject<void>();
+  it("should should not animate grabbed node", async () => {
+    const canvasElement = createElement({ width: 1000, height: 1000 });
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userDraggableNodes: { enabled: true, config: undefined },
+      animatedLayout: { enabled: true, config: undefined },
+    });
 
-    const canvas = builder
-      .enableLayout({
-        algorithm: {
-          type: "custom",
-          instance: new DummyLayoutAlgorithm(),
-        },
-        applyOn: trigger,
-      })
-      .enableAnimatedLayout({
-        algorithm: {
-          type: "custom",
-          instance: new DummyAnimatedLayoutAlgorithm(100, 100),
-        },
-      })
-      .build();
+    const canvas = context.createCanvas();
 
-    canvas.addNode({ id: "node-1", element: document.createElement("div") });
+    setLayersDimensions(canvasElement);
 
-    animationMock.timer.emit(0);
-    animationMock.timer.emit(100);
+    const nodeElement = createElement();
 
-    trigger.emit();
+    canvas.addNode({
+      id: "node-1",
+      element: nodeElement,
+      x: 0,
+      y: 0,
+    });
 
-    const { x, y } = canvas.graph.getNode("node-1");
-
-    expect({ x, y }).toEqual({ x: 100, y: 100 });
-  });
-
-  it("should unset canvas animated layout config when layout configured", async () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
-    const trigger = new EventSubject<void>();
-
-    const canvas = builder
-      .enableAnimatedLayout({
-        algorithm: {
-          type: "custom",
-          instance: new DummyAnimatedLayoutAlgorithm(),
-        },
-      })
-      .enableLayout({
-        algorithm: {
-          type: "custom",
-          instance: new DummyLayoutAlgorithm(),
-        },
-        applyOn: trigger,
-      })
-      .build();
-
-    canvas.addNode({ id: "node-1", element: document.createElement("div") });
-    trigger.emit();
+    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     animationMock.timer.emit(0);
     animationMock.timer.emit(100);
@@ -428,16 +505,21 @@ describe("CanvasBuilder", () => {
     expect({ x, y }).toEqual({ x: 0, y: 0 });
   });
 
-  it("should build canvas with selectable nodes", () => {
+  it("should create canvas with selectable nodes", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
     const onNodeSelected = vi.fn();
 
-    const canvas = builder
-      .enableUserSelectableNodes({
-        onNodeSelected,
-      })
-      .build();
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userSelectableNodes: {
+        enabled: true,
+        config: {
+          onNodeSelected,
+        },
+      },
+    });
+
+    const canvas = context.createCanvas();
 
     const nodeElement = document.createElement("div");
 
@@ -456,16 +538,20 @@ describe("CanvasBuilder", () => {
     expect(onNodeSelected).toHaveBeenCalled();
   });
 
-  it("should build selectable canvas", () => {
+  it("should create selectable canvas", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
     const onCanvasSelected = vi.fn();
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userSelectableCanvas: {
+        enabled: true,
+        config: {
+          onCanvasSelected,
+        },
+      },
+    });
 
-    builder
-      .enableUserSelectableCanvas({
-        onCanvasSelected,
-      })
-      .build();
+    context.createCanvas();
 
     const layer = canvasElement.children[0].children[1];
 
@@ -475,16 +561,21 @@ describe("CanvasBuilder", () => {
     expect(onCanvasSelected).toHaveBeenCalled();
   });
 
-  it("should build canvas with selectable edges", () => {
+  it("should create canvas with selectable edges", () => {
     const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
     const onEdgeSelected = vi.fn();
 
-    const canvas = builder
-      .enableUserSelectableEdges({
-        onEdgeSelected,
-      })
-      .build();
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      userSelectableEdges: {
+        enabled: true,
+        config: {
+          onEdgeSelected,
+        },
+      },
+    });
+
+    const canvas = context.createCanvas();
 
     const node1Element = document.createElement("div");
     const node2Element = document.createElement("div");
@@ -518,18 +609,23 @@ describe("CanvasBuilder", () => {
     expect(onEdgeSelected).toHaveBeenCalled();
   });
 
-  it("should build canvas with rectangular selection", () => {
+  it("should create canvas with rectangular selection", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
     const onSelectionStarted = vi.fn();
+
+    const context = new CanvasBuildingContext(canvasElement, {
+      ...defaultConfig,
+      rectangularSelection: {
+        enabled: true,
+        config: {
+          onSelectionStarted,
+        },
+      },
+    });
 
     document.body.appendChild(canvasElement);
 
-    builder
-      .enableRectangularSelection({
-        onSelectionStarted,
-      })
-      .build();
+    context.createCanvas();
 
     setLayersDimensions(canvasElement);
 

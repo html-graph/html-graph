@@ -1,114 +1,50 @@
-import {
-  VirtualScrollHtmlView,
-  CoreHtmlView,
-  HtmlView,
-  LayoutHtmlView,
-  RenderingBox,
-} from "@/html-view";
-import { EventSubject } from "@/event-subject";
 import { Canvas } from "@/canvas";
-import { GraphStore } from "@/graph-store";
-import { ViewportStore } from "@/viewport-store";
-import {
-  BackgroundConfigurator,
-  NodeResizeReactiveEdgesConfigurator,
-  UserConnectablePortsConfigurator,
-  UserDraggableEdgesConfigurator,
-  UserDraggableNodesConfigurator,
-  UserTransformableViewportConfigurator,
-  UserTransformableViewportVirtualScrollConfigurator,
-  LayoutConfigurator,
-  AnimatedLayoutConfigurator,
-  UserSelectableNodesConfigurator,
-  UserSelectableCanvasConfigurator,
-  PointInsideVerifier,
-  EventTagger,
-  UserSelectableEdgesConfigurator,
-  RectangularSelectionConfigurator,
-} from "@/configurators";
-import { Layers } from "./layers";
-import {
-  createDraggableNodesParams,
-  DraggableNodesConfig,
-} from "./create-draggable-nodes-params";
-import {
-  createTransformableViewportParams,
-  ViewportTransformConfig,
-} from "./create-transformable-viewport-params";
-import {
-  BackgroundConfig,
-  createBackgroundParams,
-} from "./create-background-params";
-import {
-  ConnectablePortsConfig,
-  createConnectablePortsParams,
-} from "./create-connectable-ports-params";
-import {
-  createDraggableEdgeParams,
-  DraggableEdgesConfig,
-} from "./create-draggable-edges-params";
-import {
-  createVirtualScrollParams,
-  VirtualScrollConfig,
-} from "./create-virtual-scroll-params";
-import { createVirtualScrollHtmlViewParams } from "./create-virtual-scroll-html-view-params";
+import { DraggableNodesConfig } from "./create-draggable-nodes-params";
+import { ViewportTransformConfig } from "./create-transformable-viewport-params";
+import { BackgroundConfig } from "./create-background-params";
+import { ConnectablePortsConfig } from "./create-connectable-ports-params";
+import { DraggableEdgesConfig } from "./create-draggable-edges-params";
+import { VirtualScrollConfig } from "./create-virtual-scroll-params";
 import { CanvasBuilderError } from "./canvas-builder-error";
-import { Graph } from "@/graph";
-import { Viewport } from "@/viewport";
-import { Identifier } from "@/identifier";
-import {
-  AnimatedLayoutConfig,
-  createAnimatedLayoutParams,
-} from "./create-animated-layout-params";
-import { createLayoutParams, LayoutConfig } from "./create-layout-params";
-import { patchAnimatedLayoutDraggableNodesParams } from "./patch-animated-layout-draggable-nodes-params";
-import { subscribeAnimatedLayoutStaticNodesUpdate } from "./subscribe-animated-layout-static-nodes-update";
-import { patchDraggableNodesAnimatedLayoutParams } from "./patch-draggable-nodes-animated-layout-params";
-import { GraphController } from "@/graph-controller";
-import { ViewportController } from "@/viewport-controller";
-import { createGraphControllerParams } from "./create-graph-controller-params";
-import { createViewportControllerParams } from "./create-viewport-controller-params";
+import { AnimatedLayoutConfig } from "./create-animated-layout-params";
+import { LayoutConfig } from "./create-layout-params";
 import { CanvasDefaults } from "./shared";
+import { UserSelectableNodesConfig } from "./create-user-selectable-nodes-params";
+import { UserSelectableCanvasConfig } from "./create-user-selectable-canvas-params";
+import { UserSelectableEdgesConfig } from "./create-user-selectable-edges-params";
+import { RectangularSelectionConfig } from "./create-rectangular-selection-params";
 import {
-  createUserSelectableNodesParams,
-  UserSelectableNodesConfig,
-} from "./create-user-selectable-nodes-params";
-import {
-  createUserSelectableCanvasParams,
-  UserSelectableCanvasConfig,
-} from "./create-user-selectable-canvas-params";
-import {
-  createUserSelectableEdgesParams,
-  UserSelectableEdgesConfig,
-} from "./create-user-selectable-edges-params";
-import {
-  createRectangularSelectionParams,
-  RectangularSelectionConfig,
-} from "./create-rectangular-selection-params";
+  CanvasBuildingContext,
+  CanvasBuildingContextParams,
+} from "./canvas-building-context";
 
 export class CanvasBuilder {
   private used = false;
 
   private canvasDefaults: CanvasDefaults = {};
 
-  private dragConfig: DraggableNodesConfig = {};
+  private userDraggableNodesConfig: DraggableNodesConfig | undefined =
+    undefined;
 
-  private transformConfig: ViewportTransformConfig = {};
+  private userTransformableViewportConfig: ViewportTransformConfig | undefined =
+    undefined;
 
-  private backgroundConfig: BackgroundConfig = {};
+  private backgroundConfig: BackgroundConfig | undefined = undefined;
 
-  private connectablePortsConfig: ConnectablePortsConfig = {};
+  private userConnectablePortsConfig: ConnectablePortsConfig | undefined =
+    undefined;
 
-  private draggableEdgesConfig: DraggableEdgesConfig = {};
+  private userDraggableEdgesConfig: DraggableEdgesConfig | undefined =
+    undefined;
 
   private rectangularSelectionConfig: RectangularSelectionConfig | undefined =
     undefined;
 
   private virtualScrollConfig: VirtualScrollConfig | undefined = undefined;
 
-  private layoutConfig: LayoutConfig = {};
+  private layoutConfig: LayoutConfig | undefined = undefined;
 
-  private animatedLayoutConfig: AnimatedLayoutConfig = {};
+  private animatedLayoutConfig: AnimatedLayoutConfig | undefined = undefined;
 
   private userSelectableNodesConfig: UserSelectableNodesConfig | undefined =
     undefined;
@@ -137,19 +73,7 @@ export class CanvasBuilder {
 
   private hasLayout = false;
 
-  private readonly boxRenderingTrigger = new EventSubject<RenderingBox>();
-
-  private readonly window: Window = window;
-
-  private readonly animationStaticNodes = new Set<Identifier>();
-
-  private readonly pointInsideVerifier: PointInsideVerifier;
-
-  private readonly eventTagger = new EventTagger();
-
-  public constructor(private readonly element: HTMLElement) {
-    this.pointInsideVerifier = new PointInsideVerifier(element, this.window);
-  }
+  public constructor(private readonly element: HTMLElement) {}
 
   public setDefaults(defaults: CanvasDefaults): CanvasBuilder {
     this.canvasDefaults = defaults;
@@ -161,7 +85,7 @@ export class CanvasBuilder {
     config?: DraggableNodesConfig | undefined,
   ): CanvasBuilder {
     this.hasDraggableNodes = true;
-    this.dragConfig = config ?? {};
+    this.userDraggableNodesConfig = config;
 
     return this;
   }
@@ -170,7 +94,7 @@ export class CanvasBuilder {
     config?: ViewportTransformConfig | undefined,
   ): CanvasBuilder {
     this.hasTransformableViewport = true;
-    this.transformConfig = config ?? {};
+    this.userTransformableViewportConfig = config;
 
     return this;
   }
@@ -191,7 +115,7 @@ export class CanvasBuilder {
     config?: BackgroundConfig | undefined,
   ): CanvasBuilder {
     this.hasBackground = true;
-    this.backgroundConfig = config ?? {};
+    this.backgroundConfig = config;
 
     return this;
   }
@@ -200,7 +124,7 @@ export class CanvasBuilder {
     config?: ConnectablePortsConfig | undefined,
   ): CanvasBuilder {
     this.hasUserConnectablePorts = true;
-    this.connectablePortsConfig = config ?? {};
+    this.userConnectablePortsConfig = config;
 
     return this;
   }
@@ -209,7 +133,7 @@ export class CanvasBuilder {
     config?: DraggableEdgesConfig | undefined,
   ): CanvasBuilder {
     this.hasUserDraggableEdges = true;
-    this.draggableEdgesConfig = config ?? {};
+    this.userDraggableEdgesConfig = config;
 
     return this;
   }
@@ -224,7 +148,7 @@ export class CanvasBuilder {
   }
 
   public enableLayout(config?: LayoutConfig | undefined): CanvasBuilder {
-    this.layoutConfig = config ?? {};
+    this.layoutConfig = config;
     this.hasLayout = true;
     this.hasAnimatedLayout = false;
 
@@ -234,7 +158,7 @@ export class CanvasBuilder {
   public enableAnimatedLayout(
     config?: AnimatedLayoutConfig | undefined,
   ): CanvasBuilder {
-    this.animatedLayoutConfig = config ?? {};
+    this.animatedLayoutConfig = config;
     this.hasAnimatedLayout = true;
     this.hasLayout = false;
 
@@ -274,242 +198,75 @@ export class CanvasBuilder {
 
     this.used = true;
 
-    const viewportStore = new ViewportStore(this.element);
-    const graphStore = new GraphStore();
-
-    const layers = new Layers(this.element);
-    const htmlView = this.createHtmlView(
-      layers.main,
-      graphStore,
-      viewportStore,
-    );
-
-    const graphControllerParams = createGraphControllerParams(
-      this.canvasDefaults,
-    );
-
-    const graphController = new GraphController(
-      graphStore,
-      htmlView,
-      graphControllerParams,
-    );
-
-    const layoutParams = createLayoutParams(this.layoutConfig);
-
-    const viewportControllerParams = createViewportControllerParams({
+    const contextParams: CanvasBuildingContextParams = {
       canvasDefaults: this.canvasDefaults,
-      hasLayout: this.hasLayout,
-      layoutParams,
-    });
+      userDraggableNodes: {
+        enabled: this.hasDraggableNodes,
+        config: this.userDraggableNodesConfig,
+      },
+      userTransformableViewport: {
+        enabled: this.hasTransformableViewport,
+        config: this.userTransformableViewportConfig,
+      },
+      background: {
+        enabled: this.hasBackground,
+        config: this.backgroundConfig,
+      },
+      userConnectablePorts: {
+        enabled: this.hasUserConnectablePorts,
+        config: this.userConnectablePortsConfig,
+      },
+      userDraggableEdges: {
+        enabled: this.hasUserDraggableEdges,
+        config: this.userDraggableEdgesConfig,
+      },
+      rectangularSelection: {
+        enabled: this.hasRectangularSelection,
+        config: this.rectangularSelectionConfig,
+      },
+      virtualScroll:
+        this.virtualScrollConfig !== undefined
+          ? {
+              enabled: true,
+              config: this.virtualScrollConfig,
+            }
+          : { enabled: false },
+      layout: {
+        enabled: this.hasLayout,
+        config: this.layoutConfig,
+      },
+      animatedLayout: {
+        enabled: this.hasAnimatedLayout,
+        config: this.animatedLayoutConfig,
+      },
+      nodeResizeReactiveEdges: {
+        enabled: this.hasNodeResizeReactiveEdges,
+      },
+      userSelectableNodes:
+        this.userSelectableNodesConfig !== undefined
+          ? {
+              enabled: true,
+              config: this.userSelectableNodesConfig,
+            }
+          : { enabled: false },
+      userSelectableEdges:
+        this.userSelectableEdgesConfig !== undefined
+          ? {
+              enabled: true,
+              config: this.userSelectableEdgesConfig,
+            }
+          : { enabled: false },
+      userSelectableCanvas:
+        this.userSelectableCanvasConfig !== undefined
+          ? {
+              enabled: true,
+              config: this.userSelectableCanvasConfig,
+            }
+          : { enabled: false },
+    };
 
-    const viewportController = new ViewportController(
-      graphStore,
-      viewportStore,
-      viewportControllerParams,
-      this.window,
-    );
+    const context = new CanvasBuildingContext(this.element, contextParams);
 
-    const viewport = new Viewport(viewportStore);
-    const graph = new Graph(graphStore);
-
-    const canvas = new Canvas(
-      graph,
-      viewport,
-      graphController,
-      viewportController,
-    );
-
-    if (this.hasBackground) {
-      BackgroundConfigurator.configure(
-        canvas,
-        createBackgroundParams(this.backgroundConfig),
-        layers.background,
-      );
-    }
-
-    if (this.hasNodeResizeReactiveEdges) {
-      NodeResizeReactiveEdgesConfigurator.configure(canvas);
-    }
-
-    if (this.userSelectableEdgesConfig !== undefined) {
-      const params = createUserSelectableEdgesParams(
-        this.userSelectableEdgesConfig,
-      );
-
-      UserSelectableEdgesConfigurator.configure(
-        canvas,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
-
-    if (this.userSelectableNodesConfig !== undefined) {
-      const params = createUserSelectableNodesParams(
-        this.userSelectableNodesConfig,
-      );
-
-      UserSelectableNodesConfigurator.configure(
-        canvas,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
-
-    if (this.userSelectableCanvasConfig !== undefined) {
-      const params = createUserSelectableCanvasParams(
-        this.userSelectableCanvasConfig,
-      );
-
-      UserSelectableCanvasConfigurator.configure(
-        canvas,
-        layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
-
-    if (this.hasDraggableNodes) {
-      let draggableNodesParams = createDraggableNodesParams(this.dragConfig);
-
-      if (this.hasAnimatedLayout) {
-        draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
-          draggableNodesParams,
-          this.animationStaticNodes,
-        );
-      }
-
-      UserDraggableNodesConfigurator.configure(
-        canvas,
-        layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        draggableNodesParams,
-      );
-    }
-
-    if (this.hasUserConnectablePorts) {
-      const params = createConnectablePortsParams(
-        this.connectablePortsConfig,
-        graphControllerParams.edges.shapeFactory,
-        canvas.graph,
-      );
-
-      UserConnectablePortsConfigurator.configure(
-        canvas,
-        layers.overlayConnectablePorts,
-        viewportStore,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
-
-    if (this.hasUserDraggableEdges) {
-      const dragEdgeParams = createDraggableEdgeParams(
-        this.draggableEdgesConfig,
-        canvas.graph,
-      );
-
-      UserDraggableEdgesConfigurator.configure(
-        canvas,
-        layers.overlayDraggableEdges,
-        viewportStore,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        dragEdgeParams,
-      );
-    }
-
-    if (this.virtualScrollConfig !== undefined) {
-      UserTransformableViewportVirtualScrollConfigurator.configure(
-        canvas,
-        layers.main,
-        this.window,
-        createTransformableViewportParams(this.transformConfig),
-        this.boxRenderingTrigger,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        createVirtualScrollParams(this.virtualScrollConfig),
-      );
-    } else if (this.hasTransformableViewport) {
-      UserTransformableViewportConfigurator.configure(
-        canvas,
-        layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        createTransformableViewportParams(this.transformConfig),
-      );
-    }
-
-    if (this.hasRectangularSelection) {
-      RectangularSelectionConfigurator.configure(
-        canvas,
-        layers.main,
-        layers.overlayRectangularSelection,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        this.window,
-        createRectangularSelectionParams(this.rectangularSelectionConfig),
-      );
-    }
-
-    if (this.hasLayout) {
-      LayoutConfigurator.configure(canvas, layoutParams);
-    }
-
-    if (this.hasAnimatedLayout) {
-      let config = createAnimatedLayoutParams(this.animatedLayoutConfig);
-
-      if (this.hasDraggableNodes) {
-        subscribeAnimatedLayoutStaticNodesUpdate(
-          canvas,
-          this.animationStaticNodes,
-        );
-
-        config = patchDraggableNodesAnimatedLayoutParams(
-          config,
-          this.animationStaticNodes,
-        );
-      }
-
-      AnimatedLayoutConfigurator.configure(canvas, config, this.window);
-    }
-
-    canvas.onBeforeDestroy.subscribe(() => {
-      layers.destroy();
-    });
-
-    return canvas;
-  }
-
-  private createHtmlView(
-    host: HTMLElement,
-    graphStore: GraphStore,
-    viewportStore: ViewportStore,
-  ): HtmlView {
-    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, host);
-
-    if (this.virtualScrollConfig !== undefined) {
-      htmlView = new VirtualScrollHtmlView(
-        htmlView,
-        graphStore,
-        this.boxRenderingTrigger,
-        createVirtualScrollHtmlViewParams(this.virtualScrollConfig),
-      );
-    }
-
-    htmlView = new LayoutHtmlView(htmlView, graphStore);
-
-    return htmlView;
+    return context.createCanvas();
   }
 }
