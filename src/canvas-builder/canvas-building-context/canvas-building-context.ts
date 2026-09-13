@@ -174,7 +174,7 @@ export class CanvasBuildingContext {
       );
     }
 
-    if (this.params.userDraggableNodes) {
+    if (this.params.userDraggableNodes.enabled) {
       let draggableNodesParams = createDraggableNodesParams(
         this.params.userDraggableNodes.config,
       );
