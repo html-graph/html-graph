@@ -174,9 +174,9 @@ export class CanvasBuildingContext {
       );
     }
 
-    if (this.params.draggableNodes) {
+    if (this.params.userDraggableNodes) {
       let draggableNodesParams = createDraggableNodesParams(
-        this.params.draggableNodes.config,
+        this.params.userDraggableNodes.config,
       );
 
       if (this.params.animatedLayout.enabled) {
@@ -196,9 +196,9 @@ export class CanvasBuildingContext {
       );
     }
 
-    if (this.params.connectablePorts.enabled) {
+    if (this.params.userConnectablePorts.enabled) {
       const params = createConnectablePortsParams(
-        this.params.connectablePorts.config,
+        this.params.userConnectablePorts.config,
         graphControllerParams.edges.shapeFactory,
         canvas.graph,
       );
@@ -214,9 +214,9 @@ export class CanvasBuildingContext {
       );
     }
 
-    if (this.params.draggableEdges.enabled) {
+    if (this.params.userDraggableEdges.enabled) {
       const dragEdgeParams = createDraggableEdgeParams(
-        this.params.draggableEdges.config,
+        this.params.userDraggableEdges.config,
         canvas.graph,
       );
 
@@ -237,14 +237,14 @@ export class CanvasBuildingContext {
         layers.main,
         this.window,
         createTransformableViewportParams(
-          this.params.transformableViewport.config,
+          this.params.userTransformableViewport.config,
         ),
         this.boxRenderingTrigger,
         this.pointInsideVerifier,
         this.eventTagger,
         createVirtualScrollParams(this.params.virtualScroll.config),
       );
-    } else if (this.params.transformableViewport.enabled) {
+    } else if (this.params.userTransformableViewport.enabled) {
       UserTransformableViewportConfigurator.configure(
         canvas,
         layers.main,
@@ -252,7 +252,7 @@ export class CanvasBuildingContext {
         this.pointInsideVerifier,
         this.eventTagger,
         createTransformableViewportParams(
-          this.params.transformableViewport.config,
+          this.params.userTransformableViewport.config,
         ),
       );
     }
@@ -280,7 +280,7 @@ export class CanvasBuildingContext {
         this.params.animatedLayout.config,
       );
 
-      if (this.params.draggableNodes.enabled) {
+      if (this.params.userDraggableNodes.enabled) {
         subscribeAnimatedLayoutStaticNodesUpdate(
           canvas,
           this.animationStaticNodes,

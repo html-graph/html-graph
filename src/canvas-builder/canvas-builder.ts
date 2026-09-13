@@ -200,11 +200,11 @@ export class CanvasBuilder {
 
     const contextParams: CanvasBuildingContextParams = {
       canvasDefaults: this.canvasDefaults,
-      draggableNodes: {
+      userDraggableNodes: {
         enabled: this.hasDraggableNodes,
         config: this.userDraggableNodesConfig,
       },
-      transformableViewport: {
+      userTransformableViewport: {
         enabled: this.hasTransformableViewport,
         config: this.userTransformableViewportConfig,
       },
@@ -212,11 +212,11 @@ export class CanvasBuilder {
         enabled: this.hasBackground,
         config: this.backgroundConfig,
       },
-      connectablePorts: {
+      userConnectablePorts: {
         enabled: this.hasUserConnectablePorts,
         config: this.userConnectablePortsConfig,
       },
-      draggableEdges: {
+      userDraggableEdges: {
         enabled: this.hasUserDraggableEdges,
         config: this.userDraggableEdgesConfig,
       },

@@ -12,12 +12,7 @@ import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
 import { CanvasBuilderError } from "./canvas-builder-error";
 import { EventSubject } from "@/event-subject";
 import { AddEdgeRequest, AddNodeRequest } from "@/graph-controller";
-
-const setLayersDimensions = (element: HTMLElement): void => {
-  for (const child of element.children[0].children) {
-    child.getBoundingClientRect = element.getBoundingClientRect;
-  }
-};
+import { setLayersDimensions } from "@/mocks/set-layer-dimensions.mock";
 
 describe("CanvasBuilder", () => {
   const animationMock = new AnimationFrameMock();
@@ -41,17 +36,6 @@ describe("CanvasBuilder", () => {
     expect(() => {
       builder.build();
     }).toThrow(CanvasBuilderError);
-  });
-
-  it("should remove all children before destroy", () => {
-    const canvasElement = document.createElement("div");
-    const builder = new CanvasBuilder(canvasElement);
-
-    const canvas = builder.build();
-
-    canvas.destroy();
-
-    expect(canvasElement.children.length).toBe(0);
   });
 
   it("should build canvas with specified defaults", () => {
@@ -352,7 +336,7 @@ describe("CanvasBuilder", () => {
     });
   });
 
-  it("should build canvas with default layout", async () => {
+  it("should build canvas with layout", async () => {
     const builder = new CanvasBuilder(document.createElement("div"));
 
     const canvas = builder.enableLayout().build();
@@ -366,30 +350,7 @@ describe("CanvasBuilder", () => {
     expect(x !== null && y !== null).toBe(true);
   });
 
-  it("should build canvas with specified layout", () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
-    const trigger = new EventSubject<void>();
-
-    const canvas = builder
-      .enableLayout({
-        algorithm: {
-          type: "custom",
-          instance: new DummyLayoutAlgorithm(),
-        },
-        applyOn: trigger,
-      })
-      .build();
-
-    canvas.addNode({ id: "node-1", element: document.createElement("div") });
-
-    trigger.emit();
-
-    const { x, y } = canvas.graph.getNode("node-1");
-
-    expect({ x, y }).toEqual({ x: 0, y: 0 });
-  });
-
-  it("should build canvas with specified animated layout", async () => {
+  it("should build canvas with animated layout", async () => {
     const builder = new CanvasBuilder(document.createElement("div"));
 
     const canvas = builder.enableAnimatedLayout().build();
@@ -458,36 +419,6 @@ describe("CanvasBuilder", () => {
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
     trigger.emit();
-
-    animationMock.timer.emit(0);
-    animationMock.timer.emit(100);
-
-    const { x, y } = canvas.graph.getNode("node-1");
-
-    expect({ x, y }).toEqual({ x: 0, y: 0 });
-  });
-
-  it("should should not animate grabbed node", async () => {
-    const canvasElement = createElement({ width: 1000, height: 1000 });
-    const builder = new CanvasBuilder(canvasElement);
-
-    const canvas = builder
-      .enableUserDraggableNodes()
-      .enableAnimatedLayout()
-      .build();
-
-    setLayersDimensions(canvasElement);
-
-    const nodeElement = createElement();
-
-    canvas.addNode({
-      id: "node-1",
-      element: nodeElement,
-      x: 0,
-      y: 0,
-    });
-
-    nodeElement.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
 
     animationMock.timer.emit(0);
     animationMock.timer.emit(100);

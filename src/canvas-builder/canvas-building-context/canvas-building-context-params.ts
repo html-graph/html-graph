@@ -15,12 +15,12 @@ import { CanvasDefaults } from "../shared";
 export interface CanvasBuildingContextParams {
   readonly canvasDefaults: CanvasDefaults;
 
-  readonly draggableNodes: {
+  readonly userDraggableNodes: {
     readonly enabled: boolean;
     readonly config: DraggableNodesConfig | undefined;
   };
 
-  readonly transformableViewport: {
+  readonly userTransformableViewport: {
     readonly enabled: boolean;
     readonly config: ViewportTransformConfig | undefined;
   };
@@ -30,12 +30,12 @@ export interface CanvasBuildingContextParams {
     readonly config: BackgroundConfig | undefined;
   };
 
-  readonly connectablePorts: {
+  readonly userConnectablePorts: {
     readonly enabled: boolean;
     readonly config: ConnectablePortsConfig | undefined;
   };
 
-  readonly draggableEdges: {
+  readonly userDraggableEdges: {
     readonly enabled: boolean;
     readonly config: DraggableEdgesConfig | undefined;
   };
