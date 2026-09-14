@@ -1,7 +1,16 @@
 import { MouseEventVerifier } from "@/configurators";
 import { TransformPreprocessorConfig } from "./transform-preprocessor-config";
 
-export interface ViewportTransformConfig {
+export interface UserTransformableViewportConfig {
+  readonly zoom?: {
+    readonly mouseWheelSensitivity?: number;
+    readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
+    readonly wheelFinishTimeout?: number;
+  };
+  /**
+   * @deprecated
+   * use zoom property instead
+   */
   readonly scale?: {
     readonly mouseWheelSensitivity?: number;
     readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;

@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { DraggableNodesConfig } from "./create-draggable-nodes-params";
-import { ViewportTransformConfig } from "./create-transformable-viewport-params";
+import { UserTransformableViewportConfig } from "./create-user-transformable-viewport-params";
 import { BackgroundConfig } from "./create-background-params";
 import { ConnectablePortsConfig } from "./create-connectable-ports-params";
 import { DraggableEdgesConfig } from "./create-draggable-edges-params";
@@ -23,11 +23,11 @@ export class CanvasBuilder {
 
   private canvasDefaults: CanvasDefaults = {};
 
-  private userDraggableNodesConfig: DraggableNodesConfig | undefined =
-    undefined;
+  private draggableNodesConfig: DraggableNodesConfig | undefined = undefined;
 
-  private userTransformableViewportConfig: ViewportTransformConfig | undefined =
-    undefined;
+  private userTransformableViewportConfig:
+    | UserTransformableViewportConfig
+    | undefined = undefined;
 
   private backgroundConfig: BackgroundConfig | undefined = undefined;
 
@@ -57,7 +57,7 @@ export class CanvasBuilder {
 
   private hasDraggableNodes = false;
 
-  private hasTransformableViewport = false;
+  private hasUserTransformableViewport = false;
 
   private hasNodeResizeReactiveEdges = false;
 
@@ -85,15 +85,15 @@ export class CanvasBuilder {
     config?: DraggableNodesConfig | undefined,
   ): CanvasBuilder {
     this.hasDraggableNodes = true;
-    this.userDraggableNodesConfig = config;
+    this.draggableNodesConfig = config;
 
     return this;
   }
 
   public enableUserTransformableViewport(
-    config?: ViewportTransformConfig | undefined,
+    config?: UserTransformableViewportConfig | undefined,
   ): CanvasBuilder {
-    this.hasTransformableViewport = true;
+    this.hasUserTransformableViewport = true;
     this.userTransformableViewportConfig = config;
 
     return this;
@@ -200,12 +200,12 @@ export class CanvasBuilder {
 
     const contextParams: CanvasBuildingContextParams = {
       canvasDefaults: this.canvasDefaults,
-      userDraggableNodes: {
+      draggableNodes: {
         enabled: this.hasDraggableNodes,
-        config: this.userDraggableNodesConfig,
+        config: this.draggableNodesConfig,
       },
       userTransformableViewport: {
-        enabled: this.hasTransformableViewport,
+        enabled: this.hasUserTransformableViewport,
         config: this.userTransformableViewportConfig,
       },
       background: {
@@ -267,6 +267,6 @@ export class CanvasBuilder {
 
     const context = new CanvasBuildingContext(this.element, contextParams);
 
-    return context.createCanvas();
+    return context.canvas;
   }
 }

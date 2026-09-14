@@ -4,7 +4,7 @@ import { ViewportStore } from "@/viewport-store";
 import { GraphStore } from "@/graph-store";
 import { Layers } from "../layers";
 import { createGraphControllerParams } from "../create-graph-controller-params";
-import { GraphController } from "@/graph-controller";
+import { GraphController, GraphControllerParams } from "@/graph-controller";
 import { createLayoutParams } from "../create-layout-params";
 import { createViewportControllerParams } from "../create-viewport-controller-params";
 import { ViewportController } from "@/viewport-controller";
@@ -22,6 +22,7 @@ import {
   BackgroundConfigurator,
   EventTagger,
   LayoutConfigurator,
+  LayoutParams,
   NodeResizeReactiveEdgesConfigurator,
   PointInsideVerifier,
   RectangularSelectionConfigurator,
@@ -44,7 +45,7 @@ import { createDraggableNodesParams } from "../create-draggable-nodes-params";
 import { patchAnimatedLayoutDraggableNodesParams } from "../patch-animated-layout-draggable-nodes-params";
 import { createConnectablePortsParams } from "../create-connectable-ports-params";
 import { createDraggableEdgeParams } from "../create-draggable-edges-params";
-import { createTransformableViewportParams } from "../create-transformable-viewport-params";
+import { createUserTransformableViewportParams } from "../create-user-transformable-viewport-params";
 import { createVirtualScrollParams } from "../create-virtual-scroll-params";
 import { createRectangularSelectionParams } from "../create-rectangular-selection-params";
 import { createAnimatedLayoutParams } from "../create-animated-layout-params";
@@ -63,6 +64,22 @@ export class CanvasBuildingContext {
 
   private readonly eventTagger = new EventTagger();
 
+  private readonly viewportStore: ViewportStore;
+
+  private readonly graphStore = new GraphStore();
+
+  private readonly layers: Layers;
+
+  private readonly htmlView: HtmlView;
+
+  private readonly graphControllerParams: GraphControllerParams;
+
+  private readonly graphController: GraphController;
+
+  private readonly layoutParams: LayoutParams;
+
+  public readonly canvas: Canvas;
+
   public constructor(
     private readonly element: HTMLElement,
     private readonly params: CanvasBuildingContextParams,
@@ -71,64 +88,61 @@ export class CanvasBuildingContext {
       this.element,
       this.window,
     );
-  }
 
-  public createCanvas(): Canvas {
-    const viewportStore = new ViewportStore(this.element);
-    const graphStore = new GraphStore();
+    this.viewportStore = new ViewportStore(this.element);
+    this.layers = new Layers(this.element);
 
-    const layers = new Layers(this.element);
-    const htmlView = this.createHtmlView(
-      layers.main,
-      graphStore,
-      viewportStore,
+    this.htmlView = this.createHtmlView(
+      this.layers.main,
+      this.graphStore,
+      this.viewportStore,
     );
 
-    const graphControllerParams = createGraphControllerParams(
+    this.graphControllerParams = createGraphControllerParams(
       this.params.canvasDefaults,
     );
 
-    const graphController = new GraphController(
-      graphStore,
-      htmlView,
-      graphControllerParams,
+    this.graphController = new GraphController(
+      this.graphStore,
+      this.htmlView,
+      this.graphControllerParams,
     );
 
-    const layoutParams = createLayoutParams(this.params.layout.config);
+    this.layoutParams = createLayoutParams(this.params.layout.config);
 
     const viewportControllerParams = createViewportControllerParams({
       canvasDefaults: this.params.canvasDefaults,
       hasLayout: this.params.layout.enabled,
-      layoutParams,
+      layoutParams: this.layoutParams,
     });
 
     const viewportController = new ViewportController(
-      graphStore,
-      viewportStore,
+      this.graphStore,
+      this.viewportStore,
       viewportControllerParams,
       this.window,
     );
 
-    const viewport = new Viewport(viewportStore);
-    const graph = new Graph(graphStore);
+    const viewport = new Viewport(this.viewportStore);
+    const graph = new Graph(this.graphStore);
 
-    const canvas = new Canvas(
+    this.canvas = new Canvas(
       graph,
       viewport,
-      graphController,
+      this.graphController,
       viewportController,
     );
 
     if (this.params.background.enabled) {
       BackgroundConfigurator.configure(
-        canvas,
+        this.canvas,
         createBackgroundParams(this.params.background.config),
-        layers.background,
+        this.layers.background,
       );
     }
 
     if (this.params.nodeResizeReactiveEdges.enabled) {
-      NodeResizeReactiveEdgesConfigurator.configure(canvas);
+      NodeResizeReactiveEdgesConfigurator.configure(this.canvas);
     }
 
     if (this.params.userSelectableEdges.enabled) {
@@ -137,7 +151,7 @@ export class CanvasBuildingContext {
       );
 
       UserSelectableEdgesConfigurator.configure(
-        canvas,
+        this.canvas,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -151,7 +165,7 @@ export class CanvasBuildingContext {
       );
 
       UserSelectableNodesConfigurator.configure(
-        canvas,
+        this.canvas,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -165,8 +179,8 @@ export class CanvasBuildingContext {
       );
 
       UserSelectableCanvasConfigurator.configure(
-        canvas,
-        layers.main,
+        this.canvas,
+        this.layers.main,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -174,9 +188,9 @@ export class CanvasBuildingContext {
       );
     }
 
-    if (this.params.userDraggableNodes.enabled) {
+    if (this.params.draggableNodes.enabled) {
       let draggableNodesParams = createDraggableNodesParams(
-        this.params.userDraggableNodes.config,
+        this.params.draggableNodes.config,
       );
 
       if (this.params.animatedLayout.enabled) {
@@ -187,8 +201,8 @@ export class CanvasBuildingContext {
       }
 
       UserDraggableNodesConfigurator.configure(
-        canvas,
-        layers.main,
+        this.canvas,
+        this.layers.main,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -199,14 +213,14 @@ export class CanvasBuildingContext {
     if (this.params.userConnectablePorts.enabled) {
       const params = createConnectablePortsParams(
         this.params.userConnectablePorts.config,
-        graphControllerParams.edges.shapeFactory,
-        canvas.graph,
+        this.graphControllerParams.edges.shapeFactory,
+        this.canvas.graph,
       );
 
       UserConnectablePortsConfigurator.configure(
-        canvas,
-        layers.overlayConnectablePorts,
-        viewportStore,
+        this.canvas,
+        this.layers.overlayConnectablePorts,
+        this.viewportStore,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -217,13 +231,13 @@ export class CanvasBuildingContext {
     if (this.params.userDraggableEdges.enabled) {
       const dragEdgeParams = createDraggableEdgeParams(
         this.params.userDraggableEdges.config,
-        canvas.graph,
+        this.canvas.graph,
       );
 
       UserDraggableEdgesConfigurator.configure(
-        canvas,
-        layers.overlayDraggableEdges,
-        viewportStore,
+        this.canvas,
+        this.layers.overlayDraggableEdges,
+        this.viewportStore,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
@@ -233,10 +247,10 @@ export class CanvasBuildingContext {
 
     if (this.params.virtualScroll.enabled) {
       UserTransformableViewportVirtualScrollConfigurator.configure(
-        canvas,
-        layers.main,
+        this.canvas,
+        this.layers.main,
         this.window,
-        createTransformableViewportParams(
+        createUserTransformableViewportParams(
           this.params.userTransformableViewport.config,
         ),
         this.boxRenderingTrigger,
@@ -246,12 +260,12 @@ export class CanvasBuildingContext {
       );
     } else if (this.params.userTransformableViewport.enabled) {
       UserTransformableViewportConfigurator.configure(
-        canvas,
-        layers.main,
+        this.canvas,
+        this.layers.main,
         this.window,
         this.pointInsideVerifier,
         this.eventTagger,
-        createTransformableViewportParams(
+        createUserTransformableViewportParams(
           this.params.userTransformableViewport.config,
         ),
       );
@@ -259,9 +273,9 @@ export class CanvasBuildingContext {
 
     if (this.params.rectangularSelection.enabled) {
       RectangularSelectionConfigurator.configure(
-        canvas,
-        layers.main,
-        layers.overlayRectangularSelection,
+        this.canvas,
+        this.layers.main,
+        this.layers.overlayRectangularSelection,
         this.pointInsideVerifier,
         this.eventTagger,
         this.window,
@@ -272,7 +286,7 @@ export class CanvasBuildingContext {
     }
 
     if (this.params.layout.enabled) {
-      LayoutConfigurator.configure(canvas, layoutParams);
+      LayoutConfigurator.configure(this.canvas, this.layoutParams);
     }
 
     if (this.params.animatedLayout.enabled) {
@@ -280,9 +294,9 @@ export class CanvasBuildingContext {
         this.params.animatedLayout.config,
       );
 
-      if (this.params.userDraggableNodes.enabled) {
+      if (this.params.draggableNodes.enabled) {
         subscribeAnimatedLayoutStaticNodesUpdate(
-          canvas,
+          this.canvas,
           this.animationStaticNodes,
         );
 
@@ -292,14 +306,12 @@ export class CanvasBuildingContext {
         );
       }
 
-      AnimatedLayoutConfigurator.configure(canvas, config, this.window);
+      AnimatedLayoutConfigurator.configure(this.canvas, config, this.window);
     }
 
-    canvas.onBeforeDestroy.subscribe(() => {
-      layers.destroy();
+    this.canvas.onBeforeDestroy.subscribe(() => {
+      this.layers.destroy();
     });
-
-    return canvas;
   }
 
   private createHtmlView(
