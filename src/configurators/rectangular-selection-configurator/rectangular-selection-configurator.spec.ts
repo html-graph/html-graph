@@ -906,7 +906,7 @@ describe("RectangularSelectionConfigurator", () => {
     expect(onSelectionFinished).not.toHaveBeenCalled();
   });
 
-  it("should not call specified callback on touch move when canvas is destroyed", () => {
+  it("should not call specified callback on touch move when selection is finished", () => {
     const mainElement = createElement({ width: 1000, height: 1000 });
     const overlayElement = createElement({ width: 1000, height: 1000 });
     const onSelectionChange = vi.fn();
