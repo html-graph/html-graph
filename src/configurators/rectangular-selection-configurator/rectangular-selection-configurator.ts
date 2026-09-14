@@ -72,29 +72,21 @@ export class RectangularSelectionConfigurator {
       return;
     }
 
-    const canvasRect = this.mainElement.getBoundingClientRect();
-
-    const touchPoints: Point[] = [];
-
-    for (let i = 0; i < touchEvent.touches.length; i++) {
-      const t = touchEvent.touches[i];
-
-      touchPoints.push({
-        x: t.clientX - canvasRect.x,
-        y: t.clientY - canvasRect.y,
-      });
-    }
-
-    const viewportRectangle = calculateContainingRectangle(touchPoints);
-
-    this.initialContentPoint = this.canvas.viewport.createContentCoords(
-      viewportRectangle.from,
-    );
-    this.draggingViewportPoint = viewportRectangle.to;
-
-    this.updateSelectionRectangle();
+    this.updateTouchSelectionRectangle(touchEvent.touches);
 
     this.host.appendChild(this.selectionRectangleWrapper);
+
+    this.win.addEventListener("touchmove", this.onWindowTouchMove, {
+      passive: true,
+    });
+    this.win.addEventListener("touchend", this.onWindowTouchEnd, {
+      passive: true,
+    });
+    this.win.addEventListener("touchcancel", this.onWindowTouchCancel, {
+      passive: true,
+    });
+
+    this.params.onSelectionStarted();
   };
 
   private readonly onWindowMouseMove: EventListener = (event: Event) => {
@@ -124,6 +116,17 @@ export class RectangularSelectionConfigurator {
     this.params.onSelectionChange(selectionRect);
   };
 
+  private readonly onWindowTouchMove: EventListener = (event: Event) => {
+    const touchEvent = event as TouchEvent;
+
+    this.updateTouchSelectionRectangle(touchEvent.touches);
+
+    const selectionRect =
+      this.selectionRectangleWrapper.getBoundingClientRect();
+
+    this.params.onSelectionChange(selectionRect);
+  };
+
   private readonly onWindowMouseUp: EventListener = (event) => {
     const mouseEvent = event as MouseEvent;
 
@@ -133,6 +136,16 @@ export class RectangularSelectionConfigurator {
 
     this.removeMouseListeners();
     this.finishSelection();
+  };
+
+  private readonly onWindowTouchEnd: EventListener = () => {
+    this.removeTouchListeners();
+    this.finishSelection();
+  };
+
+  private readonly onWindowTouchCancel: EventListener = () => {
+    this.removeTouchListeners();
+    this.interruptSelection();
   };
 
   private constructor(
@@ -159,7 +172,12 @@ export class RectangularSelectionConfigurator {
 
     this.canvas.onBeforeDestroy.subscribe(() => {
       this.mainElement.removeEventListener("mousedown", this.onCanvasMouseDown);
+      this.mainElement.removeEventListener(
+        "touchstart",
+        this.onCanvasTouchStart,
+      );
       this.removeMouseListeners();
+      this.removeTouchListeners();
     });
   }
 
@@ -215,6 +233,12 @@ export class RectangularSelectionConfigurator {
     this.win.removeEventListener("mouseup", this.onWindowMouseUp);
   }
 
+  private removeTouchListeners(): void {
+    this.win.removeEventListener("touchmove", this.onWindowTouchMove);
+    this.win.removeEventListener("touchend", this.onWindowTouchEnd);
+    this.win.removeEventListener("touchcancel", this.onWindowTouchCancel);
+  }
+
   private finishSelection(): void {
     const selectionRect =
       this.selectionRectangleWrapper.getBoundingClientRect();
@@ -233,5 +257,29 @@ export class RectangularSelectionConfigurator {
     this.host.removeChild(this.selectionRectangleWrapper);
     this.initialContentPoint = null;
     this.draggingViewportPoint = null;
+  }
+
+  private updateTouchSelectionRectangle(touches: TouchList): void {
+    const canvasRect = this.mainElement.getBoundingClientRect();
+
+    const touchPoints: Point[] = [];
+
+    for (let i = 0; i < touches.length; i++) {
+      const t = touches[i];
+
+      touchPoints.push({
+        x: t.clientX - canvasRect.x,
+        y: t.clientY - canvasRect.y,
+      });
+    }
+
+    const viewportRectangle = calculateContainingRectangle(touchPoints);
+
+    this.initialContentPoint = this.canvas.viewport.createContentCoords(
+      viewportRectangle.from,
+    );
+    this.draggingViewportPoint = viewportRectangle.to;
+
+    this.updateSelectionRectangle();
   }
 }
