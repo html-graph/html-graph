@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { calculateContainingRectangle } from "./calculate-containing-rectangle";
 
 describe("calculateContainingRectangle", () => {
-  it("should calculate point for two points", () => {
+  it("should calculate rectangle for two points", () => {
     const contains: readonly Point[] = [
       { x: 100, y: 100 },
       { x: 200, y: 200 },
@@ -17,7 +17,7 @@ describe("calculateContainingRectangle", () => {
     });
   });
 
-  it("should calculate point for three points", () => {
+  it("should calculate rectangle for three points", () => {
     const contains: readonly Point[] = [
       { x: 100, y: 100 },
       { x: 200, y: 200 },
