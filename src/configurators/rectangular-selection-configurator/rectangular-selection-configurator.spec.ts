@@ -17,6 +17,7 @@ import {
   MouseEventVerifier,
   PointInsideVerifier,
 } from "../shared";
+import { createTouch } from "@/mocks/create-touch.mock";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -596,21 +597,102 @@ describe("RectangularSelectionConfigurator", () => {
     expect(onSelectionStarted).not.toHaveBeenCalled();
   });
 
-  // it("should create selection rectangle element on touch start", () => {
-  //   const mainElement = createElement({ width: 1000, height: 1000 });
-  //   const overlayElement = createElement({ width: 1000, height: 1000 });
-  //   createCanvas({ mainElement, overlayElement });
+  it("should create selection rectangle element on touch start", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
 
-  //   mainElement.dispatchEvent(
-  //     new TouchEvent("touchstart", {
-  //       touches: [
-  //         createTouch({ clientX: 100, clientY: 100 }),
-  //         createTouch({ clientX: 200, clientY: 200 }),
-  //         createTouch({ clientX: 200, clientY: 200 }),
-  //       ],
-  //     }),
-  //   );
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
 
-  //   expect(overlayElement.children[0].children.length).toBe(1);
-  // });
+    expect(overlayElement.children[0].children.length).toBe(1);
+  });
+
+  it("should not create selection rectangle element on touch start when number of touches is not 3", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    expect(overlayElement.children[0].children.length).toBe(0);
+  });
+
+  it("should not create selection rectangle element on touch start when event is makred as handled", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    const event = new TouchEvent("touchstart", {
+      touches: [
+        createTouch({ clientX: 100, clientY: 100 }),
+        createTouch({ clientX: 200, clientY: 200 }),
+        createTouch({ clientX: 200, clientY: 200 }),
+      ],
+    });
+
+    const eventTagger = new EventTagger();
+
+    eventTagger.tag(event, dragEventHandledTag);
+
+    mainElement.dispatchEvent(event);
+
+    expect(overlayElement.children[0].children.length).toBe(0);
+  });
+
+  it("should create selection rectangle positioned at first touch", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "100px", y: "100px" });
+  });
+
+  it("should create selection rectangle with dimensions encompassing remaining touches", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const dimensions = { x: rectangle.style.width, y: rectangle.style.height };
+
+    expect(dimensions).toEqual({ x: "200px", y: "100px" });
+  });
 });

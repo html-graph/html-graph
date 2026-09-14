@@ -38,11 +38,11 @@ export class RectangularSelectionConfigurator {
 
     this.params.onSelectionStarted();
 
-    const rect = this.mainElement.getBoundingClientRect();
+    const canvasRect = this.mainElement.getBoundingClientRect();
 
     const cursorViewportCoords: Point = {
-      x: mouseEvent.clientX - rect.x,
-      y: mouseEvent.clientY - rect.y,
+      x: mouseEvent.clientX - canvasRect.x,
+      y: mouseEvent.clientY - canvasRect.y,
     };
 
     this.initialContentPoint =
@@ -58,6 +58,35 @@ export class RectangularSelectionConfigurator {
     this.win.addEventListener("mouseup", this.onWindowMouseUp, {
       passive: true,
     });
+  };
+
+  private readonly onCanvasTouchStart: EventListener = (event: Event) => {
+    if (this.eventTagger.has(event, dragEventHandledTag)) {
+      return;
+    }
+
+    const touchEvent = event as TouchEvent;
+
+    if (touchEvent.touches.length !== 3) {
+      return;
+    }
+
+    const touch = touchEvent.touches[0];
+
+    const canvasRect = this.mainElement.getBoundingClientRect();
+
+    const cursorViewportCoords: Point = {
+      x: touch.clientX - canvasRect.x,
+      y: touch.clientY - canvasRect.y,
+    };
+
+    this.initialContentPoint =
+      this.canvas.viewport.createContentCoords(cursorViewportCoords);
+    this.draggingViewportPoint = cursorViewportCoords;
+
+    this.updateSelectionRectangle();
+
+    this.host.appendChild(this.selectionRectangleWrapper);
   };
 
   private readonly onWindowMouseMove: EventListener = (event: Event) => {
@@ -113,6 +142,10 @@ export class RectangularSelectionConfigurator {
     this.canvas.viewport.onAfterUpdated.subscribe(this.onAfterViewportUpdated);
 
     this.mainElement.addEventListener("mousedown", this.onCanvasMouseDown, {
+      passive: true,
+    });
+
+    this.mainElement.addEventListener("touchstart", this.onCanvasTouchStart, {
       passive: true,
     });
 
