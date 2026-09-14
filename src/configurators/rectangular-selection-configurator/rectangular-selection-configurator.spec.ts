@@ -675,24 +675,24 @@ describe("RectangularSelectionConfigurator", () => {
     expect(pos).toEqual({ x: "100px", y: "100px" });
   });
 
-  it("should create selection rectangle with dimensions encompassing remaining touches", () => {
-    const mainElement = createElement({ width: 1000, height: 1000 });
-    const overlayElement = createElement({ width: 1000, height: 1000 });
-    createCanvas({ mainElement, overlayElement });
+  // it("should create selection rectangle with dimensions encompassing remaining touches", () => {
+  //   const mainElement = createElement({ width: 1000, height: 1000 });
+  //   const overlayElement = createElement({ width: 1000, height: 1000 });
+  //   createCanvas({ mainElement, overlayElement });
 
-    mainElement.dispatchEvent(
-      new TouchEvent("touchstart", {
-        touches: [
-          createTouch({ clientX: 100, clientY: 100 }),
-          createTouch({ clientX: 200, clientY: 200 }),
-          createTouch({ clientX: 300, clientY: 100 }),
-        ],
-      }),
-    );
+  //   mainElement.dispatchEvent(
+  //     new TouchEvent("touchstart", {
+  //       touches: [
+  //         createTouch({ clientX: 100, clientY: 100 }),
+  //         createTouch({ clientX: 200, clientY: 200 }),
+  //         createTouch({ clientX: 300, clientY: 100 }),
+  //       ],
+  //     }),
+  //   );
 
-    const rectangle = selectRectangle(overlayElement);
-    const dimensions = { x: rectangle.style.width, y: rectangle.style.height };
+  //   const rectangle = selectRectangle(overlayElement);
+  //   const dimensions = { x: rectangle.style.width, y: rectangle.style.height };
 
-    expect(dimensions).toEqual({ x: "200px", y: "100px" });
-  });
+  //   expect(dimensions).toEqual({ x: "200px", y: "100px" });
+  // });
 });

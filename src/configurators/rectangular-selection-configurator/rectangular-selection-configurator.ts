@@ -8,6 +8,7 @@ import {
   EventTagger,
   PointInsideVerifier,
 } from "../shared";
+import { calculateContainingRectangle } from "./calculate-containing-rectangle";
 
 export class RectangularSelectionConfigurator {
   private readonly host = createHost();
@@ -71,18 +72,25 @@ export class RectangularSelectionConfigurator {
       return;
     }
 
-    const touch = touchEvent.touches[0];
-
     const canvasRect = this.mainElement.getBoundingClientRect();
 
-    const cursorViewportCoords: Point = {
-      x: touch.clientX - canvasRect.x,
-      y: touch.clientY - canvasRect.y,
-    };
+    const touchPoints: Point[] = [];
 
-    this.initialContentPoint =
-      this.canvas.viewport.createContentCoords(cursorViewportCoords);
-    this.draggingViewportPoint = cursorViewportCoords;
+    for (let i = 0; i < touchEvent.touches.length; i++) {
+      const t = touchEvent.touches[i];
+
+      touchPoints.push({
+        x: t.clientX - canvasRect.x,
+        y: t.clientY - canvasRect.y,
+      });
+    }
+
+    const viewportRectangle = calculateContainingRectangle(touchPoints);
+
+    this.initialContentPoint = this.canvas.viewport.createContentCoords(
+      viewportRectangle.from,
+    );
+    this.draggingViewportPoint = viewportRectangle.to;
 
     this.updateSelectionRectangle();
 
