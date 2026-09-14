@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -32,8 +32,8 @@ document.addEventListener(
   { passive: true },
 );
 
-const transformOptions: ViewportTransformConfig = {
-  scale: {
+const transformOptions: UserTransformableViewportConfig = {
+  zoom: {
     mouseWheelEventVerifier: (): boolean => isSpacePressed,
   },
 };

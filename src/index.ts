@@ -4,7 +4,12 @@ export type {
   BackgroundConfig,
   ConnectablePortsConfig,
   DraggableNodesConfig,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
+  /**
+   * @deprecated
+   * use UserTransformableViewportConfig instead
+   */
+  UserTransformableViewportConfig as ViewportTransformConfig,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,

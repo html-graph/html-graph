@@ -5,7 +5,7 @@ import {
 } from "@/configurators";
 import { createCombinedTransformPreprocessor } from "./preprocessors";
 import { resolveTransformPreprocessor } from "./resolve-transform-preprocessor";
-import { ViewportTransformConfig } from "./viewport-transform-config";
+import { UserTransformableViewportConfig } from "./user-transformable-viewport-config";
 import { TransformState } from "@/viewport-store";
 import {
   lmbMouseEventVerifier,
@@ -13,8 +13,8 @@ import {
   noopFn,
 } from "../shared";
 
-export const createTransformableViewportParams = (
-  transformConfig: ViewportTransformConfig | undefined,
+export const createUserTransformableViewportParams = (
+  transformConfig: UserTransformableViewportConfig | undefined,
 ): TransformableViewportParams => {
   const preprocessors = transformConfig?.transformPreprocessor;
 
@@ -39,7 +39,10 @@ export const createTransformableViewportParams = (
   }
 
   return {
-    wheelSensitivity: transformConfig?.scale?.mouseWheelSensitivity ?? 1.2,
+    wheelSensitivity:
+      transformConfig?.zoom?.mouseWheelSensitivity ??
+      transformConfig?.scale?.mouseWheelSensitivity ??
+      1.2,
     onTransformStarted: transformConfig?.events?.onTransformStarted ?? noopFn,
     onTransformFinished: transformConfig?.events?.onTransformFinished ?? noopFn,
     onBeforeTransformChange:
@@ -53,8 +56,13 @@ export const createTransformableViewportParams = (
     mouseUpEventVerifier:
       transformConfig?.pan?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     mouseWheelEventVerifier:
-      transformConfig?.scale?.mouseWheelEventVerifier ?? ((): boolean => true),
-    scaleWheelFinishTimeout: transformConfig?.scale?.wheelFinishTimeout ?? 500,
+      transformConfig?.zoom?.mouseWheelEventVerifier ??
+      transformConfig?.scale?.mouseWheelEventVerifier ??
+      ((): boolean => true),
+    scaleWheelFinishTimeout:
+      transformConfig?.zoom?.wheelFinishTimeout ??
+      transformConfig?.scale?.wheelFinishTimeout ??
+      500,
     onResizeTransformStarted:
       transformConfig?.events?.onResizeTransformStarted ?? noopFn,
     onResizeTransformFinished:

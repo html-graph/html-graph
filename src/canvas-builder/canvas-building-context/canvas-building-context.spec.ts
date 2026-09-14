@@ -15,7 +15,7 @@ import { CanvasBuildingContext } from "./canvas-building-context";
 
 const defaultConfig: CanvasBuildingContextParams = {
   canvasDefaults: {},
-  userDraggableNodes: {
+  draggableNodes: {
     enabled: false,
     config: undefined,
   },
@@ -83,7 +83,7 @@ describe("CanvasBuildingContextContext", () => {
     const canvasElement = document.createElement("div");
     const context = new CanvasBuildingContext(canvasElement, defaultConfig);
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.destroy();
 
@@ -101,7 +101,7 @@ describe("CanvasBuildingContextContext", () => {
       },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -123,7 +123,7 @@ describe("CanvasBuildingContextContext", () => {
       nodeResizeReactiveEdges: { enabled: true },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     const nodeRequest1: AddNodeRequest = {
       id: "node-1",
@@ -172,10 +172,10 @@ describe("CanvasBuildingContextContext", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
     const context = new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
-      userDraggableNodes: { enabled: true, config: undefined },
+      draggableNodes: { enabled: true, config: undefined },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
     setLayersDimensions(canvasElement);
 
     const nodeElement = createElement();
@@ -202,12 +202,10 @@ describe("CanvasBuildingContextContext", () => {
 
   it("should create canvas with user transformable viewport", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
-    const context = new CanvasBuildingContext(canvasElement, {
+    new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
       userTransformableViewport: { enabled: true, config: undefined },
     });
-
-    context.createCanvas();
 
     const host = canvasElement.children[0].children[1];
     host.dispatchEvent(new MouseEvent("mousedown", { button: 0 }));
@@ -236,7 +234,7 @@ describe("CanvasBuildingContextContext", () => {
       },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.addNode({
       element: document.createElement("div"),
@@ -260,12 +258,10 @@ describe("CanvasBuildingContextContext", () => {
 
   it("should create canvas with background", async () => {
     const canvasElement = createElement({ width: 100, height: 100 });
-    const context = new CanvasBuildingContext(canvasElement, {
+    new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
       background: { enabled: true, config: undefined },
     });
-
-    context.createCanvas();
 
     const svg = canvasElement.children[0].children[0].children[0];
 
@@ -280,7 +276,7 @@ describe("CanvasBuildingContextContext", () => {
     });
     document.body.appendChild(canvasElement);
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     setLayersDimensions(canvasElement);
 
@@ -343,7 +339,7 @@ describe("CanvasBuildingContextContext", () => {
     });
     document.body.appendChild(canvasElement);
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     setLayersDimensions(canvasElement);
 
@@ -417,7 +413,7 @@ describe("CanvasBuildingContextContext", () => {
       layout: { enabled: true, config: undefined },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
@@ -445,7 +441,7 @@ describe("CanvasBuildingContextContext", () => {
       },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
@@ -462,7 +458,7 @@ describe("CanvasBuildingContextContext", () => {
       animatedLayout: { enabled: true, config: undefined },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     canvas.addNode({ id: "node-1", element: document.createElement("div") });
 
@@ -478,11 +474,11 @@ describe("CanvasBuildingContextContext", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
     const context = new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
-      userDraggableNodes: { enabled: true, config: undefined },
+      draggableNodes: { enabled: true, config: undefined },
       animatedLayout: { enabled: true, config: undefined },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     setLayersDimensions(canvasElement);
 
@@ -519,7 +515,7 @@ describe("CanvasBuildingContextContext", () => {
       },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     const nodeElement = document.createElement("div");
 
@@ -541,7 +537,7 @@ describe("CanvasBuildingContextContext", () => {
   it("should create selectable canvas", () => {
     const canvasElement = document.createElement("div");
     const onCanvasSelected = vi.fn();
-    const context = new CanvasBuildingContext(canvasElement, {
+    new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
       userSelectableCanvas: {
         enabled: true,
@@ -550,8 +546,6 @@ describe("CanvasBuildingContextContext", () => {
         },
       },
     });
-
-    context.createCanvas();
 
     const layer = canvasElement.children[0].children[1];
 
@@ -575,7 +569,7 @@ describe("CanvasBuildingContextContext", () => {
       },
     });
 
-    const canvas = context.createCanvas();
+    const canvas = context.canvas;
 
     const node1Element = document.createElement("div");
     const node2Element = document.createElement("div");
@@ -613,7 +607,7 @@ describe("CanvasBuildingContextContext", () => {
     const canvasElement = createElement({ width: 1000, height: 1000 });
     const onSelectionStarted = vi.fn();
 
-    const context = new CanvasBuildingContext(canvasElement, {
+    new CanvasBuildingContext(canvasElement, {
       ...defaultConfig,
       rectangularSelection: {
         enabled: true,
@@ -624,8 +618,6 @@ describe("CanvasBuildingContextContext", () => {
     });
 
     document.body.appendChild(canvasElement);
-
-    context.createCanvas();
 
     setLayersDimensions(canvasElement);
 

@@ -5,7 +5,7 @@ import { DraggableEdgesConfig } from "../create-draggable-edges-params";
 import { DraggableNodesConfig } from "../create-draggable-nodes-params";
 import { LayoutConfig } from "../create-layout-params";
 import { RectangularSelectionConfig } from "../create-rectangular-selection-params";
-import { ViewportTransformConfig } from "../create-transformable-viewport-params";
+import { UserTransformableViewportConfig } from "../create-user-transformable-viewport-params";
 import { UserSelectableCanvasConfig } from "../create-user-selectable-canvas-params";
 import { UserSelectableEdgesConfig } from "../create-user-selectable-edges-params";
 import { UserSelectableNodesConfig } from "../create-user-selectable-nodes-params";
@@ -15,14 +15,14 @@ import { CanvasDefaults } from "../shared";
 export interface CanvasBuildingContextParams {
   readonly canvasDefaults: CanvasDefaults;
 
-  readonly userDraggableNodes: {
+  readonly draggableNodes: {
     readonly enabled: boolean;
     readonly config: DraggableNodesConfig | undefined;
   };
 
   readonly userTransformableViewport: {
     readonly enabled: boolean;
-    readonly config: ViewportTransformConfig | undefined;
+    readonly config: UserTransformableViewportConfig | undefined;
   };
 
   readonly background: {
