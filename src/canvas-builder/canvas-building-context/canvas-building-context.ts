@@ -92,11 +92,7 @@ export class CanvasBuildingContext {
     this.viewportStore = new ViewportStore(this.element);
     this.layers = new Layers(this.element);
 
-    this.htmlView = this.createHtmlView(
-      this.layers.main,
-      this.graphStore,
-      this.viewportStore,
-    );
+    this.htmlView = this.createHtmlView();
 
     this.graphControllerParams = createGraphControllerParams(
       this.params.canvasDefaults,
@@ -314,23 +310,23 @@ export class CanvasBuildingContext {
     });
   }
 
-  private createHtmlView(
-    host: HTMLElement,
-    graphStore: GraphStore,
-    viewportStore: ViewportStore,
-  ): HtmlView {
-    let htmlView: HtmlView = new CoreHtmlView(graphStore, viewportStore, host);
+  private createHtmlView(): HtmlView {
+    let htmlView: HtmlView = new CoreHtmlView(
+      this.graphStore,
+      this.viewportStore,
+      this.layers.main,
+    );
 
     if (this.params.virtualScroll.enabled) {
       htmlView = new VirtualScrollHtmlView(
         htmlView,
-        graphStore,
+        this.graphStore,
         this.boxRenderingTrigger,
         createVirtualScrollHtmlViewParams(this.params.virtualScroll.config),
       );
     }
 
-    htmlView = new LayoutHtmlView(htmlView, graphStore);
+    htmlView = new LayoutHtmlView(htmlView, this.graphStore);
 
     return htmlView;
   }

@@ -17,6 +17,7 @@ import {
   MouseEventVerifier,
   PointInsideVerifier,
 } from "../shared";
+import { createTouch } from "@/mocks/create-touch.mock";
 
 const createCanvas = (options?: {
   mainElement?: HTMLElement;
@@ -596,21 +597,374 @@ describe("RectangularSelectionConfigurator", () => {
     expect(onSelectionStarted).not.toHaveBeenCalled();
   });
 
-  // it("should create selection rectangle element on touch start", () => {
-  //   const mainElement = createElement({ width: 1000, height: 1000 });
-  //   const overlayElement = createElement({ width: 1000, height: 1000 });
-  //   createCanvas({ mainElement, overlayElement });
+  it("should create selection rectangle element on touch start", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
 
-  //   mainElement.dispatchEvent(
-  //     new TouchEvent("touchstart", {
-  //       touches: [
-  //         createTouch({ clientX: 100, clientY: 100 }),
-  //         createTouch({ clientX: 200, clientY: 200 }),
-  //         createTouch({ clientX: 200, clientY: 200 }),
-  //       ],
-  //     }),
-  //   );
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
 
-  //   expect(overlayElement.children[0].children.length).toBe(1);
-  // });
+    expect(overlayElement.children[0].children.length).toBe(1);
+  });
+
+  it("should not create selection rectangle element on touch start when number of touches is not 3", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    expect(overlayElement.children[0].children.length).toBe(0);
+  });
+
+  it("should not create selection rectangle element on touch start when event is makred as handled", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    const event = new TouchEvent("touchstart", {
+      touches: [
+        createTouch({ clientX: 100, clientY: 100 }),
+        createTouch({ clientX: 200, clientY: 200 }),
+        createTouch({ clientX: 200, clientY: 200 }),
+      ],
+    });
+
+    const eventTagger = new EventTagger();
+
+    eventTagger.tag(event, dragEventHandledTag);
+
+    mainElement.dispatchEvent(event);
+
+    expect(overlayElement.children[0].children.length).toBe(0);
+  });
+
+  it("should create selection rectangle positioned at first touch", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const pos = { x: rectangle.style.left, y: rectangle.style.top };
+
+    expect(pos).toEqual({ x: "100px", y: "100px" });
+  });
+
+  it("should call specified callback on touch start", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionStarted });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+        ],
+      }),
+    );
+
+    expect(onSelectionStarted).toHaveBeenCalled();
+  });
+
+  it("should create selection rectangle with dimensions encompassing remaining touches", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const dimensions = { x: rectangle.style.width, y: rectangle.style.height };
+
+    expect(dimensions).toEqual({ x: "200px", y: "100px" });
+  });
+
+  it("should adjust rectangle width and height on touch move", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    createCanvas({ mainElement, overlayElement });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    const rectangle = selectRectangle(overlayElement);
+    const size = {
+      width: rectangle.style.width,
+      height: rectangle.style.height,
+    };
+
+    expect(size).toEqual({ width: "300px", height: "200px" });
+  });
+
+  it("should call specified callback on touch move", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionChange });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    expect(onSelectionChange).toHaveBeenCalled();
+  });
+
+  it("should call specified callback on touch end", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionFinished = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionFinished });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    expect(onSelectionFinished).toHaveBeenCalled();
+  });
+
+  it("should not initiate touch selection when canvas is destroyed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionStarted = vi.fn();
+    const canvas = createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionStarted,
+    });
+
+    canvas.destroy();
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    expect(onSelectionStarted).not.toHaveBeenCalled();
+  });
+
+  it("should not update selection when canvas is destroyed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    const canvas = createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionChange,
+    });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("should not finish selection when canvas is destroyed", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionFinished = vi.fn();
+    const canvas = createCanvas({
+      mainElement,
+      overlayElement,
+      onSelectionFinished,
+    });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    canvas.destroy();
+
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    expect(onSelectionFinished).not.toHaveBeenCalled();
+  });
+
+  it("should not call specified callback on touch move when selection is finished", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionChange = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionChange });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchend"));
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    expect(onSelectionChange).not.toHaveBeenCalled();
+  });
+
+  it("should call specified callback on touch cancel", () => {
+    const mainElement = createElement({ width: 1000, height: 1000 });
+    const overlayElement = createElement({ width: 1000, height: 1000 });
+    const onSelectionInterrupted = vi.fn();
+    createCanvas({ mainElement, overlayElement, onSelectionInterrupted });
+
+    mainElement.dispatchEvent(
+      new TouchEvent("touchstart", {
+        touches: [
+          createTouch({ clientX: 100, clientY: 100 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(
+      new TouchEvent("touchmove", {
+        touches: [
+          createTouch({ clientX: 0, clientY: 0 }),
+          createTouch({ clientX: 200, clientY: 200 }),
+          createTouch({ clientX: 300, clientY: 100 }),
+        ],
+      }),
+    );
+
+    window.dispatchEvent(new TouchEvent("touchcancel"));
+
+    expect(onSelectionInterrupted).toHaveBeenCalled();
+  });
 });
