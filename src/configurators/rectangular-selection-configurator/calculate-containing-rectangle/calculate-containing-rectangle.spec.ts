@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { describe, expect, it } from "vitest";
 import { calculateContainingRectangle } from "./calculate-containing-rectangle";
 
-describe("calculateContainingRectanglePoint", () => {
+describe("calculateContainingRectangle", () => {
   it("should calculate point for two points", () => {
     const contains: readonly Point[] = [
       { x: 100, y: 100 },
