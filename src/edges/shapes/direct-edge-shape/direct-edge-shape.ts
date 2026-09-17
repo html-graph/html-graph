@@ -5,7 +5,7 @@ import { edgeConstants } from "../../edge-constants";
 import { Point } from "@/point";
 import { createEdgeRectangle } from "../../geometry";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { ArrowRenderer, resolveArrowRenderer } from "@/edges/arrow-renderer";
 import {
   createEdgeArrow,

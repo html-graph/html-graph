@@ -4,13 +4,12 @@ import {
   DetourBezierEdgePath,
   CycleCircleEdgePath,
 } from "../../paths";
-import { Point } from "@/point";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../../edge-constants";
-import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
+import { EdgePathFactory, EdgePort, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
 
@@ -45,14 +44,10 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (
-    from: Point,
-    _to: Point,
-    fromDir: Point,
-  ) =>
+  private readonly createCyclePath: EdgePathFactory = (from: EdgePort) =>
     new CycleCircleEdgePath({
-      origin: from,
-      dir: fromDir,
+      origin: from.coords,
+      dir: from.dir,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
@@ -60,16 +55,14 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    from: Point,
-    to: Point,
-    fromDir: Point,
-    toDir: Point,
+    from: EdgePort,
+    to: EdgePort,
   ) =>
     new DetourBezierEdgePath({
-      from,
-      to,
-      fromDir,
-      toDir,
+      from: from.coords,
+      to: to.coords,
+      fromDir: from.dir,
+      toDir: to.dir,
       arrowLength: this.arrowLength,
       detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
@@ -79,16 +72,14 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    from: Point,
-    to: Point,
-    fromDir: Point,
-    toDir: Point,
+    from: EdgePort,
+    to: EdgePort,
   ) =>
     new BezierEdgePath({
-      from,
-      to,
-      fromDir,
-      toDir,
+      from: from.coords,
+      to: to.coords,
+      fromDir: from.dir,
+      toDir: to.dir,
       arrowLength: this.arrowLength,
       curvature: this.curvature,
       hasSourceArrow: this.hasSourceArrow,

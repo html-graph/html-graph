@@ -4,13 +4,12 @@ import {
   DetourStraightEdgePath,
   StraightEdgePath,
 } from "../../paths";
-import { Point } from "@/point";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../../edge-constants";
-import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
+import { EdgePathFactory, EdgePort, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
 
@@ -45,14 +44,10 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (
-    from: Point,
-    _to: Point,
-    fromDir: Point,
-  ) =>
+  private readonly createCyclePath: EdgePathFactory = (from: EdgePort) =>
     new CycleSquareEdgePath({
-      origin: from,
-      dir: fromDir,
+      origin: from.coords,
+      dir: from.dir,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
@@ -61,16 +56,14 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    from: Point,
-    to: Point,
-    fromDir: Point,
-    toDir: Point,
+    from: EdgePort,
+    to: EdgePort,
   ) =>
     new DetourStraightEdgePath({
-      from,
-      to,
-      fromDir,
-      toDir,
+      from: from.coords,
+      to: to.coords,
+      fromDir: from.dir,
+      toDir: to.dir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
@@ -81,16 +74,14 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    from: Point,
-    to: Point,
-    fromDir: Point,
-    toDir: Point,
+    from: EdgePort,
+    to: EdgePort,
   ) =>
     new StraightEdgePath({
-      from,
-      to,
-      fromDir,
-      toDir,
+      from: from.coords,
+      to: to.coords,
+      fromDir: from.dir,
+      toDir: to.dir,
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,

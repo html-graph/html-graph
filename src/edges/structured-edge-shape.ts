@@ -1,6 +1,6 @@
 import { EventHandler } from "@/event-subject";
 import { EdgeShape } from "./edge-shape";
-import { StructuredEdgeRenderModel } from "./structure-render-model";
+import { StructuredEdgeRenderModel } from "./structured-edge-render-model";
 
 export interface StructuredEdgeShape extends EdgeShape {
   readonly group: SVGGElement;

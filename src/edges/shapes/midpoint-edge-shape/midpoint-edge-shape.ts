@@ -1,6 +1,6 @@
 import { EventHandler } from "@/event-subject";
 import { EdgeRenderParams } from "../../edge-render-params";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EdgeElement } from "@/element";
 

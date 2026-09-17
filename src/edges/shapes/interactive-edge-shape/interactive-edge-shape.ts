@@ -7,7 +7,7 @@ import { createEdgeArrow } from "./create-edge-arrow";
 import { edgeConstants } from "../../edge-constants";
 import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { EdgeElement } from "@/element";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {

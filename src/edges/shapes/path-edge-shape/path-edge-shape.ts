@@ -5,7 +5,7 @@ import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { createEdgeRectangle } from "../../geometry";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { StructuredEdgeRenderModel } from "../../structure-render-model";
+import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { ConnectionCategory } from "../../connection-category";
 import { ArrowRenderer } from "../../arrow-renderer";
 import {
@@ -82,7 +82,13 @@ export class PathEdgeShape implements StructuredEdgeShape {
       createPathFn = this.params.createLinePath;
     }
 
-    const edgePath = createPathFn(from, to, sourceDirection, targetDirection);
+    const edgePath = createPathFn(
+      { coords: from, dir: sourceDirection },
+      {
+        coords: to,
+        dir: targetDirection,
+      },
+    );
 
     this.line.setAttribute("d", edgePath.path);
 
