@@ -33,7 +33,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public constructor(
     private readonly baseEdge: StructuredEdgeShape,
-    params?: InteractiveEdgeParams,
+    params?: InteractiveEdgeParams | undefined,
   ) {
     if (baseEdge instanceof InteractiveEdgeShape) {
       throw new InteractiveEdgeError(

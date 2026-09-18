@@ -3,6 +3,7 @@ import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 import { createOrthogonalLine } from "../shared";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class OrthogonalEdgePath implements EdgePath {
   public readonly path: string;
@@ -10,10 +11,8 @@ export class OrthogonalEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: Point;
-    readonly to: Point;
-    readonly fromDir: Point;
-    readonly toDir: Point;
+    readonly from: EdgePort;
+    readonly to: EdgePort;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -23,8 +22,6 @@ export class OrthogonalEdgePath implements EdgePath {
     const {
       from,
       to,
-      fromDir,
-      toDir,
       arrowLength,
       arrowOffset,
       roundness,
@@ -34,29 +31,37 @@ export class OrthogonalEdgePath implements EdgePath {
 
     const beginArrow: Point = hasSourceArrow
       ? createRotatedPoint(
-          { x: from.x + arrowLength, y: from.y },
-          fromDir,
-          from,
+          { x: from.coords.x + arrowLength, y: from.coords.y },
+          from.dir,
+          from.coords,
         )
-      : from;
+      : from.coords;
 
     const endArrow: Point = hasTargetArrow
-      ? createRotatedPoint({ x: to.x - arrowLength, y: to.y }, toDir, to)
-      : to;
+      ? createRotatedPoint(
+          { x: to.coords.x - arrowLength, y: to.coords.y },
+          to.dir,
+          to.coords,
+        )
+      : to.coords;
 
     const gap = arrowLength + arrowOffset;
 
     const beginLine = createRotatedPoint(
-      { x: from.x + gap, y: from.y },
-      fromDir,
-      from,
+      { x: from.coords.x + gap, y: from.coords.y },
+      from.dir,
+      from.coords,
     );
 
-    const endLine = createRotatedPoint({ x: to.x - gap, y: to.y }, toDir, to);
+    const endLine = createRotatedPoint(
+      { x: to.coords.x - gap, y: to.coords.y },
+      to.dir,
+      to.coords,
+    );
 
     const line = createOrthogonalLine(
-      { arrowPoint: beginArrow, linePoint: beginLine, dir: fromDir },
-      { arrowPoint: endArrow, linePoint: endLine, dir: toDir },
+      { arrowPoint: beginArrow, linePoint: beginLine, dir: from.dir },
+      { arrowPoint: endArrow, linePoint: endLine, dir: to.dir },
     );
 
     this.path = createRoundedPath(line.points, roundness);

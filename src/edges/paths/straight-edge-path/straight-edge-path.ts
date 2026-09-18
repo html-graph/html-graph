@@ -2,6 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class StraightEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,10 +10,8 @@ export class StraightEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: Point;
-    readonly to: Point;
-    readonly fromDir: Point;
-    readonly toDir: Point;
+    readonly from: EdgePort;
+    readonly to: EdgePort;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -25,33 +24,31 @@ export class StraightEdgePath implements EdgePath {
       hasSourceArrow,
       hasTargetArrow,
       arrowLength,
-      fromDir,
-      toDir,
       arrowOffset,
       roundness,
     } = params;
 
     const beginArrow: Point = this.createArrowPoint(
       hasSourceArrow,
-      fromDir,
-      from,
+      from.dir,
+      from.coords,
       arrowLength,
     );
 
     const endArrow: Point = this.createArrowPoint(
       hasTargetArrow,
-      toDir,
-      to,
+      to.dir,
+      to.coords,
       -arrowLength,
     );
 
     const gap = arrowLength + arrowOffset;
 
-    const beginGap: Point = { x: from.x + gap, y: from.y };
-    const beginLine = createRotatedPoint(beginGap, fromDir, from);
+    const beginGap: Point = { x: from.coords.x + gap, y: from.coords.y };
+    const beginLine = createRotatedPoint(beginGap, from.dir, from.coords);
 
-    const endGap: Point = { x: to.x - gap, y: to.y };
-    const endLine = createRotatedPoint(endGap, toDir, to);
+    const endGap: Point = { x: to.coords.x - gap, y: to.coords.y };
+    const endLine = createRotatedPoint(endGap, to.dir, to.coords);
 
     this.path = createRoundedPath(
       [beginArrow, beginLine, endLine, endArrow],

@@ -4,10 +4,14 @@ import { DetourStraightEdgePath } from "./detour-straight-edge-path";
 describe("DetourStraightEdgePath", () => {
   it("should create detour straight", () => {
     const edgePath = new DetourStraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -24,10 +28,14 @@ describe("DetourStraightEdgePath", () => {
 
   it("should create detour straight path with source arrow", () => {
     const edgePath = new DetourStraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -44,10 +52,14 @@ describe("DetourStraightEdgePath", () => {
 
   it("should create detour straight path with target arrow", () => {
     const edgePath = new DetourStraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -64,10 +76,14 @@ describe("DetourStraightEdgePath", () => {
 
   it("should calculate midpoint in between detour points", () => {
     const edgePath = new DetourStraightEdgePath({
-      from: { x: 100, y: 200 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 200 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,

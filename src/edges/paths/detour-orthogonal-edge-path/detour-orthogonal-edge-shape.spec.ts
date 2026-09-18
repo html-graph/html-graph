@@ -4,10 +4,14 @@ import { DetourOrthogonalEdgePath } from "./detour-orthogonal-edge-shape";
 describe("DetourOrthogonalEdgeShape", () => {
   it("should create detour horizontal path when both ports are horizontal", () => {
     const edgePath = new DetourOrthogonalEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -23,10 +27,14 @@ describe("DetourOrthogonalEdgeShape", () => {
 
   it("should create detour vertical path when both ports are vertical", () => {
     const edgePath = new DetourOrthogonalEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 0, y: 1 },
-      toDir: { x: 0, y: 1 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 0, y: 1 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 0, y: 1 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,
@@ -42,10 +50,14 @@ describe("DetourOrthogonalEdgeShape", () => {
 
   it("should create orthogonal path when ports are orthogonal", () => {
     const edgePath = new DetourOrthogonalEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 0, y: 1 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 0, y: 1 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       arrowOffset: 10,
       roundness: 10,

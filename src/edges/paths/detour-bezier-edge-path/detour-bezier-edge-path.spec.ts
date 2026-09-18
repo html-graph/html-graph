@@ -4,10 +4,14 @@ import { DetourBezierEdgePath } from "./detour-bezier-edge-path";
 describe("DetourBezierEdgePath", () => {
   it("should create detour bezier path", () => {
     const edgePath = new DetourBezierEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
@@ -23,10 +27,14 @@ describe("DetourBezierEdgePath", () => {
 
   it("should create detour bezier path with source arrow", () => {
     const edgePath = new DetourBezierEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
@@ -42,10 +50,14 @@ describe("DetourBezierEdgePath", () => {
 
   it("should create detour bezier path with target arrow", () => {
     const edgePath = new DetourBezierEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
@@ -61,10 +73,14 @@ describe("DetourBezierEdgePath", () => {
 
   it("should calculate midpoint in between detour points", () => {
     const edgePath = new DetourBezierEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,

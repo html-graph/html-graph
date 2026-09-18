@@ -1,6 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
@@ -8,10 +9,8 @@ export class DetourBezierEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: Point;
-    readonly to: Point;
-    readonly fromDir: Point;
-    readonly toDir: Point;
+    readonly from: EdgePort;
+    readonly to: EdgePort;
     readonly arrowLength: number;
     readonly detourDir: number;
     readonly detourDistance: number;
@@ -23,8 +22,6 @@ export class DetourBezierEdgePath implements EdgePath {
       hasSourceArrow,
       hasTargetArrow,
       curvature,
-      fromDir,
-      toDir,
       detourDir,
       from,
       to,
@@ -34,30 +31,30 @@ export class DetourBezierEdgePath implements EdgePath {
 
     const beginArrow: Point = hasSourceArrow
       ? createRotatedPoint(
-          { x: from.x + arrowLength, y: from.y },
-          fromDir,
-          from,
+          { x: from.coords.x + arrowLength, y: from.coords.y },
+          from.dir,
+          from.coords,
         )
-      : from;
+      : from.coords;
 
     const endArrow: Point = hasTargetArrow
       ? createRotatedPoint(
           {
-            x: to.x - arrowLength,
-            y: to.y,
+            x: to.coords.x - arrowLength,
+            y: to.coords.y,
           },
-          toDir,
-          to,
+          to.dir,
+          to.coords,
         )
-      : to;
+      : to.coords;
 
     const detourX = Math.cos(detourDir) * detourDistance;
     const detourY = Math.sin(detourDir) * detourDistance;
 
     const beginLine1: Point = createRotatedPoint(
-      { x: from.x + arrowLength, y: from.y },
-      fromDir,
-      from,
+      { x: from.coords.x + arrowLength, y: from.coords.y },
+      from.dir,
+      from.coords,
     );
 
     const beginLine2: Point = {
@@ -66,9 +63,9 @@ export class DetourBezierEdgePath implements EdgePath {
     };
 
     const endLine1: Point = createRotatedPoint(
-      { x: to.x - arrowLength, y: to.y },
-      toDir,
-      to,
+      { x: to.coords.x - arrowLength, y: to.coords.y },
+      to.dir,
+      to.coords,
     );
 
     const endLine2: Point = {
@@ -82,13 +79,13 @@ export class DetourBezierEdgePath implements EdgePath {
     };
 
     const beginCurve1: Point = {
-      x: beginLine1.x + curvature * fromDir.x,
-      y: beginLine1.y + curvature * fromDir.y,
+      x: beginLine1.x + curvature * from.dir.x,
+      y: beginLine1.y + curvature * from.dir.y,
     };
 
     const endCurve1: Point = {
-      x: endLine1.x - curvature * toDir.x,
-      y: endLine1.y - curvature * toDir.y,
+      x: endLine1.x - curvature * to.dir.x,
+      y: endLine1.y - curvature * to.dir.y,
     };
 
     const beginCurve2: Point = {

@@ -3,6 +3,7 @@ import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 import { calculateDotourY } from "./calculate-detour-y";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class DetourHorizontalEdgePath implements EdgePath {
   public readonly path: string;
@@ -10,10 +11,8 @@ export class DetourHorizontalEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: Point;
-    readonly to: Point;
-    readonly fromDir: Point;
-    readonly toDir: Point;
+    readonly from: EdgePort;
+    readonly to: EdgePort;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
@@ -27,8 +26,6 @@ export class DetourHorizontalEdgePath implements EdgePath {
       arrowLength,
       from,
       to,
-      fromDir,
-      toDir,
       arrowOffset,
       roundness,
       detourDistance,
@@ -36,35 +33,35 @@ export class DetourHorizontalEdgePath implements EdgePath {
 
     const beginArrow: Point = hasSourceArrow
       ? createRotatedPoint(
-          { x: from.x + arrowLength, y: from.y },
-          fromDir,
-          from,
+          { x: from.coords.x + arrowLength, y: from.coords.y },
+          from.dir,
+          from.coords,
         )
-      : from;
+      : from.coords;
 
     const endArrow: Point = hasTargetArrow
       ? createRotatedPoint(
           {
-            x: to.x - arrowLength,
-            y: to.y,
+            x: to.coords.x - arrowLength,
+            y: to.coords.y,
           },
-          toDir,
-          to,
+          to.dir,
+          to.coords,
         )
-      : to;
+      : to.coords;
 
     const gap = arrowLength + arrowOffset;
 
     const lineBegin: Point = createRotatedPoint(
-      { x: from.x + gap, y: from.y },
-      fromDir,
-      from,
+      { x: from.coords.x + gap, y: from.coords.y },
+      from.dir,
+      from.coords,
     );
 
     const lineEnd: Point = createRotatedPoint(
-      { x: to.x - gap, y: to.y },
-      toDir,
-      to,
+      { x: to.coords.x - gap, y: to.coords.y },
+      to.dir,
+      to.coords,
     );
 
     const detourY = calculateDotourY(lineBegin, lineEnd, detourDistance);

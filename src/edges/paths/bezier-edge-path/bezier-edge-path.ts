@@ -1,6 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 const halfCube = 0.5 * 0.5 * 0.5;
 const halfCube3 = 3 * halfCube;
@@ -11,46 +12,36 @@ export class BezierEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: Point;
-    readonly to: Point;
-    readonly fromDir: Point;
-    readonly toDir: Point;
+    readonly from: EdgePort;
+    readonly to: EdgePort;
     readonly arrowLength: number;
     readonly curvature: number;
     readonly hasSourceArrow: boolean;
     readonly hasTargetArrow: boolean;
   }) {
-    const {
-      from,
-      to,
-      arrowLength,
-      fromDir,
-      toDir,
-      curvature,
-      hasSourceArrow,
-      hasTargetArrow,
-    } = params;
+    const { from, to, arrowLength, curvature, hasSourceArrow, hasTargetArrow } =
+      params;
 
     const begin = createRotatedPoint(
-      { x: from.x + arrowLength, y: from.y },
-      fromDir,
-      from,
+      { x: from.coords.x + arrowLength, y: from.coords.y },
+      from.dir,
+      from.coords,
     );
 
     const end = createRotatedPoint(
-      { x: to.x - arrowLength, y: to.y },
-      toDir,
-      to,
+      { x: to.coords.x - arrowLength, y: to.coords.y },
+      to.dir,
+      to.coords,
     );
 
     const bezierBegin: Point = {
-      x: begin.x + fromDir.x * curvature,
-      y: begin.y + fromDir.y * curvature,
+      x: begin.x + from.dir.x * curvature,
+      y: begin.y + from.dir.y * curvature,
     };
 
     const bezierEnd: Point = {
-      x: end.x - toDir.x * curvature,
-      y: end.y - toDir.y * curvature,
+      x: end.x - to.dir.x * curvature,
+      y: end.y - to.dir.y * curvature,
     };
 
     const centerX =
@@ -71,11 +62,11 @@ export class BezierEdgePath implements EdgePath {
 
     const preLine = hasSourceArrow
       ? ""
-      : `M ${from.x} ${from.y} L ${begin.x} ${begin.y} `;
+      : `M ${from.coords.x} ${from.coords.y} L ${begin.x} ${begin.y} `;
 
     const postLine = hasTargetArrow
       ? ""
-      : ` M ${end.x} ${end.y} L ${to.x} ${to.y}`;
+      : ` M ${end.x} ${end.y} L ${to.coords.x} ${to.coords.y}`;
 
     this.path = `${preLine}${curve}${postLine}`;
   }

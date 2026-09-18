@@ -4,8 +4,10 @@ import { CycleSquareEdgePath } from "./cycle-square-edge-path";
 describe("CycleSquareEdgePath", () => {
   it("should create cycle square path without arrows", () => {
     const edgePath = new CycleSquareEdgePath({
-      origin: { x: 100, y: 100 },
-      dir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
@@ -20,8 +22,10 @@ describe("CycleSquareEdgePath", () => {
 
   it("should create cycle square path with source arrow", () => {
     const edgePath = new CycleSquareEdgePath({
-      origin: { x: 100, y: 100 },
-      dir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
@@ -36,8 +40,10 @@ describe("CycleSquareEdgePath", () => {
 
   it("should calculate midpoint in between detour points", () => {
     const edgePath = new CycleSquareEdgePath({
-      origin: { x: 100, y: 100 },
-      dir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,

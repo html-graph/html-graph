@@ -21,10 +21,14 @@ const createBezierEdge = (
     hasTargetArrow,
     createLinePath: () =>
       new BezierEdgePath({
-        from: { x: 0, y: 0 },
-        to: { x: 0, y: 0 },
-        fromDir: { x: 1, y: 0 },
-        toDir: { x: 1, y: 0 },
+        from: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+        },
+        to: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+        },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
@@ -32,10 +36,14 @@ const createBezierEdge = (
       }),
     createDetourPath: () =>
       new DetourBezierEdgePath({
-        from: { x: 0, y: 0 },
-        to: { x: 0, y: 0 },
-        fromDir: { x: 1, y: 0 },
-        toDir: { x: 1, y: 0 },
+        from: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+        },
+        to: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+        },
         arrowLength: 10,
         curvature: 90,
         hasTargetArrow: false,
@@ -45,8 +53,10 @@ const createBezierEdge = (
       }),
     createCyclePath: () =>
       new CycleCircleEdgePath({
-        origin: { x: 0, y: 0 },
-        dir: { x: 1, y: 0 },
+        from: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+        },
         radius: 10,
         smallRadius: 2,
         hasArrow: false,

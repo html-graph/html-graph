@@ -1,6 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
@@ -8,14 +9,13 @@ export class CycleCircleEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly origin: Point;
-    readonly dir: Point;
+    readonly from: EdgePort;
     readonly radius: number;
     readonly smallRadius: number;
     readonly arrowLength: number;
     readonly hasArrow: boolean;
   }) {
-    const { arrowLength, radius, smallRadius, dir, origin, hasArrow } = params;
+    const { arrowLength, radius, smallRadius, from, hasArrow } = params;
 
     const diagonal = smallRadius + radius;
     const jointY = (smallRadius * radius) / diagonal;
@@ -32,8 +32,8 @@ export class CycleCircleEdgePath implements EdgePath {
     ];
 
     const absPoints = points
-      .map((p) => createRotatedPoint(p, dir, { x: 0, y: 0 }))
-      .map((p) => ({ x: p.x + origin.x, y: p.y + origin.y }));
+      .map((p) => createRotatedPoint(p, from.dir, { x: 0, y: 0 }))
+      .map((p) => ({ x: p.x + from.coords.x, y: p.y + from.coords.y }));
 
     const c = [
       `M ${absPoints[0].x} ${absPoints[0].y}`,
@@ -42,7 +42,7 @@ export class CycleCircleEdgePath implements EdgePath {
       `A ${smallRadius} ${smallRadius} 0 0 1 ${absPoints[0].x} ${absPoints[0].y}`,
     ].join(" ");
 
-    const preLine = `M ${origin.x} ${origin.y} L ${absPoints[0].x} ${absPoints[0].y} `;
+    const preLine = `M ${from.coords.x} ${from.coords.y} L ${absPoints[0].x} ${absPoints[0].y} `;
 
     this.path = `${hasArrow ? "" : preLine}${c}`;
 

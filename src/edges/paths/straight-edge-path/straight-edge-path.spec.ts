@@ -4,10 +4,14 @@ import { StraightEdgePath } from "./straight-edge-path";
 describe("StraightEdgePath", () => {
   it("should create straight line path without arrows", () => {
     const edgePath = new StraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -22,10 +26,14 @@ describe("StraightEdgePath", () => {
 
   it("should create straight line path with source arrow", () => {
     const edgePath = new StraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -40,10 +48,14 @@ describe("StraightEdgePath", () => {
 
   it("should create straight line path with target arrow", () => {
     const edgePath = new StraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
@@ -58,10 +70,14 @@ describe("StraightEdgePath", () => {
 
   it("should calculate midpoint in the center", () => {
     const edgePath = new StraightEdgePath({
-      from: { x: 100, y: 100 },
-      to: { x: 200, y: 300 },
-      fromDir: { x: 1, y: 0 },
-      toDir: { x: 1, y: 0 },
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+      },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,

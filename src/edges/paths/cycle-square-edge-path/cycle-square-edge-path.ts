@@ -2,6 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
+import { EdgePort } from "@/edges/shapes/path-edge-shape";
 
 export class CycleSquareEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,15 +10,14 @@ export class CycleSquareEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly origin: Point;
-    readonly dir: Point;
+    readonly from: EdgePort;
     readonly arrowLength: number;
     readonly side: number;
     readonly arrowOffset: number;
     readonly roundness: number;
     readonly hasArrow: boolean;
   }) {
-    const { side, arrowLength, arrowOffset, dir, origin, hasArrow } = params;
+    const { side, arrowLength, arrowOffset, from, hasArrow } = params;
     const x1 = arrowLength + arrowOffset;
     const x2 = x1 + 2 * side;
 
@@ -33,10 +33,10 @@ export class CycleSquareEdgePath implements EdgePath {
     ];
 
     const rp = linePoints
-      .map((p) => createRotatedPoint(p, dir, { x: 0, y: 0 }))
-      .map((p) => ({ x: p.x + origin.x, y: p.y + origin.y }));
+      .map((p) => createRotatedPoint(p, from.dir, { x: 0, y: 0 }))
+      .map((p) => ({ x: p.x + from.coords.x, y: p.y + from.coords.y }));
 
-    const preLine = `M ${origin.x} ${origin.y} L ${rp[0].x} ${rp[0].y} `;
+    const preLine = `M ${from.coords.x} ${from.coords.y} L ${rp[0].x} ${rp[0].y} `;
 
     this.path = `${hasArrow ? "" : preLine}${createRoundedPath(rp, params.roundness)}`;
 

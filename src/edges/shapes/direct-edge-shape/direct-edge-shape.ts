@@ -48,7 +48,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowRenderer: ArrowRenderer;
 
-  public constructor(params?: DirectEdgeParams) {
+  public constructor(params?: DirectEdgeParams | undefined) {
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
