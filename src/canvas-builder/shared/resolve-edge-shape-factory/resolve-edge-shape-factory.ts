@@ -3,7 +3,7 @@ import {
   DirectEdgeShape,
   OrthogonalEdgeShape,
   StraightEdgeShape,
-} from "@/edges";
+} from "@/edge-shapes";
 import { EdgeShapeConfig } from "./edge-shape-config";
 import { EdgeShapeFactory } from "@/graph-controller";
 

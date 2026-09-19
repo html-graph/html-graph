@@ -9,7 +9,7 @@ import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
 import { defaultGraphControllerParams } from "@/mocks/default-graph-controller-params";
 import { defaultViewportControllerParams } from "@/mocks/default-viewport-controller-params";
 import { UserConnectablePortsParams } from "./user-connectable-ports-params";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { ConnectionTypeResolver } from "./connection-type-resolver";
 import {
   ConnectionAllowedVerifier,

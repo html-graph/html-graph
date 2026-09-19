@@ -1,4 +1,4 @@
-import { ArrowRenderer } from "@/edges/arrow-renderer";
+import { ArrowRenderer } from "@/edge-shapes/arrow-renderer";
 import { EdgePathFactory } from "./edge-path-factory";
 
 export interface PathEdgeParams {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveArrowRenderer } from "../../../edges/arrow-renderer";
+import { resolveArrowRenderer } from "../../arrow-renderer";
 import { ConnectionCategory } from "../../connection-category";
 import {
   BezierEdgePath,

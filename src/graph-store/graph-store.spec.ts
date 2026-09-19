@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { GraphStore } from "./graph-store";
-import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edges";
+import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edge-shapes";
 import { AddNodeRequest } from "./add-node-request";
 import { AddPortRequest } from "./add-port-request";
 import { AddEdgeRequest } from "./add-edge-request";

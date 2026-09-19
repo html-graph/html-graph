@@ -107,7 +107,7 @@ html-graph/
 │   ├── center-fn/           # Function which determines node's center
 │   ├── configurators/       # Canvas extension with useful extra features
 │   ├── dimensions/          # Viewport dimensions model
-│   ├── edges/               # Visualization for connections
+│   ├── edge-shapes/         # Visualization for connections
 │   ├── element/             # Model for HTML elements
 │   ├── event-subject/       # Straightforward implementation of observer pattern
 │   ├── graph/               # Public model for graph

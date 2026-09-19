@@ -1,6 +1,6 @@
 import { describe, expect, it, afterEach, vi } from "vitest";
 import { Canvas } from "@/canvas";
-import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edges";
+import { BezierEdgeShape, DirectEdgeShape, EdgeShape } from "@/edge-shapes";
 import { GraphStore } from "@/graph-store";
 import { CoreHtmlView } from "@/html-view";
 import { createElement } from "@/mocks/create-element.mock";

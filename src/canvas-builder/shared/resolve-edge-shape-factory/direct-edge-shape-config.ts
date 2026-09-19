@@ -1,4 +1,4 @@
-import { DirectEdgeParams } from "@/edges";
+import { DirectEdgeParams } from "@/edge-shapes";
 
 export type DirectEdgeShapeConfig = {
   readonly type: "direct";

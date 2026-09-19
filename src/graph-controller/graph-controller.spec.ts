@@ -5,7 +5,7 @@ import { ViewportStore } from "@/viewport-store";
 import { GraphController } from "./graph-controller";
 import { createElement } from "@/mocks/create-element.mock";
 import { CenterFn, standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { PriorityFn } from "@/priority";
 import { GraphControllerParams } from "./graph-controller-params";
 import { EdgeShapeFactory } from "./edge-shape-factory";

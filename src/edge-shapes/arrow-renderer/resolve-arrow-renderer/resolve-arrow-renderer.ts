@@ -1,4 +1,4 @@
-import { edgeConstants } from "@/edges/edge-constants";
+import { edgeConstants } from "@/edge-shapes/edge-constants";
 import { ArrowRenderer } from "../arrow-renderer";
 import { createTriangleArrowRenderer } from "../create-triangle-arrow-renderer";
 import { ArrowRendererConfig } from "./arrow-config";

@@ -6,7 +6,7 @@ import {
   EdgeShape,
   OrthogonalEdgeShape,
   StraightEdgeShape,
-} from "@/edges";
+} from "@/edge-shapes";
 
 describe("resolveEdgeShapeFactory", () => {
   it("should return bezier function by default", () => {

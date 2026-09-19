@@ -1,7 +1,7 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from "vitest";
 import { CanvasBuilder } from "@/canvas-builder";
 import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { AnimationFrameMock } from "@/mocks/animation-frame.mock";
 import { createElement } from "@/mocks/create-element.mock";
 import { createMouseMoveEvent } from "@/mocks/create-mouse-move-event.mock";
