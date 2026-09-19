@@ -6,7 +6,7 @@ import { EventSubject } from "@/event-subject";
 import { RenderingBox } from "./rendering-box";
 import { VirtualScrollHtmlView } from "./virtual-scroll-html-view";
 import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { Identifier } from "@/identifier";
 
 const create = (config?: {

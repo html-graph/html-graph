@@ -1,4 +1,4 @@
-import { EdgeShape } from "@/edges";
+import { EdgeShape } from "@/edge-shapes";
 import { Identifier } from "@/identifier";
 
 export interface UpdateEdgeRequest {

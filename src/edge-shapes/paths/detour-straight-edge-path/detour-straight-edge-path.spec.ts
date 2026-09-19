@@ -1,0 +1,106 @@
+import { describe, expect, it } from "vitest";
+import { DetourStraightEdgePath } from "./detour-straight-edge-path";
+
+describe("DetourStraightEdgePath", () => {
+  it("should create detour straight", () => {
+    const edgePath = new DetourStraightEdgePath({
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDir: -Math.PI / 2,
+      detourDistance: 100,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.path).toBe(
+      "M 100 100 L 110 100 C 120 100 120 100 120 90 L 120 10 C 120 0 120 0 122.87347885566345 9.578262852211514 L 177.12652114433655 190.4217371477885 C 180 200 180 200 180 210 L 180 290 C 180 300 180 300 190 300 L 200 300",
+    );
+  });
+
+  it("should create detour straight path with source arrow", () => {
+    const edgePath = new DetourStraightEdgePath({
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: true,
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDir: -Math.PI / 2,
+      detourDistance: 100,
+      hasSourceArrow: true,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.path).toBe(
+      "M 110 100 L 110 100 C 120 100 120 100 120 90 L 120 10 C 120 0 120 0 122.87347885566345 9.578262852211514 L 177.12652114433655 190.4217371477885 C 180 200 180 200 180 210 L 180 290 C 180 300 180 300 190 300 L 200 300",
+    );
+  });
+
+  it("should create detour straight path with target arrow", () => {
+    const edgePath = new DetourStraightEdgePath({
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+        hasArrow: true,
+      },
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDir: -Math.PI / 2,
+      detourDistance: 100,
+      hasSourceArrow: false,
+      hasTargetArrow: true,
+    });
+
+    expect(edgePath.path).toBe(
+      "M 100 100 L 110 100 C 120 100 120 100 120 90 L 120 10 C 120 0 120 0 122.87347885566345 9.578262852211514 L 177.12652114433655 190.4217371477885 C 180 200 180 200 180 210 L 180 290 C 180 300 180 300 190 300 L 190 300",
+    );
+  });
+
+  it("should calculate midpoint in between detour points", () => {
+    const edgePath = new DetourStraightEdgePath({
+      from: {
+        coords: { x: 100, y: 200 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDir: -Math.PI / 2,
+      detourDistance: 100,
+      hasSourceArrow: false,
+      hasTargetArrow: false,
+    });
+
+    expect(edgePath.midpoint).toEqual({ x: 150, y: 150 });
+  });
+});

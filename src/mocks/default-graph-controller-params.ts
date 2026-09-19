@@ -1,5 +1,5 @@
 import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { GraphControllerParams } from "@/graph-controller";
 
 export const defaultGraphControllerParams: GraphControllerParams = {

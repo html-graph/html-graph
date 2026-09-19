@@ -17,7 +17,7 @@ import {
   selectionEventHandledTag,
 } from "../shared";
 import { UserSelectableEdgesConfigurator } from "./user-selectable-edges-configurator";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 
 const createCanvas = (options?: {
   element?: HTMLElement;

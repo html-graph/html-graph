@@ -1,6 +1,6 @@
 import { Canvas } from "@/canvas";
 import { standardCenterFn } from "@/center-fn";
-import { DirectEdgeShape } from "@/edges";
+import { DirectEdgeShape } from "@/edge-shapes";
 import { Graph } from "@/graph";
 import { GraphController, GraphControllerParams } from "@/graph-controller";
 import { GraphStore } from "@/graph-store";

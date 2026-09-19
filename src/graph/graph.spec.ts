@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edges";
+import { BezierEdgeShape, OrthogonalEdgeShape } from "@/edge-shapes";
 import {
   AddEdgeRequest,
   AddNodeRequest,

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { EventSubject } from "@/event-subject";
 import { VirtualScrollHtmlView, CoreHtmlView, RenderingBox } from "@/html-view";
 import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 import { GraphStore } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { createElement } from "@/mocks/create-element.mock";

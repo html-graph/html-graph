@@ -8,8 +8,8 @@ import {
 import { CoreHtmlView } from "./core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { Point } from "@/point";
-import { BezierEdgeShape, EdgeRenderParams } from "@/edges";
-import { ConnectionCategory } from "@/edges/connection-category";
+import { BezierEdgeShape, EdgeRenderParams } from "@/edge-shapes";
+import { ConnectionCategory } from "@/edge-shapes/connection-category";
 
 const createHtmlController = (params?: {
   viewportStore?: ViewportStore;

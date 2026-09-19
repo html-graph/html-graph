@@ -3,7 +3,7 @@ import { Point } from "@/point";
 import { createGraphControllerParams } from "./create-graph-controller-params";
 import { standardCenterFn } from "@/center-fn";
 import { standardPriorityFn } from "@/priority";
-import { BezierEdgeShape, StraightEdgeShape } from "@/edges";
+import { BezierEdgeShape, StraightEdgeShape } from "@/edge-shapes";
 
 describe("createGraphControllerParams", () => {
   it("should return standard nodes center fn", () => {

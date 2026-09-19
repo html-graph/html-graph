@@ -73,7 +73,7 @@ export {
   DirectEdgeShape,
   MidpointEdgeShape,
   ConnectionCategory,
-} from "./edges";
+} from "./edge-shapes";
 export type {
   EdgeShape,
   EdgeRenderParams,
@@ -91,7 +91,7 @@ export type {
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
-} from "./edges";
+} from "./edge-shapes";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";
 

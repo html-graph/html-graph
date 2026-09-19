@@ -3,7 +3,7 @@ import { ViewportStore } from "@/viewport-store";
 import { createOverlayCanvas } from "./create-overlay-canvas";
 import { Canvas } from "@/canvas";
 import { createElement } from "@/mocks/create-element.mock";
-import { DirectEdgeShape } from "@/edges";
+import { DirectEdgeShape } from "@/edge-shapes";
 
 const createCanvas = (): Canvas => {
   const element = document.createElement("div");

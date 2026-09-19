@@ -4,7 +4,7 @@ import { CoreHtmlView } from "../core-html-view";
 import { ViewportStore } from "@/viewport-store";
 import { LayoutHtmlView } from "./layout-html-view";
 import { standardCenterFn } from "@/center-fn";
-import { BezierEdgeShape } from "@/edges";
+import { BezierEdgeShape } from "@/edge-shapes";
 
 const create = (): {
   readonly graphStore: GraphStore;
