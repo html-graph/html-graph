@@ -3,7 +3,7 @@ import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 import { calculateDetourX } from "./calculate-detour-x";
-import { EdgePort } from "@/edges/shapes/path-edge-shape";
+import { EdgePort } from "../../edge-port";
 
 export class DetourVerticalEdgePath implements EdgePath {
   public readonly path: string;

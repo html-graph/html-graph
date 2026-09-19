@@ -3,7 +3,7 @@ import { EdgePath } from "../edge-path";
 import { DetourHorizontalEdgePath } from "../detour-horizontal-edge-path";
 import { DetourVerticalEdgePath } from "../detour-vertical-edge-path";
 import { OrthogonalEdgePath } from "../orthogonal-edge-path";
-import { EdgePort } from "@/edges/shapes/path-edge-shape";
+import { EdgePort } from "../../edge-port";
 
 export class DetourOrthogonalEdgePath implements EdgePath {
   public readonly path: string;

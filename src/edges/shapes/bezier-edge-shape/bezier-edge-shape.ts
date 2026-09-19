@@ -6,12 +6,13 @@ import {
 } from "../../paths";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { edgeConstants } from "../../edge-constants";
-import { EdgePathFactory, EdgePort, PathEdgeShape } from "../path-edge-shape";
+import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
+import { EdgePort } from "../../edge-port";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;

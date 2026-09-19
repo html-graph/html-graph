@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
-import { EdgePort } from "@/edges/shapes/path-edge-shape";
+import { EdgePort } from "../../edge-port";
 
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;

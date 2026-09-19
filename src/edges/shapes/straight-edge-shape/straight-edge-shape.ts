@@ -6,7 +6,8 @@ import {
 } from "../../paths";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../../edge-constants";
-import { EdgePathFactory, EdgePort, PathEdgeShape } from "../path-edge-shape";
+import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
+import { EdgePort } from "../../edge-port";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";

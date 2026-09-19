@@ -3,7 +3,7 @@ import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 import { createOrthogonalLine } from "../shared";
-import { EdgePort } from "@/edges/shapes/path-edge-shape";
+import { EdgePort } from "../../edge-port";
 
 export class OrthogonalEdgePath implements EdgePath {
   public readonly path: string;

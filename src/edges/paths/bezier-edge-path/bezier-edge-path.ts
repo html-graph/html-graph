@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { EdgePort } from "@/edges/shapes/path-edge-shape";
+import { EdgePort } from "../../edge-port";
 
 const halfCube = 0.5 * 0.5 * 0.5;
 const halfCube3 = 3 * halfCube;
