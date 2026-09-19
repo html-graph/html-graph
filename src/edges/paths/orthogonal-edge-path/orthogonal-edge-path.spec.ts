@@ -7,10 +7,12 @@ describe("OrthogonalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       arrowOffset: 5,
@@ -29,10 +31,12 @@ describe("OrthogonalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       arrowOffset: 5,
@@ -51,10 +55,12 @@ describe("OrthogonalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       arrowLength: 15,
       arrowOffset: 5,
@@ -73,10 +79,12 @@ describe("OrthogonalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       arrowOffset: 5,

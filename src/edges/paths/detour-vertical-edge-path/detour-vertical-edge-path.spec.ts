@@ -7,10 +7,12 @@ describe("DetourVerticalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 10,
       arrowOffset: 10,
@@ -30,10 +32,12 @@ describe("DetourVerticalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 10,
       arrowOffset: 10,
@@ -53,10 +57,12 @@ describe("DetourVerticalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 10,
       arrowOffset: 10,
@@ -76,10 +82,12 @@ describe("DetourVerticalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       arrowLength: 10,
       arrowOffset: 10,
@@ -99,10 +107,12 @@ describe("DetourVerticalEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 10,
       arrowOffset: 10,

@@ -16,11 +16,8 @@ export class BezierEdgePath implements EdgePath {
     readonly to: PathPort;
     readonly arrowLength: number;
     readonly curvature: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
-    const { from, to, arrowLength, curvature, hasSourceArrow, hasTargetArrow } =
-      params;
+    const { from, to, arrowLength, curvature } = params;
 
     const begin = createRotatedPoint(
       { x: from.coords.x + arrowLength, y: from.coords.y },
@@ -60,11 +57,11 @@ export class BezierEdgePath implements EdgePath {
 
     const curve = `M ${begin.x} ${begin.y} C ${bezierBegin.x} ${bezierBegin.y}, ${bezierEnd.x} ${bezierEnd.y}, ${end.x} ${end.y}`;
 
-    const preLine = hasSourceArrow
+    const preLine = from.hasArrow
       ? ""
       : `M ${from.coords.x} ${from.coords.y} L ${begin.x} ${begin.y} `;
 
-    const postLine = hasTargetArrow
+    const postLine = to.hasArrow
       ? ""
       : ` M ${end.x} ${end.y} L ${to.coords.x} ${to.coords.y}`;
 

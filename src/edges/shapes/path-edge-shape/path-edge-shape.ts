@@ -83,10 +83,15 @@ export class PathEdgeShape implements StructuredEdgeShape {
     }
 
     const edgePath = createPathFn(
-      { coords: from, dir: sourceDirection },
+      {
+        coords: from,
+        dir: sourceDirection,
+        hasArrow: this.sourceArrow !== null,
+      },
       {
         coords: to,
         dir: targetDirection,
+        hasArrow: this.targetArrow !== null,
       },
     );
 

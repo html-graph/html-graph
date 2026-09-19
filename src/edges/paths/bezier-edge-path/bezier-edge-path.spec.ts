@@ -7,15 +7,15 @@ describe("BezierEdgePath", () => {
       from: {
         coords: { x: -100, y: -200 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       to: {
         coords: { x: 100, y: 200 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       curvature: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -28,15 +28,15 @@ describe("BezierEdgePath", () => {
       from: {
         coords: { x: -100, y: 200 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       to: {
         coords: { x: 100, y: -200 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       curvature: 100,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -49,15 +49,15 @@ describe("BezierEdgePath", () => {
       from: {
         coords: { x: -100, y: -200 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       to: {
         coords: { x: 100, y: 200 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       curvature: 100,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -70,15 +70,15 @@ describe("BezierEdgePath", () => {
       from: {
         coords: { x: -100, y: -200 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       to: {
         coords: { x: 100, y: 200 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       arrowLength: 15,
       curvature: 100,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.midpoint).toEqual({ x: 0, y: 0 });

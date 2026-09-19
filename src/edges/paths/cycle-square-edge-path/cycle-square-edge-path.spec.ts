@@ -7,6 +7,7 @@ describe("CycleSquareEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       side: 40,
       arrowLength: 15,
@@ -25,6 +26,7 @@ describe("CycleSquareEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       side: 40,
       arrowLength: 15,
@@ -43,6 +45,7 @@ describe("CycleSquareEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       side: 40,
       arrowLength: 15,

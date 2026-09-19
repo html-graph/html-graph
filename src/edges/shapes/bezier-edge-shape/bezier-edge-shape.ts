@@ -78,8 +78,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       to,
       arrowLength: this.arrowLength,
       curvature: this.curvature,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
     });
 
   public constructor(params?: BezierEdgeParams | undefined) {

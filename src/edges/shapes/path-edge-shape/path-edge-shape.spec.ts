@@ -24,25 +24,27 @@ const createBezierEdge = (
         from: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
+          hasArrow: false,
         },
         to: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
+          hasArrow: false,
         },
         arrowLength: 10,
         curvature: 90,
-        hasTargetArrow: false,
-        hasSourceArrow: false,
       }),
     createDetourPath: () =>
       new DetourBezierEdgePath({
         from: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
+          hasArrow: false,
         },
         to: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
+          hasArrow: false,
         },
         arrowLength: 10,
         curvature: 90,
@@ -56,6 +58,7 @@ const createBezierEdge = (
         from: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
+          hasArrow: false,
         },
         radius: 10,
         smallRadius: 2,

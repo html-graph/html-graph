@@ -7,6 +7,7 @@ describe("CycleCircleEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       radius: 40,
       smallRadius: 10,
@@ -24,6 +25,7 @@ describe("CycleCircleEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       radius: 40,
       smallRadius: 10,
@@ -41,6 +43,7 @@ describe("CycleCircleEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
+        hasArrow: false,
       },
       radius: 40,
       smallRadius: 10,
