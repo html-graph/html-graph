@@ -11,13 +11,13 @@ export class CycleSquareEdgePath implements EdgePath {
 
   public constructor(params: {
     readonly from: PathPort;
+    readonly to: PathPort;
     readonly arrowLength: number;
     readonly side: number;
     readonly arrowOffset: number;
     readonly roundness: number;
-    readonly hasArrow: boolean;
   }) {
-    const { side, arrowLength, arrowOffset, from, hasArrow } = params;
+    const { side, arrowLength, arrowOffset, from, to } = params;
     const x1 = arrowLength + arrowOffset;
     const x2 = x1 + 2 * side;
 
@@ -38,6 +38,7 @@ export class CycleSquareEdgePath implements EdgePath {
 
     const preLine = `M ${from.coords.x} ${from.coords.y} L ${rp[0].x} ${rp[0].y} `;
 
+    const hasArrow = from.hasArrow || to.hasArrow;
     this.path = `${hasArrow ? "" : preLine}${createRoundedPath(rp, params.roundness)}`;
 
     this.midpoint = { x: (rp[3].x + rp[4].x) / 2, y: (rp[3].y + rp[4].y) / 2 };

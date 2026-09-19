@@ -17,21 +17,11 @@ export class DetourVerticalEdgePath implements EdgePath {
     readonly arrowOffset: number;
     readonly roundness: number;
     readonly detourDistance: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
-    const {
-      hasSourceArrow,
-      hasTargetArrow,
-      arrowLength,
-      from,
-      to,
-      arrowOffset,
-      detourDistance,
-      roundness,
-    } = params;
+    const { from, to, arrowLength, arrowOffset, detourDistance, roundness } =
+      params;
 
-    const beginArrow: Point = hasSourceArrow
+    const beginArrow: Point = from.hasArrow
       ? createRotatedPoint(
           { x: from.coords.x + arrowLength, y: from.coords.y },
           from.dir,
@@ -39,7 +29,7 @@ export class DetourVerticalEdgePath implements EdgePath {
         )
       : from.coords;
 
-    const endArrow: Point = hasTargetArrow
+    const endArrow: Point = to.hasArrow
       ? createRotatedPoint(
           {
             x: to.coords.x - arrowLength,

@@ -46,17 +46,20 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
+  private readonly createPortCyclePath: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
     new CycleSquareEdgePath({
       from,
+      to,
       arrowLength: this.arrowLength,
       side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
-  private readonly createDetourPath: EdgePathFactory = (
+  private readonly createNodeCyclePath: EdgePathFactory = (
     from: PathPort,
     to: PathPort,
   ) =>
@@ -68,8 +71,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       roundness: this.roundness,
       detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
     });
 
   private readonly createLinePath: EdgePathFactory = (
@@ -82,8 +83,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
     });
 
   public constructor(params?: StraightEdgeParams | undefined) {
@@ -117,8 +116,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
-      createCyclePath: this.createCyclePath,
-      createDetourPath: this.createDetourPath,
+      createPortCyclePath: this.createPortCyclePath,
+      createNodeCyclePath: this.createNodeCyclePath,
       createLinePath: this.createLinePath,
       padding: svgPadding,
     });

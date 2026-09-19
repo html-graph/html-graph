@@ -17,12 +17,8 @@ export class DetourStraightEdgePath implements EdgePath {
     readonly roundness: number;
     readonly detourDir: number;
     readonly detourDistance: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
     const {
-      hasSourceArrow,
-      hasTargetArrow,
       from,
       to,
       arrowLength,
@@ -32,7 +28,7 @@ export class DetourStraightEdgePath implements EdgePath {
       roundness,
     } = params;
 
-    const pba: Point = hasSourceArrow
+    const pba: Point = from.hasArrow
       ? createRotatedPoint(
           { x: from.coords.x + arrowLength, y: from.coords.y },
           from.dir,
@@ -40,7 +36,7 @@ export class DetourStraightEdgePath implements EdgePath {
         )
       : from.coords;
 
-    const pea: Point = hasTargetArrow
+    const pea: Point = to.hasArrow
       ? createRotatedPoint(
           {
             x: to.coords.x - arrowLength,

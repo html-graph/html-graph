@@ -15,21 +15,11 @@ export class DetourBezierEdgePath implements EdgePath {
     readonly detourDir: number;
     readonly detourDistance: number;
     readonly curvature: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
-    const {
-      hasSourceArrow,
-      hasTargetArrow,
-      curvature,
-      detourDir,
-      from,
-      to,
-      arrowLength,
-      detourDistance,
-    } = params;
+    const { from, to, curvature, detourDir, arrowLength, detourDistance } =
+      params;
 
-    const beginArrow: Point = hasSourceArrow
+    const beginArrow: Point = from.hasArrow
       ? createRotatedPoint(
           { x: from.coords.x + arrowLength, y: from.coords.y },
           from.dir,
@@ -37,7 +27,7 @@ export class DetourBezierEdgePath implements EdgePath {
         )
       : from.coords;
 
-    const endArrow: Point = hasTargetArrow
+    const endArrow: Point = to.hasArrow
       ? createRotatedPoint(
           {
             x: to.coords.x - arrowLength,

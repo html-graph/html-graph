@@ -9,10 +9,14 @@ describe("CycleCircleEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: false,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -27,10 +31,14 @@ describe("CycleCircleEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: true,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -45,10 +53,14 @@ describe("CycleCircleEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: false,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       radius: 40,
       smallRadius: 10,
       arrowLength: 15,
-      hasArrow: false,
     });
 
     const x = 15 + 40 + Math.sqrt(50 * 50 - 10 * 10) + 100;

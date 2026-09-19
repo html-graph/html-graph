@@ -9,11 +9,15 @@ describe("CycleSquareEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: false,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -28,11 +32,15 @@ describe("CycleSquareEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: true,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -47,11 +55,15 @@ describe("CycleSquareEdgePath", () => {
         dir: { x: 1, y: 0 },
         hasArrow: false,
       },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
       side: 40,
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasArrow: false,
     });
 
     expect(edgePath.midpoint).toEqual({ x: 200, y: 100 });

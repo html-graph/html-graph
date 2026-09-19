@@ -8,8 +8,8 @@ export interface PathEdgeParams {
   readonly arrowLength: number;
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
-  readonly createCyclePath: EdgePathFactory;
-  readonly createDetourPath: EdgePathFactory;
+  readonly createPortCyclePath: EdgePathFactory;
+  readonly createNodeCyclePath: EdgePathFactory;
   readonly createLinePath: EdgePathFactory;
   readonly padding: number;
 }

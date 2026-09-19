@@ -16,20 +16,10 @@ export class OrthogonalEdgePath implements EdgePath {
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
-    const {
-      from,
-      to,
-      arrowLength,
-      arrowOffset,
-      roundness,
-      hasSourceArrow,
-      hasTargetArrow,
-    } = params;
+    const { from, to, arrowLength, arrowOffset, roundness } = params;
 
-    const beginArrow: Point = hasSourceArrow
+    const beginArrow: Point = from.hasArrow
       ? createRotatedPoint(
           { x: from.coords.x + arrowLength, y: from.coords.y },
           from.dir,
@@ -37,7 +27,7 @@ export class OrthogonalEdgePath implements EdgePath {
         )
       : from.coords;
 
-    const endArrow: Point = hasTargetArrow
+    const endArrow: Point = to.hasArrow
       ? createRotatedPoint(
           { x: to.coords.x - arrowLength, y: to.coords.y },
           to.dir,

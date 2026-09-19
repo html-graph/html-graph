@@ -15,28 +15,18 @@ export class StraightEdgePath implements EdgePath {
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
-    const {
-      from,
-      to,
-      hasSourceArrow,
-      hasTargetArrow,
-      arrowLength,
-      arrowOffset,
-      roundness,
-    } = params;
+    const { from, to, arrowLength, arrowOffset, roundness } = params;
 
     const beginArrow: Point = this.createArrowPoint(
-      hasSourceArrow,
+      from.hasArrow,
       from.dir,
       from.coords,
       arrowLength,
     );
 
     const endArrow: Point = this.createArrowPoint(
-      hasTargetArrow,
+      to.hasArrow,
       to.dir,
       to.coords,
       -arrowLength,

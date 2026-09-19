@@ -18,8 +18,6 @@ describe("DetourOrthogonalEdgeShape", () => {
       arrowOffset: 10,
       roundness: 10,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -43,8 +41,6 @@ describe("DetourOrthogonalEdgeShape", () => {
       arrowOffset: 10,
       roundness: 10,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -68,8 +64,6 @@ describe("DetourOrthogonalEdgeShape", () => {
       arrowOffset: 10,
       roundness: 10,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(

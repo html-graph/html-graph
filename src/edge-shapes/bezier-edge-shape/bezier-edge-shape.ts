@@ -46,16 +46,19 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
+  private readonly createPortCyclePath: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
     new CycleCircleEdgePath({
       from,
+      to,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
       arrowLength: this.arrowLength,
-      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
-  private readonly createDetourPath: EdgePathFactory = (
+  private readonly createNodeCyclePath: EdgePathFactory = (
     from: PathPort,
     to: PathPort,
   ) =>
@@ -66,8 +69,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
       curvature: this.curvature,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
     });
 
   private readonly createLinePath: EdgePathFactory = (
@@ -103,8 +104,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       arrowLength: this.arrowLength,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
-      createCyclePath: this.createCyclePath,
-      createDetourPath: this.createDetourPath,
+      createPortCyclePath: this.createPortCyclePath,
+      createNodeCyclePath: this.createNodeCyclePath,
       createLinePath: this.createLinePath,
       padding: svgPadding,
     });

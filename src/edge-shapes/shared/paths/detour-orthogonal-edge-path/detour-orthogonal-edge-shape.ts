@@ -17,8 +17,6 @@ export class DetourOrthogonalEdgePath implements EdgePath {
     readonly arrowOffset: number;
     readonly roundness: number;
     readonly detourDistance: number;
-    readonly hasSourceArrow: boolean;
-    readonly hasTargetArrow: boolean;
   }) {
     const isSourceHor = Math.abs(params.from.dir.y) < 1e-10;
     const isTargetHor = Math.abs(params.to.dir.y) < 1e-10;

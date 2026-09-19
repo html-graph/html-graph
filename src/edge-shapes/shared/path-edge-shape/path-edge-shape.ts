@@ -74,10 +74,10 @@ export class PathEdgeShape implements StructuredEdgeShape {
     let createPathFn: EdgePathFactory;
 
     if (params.category === ConnectionCategory.PortCycle) {
-      createPathFn = this.params.createCyclePath;
+      createPathFn = this.params.createPortCyclePath;
       targetVect = sourceDirection;
     } else if (params.category === ConnectionCategory.NodeCycle) {
-      createPathFn = this.params.createDetourPath;
+      createPathFn = this.params.createNodeCyclePath;
     } else {
       createPathFn = this.params.createLinePath;
     }
