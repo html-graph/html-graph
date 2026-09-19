@@ -7,7 +7,7 @@ import {
 import { StraightEdgeParams } from "./straight-edge-params";
 import { edgeConstants } from "../../edge-constants";
 import { EdgePathFactory, PathEdgeShape } from "../path-edge-shape";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 import { StructuredEdgeShape } from "../../structured-edge-shape";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
@@ -45,7 +45,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (from: EdgePort) =>
+  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
     new CycleSquareEdgePath({
       from,
       arrowLength: this.arrowLength,
@@ -56,8 +56,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    from: EdgePort,
-    to: EdgePort,
+    from: PathPort,
+    to: PathPort,
   ) =>
     new DetourStraightEdgePath({
       from,
@@ -72,8 +72,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    from: EdgePort,
-    to: EdgePort,
+    from: PathPort,
+    to: PathPort,
   ) =>
     new StraightEdgePath({
       from,

@@ -2,7 +2,7 @@ import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class CycleSquareEdgePath implements EdgePath {
   public readonly path: string;
@@ -10,7 +10,7 @@ export class CycleSquareEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
+    readonly from: PathPort;
     readonly arrowLength: number;
     readonly side: number;
     readonly arrowOffset: number;

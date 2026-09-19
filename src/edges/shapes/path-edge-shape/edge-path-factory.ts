@@ -1,4 +1,4 @@
 import { EdgePath } from "../../paths";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
-export type EdgePathFactory = (from: EdgePort, to: EdgePort) => EdgePath;
+export type EdgePathFactory = (from: PathPort, to: PathPort) => EdgePath;

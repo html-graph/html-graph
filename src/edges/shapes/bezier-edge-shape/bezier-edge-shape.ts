@@ -12,7 +12,7 @@ import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../../structured-edge-render-model";
 import { resolveArrowRenderer } from "../../arrow-renderer";
 import { svgPadding } from "../../svg-padding";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -45,7 +45,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (from: EdgePort) =>
+  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
     new CycleCircleEdgePath({
       from,
       radius: this.portCycleRadius,
@@ -55,8 +55,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createDetourPath: EdgePathFactory = (
-    from: EdgePort,
-    to: EdgePort,
+    from: PathPort,
+    to: PathPort,
   ) =>
     new DetourBezierEdgePath({
       from,
@@ -70,8 +70,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
     });
 
   private readonly createLinePath: EdgePathFactory = (
-    from: EdgePort,
-    to: EdgePort,
+    from: PathPort,
+    to: PathPort,
   ) =>
     new BezierEdgePath({
       from,

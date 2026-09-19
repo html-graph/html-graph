@@ -3,7 +3,7 @@ import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
 import { createRoundedPath } from "../../svg";
 import { createOrthogonalLine } from "../shared";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class OrthogonalEdgePath implements EdgePath {
   public readonly path: string;
@@ -11,8 +11,8 @@ export class OrthogonalEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
-    readonly to: EdgePort;
+    readonly from: PathPort;
+    readonly to: PathPort;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;

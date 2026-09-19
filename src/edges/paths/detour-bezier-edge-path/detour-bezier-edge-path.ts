@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,8 +9,8 @@ export class DetourBezierEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
-    readonly to: EdgePort;
+    readonly from: PathPort;
+    readonly to: PathPort;
     readonly arrowLength: number;
     readonly detourDir: number;
     readonly detourDistance: number;

@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 const halfCube = 0.5 * 0.5 * 0.5;
 const halfCube3 = 3 * halfCube;
@@ -12,8 +12,8 @@ export class BezierEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
-    readonly to: EdgePort;
+    readonly from: PathPort;
+    readonly to: PathPort;
     readonly arrowLength: number;
     readonly curvature: number;
     readonly hasSourceArrow: boolean;

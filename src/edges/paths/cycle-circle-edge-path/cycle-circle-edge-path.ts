@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { createRotatedPoint } from "../../geometry";
 import { EdgePath } from "../edge-path";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class CycleCircleEdgePath implements EdgePath {
   public readonly path: string;
@@ -9,7 +9,7 @@ export class CycleCircleEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
+    readonly from: PathPort;
     readonly radius: number;
     readonly smallRadius: number;
     readonly arrowLength: number;

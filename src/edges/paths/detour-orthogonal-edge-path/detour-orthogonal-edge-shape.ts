@@ -3,7 +3,7 @@ import { EdgePath } from "../edge-path";
 import { DetourHorizontalEdgePath } from "../detour-horizontal-edge-path";
 import { DetourVerticalEdgePath } from "../detour-vertical-edge-path";
 import { OrthogonalEdgePath } from "../orthogonal-edge-path";
-import { EdgePort } from "../../edge-port";
+import { PathPort } from "../../path-port";
 
 export class DetourOrthogonalEdgePath implements EdgePath {
   public readonly path: string;
@@ -11,8 +11,8 @@ export class DetourOrthogonalEdgePath implements EdgePath {
   public readonly midpoint: Point;
 
   public constructor(params: {
-    readonly from: EdgePort;
-    readonly to: EdgePort;
+    readonly from: PathPort;
+    readonly to: PathPort;
     readonly arrowLength: number;
     readonly arrowOffset: number;
     readonly roundness: number;

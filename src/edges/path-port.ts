@@ -1,6 +1,6 @@
 import { Point } from "@/point";
 
-export interface EdgePort {
+export interface PathPort {
   readonly coords: Point;
   readonly dir: Point;
 }
