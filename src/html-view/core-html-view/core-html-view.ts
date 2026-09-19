@@ -2,7 +2,7 @@ import { GraphStore, StorePort } from "@/graph-store";
 import { ViewportStore } from "@/viewport-store";
 import { EdgeRenderPort } from "@/edge-shapes";
 import { HtmlView } from "../html-view";
-import { ConnectionCategory } from "@/edge-shapes/connection-category";
+import { ConnectionCategory } from "@/edge-shapes";
 import { createHost } from "./create-host";
 import { createContainer } from "./create-container";
 import { prepareNodeElement } from "./prepare-node-element";

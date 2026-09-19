@@ -1,0 +1,137 @@
+import {
+  EdgeRenderParams,
+  CycleSquareEdgePath,
+  DetourStraightEdgePath,
+  StraightEdgePath,
+  edgeConstants,
+  EdgePathFactory,
+  PathEdgeShape,
+  PathPort,
+  StructuredEdgeShape,
+  StructuredEdgeRenderModel,
+  resolveArrowRenderer,
+  svgPadding,
+} from "../shared";
+import { StraightEdgeParams } from "./straight-edge-params";
+import { EventHandler } from "@/event-subject";
+
+export class StraightEdgeShape implements StructuredEdgeShape {
+  public readonly element: SVGSVGElement;
+
+  public readonly group: SVGGElement;
+
+  public readonly line: SVGPathElement;
+
+  public readonly sourceArrow: SVGPathElement | null;
+
+  public readonly targetArrow: SVGPathElement | null;
+
+  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  private readonly arrowLength: number;
+
+  private readonly arrowOffset: number;
+
+  private readonly roundness: number;
+
+  private readonly cycleSquareSide: number;
+
+  private readonly detourDirection: number;
+
+  private readonly detourDistance: number;
+
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  private readonly pathShape: PathEdgeShape;
+
+  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
+    new CycleSquareEdgePath({
+      from,
+      arrowLength: this.arrowLength,
+      side: this.cycleSquareSide,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
+    });
+
+  private readonly createDetourPath: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
+    new DetourStraightEdgePath({
+      from,
+      to,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      detourDir: this.detourDirection,
+      detourDistance: this.detourDistance,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  private readonly createLinePath: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
+    new StraightEdgePath({
+      from,
+      to,
+      arrowLength: this.arrowLength,
+      arrowOffset: this.arrowOffset,
+      roundness: this.roundness,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+    });
+
+  public constructor(params?: StraightEdgeParams | undefined) {
+    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
+    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
+    this.cycleSquareSide =
+      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
+
+    const roundness = params?.roundness ?? edgeConstants.roundness;
+
+    this.roundness = Math.min(
+      roundness,
+      this.arrowOffset,
+      this.cycleSquareSide / 2,
+    );
+
+    this.detourDirection =
+      params?.detourDirection ?? edgeConstants.detourDirection;
+    this.detourDistance =
+      params?.detourDistance ?? edgeConstants.detourDistance;
+
+    this.hasSourceArrow =
+      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
+    this.hasTargetArrow =
+      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
+
+    this.pathShape = new PathEdgeShape({
+      color: params?.color ?? edgeConstants.color,
+      width: params?.width ?? edgeConstants.width,
+      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowLength: this.arrowLength,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
+      createCyclePath: this.createCyclePath,
+      createDetourPath: this.createDetourPath,
+      createLinePath: this.createLinePath,
+      padding: svgPadding,
+    });
+
+    this.element = this.pathShape.element;
+    this.group = this.pathShape.group;
+    this.line = this.pathShape.line;
+    this.sourceArrow = this.pathShape.sourceArrow;
+    this.targetArrow = this.pathShape.targetArrow;
+    this.onAfterRender = this.pathShape.onAfterRender;
+  }
+
+  public render(params: EdgeRenderParams): void {
+    this.pathShape.render(params);
+  }
+}

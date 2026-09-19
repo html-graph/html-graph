@@ -1,33 +1,34 @@
-export type { EdgeShape } from "./edge-shape";
-export type { EdgeRenderParams } from "./edge-render-params";
-export type { EdgeRenderPort } from "./edge-render-port";
-export type { StructuredEdgeShape } from "./structured-edge-shape";
-export type { StructuredEdgeRenderModel } from "./structured-edge-render-model";
-
-export {
-  BezierEdgeShape,
-  StraightEdgeShape,
-  OrthogonalEdgeShape,
-  DirectEdgeShape,
-  InteractiveEdgeShape,
-  InteractiveEdgeError,
-  MidpointEdgeShape,
-} from "./shapes";
 export type {
-  BezierEdgeParams,
-  StraightEdgeParams,
-  OrthogonalEdgeParams,
-  DirectEdgeParams,
-  InteractiveEdgeParams,
-  PortOffset,
-  PortOffsetFn,
-  PortOffsetFnParams,
-} from "./shapes";
-
-export { ConnectionCategory } from "./connection-category";
-
-export type {
+  EdgeShape,
+  EdgeRenderParams,
+  EdgeRenderPort,
+  StructuredEdgeShape,
+  StructuredEdgeRenderModel,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
-} from "./arrow-renderer";
+  InteractiveEdgeParams,
+} from "./shared";
+export {
+  MidpointEdgeShape,
+  InteractiveEdgeShape,
+  InteractiveEdgeError,
+  ConnectionCategory,
+} from "./shared";
+
+export { BezierEdgeShape } from "./bezier-edge-shape";
+export type { BezierEdgeParams } from "./bezier-edge-shape";
+
+export { StraightEdgeShape } from "./straight-edge-shape";
+export type { StraightEdgeParams } from "./straight-edge-shape";
+
+export { OrthogonalEdgeShape } from "./orthogonal-edge-shape";
+export type { OrthogonalEdgeParams } from "./orthogonal-edge-shape";
+
+export { DirectEdgeShape } from "./direct-edge-shape";
+export type {
+  DirectEdgeParams,
+  PortOffset,
+  PortOffsetFn,
+  PortOffsetFnParams,
+} from "./direct-edge-shape";
