@@ -36,7 +36,17 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowRenderer: ArrowRenderer;
 
+  private readonly pathFnMapping: {
+    [key in ConnectionCategory]: EdgePathFactory;
+  };
+
   public constructor(private readonly params: PathEdgeParams) {
+    this.pathFnMapping = {
+      [ConnectionCategory.PortCycle]: this.params.createPortCyclePath,
+      [ConnectionCategory.NodeCycle]: this.params.createNodeCyclePath,
+      [ConnectionCategory.Line]: this.params.createLinePath,
+    };
+
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
@@ -70,17 +80,12 @@ export class PathEdgeShape implements StructuredEdgeShape {
     const sourceDirection = createDirectionVector(params.from.direction);
     const targetDirection = createDirectionVector(params.to.direction);
 
-    let targetVect: Point = { x: -targetDirection.x, y: -targetDirection.y };
-    let createPathFn: EdgePathFactory;
+    const targetVect: Point =
+      params.category === ConnectionCategory.PortCycle
+        ? sourceDirection
+        : { x: -targetDirection.x, y: -targetDirection.y };
 
-    if (params.category === ConnectionCategory.PortCycle) {
-      createPathFn = this.params.createPortCyclePath;
-      targetVect = sourceDirection;
-    } else if (params.category === ConnectionCategory.NodeCycle) {
-      createPathFn = this.params.createNodeCyclePath;
-    } else {
-      createPathFn = this.params.createLinePath;
-    }
+    const createPathFn = this.pathFnMapping[params.category];
 
     const edgePath = createPathFn(
       {
@@ -99,7 +104,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
     let sourceArrowPath: string | null = null;
 
-    if (this.sourceArrow) {
+    if (this.sourceArrow !== null) {
       sourceArrowPath = this.arrowRenderer({
         direction: sourceDirection,
         shift: from,
@@ -111,7 +116,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
 
     let targetArrowPath: string | null = null;
 
-    if (this.targetArrow) {
+    if (this.targetArrow !== null) {
       targetArrowPath = this.arrowRenderer({
         direction: targetVect,
         shift: to,

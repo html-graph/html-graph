@@ -73,7 +73,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
       }
 
       if (this.interactiveTargetArrow) {
-        this.interactiveTargetArrow!.setAttribute("d", model.targetArrowPath!);
+        this.interactiveTargetArrow.setAttribute("d", model.targetArrowPath!);
       }
     });
   }
