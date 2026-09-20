@@ -24,7 +24,7 @@ describe("CycleCircleEdgePath", () => {
     );
   });
 
-  it("should create cycle circle path with arrow", () => {
+  it("should create cycle circle path with source arrow", () => {
     const edgePath = new CycleCircleEdgePath({
       from: {
         coords: { x: 100, y: 100 },
@@ -35,6 +35,28 @@ describe("CycleCircleEdgePath", () => {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
         hasArrow: false,
+      },
+      radius: 40,
+      smallRadius: 10,
+      arrowLength: 15,
+    });
+
+    expect(edgePath.path).toBe(
+      "M 115 100 A 10 10 0 0 1 124.79795897113272 108 A 40 40 0 1 0 124.79795897113272 92 A 10 10 0 0 1 115 100",
+    );
+  });
+
+  it("should create cycle circle path with target arrow", () => {
+    const edgePath = new CycleCircleEdgePath({
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      to: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: true,
       },
       radius: 40,
       smallRadius: 10,
