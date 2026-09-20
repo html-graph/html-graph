@@ -54,9 +54,9 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       from,
       to,
       arrowLength: this.arrowLength,
-      side: this.cycleSquareSide,
       arrowOffset: this.arrowOffset,
       roundness: this.roundness,
+      side: this.cycleSquareSide,
     });
 
   private readonly createNodeCyclePath: EdgePathFactory = (
