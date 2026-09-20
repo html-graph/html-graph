@@ -34,7 +34,7 @@ const createBezierEdge = (
         arrowLength: 10,
         curvature: 90,
       }),
-    createDetourPath: () =>
+    createNodeCyclePath: () =>
       new DetourBezierEdgePath({
         from: {
           coords: { x: 0, y: 0 },
@@ -48,21 +48,23 @@ const createBezierEdge = (
         },
         arrowLength: 10,
         curvature: 90,
-        hasTargetArrow: false,
-        hasSourceArrow: false,
         detourDistance: 100,
         detourDir: 0,
       }),
-    createCyclePath: () =>
+    createPortCyclePath: () =>
       new CycleCircleEdgePath({
         from: {
           coords: { x: 0, y: 0 },
           dir: { x: 1, y: 0 },
           hasArrow: false,
         },
+        to: {
+          coords: { x: 0, y: 0 },
+          dir: { x: 1, y: 0 },
+          hasArrow: false,
+        },
         radius: 10,
         smallRadius: 2,
-        hasArrow: false,
         arrowLength: 10,
       }),
     padding: 0,

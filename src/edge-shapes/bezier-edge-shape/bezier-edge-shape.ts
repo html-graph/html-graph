@@ -40,22 +40,21 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   private readonly detourDistance: number;
 
-  private readonly hasSourceArrow: boolean;
-
-  private readonly hasTargetArrow: boolean;
-
   private readonly pathShape: PathEdgeShape;
 
-  private readonly createCyclePath: EdgePathFactory = (from: PathPort) =>
+  private readonly createPortCyclePath: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
     new CycleCircleEdgePath({
       from,
+      to,
+      arrowLength: this.arrowLength,
       radius: this.portCycleRadius,
       smallRadius: this.portCycleSmallRadius,
-      arrowLength: this.arrowLength,
-      hasArrow: this.hasSourceArrow || this.hasTargetArrow,
     });
 
-  private readonly createDetourPath: EdgePathFactory = (
+  private readonly createNodeCyclePath: EdgePathFactory = (
     from: PathPort,
     to: PathPort,
   ) =>
@@ -63,11 +62,9 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       from,
       to,
       arrowLength: this.arrowLength,
+      curvature: this.curvature,
       detourDir: this.detourDirection,
       detourDistance: this.detourDistance,
-      curvature: this.curvature,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
     });
 
   private readonly createLinePath: EdgePathFactory = (
@@ -91,20 +88,16 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       params?.detourDirection ?? edgeConstants.detourDirection;
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-    this.hasSourceArrow =
-      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
-    this.hasTargetArrow =
-      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
     this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
       arrowLength: this.arrowLength,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
-      createCyclePath: this.createCyclePath,
-      createDetourPath: this.createDetourPath,
+      hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
+      hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
+      createPortCyclePath: this.createPortCyclePath,
+      createNodeCyclePath: this.createNodeCyclePath,
       createLinePath: this.createLinePath,
       padding: svgPadding,
     });

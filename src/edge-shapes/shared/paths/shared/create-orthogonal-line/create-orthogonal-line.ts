@@ -19,9 +19,9 @@ export const createOrthogonalLine = (
     return createHorizontalSourceOrthogonalLine(from, to);
   }
 
-  if (!isTargetHor) {
-    return createVerticalLine(from, to);
+  if (isTargetHor) {
+    return createVerticalSourceOrthogonalLine(from, to);
   }
 
-  return createVerticalSourceOrthogonalLine(from, to);
+  return createVerticalLine(from, to);
 };

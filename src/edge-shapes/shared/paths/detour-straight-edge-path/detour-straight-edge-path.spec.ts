@@ -19,8 +19,6 @@ describe("DetourStraightEdgePath", () => {
       roundness: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -45,8 +43,6 @@ describe("DetourStraightEdgePath", () => {
       roundness: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -71,8 +67,6 @@ describe("DetourStraightEdgePath", () => {
       roundness: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -97,8 +91,6 @@ describe("DetourStraightEdgePath", () => {
       roundness: 10,
       detourDir: -Math.PI / 2,
       detourDistance: 100,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.midpoint).toEqual({ x: 150, y: 150 });

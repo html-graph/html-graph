@@ -17,8 +17,6 @@ describe("OrthogonalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -41,8 +39,6 @@ describe("OrthogonalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -65,8 +61,6 @@ describe("OrthogonalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -89,8 +83,6 @@ describe("OrthogonalEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.midpoint).toEqual({ x: 150, y: 200 });

@@ -17,8 +17,6 @@ describe("StraightEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -31,7 +29,7 @@ describe("StraightEdgePath", () => {
       from: {
         coords: { x: 100, y: 100 },
         dir: { x: 1, y: 0 },
-        hasArrow: false,
+        hasArrow: true,
       },
       to: {
         coords: { x: 200, y: 300 },
@@ -41,8 +39,6 @@ describe("StraightEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: true,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.path).toBe(
@@ -60,13 +56,11 @@ describe("StraightEdgePath", () => {
       to: {
         coords: { x: 200, y: 300 },
         dir: { x: 1, y: 0 },
-        hasArrow: false,
+        hasArrow: true,
       },
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: true,
     });
 
     expect(edgePath.path).toBe(
@@ -89,8 +83,6 @@ describe("StraightEdgePath", () => {
       arrowLength: 15,
       arrowOffset: 5,
       roundness: 10,
-      hasSourceArrow: false,
-      hasTargetArrow: false,
     });
 
     expect(edgePath.midpoint).toEqual({ x: 150, y: 200 });
