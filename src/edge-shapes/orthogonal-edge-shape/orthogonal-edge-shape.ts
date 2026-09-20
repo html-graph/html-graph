@@ -39,10 +39,6 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
 
   private readonly detourDistance: number;
 
-  private readonly hasSourceArrow: boolean;
-
-  private readonly hasTargetArrow: boolean;
-
   private readonly pathShape: PathEdgeShape;
 
   private readonly createPortCyclePath: EdgePathFactory = (
@@ -98,18 +94,14 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
 
     this.detourDistance =
       params?.detourDistance ?? edgeConstants.detourDistance;
-    this.hasSourceArrow =
-      params?.hasSourceArrow ?? edgeConstants.hasSourceArrow;
-    this.hasTargetArrow =
-      params?.hasTargetArrow ?? edgeConstants.hasTargetArrow;
 
     this.pathShape = new PathEdgeShape({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
       arrowLength: this.arrowLength,
-      hasSourceArrow: this.hasSourceArrow,
-      hasTargetArrow: this.hasTargetArrow,
+      hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
+      hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
       createPortCyclePath: this.createPortCyclePath,
       createNodeCyclePath: this.createNodeCyclePath,
       createLinePath: this.createLinePath,
