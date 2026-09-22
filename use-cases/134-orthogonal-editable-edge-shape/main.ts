@@ -18,6 +18,8 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
       shape: () => {
         const shape = new OrthogonalEdgeShape({
           hasTargetArrow: true,
+          // interactiveWidth: true,
+          // midpointElement: ...,
         });
 
         return shape;
