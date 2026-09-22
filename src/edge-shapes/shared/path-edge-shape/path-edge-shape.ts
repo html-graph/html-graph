@@ -15,6 +15,7 @@ import {
   setSvgRectangle,
 } from "../svg";
 import { createDirectionVector } from "./create-direction-vector";
+import { createInteractionHandle } from "./create-interaction-handle";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -39,6 +40,8 @@ export class PathEdgeShape implements StructuredEdgeShape {
   private readonly pathFnMapping: {
     [key in ConnectionCategory]: EdgePathFactory;
   };
+
+  private interactionHandle: SVGGElement | null = null;
 
   public constructor(private readonly params: PathEdgeParams) {
     this.pathFnMapping = {
@@ -131,5 +134,23 @@ export class PathEdgeShape implements StructuredEdgeShape {
       sourceArrowPath,
       targetArrowPath,
     });
+  }
+
+  public enableInteraction(): void {
+    if (this.interactionHandle !== null) {
+      return;
+    }
+
+    this.interactionHandle = createInteractionHandle();
+    this.element.appendChild(this.interactionHandle);
+  }
+
+  public disableInteraction(): void {
+    if (this.interactionHandle === null) {
+      return;
+    }
+
+    this.element.removeChild(this.interactionHandle);
+    this.interactionHandle = null;
   }
 }
