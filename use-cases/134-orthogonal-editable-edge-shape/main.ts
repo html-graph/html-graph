@@ -16,24 +16,9 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
     },
     edges: {
       shape: () => {
-        const midpointElement = createMidpointElement();
-
-        midpointElement.addEventListener("click", () => {
-          // ...
-        });
-
         const shape = new OrthogonalEdgeShape({
           hasTargetArrow: true,
-        })
-          .enableInteraction({ radius: 10 })
-          .enableMidpoint({ element: midpointElement })
-          .enableEditing();
-
-        shape.element.addEventListener("click", () => {
-          // ...
         });
-
-        shape.disableMidpoint().disableInteraction().disableEditing();
 
         return shape;
       },
