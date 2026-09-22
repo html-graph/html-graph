@@ -135,22 +135,4 @@ export class PathEdgeShape implements StructuredEdgeShape {
       targetArrowPath,
     });
   }
-
-  public enableInteraction(): void {
-    if (this.interactionHandle !== null) {
-      return;
-    }
-
-    this.interactionHandle = createInteractionHandle();
-    this.element.appendChild(this.interactionHandle);
-  }
-
-  public disableInteraction(): void {
-    if (this.interactionHandle === null) {
-      return;
-    }
-
-    this.element.removeChild(this.interactionHandle);
-    this.interactionHandle = null;
-  }
 }

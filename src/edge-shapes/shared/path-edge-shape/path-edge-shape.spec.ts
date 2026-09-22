@@ -202,42 +202,4 @@ describe("PathEdgeShape", () => {
 
     expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 97 L 90 103 Z");
   });
-
-  it("should add interactive wrapper element", () => {
-    const shape = createPathEdge(false, false);
-
-    shape.enableInteraction();
-
-    const handle = shape.element.children[1];
-
-    expect(handle).toBeDefined();
-  });
-
-  it("should remove interactive wrapper element", () => {
-    const shape = createPathEdge(false, false);
-
-    shape.enableInteraction();
-    shape.disableInteraction();
-
-    const handle = shape.element.children[1];
-
-    expect(handle).toBeUndefined();
-  });
-
-  it("should not throw error when interaction is already disabled", () => {
-    const shape = createPathEdge(false, false);
-
-    expect(() => {
-      shape.disableInteraction();
-    }).not.toThrow();
-  });
-
-  it("should add interactive wrapper element once", () => {
-    const shape = createPathEdge(false, false);
-
-    shape.enableInteraction();
-    shape.enableInteraction();
-
-    expect(shape.element.children.length).toBe(2);
-  });
 });
