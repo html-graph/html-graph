@@ -3,6 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
+  OrthogonalEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -15,7 +16,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
     },
     edges: {
       shape: () => {
-        return new OrthogonalEditableEdgeShape();
+        return new OrthogonalEdgeShape();
       },
       priority: 0,
     },
@@ -26,7 +27,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
         const { shape } = canvas.graph.getEdge(edgeId);
         const width = edgeId === selectedEdgeId ? 2 : 1;
 
-        (shape as OrthogonalEditableEdgeShape).line.setAttribute(
+        (shape as OrthogonalEdgeShape).line.setAttribute(
           "stroke-width",
           `${width}`,
         );
@@ -38,10 +39,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
       canvas.graph.getAllEdgeIds().forEach((edgeId) => {
         const { shape } = canvas.graph.getEdge(edgeId);
 
-        (shape as OrthogonalEditableEdgeShape).line.setAttribute(
-          "stroke-width",
-          "1",
-        );
+        (shape as OrthogonalEdgeShape).line.setAttribute("stroke-width", "1");
       });
     },
   })

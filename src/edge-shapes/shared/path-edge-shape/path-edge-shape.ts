@@ -8,27 +8,38 @@ import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { ConnectionCategory } from "../connection-category";
 import { ArrowRenderer } from "../arrow-renderer";
-import {
-  createEdgeArrow,
-  createEdgePath,
-  createEdgeSvg,
-  setSvgRectangle,
-} from "../svg";
+import { setSvgRectangle } from "../svg";
 import { createDirectionVector } from "./create-direction-vector";
+import { StructuredView } from "../structured-view";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly group = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "g",
-  );
+  /**
+   * @deprecated
+   * use view.group instead
+   */
+  public readonly group: SVGGElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly line: SVGPathElement;
 
+  /**
+   * @deprecated
+   * use view.sourceArrow instead
+   */
   public readonly sourceArrow: SVGPathElement | null = null;
 
+  /**
+   * @deprecated
+   * use view.targetArrow instead
+   */
   public readonly targetArrow: SVGPathElement | null = null;
+
+  public readonly view: StructuredView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
@@ -41,6 +52,13 @@ export class PathEdgeShape implements StructuredEdgeShape {
   };
 
   public constructor(private readonly params: PathEdgeParams) {
+    this.view = new StructuredView({
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
+    });
+
     this.pathFnMapping = {
       [ConnectionCategory.PortCycle]: this.params.createPortCyclePath,
       [ConnectionCategory.NodeCycle]: this.params.createNodeCyclePath,
@@ -50,22 +68,13 @@ export class PathEdgeShape implements StructuredEdgeShape {
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
+    this.element = this.view.element;
+    this.line = this.view.line;
+    this.group = this.view.group;
+    this.sourceArrow = this.view.sourceArrow;
+    this.targetArrow = this.view.targetArrow;
+
     this.arrowRenderer = this.params.arrowRenderer;
-
-    this.element = createEdgeSvg(params.color);
-    this.element.appendChild(this.group);
-    this.line = createEdgePath(params.width);
-    this.group.appendChild(this.line);
-
-    if (params.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow();
-      this.group.appendChild(this.sourceArrow);
-    }
-
-    if (params.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow();
-      this.group.appendChild(this.targetArrow);
-    }
   }
 
   public render(params: EdgeRenderParams): void {
@@ -91,39 +100,39 @@ export class PathEdgeShape implements StructuredEdgeShape {
       {
         coords: from,
         dir: sourceDirection,
-        hasArrow: this.sourceArrow !== null,
+        hasArrow: this.view.sourceArrow !== null,
       },
       {
         coords: to,
         dir: targetDirection,
-        hasArrow: this.targetArrow !== null,
+        hasArrow: this.view.targetArrow !== null,
       },
     );
 
-    this.line.setAttribute("d", edgePath.path);
+    this.view.line.setAttribute("d", edgePath.path);
 
     let sourceArrowPath: string | null = null;
 
-    if (this.sourceArrow !== null) {
+    if (this.view.sourceArrow !== null) {
       sourceArrowPath = this.arrowRenderer({
         direction: sourceDirection,
         shift: from,
         arrowLength: this.params.arrowLength,
       });
 
-      this.sourceArrow.setAttribute("d", sourceArrowPath);
+      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
     let targetArrowPath: string | null = null;
 
-    if (this.targetArrow !== null) {
+    if (this.view.targetArrow !== null) {
       targetArrowPath = this.arrowRenderer({
         direction: targetVect,
         shift: to,
         arrowLength: this.params.arrowLength,
       });
 
-      this.targetArrow.setAttribute("d", targetArrowPath);
+      this.view.targetArrow.setAttribute("d", targetArrowPath);
     }
 
     this.afterRenderEmitter.emit({

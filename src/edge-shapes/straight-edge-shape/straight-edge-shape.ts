@@ -11,6 +11,7 @@ import {
   StructuredEdgeRenderModel,
   resolveArrowRenderer,
   svgPadding,
+  StructuredView,
 } from "../shared";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { EventHandler } from "@/event-subject";
@@ -18,13 +19,31 @@ import { EventHandler } from "@/event-subject";
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
+  /**
+   * @deprecated
+   * use view.group instead
+   */
   public readonly group: SVGGElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly line: SVGPathElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly sourceArrow: SVGPathElement | null;
 
+  /**
+   * @deprecated
+   * use view.targetArrow instead
+   */
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly view: StructuredView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
@@ -118,6 +137,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     this.line = this.pathShape.line;
     this.sourceArrow = this.pathShape.sourceArrow;
     this.targetArrow = this.pathShape.targetArrow;
+    this.view = this.pathShape.view;
     this.onAfterRender = this.pathShape.onAfterRender;
   }
 

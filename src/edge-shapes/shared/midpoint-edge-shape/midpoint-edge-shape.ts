@@ -5,6 +5,8 @@ import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EdgeElement } from "@/element";
 
 export class MidpointEdgeShape implements StructuredEdgeShape {
+  public readonly element: EdgeElement;
+
   public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;
@@ -14,8 +16,6 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
   public readonly targetArrow: SVGPathElement | null;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
-
-  public readonly element: EdgeElement;
 
   public constructor(
     private readonly baseShape: StructuredEdgeShape,
@@ -30,7 +30,7 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
     this.element.append(this.midpointElement);
 
     this.baseShape.onAfterRender.subscribe((model) => {
-      const midpoint = model.edgePath.midpoint;
+      const { midpoint } = model.edgePath;
       const transform = `translate(${midpoint.x}px, ${midpoint.y}px)`;
 
       this.midpointElement.style.setProperty("transform", transform);

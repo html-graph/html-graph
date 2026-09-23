@@ -6,11 +6,9 @@ import {
   ArrowRenderer,
   resolveArrowRenderer,
   StructuredEdgeRenderModel,
-  createEdgeArrow,
-  createEdgePath,
-  createEdgeSvg,
   setSvgRectangle,
   svgPadding,
+  StructuredView,
 } from "../shared";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { Point } from "@/point";
@@ -22,20 +20,31 @@ const defaultPortOffset = edgeConstants.portOffset;
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  public readonly group = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "g",
-  );
+  /**
+   * @deprecated
+   * use view.group instead
+   */
+  public readonly group: SVGGElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly line: SVGPathElement;
 
+  /**
+   * @deprecated
+   * use view.sourceArrow instead
+   */
   public readonly sourceArrow: SVGPathElement | null = null;
 
+  /**
+   * @deprecated
+   * use view.targetArrow instead
+   */
   public readonly targetArrow: SVGPathElement | null = null;
 
-  private readonly color: string;
-
-  private readonly width: number;
+  public readonly view: StructuredView;
 
   private readonly arrowLength: number;
 
@@ -50,11 +59,16 @@ export class DirectEdgeShape implements StructuredEdgeShape {
   private readonly arrowRenderer: ArrowRenderer;
 
   public constructor(params?: DirectEdgeParams | undefined) {
+    this.view = new StructuredView({
+      color: params?.color ?? edgeConstants.color,
+      width: params?.width ?? edgeConstants.width,
+      hasSourceArrow: params?.hasSourceArrow === true,
+      hasTargetArrow: params?.hasTargetArrow === true,
+    });
+
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
-    this.color = params?.color ?? edgeConstants.color;
-    this.width = params?.width ?? edgeConstants.width;
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
 
@@ -66,20 +80,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       params?.targetOffset ?? defaultPortOffset,
     );
 
-    this.element = createEdgeSvg(this.color);
-    this.element.appendChild(this.group);
-    this.line = createEdgePath(this.width);
-    this.group.appendChild(this.line);
-
-    if (params?.hasSourceArrow) {
-      this.sourceArrow = createEdgeArrow();
-      this.group.appendChild(this.sourceArrow);
-    }
-
-    if (params?.hasTargetArrow) {
-      this.targetArrow = createEdgeArrow();
-      this.group.appendChild(this.targetArrow);
-    }
+    this.element = this.view.element;
+    this.line = this.view.line;
+    this.group = this.view.group;
+    this.sourceArrow = this.view.sourceArrow;
+    this.targetArrow = this.view.targetArrow;
   }
 
   public render(params: EdgeRenderParams): void {
@@ -129,14 +134,16 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       y: to.y - targetOffset * direction.y,
     };
 
-    const diagonalSource = this.sourceArrow !== null ? this.arrowLength : 0;
+    const diagonalSource =
+      this.view.sourceArrow !== null ? this.arrowLength : 0;
 
     const sourceLine: Point = {
       x: source.x + diagonalSource * direction.x,
       y: source.y + diagonalSource * direction.y,
     };
 
-    const diagonalTarget = this.targetArrow !== null ? this.arrowLength : 0;
+    const diagonalTarget =
+      this.view.targetArrow !== null ? this.arrowLength : 0;
 
     const targetLine: Point = {
       x: target.x - diagonalTarget * direction.x,
@@ -149,12 +156,12 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     };
 
     const path = `M ${sourceLine.x} ${sourceLine.y} L ${targetLine.x} ${targetLine.y}`;
-    this.line.setAttribute("d", path);
+    this.view.line.setAttribute("d", path);
 
     let sourceArrowPath: string | null = null;
     let targetArrowPath: string | null = null;
 
-    if (this.sourceArrow) {
+    if (this.view.sourceArrow !== null) {
       const sourceOffsetPoint: Point = {
         x: direction.x * sourceOffset + from.x,
         y: direction.y * sourceOffset + from.y,
@@ -166,10 +173,10 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         arrowLength: this.arrowLength,
       });
 
-      this.sourceArrow.setAttribute("d", sourceArrowPath);
+      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
-    if (this.targetArrow) {
+    if (this.view.targetArrow !== null) {
       const targetOffsetPoint: Point = {
         x: direction.x * targetOffset,
         y: direction.y * targetOffset,
@@ -184,7 +191,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
         arrowLength: this.arrowLength,
       });
 
-      this.targetArrow.setAttribute("d", targetArrowPath);
+      this.view.targetArrow.setAttribute("d", targetArrowPath);
     }
 
     this.afterRenderEmitter.emit({
@@ -199,16 +206,16 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     let sourceArrowPath: string | null = null;
     let targetArrowPath: string | null = null;
 
-    this.line.setAttribute("d", emptyPath);
+    this.view.line.setAttribute("d", emptyPath);
 
-    if (this.sourceArrow !== null) {
+    if (this.view.sourceArrow !== null) {
       sourceArrowPath = "";
-      this.sourceArrow.setAttribute("d", sourceArrowPath);
+      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
     }
 
-    if (this.targetArrow !== null) {
+    if (this.view.targetArrow !== null) {
       targetArrowPath = "";
-      this.targetArrow.setAttribute("d", targetArrowPath);
+      this.view.targetArrow.setAttribute("d", targetArrowPath);
     }
 
     this.afterRenderEmitter.emit({

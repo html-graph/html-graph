@@ -53,12 +53,12 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.interactiveLine = createEdgeLine(width);
     this.handle.appendChild(this.interactiveLine);
 
-    if (this.sourceArrow) {
+    if (this.sourceArrow !== null) {
       this.interactiveSourceArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveSourceArrow);
     }
 
-    if (this.targetArrow) {
+    if (this.targetArrow !== null) {
       this.interactiveTargetArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveTargetArrow);
     }
@@ -68,11 +68,11 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.baseEdge.onAfterRender.subscribe((model) => {
       this.interactiveLine.setAttribute("d", model.edgePath.path);
 
-      if (this.interactiveSourceArrow) {
+      if (this.interactiveSourceArrow !== null) {
         this.interactiveSourceArrow.setAttribute("d", model.sourceArrowPath!);
       }
 
-      if (this.interactiveTargetArrow) {
+      if (this.interactiveTargetArrow !== null) {
         this.interactiveTargetArrow.setAttribute("d", model.targetArrowPath!);
       }
     });
