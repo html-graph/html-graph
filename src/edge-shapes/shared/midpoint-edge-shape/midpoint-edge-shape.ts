@@ -8,12 +8,28 @@ import { StructuredView } from "../structured-view";
 export class MidpointEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
 
+  /**
+   * @deprecated
+   * use view.group instead
+   */
   public readonly group: SVGGElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly line: SVGPathElement;
 
+  /**
+   * @deprecated
+   * use view.sourceArrow instead
+   */
   public readonly sourceArrow: SVGPathElement | null;
 
+  /**
+   * @deprecated
+   * use view.targetArrow instead
+   */
   public readonly targetArrow: SVGPathElement | null;
 
   public readonly view: StructuredView;
