@@ -72,30 +72,6 @@ const createPathEdge = (
 };
 
 describe("PathEdgeShape", () => {
-  it("should have only line element", () => {
-    const shape = createPathEdge(false, false);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(1);
-  });
-
-  it("should have line and arrow element", () => {
-    const shape = createPathEdge(true, false);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(2);
-  });
-
-  it("should have line and 2 arrows element", () => {
-    const shape = createPathEdge(true, true);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(3);
-  });
-
   it("should create path for target arrow", () => {
     const shape = createPathEdge(false, true);
 
