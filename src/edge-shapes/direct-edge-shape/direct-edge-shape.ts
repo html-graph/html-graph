@@ -14,6 +14,7 @@ import { DirectEdgeParams } from "./direct-edge-params";
 import { Point } from "@/point";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
+import { DirectEdgeShapeModel } from "./direct-edge-shape-model";
 
 const defaultPortOffset = edgeConstants.portOffset;
 
@@ -58,9 +59,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowRenderer: ArrowRenderer;
 
-  public readonly onModelChange: EventHandler<unknown>;
+  public readonly onModelChange: EventHandler<DirectEdgeShapeModel>;
 
-  private readonly modelChangeEmitter: EventEmitter<unknown>;
+  private readonly modelChangeEmitter: EventEmitter<DirectEdgeShapeModel>;
 
   public constructor(params?: DirectEdgeParams | undefined) {
     this.view = new StructuredView({
@@ -73,7 +74,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
-    [this.modelChangeEmitter, this.onModelChange] = createPair<unknown>();
+    [this.modelChangeEmitter, this.onModelChange] =
+      createPair<DirectEdgeShapeModel>();
 
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
@@ -101,7 +103,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const model = createModel(params);
 
     this.modelChangeEmitter.emit(model);
-    // set model
 
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
