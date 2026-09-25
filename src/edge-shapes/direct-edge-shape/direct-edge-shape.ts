@@ -58,6 +58,10 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowRenderer: ArrowRenderer;
 
+  public readonly onModelChange: EventHandler<unknown>;
+
+  private readonly modelChangeEmitter: EventEmitter<unknown>;
+
   public constructor(params?: DirectEdgeParams | undefined) {
     this.view = new StructuredView({
       color: params?.color ?? edgeConstants.color,
@@ -68,6 +72,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
+
+    [this.modelChangeEmitter, this.onModelChange] = createPair<unknown>();
 
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
@@ -85,9 +91,18 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.group = this.view.group;
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
+
+    this.onModelChange.subscribe((model) => {
+      console.log(model);
+    });
   }
 
   public render(params: EdgeRenderParams): void {
+    const model = createModel(params);
+
+    this.modelChangeEmitter.emit(model);
+    // set model
+
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
