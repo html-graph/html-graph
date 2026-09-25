@@ -9,6 +9,7 @@ import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { EdgeElement } from "@/element";
+import { StructuredView } from "../structured-view";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
@@ -20,6 +21,8 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly sourceArrow: SVGPathElement | null;
 
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly view: StructuredView;
 
   private readonly handle = createEdgeGroup();
 
@@ -46,6 +49,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.line = this.baseEdge.line;
     this.sourceArrow = this.baseEdge.sourceArrow;
     this.targetArrow = this.baseEdge.targetArrow;
+    this.view = this.baseEdge.view;
     this.onAfterRender = this.baseEdge.onAfterRender;
 
     const width = params?.distance ?? edgeConstants.interactiveWidth;
