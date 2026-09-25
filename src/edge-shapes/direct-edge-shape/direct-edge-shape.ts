@@ -253,14 +253,34 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const diagonal = Math.sqrt(dirX * dirX + dirY * dirY);
 
-    return {
-      empty: diagonal === 0,
-      box: {
-        x,
-        y,
-        width,
-        height,
-      },
+    const box = {
+      x,
+      y,
+      width,
+      height,
     };
+
+    if (diagonal === 0) {
+      return {
+        empty: true,
+        box,
+      };
+    }
+
+    return {
+      empty: false,
+      box,
+    };
+  }
+
+  private updateView(model: DirectEdgeShapeModel): void {
+    const { box } = model;
+
+    setSvgRectangle(this.element, {
+      x: box.x,
+      y: box.y,
+      width: box.width,
+      height: box.height,
+    });
   }
 }
