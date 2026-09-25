@@ -95,12 +95,12 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.targetArrow = this.view.targetArrow;
 
     this.onModelChange.subscribe((model) => {
-      console.log(model);
+      this.updateView(model);
     });
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = createModel(params);
+    const model = this.createModel(params);
 
     this.modelChangeEmitter.emit(model);
 
