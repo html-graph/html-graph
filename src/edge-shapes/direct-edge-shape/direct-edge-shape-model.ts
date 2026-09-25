@@ -1,5 +1,3 @@
-import { Point } from "@/point";
-
 export type DirectEdgeShapeModel = (
   | {
       readonly empty: true;
@@ -8,12 +6,10 @@ export type DirectEdgeShapeModel = (
       readonly empty: false;
     }
 ) & {
-  readonly rectangle: {
+  readonly box: {
     readonly x: number;
     readonly y: number;
     readonly width: number;
     readonly height: number;
   };
-  readonly from: Point;
-  readonly to: Point;
 };

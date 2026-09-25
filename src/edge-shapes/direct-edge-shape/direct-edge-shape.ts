@@ -240,4 +240,27 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       targetArrowPath,
     });
   }
+
+  private createModel(params: EdgeRenderParams): DirectEdgeShapeModel {
+    const { x, y, width, height, from, to } = createEdgeRectangle(
+      params.from,
+      params.to,
+      svgPadding,
+    );
+
+    const dirX = to.x - from.x;
+    const dirY = to.y - from.y;
+
+    const diagonal = Math.sqrt(dirX * dirX + dirY * dirY);
+
+    return {
+      empty: diagonal === 0,
+      box: {
+        x,
+        y,
+        width,
+        height,
+      },
+    };
+  }
 }
