@@ -6,10 +6,7 @@ import { StructuredViewParams } from "./structured-view-params";
 export class StructuredView {
   public readonly element: SVGSVGElement;
 
-  public readonly group = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "g",
-  );
+  public readonly group: SVGGElement;
 
   public readonly line: SVGPathElement;
 
@@ -19,6 +16,7 @@ export class StructuredView {
 
   public constructor(params: StructuredViewParams) {
     this.element = createEdgeSvg(params.color);
+    this.group = document.createElementNS("http://www.w3.org/2000/svg", "g");
     this.element.appendChild(this.group);
     this.line = createEdgePath(params.width);
     this.group.appendChild(this.line);
