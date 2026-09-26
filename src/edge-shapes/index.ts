@@ -8,6 +8,8 @@ export type {
   ArrowRenderer,
   ArrowRenderingParams,
   InteractiveEdgeParams,
+  StructuredEdgeShapeModel,
+  EdgeBox,
 } from "./shared";
 export {
   MidpointEdgeShape,

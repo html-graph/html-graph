@@ -91,6 +91,8 @@ export type {
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
+  StructuredEdgeShapeModel,
+  EdgeBox,
 } from "./edge-shapes";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";

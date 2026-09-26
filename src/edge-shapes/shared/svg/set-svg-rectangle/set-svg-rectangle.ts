@@ -1,13 +1,7 @@
-export const setSvgRectangle = (
-  svg: SVGSVGElement,
-  params: {
-    readonly x: number;
-    readonly y: number;
-    readonly width: number;
-    readonly height: number;
-  },
-): void => {
-  svg.style.transform = `translate(${params.x}px, ${params.y}px)`;
-  svg.style.width = `${params.width}px`;
-  svg.style.height = `${params.height}px`;
+import { EdgeBox } from "../../edge-box";
+
+export const setSvgRectangle = (svg: SVGSVGElement, box: EdgeBox): void => {
+  svg.style.transform = `translate(${box.x}px, ${box.y}px)`;
+  svg.style.width = `${box.width}px`;
+  svg.style.height = `${box.height}px`;
 };
