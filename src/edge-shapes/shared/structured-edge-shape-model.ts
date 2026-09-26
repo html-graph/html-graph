@@ -6,8 +6,6 @@ export interface StructuredEdgeModel {
 
   readonly linePath: string;
 
-  readonly linePoints: readonly Point[];
-
   readonly sourceArrowPath: string;
 
   readonly targetArrowPath: string;

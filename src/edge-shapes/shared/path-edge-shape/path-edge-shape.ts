@@ -78,13 +78,13 @@ export class PathEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, from, to } = createEdgeRectangle(
+    const { box, from, to } = createEdgeRectangle(
       params.from,
       params.to,
       this.params.padding,
     );
 
-    setSvgRectangle(this.element, { x, y, width, height });
+    setSvgRectangle(this.element, box);
 
     const sourceDirection = createDirectionVector(params.from.direction);
     const targetDirection = createDirectionVector(params.to.direction);

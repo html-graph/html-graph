@@ -6,7 +6,6 @@ import {
   resolveArrowRenderer,
   StructuredEdgeRenderModel,
   StructuredEdgeView,
-  StructuredEdgeModel,
   updateStructuredView,
 } from "../shared";
 import { DirectEdgeParams } from "./direct-edge-params";
@@ -60,9 +59,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
    */
   private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
-  public readonly onModelChange: EventHandler<StructuredEdgeModel>;
+  public readonly onModelChange: EventHandler<DirectEdgeModel>;
 
-  private readonly modelChangeEmitter: EventEmitter<StructuredEdgeModel>;
+  private readonly modelChangeEmitter: EventEmitter<DirectEdgeModel>;
 
   private readonly arrowRenderer: ArrowRenderer;
 
@@ -89,7 +88,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       createPair<StructuredEdgeRenderModel>();
 
     [this.modelChangeEmitter, this.onModelChange] =
-      createPair<StructuredEdgeModel>();
+      createPair<DirectEdgeModel>();
 
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});

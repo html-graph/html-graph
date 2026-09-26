@@ -4,10 +4,10 @@ import {
   EdgeRenderParams,
   StructuredEdgeModel,
   svgPadding,
+  EdgeBox,
 } from "../../shared";
 import { Point } from "@/point";
 import { PortOffsetFn } from "../resolve-port-offset-fn";
-import { EdgeBox } from "../../shared";
 
 export class DirectEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;
@@ -21,8 +21,6 @@ export class DirectEdgeModel implements StructuredEdgeModel {
   public readonly sourcePoint: Point;
 
   public readonly targetPoint: Point;
-
-  public readonly linePoints: readonly Point[];
 
   private readonly lineBegin: Point;
 
@@ -41,13 +39,13 @@ export class DirectEdgeModel implements StructuredEdgeModel {
       readonly arrowLength: number;
     },
   ) {
-    const { x, y, width, height, from, to } = createEdgeRectangle(
+    const { box, from, to } = createEdgeRectangle(
       renderParams.from,
       renderParams.to,
       svgPadding,
     );
 
-    this.box = { x, y, width, height };
+    this.box = box;
 
     const diagonal: Point = {
       x: to.x - from.x,
@@ -128,8 +126,6 @@ export class DirectEdgeModel implements StructuredEdgeModel {
       this.lineBegin = from;
       this.lineEnd = to;
     }
-
-    this.linePoints = [this.lineBegin, this.lineEnd];
   }
 
   public calculateMidpoint(): Point {
