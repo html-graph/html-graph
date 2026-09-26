@@ -6,17 +6,15 @@ export const updateStructuredView = (
   view: StructuredView,
   model: StructuredEdgeShapeModel,
 ): void => {
-  const { box, line } = model;
+  setSvgRectangle(view.element, model.box);
 
-  setSvgRectangle(view.element, box);
-
-  view.line.setAttribute("d", line.path);
+  view.line.setAttribute("d", model.linePath);
 
   if (view.sourceArrow !== null) {
-    view.sourceArrow.setAttribute("d", model.source.arrowPath);
+    view.sourceArrow.setAttribute("d", model.sourceArrowPath);
   }
 
   if (view.targetArrow !== null) {
-    view.targetArrow.setAttribute("d", model.target.arrowPath);
+    view.targetArrow.setAttribute("d", model.targetArrowPath);
   }
 };

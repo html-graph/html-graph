@@ -12,34 +12,21 @@ import { EdgeBox } from "../../shared";
 export class DirectEdgeShapeModel implements StructuredEdgeShapeModel {
   public readonly box: EdgeBox;
 
-  public readonly line: {
-    readonly path: string;
-    readonly points: readonly Point[];
-  };
+  public readonly linePath: string = "";
 
-  public readonly source: {
-    readonly arrowPath: string;
-    readonly coords: Point;
-  };
+  public readonly sourceArrowPath: string = "";
 
-  public readonly target: {
-    readonly arrowPath: string;
-    readonly coords: Point;
-  };
+  public readonly targetArrowPath: string = "";
 
-  private linePath = "";
+  public readonly sourcePoint: Point;
 
-  private sourceArrowPath = "";
+  public readonly targetPoint: Point;
 
-  private targetArrowPath = "";
+  private readonly lineBegin: Point;
 
-  private sourcePoint: Point;
+  private readonly lineEnd: Point;
 
-  private targetPoint: Point;
-
-  private lineBegin: Point;
-
-  private lineEnd: Point;
+  public readonly linePoints: readonly Point[];
 
   public constructor(
     renderParams: EdgeRenderParams,
@@ -142,20 +129,7 @@ export class DirectEdgeShapeModel implements StructuredEdgeShapeModel {
       this.lineEnd = to;
     }
 
-    this.line = {
-      path: this.linePath,
-      points: [this.lineBegin, this.lineEnd],
-    };
-
-    this.source = {
-      arrowPath: this.sourceArrowPath,
-      coords: this.sourcePoint,
-    };
-
-    this.target = {
-      arrowPath: this.targetArrowPath,
-      coords: this.targetPoint,
-    };
+    this.linePoints = [this.lineBegin, this.lineEnd];
   }
 
   public calculateMidpoint(): Point {

@@ -116,11 +116,11 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
       this.afterRenderEmitter.emit({
         edgePath: {
-          path: model.line.path,
+          path: model.linePath,
           midpoint: model.calculateMidpoint(),
         },
-        sourceArrowPath: model.source.arrowPath,
-        targetArrowPath: model.target.arrowPath,
+        sourceArrowPath: model.sourceArrowPath,
+        targetArrowPath: model.targetArrowPath,
       });
     });
   }
