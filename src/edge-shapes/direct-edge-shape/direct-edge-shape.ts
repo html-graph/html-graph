@@ -14,8 +14,7 @@ import { DirectEdgeParams } from "./direct-edge-params";
 import { Point } from "@/point";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
-
-const defaultPortOffset = edgeConstants.portOffset;
+import { DirectEdgeShapeModel } from "./direct-edge-shape-model";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -52,32 +51,54 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly targetOffsetFn: PortOffsetFn;
 
+  /**
+   * @deprecated
+   * use onModelChange instead
+   */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
+  public readonly onModelChange: EventHandler<DirectEdgeShapeModel>;
+
+  private readonly modelChangeEmitter: EventEmitter<DirectEdgeShapeModel>;
+
   private readonly arrowRenderer: ArrowRenderer;
 
+  private readonly hasSourceArrow: boolean;
+
+  private readonly hasTargetArrow: boolean;
+
+  private readonly diagonalSource: number;
+
+  private readonly diagonalTarget: number;
+
   public constructor(params?: DirectEdgeParams | undefined) {
+    this.hasSourceArrow = params?.hasSourceArrow === true;
+    this.hasTargetArrow = params?.hasTargetArrow === true;
+
     this.view = new StructuredView({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
-      hasSourceArrow: params?.hasSourceArrow === true,
-      hasTargetArrow: params?.hasTargetArrow === true,
+      hasSourceArrow: this.hasSourceArrow,
+      hasTargetArrow: this.hasTargetArrow,
     });
 
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
 
+    [this.modelChangeEmitter, this.onModelChange] =
+      createPair<DirectEdgeShapeModel>();
+
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
 
     this.sourceOffsetFn = resolvePortOffsetFn(
-      params?.sourceOffset ?? defaultPortOffset,
+      params?.sourceOffset ?? edgeConstants.portOffset,
     );
 
     this.targetOffsetFn = resolvePortOffsetFn(
-      params?.targetOffset ?? defaultPortOffset,
+      params?.targetOffset ?? edgeConstants.portOffset,
     );
 
     this.element = this.view.element;
@@ -85,143 +106,157 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.group = this.view.group;
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
+
+    this.diagonalSource = this.hasSourceArrow ? this.arrowLength : 0;
+    this.diagonalTarget = this.hasTargetArrow ? this.arrowLength : 0;
+
+    this.onModelChange.subscribe((model) => {
+      this.updateView(model);
+    });
   }
 
   public render(params: EdgeRenderParams): void {
+    this.modelChangeEmitter.emit(this.createModel(params));
+  }
+
+  public createModel(params: EdgeRenderParams): DirectEdgeShapeModel {
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
       svgPadding,
     );
 
-    setSvgRectangle(this.element, { x, y, width, height });
-
-    const dirX = to.x - from.x;
-    const dirY = to.y - from.y;
-
-    const diagonal = Math.sqrt(dirX * dirX + dirY * dirY);
-
-    if (diagonal === 0) {
-      this.renderEmpty(from);
-      return;
-    }
-
-    const direction: Point = { x: dirX / diagonal, y: dirY / diagonal };
-
-    const sourceOffset = this.sourceOffsetFn({
-      direction: { x: direction.x, y: direction.y },
-      radius: {
-        horizontal: params.from.width / 2,
-        vertical: params.from.height / 2,
-      },
-    });
-
-    const targetOffset = this.targetOffsetFn({
-      direction: { x: -direction.x, y: -direction.y },
-      radius: {
-        horizontal: params.to.width / 2,
-        vertical: params.to.height / 2,
-      },
-    });
-
-    const source: Point = {
-      x: from.x + sourceOffset * direction.x,
-      y: from.y + sourceOffset * direction.y,
+    const diagonal: Point = {
+      x: to.x - from.x,
+      y: to.y - from.y,
     };
 
-    const target: Point = {
-      x: to.x - targetOffset * direction.x,
-      y: to.y - targetOffset * direction.y,
-    };
+    const diagonalLength = Math.sqrt(
+      diagonal.x * diagonal.x + diagonal.y * diagonal.y,
+    );
 
-    const diagonalSource =
-      this.view.sourceArrow !== null ? this.arrowLength : 0;
+    let linePath = "";
+    let sourceArrowPath: string = "";
+    let targetArrowPath: string = "";
+    let source: Point = from;
+    let target: Point = to;
+    let lineBegin: Point = from;
+    let lineEnd: Point = to;
 
-    const sourceLine: Point = {
-      x: source.x + diagonalSource * direction.x,
-      y: source.y + diagonalSource * direction.y,
-    };
-
-    const diagonalTarget =
-      this.view.targetArrow !== null ? this.arrowLength : 0;
-
-    const targetLine: Point = {
-      x: target.x - diagonalTarget * direction.x,
-      y: target.y - diagonalTarget * direction.y,
-    };
-
-    const midpoint: Point = {
-      x: (source.x + target.x) / 2,
-      y: (source.y + target.y) / 2,
-    };
-
-    const path = `M ${sourceLine.x} ${sourceLine.y} L ${targetLine.x} ${targetLine.y}`;
-    this.view.line.setAttribute("d", path);
-
-    let sourceArrowPath: string | null = null;
-    let targetArrowPath: string | null = null;
-
-    if (this.view.sourceArrow !== null) {
-      const sourceOffsetPoint: Point = {
-        x: direction.x * sourceOffset + from.x,
-        y: direction.y * sourceOffset + from.y,
+    if (diagonalLength > 0) {
+      const sourceDirection: Point = {
+        x: diagonal.x / diagonalLength,
+        y: diagonal.y / diagonalLength,
       };
 
-      sourceArrowPath = this.arrowRenderer({
-        direction,
-        shift: sourceOffsetPoint,
-        arrowLength: this.arrowLength,
-      });
-
-      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
-    }
-
-    if (this.view.targetArrow !== null) {
-      const targetOffsetPoint: Point = {
-        x: direction.x * targetOffset,
-        y: direction.y * targetOffset,
+      const targetDirection: Point = {
+        x: -sourceDirection.x,
+        y: -sourceDirection.y,
       };
 
-      targetArrowPath = this.arrowRenderer({
-        direction: { x: -direction.x, y: -direction.y },
-        shift: {
-          x: to.x - targetOffsetPoint.x,
-          y: to.y - targetOffsetPoint.y,
+      const sourceOffset = this.sourceOffsetFn({
+        direction: sourceDirection,
+        radius: {
+          horizontal: params.from.width / 2,
+          vertical: params.from.height / 2,
         },
-        arrowLength: this.arrowLength,
       });
 
-      this.view.targetArrow.setAttribute("d", targetArrowPath);
+      const targetOffset = this.targetOffsetFn({
+        direction: targetDirection,
+        radius: {
+          horizontal: params.to.width / 2,
+          vertical: params.to.height / 2,
+        },
+      });
+
+      source = {
+        x: from.x + sourceDirection.x * sourceOffset,
+        y: from.y + sourceDirection.y * sourceOffset,
+      };
+
+      target = {
+        x: to.x + targetDirection.x * targetOffset,
+        y: to.y + targetDirection.y * targetOffset,
+      };
+
+      lineBegin = {
+        x: source.x + sourceDirection.x * this.diagonalSource,
+        y: source.y + sourceDirection.y * this.diagonalSource,
+      };
+
+      lineEnd = {
+        x: target.x + targetDirection.x * this.diagonalTarget,
+        y: target.y + targetDirection.y * this.diagonalTarget,
+      };
+
+      linePath = `M ${lineBegin.x} ${lineBegin.y} L ${lineEnd.x} ${lineEnd.y}`;
+
+      if (this.hasSourceArrow) {
+        sourceArrowPath = this.arrowRenderer({
+          direction: sourceDirection,
+          shift: source,
+          arrowLength: this.arrowLength,
+        });
+      }
+
+      if (this.hasTargetArrow) {
+        targetArrowPath = this.arrowRenderer({
+          direction: targetDirection,
+          shift: target,
+          arrowLength: this.arrowLength,
+        });
+      }
     }
 
-    this.afterRenderEmitter.emit({
-      edgePath: { path, midpoint },
-      sourceArrowPath,
-      targetArrowPath,
-    });
+    const model: DirectEdgeShapeModel = {
+      box: { x, y, width, height },
+      line: {
+        path: linePath,
+        begin: lineBegin,
+        end: lineEnd,
+      },
+      source: {
+        arrowPath: sourceArrowPath,
+        coords: source,
+      },
+      target: {
+        arrowPath: targetArrowPath,
+        coords: target,
+      },
+      calculateMidpoint: () => {
+        return {
+          x: (source.x + target.x) / 2,
+          y: (source.y + target.y) / 2,
+        };
+      },
+    };
+
+    return model;
   }
 
-  private renderEmpty(midpoint: Point): void {
-    const emptyPath = "";
-    let sourceArrowPath: string | null = null;
-    let targetArrowPath: string | null = null;
+  private updateView(model: DirectEdgeShapeModel): void {
+    const { box, line, source, target } = model;
 
-    this.view.line.setAttribute("d", emptyPath);
+    setSvgRectangle(this.element, box);
+
+    this.view.line.setAttribute("d", line.path);
 
     if (this.view.sourceArrow !== null) {
-      sourceArrowPath = "";
-      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
+      this.view.sourceArrow.setAttribute("d", model.source.arrowPath);
     }
 
     if (this.view.targetArrow !== null) {
-      targetArrowPath = "";
-      this.view.targetArrow.setAttribute("d", targetArrowPath);
+      this.view.targetArrow.setAttribute("d", model.target.arrowPath);
     }
 
     this.afterRenderEmitter.emit({
-      edgePath: { path: emptyPath, midpoint },
-      sourceArrowPath,
-      targetArrowPath,
+      edgePath: {
+        path: line.path,
+        midpoint: model.calculateMidpoint(),
+      },
+      sourceArrowPath: source.arrowPath,
+      targetArrowPath: target.arrowPath,
     });
   }
 }
