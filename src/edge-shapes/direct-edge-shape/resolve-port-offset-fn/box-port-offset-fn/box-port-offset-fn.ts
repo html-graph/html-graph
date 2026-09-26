@@ -4,7 +4,7 @@ import { PortOffsetFnParams } from "../port-offset-fn-params";
 export const boxPortOffsetFn: PortOffsetFn = (
   params: PortOffsetFnParams,
 ): number => {
-  const { direction, radii: radius } = params;
+  const { direction, radius: radius } = params;
   const { x, y } = direction;
   const { horizontal, vertical } = radius;
   const tg = y / x;

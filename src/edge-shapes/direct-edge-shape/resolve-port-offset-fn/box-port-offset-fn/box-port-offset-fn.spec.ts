@@ -6,7 +6,7 @@ describe("boxPortOffsetFn", () => {
     expect(
       boxPortOffsetFn({
         direction: { x: 1, y: 0 },
-        radii: { horizontal: 100, vertical: 50 },
+        radius: { horizontal: 100, vertical: 50 },
       }),
     ).toBe(100);
   });
@@ -15,7 +15,7 @@ describe("boxPortOffsetFn", () => {
     expect(
       boxPortOffsetFn({
         direction: { x: 0, y: 1 },
-        radii: { horizontal: 100, vertical: 50 },
+        radius: { horizontal: 100, vertical: 50 },
       }),
     ).toBe(50);
   });

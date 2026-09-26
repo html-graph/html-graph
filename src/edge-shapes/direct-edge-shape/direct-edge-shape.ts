@@ -126,7 +126,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const sourceOffset = this.sourceOffsetFn({
       direction: { x: direction.x, y: direction.y },
-      radii: {
+      radius: {
         horizontal: params.from.width / 2,
         vertical: params.from.height / 2,
       },
@@ -134,7 +134,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     const targetOffset = this.targetOffsetFn({
       direction: { x: -direction.x, y: -direction.y },
-      radii: {
+      radius: {
         horizontal: params.to.width / 2,
         vertical: params.to.height / 2,
       },
