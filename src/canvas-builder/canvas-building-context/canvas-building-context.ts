@@ -377,9 +377,5 @@ export class CanvasBuildingContext {
 
       AnimatedLayoutConfigurator.configure(this.canvas, config, this.window);
     }
-
-    this.canvas.onBeforeDestroy.subscribe(() => {
-      this.layers.destroy();
-    });
   }
 }
