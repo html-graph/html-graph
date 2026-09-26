@@ -14,7 +14,6 @@ import { DirectEdgeParams } from "./direct-edge-params";
 import { Point } from "@/point";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
-import { DirectEdgeShapeModel } from "./direct-edge-shape-model";
 
 const defaultPortOffset = edgeConstants.portOffset;
 
@@ -59,10 +58,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly arrowRenderer: ArrowRenderer;
 
-  public readonly onModelChange: EventHandler<DirectEdgeShapeModel>;
-
-  private readonly modelChangeEmitter: EventEmitter<DirectEdgeShapeModel>;
-
   public constructor(params?: DirectEdgeParams | undefined) {
     this.view = new StructuredView({
       color: params?.color ?? edgeConstants.color,
@@ -73,9 +68,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
-
-    [this.modelChangeEmitter, this.onModelChange] =
-      createPair<DirectEdgeShapeModel>();
 
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
@@ -93,17 +85,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.group = this.view.group;
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
-
-    this.onModelChange.subscribe((model) => {
-      this.updateView(model);
-    });
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = this.createModel(params);
-
-    this.modelChangeEmitter.emit(model);
-
     const { x, y, width, height, from, to } = createEdgeRectangle(
       params.from,
       params.to,
@@ -238,49 +222,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       edgePath: { path: emptyPath, midpoint },
       sourceArrowPath,
       targetArrowPath,
-    });
-  }
-
-  private createModel(params: EdgeRenderParams): DirectEdgeShapeModel {
-    const { x, y, width, height, from, to } = createEdgeRectangle(
-      params.from,
-      params.to,
-      svgPadding,
-    );
-
-    const dirX = to.x - from.x;
-    const dirY = to.y - from.y;
-
-    const diagonal = Math.sqrt(dirX * dirX + dirY * dirY);
-
-    const box = {
-      x,
-      y,
-      width,
-      height,
-    };
-
-    if (diagonal === 0) {
-      return {
-        empty: true,
-        box,
-      };
-    }
-
-    return {
-      empty: false,
-      box,
-    };
-  }
-
-  private updateView(model: DirectEdgeShapeModel): void {
-    const { box } = model;
-
-    setSvgRectangle(this.element, {
-      x: box.x,
-      y: box.y,
-      width: box.width,
-      height: box.height,
     });
   }
 }
