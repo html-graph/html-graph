@@ -10,7 +10,7 @@ describe("resolvePortOffsetFn", () => {
     const direction: Point = { x: 0, y: 1 };
     const radius: Radii = { horizontal: 100, vertical: 100 };
 
-    expect(fn({ direction, radius })).toBe(10);
+    expect(fn({ direction, radii: radius })).toBe(10);
   });
 
   it("should resolve specified offset function", () => {
@@ -18,7 +18,7 @@ describe("resolvePortOffsetFn", () => {
     const direction: Point = { x: 0, y: 1 };
     const radius: Radii = { horizontal: 100, vertical: 100 };
 
-    expect(fn({ direction, radius })).toBe(20);
+    expect(fn({ direction, radii: radius })).toBe(20);
   });
 
   it("should resolve box offset function", () => {

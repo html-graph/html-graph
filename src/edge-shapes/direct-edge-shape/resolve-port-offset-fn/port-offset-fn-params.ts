@@ -3,5 +3,5 @@ import { Radii } from "@/radii";
 
 export interface PortOffsetFnParams {
   readonly direction: Point;
-  readonly radius: Radii;
+  readonly radii: Radii;
 }
