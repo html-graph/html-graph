@@ -129,181 +129,29 @@ export class CanvasBuildingContext {
       viewportController,
     );
 
-    if (this.params.background.enabled) {
-      BackgroundConfigurator.configure(
-        this.canvas,
-        createBackgroundParams(this.params.background.config),
-        this.layers.background,
-      );
-    }
+    this.tryConfigureBackground();
 
-    if (this.params.nodeResizeReactiveEdges.enabled) {
-      NodeResizeReactiveEdgesConfigurator.configure(this.canvas);
-    }
+    this.tryConfigureNodeResizeReactiveEdges();
 
-    if (this.params.userSelectableEdges.enabled) {
-      const params = createUserSelectableEdgesParams(
-        this.params.userSelectableEdges.config,
-      );
+    this.tryConfigureSelectableEdges();
 
-      UserSelectableEdgesConfigurator.configure(
-        this.canvas,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
+    this.tryConfigureSelectableNodes();
 
-    if (this.params.userSelectableNodes.enabled) {
-      const params = createUserSelectableNodesParams(
-        this.params.userSelectableNodes.config,
-      );
+    this.tryConfigureSelectableCanvas();
 
-      UserSelectableNodesConfigurator.configure(
-        this.canvas,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
+    this.tryConfigureDraggableNodes();
 
-    if (this.params.userSelectableCanvas.enabled) {
-      const params = createUserSelectableCanvasParams(
-        this.params.userSelectableCanvas.config,
-      );
+    this.tryConfigureConnectablePorts();
 
-      UserSelectableCanvasConfigurator.configure(
-        this.canvas,
-        this.layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
+    this.tryConfigureDraggableEdges();
 
-    if (this.params.draggableNodes.enabled) {
-      let draggableNodesParams = createDraggableNodesParams(
-        this.params.draggableNodes.config,
-      );
+    this.tryConfigureTransformableViewport();
 
-      if (this.params.animatedLayout.enabled) {
-        draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
-          draggableNodesParams,
-          this.animationStaticNodes,
-        );
-      }
+    this.tryConfigureRectangularSelection();
 
-      UserDraggableNodesConfigurator.configure(
-        this.canvas,
-        this.layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        draggableNodesParams,
-      );
-    }
+    this.tryConfigureLayout();
 
-    if (this.params.userConnectablePorts.enabled) {
-      const params = createConnectablePortsParams(
-        this.params.userConnectablePorts.config,
-        this.graphControllerParams.edges.shapeFactory,
-        this.canvas.graph,
-      );
-
-      UserConnectablePortsConfigurator.configure(
-        this.canvas,
-        this.layers.overlayConnectablePorts,
-        this.viewportStore,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        params,
-      );
-    }
-
-    if (this.params.userDraggableEdges.enabled) {
-      const dragEdgeParams = createDraggableEdgeParams(
-        this.params.userDraggableEdges.config,
-        this.canvas.graph,
-      );
-
-      UserDraggableEdgesConfigurator.configure(
-        this.canvas,
-        this.layers.overlayDraggableEdges,
-        this.viewportStore,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        dragEdgeParams,
-      );
-    }
-
-    if (this.params.virtualScroll.enabled) {
-      UserTransformableViewportVirtualScrollConfigurator.configure(
-        this.canvas,
-        this.layers.main,
-        this.window,
-        createUserTransformableViewportParams(
-          this.params.userTransformableViewport.config,
-        ),
-        this.boxRenderingTrigger,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        createVirtualScrollParams(this.params.virtualScroll.config),
-      );
-    } else if (this.params.userTransformableViewport.enabled) {
-      UserTransformableViewportConfigurator.configure(
-        this.canvas,
-        this.layers.main,
-        this.window,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        createUserTransformableViewportParams(
-          this.params.userTransformableViewport.config,
-        ),
-      );
-    }
-
-    if (this.params.rectangularSelection.enabled) {
-      RectangularSelectionConfigurator.configure(
-        this.canvas,
-        this.layers.main,
-        this.layers.overlayRectangularSelection,
-        this.pointInsideVerifier,
-        this.eventTagger,
-        this.window,
-        createRectangularSelectionParams(
-          this.params.rectangularSelection.config,
-        ),
-      );
-    }
-
-    if (this.params.layout.enabled) {
-      LayoutConfigurator.configure(this.canvas, this.layoutParams);
-    }
-
-    if (this.params.animatedLayout.enabled) {
-      let config = createAnimatedLayoutParams(
-        this.params.animatedLayout.config,
-      );
-
-      if (this.params.draggableNodes.enabled) {
-        subscribeAnimatedLayoutStaticNodesUpdate(
-          this.canvas,
-          this.animationStaticNodes,
-        );
-
-        config = patchDraggableNodesAnimatedLayoutParams(
-          config,
-          this.animationStaticNodes,
-        );
-      }
-
-      AnimatedLayoutConfigurator.configure(this.canvas, config, this.window);
-    }
+    this.tryConfigureAnimatedLayout();
 
     this.canvas.onBeforeDestroy.subscribe(() => {
       this.layers.destroy();
@@ -329,5 +177,209 @@ export class CanvasBuildingContext {
     htmlView = new LayoutHtmlView(htmlView, this.graphStore);
 
     return htmlView;
+  }
+
+  private tryConfigureBackground(): void {
+    if (this.params.background.enabled) {
+      BackgroundConfigurator.configure(
+        this.canvas,
+        createBackgroundParams(this.params.background.config),
+        this.layers.background,
+      );
+    }
+  }
+
+  private tryConfigureNodeResizeReactiveEdges(): void {
+    if (this.params.nodeResizeReactiveEdges.enabled) {
+      NodeResizeReactiveEdgesConfigurator.configure(this.canvas);
+    }
+  }
+
+  private tryConfigureSelectableEdges(): void {
+    if (this.params.userSelectableEdges.enabled) {
+      const params = createUserSelectableEdgesParams(
+        this.params.userSelectableEdges.config,
+      );
+
+      UserSelectableEdgesConfigurator.configure(
+        this.canvas,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        params,
+      );
+    }
+  }
+
+  private tryConfigureSelectableNodes(): void {
+    if (this.params.userSelectableNodes.enabled) {
+      const params = createUserSelectableNodesParams(
+        this.params.userSelectableNodes.config,
+      );
+
+      UserSelectableNodesConfigurator.configure(
+        this.canvas,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        params,
+      );
+    }
+  }
+
+  private tryConfigureSelectableCanvas(): void {
+    if (this.params.userSelectableCanvas.enabled) {
+      const params = createUserSelectableCanvasParams(
+        this.params.userSelectableCanvas.config,
+      );
+
+      UserSelectableCanvasConfigurator.configure(
+        this.canvas,
+        this.layers.main,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        params,
+      );
+    }
+  }
+
+  private tryConfigureDraggableNodes(): void {
+    if (this.params.draggableNodes.enabled) {
+      let draggableNodesParams = createDraggableNodesParams(
+        this.params.draggableNodes.config,
+      );
+
+      if (this.params.animatedLayout.enabled) {
+        draggableNodesParams = patchAnimatedLayoutDraggableNodesParams(
+          draggableNodesParams,
+          this.animationStaticNodes,
+        );
+      }
+
+      UserDraggableNodesConfigurator.configure(
+        this.canvas,
+        this.layers.main,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        draggableNodesParams,
+      );
+    }
+  }
+
+  private tryConfigureConnectablePorts(): void {
+    if (this.params.userConnectablePorts.enabled) {
+      const params = createConnectablePortsParams(
+        this.params.userConnectablePorts.config,
+        this.graphControllerParams.edges.shapeFactory,
+        this.canvas.graph,
+      );
+
+      UserConnectablePortsConfigurator.configure(
+        this.canvas,
+        this.layers.overlayConnectablePorts,
+        this.viewportStore,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        params,
+      );
+    }
+  }
+
+  private tryConfigureDraggableEdges(): void {
+    if (this.params.userDraggableEdges.enabled) {
+      const dragEdgeParams = createDraggableEdgeParams(
+        this.params.userDraggableEdges.config,
+        this.canvas.graph,
+      );
+
+      UserDraggableEdgesConfigurator.configure(
+        this.canvas,
+        this.layers.overlayDraggableEdges,
+        this.viewportStore,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        dragEdgeParams,
+      );
+    }
+  }
+
+  private tryConfigureTransformableViewport(): void {
+    if (this.params.virtualScroll.enabled) {
+      UserTransformableViewportVirtualScrollConfigurator.configure(
+        this.canvas,
+        this.layers.main,
+        this.window,
+        createUserTransformableViewportParams(
+          this.params.userTransformableViewport.config,
+        ),
+        this.boxRenderingTrigger,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        createVirtualScrollParams(this.params.virtualScroll.config),
+      );
+    } else if (this.params.userTransformableViewport.enabled) {
+      UserTransformableViewportConfigurator.configure(
+        this.canvas,
+        this.layers.main,
+        this.window,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        createUserTransformableViewportParams(
+          this.params.userTransformableViewport.config,
+        ),
+      );
+    }
+  }
+
+  private tryConfigureRectangularSelection(): void {
+    if (this.params.rectangularSelection.enabled) {
+      RectangularSelectionConfigurator.configure(
+        this.canvas,
+        this.layers.main,
+        this.layers.overlayRectangularSelection,
+        this.pointInsideVerifier,
+        this.eventTagger,
+        this.window,
+        createRectangularSelectionParams(
+          this.params.rectangularSelection.config,
+        ),
+      );
+    }
+  }
+
+  private tryConfigureLayout(): void {
+    if (this.params.layout.enabled) {
+      LayoutConfigurator.configure(this.canvas, this.layoutParams);
+    }
+  }
+
+  private tryConfigureAnimatedLayout(): void {
+    if (this.params.animatedLayout.enabled) {
+      let config = createAnimatedLayoutParams(
+        this.params.animatedLayout.config,
+      );
+
+      if (this.params.draggableNodes.enabled) {
+        subscribeAnimatedLayoutStaticNodesUpdate(
+          this.canvas,
+          this.animationStaticNodes,
+        );
+
+        config = patchDraggableNodesAnimatedLayoutParams(
+          config,
+          this.animationStaticNodes,
+        );
+      }
+
+      AnimatedLayoutConfigurator.configure(this.canvas, config, this.window);
+    }
+
+    this.canvas.onBeforeDestroy.subscribe(() => {
+      this.layers.destroy();
+    });
   }
 }
