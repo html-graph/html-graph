@@ -50,11 +50,7 @@ export type { PathPort } from "./path-port";
 
 export { createRotatedPoint, createEdgeRectangle } from "./geometry";
 
-export {
-  cssVariables,
-  createEdgeSvg,
-  createEdgePath,
-  createEdgeArrow,
-  setSvgRectangle,
-  createRoundedPath,
-} from "./svg";
+export { setSvgRectangle, createRoundedPath } from "./svg";
+
+export { StructuredView } from "./structured-view";
+export type { StructuredViewParams } from "./structured-view";

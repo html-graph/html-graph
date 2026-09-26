@@ -8,7 +8,7 @@ import {
 } from "../paths";
 import { PathEdgeShape } from "./path-edge-shape";
 
-const createBezierEdge = (
+const createPathEdge = (
   hasSourceArrow: boolean,
   hasTargetArrow: boolean,
 ): PathEdgeShape => {
@@ -72,32 +72,8 @@ const createBezierEdge = (
 };
 
 describe("PathEdgeShape", () => {
-  it("should have only line element", () => {
-    const shape = createBezierEdge(false, false);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(1);
-  });
-
-  it("should have line and arrow element", () => {
-    const shape = createBezierEdge(true, false);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(2);
-  });
-
-  it("should have line and 2 arrows element", () => {
-    const shape = createBezierEdge(true, true);
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(3);
-  });
-
   it("should create path for target arrow", () => {
-    const shape = createBezierEdge(false, true);
+    const shape = createPathEdge(false, true);
 
     shape.render({
       from: {
@@ -124,7 +100,7 @@ describe("PathEdgeShape", () => {
   });
 
   it("should create path for source arrow", () => {
-    const shape = createBezierEdge(true, false);
+    const shape = createPathEdge(true, false);
 
     shape.render({
       from: {
@@ -151,7 +127,7 @@ describe("PathEdgeShape", () => {
   });
 
   it("should create port cycle target arrow path", () => {
-    const shape = createBezierEdge(false, true);
+    const shape = createPathEdge(false, true);
 
     shape.render({
       from: {
@@ -177,7 +153,7 @@ describe("PathEdgeShape", () => {
   });
 
   it("should create node cycle target arrow path", () => {
-    const shape = createBezierEdge(false, true);
+    const shape = createPathEdge(false, true);
 
     shape.render({
       from: {

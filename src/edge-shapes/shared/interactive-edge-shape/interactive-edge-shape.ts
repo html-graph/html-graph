@@ -9,17 +9,36 @@ import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { EdgeElement } from "@/element";
+import { StructuredView } from "../structured-view";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
 
+  /**
+   * @deprecated
+   * use view.group instead
+   */
   public readonly group: SVGGElement;
 
+  /**
+   * @deprecated
+   * use view.line instead
+   */
   public readonly line: SVGPathElement;
 
+  /**
+   * @deprecated
+   * use view.sourceArrow instead
+   */
   public readonly sourceArrow: SVGPathElement | null;
 
+  /**
+   * @deprecated
+   * use view.targetArrow instead
+   */
   public readonly targetArrow: SVGPathElement | null;
+
+  public readonly view: StructuredView;
 
   private readonly handle = createEdgeGroup();
 
@@ -46,6 +65,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.line = this.baseEdge.line;
     this.sourceArrow = this.baseEdge.sourceArrow;
     this.targetArrow = this.baseEdge.targetArrow;
+    this.view = this.baseEdge.view;
     this.onAfterRender = this.baseEdge.onAfterRender;
 
     const width = params?.distance ?? edgeConstants.interactiveWidth;
@@ -53,12 +73,12 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.interactiveLine = createEdgeLine(width);
     this.handle.appendChild(this.interactiveLine);
 
-    if (this.sourceArrow) {
+    if (this.sourceArrow !== null) {
       this.interactiveSourceArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveSourceArrow);
     }
 
-    if (this.targetArrow) {
+    if (this.targetArrow !== null) {
       this.interactiveTargetArrow = createEdgeArrow(width);
       this.handle.appendChild(this.interactiveTargetArrow);
     }
@@ -68,12 +88,12 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
     this.baseEdge.onAfterRender.subscribe((model) => {
       this.interactiveLine.setAttribute("d", model.edgePath.path);
 
-      if (this.interactiveSourceArrow) {
+      if (this.interactiveSourceArrow !== null) {
         this.interactiveSourceArrow.setAttribute("d", model.sourceArrowPath!);
       }
 
-      if (this.interactiveTargetArrow) {
-        this.interactiveTargetArrow!.setAttribute("d", model.targetArrowPath!);
+      if (this.interactiveTargetArrow !== null) {
+        this.interactiveTargetArrow.setAttribute("d", model.targetArrowPath!);
       }
     });
   }

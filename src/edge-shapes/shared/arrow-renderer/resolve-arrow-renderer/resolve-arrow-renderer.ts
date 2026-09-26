@@ -15,7 +15,7 @@ export const resolveArrowRenderer = (
   switch (config.type) {
     case "triangle": {
       return createTriangleArrowRenderer({
-        radius: config.radius ?? edgeConstants.polygonArrowRadius,
+        radius: config.radius ?? edgeConstants.triangleArrowRadius,
       });
     }
     case "arc": {

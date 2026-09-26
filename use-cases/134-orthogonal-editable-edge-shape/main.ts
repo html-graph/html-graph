@@ -3,7 +3,6 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  InteractiveEdgeShape,
   OrthogonalEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -17,19 +16,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
     },
     edges: {
       shape: () => {
-        const baseShape = new OrthogonalEdgeShape({
-          hasTargetArrow: true,
-          // interactiveWidth: 10,
-          // midpointElement: ...,
-        });
-
-        // baseShape.enableMidpoint();
-        // baseShape.enableInteraction();
-        // baseShape.enableEdit();
-
-        return new InteractiveEdgeShape(baseShape, {
-          distance: 10,
-        });
+        return new OrthogonalEdgeShape();
       },
       priority: 0,
     },
@@ -53,8 +40,6 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
         const { shape } = canvas.graph.getEdge(edgeId);
 
         (shape as OrthogonalEdgeShape).line.setAttribute("stroke-width", "1");
-
-        // shape.disableEdit();
       });
     },
   })
