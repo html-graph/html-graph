@@ -2,14 +2,14 @@ import {
   ArrowRenderer,
   createEdgeRectangle,
   EdgeRenderParams,
-  StructuredEdgeShapeModel,
+  StructuredEdgeModel,
   svgPadding,
 } from "../../shared";
 import { Point } from "@/point";
 import { PortOffsetFn } from "../resolve-port-offset-fn";
 import { EdgeBox } from "../../shared";
 
-export class DirectEdgeShapeModel implements StructuredEdgeShapeModel {
+export class DirectEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;
 
   public readonly linePath: string = "";
@@ -22,11 +22,11 @@ export class DirectEdgeShapeModel implements StructuredEdgeShapeModel {
 
   public readonly targetPoint: Point;
 
+  public readonly linePoints: readonly Point[];
+
   private readonly lineBegin: Point;
 
   private readonly lineEnd: Point;
-
-  public readonly linePoints: readonly Point[];
 
   public constructor(
     renderParams: EdgeRenderParams,

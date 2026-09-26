@@ -8,7 +8,8 @@ export type {
   ArrowRenderer,
   ArrowRenderingParams,
   InteractiveEdgeParams,
-  StructuredEdgeShapeModel,
+  StructuredEdgeModel,
+  StructuredEdgeView,
   EdgeBox,
 } from "./shared";
 export {

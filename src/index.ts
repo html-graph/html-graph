@@ -91,7 +91,8 @@ export type {
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
-  StructuredEdgeShapeModel,
+  StructuredEdgeView,
+  StructuredEdgeModel,
   EdgeBox,
 } from "./edge-shapes";
 

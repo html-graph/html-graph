@@ -5,14 +5,14 @@ import {
   ArrowRenderer,
   resolveArrowRenderer,
   StructuredEdgeRenderModel,
-  StructuredView,
-  StructuredEdgeShapeModel,
+  StructuredEdgeView,
+  StructuredEdgeModel,
   updateStructuredView,
 } from "../shared";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { PortOffsetFn, resolvePortOffsetFn } from "./resolve-port-offset-fn";
-import { DirectEdgeShapeModel } from "./direct-edge-shape-model/direct-edge-shape-model";
+import { DirectEdgeModel } from "./direct-edge-model";
 
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -41,7 +41,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   private readonly arrowLength: number;
 
@@ -60,9 +60,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
    */
   private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
-  public readonly onModelChange: EventHandler<StructuredEdgeShapeModel>;
+  public readonly onModelChange: EventHandler<StructuredEdgeModel>;
 
-  private readonly modelChangeEmitter: EventEmitter<StructuredEdgeShapeModel>;
+  private readonly modelChangeEmitter: EventEmitter<StructuredEdgeModel>;
 
   private readonly arrowRenderer: ArrowRenderer;
 
@@ -78,7 +78,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.hasSourceArrow = params?.hasSourceArrow === true;
     this.hasTargetArrow = params?.hasTargetArrow === true;
 
-    this.view = new StructuredView({
+    this.view = new StructuredEdgeView({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       hasSourceArrow: this.hasSourceArrow,
@@ -89,7 +89,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       createPair<StructuredEdgeRenderModel>();
 
     [this.modelChangeEmitter, this.onModelChange] =
-      createPair<StructuredEdgeShapeModel>();
+      createPair<StructuredEdgeModel>();
 
     this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
     this.arrowRenderer = resolveArrowRenderer(params?.arrowRenderer ?? {});
@@ -126,7 +126,7 @@ export class DirectEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new DirectEdgeShapeModel(params, {
+    const model = new DirectEdgeModel(params, {
       sourceOffsetFn: this.sourceOffsetFn,
       targetOffsetFn: this.targetOffsetFn,
       diagonalBegin: this.diagonalBegin,

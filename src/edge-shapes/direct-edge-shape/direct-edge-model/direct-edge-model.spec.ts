@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-describe("DirectEdgeShapeModel", () => {
+describe("DirectEdgeModel", () => {
   it("should fail", () => {
     expect(true).toBe(false);
   });

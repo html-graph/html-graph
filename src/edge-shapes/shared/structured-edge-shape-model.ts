@@ -1,7 +1,7 @@
 import { Point } from "@/point";
 import { EdgeBox } from "./edge-box";
 
-export interface StructuredEdgeShapeModel {
+export interface StructuredEdgeModel {
   readonly box: EdgeBox;
 
   readonly linePath: string;

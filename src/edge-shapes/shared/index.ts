@@ -52,10 +52,10 @@ export { createRotatedPoint, createEdgeRectangle } from "./geometry";
 
 export { setSvgRectangle, createRoundedPath } from "./svg";
 
-export { StructuredView } from "./structured-view";
+export { StructuredEdgeView } from "./structured-view";
 export type { StructuredViewParams } from "./structured-view";
 
-export type { StructuredEdgeShapeModel } from "./structured-edge-shape-model";
+export type { StructuredEdgeModel } from "./structured-edge-shape-model";
 
 export { updateStructuredView } from "./update-structured-view";
 

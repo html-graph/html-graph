@@ -12,7 +12,7 @@ import {
   resolveArrowRenderer,
   svgPadding,
   PathPort,
-  StructuredView,
+  StructuredEdgeView,
 } from "../shared";
 import { BezierEdgeParams } from "./bezier-edge-params";
 
@@ -43,7 +43,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 

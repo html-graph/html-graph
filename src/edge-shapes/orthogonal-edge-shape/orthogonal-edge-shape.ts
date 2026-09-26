@@ -11,7 +11,7 @@ import {
   StructuredEdgeRenderModel,
   resolveArrowRenderer,
   svgPadding,
-  StructuredView,
+  StructuredEdgeView,
 } from "../shared";
 import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
 import { EventHandler } from "@/event-subject";
@@ -44,7 +44,7 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 

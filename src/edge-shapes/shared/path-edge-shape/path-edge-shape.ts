@@ -10,7 +10,7 @@ import { ConnectionCategory } from "../connection-category";
 import { ArrowRenderer } from "../arrow-renderer";
 import { setSvgRectangle } from "../svg";
 import { createDirectionVector } from "./create-direction-vector";
-import { StructuredView } from "../structured-view";
+import { StructuredEdgeView } from "../structured-view";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -39,7 +39,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
@@ -52,7 +52,7 @@ export class PathEdgeShape implements StructuredEdgeShape {
   };
 
   public constructor(private readonly params: PathEdgeParams) {
-    this.view = new StructuredView({
+    this.view = new StructuredEdgeView({
       color: params.color,
       width: params.width,
       hasSourceArrow: params.hasSourceArrow,

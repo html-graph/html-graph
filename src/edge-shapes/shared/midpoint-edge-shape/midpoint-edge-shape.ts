@@ -3,7 +3,7 @@ import { EdgeRenderParams } from "../edge-render-params";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { StructuredEdgeShape } from "../structured-edge-shape";
 import { EdgeElement } from "@/element";
-import { StructuredView } from "../structured-view";
+import { StructuredEdgeView } from "../structured-view";
 
 export class MidpointEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
@@ -32,7 +32,7 @@ export class MidpointEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 

@@ -9,7 +9,7 @@ import { InteractiveEdgeError } from "./interactive-edge-error";
 import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { EdgeElement } from "@/element";
-import { StructuredView } from "../structured-view";
+import { StructuredEdgeView } from "../structured-view";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
@@ -38,7 +38,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   private readonly handle = createEdgeGroup();
 

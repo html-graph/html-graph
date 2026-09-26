@@ -1,10 +1,10 @@
-import { StructuredEdgeShapeModel } from "../structured-edge-shape-model";
-import { StructuredView } from "../structured-view";
+import { StructuredEdgeModel } from "../structured-edge-shape-model";
+import { StructuredEdgeView } from "../structured-view";
 import { setSvgRectangle } from "../svg";
 
 export const updateStructuredView = (
-  view: StructuredView,
-  model: StructuredEdgeShapeModel,
+  view: StructuredEdgeView,
+  model: StructuredEdgeModel,
 ): void => {
   setSvgRectangle(view.element, model.box);
 
