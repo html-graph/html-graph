@@ -100,12 +100,12 @@ export class PathEdgeShape implements StructuredEdgeShape {
       {
         coords: from,
         dir: sourceDirection,
-        hasArrow: this.view.sourceArrow !== null,
+        hasArrow: this.params.hasSourceArrow,
       },
       {
         coords: to,
         dir: targetDirection,
-        hasArrow: this.view.targetArrow !== null,
+        hasArrow: this.params.hasTargetArrow,
       },
     );
 
