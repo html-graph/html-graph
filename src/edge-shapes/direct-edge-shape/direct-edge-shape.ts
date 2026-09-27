@@ -42,12 +42,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   public readonly view: StructuredEdgeView;
 
-  private readonly arrowLength: number;
-
-  private readonly sourceOffsetFn: PortOffsetFn;
-
-  private readonly targetOffsetFn: PortOffsetFn;
-
   /**
    * @deprecated
    * use onModelChange instead
@@ -68,6 +62,12 @@ export class DirectEdgeShape implements StructuredEdgeShape {
   private readonly hasSourceArrow: boolean;
 
   private readonly hasTargetArrow: boolean;
+
+  private readonly arrowLength: number;
+
+  private readonly sourceOffsetFn: PortOffsetFn;
+
+  private readonly targetOffsetFn: PortOffsetFn;
 
   public constructor(params?: DirectEdgeParams | undefined) {
     this.hasSourceArrow = params?.hasSourceArrow === true;
