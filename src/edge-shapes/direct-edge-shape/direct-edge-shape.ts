@@ -69,10 +69,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
 
   private readonly hasTargetArrow: boolean;
 
-  private readonly diagonalBegin: number;
-
-  private readonly diagonalEnd: number;
-
   public constructor(params?: DirectEdgeParams | undefined) {
     this.hasSourceArrow = params?.hasSourceArrow === true;
     this.hasTargetArrow = params?.hasTargetArrow === true;
@@ -107,9 +103,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
 
-    this.diagonalBegin = this.hasSourceArrow ? this.arrowLength : 0;
-    this.diagonalEnd = this.hasTargetArrow ? this.arrowLength : 0;
-
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
 
@@ -128,8 +121,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     const model = new DirectEdgeModel(params, {
       sourceOffsetFn: this.sourceOffsetFn,
       targetOffsetFn: this.targetOffsetFn,
-      diagonalBegin: this.diagonalBegin,
-      diagonalEnd: this.diagonalEnd,
       hasSourceArrow: this.hasSourceArrow,
       hasTargetArrow: this.hasTargetArrow,
       arrowRenderer: this.arrowRenderer,

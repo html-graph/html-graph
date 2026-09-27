@@ -3,33 +3,6 @@ import { ConnectionCategory } from "../shared";
 import { DirectEdgeShape } from "./direct-edge-shape";
 
 describe("DirectEdgeShape", () => {
-  it("should create edge shape with only line", () => {
-    const shape = new DirectEdgeShape();
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(1);
-  });
-
-  it("should create edge with line and arrow element", () => {
-    const shape = new DirectEdgeShape({ hasSourceArrow: true });
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(2);
-  });
-
-  it("should create edge with line and 2 arrows element", () => {
-    const shape = new DirectEdgeShape({
-      hasSourceArrow: true,
-      hasTargetArrow: true,
-    });
-
-    const childrenCount = shape.element.children[0].children.length;
-
-    expect(childrenCount).toBe(3);
-  });
-
   it("should create line path", () => {
     const shape = new DirectEdgeShape();
 

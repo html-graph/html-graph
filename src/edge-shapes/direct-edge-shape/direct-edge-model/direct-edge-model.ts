@@ -1,5 +1,4 @@
 import {
-  ArrowRenderer,
   createEdgeRectangle,
   EdgeRenderParams,
   StructuredEdgeModel,
@@ -7,7 +6,7 @@ import {
   EdgeBox,
 } from "../../shared";
 import { Point } from "@/point";
-import { PortOffsetFn } from "../resolve-port-offset-fn";
+import { DirectEdgeModelShapeParams } from "./direct-edge-model-shape-params";
 
 export class DirectEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;
@@ -22,22 +21,9 @@ export class DirectEdgeModel implements StructuredEdgeModel {
 
   public readonly targetPoint: Point;
 
-  private readonly lineBegin: Point;
-
-  private readonly lineEnd: Point;
-
   public constructor(
     renderParams: EdgeRenderParams,
-    shapeParams: {
-      readonly sourceOffsetFn: PortOffsetFn;
-      readonly targetOffsetFn: PortOffsetFn;
-      readonly diagonalBegin: number;
-      readonly diagonalEnd: number;
-      readonly hasSourceArrow: boolean;
-      readonly hasTargetArrow: boolean;
-      readonly arrowRenderer: ArrowRenderer;
-      readonly arrowLength: number;
-    },
+    shapeParams: DirectEdgeModelShapeParams,
   ) {
     const { box, from, to } = createEdgeRectangle(
       renderParams.from,
@@ -56,75 +42,83 @@ export class DirectEdgeModel implements StructuredEdgeModel {
       diagonal.x * diagonal.x + diagonal.y * diagonal.y,
     );
 
-    if (diagonalLength > 0) {
-      const sourceDirection: Point = {
-        x: diagonal.x / diagonalLength,
-        y: diagonal.y / diagonalLength,
-      };
-
-      const targetDirection: Point = {
-        x: -sourceDirection.x,
-        y: -sourceDirection.y,
-      };
-
-      const sourceOffset = shapeParams.sourceOffsetFn({
-        direction: sourceDirection,
-        radius: {
-          horizontal: renderParams.from.width / 2,
-          vertical: renderParams.from.height / 2,
-        },
-      });
-
-      const targetOffset = shapeParams.targetOffsetFn({
-        direction: targetDirection,
-        radius: {
-          horizontal: renderParams.to.width / 2,
-          vertical: renderParams.to.height / 2,
-        },
-      });
-
-      this.sourcePoint = {
-        x: from.x + sourceDirection.x * sourceOffset,
-        y: from.y + sourceDirection.y * sourceOffset,
-      };
-
-      this.targetPoint = {
-        x: to.x + targetDirection.x * targetOffset,
-        y: to.y + targetDirection.y * targetOffset,
-      };
-
-      this.lineBegin = {
-        x: this.sourcePoint.x + sourceDirection.x * shapeParams.diagonalBegin,
-        y: this.sourcePoint.y + sourceDirection.y * shapeParams.diagonalBegin,
-      };
-
-      this.lineEnd = {
-        x: this.targetPoint.x + targetDirection.x * shapeParams.diagonalEnd,
-        y: this.targetPoint.y + targetDirection.y * shapeParams.diagonalEnd,
-      };
-
-      this.linePath = `M ${this.lineBegin.x} ${this.lineBegin.y} L ${this.lineEnd.x} ${this.lineEnd.y}`;
-
-      if (shapeParams.hasSourceArrow) {
-        this.sourceArrowPath = shapeParams.arrowRenderer({
-          direction: sourceDirection,
-          shift: this.sourcePoint,
-          arrowLength: shapeParams.arrowLength,
-        });
-      }
-
-      if (shapeParams.hasTargetArrow) {
-        this.targetArrowPath = shapeParams.arrowRenderer({
-          direction: targetDirection,
-          shift: this.targetPoint,
-          arrowLength: shapeParams.arrowLength,
-        });
-      }
-    } else {
+    if (diagonalLength === 0) {
       this.sourcePoint = from;
       this.targetPoint = to;
-      this.lineBegin = from;
-      this.lineEnd = to;
+
+      return;
+    }
+
+    const sourceDirection: Point = {
+      x: diagonal.x / diagonalLength,
+      y: diagonal.y / diagonalLength,
+    };
+
+    const targetDirection: Point = {
+      x: -sourceDirection.x,
+      y: -sourceDirection.y,
+    };
+
+    const sourceOffset = shapeParams.sourceOffsetFn({
+      direction: sourceDirection,
+      radius: {
+        horizontal: renderParams.from.width / 2,
+        vertical: renderParams.from.height / 2,
+      },
+    });
+
+    const targetOffset = shapeParams.targetOffsetFn({
+      direction: targetDirection,
+      radius: {
+        horizontal: renderParams.to.width / 2,
+        vertical: renderParams.to.height / 2,
+      },
+    });
+
+    this.sourcePoint = {
+      x: from.x + sourceDirection.x * sourceOffset,
+      y: from.y + sourceDirection.y * sourceOffset,
+    };
+
+    this.targetPoint = {
+      x: to.x + targetDirection.x * targetOffset,
+      y: to.y + targetDirection.y * targetOffset,
+    };
+
+    const diagonalBegin = shapeParams.hasSourceArrow
+      ? shapeParams.arrowLength
+      : 0;
+
+    const diagonalEnd = shapeParams.hasTargetArrow
+      ? shapeParams.arrowLength
+      : 0;
+
+    const lineBegin: Point = {
+      x: this.sourcePoint.x + sourceDirection.x * diagonalBegin,
+      y: this.sourcePoint.y + sourceDirection.y * diagonalBegin,
+    };
+
+    const lineEnd: Point = {
+      x: this.targetPoint.x + targetDirection.x * diagonalEnd,
+      y: this.targetPoint.y + targetDirection.y * diagonalEnd,
+    };
+
+    this.linePath = `M ${lineBegin.x} ${lineBegin.y} L ${lineEnd.x} ${lineEnd.y}`;
+
+    if (shapeParams.hasSourceArrow) {
+      this.sourceArrowPath = shapeParams.arrowRenderer({
+        direction: sourceDirection,
+        shift: this.sourcePoint,
+        arrowLength: shapeParams.arrowLength,
+      });
+    }
+
+    if (shapeParams.hasTargetArrow) {
+      this.targetArrowPath = shapeParams.arrowRenderer({
+        direction: targetDirection,
+        shift: this.targetPoint,
+        arrowLength: shapeParams.arrowLength,
+      });
     }
   }
 
