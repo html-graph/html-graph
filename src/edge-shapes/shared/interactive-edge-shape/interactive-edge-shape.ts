@@ -10,6 +10,7 @@ import { EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
 import { EdgeElement } from "@/element";
 import { StructuredEdgeView } from "../structured-view";
+import { StructuredEdgeModel } from "../structured-edge-shape-model";
 
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
@@ -44,6 +45,8 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
+  public readonly onModelChange: EventHandler<StructuredEdgeModel>;
+
   private readonly interactiveLine: SVGPathElement;
 
   private readonly interactiveSourceArrow: SVGPathElement | null = null;
@@ -51,22 +54,23 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   private readonly interactiveTargetArrow: SVGPathElement | null = null;
 
   public constructor(
-    private readonly baseEdge: StructuredEdgeShape,
+    private readonly baseShape: StructuredEdgeShape,
     params?: InteractiveEdgeParams | undefined,
   ) {
-    if (baseEdge instanceof InteractiveEdgeShape) {
+    if (baseShape instanceof InteractiveEdgeShape) {
       throw new InteractiveEdgeError(
         "interactive edge can be configured only once",
       );
     }
 
-    this.element = this.baseEdge.element;
-    this.group = this.baseEdge.group;
-    this.line = this.baseEdge.line;
-    this.sourceArrow = this.baseEdge.sourceArrow;
-    this.targetArrow = this.baseEdge.targetArrow;
-    this.view = this.baseEdge.view;
-    this.onAfterRender = this.baseEdge.onAfterRender;
+    this.element = this.baseShape.element;
+    this.group = this.baseShape.group;
+    this.line = this.baseShape.line;
+    this.sourceArrow = this.baseShape.sourceArrow;
+    this.targetArrow = this.baseShape.targetArrow;
+    this.view = this.baseShape.view;
+    this.onAfterRender = this.baseShape.onAfterRender;
+    this.onModelChange = this.baseShape.onModelChange;
 
     const width = params?.distance ?? edgeConstants.interactiveWidth;
 
@@ -85,7 +89,7 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
 
     this.group.appendChild(this.handle);
 
-    this.baseEdge.onAfterRender.subscribe((model) => {
+    this.baseShape.onAfterRender.subscribe((model) => {
       this.interactiveLine.setAttribute("d", model.edgePath.path);
 
       if (this.interactiveSourceArrow !== null) {
@@ -99,6 +103,6 @@ export class InteractiveEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.baseEdge.render(params);
+    this.baseShape.render(params);
   }
 }

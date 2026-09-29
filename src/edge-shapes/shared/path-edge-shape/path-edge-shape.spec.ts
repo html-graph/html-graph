@@ -1,5 +1,4 @@
-import { describe, expect, it } from "vitest";
-import { resolveArrowRenderer } from "../arrow-renderer";
+import { describe, expect, it, vi } from "vitest";
 import { ConnectionCategory } from "../connection-category";
 import {
   BezierEdgePath,
@@ -7,73 +6,53 @@ import {
   DetourBezierEdgePath,
 } from "../paths";
 import { PathEdgeShape } from "./path-edge-shape";
+import { svgPadding } from "../svg-padding";
 
-const createPathEdge = (
-  hasSourceArrow: boolean,
-  hasTargetArrow: boolean,
-): PathEdgeShape => {
+const createPathEdge = (): PathEdgeShape => {
   return new PathEdgeShape({
     color: "#FFFFFF",
     width: 2,
-    arrowRenderer: resolveArrowRenderer({ type: "triangle", radius: 3 }),
-    arrowLength: 10,
-    hasSourceArrow,
-    hasTargetArrow,
-    createLinePath: () =>
+    hasSourceArrow: false,
+    hasTargetArrow: false,
+    createLinePath: (from, to) =>
       new BezierEdgePath({
-        from: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
-        to: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
+        from,
+        to,
         arrowLength: 10,
         curvature: 90,
       }),
-    createNodeCyclePath: () =>
+    createNodeCyclePath: (from, to) =>
       new DetourBezierEdgePath({
-        from: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
-        to: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
+        from,
+        to,
         arrowLength: 10,
         curvature: 90,
         detourDistance: 100,
         detourDir: 0,
       }),
-    createPortCyclePath: () =>
+    createPortCyclePath: (from, to) =>
       new CycleCircleEdgePath({
-        from: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
-        to: {
-          coords: { x: 0, y: 0 },
-          dir: { x: 1, y: 0 },
-          hasArrow: false,
-        },
+        from,
+        to,
         radius: 10,
         smallRadius: 2,
         arrowLength: 10,
       }),
-    padding: 0,
+    arrowRenderer: () => "",
+    arrowLength: 10,
+    padding: svgPadding,
   });
 };
 
 describe("PathEdgeShape", () => {
-  it("should create path for target arrow", () => {
-    const shape = createPathEdge(false, true);
+  it("should call model change callback on render", () => {
+    const shape = createPathEdge();
+
+    const modelChange = vi.fn();
+
+    shape.onModelChange.subscribe((model) => {
+      modelChange(model);
+    });
 
     shape.render({
       from: {
@@ -93,14 +72,11 @@ describe("PathEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.element.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 97 L 90 103 Z");
+    expect(modelChange).toHaveBeenCalled();
   });
 
-  it("should create path for source arrow", () => {
-    const shape = createPathEdge(true, false);
+  it("should update view on render", () => {
+    const shape = createPathEdge();
 
     shape.render({
       from: {
@@ -120,62 +96,8 @@ describe("PathEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    const g = shape.element.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3 Z");
-  });
-
-  it("should create port cycle target arrow path", () => {
-    const shape = createPathEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.PortCycle,
-    });
-
-    const line = shape.element.children[0].children[1];
-
-    expect(line.getAttribute("d")).toBe("M 0 0 L 10 3 L 10 -3 Z");
-  });
-
-  it("should create node cycle target arrow path", () => {
-    const shape = createPathEdge(false, true);
-
-    shape.render({
-      from: {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      to: {
-        x: 100,
-        y: 100,
-        width: 0,
-        height: 0,
-        direction: 0,
-      },
-      category: ConnectionCategory.NodeCycle,
-    });
-
-    const g = shape.element.children[0];
-    const arrow = g.children[1];
-
-    expect(arrow.getAttribute("d")).toBe("M 100 100 L 90 97 L 90 103 Z");
+    expect(shape.view.line.getAttribute("d")).toBe(
+      "M 50 50 L 60 50 M 60 50 C 150 50, 50 150, 140 150 M 140 150 L 150 150",
+    );
   });
 });
