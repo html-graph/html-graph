@@ -13,9 +13,9 @@ import {
   svgPadding,
   PathPort,
   StructuredEdgeView,
-  PathEdgeModel,
 } from "../shared";
 import { BezierEdgeParams } from "./bezier-edge-params";
+import { BezierEdgeModel } from "./bezier-edge-model";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -52,7 +52,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
    */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  public readonly onModelChange: EventHandler<PathEdgeModel>;
+  public readonly onModelChange: EventHandler<BezierEdgeModel>;
 
   private readonly arrowLength: number;
 

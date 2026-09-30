@@ -20,13 +20,19 @@ export {
 } from "./shared";
 
 export { BezierEdgeShape } from "./bezier-edge-shape";
-export type { BezierEdgeParams } from "./bezier-edge-shape";
+export type { BezierEdgeParams, BezierEdgeModel } from "./bezier-edge-shape";
 
 export { StraightEdgeShape } from "./straight-edge-shape";
-export type { StraightEdgeParams } from "./straight-edge-shape";
+export type {
+  StraightEdgeParams,
+  StraightEdgeModel,
+} from "./straight-edge-shape";
 
 export { OrthogonalEdgeShape } from "./orthogonal-edge-shape";
-export type { OrthogonalEdgeParams } from "./orthogonal-edge-shape";
+export type {
+  OrthogonalEdgeParams,
+  OrthogonalEdgeModel,
+} from "./orthogonal-edge-shape";
 
 export { DirectEdgeShape } from "./direct-edge-shape";
 export type {
@@ -34,4 +40,5 @@ export type {
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
+  DirectEdgeModel,
 } from "./direct-edge-shape";

@@ -12,8 +12,8 @@ import {
   resolveArrowRenderer,
   svgPadding,
   StructuredEdgeView,
-  PathEdgeModel,
 } from "../shared";
+import { StraightEdgeModel } from "./straight-edge-model";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { EventHandler } from "@/event-subject";
 
@@ -52,7 +52,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
    */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  public readonly onModelChange: EventHandler<PathEdgeModel>;
+  public readonly onModelChange: EventHandler<StraightEdgeModel>;
 
   private readonly arrowLength: number;
 

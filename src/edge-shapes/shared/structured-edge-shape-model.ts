@@ -10,9 +10,9 @@ export interface StructuredEdgeModel {
 
   readonly targetArrowPath: string;
 
-  readonly sourcePoint: Point;
+  readonly sourceArrowPoint: Point;
 
-  readonly targetPoint: Point;
+  readonly targetArrowPoint: Point;
 
   calculateMidpoint(): Point;
 }

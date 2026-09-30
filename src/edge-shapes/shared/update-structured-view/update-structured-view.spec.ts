@@ -10,8 +10,8 @@ const createModel = (): StructuredEdgeModel => {
     linePath: "line path",
     sourceArrowPath: "source arrow path",
     targetArrowPath: "target arrow path",
-    sourcePoint: { x: 0, y: 0 },
-    targetPoint: { x: 100, y: 100 },
+    sourceArrowPoint: { x: 0, y: 0 },
+    targetArrowPoint: { x: 100, y: 100 },
     calculateMidpoint: (): Point => {
       return { x: 50, y: 50 };
     },

@@ -43,7 +43,7 @@ describe("DirectEdgeModel", () => {
 
     const model = new DirectEdgeModel(renderingParams, shapeParams);
 
-    expect(model.sourcePoint).toEqual({ x: 50, y: 50 });
+    expect(model.sourceArrowPoint).toEqual({ x: 50, y: 50 });
   });
 
   it("should set target point when diagonal has 0 length", () => {
@@ -64,7 +64,7 @@ describe("DirectEdgeModel", () => {
 
     const model = new DirectEdgeModel(renderingParams, shapeParams);
 
-    expect(model.targetPoint).toEqual({ x: 50, y: 50 });
+    expect(model.targetArrowPoint).toEqual({ x: 50, y: 50 });
   });
 
   it("should set source point accounting for arrow offset", () => {
@@ -85,7 +85,7 @@ describe("DirectEdgeModel", () => {
 
     const model = new DirectEdgeModel(renderingParams, shapeParams);
 
-    expect(model.sourcePoint).toEqual({ x: 60, y: 50 });
+    expect(model.sourceArrowPoint).toEqual({ x: 60, y: 50 });
   });
 
   it("should set target point accounting for arrow offset", () => {
@@ -106,7 +106,7 @@ describe("DirectEdgeModel", () => {
 
     const model = new DirectEdgeModel(renderingParams, shapeParams);
 
-    expect(model.targetPoint).toEqual({ x: 140, y: 50 });
+    expect(model.targetArrowPoint).toEqual({ x: 140, y: 50 });
   });
 
   it("should set line path without arrows", () => {

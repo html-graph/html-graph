@@ -5,3 +5,4 @@ export type {
   PortOffsetFn,
   PortOffsetFnParams,
 } from "./resolve-port-offset-fn";
+export { DirectEdgeModel } from "./direct-edge-model";

@@ -12,11 +12,11 @@ import {
   resolveArrowRenderer,
   svgPadding,
   StructuredEdgeView,
-  PathEdgeModel,
 } from "../shared";
 import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
 import { EventHandler } from "@/event-subject";
 import { orthogonalizeDirection } from "./orthogonalize-direction";
+import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
 
 export class OrthogonalEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -53,7 +53,7 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
    */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  public readonly onModelChange: EventHandler<PathEdgeModel>;
+  public readonly onModelChange: EventHandler<OrthogonalEdgeModel>;
 
   private readonly arrowLength: number;
 
