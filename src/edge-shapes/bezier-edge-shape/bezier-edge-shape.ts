@@ -13,6 +13,8 @@ import {
   svgPadding,
   PathPort,
   StructuredEdgeView,
+  configureMidpoint,
+  configureInteractiveEdge,
 } from "../shared";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { BezierEdgeModel } from "./bezier-edge-model";
@@ -52,6 +54,7 @@ export class BezierEdgeShape implements StructuredEdgeShape {
    */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
+  // how to discern different model categories?
   public readonly onModelChange: EventHandler<BezierEdgeModel>;
 
   private readonly arrowLength: number;
@@ -130,12 +133,23 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
     this.element = this.pathShape.element;
     this.view = this.pathShape.view;
+    this.group = this.view.group;
+    this.line = this.view.line;
+    this.sourceArrow = this.view.sourceArrow;
+    this.targetArrow = this.view.targetArrow;
     this.onModelChange = this.pathShape.onModelChange;
-    this.group = this.pathShape.group;
-    this.line = this.pathShape.line;
-    this.sourceArrow = this.pathShape.sourceArrow;
-    this.targetArrow = this.pathShape.targetArrow;
     this.onAfterRender = this.pathShape.onAfterRender;
+
+    if (params?.midpointElement !== undefined) {
+      configureMidpoint(this, params.midpointElement);
+    }
+
+    if (
+      params?.interactiveDistance !== undefined &&
+      params.interactiveDistance > 0
+    ) {
+      configureInteractiveEdge(this, params.interactiveDistance);
+    }
   }
 
   public render(params: EdgeRenderParams): void {

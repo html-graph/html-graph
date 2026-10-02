@@ -12,6 +12,10 @@ import { EdgeElement } from "@/element";
 import { StructuredEdgeView } from "../structured-view";
 import { StructuredEdgeModel } from "../structured-edge-shape-model";
 
+/**
+ * @deprecated
+ * use interactiveDistance parameter instead
+ */
 export class InteractiveEdgeShape implements StructuredEdgeShape {
   public readonly element: EdgeElement;
 

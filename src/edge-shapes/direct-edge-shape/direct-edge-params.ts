@@ -10,4 +10,6 @@ export interface DirectEdgeParams {
   readonly hasTargetArrow?: boolean | undefined;
   readonly sourceOffset?: PortOffset | undefined;
   readonly targetOffset?: PortOffset | undefined;
+  readonly midpointElement?: HTMLElement | SVGElement | undefined;
+  readonly interactiveDistance?: number | undefined;
 }

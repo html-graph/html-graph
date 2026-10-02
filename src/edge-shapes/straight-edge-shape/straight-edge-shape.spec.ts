@@ -233,4 +233,22 @@ describe("StraightEdgeShape", () => {
       "M 60 50 L 65 50 C 70 50 70 50 70 45 L 70 -45 C 70 -50 70 -50 72.57247877713763 -45.712535371437276 L 127.42752122286237 45.712535371437276 C 130 50 130 50 130 55 L 130 145 C 130 150 130 150 135 150 L 150 150",
     );
   });
+
+  it("should configure midpoint element", () => {
+    const midpointElement = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
+
+    const shape = new StraightEdgeShape({ midpointElement });
+
+    expect(shape.element.lastChild).toBe(midpointElement);
+  });
+
+  it("should configure interactive shape", () => {
+    const shape = new StraightEdgeShape({ interactiveDistance: 10 });
+    const handle = shape.element.children[0].children[1];
+
+    expect(handle.children[0].nodeName).toBe("path");
+  });
 });

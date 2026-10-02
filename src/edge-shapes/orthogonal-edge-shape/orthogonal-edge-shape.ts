@@ -12,6 +12,8 @@ import {
   resolveArrowRenderer,
   svgPadding,
   StructuredEdgeView,
+  configureMidpoint,
+  configureInteractiveEdge,
 } from "../shared";
 import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
 import { EventHandler } from "@/event-subject";
@@ -136,12 +138,23 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
 
     this.element = this.pathShape.element;
     this.view = this.pathShape.view;
+    this.group = this.view.group;
+    this.line = this.view.line;
+    this.sourceArrow = this.view.sourceArrow;
+    this.targetArrow = this.view.targetArrow;
     this.onModelChange = this.pathShape.onModelChange;
-    this.group = this.pathShape.group;
-    this.line = this.pathShape.line;
-    this.sourceArrow = this.pathShape.sourceArrow;
-    this.targetArrow = this.pathShape.targetArrow;
     this.onAfterRender = this.pathShape.onAfterRender;
+
+    if (params?.midpointElement !== undefined) {
+      configureMidpoint(this, params.midpointElement);
+    }
+
+    if (
+      params?.interactiveDistance !== undefined &&
+      params.interactiveDistance > 0
+    ) {
+      configureInteractiveEdge(this, params.interactiveDistance);
+    }
   }
 
   public render(params: EdgeRenderParams): void {

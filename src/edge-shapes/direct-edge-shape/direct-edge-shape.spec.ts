@@ -39,12 +39,12 @@ describe("DirectEdgeShape", () => {
       },
       linePath: "M 50 50 L 150 50",
       sourceArrowPath: "",
-      sourceArrowPoint: {
+      from: {
         x: 50,
         y: 50,
       },
       targetArrowPath: "",
-      targetArrowPoint: {
+      to: {
         x: 150,
         y: 50,
       },
@@ -79,5 +79,23 @@ describe("DirectEdgeShape", () => {
     });
 
     expect(shape.view.line.getAttribute("d")).toBe("M 50 50 L 150 50");
+  });
+
+  it("should configure midpoint element", () => {
+    const midpointElement = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
+
+    const shape = new DirectEdgeShape({ midpointElement });
+
+    expect(shape.element.lastChild).toBe(midpointElement);
+  });
+
+  it("should configure interactive shape", () => {
+    const shape = new DirectEdgeShape({ interactiveDistance: 10 });
+    const handle = shape.element.children[0].children[1];
+
+    expect(handle.children[0].nodeName).toBe("path");
   });
 });

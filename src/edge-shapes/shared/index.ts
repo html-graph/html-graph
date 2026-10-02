@@ -64,3 +64,7 @@ export type { StructuredEdgeModel } from "./structured-edge-shape-model";
 export { updateStructuredView } from "./update-structured-view";
 
 export type { EdgeBox } from "./edge-box";
+
+export { configureMidpoint } from "./configure-midpoint";
+
+export { configureInteractiveEdge } from "./configure-interactive-edge";

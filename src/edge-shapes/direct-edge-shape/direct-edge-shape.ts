@@ -7,6 +7,8 @@ import {
   StructuredEdgeRenderModel,
   StructuredEdgeView,
   updateStructuredView,
+  configureMidpoint,
+  configureInteractiveEdge,
 } from "../shared";
 import { DirectEdgeParams } from "./direct-edge-params";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
@@ -102,6 +104,17 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.group = this.view.group;
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
+
+    if (params?.midpointElement !== undefined) {
+      configureMidpoint(this, params.midpointElement);
+    }
+
+    if (
+      params?.interactiveDistance !== undefined &&
+      params.interactiveDistance > 0
+    ) {
+      configureInteractiveEdge(this, params.interactiveDistance);
+    }
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);

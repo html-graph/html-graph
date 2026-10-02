@@ -231,4 +231,22 @@ describe("BezierEdgeShape", () => {
       "M 60 50 L 60 50 C 100 50 60.00000000000001 -50 100 0 C 140 50 100 150 140 150 L 150 150",
     );
   });
+
+  it("should configure midpoint element", () => {
+    const midpointElement = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
+
+    const shape = new BezierEdgeShape({ midpointElement });
+
+    expect(shape.element.lastChild).toBe(midpointElement);
+  });
+
+  it("should configure interactive shape", () => {
+    const shape = new BezierEdgeShape({ interactiveDistance: 10 });
+    const handle = shape.element.children[0].children[1];
+
+    expect(handle.children[0].nodeName).toBe("path");
+  });
 });
