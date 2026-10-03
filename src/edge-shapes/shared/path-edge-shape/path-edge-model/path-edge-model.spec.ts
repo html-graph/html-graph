@@ -73,7 +73,7 @@ describe("PathEdgeModel", () => {
 
     const model = new PathEdgeModel(renderingParams, shapeParams);
 
-    expect(model.from).toEqual({ x: 50, y: 50 });
+    expect(model.lineSource).toEqual({ x: 50, y: 50 });
   });
 
   it("should set target point", () => {
@@ -87,7 +87,7 @@ describe("PathEdgeModel", () => {
 
     const model = new PathEdgeModel(renderingParams, shapeParams);
 
-    expect(model.to).toEqual({ x: 150, y: 150 });
+    expect(model.lineTarget).toEqual({ x: 150, y: 150 });
   });
 
   it("should set line path without arrows", () => {

@@ -16,9 +16,9 @@ export class PathEdgeModel implements StructuredEdgeModel {
 
   public readonly targetArrowPath: string = "";
 
-  public readonly from: Point;
+  public readonly lineSource: Point;
 
-  public readonly to: Point;
+  public readonly lineTarget: Point;
 
   private readonly midpoint: Point;
 
@@ -33,8 +33,8 @@ export class PathEdgeModel implements StructuredEdgeModel {
     );
 
     this.box = box;
-    this.from = from;
-    this.to = to;
+    this.lineSource = from;
+    this.lineTarget = to;
 
     const sourceDirection = createDirectionVector(renderParams.from.direction);
     const targetDirection = createDirectionVector(renderParams.to.direction);

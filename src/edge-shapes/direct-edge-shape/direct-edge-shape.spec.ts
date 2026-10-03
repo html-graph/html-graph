@@ -39,12 +39,12 @@ describe("DirectEdgeShape", () => {
       },
       linePath: "M 50 50 L 150 50",
       sourceArrowPath: "",
-      from: {
+      lineSource: {
         x: 50,
         y: 50,
       },
       targetArrowPath: "",
-      to: {
+      lineTarget: {
         x: 150,
         y: 50,
       },
