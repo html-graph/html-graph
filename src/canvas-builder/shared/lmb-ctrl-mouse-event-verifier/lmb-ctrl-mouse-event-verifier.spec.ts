@@ -19,7 +19,7 @@ describe("lmbCtrlMouseDownEventVerifier", () => {
   it("should not pass when ctrl key not pressed", () => {
     expect(
       lmbCtrlMouseEventVerifier(
-        new MouseEvent("mousedown", { button: 1, ctrlKey: true }),
+        new MouseEvent("mousedown", { button: 0, ctrlKey: false }),
       ),
     ).toBe(false);
   });
