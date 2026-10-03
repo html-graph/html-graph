@@ -17,9 +17,9 @@ export class DirectEdgeModel implements StructuredEdgeModel {
 
   public readonly targetArrowPath: string = "";
 
-  public readonly lineSource: Point;
+  public readonly shapeSourcePoint: Point;
 
-  public readonly lineTarget: Point;
+  public readonly shapeTargetPoint: Point;
 
   public constructor(
     renderParams: EdgeRenderParams,
@@ -43,8 +43,8 @@ export class DirectEdgeModel implements StructuredEdgeModel {
     );
 
     if (diagonalLength === 0) {
-      this.lineSource = from;
-      this.lineTarget = to;
+      this.shapeSourcePoint = from;
+      this.shapeTargetPoint = to;
 
       return;
     }
@@ -75,12 +75,12 @@ export class DirectEdgeModel implements StructuredEdgeModel {
       },
     });
 
-    this.lineSource = {
+    this.shapeSourcePoint = {
       x: from.x + sourceDirection.x * sourceOffset,
       y: from.y + sourceDirection.y * sourceOffset,
     };
 
-    this.lineTarget = {
+    this.shapeTargetPoint = {
       x: to.x + targetDirection.x * targetOffset,
       y: to.y + targetDirection.y * targetOffset,
     };
@@ -94,13 +94,13 @@ export class DirectEdgeModel implements StructuredEdgeModel {
       : 0;
 
     const lineBegin: Point = {
-      x: this.lineSource.x + sourceDirection.x * diagonalBegin,
-      y: this.lineSource.y + sourceDirection.y * diagonalBegin,
+      x: this.shapeSourcePoint.x + sourceDirection.x * diagonalBegin,
+      y: this.shapeSourcePoint.y + sourceDirection.y * diagonalBegin,
     };
 
     const lineEnd: Point = {
-      x: this.lineTarget.x + targetDirection.x * diagonalEnd,
-      y: this.lineTarget.y + targetDirection.y * diagonalEnd,
+      x: this.shapeTargetPoint.x + targetDirection.x * diagonalEnd,
+      y: this.shapeTargetPoint.y + targetDirection.y * diagonalEnd,
     };
 
     this.linePath = `M ${lineBegin.x} ${lineBegin.y} L ${lineEnd.x} ${lineEnd.y}`;
@@ -108,7 +108,7 @@ export class DirectEdgeModel implements StructuredEdgeModel {
     if (shapeParams.hasSourceArrow) {
       this.sourceArrowPath = shapeParams.arrowRenderer({
         direction: sourceDirection,
-        shift: this.lineSource,
+        shift: this.shapeSourcePoint,
         arrowLength: shapeParams.arrowLength,
       });
     }
@@ -116,7 +116,7 @@ export class DirectEdgeModel implements StructuredEdgeModel {
     if (shapeParams.hasTargetArrow) {
       this.targetArrowPath = shapeParams.arrowRenderer({
         direction: targetDirection,
-        shift: this.lineTarget,
+        shift: this.shapeTargetPoint,
         arrowLength: shapeParams.arrowLength,
       });
     }
@@ -124,8 +124,8 @@ export class DirectEdgeModel implements StructuredEdgeModel {
 
   public calculateMidpoint(): Point {
     return {
-      x: (this.lineSource.x + this.lineTarget.x) / 2,
-      y: (this.lineSource.y + this.lineTarget.y) / 2,
+      x: (this.shapeSourcePoint.x + this.shapeTargetPoint.x) / 2,
+      y: (this.shapeSourcePoint.y + this.shapeTargetPoint.y) / 2,
     };
   }
 }
