@@ -54,7 +54,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
    */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
-  // how to discern different model categories?
   public readonly onModelChange: EventHandler<BezierEdgeModel>;
 
   private readonly arrowLength: number;
