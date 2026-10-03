@@ -40,7 +40,11 @@ export {
 export type { EdgePath } from "./paths";
 
 export { PathEdgeShape } from "./path-edge-shape";
-export type { PathEdgeParams, EdgePathFactory } from "./path-edge-shape";
+export type {
+  PathEdgeParams,
+  EdgePathFactory,
+  PathEdgeModel,
+} from "./path-edge-shape";
 
 export { edgeConstants } from "./edge-constants";
 
@@ -52,5 +56,15 @@ export { createRotatedPoint, createEdgeRectangle } from "./geometry";
 
 export { setSvgRectangle, createRoundedPath } from "./svg";
 
-export { StructuredView } from "./structured-view";
+export { StructuredEdgeView } from "./structured-view";
 export type { StructuredViewParams } from "./structured-view";
+
+export type { StructuredEdgeModel } from "./structured-edge-shape-model";
+
+export { updateStructuredView } from "./update-structured-view";
+
+export type { EdgeBox } from "./edge-box";
+
+export { configureMidpoint } from "./configure-midpoint";
+
+export { configureInteractiveEdge } from "./configure-interactive-edge";

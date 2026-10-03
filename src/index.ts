@@ -79,10 +79,14 @@ export type {
   EdgeRenderParams,
   EdgeRenderPort,
   BezierEdgeParams,
+  BezierEdgeModel,
   OrthogonalEdgeParams,
+  OrthogonalEdgeModel,
   StraightEdgeParams,
+  StraightEdgeModel,
   InteractiveEdgeParams,
   DirectEdgeParams,
+  DirectEdgeModel,
   StructuredEdgeShape,
   StructuredEdgeRenderModel,
   ArrowRendererConfig,
@@ -91,6 +95,9 @@ export type {
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
+  StructuredEdgeView,
+  StructuredEdgeModel,
+  EdgeBox,
 } from "./edge-shapes";
 
 export type { GraphNode, GraphPort, GraphEdge, Graph } from "./graph";

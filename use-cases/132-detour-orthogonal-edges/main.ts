@@ -1,8 +1,4 @@
-import {
-  CanvasBuilder,
-  MidpointEdgeShape,
-  OrthogonalEdgeShape,
-} from "@html-graph/html-graph";
+import { CanvasBuilder, OrthogonalEdgeShape } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 import { createMidpoint } from "../shared/create-midpoint";
 
@@ -13,14 +9,11 @@ const canvas = new CanvasBuilder(canvasElement)
     edges: {
       priority: 1,
       shape: () => {
-        const baseShape = new OrthogonalEdgeShape({
+        return new OrthogonalEdgeShape({
           hasSourceArrow: true,
           hasTargetArrow: true,
+          midpointElement: createMidpoint(),
         });
-
-        const midpoint = createMidpoint();
-
-        return new MidpointEdgeShape(baseShape, midpoint);
       },
     },
   })

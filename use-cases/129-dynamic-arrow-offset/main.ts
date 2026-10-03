@@ -6,7 +6,6 @@ import {
   CanvasDefaults,
   DirectEdgeShape,
   Identifier,
-  MidpointEdgeShape,
 } from "@html-graph/html-graph";
 import { createMidpoint } from "../shared/create-midpoint";
 
@@ -35,16 +34,13 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvasDefaults: CanvasDefaults = {
   edges: {
     shape: () => {
-      const baseShape = new DirectEdgeShape({
+      return new DirectEdgeShape({
         hasTargetArrow: true,
         hasSourceArrow: true,
         sourceOffset: "box",
         targetOffset: "box",
+        midpointElement: createMidpoint(),
       });
-
-      const midpoint = createMidpoint();
-
-      return new MidpointEdgeShape(baseShape, midpoint);
     },
   },
 };

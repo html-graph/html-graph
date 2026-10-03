@@ -1,16 +1,11 @@
 import { EdgeRenderParams } from "../edge-render-params";
-import { Point } from "@/point";
 import { PathEdgeParams } from "./path-edge-params";
-import { EdgePathFactory } from "./edge-path-factory";
 import { StructuredEdgeShape } from "../structured-edge-shape";
-import { createEdgeRectangle } from "../geometry";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { StructuredEdgeRenderModel } from "../structured-edge-render-model";
-import { ConnectionCategory } from "../connection-category";
-import { ArrowRenderer } from "../arrow-renderer";
-import { setSvgRectangle } from "../svg";
-import { createDirectionVector } from "./create-direction-vector";
-import { StructuredView } from "../structured-view";
+import { StructuredEdgeView } from "../structured-view";
+import { PathEdgeModel } from "./path-edge-model";
+import { updateStructuredView } from "../update-structured-view";
 
 export class PathEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -39,34 +34,28 @@ export class PathEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null = null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
-  private readonly arrowRenderer: ArrowRenderer;
+  public readonly onModelChange: EventHandler<PathEdgeModel>;
 
-  private readonly pathFnMapping: {
-    [key in ConnectionCategory]: EdgePathFactory;
-  };
+  private readonly modelChangeEmitter: EventEmitter<PathEdgeModel>;
 
   public constructor(private readonly params: PathEdgeParams) {
-    this.view = new StructuredView({
+    this.view = new StructuredEdgeView({
       color: params.color,
       width: params.width,
       hasSourceArrow: params.hasSourceArrow,
       hasTargetArrow: params.hasTargetArrow,
     });
 
-    this.pathFnMapping = {
-      [ConnectionCategory.PortCycle]: this.params.createPortCyclePath,
-      [ConnectionCategory.NodeCycle]: this.params.createNodeCyclePath,
-      [ConnectionCategory.Line]: this.params.createLinePath,
-    };
-
     [this.afterRenderEmitter, this.onAfterRender] =
       createPair<StructuredEdgeRenderModel>();
+
+    [this.modelChangeEmitter, this.onModelChange] = createPair<PathEdgeModel>();
 
     this.element = this.view.element;
     this.line = this.view.line;
@@ -74,71 +63,32 @@ export class PathEdgeShape implements StructuredEdgeShape {
     this.sourceArrow = this.view.sourceArrow;
     this.targetArrow = this.view.targetArrow;
 
-    this.arrowRenderer = this.params.arrowRenderer;
+    this.onModelChange.subscribe((model) => {
+      updateStructuredView(this.view, model);
+
+      this.afterRenderEmitter.emit({
+        edgePath: {
+          path: model.linePath,
+          midpoint: model.calculateMidpoint(),
+        },
+        sourceArrowPath: model.sourceArrowPath,
+        targetArrowPath: model.targetArrowPath,
+      });
+    });
   }
 
   public render(params: EdgeRenderParams): void {
-    const { x, y, width, height, from, to } = createEdgeRectangle(
-      params.from,
-      params.to,
-      this.params.padding,
-    );
-
-    setSvgRectangle(this.element, { x, y, width, height });
-
-    const sourceDirection = createDirectionVector(params.from.direction);
-    const targetDirection = createDirectionVector(params.to.direction);
-
-    const targetVect: Point =
-      params.category === ConnectionCategory.PortCycle
-        ? sourceDirection
-        : { x: -targetDirection.x, y: -targetDirection.y };
-
-    const createPathFn = this.pathFnMapping[params.category];
-
-    const edgePath = createPathFn(
-      {
-        coords: from,
-        dir: sourceDirection,
-        hasArrow: this.view.sourceArrow !== null,
-      },
-      {
-        coords: to,
-        dir: targetDirection,
-        hasArrow: this.view.targetArrow !== null,
-      },
-    );
-
-    this.view.line.setAttribute("d", edgePath.path);
-
-    let sourceArrowPath: string | null = null;
-
-    if (this.view.sourceArrow !== null) {
-      sourceArrowPath = this.arrowRenderer({
-        direction: sourceDirection,
-        shift: from,
-        arrowLength: this.params.arrowLength,
-      });
-
-      this.view.sourceArrow.setAttribute("d", sourceArrowPath);
-    }
-
-    let targetArrowPath: string | null = null;
-
-    if (this.view.targetArrow !== null) {
-      targetArrowPath = this.arrowRenderer({
-        direction: targetVect,
-        shift: to,
-        arrowLength: this.params.arrowLength,
-      });
-
-      this.view.targetArrow.setAttribute("d", targetArrowPath);
-    }
-
-    this.afterRenderEmitter.emit({
-      edgePath,
-      sourceArrowPath,
-      targetArrowPath,
+    const model = new PathEdgeModel(params, {
+      createLinePath: this.params.createLinePath,
+      createNodeCyclePath: this.params.createNodeCyclePath,
+      createPortCyclePath: this.params.createPortCyclePath,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+      padding: this.params.padding,
     });
+
+    this.modelChangeEmitter.emit(model);
   }
 }

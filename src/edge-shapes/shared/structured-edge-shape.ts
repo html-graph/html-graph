@@ -1,7 +1,8 @@
 import { EventHandler } from "@/event-subject";
 import { EdgeShape } from "./edge-shape";
 import { StructuredEdgeRenderModel } from "./structured-edge-render-model";
-import { StructuredView } from "./structured-view";
+import { StructuredEdgeView } from "./structured-view";
+import { StructuredEdgeModel } from "./structured-edge-shape-model";
 
 export interface StructuredEdgeShape extends EdgeShape {
   /**
@@ -24,6 +25,13 @@ export interface StructuredEdgeShape extends EdgeShape {
    * use view.targetArrow instead
    */
   readonly targetArrow: SVGPathElement | null;
-  readonly view: StructuredView;
+  readonly view: StructuredEdgeView;
+
+  /**
+   * @deprecated
+   * use onModelChange instead
+   */
   readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  readonly onModelChange: EventHandler<StructuredEdgeModel>;
 }

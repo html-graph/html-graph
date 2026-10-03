@@ -11,11 +11,14 @@ import {
   StructuredEdgeRenderModel,
   resolveArrowRenderer,
   svgPadding,
-  StructuredView,
+  StructuredEdgeView,
+  configureMidpoint,
+  configureInteractiveEdge,
 } from "../shared";
 import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
 import { EventHandler } from "@/event-subject";
 import { orthogonalizeDirection } from "./orthogonalize-direction";
+import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
 
 export class OrthogonalEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -44,9 +47,15 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
    */
   public readonly targetArrow: SVGPathElement | null;
 
-  public readonly view: StructuredView;
+  public readonly view: StructuredEdgeView;
 
+  /**
+   * @deprecated
+   * use onModelChange instead
+   */
   public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
+
+  public readonly onModelChange: EventHandler<OrthogonalEdgeModel>;
 
   private readonly arrowLength: number;
 
@@ -128,12 +137,24 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
     });
 
     this.element = this.pathShape.element;
-    this.group = this.pathShape.group;
-    this.line = this.pathShape.line;
-    this.sourceArrow = this.pathShape.sourceArrow;
-    this.targetArrow = this.pathShape.targetArrow;
     this.view = this.pathShape.view;
+    this.group = this.view.group;
+    this.line = this.view.line;
+    this.sourceArrow = this.view.sourceArrow;
+    this.targetArrow = this.view.targetArrow;
+    this.onModelChange = this.pathShape.onModelChange;
     this.onAfterRender = this.pathShape.onAfterRender;
+
+    if (params?.midpointElement !== undefined) {
+      configureMidpoint(this, params.midpointElement);
+    }
+
+    if (
+      params?.interactiveDistance !== undefined &&
+      params.interactiveDistance > 0
+    ) {
+      configureInteractiveEdge(this, params.interactiveDistance);
+    }
   }
 
   public render(params: EdgeRenderParams): void {

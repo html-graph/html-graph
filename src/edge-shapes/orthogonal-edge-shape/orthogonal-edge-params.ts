@@ -11,4 +11,6 @@ export interface OrthogonalEdgeParams {
   readonly cycleSquareSide?: number | undefined;
   readonly roundness?: number | undefined;
   readonly detourDistance?: number | undefined;
+  readonly midpointElement?: HTMLElement | SVGElement | undefined;
+  readonly interactiveDistance?: number | undefined;
 }

@@ -48,7 +48,17 @@ describe("resolveArrowRenderer", () => {
     );
   });
 
-  it("should resolve polygon arrow renderer with specified radius", () => {
+  it("should resolve triangle arrow renderer with default radius", () => {
+    const renderer = resolveArrowRenderer({ type: "triangle" });
+    const direction: Point = { x: 1, y: 0 };
+    const shift: Point = { x: 0, y: 0 };
+
+    expect(renderer({ direction, shift, arrowLength: 15 })).toBe(
+      "M 0 0 L 15 4 L 15 -4 Z",
+    );
+  });
+
+  it("should resolve triangle arrow renderer with specified radius", () => {
     const renderer = resolveArrowRenderer({ type: "triangle", radius: 10 });
     const direction: Point = { x: 1, y: 0 };
     const shift: Point = { x: 0, y: 0 };

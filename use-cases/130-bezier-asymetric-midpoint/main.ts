@@ -1,9 +1,4 @@
-import {
-  BezierEdgeShape,
-  Canvas,
-  CanvasBuilder,
-  MidpointEdgeShape,
-} from "@html-graph/html-graph";
+import { BezierEdgeShape, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createMidpoint } from "../shared/create-midpoint";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -12,11 +7,9 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
     edges: {
       priority: 0,
       shape: () => {
-        const baseShape = new BezierEdgeShape();
-
-        const midpoint = createMidpoint();
-
-        return new MidpointEdgeShape(baseShape, midpoint);
+        return new BezierEdgeShape({
+          midpointElement: createMidpoint(),
+        });
       },
     },
     nodes: {

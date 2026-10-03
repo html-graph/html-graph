@@ -3,7 +3,7 @@ import { createEdgePath } from "./create-edge-path";
 import { createEdgeSvg } from "./create-edge-svg";
 import { StructuredViewParams } from "./structured-view-params";
 
-export class StructuredView {
+export class StructuredEdgeView {
   public readonly element: SVGSVGElement;
 
   public readonly group: SVGGElement;

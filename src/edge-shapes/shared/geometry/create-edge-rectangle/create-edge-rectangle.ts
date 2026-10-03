@@ -24,10 +24,12 @@ export const createEdgeRectangle = (
   const height = Math.abs(to.y - from.y) + doublePadding;
 
   return {
-    x,
-    y,
-    width,
-    height,
+    box: {
+      x,
+      y,
+      width,
+      height,
+    },
     from: { x: from.x - x, y: from.y - y },
     to: { x: to.x - x, y: to.y - y },
   };

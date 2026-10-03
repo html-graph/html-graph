@@ -1,10 +1,8 @@
 import { Point } from "@/point";
+import { EdgeBox } from "../../edge-box";
 
 export interface EdgeRectangle {
-  readonly x: number;
-  readonly y: number;
-  readonly width: number;
-  readonly height: number;
+  readonly box: EdgeBox;
   readonly from: Point;
   readonly to: Point;
 }

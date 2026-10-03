@@ -232,4 +232,22 @@ describe("OrthogonalEdgeShape", () => {
       "M 60 50 L 65 50 C 70 50 70 50 70 55 L 70 245 C 70 250 70 250 75 250 L 125 250 C 130 250 130 250 130 245 L 130 155 C 130 150 130 150 135 150 L 150 150",
     );
   });
+
+  it("should configure midpoint element", () => {
+    const midpointElement = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "g",
+    );
+
+    const shape = new OrthogonalEdgeShape({ midpointElement });
+
+    expect(shape.element.lastChild).toBe(midpointElement);
+  });
+
+  it("should configure interactive shape", () => {
+    const shape = new OrthogonalEdgeShape({ interactiveDistance: 10 });
+    const handle = shape.element.children[0].children[1];
+
+    expect(handle.children[0].nodeName).toBe("path");
+  });
 });

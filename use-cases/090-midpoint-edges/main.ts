@@ -1,9 +1,4 @@
-import {
-  BezierEdgeShape,
-  Canvas,
-  CanvasBuilder,
-  MidpointEdgeShape,
-} from "@html-graph/html-graph";
+import { BezierEdgeShape, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 import { createMidpoint } from "../shared/create-midpoint";
 
@@ -13,22 +8,20 @@ const canvas: Canvas = builder
   .setDefaults({
     edges: {
       shape: (edgeId) => {
-        const baseShape = new BezierEdgeShape({
-          hasTargetArrow: true,
-          smallCycleRadius: 15,
-          cycleRadius: 30,
-        });
+        const midpointElement = createMidpoint();
 
-        const midpoint = createMidpoint();
-        const midpointShape = new MidpointEdgeShape(baseShape, midpoint);
-
-        midpointShape.midpointElement.addEventListener("mouseup", (event) => {
+        midpointElement.addEventListener("mouseup", (event) => {
           if (event.button === 0) {
             canvas.removeEdge(edgeId);
           }
         });
 
-        return midpointShape;
+        return new BezierEdgeShape({
+          hasTargetArrow: true,
+          smallCycleRadius: 15,
+          cycleRadius: 30,
+          midpointElement,
+        });
       },
     },
   })

@@ -12,4 +12,6 @@ export interface StraightEdgeParams {
   readonly roundness?: number | undefined;
   readonly detourDistance?: number | undefined;
   readonly detourDirection?: number | undefined;
+  readonly midpointElement?: HTMLElement | SVGElement | undefined;
+  readonly interactiveDistance?: number | undefined;
 }

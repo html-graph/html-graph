@@ -1,7 +1,6 @@
 import {
   Canvas,
   CanvasBuilder,
-  MidpointEdgeShape,
   StraightEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -45,15 +44,13 @@ const canvas: Canvas = builder
   .setDefaults({
     edges: {
       shape: () => {
-        const baseShape = new StraightEdgeShape({
+        const midpointElement = createMidpoint();
+
+        return new StraightEdgeShape({
           hasTargetArrow: true,
           detourDirection: Math.PI / 12,
+          midpointElement,
         });
-
-        const midpoint = createMidpoint();
-        const midpointShape = new MidpointEdgeShape(baseShape, midpoint);
-
-        return midpointShape;
       },
     },
   })
