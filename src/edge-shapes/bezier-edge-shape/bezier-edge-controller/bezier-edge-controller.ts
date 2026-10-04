@@ -13,6 +13,7 @@ import {
 } from "../../shared";
 import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
+import { PathEdgeModelShapeParams } from "@/edge-shapes/shared/path-edge-model";
 
 export class BezierEdgeController {
   public readonly view: StructuredEdgeView;
@@ -57,13 +58,26 @@ export class BezierEdgeController {
       curvature: this.params.curvature,
     });
 
+  private readonly shapeParams: PathEdgeModelShapeParams;
+
   public constructor(private readonly params: BezierEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: params.color,
-      width: params.width,
-      hasSourceArrow: params.hasSourceArrow,
-      hasTargetArrow: params.hasTargetArrow,
+      color: this.params.color,
+      width: this.params.width,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
     });
+
+    this.shapeParams = {
+      createLinePath: this.createLinePath,
+      createNodeCyclePath: this.createNodeCyclePath,
+      createPortCyclePath: this.createPortCyclePath,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+      padding: svgPadding,
+    };
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<BezierEdgeModel>();
@@ -74,16 +88,7 @@ export class BezierEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new PathEdgeModel(params, {
-      createLinePath: this.createLinePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createPortCyclePath: this.createPortCyclePath,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      padding: svgPadding,
-    });
+    const model = new PathEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }

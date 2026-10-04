@@ -19,4 +19,5 @@ export const edgeConstants = Object.freeze({
   curvature: 90,
   interactiveWidth: 10,
   portOffset: 0,
+  arrowRenderer: {},
 });

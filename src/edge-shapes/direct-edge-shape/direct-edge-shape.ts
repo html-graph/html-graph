@@ -29,7 +29,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
-      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer ?? edgeConstants.arrowRenderer,
+      ),
       sourceOffsetFn: resolvePortOffsetFn(
         params?.sourceOffset ?? edgeConstants.portOffset,
       ),

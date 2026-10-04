@@ -26,7 +26,9 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
-      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer ?? edgeConstants.arrowRenderer,
+      ),
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
       curvature: params?.curvature ?? edgeConstants.curvature,

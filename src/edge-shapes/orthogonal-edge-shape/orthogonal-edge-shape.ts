@@ -26,7 +26,9 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
-      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer ?? edgeConstants.arrowRenderer,
+      ),
       arrowOffset: params?.arrowOffset ?? edgeConstants.arrowOffset,
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,

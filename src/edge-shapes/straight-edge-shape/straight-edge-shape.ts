@@ -25,7 +25,9 @@ export class StraightEdgeShape implements StructuredEdgeShape {
     this.controller = new StraightEdgeController({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
-      arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
+      arrowRenderer: resolveArrowRenderer(
+        params?.arrowRenderer ?? edgeConstants.arrowRenderer,
+      ),
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
       arrowOffset: params?.arrowOffset ?? edgeConstants.arrowOffset,
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
