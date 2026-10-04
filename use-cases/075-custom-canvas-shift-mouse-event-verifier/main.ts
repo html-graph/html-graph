@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -32,7 +32,7 @@ document.addEventListener(
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: ViewportTransformConfig = {
+const transformOptions: UserTransformableViewportConfig = {
   pan: {
     mouseDownEventVerifier: (event: MouseEvent) =>
       event.button === 0 && isSpacePressed,

@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -12,7 +12,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const boundsElement = document.getElementById("bounds")! as HTMLElement;
 
-const transformOptions: ViewportTransformConfig = {
+const transformOptions: UserTransformableViewportConfig = {
   transformPreprocessor: {
     type: "shift-limit",
     minX: -500,

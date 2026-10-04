@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
   TransformPreprocessorParams,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
@@ -11,7 +11,7 @@ import { createInOutNode } from "../shared/create-in-out-node";
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: ViewportTransformConfig = {
+const transformOptions: UserTransformableViewportConfig = {
   transformPreprocessor: (params: TransformPreprocessorParams) => {
     if (params.prevTransform.scale !== params.nextTransform.scale) {
       return params.nextTransform;
