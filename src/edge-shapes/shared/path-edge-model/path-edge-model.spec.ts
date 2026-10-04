@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { EdgeRenderParams } from "../../edge-render-params";
-import { ConnectionCategory } from "../../connection-category";
+import { EdgeRenderParams } from "../edge-render-params";
+import { ConnectionCategory } from "../connection-category";
 import { PathEdgeModelShapeParams } from "./path-edge-model-shape-params";
 import { PathEdgeModel } from "./path-edge-model";
-import { svgPadding } from "../../svg-padding";
+import { svgPadding } from "../svg-padding";
 import {
   BezierEdgePath,
   CycleCircleEdgePath,
   DetourBezierEdgePath,
-} from "../../paths";
+} from "../paths";
 
 const createShapeParams = (params?: {
   hasSourceArrow?: boolean;

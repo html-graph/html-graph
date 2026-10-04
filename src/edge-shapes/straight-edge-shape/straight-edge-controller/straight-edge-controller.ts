@@ -3,16 +3,16 @@ import {
   CycleSquareEdgePath,
   DetourStraightEdgePath,
   StraightEdgePath,
-  edgeConstants,
   EdgePathFactory,
-  PathEdgeShape,
   PathPort,
   svgPadding,
   StructuredEdgeView,
+  PathEdgeModel,
+  updateStructuredView,
 } from "../../shared";
-import { EventHandler } from "@/event-subject";
 import { StraightEdgeModel } from "../straight-edge-model";
 import { StraightEdgeControllerParams } from "./straight-edge-controller-params";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 export class StraightEdgeController {
   public readonly element: SVGSVGElement;
@@ -21,19 +21,7 @@ export class StraightEdgeController {
 
   public readonly onModelChange: EventHandler<StraightEdgeModel>;
 
-  private readonly arrowLength: number;
-
-  private readonly arrowOffset: number;
-
-  private readonly roundness: number;
-
-  private readonly cycleSquareSide: number;
-
-  private readonly detourDirection: number;
-
-  private readonly detourDistance: number;
-
-  private readonly pathShape: PathEdgeShape;
+  private readonly modelChangeEmitter: EventEmitter<StraightEdgeModel>;
 
   private readonly createPortCyclePath: EdgePathFactory = (
     from: PathPort,
@@ -42,10 +30,10 @@ export class StraightEdgeController {
     new CycleSquareEdgePath({
       from,
       to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      side: this.cycleSquareSide,
+      arrowLength: this.params.arrowLength,
+      arrowOffset: this.params.arrowOffset,
+      roundness: this.params.roundness,
+      side: this.params.cycleSquareSide,
     });
 
   private readonly createNodeCyclePath: EdgePathFactory = (
@@ -55,11 +43,11 @@ export class StraightEdgeController {
     new DetourStraightEdgePath({
       from,
       to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      detourDir: this.detourDirection,
-      detourDistance: this.detourDistance,
+      arrowLength: this.params.arrowLength,
+      arrowOffset: this.params.arrowOffset,
+      roundness: this.params.roundness,
+      detourDir: this.params.detourDirection,
+      detourDistance: this.params.detourDistance,
     });
 
   private readonly createLinePath: EdgePathFactory = (
@@ -69,49 +57,40 @@ export class StraightEdgeController {
     new StraightEdgePath({
       from,
       to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
+      arrowLength: this.params.arrowLength,
+      arrowOffset: this.params.arrowOffset,
+      roundness: this.params.roundness,
     });
 
   public constructor(private readonly params: StraightEdgeControllerParams) {
-    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
-    this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
-    this.detourDistance =
-      params?.detourDistance ?? edgeConstants.detourDistance;
-
-    this.pathShape = new PathEdgeShape({
-      color: this.params.color,
-      width: this.params.width,
-      arrowRenderer: params.arrowRenderer,
-      arrowLength: this.arrowLength,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+    this.view = new StructuredEdgeView({
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    [this.modelChangeEmitter, this.onModelChange] = createPair<PathEdgeModel>();
+
+    this.element = this.view.element;
+
+    this.onModelChange.subscribe((model) => {
+      updateStructuredView(this.view, model);
+    });
   }
 
   public render(params: EdgeRenderParams): void {
-    this.pathShape.render(params);
+    const model = new PathEdgeModel(params, {
+      createLinePath: this.createLinePath,
+      createNodeCyclePath: this.createNodeCyclePath,
+      createPortCyclePath: this.createPortCyclePath,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+      padding: svgPadding,
+    });
+
+    this.modelChangeEmitter.emit(model);
   }
 }

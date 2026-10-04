@@ -29,12 +29,8 @@ export {
 } from "./paths";
 export type { EdgePath } from "./paths";
 
-export { PathEdgeShape } from "./path-edge-shape";
-export type {
-  PathEdgeParams,
-  EdgePathFactory,
-  PathEdgeModel,
-} from "./path-edge-shape";
+export { PathEdgeModel } from "./path-edge-model";
+export type { EdgePathFactory } from "./edge-path-factory";
 
 export { edgeConstants } from "./edge-constants";
 

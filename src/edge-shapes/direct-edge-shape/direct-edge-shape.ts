@@ -26,8 +26,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     this.controller = new DirectEdgeController({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
-      hasSourceArrow: params?.hasSourceArrow === true,
-      hasTargetArrow: params?.hasTargetArrow === true,
+      hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
+      hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
       sourceOffsetFn: resolvePortOffsetFn(

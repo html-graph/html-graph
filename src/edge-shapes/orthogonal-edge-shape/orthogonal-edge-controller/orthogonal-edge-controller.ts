@@ -1,14 +1,15 @@
-import { EventHandler } from "@/event-subject";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import {
   EdgeRenderParams,
   CycleSquareEdgePath,
   DetourOrthogonalEdgePath,
   OrthogonalEdgePath,
   EdgePathFactory,
-  PathEdgeShape,
   PathPort,
   svgPadding,
   StructuredEdgeView,
+  updateStructuredView,
+  PathEdgeModel,
 } from "../../shared";
 import { OrthogonalEdgeModel } from "../orthogonal-edge-model";
 import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-params";
@@ -21,7 +22,7 @@ export class OrthogonalEdgeController {
 
   public readonly onModelChange: EventHandler<OrthogonalEdgeModel>;
 
-  private readonly pathShape: PathEdgeShape;
+  private readonly modelChangeEmitter: EventEmitter<OrthogonalEdgeModel>;
 
   private readonly createPortCyclePath: EdgePathFactory = (
     from: PathPort,
@@ -62,37 +63,50 @@ export class OrthogonalEdgeController {
     });
 
   public constructor(private readonly params: OrthogonalEdgeControllerParams) {
-    this.pathShape = new PathEdgeShape({
-      color: this.params.color,
-      width: this.params.width,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+    this.view = new StructuredEdgeView({
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    [this.modelChangeEmitter, this.onModelChange] =
+      createPair<OrthogonalEdgeModel>();
+
+    this.element = this.view.element;
+
+    this.onModelChange.subscribe((model) => {
+      updateStructuredView(this.view, model);
+    });
   }
 
   public render(params: EdgeRenderParams): void {
-    const { from, to, category } = params;
+    const { category, from, to } = params;
 
-    this.pathShape.render({
-      category,
-      from: {
-        ...from,
-        direction: orthogonalizeDirection(from.direction),
+    const model = new PathEdgeModel(
+      {
+        category,
+        from: {
+          ...from,
+          direction: orthogonalizeDirection(from.direction),
+        },
+        to: {
+          ...to,
+          direction: orthogonalizeDirection(to.direction),
+        },
       },
-      to: {
-        ...to,
-        direction: orthogonalizeDirection(to.direction),
+      {
+        createLinePath: this.createLinePath,
+        createNodeCyclePath: this.createNodeCyclePath,
+        createPortCyclePath: this.createPortCyclePath,
+        hasSourceArrow: this.params.hasSourceArrow,
+        hasTargetArrow: this.params.hasTargetArrow,
+        arrowRenderer: this.params.arrowRenderer,
+        arrowLength: this.params.arrowLength,
+        padding: svgPadding,
       },
-    });
+    );
+
+    this.modelChangeEmitter.emit(model);
   }
 }

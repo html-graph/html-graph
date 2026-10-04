@@ -1,11 +1,11 @@
 import { Point } from "@/point";
-import { EdgeBox } from "../../edge-box";
-import { StructuredEdgeModel } from "../../structured-edge-shape-model";
-import { EdgeRenderParams } from "../../edge-render-params";
+import { EdgeBox } from "../edge-box";
+import { StructuredEdgeModel } from "../structured-edge-shape-model";
+import { EdgeRenderParams } from "../edge-render-params";
 import { PathEdgeModelShapeParams } from "./path-edge-model-shape-params";
-import { createEdgeRectangle } from "../../geometry";
 import { createDirectionVector } from "./create-direction-vector";
-import { ConnectionCategory } from "../../connection-category";
+import { createEdgeRectangle } from "../geometry";
+import { ConnectionCategory } from "../connection-category";
 
 export class PathEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;

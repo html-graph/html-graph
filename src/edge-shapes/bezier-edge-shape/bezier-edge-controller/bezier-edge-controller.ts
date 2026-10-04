@@ -1,26 +1,28 @@
-import { EventHandler } from "@/event-subject";
+import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import {
   EdgeRenderParams,
   BezierEdgePath,
   DetourBezierEdgePath,
   CycleCircleEdgePath,
   EdgePathFactory,
-  PathEdgeShape,
-  svgPadding,
   PathPort,
   StructuredEdgeView,
+  StructuredEdgeShape,
+  updateStructuredView,
+  PathEdgeModel,
+  svgPadding,
 } from "../../shared";
 import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
 
-export class BezierEdgeController {
+export class BezierEdgeController implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
   public readonly view: StructuredEdgeView;
 
   public readonly onModelChange: EventHandler<BezierEdgeModel>;
 
-  private readonly pathShape: PathEdgeShape;
+  private readonly modelChangeEmitter: EventEmitter<BezierEdgeModel>;
 
   private readonly createPortCyclePath: EdgePathFactory = (
     from: PathPort,
@@ -59,25 +61,35 @@ export class BezierEdgeController {
     });
 
   public constructor(private readonly params: BezierEdgeControllerParams) {
-    this.pathShape = new PathEdgeShape({
-      color: this.params.color,
-      width: this.params.width,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+    this.view = new StructuredEdgeView({
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    [this.modelChangeEmitter, this.onModelChange] =
+      createPair<BezierEdgeModel>();
+
+    this.element = this.view.element;
+
+    this.onModelChange.subscribe((model) => {
+      updateStructuredView(this.view, model);
+    });
   }
 
   public render(params: EdgeRenderParams): void {
-    this.pathShape.render(params);
+    const model = new PathEdgeModel(params, {
+      createLinePath: this.createLinePath,
+      createNodeCyclePath: this.createNodeCyclePath,
+      createPortCyclePath: this.createPortCyclePath,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+      padding: svgPadding,
+    });
+
+    this.modelChangeEmitter.emit(model);
   }
 }
