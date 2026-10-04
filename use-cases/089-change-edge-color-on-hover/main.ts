@@ -5,7 +5,6 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
-  InteractiveEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -21,27 +20,21 @@ const defaults: CanvasDefaults = {
   },
   edges: {
     shape: () => {
-      const baseShape = new BezierEdgeShape({
+      const shape = new BezierEdgeShape({
         hasTargetArrow: true,
         color: edgeColor,
+        interactiveDistance: 40,
       });
 
-      const interactiveShape = new InteractiveEdgeShape(baseShape, {
-        distance: 40,
+      shape.element.addEventListener("mouseenter", () => {
+        shape.element.style.setProperty("--edge-color", hoverEdgeColor);
       });
 
-      interactiveShape.element.addEventListener("mouseenter", () => {
-        interactiveShape.element.style.setProperty(
-          "--edge-color",
-          hoverEdgeColor,
-        );
+      shape.element.addEventListener("mouseleave", () => {
+        shape.element.style.setProperty("--edge-color", edgeColor);
       });
 
-      interactiveShape.element.addEventListener("mouseleave", () => {
-        interactiveShape.element.style.setProperty("--edge-color", edgeColor);
-      });
-
-      return interactiveShape;
+      return shape;
     },
     priority: 0,
   },

@@ -27,7 +27,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
         const { shape } = canvas.graph.getEdge(edgeId);
         const width = edgeId === selectedEdgeId ? 2 : 1;
 
-        (shape as OrthogonalEdgeShape).line.setAttribute(
+        (shape as OrthogonalEdgeShape).view.line.setAttribute(
           "stroke-width",
           `${width}`,
         );
@@ -39,7 +39,10 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
       canvas.graph.getAllEdgeIds().forEach((edgeId) => {
         const { shape } = canvas.graph.getEdge(edgeId);
 
-        (shape as OrthogonalEdgeShape).line.setAttribute("stroke-width", "1");
+        (shape as OrthogonalEdgeShape).view.line.setAttribute(
+          "stroke-width",
+          "1",
+        );
       });
     },
   })
