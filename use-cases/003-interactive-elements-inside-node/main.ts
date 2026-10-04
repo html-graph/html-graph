@@ -2,7 +2,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
 } from "@html-graph/html-graph";
 
 let transformInProgress: boolean = false;
@@ -11,7 +11,7 @@ let preventClick: boolean = false;
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
-const transformOptions: ViewportTransformConfig = {
+const transformOptions: UserTransformableViewportConfig = {
   events: {
     onTransformStarted: () => {
       transformInProgress = true;
