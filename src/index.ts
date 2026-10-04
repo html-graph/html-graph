@@ -78,7 +78,6 @@ export type {
   StraightEdgeModel,
   DirectEdgeParams,
   DirectEdgeModel,
-  StructuredEdgeShape,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
@@ -86,7 +85,6 @@ export type {
   PortOffsetFn,
   PortOffsetFnParams,
   StructuredEdgeView,
-  StructuredEdgeModel,
   EdgeBox,
 } from "./edge-shapes";
 
