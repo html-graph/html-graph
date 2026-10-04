@@ -1,19 +1,13 @@
 import {
   EdgeRenderParams,
-  CycleSquareEdgePath,
-  DetourStraightEdgePath,
-  StraightEdgePath,
   edgeConstants,
-  EdgePathFactory,
-  PathEdgeShape,
-  PathPort,
   StructuredEdgeShape,
   resolveArrowRenderer,
-  svgPadding,
   StructuredEdgeView,
   configureMidpoint,
   configureInteractiveEdge,
 } from "../shared";
+import { StraightEdgeController } from "./straight-edge-controller";
 import { StraightEdgeModel } from "./straight-edge-model";
 import { StraightEdgeParams } from "./straight-edge-params";
 import { EventHandler } from "@/event-subject";
@@ -25,94 +19,26 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
   public readonly onModelChange: EventHandler<StraightEdgeModel>;
 
-  private readonly arrowLength: number;
-
-  private readonly arrowOffset: number;
-
-  private readonly roundness: number;
-
-  private readonly cycleSquareSide: number;
-
-  private readonly detourDirection: number;
-
-  private readonly detourDistance: number;
-
-  private readonly pathShape: PathEdgeShape;
-
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleSquareEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      side: this.cycleSquareSide,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourStraightEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      detourDir: this.detourDirection,
-      detourDistance: this.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new StraightEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-    });
+  private readonly controller: StraightEdgeController;
 
   public constructor(params?: StraightEdgeParams | undefined) {
-    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
-    this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
-    this.detourDistance =
-      params?.detourDistance ?? edgeConstants.detourDistance;
-
-    this.pathShape = new PathEdgeShape({
+    this.controller = new StraightEdgeController({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
-      arrowLength: this.arrowLength,
+      arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
+      arrowOffset: params?.arrowOffset ?? edgeConstants.arrowOffset,
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+      detourDirection: params?.detourDirection ?? edgeConstants.detourDirection,
+      detourDistance: params?.detourDistance ?? edgeConstants.detourDistance,
+      cycleSquareSide: params?.cycleSquareSide ?? edgeConstants.cycleSquareSide,
+      roundness: params?.roundness ?? edgeConstants.roundness,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    this.element = this.controller.element;
+    this.view = this.controller.view;
+    this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {
       configureMidpoint(this, params.midpointElement);
@@ -127,6 +53,6 @@ export class StraightEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.pathShape.render(params);
+    this.controller.render(params);
   }
 }

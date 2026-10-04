@@ -1,23 +1,16 @@
 import {
   EdgeRenderParams,
-  CycleSquareEdgePath,
-  DetourOrthogonalEdgePath,
-  OrthogonalEdgePath,
   edgeConstants,
-  EdgePathFactory,
-  PathEdgeShape,
-  PathPort,
   StructuredEdgeShape,
   resolveArrowRenderer,
-  svgPadding,
   StructuredEdgeView,
   configureMidpoint,
   configureInteractiveEdge,
 } from "../shared";
 import { OrthogonalEdgeParams } from "./orthogonal-edge-params";
 import { EventHandler } from "@/event-subject";
-import { orthogonalizeDirection } from "./orthogonalize-direction";
 import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
+import { OrthogonalEdgeController } from "./orthogonal-edge-controller";
 
 export class OrthogonalEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -26,88 +19,25 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
 
   public readonly onModelChange: EventHandler<OrthogonalEdgeModel>;
 
-  private readonly arrowLength: number;
-
-  private readonly arrowOffset: number;
-
-  private readonly roundness: number;
-
-  private readonly cycleSquareSide: number;
-
-  private readonly detourDistance: number;
-
-  private readonly pathShape: PathEdgeShape;
-
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleSquareEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      side: this.cycleSquareSide,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourOrthogonalEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-      detourDistance: this.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new OrthogonalEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      arrowOffset: this.arrowOffset,
-      roundness: this.roundness,
-    });
+  private readonly controller: OrthogonalEdgeController;
 
   public constructor(params?: OrthogonalEdgeParams | undefined) {
-    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.arrowOffset = params?.arrowOffset ?? edgeConstants.arrowOffset;
-    this.cycleSquareSide =
-      params?.cycleSquareSide ?? edgeConstants.cycleSquareSide;
-
-    const roundness = params?.roundness ?? edgeConstants.roundness;
-    this.roundness = Math.min(
-      roundness,
-      this.arrowOffset,
-      this.cycleSquareSide / 2,
-    );
-
-    this.detourDistance =
-      params?.detourDistance ?? edgeConstants.detourDistance;
-
-    this.pathShape = new PathEdgeShape({
+    this.controller = new OrthogonalEdgeController({
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
+      arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
-      arrowLength: this.arrowLength,
+      arrowOffset: params?.arrowOffset ?? edgeConstants.arrowOffset,
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+      cycleSquareSide: params?.cycleSquareSide ?? edgeConstants.cycleSquareSide,
+      roundness: params?.roundness ?? edgeConstants.roundness,
+      detourDistance: params?.detourDistance ?? edgeConstants.detourDistance,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    this.element = this.controller.element;
+    this.view = this.controller.view;
+    this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {
       configureMidpoint(this, params.midpointElement);
@@ -122,18 +52,6 @@ export class OrthogonalEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { from, to, category } = params;
-
-    this.pathShape.render({
-      category,
-      from: {
-        ...from,
-        direction: orthogonalizeDirection(from.direction),
-      },
-      to: {
-        ...to,
-        direction: orthogonalizeDirection(to.direction),
-      },
-    });
+    this.controller.render(params);
   }
 }
