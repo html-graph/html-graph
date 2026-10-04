@@ -15,8 +15,6 @@ import { StraightEdgeControllerParams } from "./straight-edge-controller-params"
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
 export class StraightEdgeController {
-  public readonly element: SVGSVGElement;
-
   public readonly view: StructuredEdgeView;
 
   public readonly onModelChange: EventHandler<StraightEdgeModel>;
@@ -71,8 +69,6 @@ export class StraightEdgeController {
     });
 
     [this.modelChangeEmitter, this.onModelChange] = createPair<PathEdgeModel>();
-
-    this.element = this.view.element;
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);

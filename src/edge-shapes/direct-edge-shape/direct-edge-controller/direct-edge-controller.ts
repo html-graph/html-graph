@@ -8,8 +8,6 @@ import { DirectEdgeControllerParams } from "./direct-edge-controller-params";
 import { DirectEdgeModel } from "../direct-edge-model";
 
 export class DirectEdgeController {
-  public readonly element: SVGSVGElement;
-
   public readonly view: StructuredEdgeView;
 
   public readonly onModelChange: EventHandler<DirectEdgeModel>;
@@ -26,8 +24,6 @@ export class DirectEdgeController {
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<DirectEdgeModel>();
-
-    this.element = this.view.element;
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);

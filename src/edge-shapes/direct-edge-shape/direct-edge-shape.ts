@@ -38,8 +38,8 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       ),
     });
 
-    this.element = this.controller.view.element;
     this.view = this.controller.view;
+    this.element = this.view.element;
     this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {

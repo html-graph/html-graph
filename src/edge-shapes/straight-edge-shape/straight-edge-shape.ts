@@ -36,8 +36,8 @@ export class StraightEdgeShape implements StructuredEdgeShape {
       roundness: params?.roundness ?? edgeConstants.roundness,
     });
 
-    this.element = this.controller.element;
     this.view = this.controller.view;
+    this.element = this.view.element;
     this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {

@@ -16,8 +16,6 @@ import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-par
 import { orthogonalizeDirection } from "../orthogonalize-direction";
 
 export class OrthogonalEdgeController {
-  public readonly element: SVGSVGElement;
-
   public readonly view: StructuredEdgeView;
 
   public readonly onModelChange: EventHandler<OrthogonalEdgeModel>;
@@ -72,8 +70,6 @@ export class OrthogonalEdgeController {
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<OrthogonalEdgeModel>();
-
-    this.element = this.view.element;
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);

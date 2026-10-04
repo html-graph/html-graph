@@ -37,8 +37,8 @@ export class BezierEdgeShape implements StructuredEdgeShape {
       detourDistance: params?.detourDistance ?? edgeConstants.detourDistance,
     });
 
-    this.element = this.controller.element;
     this.view = this.controller.view;
+    this.element = this.view.element;
     this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {

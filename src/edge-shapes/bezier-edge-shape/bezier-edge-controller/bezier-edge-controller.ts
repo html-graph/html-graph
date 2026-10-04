@@ -7,7 +7,6 @@ import {
   EdgePathFactory,
   PathPort,
   StructuredEdgeView,
-  StructuredEdgeShape,
   updateStructuredView,
   PathEdgeModel,
   svgPadding,
@@ -15,9 +14,7 @@ import {
 import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
 
-export class BezierEdgeController implements StructuredEdgeShape {
-  public readonly element: SVGSVGElement;
-
+export class BezierEdgeController {
   public readonly view: StructuredEdgeView;
 
   public readonly onModelChange: EventHandler<BezierEdgeModel>;
@@ -70,8 +67,6 @@ export class BezierEdgeController implements StructuredEdgeShape {
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<BezierEdgeModel>();
-
-    this.element = this.view.element;
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
