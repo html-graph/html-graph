@@ -1,22 +1,16 @@
 import { EventHandler } from "@/event-subject";
 import {
   EdgeRenderParams,
-  BezierEdgePath,
-  DetourBezierEdgePath,
-  CycleCircleEdgePath,
   edgeConstants,
-  EdgePathFactory,
-  PathEdgeShape,
   StructuredEdgeShape,
   resolveArrowRenderer,
-  svgPadding,
-  PathPort,
   StructuredEdgeView,
   configureMidpoint,
   configureInteractiveEdge,
 } from "../shared";
 import { BezierEdgeParams } from "./bezier-edge-params";
 import { BezierEdgeModel } from "./bezier-edge-model";
+import { BezierEdgeController } from "./bezier-edge-controller";
 
 export class BezierEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
@@ -25,83 +19,27 @@ export class BezierEdgeShape implements StructuredEdgeShape {
 
   public readonly onModelChange: EventHandler<BezierEdgeModel>;
 
-  private readonly arrowLength: number;
-
-  private readonly curvature: number;
-
-  private readonly portCycleRadius: number;
-
-  private readonly portCycleSmallRadius: number;
-
-  private readonly detourDirection: number;
-
-  private readonly detourDistance: number;
-
-  private readonly pathShape: PathEdgeShape;
-
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleCircleEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      radius: this.portCycleRadius,
-      smallRadius: this.portCycleSmallRadius,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourBezierEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      curvature: this.curvature,
-      detourDir: this.detourDirection,
-      detourDistance: this.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new BezierEdgePath({
-      from,
-      to,
-      arrowLength: this.arrowLength,
-      curvature: this.curvature,
-    });
+  private readonly controller: BezierEdgeController;
 
   public constructor(params?: BezierEdgeParams | undefined) {
-    this.arrowLength = params?.arrowLength ?? edgeConstants.arrowLength;
-    this.curvature = params?.curvature ?? edgeConstants.curvature;
-    this.portCycleRadius = params?.cycleRadius ?? edgeConstants.cycleRadius;
-    this.portCycleSmallRadius =
-      params?.smallCycleRadius ?? edgeConstants.smallCycleRadius;
-    this.detourDirection =
-      params?.detourDirection ?? edgeConstants.detourDirection;
-    this.detourDistance =
-      params?.detourDistance ?? edgeConstants.detourDistance;
-
-    this.pathShape = new PathEdgeShape({
+    this.controller = new BezierEdgeController({
+      arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowRenderer: resolveArrowRenderer(params?.arrowRenderer ?? {}),
-      arrowLength: this.arrowLength,
       hasSourceArrow: params?.hasSourceArrow ?? edgeConstants.hasSourceArrow,
       hasTargetArrow: params?.hasTargetArrow ?? edgeConstants.hasTargetArrow,
-      createPortCyclePath: this.createPortCyclePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createLinePath: this.createLinePath,
-      padding: svgPadding,
+      curvature: params?.curvature ?? edgeConstants.curvature,
+      portCycleRadius: params?.cycleRadius ?? edgeConstants.cycleRadius,
+      portCycleSmallRadius:
+        params?.smallCycleRadius ?? edgeConstants.smallCycleRadius,
+      detourDirection: params?.detourDirection ?? edgeConstants.detourDirection,
+      detourDistance: params?.detourDistance ?? edgeConstants.detourDistance,
     });
 
-    this.element = this.pathShape.element;
-    this.view = this.pathShape.view;
-    this.onModelChange = this.pathShape.onModelChange;
+    this.element = this.controller.element;
+    this.view = this.controller.view;
+    this.onModelChange = this.controller.onModelChange;
 
     if (params?.midpointElement !== undefined) {
       configureMidpoint(this, params.midpointElement);
@@ -116,6 +54,6 @@ export class BezierEdgeShape implements StructuredEdgeShape {
   }
 
   public render(params: EdgeRenderParams): void {
-    this.pathShape.render(params);
+    this.controller.render(params);
   }
 }
