@@ -6,8 +6,6 @@ export type { EdgeRenderPort } from "./edge-render-port";
 
 export type { StructuredEdgeShape } from "./structured-edge-shape";
 
-export type { StructuredEdgeRenderModel } from "./structured-edge-render-model";
-
 export { ConnectionCategory } from "./connection-category";
 
 export { resolveArrowRenderer } from "./arrow-renderer";
@@ -16,14 +14,6 @@ export type {
   ArrowRenderer,
   ArrowRenderingParams,
 } from "./arrow-renderer";
-
-export {
-  InteractiveEdgeShape,
-  InteractiveEdgeError,
-} from "./interactive-edge-shape";
-export type { InteractiveEdgeParams } from "./interactive-edge-shape";
-
-export { MidpointEdgeShape } from "./midpoint-edge-shape";
 
 export {
   BezierEdgePath,

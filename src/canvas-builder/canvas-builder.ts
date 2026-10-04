@@ -5,7 +5,6 @@ import { BackgroundConfig } from "./create-background-params";
 import { ConnectablePortsConfig } from "./create-connectable-ports-params";
 import { DraggableEdgesConfig } from "./create-draggable-edges-params";
 import { VirtualScrollConfig } from "./create-virtual-scroll-params";
-import { CanvasBuilderError } from "./canvas-builder-error";
 import { AnimatedLayoutConfig } from "./create-animated-layout-params";
 import { LayoutConfig } from "./create-layout-params";
 import { CanvasDefaults } from "./shared";
@@ -19,8 +18,6 @@ import {
 } from "./canvas-building-context";
 
 export class CanvasBuilder {
-  private used = false;
-
   private canvasDefaults: CanvasDefaults = {};
 
   private draggableNodesConfig: DraggableNodesConfig | undefined = undefined;
@@ -190,14 +187,6 @@ export class CanvasBuilder {
   }
 
   public build(): Canvas {
-    if (this.used) {
-      throw new CanvasBuilderError(
-        "Failed to build Canvas because CanvasBuilder is a single-use object",
-      );
-    }
-
-    this.used = true;
-
     const contextParams: CanvasBuildingContextParams = {
       canvasDefaults: this.canvasDefaults,
       draggableNodes: {

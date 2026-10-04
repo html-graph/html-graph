@@ -3,21 +3,14 @@ export type {
   EdgeRenderParams,
   EdgeRenderPort,
   StructuredEdgeShape,
-  StructuredEdgeRenderModel,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
-  InteractiveEdgeParams,
   StructuredEdgeModel,
   StructuredEdgeView,
   EdgeBox,
 } from "./shared";
-export {
-  MidpointEdgeShape,
-  InteractiveEdgeShape,
-  InteractiveEdgeError,
-  ConnectionCategory,
-} from "./shared";
+export { ConnectionCategory } from "./shared";
 
 export { BezierEdgeShape } from "./bezier-edge-shape";
 export type { BezierEdgeParams, BezierEdgeModel } from "./bezier-edge-shape";

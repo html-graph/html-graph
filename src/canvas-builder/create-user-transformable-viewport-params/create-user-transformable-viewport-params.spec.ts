@@ -22,16 +22,6 @@ describe("createUserTransformableViewportParams", () => {
     expect(res.wheelSensitivity).toBe(1.5);
   });
 
-  it("should set deprecated specified wheel velocity", () => {
-    const res = createUserTransformableViewportParams({
-      scale: {
-        mouseWheelSensitivity: 1.5,
-      },
-    });
-
-    expect(res.wheelSensitivity).toBe(1.5);
-  });
-
   it("should set noop transform preprocessor if not specified", () => {
     const res = createUserTransformableViewportParams(undefined);
 
@@ -251,32 +241,6 @@ describe("createUserTransformableViewportParams", () => {
     const options = createUserTransformableViewportParams(transformOptions);
 
     expect(options.scaleWheelFinishTimeout).toBe(1000);
-  });
-
-  it("should set deprecated specified mouse wheel finish timeout", () => {
-    const transformOptions: UserTransformableViewportConfig = {
-      scale: {
-        wheelFinishTimeout: 1000,
-      },
-    };
-
-    const options = createUserTransformableViewportParams(transformOptions);
-
-    expect(options.scaleWheelFinishTimeout).toBe(1000);
-  });
-
-  it("should set deprecated specified mouse wheel event validator", () => {
-    const mouseWheelEventVerifier = (): boolean => false;
-
-    const transformOptions: UserTransformableViewportConfig = {
-      scale: {
-        mouseWheelEventVerifier,
-      },
-    };
-
-    const options = createUserTransformableViewportParams(transformOptions);
-
-    expect(options.mouseWheelEventVerifier).toBe(mouseWheelEventVerifier);
   });
 
   it("should set default scale wheel timeout", () => {

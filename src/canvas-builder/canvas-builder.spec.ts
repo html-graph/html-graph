@@ -9,7 +9,6 @@ import { DummyAnimatedLayoutAlgorithm } from "@/mocks/dummy-animated-layout-algo
 import { triggerResizeFor } from "@/mocks/trigger-resize-for.mock";
 import { waitMacrotask } from "@/mocks/wait-macrotask.mock";
 import { DummyLayoutAlgorithm } from "@/mocks/dummy-layout-algorithm.mock";
-import { CanvasBuilderError } from "./canvas-builder-error";
 import { EventSubject } from "@/event-subject";
 import { AddEdgeRequest, AddNodeRequest } from "@/graph-controller";
 import { setLayersDimensions } from "@/mocks/set-layer-dimensions.mock";
@@ -27,15 +26,6 @@ describe("CanvasBuilder", () => {
 
   afterEach(() => {
     document.body.innerHTML = "";
-  });
-
-  it("should throw error when trying to call build second time", () => {
-    const builder = new CanvasBuilder(document.createElement("div"));
-    builder.build();
-
-    expect(() => {
-      builder.build();
-    }).toThrow(CanvasBuilderError);
   });
 
   it("should build canvas with specified defaults", () => {
