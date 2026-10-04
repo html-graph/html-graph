@@ -39,10 +39,7 @@ export const createUserTransformableViewportParams = (
   }
 
   return {
-    wheelSensitivity:
-      transformConfig?.zoom?.mouseWheelSensitivity ??
-      transformConfig?.scale?.mouseWheelSensitivity ??
-      1.2,
+    wheelSensitivity: transformConfig?.zoom?.mouseWheelSensitivity ?? 1.2,
     onTransformStarted: transformConfig?.events?.onTransformStarted ?? noopFn,
     onTransformFinished: transformConfig?.events?.onTransformFinished ?? noopFn,
     onBeforeTransformChange:
@@ -56,13 +53,8 @@ export const createUserTransformableViewportParams = (
     mouseUpEventVerifier:
       transformConfig?.pan?.mouseUpEventVerifier ?? lmbMouseEventVerifier,
     mouseWheelEventVerifier:
-      transformConfig?.zoom?.mouseWheelEventVerifier ??
-      transformConfig?.scale?.mouseWheelEventVerifier ??
-      ((): boolean => true),
-    scaleWheelFinishTimeout:
-      transformConfig?.zoom?.wheelFinishTimeout ??
-      transformConfig?.scale?.wheelFinishTimeout ??
-      500,
+      transformConfig?.zoom?.mouseWheelEventVerifier ?? ((): boolean => true),
+    scaleWheelFinishTimeout: transformConfig?.zoom?.wheelFinishTimeout ?? 500,
     onResizeTransformStarted:
       transformConfig?.events?.onResizeTransformStarted ?? noopFn,
     onResizeTransformFinished:

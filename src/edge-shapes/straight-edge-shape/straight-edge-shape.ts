@@ -8,7 +8,6 @@ import {
   PathEdgeShape,
   PathPort,
   StructuredEdgeShape,
-  StructuredEdgeRenderModel,
   resolveArrowRenderer,
   svgPadding,
   StructuredEdgeView,
@@ -22,37 +21,7 @@ import { EventHandler } from "@/event-subject";
 export class StraightEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  /**
-   * @deprecated
-   * use view.group instead
-   */
-  public readonly group: SVGGElement;
-
-  /**
-   * @deprecated
-   * use view.line instead
-   */
-  public readonly line: SVGPathElement;
-
-  /**
-   * @deprecated
-   * use view.line instead
-   */
-  public readonly sourceArrow: SVGPathElement | null;
-
-  /**
-   * @deprecated
-   * use view.targetArrow instead
-   */
-  public readonly targetArrow: SVGPathElement | null;
-
   public readonly view: StructuredEdgeView;
-
-  /**
-   * @deprecated
-   * use onModelChange instead
-   */
-  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
 
   public readonly onModelChange: EventHandler<StraightEdgeModel>;
 
@@ -143,12 +112,7 @@ export class StraightEdgeShape implements StructuredEdgeShape {
 
     this.element = this.pathShape.element;
     this.view = this.pathShape.view;
-    this.group = this.view.group;
-    this.line = this.view.line;
-    this.sourceArrow = this.view.sourceArrow;
-    this.targetArrow = this.view.targetArrow;
     this.onModelChange = this.pathShape.onModelChange;
-    this.onAfterRender = this.pathShape.onAfterRender;
 
     if (params?.midpointElement !== undefined) {
       configureMidpoint(this, params.midpointElement);

@@ -4,7 +4,7 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   Identifier,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
   VirtualScrollConfig,
 } from "@html-graph/html-graph";
 
@@ -19,7 +19,7 @@ const defaults: CanvasDefaults = {
   },
 };
 
-const transformConfig: ViewportTransformConfig = {
+const transformConfig: UserTransformableViewportConfig = {
   transformPreprocessor: {
     type: "scale-limit",
     minContentScale: 0.3,

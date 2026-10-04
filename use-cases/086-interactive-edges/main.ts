@@ -6,7 +6,6 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   DraggableNodesConfig,
-  InteractiveEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -20,12 +19,9 @@ const canvasDefaults: CanvasDefaults = {
   edges: {
     priority: 0,
     shape: (edgeId) => {
-      const baseShape = new BezierEdgeShape({
+      const shape = new BezierEdgeShape({
         hasTargetArrow: true,
-      });
-
-      const interactiveEdge = new InteractiveEdgeShape(baseShape, {
-        distance: 10,
+        interactiveDistance: 10,
       });
 
       const handler = (): void => {
@@ -33,17 +29,17 @@ const canvasDefaults: CanvasDefaults = {
           `clicked on edge with id: ${edgeId}`;
       };
 
-      interactiveEdge.element.addEventListener("mousedown", (event) => {
+      shape.element.addEventListener("mousedown", (event) => {
         event.stopPropagation();
         handler();
       });
 
-      interactiveEdge.element.addEventListener("touchstart", (event) => {
+      shape.element.addEventListener("touchstart", (event) => {
         event.stopPropagation();
         handler();
       });
 
-      return interactiveEdge;
+      return shape;
     },
   },
 };

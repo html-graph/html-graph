@@ -3,7 +3,7 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  ViewportTransformConfig,
+  UserTransformableViewportConfig,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -25,7 +25,7 @@ const updateTransform = (): void => {
   currentContent.innerText = JSON.stringify(contentTransform);
 };
 
-const transformOptions: ViewportTransformConfig = {
+const transformOptions: UserTransformableViewportConfig = {
   events: {
     onTransformChange: () => {
       updateTransform();

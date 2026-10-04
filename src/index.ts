@@ -1,15 +1,10 @@
-export { CanvasBuilder, CanvasBuilderError } from "./canvas-builder";
+export { CanvasBuilder } from "./canvas-builder";
 export type {
   CanvasDefaults,
   BackgroundConfig,
   ConnectablePortsConfig,
   DraggableNodesConfig,
   UserTransformableViewportConfig,
-  /**
-   * @deprecated
-   * use UserTransformableViewportConfig instead
-   */
-  UserTransformableViewportConfig as ViewportTransformConfig,
   ShiftLimitPreprocessorParams,
   ScaleLimitPreprocessorParams,
   VirtualScrollConfig,
@@ -68,10 +63,7 @@ export {
   BezierEdgeShape,
   StraightEdgeShape,
   OrthogonalEdgeShape,
-  InteractiveEdgeShape,
-  InteractiveEdgeError,
   DirectEdgeShape,
-  MidpointEdgeShape,
   ConnectionCategory,
 } from "./edge-shapes";
 export type {
@@ -84,11 +76,8 @@ export type {
   OrthogonalEdgeModel,
   StraightEdgeParams,
   StraightEdgeModel,
-  InteractiveEdgeParams,
   DirectEdgeParams,
   DirectEdgeModel,
-  StructuredEdgeShape,
-  StructuredEdgeRenderModel,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
@@ -96,7 +85,6 @@ export type {
   PortOffsetFn,
   PortOffsetFnParams,
   StructuredEdgeView,
-  StructuredEdgeModel,
   EdgeBox,
 } from "./edge-shapes";
 

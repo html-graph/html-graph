@@ -4,7 +4,6 @@ import {
   edgeConstants,
   ArrowRenderer,
   resolveArrowRenderer,
-  StructuredEdgeRenderModel,
   StructuredEdgeView,
   updateStructuredView,
   configureMidpoint,
@@ -18,42 +17,7 @@ import { DirectEdgeModel } from "./direct-edge-model";
 export class DirectEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
-  /**
-   * @deprecated
-   * use view.group instead
-   */
-  public readonly group: SVGGElement;
-
-  /**
-   * @deprecated
-   * use view.line instead
-   */
-  public readonly line: SVGPathElement;
-
-  /**
-   * @deprecated
-   * use view.sourceArrow instead
-   */
-  public readonly sourceArrow: SVGPathElement | null = null;
-
-  /**
-   * @deprecated
-   * use view.targetArrow instead
-   */
-  public readonly targetArrow: SVGPathElement | null = null;
-
   public readonly view: StructuredEdgeView;
-
-  /**
-   * @deprecated
-   * use onModelChange instead
-   */
-  public readonly onAfterRender: EventHandler<StructuredEdgeRenderModel>;
-
-  /**
-   * @deprecated
-   */
-  private readonly afterRenderEmitter: EventEmitter<StructuredEdgeRenderModel>;
 
   public readonly onModelChange: EventHandler<DirectEdgeModel>;
 
@@ -82,9 +46,6 @@ export class DirectEdgeShape implements StructuredEdgeShape {
       hasTargetArrow: this.hasTargetArrow,
     });
 
-    [this.afterRenderEmitter, this.onAfterRender] =
-      createPair<StructuredEdgeRenderModel>();
-
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<DirectEdgeModel>();
 
@@ -100,22 +61,9 @@ export class DirectEdgeShape implements StructuredEdgeShape {
     );
 
     this.element = this.view.element;
-    this.line = this.view.line;
-    this.group = this.view.group;
-    this.sourceArrow = this.view.sourceArrow;
-    this.targetArrow = this.view.targetArrow;
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
-
-      this.afterRenderEmitter.emit({
-        edgePath: {
-          path: model.linePath,
-          midpoint: model.calculateMidpoint(),
-        },
-        sourceArrowPath: model.sourceArrowPath,
-        targetArrowPath: model.targetArrowPath,
-      });
     });
 
     if (params?.midpointElement !== undefined) {

@@ -1,10 +1,4 @@
-import {
-  BezierEdgeShape,
-  Canvas,
-  CanvasBuilder,
-  InteractiveEdgeShape,
-  StructuredEdgeShape,
-} from "@html-graph/html-graph";
+import { BezierEdgeShape, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -16,9 +10,7 @@ const canvas: Canvas = builder
     },
     edges: {
       shape: () => {
-        const baseShape = new BezierEdgeShape();
-
-        return new InteractiveEdgeShape(baseShape, { distance: 20 });
+        return new BezierEdgeShape({ interactiveDistance: 20 });
       },
       priority: 0,
     },
@@ -31,7 +23,7 @@ const canvas: Canvas = builder
         const { shape } = canvas.graph.getEdge(edgeId);
         const width = edgeId === selectedEdgeId ? 2 : 1;
 
-        (shape as StructuredEdgeShape).line.setAttribute(
+        (shape as BezierEdgeShape).view.line.setAttribute(
           "stroke-width",
           `${width}`,
         );
@@ -43,7 +35,7 @@ const canvas: Canvas = builder
       canvas.graph.getAllEdgeIds().forEach((edgeId) => {
         const { shape } = canvas.graph.getEdge(edgeId);
 
-        (shape as StructuredEdgeShape).line.setAttribute("stroke-width", "1");
+        (shape as BezierEdgeShape).view.line.setAttribute("stroke-width", "1");
       });
     },
   })

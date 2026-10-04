@@ -22,7 +22,7 @@ const edgeRenderParams: EdgeRenderParams = {
   category: ConnectionCategory.Line,
 };
 
-describe("InteractiveEdgeShape", () => {
+describe("configureInteractiveEdge", () => {
   it("should create interactive group with line", () => {
     const shape = new BezierEdgeShape();
     configureInteractiveEdge(shape, 10);

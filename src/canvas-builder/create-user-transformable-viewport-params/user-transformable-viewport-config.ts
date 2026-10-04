@@ -7,15 +7,6 @@ export interface UserTransformableViewportConfig {
     readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
     readonly wheelFinishTimeout?: number;
   };
-  /**
-   * @deprecated
-   * use zoom property instead
-   */
-  readonly scale?: {
-    readonly mouseWheelSensitivity?: number;
-    readonly mouseWheelEventVerifier?: (event: WheelEvent) => boolean;
-    readonly wheelFinishTimeout?: number;
-  };
   readonly pan?: {
     readonly cursor?: string | null;
     readonly mouseDownEventVerifier?: MouseEventVerifier;
