@@ -1,24 +1,24 @@
 import { describe, expect, it, vi } from "vitest";
-import { BezierEdgeController } from "./bezier-edge-controller";
+import { StraightEdgeController } from "./straight-edge-controller";
 import { ConnectionCategory } from "../../shared";
 
-const createController = (): BezierEdgeController => {
-  return new BezierEdgeController({
+const createController = (): StraightEdgeController => {
+  return new StraightEdgeController({
     color: "#777777",
     width: 1,
-    curvature: 100,
     arrowLength: 10,
     arrowRenderer: (): string => "arrow path",
     hasSourceArrow: false,
     hasTargetArrow: false,
     detourDistance: 100,
     detourDirection: -Math.PI / 2,
-    portCycleRadius: 30,
-    portCycleSmallRadius: 10,
+    arrowOffset: 10,
+    cycleSquareSide: 50,
+    roundness: 3,
   });
 };
 
-describe("BezierEdgeController", () => {
+describe("StraightEdgeController", () => {
   it("should emit model change", () => {
     const controller = createController();
 
@@ -71,7 +71,7 @@ describe("BezierEdgeController", () => {
     });
 
     expect(controller.view.line.getAttribute("d")).toBe(
-      "M 50 50 L 60 50 M 60 50 C 160 50, 40 150, 140 150 M 140 150 L 150 150",
+      "M 50 50 L 67 50 C 70 50 70 50 71.54348726628258 52.57247877713763 L 128.45651273371743 147.42752122286237 C 130 150 130 150 133 150 L 150 150",
     );
   });
 
@@ -97,7 +97,7 @@ describe("BezierEdgeController", () => {
     });
 
     expect(controller.view.line.getAttribute("d")).toBe(
-      "M 150 50 L 160 50 C 260 50 160 -50 100 -50 C 40.00000000000001 -50 -60 50 40 50 L 50 50",
+      "M 150 50 L 167 50 C 170 50 170 50 170 47 L 170 -47 C 170 -50 170 -50 167 -50 L 33.00000000000001 -50 C 30.000000000000007 -50 30.000000000000007 -50 30.000000000000007 -47 L 30 47 C 30 50 30 50 33 50 L 50 50",
     );
   });
 
@@ -123,7 +123,7 @@ describe("BezierEdgeController", () => {
     });
 
     expect(controller.view.line.getAttribute("d")).toBe(
-      "M 50 50 L 60 50 M 60 50 A 10 10 0 0 1 69.68245836551854 57.5 A 30 30 0 1 0 69.68245836551854 42.5 A 10 10 0 0 1 60 50",
+      "M 50 50 L 60 50 M 60 50 L 67 50 C 70 50 70 50 70 53 L 70 97 C 70 100 70 100 73 100 L 167 100 C 170 100 170 100 170 97 L 170 3 C 170 0 170 0 167 0 L 73 0 C 70 0 70 0 70 3 L 70 47 C 70 50 70 50 67 50 L 60 50",
     );
   });
 });

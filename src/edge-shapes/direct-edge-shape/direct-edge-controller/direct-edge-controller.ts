@@ -5,7 +5,10 @@ import {
 } from "../../shared";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import { DirectEdgeControllerParams } from "./direct-edge-controller-params";
-import { DirectEdgeModel } from "../direct-edge-model";
+import {
+  DirectEdgeModel,
+  DirectEdgeModelShapeParams,
+} from "../direct-edge-model";
 
 export class DirectEdgeController {
   public readonly view: StructuredEdgeView;
@@ -14,6 +17,8 @@ export class DirectEdgeController {
 
   private readonly modelChangeEmitter: EventEmitter<DirectEdgeModel>;
 
+  private readonly shapeParams: DirectEdgeModelShapeParams;
+
   public constructor(private readonly params: DirectEdgeControllerParams) {
     this.view = new StructuredEdgeView({
       color: this.params.color,
@@ -21,6 +26,15 @@ export class DirectEdgeController {
       hasSourceArrow: this.params.hasSourceArrow,
       hasTargetArrow: this.params.hasTargetArrow,
     });
+
+    this.shapeParams = {
+      sourceOffsetFn: this.params.sourceOffsetFn,
+      targetOffsetFn: this.params.targetOffsetFn,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+    };
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<DirectEdgeModel>();
@@ -31,14 +45,7 @@ export class DirectEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new DirectEdgeModel(params, {
-      sourceOffsetFn: this.params.sourceOffsetFn,
-      targetOffsetFn: this.params.targetOffsetFn,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-    });
+    const model = new DirectEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }
