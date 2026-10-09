@@ -13,7 +13,7 @@ import {
 } from "../../shared";
 import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
-import { PathEdgeModelShapeParams } from "@/edge-shapes/shared/path-edge-model";
+import { PathEdgeModelShapeParams } from "../../shared";
 
 export class BezierEdgeController {
   public readonly view: StructuredEdgeView;

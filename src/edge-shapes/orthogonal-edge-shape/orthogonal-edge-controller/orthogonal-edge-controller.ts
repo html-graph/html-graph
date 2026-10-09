@@ -14,6 +14,7 @@ import {
 import { OrthogonalEdgeModel } from "../orthogonal-edge-model";
 import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-params";
 import { orthogonalizeDirection } from "../orthogonalize-direction";
+import { PathEdgeModelShapeParams } from "../../shared";
 
 export class OrthogonalEdgeController {
   public readonly view: StructuredEdgeView;
@@ -60,6 +61,8 @@ export class OrthogonalEdgeController {
       roundness: this.params.roundness,
     });
 
+  private readonly shapeParams: PathEdgeModelShapeParams;
+
   public constructor(private readonly params: OrthogonalEdgeControllerParams) {
     this.view = new StructuredEdgeView({
       color: params.color,
@@ -67,6 +70,17 @@ export class OrthogonalEdgeController {
       hasSourceArrow: params.hasSourceArrow,
       hasTargetArrow: params.hasTargetArrow,
     });
+
+    this.shapeParams = {
+      createLinePath: this.createLinePath,
+      createNodeCyclePath: this.createNodeCyclePath,
+      createPortCyclePath: this.createPortCyclePath,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
+      arrowRenderer: this.params.arrowRenderer,
+      arrowLength: this.params.arrowLength,
+      padding: svgPadding,
+    };
 
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<OrthogonalEdgeModel>();
@@ -91,16 +105,7 @@ export class OrthogonalEdgeController {
           direction: orthogonalizeDirection(to.direction),
         },
       },
-      {
-        createLinePath: this.createLinePath,
-        createNodeCyclePath: this.createNodeCyclePath,
-        createPortCyclePath: this.createPortCyclePath,
-        hasSourceArrow: this.params.hasSourceArrow,
-        hasTargetArrow: this.params.hasTargetArrow,
-        arrowRenderer: this.params.arrowRenderer,
-        arrowLength: this.params.arrowLength,
-        padding: svgPadding,
-      },
+      this.shapeParams,
     );
 
     this.modelChangeEmitter.emit(model);
