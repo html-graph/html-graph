@@ -10,11 +10,11 @@ import {
   StructuredEdgeView,
   updateStructuredView,
   PathEdgeModel,
+  PathEdgeModelShapeParams,
 } from "../../shared";
 import { OrthogonalEdgeModel } from "../orthogonal-edge-model";
 import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-params";
 import { orthogonalizeDirection } from "../orthogonalize-direction";
-import { PathEdgeModelShapeParams } from "../../shared";
 
 export class OrthogonalEdgeController {
   public readonly view: StructuredEdgeView;

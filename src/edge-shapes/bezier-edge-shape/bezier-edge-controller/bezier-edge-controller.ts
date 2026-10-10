@@ -10,10 +10,10 @@ import {
   updateStructuredView,
   PathEdgeModel,
   svgPadding,
+  PathEdgeModelShapeParams,
 } from "../../shared";
 import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
-import { PathEdgeModelShapeParams } from "../../shared";
 
 export class BezierEdgeController {
   public readonly view: StructuredEdgeView;

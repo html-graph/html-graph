@@ -9,11 +9,11 @@ import {
   StructuredEdgeView,
   PathEdgeModel,
   updateStructuredView,
+  PathEdgeModelShapeParams,
 } from "../../shared";
 import { StraightEdgeModel } from "../straight-edge-model";
 import { StraightEdgeControllerParams } from "./straight-edge-controller-params";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
-import { PathEdgeModelShapeParams } from "../../shared";
 
 export class StraightEdgeController {
   public readonly view: StructuredEdgeView;
