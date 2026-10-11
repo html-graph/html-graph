@@ -8,9 +8,11 @@ import {
   svgPadding,
   StructuredEdgeView,
   updateStructuredView,
-  PathEdgeModelShapeParams,
 } from "../../shared";
-import { StraightEdgeModel } from "../straight-edge-model";
+import {
+  StraightEdgeModel,
+  StraightEdgeModelShapeParams,
+} from "../straight-edge-model";
 import { StraightEdgeControllerParams } from "./straight-edge-controller-params";
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 
@@ -60,7 +62,7 @@ export class StraightEdgeController {
       roundness: this.params.roundness,
     });
 
-  private readonly shapeParams: PathEdgeModelShapeParams;
+  private readonly shapeParams: StraightEdgeModelShapeParams;
 
   public constructor(private readonly params: StraightEdgeControllerParams) {
     this.view = new StructuredEdgeView({

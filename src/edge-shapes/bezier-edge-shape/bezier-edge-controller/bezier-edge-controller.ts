@@ -9,10 +9,12 @@ import {
   StructuredEdgeView,
   updateStructuredView,
   svgPadding,
-  PathEdgeModelShapeParams,
 } from "../../shared";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
-import { BezierEdgeModel } from "../bezier-edge-model";
+import {
+  BezierEdgeModel,
+  BezierEdgeModelShapeParams,
+} from "../bezier-edge-model";
 
 export class BezierEdgeController {
   public readonly view: StructuredEdgeView;
@@ -57,7 +59,7 @@ export class BezierEdgeController {
       curvature: this.params.curvature,
     });
 
-  private readonly shapeParams: PathEdgeModelShapeParams;
+  private readonly shapeParams: BezierEdgeModelShapeParams;
 
   public constructor(private readonly params: BezierEdgeControllerParams) {
     this.view = new StructuredEdgeView({

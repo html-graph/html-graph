@@ -9,9 +9,11 @@ import {
   svgPadding,
   StructuredEdgeView,
   updateStructuredView,
-  PathEdgeModelShapeParams,
 } from "../../shared";
-import { OrthogonalEdgeModel } from "../orthogonal-edge-model";
+import {
+  OrthogonalEdgeModel,
+  OrthogonalEdgeModelShapeParams,
+} from "../orthogonal-edge-model";
 import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-params";
 import { orthogonalizeDirection } from "../orthogonalize-direction";
 
@@ -60,7 +62,7 @@ export class OrthogonalEdgeController {
       roundness: this.params.roundness,
     });
 
-  private readonly shapeParams: PathEdgeModelShapeParams;
+  private readonly shapeParams: OrthogonalEdgeModelShapeParams;
 
   public constructor(private readonly params: OrthogonalEdgeControllerParams) {
     this.view = new StructuredEdgeView({

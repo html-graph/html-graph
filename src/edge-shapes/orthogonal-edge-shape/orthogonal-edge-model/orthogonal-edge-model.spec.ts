@@ -6,7 +6,6 @@ import {
   BezierEdgePath,
   CycleCircleEdgePath,
   DetourBezierEdgePath,
-  PathEdgeModelShapeParams,
 } from "../../shared";
 import { OrthogonalEdgeModelShapeParams } from "./orthogonal-edge-model-shape-params";
 import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
@@ -14,7 +13,7 @@ import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
 const createShapeParams = (params?: {
   hasSourceArrow?: boolean;
   hasTargetArrow?: boolean;
-}): PathEdgeModelShapeParams => {
+}): OrthogonalEdgeModelShapeParams => {
   return {
     createLinePath: (from, to) =>
       new BezierEdgePath({
