@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  EdgeRenderParams,
-  ConnectionCategory,
-  BezierEdgePath,
-  CycleCircleEdgePath,
-  DetourBezierEdgePath,
-} from "../../shared";
+import { EdgeRenderParams, ConnectionCategory } from "../../shared";
 import { OrthogonalEdgeModelShapeParams } from "./orthogonal-edge-model-shape-params";
 import { OrthogonalEdgeModel } from "./orthogonal-edge-model";
 
@@ -14,34 +8,14 @@ const createShapeParams = (params?: {
   hasTargetArrow?: boolean;
 }): OrthogonalEdgeModelShapeParams => {
   return {
-    createLinePath: (from, to) =>
-      new BezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-      }),
-    createNodeCyclePath: (from, to) =>
-      new DetourBezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-        detourDistance: 100,
-        detourDir: 0,
-      }),
-    createPortCyclePath: (from, to) =>
-      new CycleCircleEdgePath({
-        from,
-        to,
-        radius: 10,
-        smallRadius: 2,
-        arrowLength: 10,
-      }),
     hasSourceArrow: params?.hasSourceArrow ?? false,
     hasTargetArrow: params?.hasTargetArrow ?? false,
     arrowRenderer: () => "",
     arrowLength: 10,
+    arrowOffset: 5,
+    roundness: 5,
+    cycleSquareSide: 50,
+    detourDistance: 100,
   };
 };
 
@@ -100,7 +74,7 @@ describe("OrthogonalEdgeModel", () => {
     const model = new OrthogonalEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 C 150 50, 50 50, 140 50 M 140 50 L 150 50",
+      "M 50 50 L 95 50 C 100 50 100 50 100 50 L 100 50 C 100 50 100 50 105 50 L 150 50",
     );
   });
 
@@ -118,7 +92,7 @@ describe("OrthogonalEdgeModel", () => {
     const model = new OrthogonalEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 60 50 C 150 50, 50 50, 140 50 M 140 50 L 150 50",
+      "M 60 50 L 95 50 C 100 50 100 50 100 50 L 100 50 C 100 50 100 50 105 50 L 150 50",
     );
   });
 
@@ -136,7 +110,7 @@ describe("OrthogonalEdgeModel", () => {
     const model = new OrthogonalEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 C 150 50, 50 50, 140 50",
+      "M 50 50 L 95 50 C 100 50 100 50 100 50 L 100 50 C 100 50 100 50 105 50 L 140 50",
     );
   });
 
@@ -166,7 +140,7 @@ describe("OrthogonalEdgeModel", () => {
     const model = new OrthogonalEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 A 2 2 0 0 1 61.97202659436654 51.666666666666664 A 10 10 0 1 0 61.97202659436654 48.333333333333336 A 2 2 0 0 1 60 50",
+      "M 50 50 L 60 50 M 60 50 L 60 50 C 65 50 65 50 65 55 L 65 95 C 65 100 65 100 70 100 L 160 100 C 165 100 165 100 165 95 L 165 5 C 165 0 165 0 160 0 L 70 0 C 65 0 65 0 65 5 L 65 45 C 65 50 65 50 60 50 L 60 50",
     );
   });
 });

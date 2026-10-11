@@ -65,10 +65,10 @@ export class StraightEdgeController {
 
   public constructor(private readonly params: StraightEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: params.color,
-      width: params.width,
-      hasSourceArrow: params.hasSourceArrow,
-      hasTargetArrow: params.hasTargetArrow,
+      color: this.params.color,
+      width: this.params.width,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
     });
 
     this.shapeParams = {

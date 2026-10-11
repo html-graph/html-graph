@@ -1,11 +1,6 @@
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import {
   EdgeRenderParams,
-  CycleSquareEdgePath,
-  DetourOrthogonalEdgePath,
-  OrthogonalEdgePath,
-  EdgePathFactory,
-  PathPort,
   StructuredEdgeView,
   updateStructuredView,
 } from "../../shared";
@@ -22,62 +17,25 @@ export class OrthogonalEdgeController {
 
   private readonly modelChangeEmitter: EventEmitter<OrthogonalEdgeModel>;
 
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleSquareEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      side: this.params.cycleSquareSide,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourOrthogonalEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      detourDistance: this.params.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new OrthogonalEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-    });
-
   private readonly shapeParams: OrthogonalEdgeModelShapeParams;
 
   public constructor(private readonly params: OrthogonalEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: params.color,
-      width: params.width,
-      hasSourceArrow: params.hasSourceArrow,
-      hasTargetArrow: params.hasTargetArrow,
+      color: this.params.color,
+      width: this.params.width,
+      hasSourceArrow: this.params.hasSourceArrow,
+      hasTargetArrow: this.params.hasTargetArrow,
     });
 
     this.shapeParams = {
-      createLinePath: this.createLinePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createPortCyclePath: this.createPortCyclePath,
       hasSourceArrow: this.params.hasSourceArrow,
       hasTargetArrow: this.params.hasTargetArrow,
       arrowRenderer: this.params.arrowRenderer,
       arrowLength: this.params.arrowLength,
+      arrowOffset: this.params.arrowOffset,
+      roundness: this.params.roundness,
+      cycleSquareSide: this.params.cycleSquareSide,
+      detourDistance: this.params.detourDistance,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
