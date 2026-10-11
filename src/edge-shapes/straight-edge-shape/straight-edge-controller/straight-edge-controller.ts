@@ -1,10 +1,5 @@
 import {
   EdgeRenderParams,
-  CycleSquareEdgePath,
-  DetourStraightEdgePath,
-  StraightEdgePath,
-  EdgePathFactory,
-  PathPort,
   StructuredEdgeView,
   updateStructuredView,
 } from "../../shared";
@@ -22,45 +17,6 @@ export class StraightEdgeController {
 
   private readonly modelChangeEmitter: EventEmitter<StraightEdgeModel>;
 
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleSquareEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      side: this.params.cycleSquareSide,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourStraightEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      detourDir: this.params.detourDirection,
-      detourDistance: this.params.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new StraightEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-    });
-
   private readonly shapeParams: StraightEdgeModelShapeParams;
 
   public constructor(private readonly params: StraightEdgeControllerParams) {
@@ -72,13 +28,15 @@ export class StraightEdgeController {
     });
 
     this.shapeParams = {
-      createLinePath: this.createLinePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createPortCyclePath: this.createPortCyclePath,
       hasSourceArrow: this.params.hasSourceArrow,
       hasTargetArrow: this.params.hasTargetArrow,
       arrowRenderer: this.params.arrowRenderer,
       arrowLength: this.params.arrowLength,
+      arrowOffset: this.params.arrowOffset,
+      roundness: this.params.roundness,
+      cycleSquareSide: this.params.cycleSquareSide,
+      detourDirection: this.params.detourDirection,
+      detourDistance: this.params.detourDistance,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =

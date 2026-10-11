@@ -9,6 +9,10 @@ import {
   EdgePathFactory,
   EdgePath,
   svgPadding,
+  PathPort,
+  CycleSquareEdgePath,
+  DetourStraightEdgePath,
+  StraightEdgePath,
 } from "../../shared";
 import { StraightEdgeModelShapeParams } from "./straight-edge-model-shape-params";
 
@@ -24,6 +28,53 @@ export class StraightEdgeModel implements StructuredEdgeModel {
   public readonly shapeSourcePoint: Point;
 
   public readonly shapeTargetPoint: Point;
+
+  private readonly portCyclePathFn: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
+    new CycleSquareEdgePath({
+      from,
+      to,
+      arrowLength: this.shapeParams.arrowLength,
+      arrowOffset: this.shapeParams.arrowOffset,
+      roundness: this.shapeParams.roundness,
+      side: this.shapeParams.cycleSquareSide,
+    });
+
+  private readonly nodeCyclePathFn: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
+    new DetourStraightEdgePath({
+      from,
+      to,
+      arrowLength: this.shapeParams.arrowLength,
+      arrowOffset: this.shapeParams.arrowOffset,
+      roundness: this.shapeParams.roundness,
+      detourDir: this.shapeParams.detourDirection,
+      detourDistance: this.shapeParams.detourDistance,
+    });
+
+  private readonly linePathFn: EdgePathFactory = (
+    from: PathPort,
+    to: PathPort,
+  ) =>
+    new StraightEdgePath({
+      from,
+      to,
+      arrowLength: this.shapeParams.arrowLength,
+      arrowOffset: this.shapeParams.arrowOffset,
+      roundness: this.shapeParams.roundness,
+    });
+
+  private readonly pathFnMapping: {
+    [key in ConnectionCategory]: EdgePathFactory;
+  } = {
+    [ConnectionCategory.PortCycle]: this.portCyclePathFn,
+    [ConnectionCategory.NodeCycle]: this.nodeCyclePathFn,
+    [ConnectionCategory.Line]: this.linePathFn,
+  };
 
   private readonly edgePath: EdgePath;
 
@@ -46,13 +97,7 @@ export class StraightEdgeModel implements StructuredEdgeModel {
     );
     const targetVector = createDirectionVector(this.renderParams.to.direction);
 
-    const pathFnMapping: { [key in ConnectionCategory]: EdgePathFactory } = {
-      [ConnectionCategory.PortCycle]: this.shapeParams.createPortCyclePath,
-      [ConnectionCategory.NodeCycle]: this.shapeParams.createNodeCyclePath,
-      [ConnectionCategory.Line]: this.shapeParams.createLinePath,
-    };
-
-    const createPathFn = pathFnMapping[this.renderParams.category];
+    const createPathFn = this.pathFnMapping[this.renderParams.category];
 
     const edgePath = createPathFn(
       {

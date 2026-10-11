@@ -126,13 +126,13 @@ export class OrthogonalEdgeModel implements StructuredEdgeModel {
     }
 
     if (this.shapeParams.hasTargetArrow) {
-      const adjustedtargetVector: Point =
+      const adjustedTargetVector: Point =
         this.renderParams.category === ConnectionCategory.PortCycle
           ? sourceVector
           : { x: -targetVector.x, y: -targetVector.y };
 
       this.targetArrowPath = this.shapeParams.arrowRenderer({
-        direction: adjustedtargetVector,
+        direction: adjustedTargetVector,
         shift: to,
         arrowLength: this.shapeParams.arrowLength,
       });

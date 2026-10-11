@@ -1,11 +1,13 @@
-import { ArrowRenderer, EdgePathFactory } from "../../shared";
+import { ArrowRenderer } from "../../shared";
 
 export interface StraightEdgeModelShapeParams {
-  readonly createPortCyclePath: EdgePathFactory;
-  readonly createNodeCyclePath: EdgePathFactory;
-  readonly createLinePath: EdgePathFactory;
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
   readonly arrowRenderer: ArrowRenderer;
   readonly arrowLength: number;
+  readonly arrowOffset: number;
+  readonly roundness: number;
+  readonly cycleSquareSide: number;
+  readonly detourDirection: number;
+  readonly detourDistance: number;
 }
