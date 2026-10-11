@@ -20,9 +20,9 @@ export class CoreHtmlView implements HtmlView {
   private readonly attachedNodeIds = new Set<Identifier>();
 
   private readonly applyTransform = (): void => {
-    const m = this.viewportStore.getContentMatrix();
+    const { scale, x, y } = this.viewportStore.getContentMatrix();
 
-    this.container.style.transform = `matrix(${m.scale}, 0, 0, ${m.scale}, ${m.x}, ${m.y})`;
+    this.container.style.transform = `matrix(${scale}, 0, 0, ${scale}, ${x}, ${y})`;
   };
 
   public constructor(
