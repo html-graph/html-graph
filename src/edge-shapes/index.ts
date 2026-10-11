@@ -12,26 +12,22 @@ export type {
 } from "./shared";
 export { ConnectionCategory } from "./shared";
 
-export { BezierEdgeShape } from "./bezier-edge-shape";
-export type { BezierEdgeParams, BezierEdgeModel } from "./bezier-edge-shape";
+export { BezierEdgeShape, BezierEdgeModel } from "./bezier-edge-shape";
+export type { BezierEdgeParams } from "./bezier-edge-shape";
 
-export { StraightEdgeShape } from "./straight-edge-shape";
-export type {
-  StraightEdgeParams,
-  StraightEdgeModel,
-} from "./straight-edge-shape";
+export { StraightEdgeShape, StraightEdgeModel } from "./straight-edge-shape";
+export type { StraightEdgeParams } from "./straight-edge-shape";
 
-export { OrthogonalEdgeShape } from "./orthogonal-edge-shape";
-export type {
-  OrthogonalEdgeParams,
+export {
+  OrthogonalEdgeShape,
   OrthogonalEdgeModel,
 } from "./orthogonal-edge-shape";
+export type { OrthogonalEdgeParams } from "./orthogonal-edge-shape";
 
-export { DirectEdgeShape } from "./direct-edge-shape";
+export { DirectEdgeShape, DirectEdgeModel } from "./direct-edge-shape";
 export type {
   DirectEdgeParams,
   PortOffset,
   PortOffsetFn,
   PortOffsetFnParams,
-  DirectEdgeModel,
 } from "./direct-edge-shape";

@@ -1,3 +1,3 @@
 export { BezierEdgeShape } from "./bezier-edge-shape";
 export type { BezierEdgeParams } from "./bezier-edge-params";
-export type { BezierEdgeModel } from "./bezier-edge-model";
+export { BezierEdgeModel } from "./bezier-edge-model";

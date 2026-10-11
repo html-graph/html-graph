@@ -7,7 +7,6 @@ import {
   PathPort,
   svgPadding,
   StructuredEdgeView,
-  PathEdgeModel,
   updateStructuredView,
   PathEdgeModelShapeParams,
 } from "../../shared";
@@ -82,7 +81,8 @@ export class StraightEdgeController {
       padding: svgPadding,
     };
 
-    [this.modelChangeEmitter, this.onModelChange] = createPair<PathEdgeModel>();
+    [this.modelChangeEmitter, this.onModelChange] =
+      createPair<StraightEdgeModel>();
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
@@ -90,7 +90,7 @@ export class StraightEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new PathEdgeModel(params, this.shapeParams);
+    const model = new StraightEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }

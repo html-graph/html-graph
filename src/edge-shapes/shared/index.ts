@@ -55,3 +55,5 @@ export type { EdgeBox } from "./edge-box";
 export { configureMidpoint } from "./configure-midpoint";
 
 export { configureInteractiveEdge } from "./configure-interactive-edge";
+
+export { createDirectionVector } from "./create-direction-vector";

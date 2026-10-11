@@ -9,7 +9,6 @@ import {
   svgPadding,
   StructuredEdgeView,
   updateStructuredView,
-  PathEdgeModel,
   PathEdgeModelShapeParams,
 } from "../../shared";
 import { OrthogonalEdgeModel } from "../orthogonal-edge-model";
@@ -93,7 +92,7 @@ export class OrthogonalEdgeController {
   public render(params: EdgeRenderParams): void {
     const { category, from, to } = params;
 
-    const model = new PathEdgeModel(
+    const model = new OrthogonalEdgeModel(
       {
         category,
         from: {

@@ -3,7 +3,7 @@ import { EdgeBox } from "../edge-box";
 import { StructuredEdgeModel } from "../structured-edge-shape-model";
 import { EdgeRenderParams } from "../edge-render-params";
 import { PathEdgeModelShapeParams } from "./path-edge-model-shape-params";
-import { createDirectionVector } from "./create-direction-vector";
+import { createDirectionVector } from "../create-direction-vector";
 import { createEdgeRectangle } from "../geometry";
 import { ConnectionCategory } from "../connection-category";
 

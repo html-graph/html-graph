@@ -8,12 +8,11 @@ import {
   PathPort,
   StructuredEdgeView,
   updateStructuredView,
-  PathEdgeModel,
   svgPadding,
   PathEdgeModelShapeParams,
 } from "../../shared";
-import { BezierEdgeModel } from "../bezier-edge-model";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
+import { BezierEdgeModel } from "../bezier-edge-model";
 
 export class BezierEdgeController {
   public readonly view: StructuredEdgeView;
@@ -88,7 +87,7 @@ export class BezierEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new PathEdgeModel(params, this.shapeParams);
+    const model = new BezierEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }
