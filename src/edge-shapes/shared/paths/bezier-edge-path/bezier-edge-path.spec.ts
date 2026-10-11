@@ -81,6 +81,6 @@ describe("BezierEdgePath", () => {
       curvature: 100,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 0, y: 0 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 0, y: 0 });
   });
 });

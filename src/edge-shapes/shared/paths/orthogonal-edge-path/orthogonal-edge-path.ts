@@ -8,7 +8,7 @@ import { PathPort } from "../../path-port";
 export class OrthogonalEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly midpoint: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -57,5 +57,9 @@ export class OrthogonalEdgePath implements EdgePath {
     this.path = createRoundedPath(line.points, roundness);
 
     this.midpoint = line.midpoint;
+  }
+
+  public calculateMidpoint(): Point {
+    return this.midpoint;
   }
 }

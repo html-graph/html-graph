@@ -6,7 +6,6 @@ import {
   OrthogonalEdgePath,
   EdgePathFactory,
   PathPort,
-  svgPadding,
   StructuredEdgeView,
   updateStructuredView,
 } from "../../shared";
@@ -15,7 +14,6 @@ import {
   OrthogonalEdgeModelShapeParams,
 } from "../orthogonal-edge-model";
 import { OrthogonalEdgeControllerParams } from "./orthogonal-edge-controller-params";
-import { orthogonalizeDirection } from "../orthogonalize-direction";
 
 export class OrthogonalEdgeController {
   public readonly view: StructuredEdgeView;
@@ -80,7 +78,6 @@ export class OrthogonalEdgeController {
       hasTargetArrow: this.params.hasTargetArrow,
       arrowRenderer: this.params.arrowRenderer,
       arrowLength: this.params.arrowLength,
-      padding: svgPadding,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
@@ -92,22 +89,7 @@ export class OrthogonalEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const { category, from, to } = params;
-
-    const model = new OrthogonalEdgeModel(
-      {
-        category,
-        from: {
-          ...from,
-          direction: orthogonalizeDirection(from.direction),
-        },
-        to: {
-          ...to,
-          direction: orthogonalizeDirection(to.direction),
-        },
-      },
-      this.shapeParams,
-    );
+    const model = new OrthogonalEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }

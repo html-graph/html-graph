@@ -4,7 +4,6 @@ export interface OrthogonalEdgeModelShapeParams {
   readonly createPortCyclePath: EdgePathFactory;
   readonly createNodeCyclePath: EdgePathFactory;
   readonly createLinePath: EdgePathFactory;
-  readonly padding: number;
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
   readonly arrowRenderer: ArrowRenderer;

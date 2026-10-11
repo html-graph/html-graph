@@ -89,6 +89,6 @@ describe("CycleSquareEdgePath", () => {
       roundness: 10,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 200, y: 100 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 200, y: 100 });
   });
 });

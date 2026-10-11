@@ -6,7 +6,7 @@ import { PathPort } from "../../path-port";
 export class DetourBezierEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly midpoint: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -97,5 +97,9 @@ export class DetourBezierEdgePath implements EdgePath {
     ].join(" ");
 
     this.midpoint = center;
+  }
+
+  public calculateMidpoint(): Point {
+    return this.midpoint;
   }
 }

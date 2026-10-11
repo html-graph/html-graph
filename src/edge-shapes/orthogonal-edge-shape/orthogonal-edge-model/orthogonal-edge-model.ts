@@ -7,8 +7,11 @@ import {
   ConnectionCategory,
   createDirectionVector,
   EdgePathFactory,
+  EdgePath,
+  svgPadding,
 } from "../../shared";
 import { OrthogonalEdgeModelShapeParams } from "./orthogonal-edge-model-shape-params";
+import { orthogonalizeDirection } from "./orthogonalize-direction";
 
 export class OrthogonalEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;
@@ -23,72 +26,76 @@ export class OrthogonalEdgeModel implements StructuredEdgeModel {
 
   public readonly shapeTargetPoint: Point;
 
-  private readonly midpoint: Point;
+  private readonly edgePath: EdgePath;
 
   public constructor(
-    renderParams: EdgeRenderParams,
-    shapeParams: OrthogonalEdgeModelShapeParams,
+    private readonly renderParams: EdgeRenderParams,
+    private readonly shapeParams: OrthogonalEdgeModelShapeParams,
   ) {
     const { box, from, to } = createEdgeRectangle(
-      renderParams.from,
-      renderParams.to,
-      shapeParams.padding,
+      this.renderParams.from,
+      this.renderParams.to,
+      svgPadding,
     );
 
     this.box = box;
     this.shapeSourcePoint = from;
     this.shapeTargetPoint = to;
 
-    const sourceDirection = createDirectionVector(renderParams.from.direction);
-    const targetDirection = createDirectionVector(renderParams.to.direction);
+    const sourceVector = createDirectionVector(
+      orthogonalizeDirection(this.renderParams.from.direction),
+    );
 
-    const targetVect: Point =
-      renderParams.category === ConnectionCategory.PortCycle
-        ? sourceDirection
-        : { x: -targetDirection.x, y: -targetDirection.y };
+    const targetVector = createDirectionVector(
+      orthogonalizeDirection(this.renderParams.to.direction),
+    );
 
     const pathFnMapping: { [key in ConnectionCategory]: EdgePathFactory } = {
-      [ConnectionCategory.PortCycle]: shapeParams.createPortCyclePath,
-      [ConnectionCategory.NodeCycle]: shapeParams.createNodeCyclePath,
-      [ConnectionCategory.Line]: shapeParams.createLinePath,
+      [ConnectionCategory.PortCycle]: this.shapeParams.createPortCyclePath,
+      [ConnectionCategory.NodeCycle]: this.shapeParams.createNodeCyclePath,
+      [ConnectionCategory.Line]: this.shapeParams.createLinePath,
     };
 
-    const createPathFn = pathFnMapping[renderParams.category];
+    const createPathFn = pathFnMapping[this.renderParams.category];
 
-    const edgePath = createPathFn(
+    this.edgePath = createPathFn(
       {
         coords: from,
-        dir: sourceDirection,
-        hasArrow: shapeParams.hasSourceArrow,
+        dir: sourceVector,
+        hasArrow: this.shapeParams.hasSourceArrow,
       },
       {
         coords: to,
-        dir: targetDirection,
-        hasArrow: shapeParams.hasTargetArrow,
+        dir: targetVector,
+        hasArrow: this.shapeParams.hasTargetArrow,
       },
     );
 
-    this.linePath = edgePath.path;
-    this.midpoint = edgePath.midpoint;
+    this.linePath = this.edgePath.path;
 
-    if (shapeParams.hasSourceArrow) {
-      this.sourceArrowPath = shapeParams.arrowRenderer({
-        direction: sourceDirection,
+    if (this.shapeParams.hasSourceArrow) {
+      this.sourceArrowPath = this.shapeParams.arrowRenderer({
+        direction: sourceVector,
         shift: from,
-        arrowLength: shapeParams.arrowLength,
+        arrowLength: this.shapeParams.arrowLength,
       });
     }
 
-    if (shapeParams.hasTargetArrow) {
-      this.targetArrowPath = shapeParams.arrowRenderer({
-        direction: targetVect,
+    if (this.shapeParams.hasTargetArrow) {
+      const adjustedtargetVector: Point =
+        this.renderParams.category === ConnectionCategory.PortCycle
+          ? sourceVector
+          : { x: -targetVector.x, y: -targetVector.y };
+
+      this.targetArrowPath = this.shapeParams.arrowRenderer({
+        direction: adjustedtargetVector,
         shift: to,
-        arrowLength: shapeParams.arrowLength,
+        arrowLength: this.shapeParams.arrowLength,
       });
     }
   }
 
   public calculateMidpoint(): Point {
-    return this.midpoint;
+    return this.edgePath.calculateMidpoint();
   }
 }

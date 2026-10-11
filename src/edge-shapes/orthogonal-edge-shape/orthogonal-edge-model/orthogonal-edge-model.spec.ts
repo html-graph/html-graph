@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   EdgeRenderParams,
   ConnectionCategory,
-  svgPadding,
   BezierEdgePath,
   CycleCircleEdgePath,
   DetourBezierEdgePath,
@@ -43,7 +42,6 @@ const createShapeParams = (params?: {
     hasTargetArrow: params?.hasTargetArrow ?? false,
     arrowRenderer: () => "",
     arrowLength: 10,
-    padding: svgPadding,
   };
 };
 

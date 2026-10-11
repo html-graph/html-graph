@@ -5,7 +5,6 @@ import {
   StraightEdgePath,
   EdgePathFactory,
   PathPort,
-  svgPadding,
   StructuredEdgeView,
   updateStructuredView,
 } from "../../shared";
@@ -80,7 +79,6 @@ export class StraightEdgeController {
       hasTargetArrow: this.params.hasTargetArrow,
       arrowRenderer: this.params.arrowRenderer,
       arrowLength: this.params.arrowLength,
-      padding: svgPadding,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =

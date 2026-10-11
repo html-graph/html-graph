@@ -89,6 +89,6 @@ describe("DetourBezierEdgePath", () => {
       curvature: 100,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 150, y: 100 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 150, y: 100 });
   });
 });

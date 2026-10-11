@@ -1,12 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  EdgeRenderParams,
-  ConnectionCategory,
-  svgPadding,
-  BezierEdgePath,
-  CycleCircleEdgePath,
-  DetourBezierEdgePath,
-} from "../../shared";
+import { EdgeRenderParams, ConnectionCategory } from "../../shared";
 import { BezierEdgeModelShapeParams } from "./bezier-edge-model-shape-params";
 import { BezierEdgeModel } from "./bezier-edge-model";
 
@@ -15,35 +8,15 @@ const createShapeParams = (params?: {
   hasTargetArrow?: boolean;
 }): BezierEdgeModelShapeParams => {
   return {
-    createLinePath: (from, to) =>
-      new BezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-      }),
-    createNodeCyclePath: (from, to) =>
-      new DetourBezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-        detourDistance: 100,
-        detourDir: 0,
-      }),
-    createPortCyclePath: (from, to) =>
-      new CycleCircleEdgePath({
-        from,
-        to,
-        radius: 10,
-        smallRadius: 2,
-        arrowLength: 10,
-      }),
     hasSourceArrow: params?.hasSourceArrow ?? false,
     hasTargetArrow: params?.hasTargetArrow ?? false,
     arrowRenderer: () => "",
     arrowLength: 10,
-    padding: svgPadding,
+    portCycleRadius: 10,
+    portCycleSmallRadius: 2,
+    curvature: 90,
+    detourDistance: 100,
+    detourDirection: 0,
   };
 };
 

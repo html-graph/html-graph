@@ -1,14 +1,8 @@
 import { createPair, EventEmitter, EventHandler } from "@/event-subject";
 import {
   EdgeRenderParams,
-  BezierEdgePath,
-  DetourBezierEdgePath,
-  CycleCircleEdgePath,
-  EdgePathFactory,
-  PathPort,
   StructuredEdgeView,
   updateStructuredView,
-  svgPadding,
 } from "../../shared";
 import { BezierEdgeControllerParams } from "./bezier-edge-controller-params";
 import {
@@ -23,42 +17,6 @@ export class BezierEdgeController {
 
   private readonly modelChangeEmitter: EventEmitter<BezierEdgeModel>;
 
-  private readonly createPortCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new CycleCircleEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      radius: this.params.portCycleRadius,
-      smallRadius: this.params.portCycleSmallRadius,
-    });
-
-  private readonly createNodeCyclePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new DetourBezierEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      curvature: this.params.curvature,
-      detourDir: this.params.detourDirection,
-      detourDistance: this.params.detourDistance,
-    });
-
-  private readonly createLinePath: EdgePathFactory = (
-    from: PathPort,
-    to: PathPort,
-  ) =>
-    new BezierEdgePath({
-      from,
-      to,
-      arrowLength: this.params.arrowLength,
-      curvature: this.params.curvature,
-    });
-
   private readonly shapeParams: BezierEdgeModelShapeParams;
 
   public constructor(private readonly params: BezierEdgeControllerParams) {
@@ -70,14 +28,15 @@ export class BezierEdgeController {
     });
 
     this.shapeParams = {
-      createLinePath: this.createLinePath,
-      createNodeCyclePath: this.createNodeCyclePath,
-      createPortCyclePath: this.createPortCyclePath,
       hasSourceArrow: this.params.hasSourceArrow,
       hasTargetArrow: this.params.hasTargetArrow,
       arrowRenderer: this.params.arrowRenderer,
       arrowLength: this.params.arrowLength,
-      padding: svgPadding,
+      curvature: this.params.curvature,
+      detourDirection: this.params.detourDirection,
+      detourDistance: this.params.detourDistance,
+      portCycleRadius: this.params.portCycleRadius,
+      portCycleSmallRadius: this.params.portCycleSmallRadius,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
