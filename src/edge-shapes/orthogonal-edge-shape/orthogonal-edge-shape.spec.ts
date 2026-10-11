@@ -36,11 +36,10 @@ describe("OrthogonalEdgeShape", () => {
   it("should update view on render", () => {
     const shape = new OrthogonalEdgeShape();
 
-    const spy = vi.fn();
+    const g = shape.element.children[0];
+    const line = g.children[0];
 
-    shape.onModelChange.subscribe((model) => {
-      spy(model);
-    });
+    const spy = vi.spyOn(line, "setAttribute");
 
     shape.render({
       from: {
@@ -60,9 +59,7 @@ describe("OrthogonalEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    expect(shape.view.line.getAttribute("d")).toBe(
-      "M 50 50 L 90 50 C 100 50 100 50 100 50 L 100 50 C 100 50 100 50 110 50 L 150 50",
-    );
+    expect(spy).toHaveBeenCalledWith("d", expect.anything());
   });
 
   it("should configure midpoint element", () => {

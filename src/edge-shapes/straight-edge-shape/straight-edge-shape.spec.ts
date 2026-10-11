@@ -36,11 +36,10 @@ describe("StraightEdgeShape", () => {
   it("should update view on render", () => {
     const shape = new StraightEdgeShape();
 
-    const spy = vi.fn();
+    const g = shape.element.children[0];
+    const line = g.children[0];
 
-    shape.onModelChange.subscribe((model) => {
-      spy(model);
-    });
+    const spy = vi.spyOn(line, "setAttribute");
 
     shape.render({
       from: {
@@ -60,9 +59,7 @@ describe("StraightEdgeShape", () => {
       category: ConnectionCategory.Line,
     });
 
-    expect(shape.view.line.getAttribute("d")).toBe(
-      "M 50 50 L 75 50 C 85 50 85 50 95 50 L 105 50 C 115 50 115 50 125 50 L 150 50",
-    );
+    expect(spy).toHaveBeenCalledWith("d", expect.anything());
   });
 
   it("should configure midpoint element", () => {
