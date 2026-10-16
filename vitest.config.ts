@@ -13,6 +13,7 @@ export default defineConfig({
         functions: 100,
         lines: 100,
         statements: 100,
+        perFile: true,
       },
       exclude: ["src/**/*.mock.ts", "src/**/index.ts"],
     },
