@@ -85,6 +85,6 @@ describe("StraightEdgePath", () => {
       roundness: 10,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 150, y: 200 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 150, y: 200 });
   });
 });

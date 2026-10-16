@@ -89,6 +89,6 @@ describe("DetourHorizontalEdgePath", () => {
       detourDistance: 100,
     });
 
-    expect(edgePath.midpoint).toEqual({ x: 150, y: 400 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 150, y: 400 });
   });
 });

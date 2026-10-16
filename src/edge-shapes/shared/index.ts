@@ -29,8 +29,6 @@ export {
 } from "./paths";
 export type { EdgePath } from "./paths";
 
-export { PathEdgeModel } from "./path-edge-model";
-export type { PathEdgeModelShapeParams } from "./path-edge-model";
 export type { EdgePathFactory } from "./edge-path-factory";
 
 export { edgeConstants } from "./edge-constants";
@@ -55,3 +53,7 @@ export type { EdgeBox } from "./edge-box";
 export { configureMidpoint } from "./configure-midpoint";
 
 export { configureInteractiveEdge } from "./configure-interactive-edge";
+
+export { createDirectionVector } from "./create-direction-vector";
+
+export { adjustTargetVector } from "./adjust-target-vector";

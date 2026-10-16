@@ -61,9 +61,13 @@ export type { TransformState } from "./viewport-store";
 
 export {
   BezierEdgeShape,
+  BezierEdgeModel,
   StraightEdgeShape,
+  StraightEdgeModel,
   OrthogonalEdgeShape,
+  OrthogonalEdgeModel,
   DirectEdgeShape,
+  DirectEdgeModel,
   ConnectionCategory,
 } from "./edge-shapes";
 export type {
@@ -71,13 +75,9 @@ export type {
   EdgeRenderParams,
   EdgeRenderPort,
   BezierEdgeParams,
-  BezierEdgeModel,
   OrthogonalEdgeParams,
-  OrthogonalEdgeModel,
   StraightEdgeParams,
-  StraightEdgeModel,
   DirectEdgeParams,
-  DirectEdgeModel,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,

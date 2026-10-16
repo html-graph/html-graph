@@ -87,6 +87,6 @@ describe("CycleCircleEdgePath", () => {
 
     const x = 15 + 40 + Math.sqrt(50 * 50 - 10 * 10) + 100;
 
-    expect(edgePath.midpoint).toEqual({ x, y: 100 });
+    expect(edgePath.calculateMidpoint()).toEqual({ x, y: 100 });
   });
 });

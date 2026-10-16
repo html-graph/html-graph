@@ -7,7 +7,7 @@ import { PathPort } from "../../path-port";
 export class DetourStraightEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly midpoint: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -83,5 +83,9 @@ export class DetourStraightEdgePath implements EdgePath {
       [pba, startLineStart, startLineEnd, endLineEnd, endLineStart, pea],
       roundness,
     );
+  }
+
+  public calculateMidpoint(): Point {
+    return this.midpoint;
   }
 }

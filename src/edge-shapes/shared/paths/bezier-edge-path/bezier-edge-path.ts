@@ -9,7 +9,13 @@ const halfCube3 = 3 * halfCube;
 export class BezierEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly begin: Point;
+
+  private readonly end: Point;
+
+  private readonly bezierBegin: Point;
+
+  private readonly bezierEnd: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -19,52 +25,54 @@ export class BezierEdgePath implements EdgePath {
   }) {
     const { from, to, arrowLength, curvature } = params;
 
-    const begin = createRotatedPoint(
+    this.begin = createRotatedPoint(
       { x: from.coords.x + arrowLength, y: from.coords.y },
       from.dir,
       from.coords,
     );
 
-    const end = createRotatedPoint(
+    this.end = createRotatedPoint(
       { x: to.coords.x - arrowLength, y: to.coords.y },
       to.dir,
       to.coords,
     );
 
-    const bezierBegin: Point = {
-      x: begin.x + from.dir.x * curvature,
-      y: begin.y + from.dir.y * curvature,
+    this.bezierBegin = {
+      x: this.begin.x + from.dir.x * curvature,
+      y: this.begin.y + from.dir.y * curvature,
     };
 
-    const bezierEnd: Point = {
-      x: end.x - to.dir.x * curvature,
-      y: end.y - to.dir.y * curvature,
+    this.bezierEnd = {
+      x: this.end.x - to.dir.x * curvature,
+      y: this.end.y - to.dir.y * curvature,
     };
 
-    const centerX =
-      halfCube * begin.x +
-      halfCube3 * bezierBegin.x +
-      halfCube3 * bezierEnd.x +
-      halfCube * end.x;
-
-    const centerY =
-      halfCube * begin.y +
-      halfCube3 * bezierBegin.y +
-      halfCube3 * bezierEnd.y +
-      halfCube * end.y;
-
-    this.midpoint = { x: centerX, y: centerY };
-
-    const curve = `M ${begin.x} ${begin.y} C ${bezierBegin.x} ${bezierBegin.y}, ${bezierEnd.x} ${bezierEnd.y}, ${end.x} ${end.y}`;
+    const curve = `M ${this.begin.x} ${this.begin.y} C ${this.bezierBegin.x} ${this.bezierBegin.y}, ${this.bezierEnd.x} ${this.bezierEnd.y}, ${this.end.x} ${this.end.y}`;
 
     const preLine = from.hasArrow
       ? ""
-      : `M ${from.coords.x} ${from.coords.y} L ${begin.x} ${begin.y} `;
+      : `M ${from.coords.x} ${from.coords.y} L ${this.begin.x} ${this.begin.y} `;
 
     const postLine = to.hasArrow
       ? ""
-      : ` M ${end.x} ${end.y} L ${to.coords.x} ${to.coords.y}`;
+      : ` M ${this.end.x} ${this.end.y} L ${to.coords.x} ${to.coords.y}`;
 
     this.path = `${preLine}${curve}${postLine}`;
+  }
+
+  public calculateMidpoint(): Point {
+    const centerX =
+      halfCube * this.begin.x +
+      halfCube3 * this.bezierBegin.x +
+      halfCube3 * this.bezierEnd.x +
+      halfCube * this.end.x;
+
+    const centerY =
+      halfCube * this.begin.y +
+      halfCube3 * this.bezierBegin.y +
+      halfCube3 * this.bezierEnd.y +
+      halfCube * this.end.y;
+
+    return { x: centerX, y: centerY };
   }
 }

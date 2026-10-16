@@ -8,7 +8,7 @@ import { PathPort } from "../../path-port";
 export class DetourOrthogonalEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly midpoint: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -25,7 +25,7 @@ export class DetourOrthogonalEdgePath implements EdgePath {
       const path = new DetourHorizontalEdgePath(params);
 
       this.path = path.path;
-      this.midpoint = path.midpoint;
+      this.midpoint = path.calculateMidpoint();
       return;
     }
 
@@ -33,13 +33,17 @@ export class DetourOrthogonalEdgePath implements EdgePath {
       const path = new DetourVerticalEdgePath(params);
 
       this.path = path.path;
-      this.midpoint = path.midpoint;
+      this.midpoint = path.calculateMidpoint();
       return;
     }
 
     const path = new OrthogonalEdgePath(params);
 
     this.path = path.path;
-    this.midpoint = path.midpoint;
+    this.midpoint = path.calculateMidpoint();
+  }
+
+  public calculateMidpoint(): Point {
+    return this.midpoint;
   }
 }

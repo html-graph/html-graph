@@ -70,4 +70,25 @@ describe("DetourOrthogonalEdgeShape", () => {
       "M 100 100 L 100 290 C 100 300 100 300 110 300 L 200 300",
     );
   });
+
+  it("should calculate midpoint", () => {
+    const edgePath = new DetourOrthogonalEdgePath({
+      from: {
+        coords: { x: 100, y: 100 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      to: {
+        coords: { x: 200, y: 300 },
+        dir: { x: 1, y: 0 },
+        hasArrow: false,
+      },
+      arrowLength: 10,
+      arrowOffset: 10,
+      roundness: 10,
+      detourDistance: 100,
+    });
+
+    expect(edgePath.calculateMidpoint()).toEqual({ x: 150, y: 400 });
+  });
 });

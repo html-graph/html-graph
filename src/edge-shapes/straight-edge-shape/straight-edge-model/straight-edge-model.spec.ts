@@ -1,53 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { EdgeRenderParams } from "../edge-render-params";
-import { ConnectionCategory } from "../connection-category";
-import { PathEdgeModelShapeParams } from "./path-edge-model-shape-params";
-import { PathEdgeModel } from "./path-edge-model";
-import { svgPadding } from "../svg-padding";
-import {
-  BezierEdgePath,
-  CycleCircleEdgePath,
-  DetourBezierEdgePath,
-} from "../paths";
+import { EdgeRenderParams, ConnectionCategory } from "../../shared";
+import { StraightEdgeModelShapeParams } from "./straight-edge-model-shape-params";
+import { StraightEdgeModel } from "./straight-edge-model";
 
 const createShapeParams = (params?: {
   hasSourceArrow?: boolean;
   hasTargetArrow?: boolean;
-}): PathEdgeModelShapeParams => {
+}): StraightEdgeModelShapeParams => {
   return {
-    createLinePath: (from, to) =>
-      new BezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-      }),
-    createNodeCyclePath: (from, to) =>
-      new DetourBezierEdgePath({
-        from,
-        to,
-        arrowLength: 10,
-        curvature: 90,
-        detourDistance: 100,
-        detourDir: 0,
-      }),
-    createPortCyclePath: (from, to) =>
-      new CycleCircleEdgePath({
-        from,
-        to,
-        radius: 10,
-        smallRadius: 2,
-        arrowLength: 10,
-      }),
     hasSourceArrow: params?.hasSourceArrow ?? false,
     hasTargetArrow: params?.hasTargetArrow ?? false,
     arrowRenderer: () => "",
     arrowLength: 10,
-    padding: svgPadding,
+    arrowOffset: 5,
+    roundness: 5,
+    cycleSquareSide: 50,
+    detourDistance: 100,
+    detourDirection: Math.PI / 2,
   };
 };
 
-describe("PathEdgeModel", () => {
+describe("StraightEdgeModel", () => {
   it("should initialize rendering box", () => {
     const renderingParams: EdgeRenderParams = {
       from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },
@@ -55,9 +28,9 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.box).toEqual({ x: -50, y: -50, width: 200, height: 200 });
   });
@@ -69,9 +42,9 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.shapeSourcePoint).toEqual({ x: 50, y: 50 });
   });
@@ -83,9 +56,9 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.shapeTargetPoint).toEqual({ x: 150, y: 150 });
   });
@@ -97,12 +70,12 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 C 150 50, 50 50, 140 50 M 140 50 L 150 50",
+      "M 50 50 L 60 50 C 65 50 65 50 70 50 L 130 50 C 135 50 135 50 140 50 L 150 50",
     );
   });
 
@@ -113,14 +86,14 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams({
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams({
       hasSourceArrow: true,
     });
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 60 50 C 150 50, 50 50, 140 50 M 140 50 L 150 50",
+      "M 60 50 L 60 50 C 65 50 65 50 70 50 L 130 50 C 135 50 135 50 140 50 L 150 50",
     );
   });
 
@@ -131,14 +104,14 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams({
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams({
       hasTargetArrow: true,
     });
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 C 150 50, 50 50, 140 50",
+      "M 50 50 L 60 50 C 65 50 65 50 70 50 L 130 50 C 135 50 135 50 140 50 L 140 50",
     );
   });
 
@@ -149,9 +122,9 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.calculateMidpoint()).toEqual({ x: 100, y: 50 });
   });
@@ -163,12 +136,12 @@ describe("PathEdgeModel", () => {
       category: ConnectionCategory.PortCycle,
     };
 
-    const shapeParams: PathEdgeModelShapeParams = createShapeParams();
+    const shapeParams: StraightEdgeModelShapeParams = createShapeParams();
 
-    const model = new PathEdgeModel(renderingParams, shapeParams);
+    const model = new StraightEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toBe(
-      "M 50 50 L 60 50 M 60 50 A 2 2 0 0 1 61.97202659436654 51.666666666666664 A 10 10 0 1 0 61.97202659436654 48.333333333333336 A 2 2 0 0 1 60 50",
+      "M 50 50 L 60 50 M 60 50 L 60 50 C 65 50 65 50 65 55 L 65 95 C 65 100 65 100 70 100 L 160 100 C 165 100 165 100 165 95 L 165 5 C 165 0 165 0 160 0 L 70 0 C 65 0 65 0 65 5 L 65 45 C 65 50 65 50 60 50 L 60 50",
     );
   });
 });

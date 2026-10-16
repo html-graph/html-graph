@@ -7,7 +7,7 @@ import { PathPort } from "../../path-port";
 export class CycleSquareEdgePath implements EdgePath {
   public readonly path: string;
 
-  public readonly midpoint: Point;
+  private readonly midpoint: Point;
 
   public constructor(params: {
     readonly from: PathPort;
@@ -42,5 +42,9 @@ export class CycleSquareEdgePath implements EdgePath {
     this.path = `${hasArrow ? "" : preLine}${createRoundedPath(rp, params.roundness)}`;
 
     this.midpoint = { x: (rp[3].x + rp[4].x) / 2, y: (rp[3].y + rp[4].y) / 2 };
+  }
+
+  public calculateMidpoint(): Point {
+    return this.midpoint;
   }
 }
