@@ -56,4 +56,4 @@ export { configureInteractiveEdge } from "./configure-interactive-edge";
 
 export { createDirectionVector } from "./create-direction-vector";
 
-export { adjustTargetVector } from "./adjust-target-arrow-vertor";
+export { adjustTargetVector } from "./adjust-target-vector";

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { adjustTargetVector } from "./adjust-target-arrow-vector";
+import { adjustTargetVector } from "./adjust-target-vector";
 import { ConnectionCategory } from "../connection-category";
 import { Point } from "@/point";
 
