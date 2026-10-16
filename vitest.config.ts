@@ -1,12 +1,8 @@
 import { defineConfig } from "vitest/config";
-import path from "path";
+import { resolveOptions } from "./configs/resolve-options";
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+  resolve: resolveOptions,
   test: {
     include: ["./src/**/*.spec.ts"],
     environment: "jsdom",

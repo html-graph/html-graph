@@ -19,23 +19,23 @@ export class OrthogonalEdgeController {
 
   private readonly shapeParams: OrthogonalEdgeModelShapeParams;
 
-  public constructor(private readonly params: OrthogonalEdgeControllerParams) {
+  public constructor(params: OrthogonalEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: this.params.color,
-      width: this.params.width,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
     this.shapeParams = {
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      cycleSquareSide: this.params.cycleSquareSide,
-      detourDistance: this.params.detourDistance,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
+      arrowRenderer: params.arrowRenderer,
+      arrowLength: params.arrowLength,
+      arrowOffset: params.arrowOffset,
+      roundness: params.roundness,
+      cycleSquareSide: params.cycleSquareSide,
+      detourDistance: params.detourDistance,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
