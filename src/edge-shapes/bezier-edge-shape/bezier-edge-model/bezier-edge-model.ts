@@ -13,6 +13,7 @@ import {
   BezierEdgePath,
   svgPadding,
   EdgePath,
+  adjustTargetVector,
 } from "../../shared";
 import { BezierEdgeModelShapeParams } from "./bezier-edge-model-shape-params";
 
@@ -118,13 +119,12 @@ export class BezierEdgeModel implements StructuredEdgeModel {
     }
 
     if (this.shapeParams.hasTargetArrow) {
-      const adjustedTargetVector: Point =
-        this.renderParams.category === ConnectionCategory.PortCycle
-          ? sourceVector
-          : { x: -targetVector.x, y: -targetVector.y };
-
       this.targetArrowPath = this.shapeParams.arrowRenderer({
-        direction: adjustedTargetVector,
+        direction: adjustTargetVector(
+          sourceVector,
+          targetVector,
+          this.renderParams.category,
+        ),
         shift: to,
         arrowLength: this.shapeParams.arrowLength,
       });
