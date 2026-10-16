@@ -19,24 +19,24 @@ export class BezierEdgeController {
 
   private readonly shapeParams: BezierEdgeModelShapeParams;
 
-  public constructor(private readonly params: BezierEdgeControllerParams) {
+  public constructor(params: BezierEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: this.params.color,
-      width: this.params.width,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
     this.shapeParams = {
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      curvature: this.params.curvature,
-      detourDirection: this.params.detourDirection,
-      detourDistance: this.params.detourDistance,
-      portCycleRadius: this.params.portCycleRadius,
-      portCycleSmallRadius: this.params.portCycleSmallRadius,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
+      arrowRenderer: params.arrowRenderer,
+      arrowLength: params.arrowLength,
+      curvature: params.curvature,
+      detourDirection: params.detourDirection,
+      detourDistance: params.detourDistance,
+      portCycleRadius: params.portCycleRadius,
+      portCycleSmallRadius: params.portCycleSmallRadius,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =

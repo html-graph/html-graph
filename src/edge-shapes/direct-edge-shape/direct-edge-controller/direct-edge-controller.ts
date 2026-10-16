@@ -19,21 +19,21 @@ export class DirectEdgeController {
 
   private readonly shapeParams: DirectEdgeModelShapeParams;
 
-  public constructor(private readonly params: DirectEdgeControllerParams) {
+  public constructor(params: DirectEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: this.params.color,
-      width: this.params.width,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
     this.shapeParams = {
-      sourceOffsetFn: this.params.sourceOffsetFn,
-      targetOffsetFn: this.params.targetOffsetFn,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
+      sourceOffsetFn: params.sourceOffsetFn,
+      targetOffsetFn: params.targetOffsetFn,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
+      arrowRenderer: params.arrowRenderer,
+      arrowLength: params.arrowLength,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =

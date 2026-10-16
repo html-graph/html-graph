@@ -19,24 +19,24 @@ export class StraightEdgeController {
 
   private readonly shapeParams: StraightEdgeModelShapeParams;
 
-  public constructor(private readonly params: StraightEdgeControllerParams) {
+  public constructor(params: StraightEdgeControllerParams) {
     this.view = new StructuredEdgeView({
-      color: this.params.color,
-      width: this.params.width,
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
+      color: params.color,
+      width: params.width,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
     });
 
     this.shapeParams = {
-      hasSourceArrow: this.params.hasSourceArrow,
-      hasTargetArrow: this.params.hasTargetArrow,
-      arrowRenderer: this.params.arrowRenderer,
-      arrowLength: this.params.arrowLength,
-      arrowOffset: this.params.arrowOffset,
-      roundness: this.params.roundness,
-      cycleSquareSide: this.params.cycleSquareSide,
-      detourDirection: this.params.detourDirection,
-      detourDistance: this.params.detourDistance,
+      hasSourceArrow: params.hasSourceArrow,
+      hasTargetArrow: params.hasTargetArrow,
+      arrowRenderer: params.arrowRenderer,
+      arrowLength: params.arrowLength,
+      arrowOffset: params.arrowOffset,
+      roundness: params.roundness,
+      cycleSquareSide: params.cycleSquareSide,
+      detourDirection: params.detourDirection,
+      detourDistance: params.detourDistance,
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
