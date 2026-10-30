@@ -7,7 +7,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .setDefaults({
     edges: {
-      shape: (edgeId) => {
+      shapeFactory: (edgeId) => {
         const midpointElement = createMidpoint();
 
         midpointElement.addEventListener("mouseup", (event) => {

@@ -35,7 +35,7 @@ const canvasDefaults: CanvasDefaults = {
     priority: 1,
   },
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new DirectEdgeShape({
         hasTargetArrow: true,
         sourceOffset: 50,

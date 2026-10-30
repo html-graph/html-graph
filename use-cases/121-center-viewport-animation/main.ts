@@ -9,7 +9,7 @@ const canvas: Canvas = builder
       priority: 1,
     },
     edges: {
-      shape: () => {
+      shapeFactory: () => {
         return new DirectEdgeShape({
           sourceOffset: 50,
           targetOffset: 50,

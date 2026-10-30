@@ -30,9 +30,10 @@ export const createConnectablePortsParams = (
       connectionAllowedVerifier,
     ),
     edgeShapeFactory:
-      config?.edgeShape !== undefined
+      config?.edgeShapeFactory ??
+      (config?.edgeShape !== undefined
         ? resolveEdgeShapeFactory(config.edgeShape)
-        : defaultEdgeShapeFactory,
+        : defaultEdgeShapeFactory),
     connectionPreprocessor:
       config?.connectionPreprocessor ?? defaults.connectionPreprocessor,
     mouseDownEventVerifier:

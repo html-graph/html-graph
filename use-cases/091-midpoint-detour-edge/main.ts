@@ -43,7 +43,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .setDefaults({
     edges: {
-      shape: () => {
+      shapeFactory: () => {
         const midpointElement = createMidpoint();
 
         return new StraightEdgeShape({

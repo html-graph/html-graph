@@ -13,7 +13,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new StraightEdgeShape({
         hasTargetArrow: true,
       });

@@ -97,7 +97,7 @@ const canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     nodes: { priority: 0 },
     edges: {
-      shape: () => {
+      shapeFactory: () => {
         return new OrthogonalEdgeShape({
           hasTargetArrow: true,
         });

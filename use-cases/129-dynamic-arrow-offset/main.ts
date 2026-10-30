@@ -33,7 +33,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new DirectEdgeShape({
         hasTargetArrow: true,
         hasSourceArrow: true,

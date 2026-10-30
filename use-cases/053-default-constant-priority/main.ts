@@ -16,7 +16,7 @@ const canvasDefaults: CanvasDefaults = {
     priority: 5,
   },
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         hasTargetArrow: true,
       });

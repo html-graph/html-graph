@@ -86,9 +86,19 @@ describe("createGraphControllerParams", () => {
   it("should return specified edges shape factory", () => {
     const graphControllerParams = createGraphControllerParams({
       edges: {
-        shape: {
-          type: "straight",
-        },
+        shapeFactory: () => new StraightEdgeShape(),
+      },
+    });
+
+    const shape = graphControllerParams.edges.shapeFactory("123");
+
+    expect(shape instanceof StraightEdgeShape).toBe(true);
+  });
+
+  it("should return specified legacy edges shape factory", () => {
+    const graphControllerParams = createGraphControllerParams({
+      edges: {
+        shape: () => new StraightEdgeShape(),
       },
     });
 
