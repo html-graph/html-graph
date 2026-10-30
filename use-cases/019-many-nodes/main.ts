@@ -1,5 +1,6 @@
 import {
   AddNodeRequest,
+  BezierEdgeShape,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
@@ -30,9 +31,10 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const defaults: CanvasDefaults = {
   edges: {
     priority: 0,
-    shape: {
-      type: "bezier",
-      curvature: 200,
+    shape: () => {
+      return new BezierEdgeShape({
+        curvature: 200,
+      });
     },
   },
   nodes: {

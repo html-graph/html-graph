@@ -2,6 +2,7 @@ import {
   AddNodeRequest,
   CanvasBuilder,
   Identifier,
+  OrthogonalEdgeShape,
 } from "@html-graph/html-graph";
 
 const createPortElement = (): HTMLElement => {
@@ -96,11 +97,12 @@ const canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     nodes: { priority: 0 },
     edges: {
-      priority: 1,
-      shape: {
-        type: "orthogonal",
-        hasTargetArrow: true,
+      shape: () => {
+        return new OrthogonalEdgeShape({
+          hasTargetArrow: true,
+        });
       },
+      priority: 1,
     },
   })
   .enableUserTransformableViewport()

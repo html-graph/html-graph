@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  StraightEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -12,9 +13,10 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: {
-      type: "straight",
-      hasTargetArrow: true,
+    shape: () => {
+      return new StraightEdgeShape({
+        hasTargetArrow: true,
+      });
     },
   },
 };

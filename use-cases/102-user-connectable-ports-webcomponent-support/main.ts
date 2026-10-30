@@ -1,5 +1,6 @@
 import {
   AddNodeRequest,
+  BezierEdgeShape,
   Canvas,
   CanvasBuilder,
   Identifier,
@@ -11,8 +12,10 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
-      shape: {
-        hasTargetArrow: true,
+      shape: () => {
+        return new BezierEdgeShape({
+          hasTargetArrow: true,
+        });
       },
     },
   })

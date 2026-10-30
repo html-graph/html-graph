@@ -1,5 +1,6 @@
 import {
   AddNodeRequest,
+  BezierEdgeShape,
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
@@ -34,8 +35,10 @@ document.addEventListener(
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: {
-      hasTargetArrow: true,
+    shape: () => {
+      return new BezierEdgeShape({
+        hasTargetArrow: true,
+      });
     },
   },
 };

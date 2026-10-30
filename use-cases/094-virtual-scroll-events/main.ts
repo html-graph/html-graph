@@ -4,6 +4,7 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   Identifier,
+  OrthogonalEdgeShape,
   UserTransformableViewportConfig,
   VirtualScrollConfig,
 } from "@html-graph/html-graph";
@@ -12,9 +13,10 @@ const canvasElement: HTMLElement = document.getElementById("canvas")!;
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: {
-      type: "orthogonal",
-      hasTargetArrow: true,
+    shape: () => {
+      return new OrthogonalEdgeShape({
+        hasTargetArrow: true,
+      });
     },
   },
 };

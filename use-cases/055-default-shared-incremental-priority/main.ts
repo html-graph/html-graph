@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  BezierEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -15,8 +16,10 @@ const canvasDefaults: CanvasDefaults = {
     priority: "incremental",
   },
   edges: {
-    shape: {
-      hasTargetArrow: true,
+    shape: () => {
+      return new BezierEdgeShape({
+        hasTargetArrow: true,
+      });
     },
     priority: "incremental",
   },

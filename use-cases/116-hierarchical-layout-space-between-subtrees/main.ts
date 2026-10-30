@@ -1,4 +1,4 @@
-import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import { BezierEdgeShape, Canvas, CanvasBuilder } from "@html-graph/html-graph";
 import graphData from "./graph.json";
 import { createInOutNode } from "../shared/create-in-out-node";
 
@@ -11,8 +11,10 @@ const canvas: Canvas = builder
       priority: 1,
     },
     edges: {
-      shape: {
-        hasTargetArrow: true,
+      shape: () => {
+        return new BezierEdgeShape({
+          hasTargetArrow: true,
+        });
       },
       priority: 0,
     },

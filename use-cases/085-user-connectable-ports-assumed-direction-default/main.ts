@@ -5,6 +5,7 @@ import {
   CanvasDefaults,
   ConnectablePortsConfig,
   Identifier,
+  OrthogonalEdgeShape,
 } from "@html-graph/html-graph";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
@@ -12,9 +13,10 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: {
-      type: "orthogonal",
-      hasTargetArrow: true,
+    shape: () => {
+      return new OrthogonalEdgeShape({
+        hasTargetArrow: true,
+      });
     },
   },
 };
