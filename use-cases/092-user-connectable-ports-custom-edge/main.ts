@@ -5,6 +5,7 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   ConnectablePortsConfig,
+  DirectEdgeShape,
   Identifier,
 } from "@html-graph/html-graph";
 
@@ -22,9 +23,10 @@ const defaults: CanvasDefaults = {
 };
 
 const connectablePortConfig: ConnectablePortsConfig = {
-  edgeShapeFactory: {
-    type: "direct",
-    hasTargetArrow: true,
+  edgeShapeFactory: () => {
+    return new DirectEdgeShape({
+      hasTargetArrow: true,
+    });
   },
   connectionTypeResolver: (portId: Identifier) => {
     const idStr = portId as string;
