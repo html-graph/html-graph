@@ -33,6 +33,7 @@ export type {
   UpdateNodeRequest,
   UpdatePortRequest,
   UpdateEdgeRequest,
+  EdgeShapeFactory,
 } from "./graph-controller";
 
 export type {
