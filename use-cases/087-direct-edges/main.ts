@@ -38,8 +38,8 @@ const canvasDefaults: CanvasDefaults = {
     shape: () => {
       return new DirectEdgeShape({
         hasTargetArrow: true,
-        sourceOffset: 0,
-        targetOffset: 0,
+        sourceOffset: 50,
+        targetOffset: 50,
       });
     },
     priority: 0,
