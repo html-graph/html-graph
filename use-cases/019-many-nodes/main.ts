@@ -31,7 +31,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const defaults: CanvasDefaults = {
   edges: {
     priority: 0,
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         curvature: 200,
       });

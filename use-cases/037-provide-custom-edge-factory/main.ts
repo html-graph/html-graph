@@ -13,7 +13,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         color: "var(--color-edge-2)",
         width: 2,

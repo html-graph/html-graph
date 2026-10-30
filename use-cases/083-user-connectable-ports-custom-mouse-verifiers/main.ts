@@ -35,7 +35,7 @@ document.addEventListener(
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         hasTargetArrow: true,
       });

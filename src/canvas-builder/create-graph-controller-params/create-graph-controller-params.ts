@@ -20,7 +20,9 @@ export const createGraphControllerParams = (
       direction: canvasDefaults.ports?.direction ?? 0,
     },
     edges: {
-      shapeFactory: resolveEdgeShapeFactory(canvasDefaults.edges?.shape ?? {}),
+      shapeFactory: resolveEdgeShapeFactory(
+        canvasDefaults.edges?.shapeFactory ?? canvasDefaults.edges?.shape ?? {},
+      ),
       priorityFn: priorities.edgesPriorityFn,
     },
   };

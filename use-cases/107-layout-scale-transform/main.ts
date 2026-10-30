@@ -11,7 +11,7 @@ const canvas: Canvas = builder
       priority: 1,
     },
     edges: {
-      shape: () => {
+      shapeFactory: () => {
         return new BezierEdgeShape({
           hasTargetArrow: true,
         });

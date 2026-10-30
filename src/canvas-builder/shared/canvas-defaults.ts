@@ -1,6 +1,7 @@
 import { CenterFn } from "@/center-fn";
 import { Priority } from "./priority";
 import { EdgeShapeConfig } from "./resolve-edge-shape-factory";
+import { EdgeShapeFactory } from "@/graph-controller";
 
 export interface CanvasDefaults {
   readonly nodes?: {
@@ -11,6 +12,11 @@ export interface CanvasDefaults {
     readonly direction?: number;
   };
   readonly edges?: {
+    readonly shapeFactory?: EdgeShapeFactory;
+    /**
+     * @deprecated
+     * use shapeFactory instead
+     */
     readonly shape?: EdgeShapeConfig;
     readonly priority?: Priority;
   };

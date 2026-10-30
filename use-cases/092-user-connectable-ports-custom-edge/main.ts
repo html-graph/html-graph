@@ -5,6 +5,7 @@ import {
   CanvasBuilder,
   CanvasDefaults,
   ConnectablePortsConfig,
+  DirectEdgeShape,
   Identifier,
 } from "@html-graph/html-graph";
 
@@ -13,7 +14,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const defaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         hasTargetArrow: true,
       });
@@ -22,9 +23,10 @@ const defaults: CanvasDefaults = {
 };
 
 const connectablePortConfig: ConnectablePortsConfig = {
-  edgeShape: {
-    type: "direct",
-    hasTargetArrow: true,
+  edgeShapeFactory: () => {
+    return new DirectEdgeShape({
+      hasTargetArrow: true,
+    });
   },
   connectionTypeResolver: (portId: Identifier) => {
     const idStr = portId as string;

@@ -275,6 +275,19 @@ describe("createUserConnectablePortsParams", () => {
     const factory: EdgeShapeFactory = () => new BezierEdgeShape();
     const connectionFactory: EdgeShapeFactory = () => new DirectEdgeShape();
     const options = createConnectablePortsParams(
+      { edgeShapeFactory: connectionFactory },
+      factory,
+      canvas.graph,
+    );
+
+    expect(options.edgeShapeFactory).toBe(connectionFactory);
+  });
+
+  it("should return specified legacy edge shape factory", () => {
+    const canvas = createCanvas();
+    const factory: EdgeShapeFactory = () => new BezierEdgeShape();
+    const connectionFactory: EdgeShapeFactory = () => new DirectEdgeShape();
+    const options = createConnectablePortsParams(
       { edgeShape: connectionFactory },
       factory,
       canvas.graph,

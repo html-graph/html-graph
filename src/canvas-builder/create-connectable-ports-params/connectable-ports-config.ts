@@ -8,9 +8,14 @@ import {
 } from "@/configurators";
 import { DraggingPortDirectionConfig, EdgeShapeConfig } from "../shared";
 import { Identifier } from "@/identifier";
-import { AddEdgeRequest } from "@/graph-controller";
+import { AddEdgeRequest, EdgeShapeFactory } from "@/graph-controller";
 
 export interface ConnectablePortsConfig {
+  readonly edgeShapeFactory?: EdgeShapeFactory | undefined;
+  /**
+   * @deprecated
+   * use edgeShapeFactory instead
+   */
   readonly edgeShape?: EdgeShapeConfig | undefined;
   readonly connectionTypeResolver?: ConnectionTypeResolver | undefined;
   readonly connectionAllowedVerifier?: ConnectionAllowedVerifier | undefined;

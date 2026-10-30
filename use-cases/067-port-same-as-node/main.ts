@@ -32,7 +32,7 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new StraightEdgeShape({
         arrowLength: 0,
         arrowOffset: 0,

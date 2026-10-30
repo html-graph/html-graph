@@ -37,7 +37,7 @@ const canvasDefaults: CanvasDefaults = {
     priority: customNodePriority,
   },
   edges: {
-    shape: () => {
+    shapeFactory: () => {
       return new BezierEdgeShape({
         hasTargetArrow: true,
       });

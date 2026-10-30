@@ -6,7 +6,7 @@ const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
       priority: 0,
-      shape: () => {
+      shapeFactory: () => {
         return new BezierEdgeShape({
           midpointElement: createMidpoint(),
         });
