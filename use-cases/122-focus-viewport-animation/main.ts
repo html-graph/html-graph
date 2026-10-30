@@ -1,4 +1,4 @@
-import { Canvas, CanvasBuilder } from "@html-graph/html-graph";
+import { Canvas, CanvasBuilder, DirectEdgeShape } from "@html-graph/html-graph";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
@@ -9,11 +9,12 @@ const canvas: Canvas = builder
       priority: 1,
     },
     edges: {
-      shape: {
-        type: "direct",
-        sourceOffset: 50,
-        targetOffset: 50,
-        hasTargetArrow: true,
+      shape: () => {
+        return new DirectEdgeShape({
+          hasTargetArrow: true,
+          sourceOffset: 50,
+          targetOffset: 50,
+        });
       },
       priority: 0,
     },

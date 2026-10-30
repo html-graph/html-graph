@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasDefaults,
   CanvasBuilder,
+  BezierEdgeShape,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
@@ -54,8 +55,10 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: {
-      hasTargetArrow: true,
+    shape: () => {
+      return new BezierEdgeShape({
+        hasTargetArrow: true,
+      });
     },
   },
 };

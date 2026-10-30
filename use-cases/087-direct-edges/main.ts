@@ -4,6 +4,7 @@ import {
   Canvas,
   CanvasBuilder,
   CanvasDefaults,
+  DirectEdgeShape,
   Identifier,
 } from "@html-graph/html-graph";
 
@@ -34,11 +35,12 @@ const canvasDefaults: CanvasDefaults = {
     priority: 1,
   },
   edges: {
-    shape: {
-      type: "direct",
-      sourceOffset: 50,
-      targetOffset: 50,
-      hasTargetArrow: true,
+    shape: () => {
+      return new DirectEdgeShape({
+        hasTargetArrow: true,
+        sourceOffset: 50,
+        targetOffset: 50,
+      });
     },
     priority: 0,
   },

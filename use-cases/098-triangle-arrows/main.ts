@@ -1,6 +1,7 @@
 import {
   AddEdgeRequest,
   AddNodeRequest,
+  BezierEdgeShape,
   Canvas,
   CanvasBuilder,
 } from "@html-graph/html-graph";
@@ -11,12 +12,14 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 const canvas: Canvas = builder
   .setDefaults({
     edges: {
-      shape: {
-        hasSourceArrow: true,
-        hasTargetArrow: true,
-        arrowRenderer: {
-          type: "triangle",
-        },
+      shape: () => {
+        return new BezierEdgeShape({
+          hasSourceArrow: true,
+          hasTargetArrow: true,
+          arrowRenderer: {
+            type: "triangle",
+          },
+        });
       },
     },
   })

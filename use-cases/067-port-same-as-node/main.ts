@@ -5,6 +5,7 @@ import {
   CanvasDefaults,
   DraggableNodesConfig,
   CanvasBuilder,
+  StraightEdgeShape,
 } from "@html-graph/html-graph";
 
 export function createNode(params: {
@@ -31,10 +32,11 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: {
-      type: "straight",
-      arrowLength: 0,
-      arrowOffset: 0,
+    shape: () => {
+      return new StraightEdgeShape({
+        arrowLength: 0,
+        arrowOffset: 0,
+      });
     },
   },
   nodes: {

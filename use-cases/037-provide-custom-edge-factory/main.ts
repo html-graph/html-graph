@@ -13,12 +13,13 @@ const builder: CanvasBuilder = new CanvasBuilder(canvasElement);
 
 const canvasDefaults: CanvasDefaults = {
   edges: {
-    shape: () =>
-      new BezierEdgeShape({
+    shape: () => {
+      return new BezierEdgeShape({
         color: "var(--color-edge-2)",
         width: 2,
         hasTargetArrow: true,
-      }),
+      });
+    },
   },
 };
 
