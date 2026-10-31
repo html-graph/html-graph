@@ -51,4 +51,5 @@ const addEdgeRequest: AddEdgeRequest = {
 canvas
   .addNode(addNode1Request)
   .addNode(addNode2Request)
-  .addEdge(addEdgeRequest);
+  .addEdge(addEdgeRequest)
+  .focus();
