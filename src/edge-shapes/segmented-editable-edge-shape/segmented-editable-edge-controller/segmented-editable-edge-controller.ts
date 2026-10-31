@@ -26,6 +26,8 @@ export class SegmentedEditableEdgeController {
 
   private readonly shapeParams: SegmentedEditableEdgeModelShapeParams;
 
+  private latestRenderParams: EdgeRenderParams | null = null;
+
   public constructor(params: SegmentedEditableEdgeControllerParams) {
     this.view = new StructuredEdgeView({
       color: params.color,
@@ -49,18 +51,36 @@ export class SegmentedEditableEdgeController {
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<SegmentedEditableEdgeModel>();
 
-    this.onRenderParamsChange.subscribe((params) => {
-      const model = new SegmentedEditableEdgeModel(params, this.shapeParams);
-
-      this.modelChangeEmitter.emit(model);
-    });
-
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
+    });
+
+    this.onRenderParamsChange.subscribe((params) => {
+      this.latestRenderParams = params;
+
+      this.emitModelChange();
+    });
+
+    this.waypoints.onChange.subscribe(() => {
+      this.emitModelChange();
     });
   }
 
   public render(params: EdgeRenderParams): void {
     this.renderParamsEmitter.emit(params);
+  }
+
+  private emitModelChange(): void {
+    if (this.latestRenderParams === null) {
+      return;
+    }
+
+    const model = new SegmentedEditableEdgeModel(
+      this.latestRenderParams,
+      this.shapeParams,
+      this.waypoints.getValue(),
+    );
+
+    this.modelChangeEmitter.emit(model);
   }
 }

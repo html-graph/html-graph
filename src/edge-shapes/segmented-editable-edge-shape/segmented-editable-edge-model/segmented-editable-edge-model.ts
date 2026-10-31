@@ -32,6 +32,7 @@ export class SegmentedEditableEdgeModel implements StructuredEdgeModel {
   public constructor(
     private readonly renderParams: EdgeRenderParams,
     private readonly shapeParams: SegmentedEditableEdgeModelShapeParams,
+    public readonly waypoints: readonly Point[],
   ) {
     const { box, from, to } = createEdgeRectangle(
       this.renderParams.from,
