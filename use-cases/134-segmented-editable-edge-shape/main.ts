@@ -6,7 +6,6 @@ import {
   SegmentedEditableEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
-import { createMidpoint } from "../shared/create-midpoint";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = new CanvasBuilder(canvasElement)
@@ -31,11 +30,8 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   backPort: { id: "node-2-out" },
 });
 
-const midpointElement = createMidpoint();
-
 const edgeShape = new SegmentedEditableEdgeShape(canvas.viewport, {
   hasTargetArrow: true,
-  midpointElement,
 });
 
 edgeShape.waypoints.setValue([{ x: 300, y: 300 }]);
