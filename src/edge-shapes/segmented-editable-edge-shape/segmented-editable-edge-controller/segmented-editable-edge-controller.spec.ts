@@ -50,6 +50,52 @@ describe("SegmentedEditableEdgeController", () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it("should emit model change after waypoints update", () => {
+    const controller = createController();
+
+    const spy = vi.fn();
+
+    controller.render({
+      from: {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      to: {
+        x: 100,
+        y: 100,
+        width: 0,
+        height: 0,
+        direction: 0,
+      },
+      category: ConnectionCategory.Line,
+    });
+
+    controller.onModelChange.subscribe(() => {
+      spy();
+    });
+
+    controller.waypoints.setValue([]);
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it("should not emit model change after waypoints update when no render occured", () => {
+    const controller = createController();
+
+    const spy = vi.fn();
+
+    controller.onModelChange.subscribe(() => {
+      spy();
+    });
+
+    controller.waypoints.setValue([]);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it("should update line view", () => {
     const controller = createController();
 
