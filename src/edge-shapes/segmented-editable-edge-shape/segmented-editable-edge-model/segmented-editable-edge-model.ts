@@ -8,13 +8,13 @@ import {
   StructuredEdgeModel,
   svgPadding,
 } from "../../shared";
-import { SegmentedOrthogonalEdgeModelShapeParams } from "./segmented-orthogonal-edge-model-shape-params";
+import { SegmentedEditableEdgeModelShapeParams } from "./segmented-editable-edge-model-shape-params";
 import { createOrthogonalDirectionVector } from "./create-orthogonal-direction-vector";
 import { createOrthogonalLinePoints } from "./create-orthogonal-line-points";
 import { createArrowPoint } from "./create-arrow-point";
 import { calculateMidpoint } from "./calculate-midpoint";
 
-export class SegmentedOrthogonalEdgeModel implements StructuredEdgeModel {
+export class SegmentedEditableEdgeModel implements StructuredEdgeModel {
   public readonly box: EdgeBox;
 
   public readonly linePath: string;
@@ -31,7 +31,7 @@ export class SegmentedOrthogonalEdgeModel implements StructuredEdgeModel {
 
   public constructor(
     private readonly renderParams: EdgeRenderParams,
-    private readonly shapeParams: SegmentedOrthogonalEdgeModelShapeParams,
+    private readonly shapeParams: SegmentedEditableEdgeModelShapeParams,
   ) {
     const { box, from, to } = createEdgeRectangle(
       this.renderParams.from,

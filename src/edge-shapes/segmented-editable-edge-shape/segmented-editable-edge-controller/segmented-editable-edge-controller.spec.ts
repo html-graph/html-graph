@@ -1,9 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import { SegmentedOrthogonalEdgeController } from "./segmented-orthogonal-edge-controller";
+import { SegmentedEditableEdgeController } from "./segmented-editable-edge-controller";
 import { ConnectionCategory } from "../../shared";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 
-const createController = (): SegmentedOrthogonalEdgeController => {
-  return new SegmentedOrthogonalEdgeController({
+const createController = (): SegmentedEditableEdgeController => {
+  const canvas = createCanvas();
+
+  return new SegmentedEditableEdgeController({
+    canvasViewport: canvas.viewport,
     color: "#777777",
     width: 1,
     arrowLength: 10,
@@ -15,7 +19,7 @@ const createController = (): SegmentedOrthogonalEdgeController => {
   });
 };
 
-describe("SegmentedOrthogonalEdgeController", () => {
+describe("SegmentedEditableEdgeController", () => {
   it("should emit model change", () => {
     const controller = createController();
 

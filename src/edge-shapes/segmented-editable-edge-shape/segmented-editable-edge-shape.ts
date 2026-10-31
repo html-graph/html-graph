@@ -7,22 +7,32 @@ import {
   configureMidpoint,
   configureInteractiveEdge,
 } from "../shared";
-import { SegmentedOrthogonalEdgeParams } from "./segmented-orthogonal-edge-params";
+import { SegmentedEditableEdgeParams } from "./segmented-editable-edge-params";
 import { EventHandler } from "@/event-subject";
-import { SegmentedOrthogonalEdgeModel } from "./segmented-orthogonal-edge-model";
-import { SegmentedOrthogonalEdgeController } from "./segmented-orthogonal-edge-controller";
+import { SegmentedEditableEdgeModel } from "./segmented-editable-edge-model";
+import {
+  SegmentedEditableEdgeController,
+  Waypoints,
+} from "./segmented-editable-edge-controller";
+import { Viewport } from "@/viewport";
 
-export class SegmentedOrthogonalEdgeShape implements StructuredEdgeShape {
+export class SegmentedEditableEdgeShape implements StructuredEdgeShape {
   public readonly element: SVGSVGElement;
 
   public readonly view: StructuredEdgeView;
 
-  public readonly onModelChange: EventHandler<SegmentedOrthogonalEdgeModel>;
+  public readonly waypoints: Waypoints;
 
-  private readonly controller: SegmentedOrthogonalEdgeController;
+  public readonly onModelChange: EventHandler<SegmentedEditableEdgeModel>;
 
-  public constructor(params?: SegmentedOrthogonalEdgeParams | undefined) {
-    this.controller = new SegmentedOrthogonalEdgeController({
+  private readonly controller: SegmentedEditableEdgeController;
+
+  public constructor(
+    canvasViewport: Viewport,
+    params?: SegmentedEditableEdgeParams | undefined,
+  ) {
+    this.controller = new SegmentedEditableEdgeController({
+      canvasViewport,
       color: params?.color ?? edgeConstants.color,
       width: params?.width ?? edgeConstants.width,
       arrowLength: params?.arrowLength ?? edgeConstants.arrowLength,
@@ -38,6 +48,7 @@ export class SegmentedOrthogonalEdgeShape implements StructuredEdgeShape {
     this.view = this.controller.view;
     this.element = this.view.element;
     this.onModelChange = this.controller.onModelChange;
+    this.waypoints = this.controller.waypoints;
 
     if (params?.midpointElement !== undefined) {
       configureMidpoint(this, params.midpointElement);

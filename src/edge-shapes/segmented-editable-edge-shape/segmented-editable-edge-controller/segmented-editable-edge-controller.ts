@@ -5,21 +5,24 @@ import {
   updateStructuredView,
 } from "../../shared";
 import {
-  SegmentedOrthogonalEdgeModel,
-  SegmentedOrthogonalEdgeModelShapeParams,
-} from "../segmented-orthogonal-edge-model";
-import { SegmentedOrthogonalEdgeControllerParams } from "./segmented-orthogonal-edge-controller-params";
+  SegmentedEditableEdgeModel,
+  SegmentedEditableEdgeModelShapeParams,
+} from "../segmented-editable-edge-model";
+import { SegmentedEditableEdgeControllerParams } from "./segmented-editable-edge-controller-params";
+import { Waypoints } from "./waypoints";
 
-export class SegmentedOrthogonalEdgeController {
+export class SegmentedEditableEdgeController {
   public readonly view: StructuredEdgeView;
 
-  public readonly onModelChange: EventHandler<SegmentedOrthogonalEdgeModel>;
+  public readonly onModelChange: EventHandler<SegmentedEditableEdgeModel>;
 
-  private readonly modelChangeEmitter: EventEmitter<SegmentedOrthogonalEdgeModel>;
+  public readonly waypoints = new Waypoints();
 
-  private readonly shapeParams: SegmentedOrthogonalEdgeModelShapeParams;
+  private readonly modelChangeEmitter: EventEmitter<SegmentedEditableEdgeModel>;
 
-  public constructor(params: SegmentedOrthogonalEdgeControllerParams) {
+  private readonly shapeParams: SegmentedEditableEdgeModelShapeParams;
+
+  public constructor(params: SegmentedEditableEdgeControllerParams) {
     this.view = new StructuredEdgeView({
       color: params.color,
       width: params.width,
@@ -37,7 +40,7 @@ export class SegmentedOrthogonalEdgeController {
     };
 
     [this.modelChangeEmitter, this.onModelChange] =
-      createPair<SegmentedOrthogonalEdgeModel>();
+      createPair<SegmentedEditableEdgeModel>();
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
@@ -45,7 +48,7 @@ export class SegmentedOrthogonalEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new SegmentedOrthogonalEdgeModel(params, this.shapeParams);
+    const model = new SegmentedEditableEdgeModel(params, this.shapeParams);
 
     this.modelChangeEmitter.emit(model);
   }

@@ -1,6 +1,6 @@
 import { ArrowRendererConfig } from "../shared";
 
-export interface SegmentedOrthogonalEdgeParams {
+export interface SegmentedEditableEdgeParams {
   readonly color?: string | undefined;
   readonly width?: number | undefined;
   readonly arrowLength?: number | undefined;

@@ -1,6 +1,8 @@
 import { ArrowRenderer } from "@/edge-shapes/shared";
+import { Viewport } from "@/viewport";
 
-export interface SegmentedOrthogonalEdgeControllerParams {
+export interface SegmentedEditableEdgeControllerParams {
+  readonly canvasViewport: Viewport;
   readonly color: string;
   readonly width: number;
   readonly arrowLength: number;

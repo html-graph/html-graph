@@ -1,12 +1,12 @@
 import { ConnectionCategory, EdgeRenderParams } from "../../shared";
 import { describe, expect, it } from "vitest";
-import { SegmentedOrthogonalEdgeModel } from "./segmented-orthogonal-edge-model";
-import { SegmentedOrthogonalEdgeModelShapeParams } from "./segmented-orthogonal-edge-model-shape-params";
+import { SegmentedEditableEdgeModel } from "./segmented-editable-edge-model";
+import { SegmentedEditableEdgeModelShapeParams } from "./segmented-editable-edge-model-shape-params";
 
 const createShapeParams = (params?: {
   hasSourceArrow?: boolean;
   hasTargetArrow?: boolean;
-}): SegmentedOrthogonalEdgeModelShapeParams => {
+}): SegmentedEditableEdgeModelShapeParams => {
   return {
     hasSourceArrow: params?.hasSourceArrow ?? false,
     hasTargetArrow: params?.hasTargetArrow ?? false,
@@ -17,7 +17,7 @@ const createShapeParams = (params?: {
   };
 };
 
-describe("SegmentedOrthogonalEdgeModel", () => {
+describe("SegmentedEditableEdgeModel", () => {
   it("should initialize rendering box", () => {
     const renderingParams: EdgeRenderParams = {
       from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },
@@ -25,13 +25,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.box).toEqual({ x: -50, y: -50, width: 200, height: 200 });
   });
@@ -43,13 +40,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.shapeSourcePoint).toEqual({ x: 50, y: 50 });
   });
@@ -61,13 +55,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.shapeTargetPoint).toEqual({ x: 150, y: 150 });
   });
@@ -79,13 +70,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePoints).toEqual([
       {
@@ -114,13 +102,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.linePath).toEqual(
       "M 50 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 150 150",
@@ -134,13 +119,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams({ hasSourceArrow: true });
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.sourceArrowPath).toEqual("arrow path");
   });
@@ -152,13 +134,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams({ hasTargetArrow: true });
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.targetArrowPath).toEqual("arrow path");
   });
@@ -170,13 +149,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams();
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.calculateMidpoint()).toEqual({ x: 100, y: 100 });
   });
@@ -188,13 +164,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams({ hasSourceArrow: true });
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.calculateMidpoint()).toEqual({ x: 100, y: 100 });
   });
@@ -206,13 +179,10 @@ describe("SegmentedOrthogonalEdgeModel", () => {
       category: ConnectionCategory.Line,
     };
 
-    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+    const shapeParams: SegmentedEditableEdgeModelShapeParams =
       createShapeParams({ hasTargetArrow: true });
 
-    const model = new SegmentedOrthogonalEdgeModel(
-      renderingParams,
-      shapeParams,
-    );
+    const model = new SegmentedEditableEdgeModel(renderingParams, shapeParams);
 
     expect(model.calculateMidpoint()).toEqual({ x: 100, y: 100 });
   });

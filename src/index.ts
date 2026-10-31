@@ -69,8 +69,8 @@ export {
   OrthogonalEdgeModel,
   DirectEdgeShape,
   DirectEdgeModel,
-  SegmentedOrthogonalEdgeShape,
-  SegmentedOrthogonalEdgeModel,
+  SegmentedEditableEdgeShape,
+  SegmentedEditableEdgeModel,
   ConnectionCategory,
 } from "./edge-shapes";
 export type {
@@ -81,7 +81,7 @@ export type {
   OrthogonalEdgeParams,
   StraightEdgeParams,
   DirectEdgeParams,
-  SegmentedOrthogonalEdgeParams,
+  SegmentedEditableEdgeParams,
   ArrowRendererConfig,
   ArrowRenderer,
   ArrowRenderingParams,
