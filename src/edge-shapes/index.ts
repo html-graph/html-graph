@@ -33,7 +33,7 @@ export type {
 } from "./direct-edge-shape";
 
 export {
-  SegmentedOrthogonalEdgeShape,
-  SegmentedOrthogonalEdgeModel,
-} from "./segmented-orthogonal-edge-shape";
-export type { SegmentedOrthogonalEdgeParams } from "./segmented-orthogonal-edge-shape";
+  SegmentedEditableEdgeShape,
+  SegmentedEditableEdgeModel,
+} from "./segmented-editable-edge-shape";
+export type { SegmentedEditableEdgeParams } from "./segmented-editable-edge-shape";

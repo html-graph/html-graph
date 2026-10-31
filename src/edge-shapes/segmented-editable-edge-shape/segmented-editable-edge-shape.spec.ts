@@ -1,10 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { ConnectionCategory } from "../shared";
-import { SegmentedOrthogonalEdgeShape } from "./segmented-orthogonal-edge-shape";
+import { SegmentedEditableEdgeShape } from "./segmented-editable-edge-shape";
+import { createCanvas } from "@/mocks/create-canvas.mock";
 
-describe("SegmentedOrthogonalEdgeShape", () => {
+describe("SegmentedEditableEdgeShape", () => {
   it("should call specified callback on render", () => {
-    const shape = new SegmentedOrthogonalEdgeShape();
+    const canvas = createCanvas();
+    const shape = new SegmentedEditableEdgeShape(canvas.viewport);
 
     const spy = vi.fn();
 
@@ -34,7 +36,8 @@ describe("SegmentedOrthogonalEdgeShape", () => {
   });
 
   it("should update view on render", () => {
-    const shape = new SegmentedOrthogonalEdgeShape();
+    const canvas = createCanvas();
+    const shape = new SegmentedEditableEdgeShape(canvas.viewport);
 
     const g = shape.element.children[0];
     const line = g.children[0];
@@ -68,13 +71,19 @@ describe("SegmentedOrthogonalEdgeShape", () => {
       "g",
     );
 
-    const shape = new SegmentedOrthogonalEdgeShape({ midpointElement });
+    const canvas = createCanvas();
+    const shape = new SegmentedEditableEdgeShape(canvas.viewport, {
+      midpointElement,
+    });
 
     expect(shape.element.lastChild).toBe(midpointElement);
   });
 
   it("should configure interactive shape", () => {
-    const shape = new SegmentedOrthogonalEdgeShape({ interactiveDistance: 10 });
+    const canvas = createCanvas();
+    const shape = new SegmentedEditableEdgeShape(canvas.viewport, {
+      interactiveDistance: 10,
+    });
     const handle = shape.element.children[0].children[1];
 
     expect(handle.children[0].nodeName).toBe("path");

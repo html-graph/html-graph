@@ -3,25 +3,13 @@ import {
   AddNodeRequest,
   Canvas,
   CanvasBuilder,
-  SegmentedOrthogonalEdgeShape,
+  SegmentedEditableEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
 import { createMidpoint } from "../shared/create-midpoint";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = new CanvasBuilder(canvasElement)
-  .setDefaults({
-    edges: {
-      shapeFactory: () => {
-        const midpointElement = createMidpoint();
-
-        return new SegmentedOrthogonalEdgeShape({
-          hasTargetArrow: true,
-          midpointElement,
-        });
-      },
-    },
-  })
   .enableUserTransformableViewport()
   .enableUserDraggableNodes()
   .enableBackground()
@@ -43,9 +31,25 @@ const addNode2Request: AddNodeRequest = createInOutNode({
   backPort: { id: "node-2-out" },
 });
 
+const midpointElement = createMidpoint();
+
+const edgeShape = new SegmentedEditableEdgeShape(canvas.viewport, {
+  hasTargetArrow: true,
+  midpointElement,
+});
+
+edgeShape.waypoints.setValue([{ x: 300, y: 300 }]);
+
+edgeShape.waypoints.onChange.subscribe(() => {
+  const waypoints = edgeShape.waypoints.getValue();
+
+  console.log(waypoints);
+});
+
 const addEdgeRequest: AddEdgeRequest = {
   from: "node-1-out",
   to: "node-2-in",
+  shape: edgeShape,
 };
 
 canvas

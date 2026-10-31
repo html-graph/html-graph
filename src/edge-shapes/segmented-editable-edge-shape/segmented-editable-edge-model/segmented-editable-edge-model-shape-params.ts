@@ -1,6 +1,6 @@
 import { ArrowRenderer } from "../../shared";
 
-export interface SegmentedOrthogonalEdgeModelShapeParams {
+export interface SegmentedEditableEdgeModelShapeParams {
   readonly hasSourceArrow: boolean;
   readonly hasTargetArrow: boolean;
   readonly arrowLength: number;
