@@ -18,6 +18,10 @@ export class SegmentedEditableEdgeController {
 
   public readonly waypoints = new Waypoints();
 
+  private readonly renderParamsEmitter: EventEmitter<EdgeRenderParams>;
+
+  private readonly onRenderParamsChange: EventHandler<EdgeRenderParams>;
+
   private readonly modelChangeEmitter: EventEmitter<SegmentedEditableEdgeModel>;
 
   private readonly shapeParams: SegmentedEditableEdgeModelShapeParams;
@@ -39,8 +43,17 @@ export class SegmentedEditableEdgeController {
       roundness: params.roundness,
     };
 
+    [this.renderParamsEmitter, this.onRenderParamsChange] =
+      createPair<EdgeRenderParams>();
+
     [this.modelChangeEmitter, this.onModelChange] =
       createPair<SegmentedEditableEdgeModel>();
+
+    this.onRenderParamsChange.subscribe((params) => {
+      const model = new SegmentedEditableEdgeModel(params, this.shapeParams);
+
+      this.modelChangeEmitter.emit(model);
+    });
 
     this.onModelChange.subscribe((model) => {
       updateStructuredView(this.view, model);
@@ -48,8 +61,6 @@ export class SegmentedEditableEdgeController {
   }
 
   public render(params: EdgeRenderParams): void {
-    const model = new SegmentedEditableEdgeModel(params, this.shapeParams);
-
-    this.modelChangeEmitter.emit(model);
+    this.renderParamsEmitter.emit(params);
   }
 }
