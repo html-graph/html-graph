@@ -107,6 +107,62 @@ describe("SegmentedOrthogonalEdgeModel", () => {
     ]);
   });
 
+  it("should set line path", () => {
+    const renderingParams: EdgeRenderParams = {
+      from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },
+      to: { x: 100, y: 100, width: 0, height: 0, direction: 0 },
+      category: ConnectionCategory.Line,
+    };
+
+    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+      createShapeParams();
+
+    const model = new SegmentedOrthogonalEdgeModel(
+      renderingParams,
+      shapeParams,
+    );
+
+    expect(model.linePath).toEqual(
+      "M 50 50 L 95 50 C 100 50 100 50 100 55 L 100 145 C 100 150 100 150 105 150 L 150 150",
+    );
+  });
+
+  it("should set source arrow path", () => {
+    const renderingParams: EdgeRenderParams = {
+      from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },
+      to: { x: 100, y: 100, width: 0, height: 0, direction: 0 },
+      category: ConnectionCategory.Line,
+    };
+
+    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+      createShapeParams({ hasSourceArrow: true });
+
+    const model = new SegmentedOrthogonalEdgeModel(
+      renderingParams,
+      shapeParams,
+    );
+
+    expect(model.sourceArrowPath).toEqual("arrow path");
+  });
+
+  it("should set target arrow path", () => {
+    const renderingParams: EdgeRenderParams = {
+      from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },
+      to: { x: 100, y: 100, width: 0, height: 0, direction: 0 },
+      category: ConnectionCategory.Line,
+    };
+
+    const shapeParams: SegmentedOrthogonalEdgeModelShapeParams =
+      createShapeParams({ hasTargetArrow: true });
+
+    const model = new SegmentedOrthogonalEdgeModel(
+      renderingParams,
+      shapeParams,
+    );
+
+    expect(model.targetArrowPath).toEqual("arrow path");
+  });
+
   it("should calculate midpoint", () => {
     const renderingParams: EdgeRenderParams = {
       from: { x: 0, y: 0, width: 0, height: 0, direction: 0 },

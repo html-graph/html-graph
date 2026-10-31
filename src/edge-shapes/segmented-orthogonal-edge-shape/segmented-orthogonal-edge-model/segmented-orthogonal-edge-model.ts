@@ -99,7 +99,7 @@ export class SegmentedOrthogonalEdgeModel implements StructuredEdgeModel {
 
     if (this.shapeParams.hasTargetArrow) {
       this.targetArrowPath = this.shapeParams.arrowRenderer({
-        direction: targetVector,
+        direction: { x: -targetVector.x, y: -targetVector.y },
         shift: to,
         arrowLength: this.shapeParams.arrowLength,
       });

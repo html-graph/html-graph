@@ -31,3 +31,9 @@ export type {
   PortOffsetFn,
   PortOffsetFnParams,
 } from "./direct-edge-shape";
+
+export {
+  SegmentedOrthogonalEdgeShape,
+  SegmentedOrthogonalEdgeModel,
+} from "./segmented-orthogonal-edge-shape";
+export type { SegmentedOrthogonalEdgeParams } from "./segmented-orthogonal-edge-shape";
