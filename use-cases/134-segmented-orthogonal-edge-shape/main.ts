@@ -6,14 +6,18 @@ import {
   SegmentedOrthogonalEdgeShape,
 } from "@html-graph/html-graph";
 import { createInOutNode } from "../shared/create-in-out-node";
+import { createMidpoint } from "../shared/create-midpoint";
 
 const canvasElement: HTMLElement = document.getElementById("canvas")!;
 const canvas: Canvas = new CanvasBuilder(canvasElement)
   .setDefaults({
     edges: {
       shapeFactory: () => {
+        const midpointElement = createMidpoint();
+
         return new SegmentedOrthogonalEdgeShape({
           hasTargetArrow: true,
+          midpointElement,
         });
       },
     },
