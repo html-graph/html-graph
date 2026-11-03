@@ -4,6 +4,7 @@ export const createHost: () => HTMLDivElement = () => {
   host.style.width = "100%";
   host.style.height = "100%";
   host.style.position = "relative";
+  host.style.zIndex = "0";
 
   return host;
 };

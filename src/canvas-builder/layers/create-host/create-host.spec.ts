@@ -19,4 +19,10 @@ describe("createHost", () => {
 
     expect(element.style.height).toBe("100%");
   });
+
+  it("should create element with zIndex set to 0", () => {
+    const element = createHost();
+
+    expect(element.style.height).toBe("100%");
+  });
 });
