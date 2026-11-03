@@ -23,6 +23,6 @@ describe("createHost", () => {
   it("should create element with zIndex set to 0", () => {
     const element = createHost();
 
-    expect(element.style.height).toBe("100%");
+    expect(element.style.zIndex).toBe("0");
   });
 });
